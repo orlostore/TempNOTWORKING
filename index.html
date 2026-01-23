@@ -1,167 +1,264 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORLO — Practical Tech & Home Essentials</title> <!-- UPDATED -->
+    <title>ORLO — Smart Tech & Home Essentials | التكنولوجيا الذكية ومستلزمات المنزل</title>
+    <meta name="description" content="Curated gadgets for your desk, car, and home — delivered across the UAE. أدوات مختارة لمكتبك وسيارتك ومنزلك - التوصيل لجميع أنحاء الإمارات">
+    <meta name="keywords" content="tech gadgets, home essentials, UAE delivery, smart devices">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
 
-<header>
-    <nav>
-        <div class="logo-container">
-            <img src="logo.png" class="logo-img" alt="ORLO Logo">
-        </div>
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        ↑
+    </button>
 
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | ابحث عن المنتجات...">
-            <button class="search-btn" id="searchBtn">🔍</button>
-        </div>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <a href="/" aria-label="ORLO Home">
+                    <img src="logo.png" class="logo-img" alt="ORLO Logo" width="160" height="160">
+                </a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" 
+                       placeholder="Search products... | بحث عن المنتجات..." 
+                       aria-label="Search products">
+                <button class="search-btn" id="searchBtn" aria-label="Search">
+                    <span class="search-icon">🔍</span>
+                </button>
+            </div>
+            
+            <ul class="nav-links" id="navLinks">
+                <li>
+                    <a href="#products" class="nav-link">
+                        Shop<br>
+                        <span class="arabic-text">تسوق</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" onclick="toggleAbout();" class="nav-link">
+                        About<br>
+                        <span class="arabic-text">من نحن</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#contact" class="nav-link">
+                        Contact<br>
+                        <span class="arabic-text">اتصل بنا</span>
+                    </a>
+                </li>
+                <li>
+                    <div class="cart-icon" id="cartIcon" role="button" aria-label="Shopping cart" tabindex="0">
+                        🛒 <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
-        <ul class="nav-links">
-            <li>
-                <a href="#products">
-                    Shop<br>
-                    <span class="arabic-text">تسوق</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="toggleAbout(); return false;">
-                    About<br>
-                    <span class="arabic-text">من نحن</span>
-                </a>
-            </li>
-            <li>
-                <a href="#contact">
-                    Contact<br>
-                    <span class="arabic-text">تواصل معنا</span>
-                </a>
-            </li>
-            <li>
-                <div class="cart-icon" id="cartIcon">
-                    🛒 <span class="cart-count" id="cartCount">0</span>
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Smart Tech & Home Essentials</h1>
+                <h1 class="arabic-text hero-arabic">التكنولوجيا الذكية ومستلزمات المنزل</h1>
+                <p>Curated gadgets for your desk, car, and home — delivered across the UAE.</p>
+                <p class="arabic-text">أدوات مختارة لمكتبك وسيارتك ومنزلك - التوصيل لجميع أنحاء الإمارات العربية المتحدة</p>
+                
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <span class="badge-icon" aria-hidden="true">✓</span>
+                        <span class="badge-text">Dubai-based</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span class="badge-icon" aria-hidden="true">✓</span>
+                        <span class="badge-text">Secure checkout</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span class="badge-icon" aria-hidden="true">✓</span>
+                        <span class="badge-text">WhatsApp support</span>
+                    </div>
                 </div>
-            </li>
-        </ul>
-    </nav>
-</header>
+                
+                <a href="#products" class="btn hero-btn" aria-label="Shop best sellers">
+                    Shop Best Sellers<br>
+                    <span class="arabic-text btn-arabic">تسوق الأكثر مبيعاً</span>
+                </a>
+            </div>
+        </section>
 
-<!-- HERO SECTION -->
-<section class="hero">
-    <h1>Practical Tech & Home Essentials</h1> <!-- UPDATED -->
-    <h1 class="arabic-text hero-arabic">أساسيات تقنية ومنزلية عملية</h1> <!-- WARMER -->
+        <section class="products-section" id="products">
+            <div class="container">
+                <h2 class="section-title">
+                    Best Sellers
+                    <span class="arabic-text section-arabic">الأكثر مبيعاً</span>
+                </h2>
+                
+                <div class="category-filters" id="categoryFilters"></div>
+                
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded here -->
+                </div>
+                
+                <div class="load-more-container" id="loadMoreContainer">
+                    <button class="load-more-btn" id="loadMoreBtn" onclick="loadMoreProducts()">
+                        Load More Products
+                        <span class="arabic-text">تحميل المزيد من المنتجات</span>
+                    </button>
+                </div>
+            </div>
+        </section>
 
-    <p>
-        Thoughtfully curated gadgets we actually use — delivered across the UAE 🇦🇪
-    </p>
-    <p class="arabic-text">
-        أدوات مختارة بعناية نستخدمها فعليًا — مع توصيل لجميع أنحاء الإمارات 🇦🇪
-    </p>
+        <section class="about-section" id="about" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">
+                    Our Story
+                    <span class="arabic-text section-arabic">قصتنا</span>
+                </h2>
+                <div class="about-content">
+                    <p>
+                        ORLO is a family-owned Dubai brand built around the essentials we genuinely love and use every day. 
+                        We believe in quality that lasts, thoughtful choices, and keeping things simple — no clutter, no gimmicks. 
+                        Every order you place helps support a local UAE business rooted in trust, simplicity, and fair pricing <span class="heart">♥</span>
+                    </p>
+                    <p class="arabic-text">
+                        أورلو علامة تجارية عائلية من دبي، نشارككم فيها أساسيات نحبّها ونستخدمها يوميًا في حياتنا. 
+                        نؤمن بالجودة اللي تعيش معك، وبالاختيارات البسيطة اللي فعلاً تفرق — بدون تعقيد ولا إضافات مالها داعي. 
+                        كل طلب منك يدعم مشروعًا محليًا إماراتيًا بُني على الثقة، والبساطة، والتسعير العادل <span class="heart">♥</span>
+                    </p>
+                </div>
+            </div>
+        </section>
 
-    <!-- TRUST MICRO-COPY -->
-    <p style="margin-top: 1rem; font-size: 0.95rem; opacity: 0.9;">
-        ✔ UAE-based &nbsp;•&nbsp; ✔ Secure checkout &nbsp;•&nbsp; ✔ WhatsApp support
-    </p>
+        <section class="contact-section" id="contact">
+            <div class="container">
+                <h2 class="section-title">
+                    Contact Us
+                    <span class="arabic-text section-arabic">اتصل بنا</span>
+                </h2>
+                <div class="contact-content">
+                    <p class="contact-text-en">We'd love to hear from you! Reach out for orders, questions, or support.</p>
+                    <p class="contact-text-ar">يسعدنا التواصل معك! لا تتردد في التواصل معنا للطلبات أو الاستفسارات أو الدعم.</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="contact-icon" aria-hidden="true">📍</div>
+                            <div class="contact-details">
+                                <h3>Location</h3>
+                                <p>Dubai, UAE (Online Only)</p>
+                                <p class="arabic-text">دبي، الإمارات (أونلاين فقط)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon" aria-hidden="true">✉️</div>
+                            <div class="contact-details">
+                                <h3>Email</h3>
+                                <a href="mailto:info@orlostore.com" class="contact-link">info@orlostore.com</a>
+                                <p class="arabic-text">البريد الإلكتروني</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon" aria-hidden="true">📱</div>
+                            <div class="contact-details">
+                                <h3>WhatsApp</h3>
+                                <a href="https://wa.me/971XXXXXXXXX" target="_blank" rel="noopener noreferrer" class="contact-link whatsapp-link">
+                                    +971 XX XXX XXXX
+                                </a>
+                                <p class="arabic-text">واتساب</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <a href="#products" class="btn">
-        See Our Best Sellers<br> <!-- UPDATED CTA -->
-        <span class="arabic-text btn-arabic">اكتشف الأكثر مبيعاً</span>
-    </a>
-</section>
+        <section class="terms-section" id="terms">
+            <div class="container">
+                <h2 class="section-title">
+                    Terms & Policies
+                    <span class="arabic-text section-arabic">الشروط والأحكام</span>
+                </h2>
+                <div class="terms-grid" id="termsGrid">
+                    <!-- Terms cards will be loaded here -->
+                </div>
+            </div>
+        </section>
+    </main>
 
-<!-- PRODUCTS -->
-<div class="container" id="products">
-    <h2 class="section-title">
-        Best Sellers
-        <span class="arabic-text section-arabic">الأكثر مبيعاً</span>
-    </h2>
-    <div class="category-filters" id="categoryFilters"></div>
-    <div class="products-grid" id="productsGrid"></div>
-</div>
+    <!-- Cart Sidebar -->
+    <aside class="cart-sidebar" id="cartSidebar" aria-label="Shopping cart sidebar">
+        <div class="cart-header">
+            <h2>Your Cart / سلة التسوق</h2>
+            <button class="close-cart" id="closeCart" aria-label="Close cart">
+                <span aria-hidden="true">✕</span>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be loaded here -->
+        </div>
+        <div class="cart-footer" id="cartFooter">
+            <!-- Cart summary will be loaded here -->
+        </div>
+    </aside>
 
-<!-- ABOUT -->
-<section class="about-section" id="about" style="display: none;">
-    <div class="container">
-        <h2 class="section-title">
-            Our Story
-            <span class="arabic-text section-arabic">قصتنا</span>
-        </h2>
-
-        <div style="max-width: 900px; margin: 0 auto;">
-            <p style="margin-bottom: 3rem;">
-                ORLO is a family-owned <strong>Dubai-based</strong> brand built around the essentials we genuinely love and use every day.
-                We believe in quality that lasts, thoughtful choices, and keeping things simple — no clutter, no gimmicks.
-                Every order you place supports a local UAE business rooted in trust, simplicity, and fair pricing 🧡
-            </p>
-
-            <p class="arabic-text">
-                أورلو علامة تجارية عائلية <strong>من دبي</strong>، نشارككم فيها أساسيات نحبّها ونستخدمها يوميًا.
-                نؤمن بالجودة اللي تعيش معك، وبالاختيارات البسيطة اللي فعلًا تفرق — بدون تعقيد ولا إضافات مالها داعي.
-                كل طلب منك يدعم مشروعًا محليًا إماراتيًا بُني على الثقة، والبساطة، والتسعير العادل 🧡
-            </p>
+    <!-- Policy Modal -->
+    <div class="policy-modal" id="policyModal" role="dialog" aria-modal="true" aria-labelledby="policyTitle">
+        <div class="policy-overlay" onclick="closePolicy()"></div>
+        <div class="policy-box">
+            <button class="policy-close" onclick="closePolicy()" aria-label="Close policy">
+                <span aria-hidden="true">✕</span>
+            </button>
+            <div class="policy-content" id="policyContent"></div>
         </div>
     </div>
-</section>
 
-<!-- CONTACT -->
-<section class="contact-section" id="contact">
-    <div class="container">
-        <h2 class="section-title">
-            Get in Touch
-            <span class="arabic-text section-arabic">تواصل معنا</span>
-        </h2>
-
-        <p>We’d love to hear from you — orders, questions, or just to say hi.</p>
-        <p class="arabic-text">يسعدنا تواصلك معنا — للطلبات أو الاستفسارات أو أي سؤال.</p>
-
-        <div class="contact-info">
-            <div class="contact-item">
-                <strong>📍 Location:</strong> Dubai, UAE
-            </div>
-            <div class="contact-item">
-                <strong>✉️ Email:</strong> info@orlostore.com
-            </div>
-            <div class="contact-item">
-                <strong>📱 WhatsApp:</strong> Fast replies • No obligation
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>&copy; <span id="currentYear">2026</span> ORLO — Dubai, UAE / دبي، الإمارات العربية المتحدة</p>
+                    <p class="footer-subtitle">Licensed & Family-Owned / مرخص ومملوك عائلياً</p>
+                </div>
+                
+                <div class="footer-links">
+                    <a href="#" onclick="openPolicy('shipping'); return false;">Shipping / الشحن</a>
+                    <a href="#" onclick="openPolicy('returns'); return false;">Returns / الإرجاع</a>
+                    <a href="#" onclick="openPolicy('privacy'); return false;">Privacy / الخصوصية</a>
+                    <a href="#" onclick="openPolicy('terms'); return false;">Terms / الشروط</a>
+                </div>
+                
+                <div class="footer-social">
+                    <p>Follow us / تابعنا</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Instagram" class="social-icon">📷</a>
+                        <a href="#" aria-label="Twitter" class="social-icon">🐦</a>
+                        <a href="#" aria-label="Facebook" class="social-icon">📘</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </footer>
 
-<!-- CART -->
-<div class="cart-sidebar" id="cartSidebar">
-    <div class="cart-header">
-        <h2>Your Cart / سلة التسوق</h2>
-        <button class="close-cart" id="closeCart">✕</button>
-    </div>
-
-    <div class="cart-items" id="cartItems"></div>
-
-    <div class="cart-footer">
-        <div class="cart-total">
-            <span>Total:</span>
-            <span id="cartTotal">0.00 AED</span>
-        </div>
-
-        <!-- URGENCY -->
-        <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.75rem;">
-            🚚 Order now — delivery in 2–5 business days
-        </p>
-
-        <button class="checkout-btn" id="checkoutBtn">
-            Order via WhatsApp
-        </button>
-    </div>
-</div>
-
-<footer>
-    <p>&copy; 2026 ORLO — Dubai, UAE</p>
-    <p class="footer-subtitle">Family-Owned • UAE-Based</p>
-</footer>
-
-<script src="app.js"></script>
+    <script src="app.js" defer></script>
 </body>
 </html>
-
