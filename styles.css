@@ -206,3 +206,53 @@ nav {
     grid-template-columns: 1fr;
   }
 }
+/* ============================================
+   AMAZON-STYLE PRODUCT GRID (SAFE OVERRIDE)
+   ============================================ */
+
+.products-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 1.5rem;
+}
+
+/* Large laptops */
+@media (max-width: 1400px) {
+  .products-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* Small laptops */
+@media (max-width: 1100px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Tighter cards (Amazon feel, safe) */
+.product-info {
+  padding: 1.25rem;
+}
+
+.product-image {
+  height: 220px;
+}
+
+.product-title {
+  font-size: 1.15rem;
+}
