@@ -1,84 +1,54 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product - ORLO Store</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - ORLO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
 <header>
-    <nav>
+    <nav class="container">
         <div class="logo-container">
-            <a href="index.html">
-                <img src="logo.png" class="logo-img" alt="ORLO Logo">
-            </a>
+            <a href="index.html"><img src="logo.png" class="logo-img" alt="ORLO"></a>
         </div>
-        
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        
-        <div class="mobile-cart-icon" id="mobileCartIcon">
-            🛒 <span class="cart-count" id="mobileCartCount">0</span>
-        </div>
-        
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        <div class="mobile-cart-icon" id="mobileCartIcon">🛒 <span class="cart-count" id="mobileCartCount">0</span></div>
         <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | بحث عن المنتجات...">
-            <button class="search-btn" id="searchBtn">🔍</button>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search...">
         </div>
-        
         <ul class="nav-links" id="navLinks">
-            <li><a href="index.html#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
-            <li><a href="index.html#about">About<br><span class="arabic-text">من نحن</span></a></li>
-            <li><a href="index.html#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
+            <li><a href="index.html#products">Products</a></li>
             <li><div class="cart-icon" id="cartIcon">🛒 <span class="cart-count" id="cartCount">0</span></div></li>
         </ul>
     </nav>
 </header>
 
-<div class="product-page-container">
-  <a href="index.html" class="back-link">← Back to Products</a>
-  
-  <div class="product-page">
-    <div class="product-gallery" id="gallery"></div>
-
-    <div class="product-details">
-      <h1 id="productTitle"></h1>
-      <div class="product-category" id="productCategory"></div>
-      <p id="productDescription"></p>
+<main class="container">
+    <div style="padding: 40px 0;">
+        <a href="index.html" style="text-decoration: none; color: var(--primary);">← Back to Shop</a>
+        <div id="productDetail" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px;">
+            <div id="gallery" style="font-size: 10rem; background: #f9f9f9; display: flex; justify-content: center; align-items: center; border-radius: 8px;"></div>
+            <div>
+                <h1 id="productTitle"></h1>
+                <p id="productPrice" style="font-size: 1.5rem; font-weight: bold; color: var(--primary);"></p>
+                <p id="productDescription"></p>
+                <button id="addToCartBtn" style="background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 4px; cursor: pointer; width: 100%;">Add to Cart</button>
+            </div>
+        </div>
     </div>
-
-    <div class="product-buybox">
-      <div class="price" id="productPrice"></div>
-      <button class="add-to-cart-btn" id="addToCartBtn">Add to Cart</button>
-      <div class="delivery-info">
-        <p>✓ Free delivery on orders over 100 AED</p>
-        <p>✓ 2-5 business days delivery</p>
-        <p>✓ 7-day return policy</p>
-      </div>
-    </div>
-  </div>
-</div>
+</main>
 
 <div class="cart-sidebar" id="cartSidebar">
-  <div class="cart-header">
-    <h2>Your Cart / سلة التسوق</h2>
-    <button class="close-cart" id="closeCart">✕</button>
-  </div>
-  <div class="cart-items" id="cartItems"></div>
-  <div class="cart-footer"></div>
+    <div style="padding: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
+        <h2>Cart</h2>
+        <button id="closeCart" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">✕</button>
+    </div>
 </div>
 
-<script src="products.js?v=2"></script>
-<script src="product.js?v=2"></script>
-<script src="app.js?v=2"></script>
+<script src="products.js"></script>
+<script src="product.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
