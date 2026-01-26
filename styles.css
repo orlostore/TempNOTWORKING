@@ -19,22 +19,44 @@ header { background: white; border-bottom: 1px solid #eee; padding: 15px 0; posi
 nav { display: flex; justify-content: space-between; align-items: center; }
 
 /* CATEGORY FILTERS: Anchored to Left Edge */
+/* The container that spans Product 1 to Product 5 */
 .category-filters {
     display: flex;
-    justify-content: flex-start;
-    gap: 15px;
-    padding-top: 30px;
-    padding-bottom: 20px;
+    justify-content: space-between; /* This creates the "Expansion" to the edges */
+    align-items: center;
+    max-width: 1200px;             /* Match this to your products-grid max-width */
+    margin: 40px auto 20px auto;   /* Centers the bar on the page */
+    padding: 0;                    /* Remove padding to ensure edge-to-edge alignment */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .filter-btn {
-    background: #f8f9fa; border: 1px solid #ddd; padding: 8px 16px;
-    border-radius: 4px; cursor: pointer; display: flex; flex-direction: column;
-    align-items: flex-start; min-width: 110px;
+    background: none;
+    border: none;
+    padding: 10px 0;               /* Vertical padding only */
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: color 0.3s ease;
 }
 
-.filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-.filter-btn.active .arabic-text { color: #ccc; }
+.filter-btn .eng-text {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.filter-btn .arabic-text {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.filter-btn.active .eng-text {
+    color: #2c4a5c;                /* Highlights your active category */
+    border-bottom: 2px solid #2c4a5c;
+}
 
 /* PRODUCT GRID: Aligned to Filters */
 .products-grid {
