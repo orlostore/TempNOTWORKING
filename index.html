@@ -1,63 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>ORLO Store</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORLO — Smart Tech & Home Essentials</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<header>
+    <nav>
+        <div class="logo-container">
+            <a href="/">
+                <img src="logo.png" class="logo-img" alt="ORLO Logo">
+            </a>
+        </div>
+        
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <div class="mobile-cart-icon" id="mobileCartIcon">
+            🛒 <span class="cart-count" id="mobileCartCount">0</span>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | بحث عن المنتجات...">
+            <button class="search-btn" id="searchBtn">🔍</button>
+        </div>
+        
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
+            <li><a href="javascript:void(0);" onclick="toggleAbout();">About<br><span class="arabic-text">من نحن</span></a></li>
+            <li><a href="#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
+            <li><div class="cart-icon" id="cartIcon">🛒 <span class="cart-count" id="cartCount">0</span></div></li>
+        </ul>
+    </nav>
+</header>
 
-  <!-- HERO / HEADER (unchanged) -->
-  <header class="hero">
+<section class="hero" id="heroSection">
     <h1>Smart Tech & Home Essentials</h1>
-    <p>Quality is a click away</p>
-  </header>
+    <h1 class="arabic-text hero-arabic">التكنولوجيا الذكية ومستلزمات المنزل</h1>
+    <p>Curated gadgets for your desk, car, and home — delivered across the UAE.</p>
+    <p class="arabic-text">أدوات مختارة لمكتبك وسيارتك ومنزلك - التوصيل لجميع أنحاء الإمارات العربية المتحدة</p>
+    
+    <div class="trust-badges">
+        <div class="trust-badge">
+            <span class="badge-icon">✔</span>
+            <span class="badge-text">Dubai-based<br><span class="arabic-text" style="font-size: 0.85em; margin-top: 2px; display: block;">من دبي</span></span>
+        </div>
+        <div class="trust-badge">
+            <span class="badge-icon">✔</span>
+            <span class="badge-text">Secure checkout<br><span class="arabic-text" style="font-size: 0.85em; margin-top: 2px; display: block;">دفع آمن</span></span>
+        </div>
+        <div class="trust-badge">
+            <span class="badge-icon">✔</span>
+            <span class="badge-text">WhatsApp support<br><span class="arabic-text" style="font-size: 0.85em; margin-top: 2px; display: block;">دعم واتساب</span></span>
+        </div>
+    </div>
+    
+    <a href="#products" class="btn">Shop Best Sellers<br><span class="arabic-text btn-arabic">تسوق الأكثر مبيعاً</span></a>
+</section>
 
-  <!-- CATEGORY FILTERS (ADDED) -->
-  <div class="category-filters">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="Workspace">Workspace</button>
-    <button class="filter-btn" data-filter="Home">Home</button>
-  </div>
+<div class="container" id="products">
+    <div class="category-filters" id="categoryFilters"></div>
+    <div class="products-grid" id="productsGrid"></div>
+</div>
 
-  <!-- PRODUCTS GRID -->
-  <section class="products-grid" id="productsGrid"></section>
+<section class="about-section" id="about" style="display: none;">
+    <div class="container">
+        <h2 class="section-title">Our Story<span class="arabic-text section-arabic">قصتنا</span></h2>
+        <div style="max-width: 900px; margin: 0 auto;">
+            <p style="margin-bottom: 3rem;">ORLO is a family-owned Dubai brand built around the essentials we genuinely love and use every day. We believe in quality that lasts, thoughtful choices, and keeping things simple — no clutter, no gimmicks. Every order you place helps support a local UAE business rooted in trust, simplicity, and fair pricing <span style="color: #e07856; font-size: 1.2em;">♥</span></p>
+            <p class="arabic-text">أورلو علامة تجارية عائلية من دبي، نشارككم فيها أساسيات نحبّها ونستخدمها يوميًا في حياتنا. نؤمن بالجودة اللي تعيش معك، وبالاختيارات البسيطة اللي فعلاً تفرق — بدون تعقيد ولا إضافات مالها داعي. كل طلب منك يدعم مشروعًا محليًا إماراتيًا بُني على الثقة، والبساطة، والتسعير العادل <span style="color: #e07856; font-size: 1.2em;">♥</span></p>
+        </div>
+    </div>
+</section>
 
-  <script src="products.js"></script>
+<section class="contact-section" id="contact">
+    <div class="contact-container">
+        <div class="contact-box">
+            <div class="contact-text-row">
+                <p class="contact-text-en">We'd love to hear from you! Reach out for orders, questions, or support.</p>
+                <p class="contact-text-ar">يسعدنا التواصل معك! لا تتردد في التواصل معنا للطلبات أو الاستفسارات أو الدعم.</p>
+            </div>
+            <div class="contact-details-row">
+                <div class="contact-detail"><strong>📍 Location:</strong> Dubai, UAE (Online Only)</div>
+                <div class="contact-detail"><strong>✉️ Email:</strong> <a href="/cdn-cgi/l/email-protection#056c6b636a456a77696a76716a77602b666a68"><span class="__cf_email__" data-cfemail="4821262e2708273a24273b3c273a2d662b2725">[email&#160;protected]</span></a></div>
+                <div class="contact-detail"><strong>📱 WhatsApp:</strong> <a href="https://wa.me/971XXXXXXXXX" target="_blank">+971 XX XXX XXXX</a></div>
+            </div>
+        </div>
+    </div>
+</section>
 
-  <!-- FILTER LOGIC (ADDED) -->
-  <script>
-    const grid = document.getElementById("productsGrid");
+<section class="terms-section" id="terms">
+    <div class="container">
+        <h2 class="section-title">Terms & Conditions <span class="arabic-inline">الشروط والأحكام</span></h2>
+        <div class="terms-grid">
+            <div class="term-card" onclick="openPolicy('shipping')">
+                <h3><span class="term-title">📦 Shipping</span><br><span class="arabic-text term-title-ar">الشحن</span></h3>
+                <p>Delivery process & timelines</p>
+                <p class="arabic-text">عملية التوصيل والمواعيد</p>
+            </div>
+            <div class="term-card" onclick="openPolicy('returns')">
+                <h3><span class="term-title">↩️ Returns</span><br><span class="arabic-text term-title-ar">الإرجاع</span></h3>
+                <p>7-day return policy</p>
+                <p class="arabic-text">سياسة الإرجاع خلال ٧ أيام</p>
+            </div>
+            <div class="term-card" onclick="openPolicy('privacy')">
+                <h3><span class="term-title">🔒 Privacy</span><br><span class="arabic-text term-title-ar">الخصوصية</span></h3>
+                <p>How we protect your data</p>
+                <p class="arabic-text">كيف نحمي بياناتك</p>
+            </div>
+            <div class="term-card" onclick="openPolicy('terms')">
+                <h3><span class="term-title">📋 Terms</span><br><span class="arabic-text term-title-ar">الشروط</span></h3>
+                <p>General conditions</p>
+                <p class="arabic-text">الشروط العامة</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-    function renderProducts(filter = "all") {
-      grid.innerHTML = "";
-      products.forEach(product => {
-        if (filter !== "all" && product.category !== filter) return;
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h2>Your Cart / سلة التسوق</h2>
+        <button class="close-cart" id="closeCart">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer"></div>
+</div>
 
-        const card = document.createElement("div");
-        card.className = "product-card";
-        card.setAttribute("data-category", product.category);
+<div id="policyModal">
+    <div class="policy-box">
+        <button onclick="closePolicy()" style="float: right; background: none; border: none; font-size: 1.5rem; cursor: pointer;">✕</button>
+        <div id="policyText"></div>
+    </div>
+</div>
 
-        card.innerHTML = `
-          <div class="product-image">${product.image}</div>
-          <h3>${product.name}</h3>
-          <p class="price">${product.price} AED</p>
-        `;
+<footer>
+    <p>&copy; 2026 ORLO — Dubai, UAE / دبي، الإمارات العربية المتحدة</p>
+    <p class="footer-subtitle">Licensed & Family-Owned / مرخصة ومملوكة للعائلة</p>
+</footer>
 
-        grid.appendChild(card);
-      });
-    }
-
-    renderProducts();
-
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderProducts(btn.dataset.filter);
-      });
-    });
-  </script>
-
+<script src="products.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
