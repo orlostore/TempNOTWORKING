@@ -1,43 +1,61 @@
-/* Container must be the same for both Filters and Grid */
-.container {
-    max-width: 1200px;
+:root {
+    --primary: #2c4a5c;
+    --max-width: 1200px;
+}
+
+body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+.arabic-text { font-family: 'Almarai', sans-serif; direction: rtl; }
+
+/* MASTER ALIGNMENT: Header, Categories, and Grid share this width */
+.container, nav, .category-filters, .products-grid {
+    max-width: var(--max-width);
     margin: 0 auto;
-    padding: 0 20px;
     width: 100%;
+    padding: 0 20px;
     box-sizing: border-box;
 }
 
-/* Align filters to the start of the container */
+header { background: white; border-bottom: 1px solid #eee; padding: 15px 0; position: sticky; top: 0; z-index: 100; }
+nav { display: flex; justify-content: space-between; align-items: center; }
+
+/* CATEGORY FILTERS: Anchored to Left Edge */
 .category-filters {
     display: flex;
-    justify-content: flex-start; /* Aligns "All products" to the far left */
-    gap: 20px;                   /* Consistent spacing between buttons */
-    margin-bottom: 30px;
-    padding: 0;                  /* Remove internal padding to ensure left-edge flush */
-    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 15px;
+    padding-top: 30px;
+    padding-bottom: 20px;
 }
 
 .filter-btn {
-    background: #f4f4f4;
-    border: 1px solid #ddd;
-    padding: 10px 20px;
-    cursor: pointer;
-    text-align: left;           /* Keeps text aligned with the left edge of the button */
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    min-width: 120px;
+    background: #f8f9fa; border: 1px solid #ddd; padding: 8px 16px;
+    border-radius: 4px; cursor: pointer; display: flex; flex-direction: column;
+    align-items: flex-start; min-width: 110px;
 }
 
-.filter-btn.active {
-    background: #2c4a5c;
-    color: white;
-    border-color: #2c4a5c;
-}
+.filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+.filter-btn.active .arabic-text { color: #ccc; }
 
-/* Ensure the grid matches the filter container exactly */
+/* PRODUCT GRID: Aligned to Filters */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 30px;
-    width: 100%;
+}
+
+.product-card { border: 1px solid #eee; border-radius: 8px; overflow: hidden; transition: 0.3s; }
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.product-image { background: #fdfdfd; height: 200px; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+.product-info { padding: 15px; }
+
+/* CART SIDEBAR */
+.cart-sidebar { position: fixed; right: -400px; top: 0; width: 350px; height: 100%; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.1); transition: 0.3s; z-index: 1001; }
+.cart-sidebar.open { right: 0; }
+
+/* RESPONSIVE HEADER */
+.hamburger { display: none; cursor: pointer; background: none; border: none; }
+@media (max-width: 768px) {
+    .hamburger { display: block; }
+    .nav-links { display: none; }
+    .nav-links.active { display: block; position: absolute; top: 70px; left: 0; width: 100%; background: white; }
 }
