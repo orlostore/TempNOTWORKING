@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product - ORLO Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo-link">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='95' fill='%232c4a5c'/%3E%3Ccircle cx='100' cy='45' r='15' fill='%23e07856'/%3E%3Ctext x='100' y='130' font-family='Arial, sans-serif' font-size='60' font-weight='bold' fill='white' text-anchor='middle'%3EORLO%3C/text%3E%3Ctext x='100' y='160' font-family='Arial, sans-serif' font-size='14' fill='white' text-anchor='middle'%3EQUALITY IS A CLICK AWAY%3C/text%3E%3C/svg%3E" alt="ORLO" class="logo-img">
+    </a>
+    
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="Search products...">
+      <button class="search-btn">🔍</button>
+    </div>
+    
+    <ul class="nav-links">
+      <li><a href="index.html#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
+      <li><a href="index.html#about">About<br><span class="arabic-text">من نحن</span></a></li>
+      <li><a href="index.html#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
+      <li>
+        <div class="cart-icon" onclick="toggleCart()">
+          🛒
+          <span class="cart-count" id="cartCount">0</span>
+        </div>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<div class="product-page-container">
+  <a href="index.html" class="back-link">← Back to Products</a>
+  
+  <div class="product-page">
+    <!-- LEFT: Images -->
+    <div class="product-gallery" id="gallery"></div>
+
+    <!-- CENTER: Info -->
+    <div class="product-details">
+      <h1 id="productTitle"></h1>
+      <div class="product-category" id="productCategory"></div>
+      <p id="productDescription"></p>
+    </div>
+
+    <!-- RIGHT: Buy box -->
+    <div class="product-buybox">
+      <div class="price" id="productPrice"></div>
+      <button class="add-to-cart-btn" id="addToCartBtn">Add to Cart</button>
+      <div class="delivery-info">
+        <p>✓ Free delivery on orders over 100 AED</p>
+        <p>✓ 2-5 business days delivery</p>
+        <p>✓ 7-day return policy</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cart Sidebar -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>Your Cart / سلة التسوق</h2>
+    <button class="close-cart" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer"></div>
+</div>
+
+<script src="products.js?v=2"></script>
+<script src="product.js?v=2"></script>
+<script src="app.js?v=2"></script>
+</body>
+</html>
