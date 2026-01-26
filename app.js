@@ -12,6 +12,14 @@ function createCategoryFilters() {
     const filterContainer = document.querySelector('.category-filters');
     if (!filterContainer) return;
 
+    const displayCategories = [
+        { id: 'all', label: 'All products', labelAr: 'كل المنتجات' },
+        { id: 'Home', label: 'Home', labelAr: 'المنزل' },
+        { id: 'Workspace', label: 'Workplace', labelAr: 'مكان العمل' },
+        { id: 'Cable Management', label: 'Cable Management', labelAr: 'تنظيم الكابلات' },
+        { id: 'Silicon Ware', label: 'Silicon Ware', labelAr: 'منتجات السيليكون' }
+    ];
+
     filterContainer.innerHTML = displayCategories.map(cat => `
         <button class="filter-btn ${cat.id === 'all' ? 'active' : ''}" 
                 onclick="filterByCategory('${cat.id}', this)">
