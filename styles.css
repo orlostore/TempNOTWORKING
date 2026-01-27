@@ -1231,3 +1231,123 @@ footer p {
 .lightbox-close:hover {
   color: var(--accent);
 }
+/* ============================================================
+   MOBILE-ONLY AMAZON STYLE (Safe for Laptop Site)
+   ============================================================ */
+
+@media (max-width: 514.56px) {
+    /* 1. AMAZON HEADER: Logo and Hamburger on top, Search below */
+    nav {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 8px 12px !important;
+        background-color: #fff;
+    }
+
+    .logo-container {
+        flex: 1;
+        justify-content: flex-start !important;
+        order: 1;
+    }
+
+    .logo-img {
+        width: 45px !important; /* Smaller logo to fit row */
+        height: 45px !important;
+    }
+
+    .hamburger {
+        order: 3;
+        margin-left: 10px;
+    }
+
+    .mobile-cart-icon {
+        order: 2;
+        margin-left: auto;
+        font-size: 1.5rem !important;
+    }
+
+    /* 2. FULL-WIDTH SEARCH BAR (Amazon Style) */
+    .search-container {
+        order: 4;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 8px 0 4px 0 !important;
+    }
+
+    .search-input {
+        border-radius: 8px 0 0 8px !important;
+        border: 1px solid #bbb !important;
+        height: 40px;
+        font-size: 14px !important;
+    }
+
+    .search-btn {
+        border-radius: 0 8px 8px 0 !important;
+        height: 40px;
+        background: #febd69 !important; /* Amazon Orange */
+        color: #333 !important;
+    }
+
+    /* 3. AMAZON-STYLE PRODUCT GRID (2 Columns) */
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important; /* 2 items per row like Amazon app */
+        gap: 10px !important;
+        padding: 10px !important;
+        background: #f1f1f1; /* Light grey background to make cards pop */
+    }
+
+    .product-card {
+        background: #ffffff !important;
+        border-radius: 4px !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+        padding: 8px !important;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-image {
+        height: 140px !important;
+        font-size: 2.5rem !important;
+        background: #fff !important;
+    }
+
+    .product-info {
+        padding: 8px 4px !important;
+    }
+
+    .product-title {
+        font-size: 0.85rem !important;
+        height: 2.4rem !important; /* Keeps titles aligned */
+        margin-top: 4px !important;
+    }
+
+    .product-price {
+        color: #B12704 !important; /* Amazon Red Price */
+        font-size: 1.1rem !important;
+        margin: 4px 0 !important;
+    }
+
+    .add-to-cart {
+        padding: 8px !important;
+        font-size: 0.75rem !important;
+        background: #ffd814 !important; /* Amazon Yellow Button */
+        color: #111 !important;
+        border: 1px solid #fcd200 !important;
+        border-radius: 20px !important; /* Rounded button style */
+    }
+
+    /* 4. CLEANER TEXT & SPACING */
+    .hero {
+        padding: 1.5rem 1rem !important;
+    }
+
+    .hero h1, .hero-arabic {
+        font-size: 1.2rem !important;
+    }
+
+    .section-title {
+        font-size: 1.1rem !important;
+        margin-bottom: 1rem !important;
+    }
+}
