@@ -2,204 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORLO — Smart Tech & Home Essentials</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ORLO | Smart Tech & Home Essentials</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /* 1. Reset Container to exact 1200px width */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* 2. Fix Top Spacing between Hero and Products */
-        #products {
-            padding-top: 60px;
-            padding-bottom: 60px;
-        }
-
-        /* 3. Automated Category Bar: Aligned P1 to P5 */
-        .category-filters {
-            display: flex;
-            justify-content: space-between; /* Spans from start of P1 to end of P5 */
-            flex-wrap: wrap;
-            gap: 15px; /* Consistent spacing */
-            width: 100%;
-            margin-bottom: 40px;
-            padding: 0;
-        }
-
-        .category-btn {
-            flex: 1; /* Automatically adjusts width based on number of categories */
-            min-width: 160px; /* Prevents squishing */
-            text-align: center;
-            padding: 12px;
-            /* No max-width so they can stretch to fill the row as requested */
-        }
-
-        /* 4. Locked 5-Product Grid */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr) !important; /* Forces exactly 5 products */
-            gap: 20px;
-            width: 100%;
-        }
-
-        /* Responsive fixes */
-        @media (max-width: 1100px) {
-            .products-grid { grid-template-columns: repeat(4, 1fr) !important; }
-        }
-        @media (max-width: 900px) {
-            .products-grid { grid-template-columns: repeat(3, 1fr) !important; }
-        }
-        @media (max-width: 768px) {
-            .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
-            .category-filters { justify-content: center; }
-            .category-btn { flex: 0 1 auto; width: 45%; }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<header>
-    <nav>
-        <div class="logo-container">
-            <a href="/">
-                <img src="logo.png" class="logo-img" alt="ORLO Logo">
-            </a>
-        </div>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <a href="index.html">
+                    <img src="logo.png" alt="ORLO Logo" class="logo-img">
+                </a>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
+                <button class="search-btn" onclick="handleSearch()">Search</button>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="#products">Products<span class="arabic-text">المنتجات</span></a></li>
+                <li><a href="#about">About<span class="arabic-text">من نحن</span></a></li>
+                <li><a href="#contact">Contact<span class="arabic-text">اتصل بنا</span></a></li>
+            </ul>
+
+            <div class="cart-icon" onclick="toggleCart()">
+                🛒
+                <span class="cart-count">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Smart Tech & Home Essentials</h1>
+        <h1 class="hero-arabic">التكنولوجيا الذكية ومستلزمات المنزل</h1>
+        <p>Curated gadgets for your desk, car, and home — delivered across the UAE.</p>
+        <p class="arabic-text">أدوات مختارة لمكتبك وسيارتك ومنزلك - التوصيل لجميع أنحاء الإمارات العربية المتحدة</p>
         
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        
-        <div class="mobile-cart-icon" id="mobileCartIcon">
-            🛒 <span class="cart-count" id="mobileCartCount">0</span>
+        <div class="trust-badges">
+            <div class="trust-badge"><span class="badge-icon">✓</span> <span class="badge-text">Dubai-based<br><small>من دبي</small></span></div>
+            <div class="trust-badge"><span class="badge-icon">✓</span> <span class="badge-text">Secure checkout<br><small>دفع آمن</small></span></div>
+            <div class="trust-badge"><span class="badge-icon">✓</span> <span class="badge-text">WhatsApp support<br><small>دعم واتساب</small></span></div>
         </div>
-        
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | بحث عن المنتجات...">
-            <button class="search-btn" id="searchBtn">🔍</button>
-        </div>
-        
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
-            <li><a href="javascript:void(0);" onclick="toggleAbout();">About<br><span class="arabic-text">من نحن</span></a></li>
-            <li><a href="#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
-            <li><div class="cart-icon" id="cartIcon">🛒 <span class="cart-count" id="cartCount">0</span></div></li>
-        </ul>
-    </nav>
-</header>
 
-<section class="hero" id="heroSection">
-    <h1>Smart Tech & Home Essentials</h1>
-    <h1 class="arabic-text hero-arabic">التكنولوجيا الذكية ومستلزمات المنزل</h1>
-    <p>Curated gadgets for your desk, car, and home — delivered across the UAE.</p>
-    <p class="arabic-text">أدوات مختارة لمكتبك وسيارتك ومنزلك - التوصيل لجميع أنحاء الإمارات العربية المتحدة</p>
-    
-    <div class="trust-badges">
-        <div class="trust-badge">
-            <span class="badge-icon">✔</span>
-            <span class="badge-text">Dubai-based<br><span class="arabic-text" style="font-size: 0.85em; margin-top: 2px; display: block;">من دبي</span></span>
-        </div>
-        <div class="trust-badge">
-            <span class="badge-icon">✔</span>
-            <span class="badge-text">Secure checkout<br><span class="arabic-text" style="font-size: 0.85em; margin-top: 2px; display: block;">دفع آمن</span></span>
-        </div>
-        <div class="trust-badge">
-            <span class="badge-icon">✔</span>
-            <span class="badge-text">WhatsApp support<br><span class="arabic-text" style="font-size: 0.85em; margin-top: 2px; display: block;">دعم واتساب</span></span>
-        </div>
-    </div>
-    
-    <a href="#products" class="btn">Shop Best Sellers<br><span class="arabic-text btn-arabic">تسوق الأكثر مبيعاً</span></a>
-</section>
+        <a href="#products" class="btn">
+            Shop Best Sellers
+            <div class="btn-arabic">تسوق الأكثر مبيعاً</div>
+        </a>
+    </section>
 
-<div class="container" id="products">
-    <div class="category-filters" id="categoryFilters"></div>
-    <div class="products-grid" id="productsGrid"></div>
-</div>
-
-<section class="about-section" id="about" style="display: none;">
-    <div class="container">
-        <h2 class="section-title">Our Story<span class="arabic-text section-arabic">قصتنا</span></h2>
-        <div style="max-width: 900px; margin: 0 auto;">
-            <p style="margin-bottom: 3rem;">ORLO is a family-owned Dubai brand built around the essentials we genuinely love and use every day. We believe in quality that lasts, thoughtful choices, and keeping things simple — no clutter, no gimmicks. Every order you place helps support a local UAE business rooted in trust, simplicity, and fair pricing <span style="color: #e07856; font-size: 1.2em;">♥</span></p>
-            <p class="arabic-text">أورلو علامة تجارية عائلية من دبي، نشارككم فيها أساسيات نحبّها ونستخدمها يوميًا في حياتنا. نؤمن بالجودة اللي تعيش معك، وبالاختيارات البسيطة اللي فعلاً تفرق — بدون تعقيد ولا إضافات مالها داعي. كل طلب منك يدعم مشروعًا محليًا إماراتيًا بُني على الثقة، والبساطة، والتسعير العادل <span style="color: #e07856; font-size: 1.2em;">♥</span></p>
-        </div>
-    </div>
-</section>
-
-<section class="contact-section" id="contact">
-    <div class="contact-container">
-        <div class="contact-box">
-            <div class="contact-text-row">
-                <p class="contact-text-en">We'd love to hear from you! Reach out for orders, questions, or support.</p>
-                <p class="contact-text-ar">يسعدنا التواصل معك! لا تتردد في التواصل معنا للطلبات أو الاستفسارات أو الدعم.</p>
+    <main class="container">
+        <div id="categoryFilters" class="category-filters">
             </div>
-            <div class="contact-details-row">
-                <div class="contact-detail"><strong>📍 Location:</strong> Dubai, UAE (Online Only)</div>
-                <div class="contact-detail"><strong>✉️ Email:</strong> <a href="mailto:support@orlostore.ae">support@orlostore.ae</a></div>
-                <div class="contact-detail"><strong>📱 WhatsApp:</strong> <a href="https://wa.me/971XXXXXXXXX" target="_blank">+971 XX XXX XXXX</a></div>
+
+        <div id="productsGrid" class="products-grid">
             </div>
-        </div>
+    </main>
+
+    <div class="mobile-bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="#" class="nav-item" onclick="toggleCart(); return false;">
+            <span class="nav-icon">🛒<span class="cart-count">0</span></span>
+            <span class="nav-label">Cart</span>
+        </a>
+        <a href="#" class="nav-item" onclick="toggleMobileMenu(); return false;">
+            <span class="nav-icon">☰</span>
+            <span class="nav-label">Menu</span>
+        </a>
     </div>
-</section>
 
-<section class="terms-section" id="terms">
-    <div class="container">
-        <h2 class="section-title">Terms & Conditions <span class="arabic-inline">الشروط والأحكام</span></h2>
-        <div class="terms-grid">
-            <div class="term-card" onclick="openPolicy('shipping')">
-                <h3><span class="term-title">📦 Shipping</span><br><span class="arabic-text term-title-ar">الشحن</span></h3>
-                <p>Delivery process & timelines</p>
-                <p class="arabic-text">عملية التوصيل والمواعيد</p>
-            </div>
-            <div class="term-card" onclick="openPolicy('returns')">
-                <h3><span class="term-title">↩️ Returns</span><br><span class="arabic-text term-title-ar">الإرجاع</span></h3>
-                <p>7-day return policy</p>
-                <p class="arabic-text">سياسة الإرجاع خلال ٧ أيام</p>
-            </div>
-            <div class="term-card" onclick="openPolicy('privacy')">
-                <h3><span class="term-title">🔒 Privacy</span><br><span class="arabic-text term-title-ar">الخصوصية</span></h3>
-                <p>How we protect your data</p>
-                <p class="arabic-text">كيف نحمي بياناتك</p>
-            </div>
-            <div class="term-card" onclick="openPolicy('terms')">
-                <h3><span class="term-title">📋 Terms</span><br><span class="arabic-text term-title-ar">الشروط</span></h3>
-                <p>General conditions</p>
-                <p class="arabic-text">الشروط العامة</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<div class="cart-sidebar" id="cartSidebar">
-    <div class="cart-header">
-        <h2>Your Cart / سلة التسوق</h2>
-        <button class="close-cart" id="closeCart">✕</button>
-    </div>
-    <div class="cart-items" id="cartItems"></div>
-    <div class="cart-footer"></div>
-</div>
-
-<div id="policyModal">
-    <div class="policy-box">
-        <button onclick="closePolicy()" style="float: right; background: none; border: none; font-size: 1.5rem; cursor: pointer;">✕</button>
-        <div id="policyText"></div>
-    </div>
-</div>
-
-<footer>
-    <p>&copy; 2026 ORLO — Dubai, UAE / دبي، الإمارات العربية المتحدة</p>
-    <p class="footer-subtitle">Licensed & Family-Owned / مرخصة ومملوكة للعائلة</p>
-</footer>
-
-<script src="products.js"></script>
-<script src="app.js"></script>
+    <script src="products.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
