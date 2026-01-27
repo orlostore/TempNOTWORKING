@@ -8,23 +8,27 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* This fix ensures categories are always centered and consistent with the grid below */
-        .category-filters {
-            display: flex;
-            justify-content: center; /* Centers buttons perfectly */
-            flex-wrap: wrap;        /* Safely drops extra buttons to a new line */
-            gap: 12px;              /* Consistent 12px gap between all buttons */
-            margin: 0 auto 2.5rem auto;
-            padding: 0 1rem;
-            max-width: 1200px;      /* Matches your products-grid width */
-            width: 100%;
+        /* This ensures the category bar is the exact width of the product grid */
+        .container {
+            max-width: 1200px; /* Matches the standard product grid width */
+            margin: 0 auto;
+            padding: 0 1.2rem;
         }
 
-        /* Standardizes button size so they look even regardless of text length */
+        .category-filters {
+            display: flex;
+            justify-content: flex-start; /* Aligns with the start of the first product box */
+            flex-wrap: wrap;             /* Keeps layout consistent if categories grow */
+            gap: 15px;                   /* Consistent spacing between categories */
+            margin-bottom: 2.5rem;
+            width: 100%;                 /* Spans the full width of the product container */
+        }
+
         .category-btn {
             flex: 0 1 auto;
-            min-width: 140px; 
             text-align: center;
+            padding: 10px 20px;
+            /* Buttons will now sit naturally from left to right within the grid width */
         }
     </style>
 </head>
