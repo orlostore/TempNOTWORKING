@@ -62,11 +62,11 @@ const products = [
   },
   {
     id: 11,
-    name: "Phone Stand Holder",
+    name: "Phone Stand",
     nameAr: "حامل هاتف",
-    slug: "phone-stand-holder",
-    description: "Adjustable desktop phone holder",
-    descriptionAr: "حامل هاتف مكتبي قابل للتعديل",
+    slug: "phone-stand",
+    description: "Adjustable phone stand",
+    descriptionAr: "حامل هاتف قابل للتعديل",
     price: 35,
     category: "Phone Accessories",
     featured: false,
@@ -74,18 +74,18 @@ const products = [
     images: ["📱"],
     colors: "Black",
     colorsAr: "أسود",
-    detailedDescription: "Coming Soon: High-quality adjustable phone stand.",
-    detailedDescriptionAr: "قريباً: حامل هاتف عالي الجودة قابل للتعديل.",
-    specifications: ["Adjustable angle"],
-    specificationsAr: ["زاوية قابلة للتعديل"]
+    detailedDescription: "Placeholder for your phone accessories.",
+    detailedDescriptionAr: "مكان مخصص لإكسسوارات الهاتف الخاصة بك.",
+    specifications: ["Adjustable"],
+    specificationsAr: ["قابل للتعديل"]
   },
   {
     id: 12,
-    name: "Magnetic Car Mount",
-    nameAr: "حامل سيارة مغناطيسي",
-    slug: "magnetic-car-mount",
-    description: "Strong magnetic car phone holder",
-    descriptionAr: "حامل هاتف مغناطيسي قوي للسيارة",
+    name: "Car Charger",
+    nameAr: "شاحن سيارة",
+    slug: "car-charger",
+    description: "Fast car charger",
+    descriptionAr: "شاحن سيارة سريع",
     price: 40,
     category: "Car Accessories",
     featured: false,
@@ -93,17 +93,17 @@ const products = [
     images: ["🚗"],
     colors: "Silver",
     colorsAr: "فضي",
-    detailedDescription: "Coming Soon: Reliable magnetic mount for your car dashboard.",
-    detailedDescriptionAr: "قريباً: حامل مغناطيسي موثوق للوحة قيادة سيارتك.",
-    specifications: ["Universal fit"],
-    specificationsAr: ["مناسب لجميع الهواتف"]
+    detailedDescription: "Placeholder for your car accessories.",
+    detailedDescriptionAr: "مكان مخصص لإكسسوارات السيارة الخاصة بك.",
+    specifications: ["Fast charge"],
+    specificationsAr: ["شحن سريع"]
   }
 ];
 
 const categoryTranslations = {
   "All Products": "جميع المنتجات",
   "Workspace": "مساحة العمل",
-  "Phone Accessories": "إكسسوارات الهاتف",
   "Home": "المنزل",
+  "Phone Accessories": "إكسسوارات الهاتف",
   "Car Accessories": "إكسسوارات السيارة"
 };
