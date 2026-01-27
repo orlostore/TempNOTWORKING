@@ -8,23 +8,22 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Alignment Fix: Ensures categories stay centered and aligned with the products below */
+        /* This fix ensures categories are always centered and consistent with the grid below */
         .category-filters {
             display: flex;
-            justify-content: center; /* Centers the buttons */
-            flex-wrap: wrap;        /* Allows buttons to drop to a new line safely */
-            gap: 12px;              /* Consistent spacing between buttons */
-            margin-bottom: 2.5rem;
+            justify-content: center; /* Centers buttons perfectly */
+            flex-wrap: wrap;        /* Safely drops extra buttons to a new line */
+            gap: 12px;              /* Consistent 12px gap between all buttons */
+            margin: 0 auto 2.5rem auto;
             padding: 0 1rem;
+            max-width: 1200px;      /* Matches your products-grid width */
             width: 100%;
-            max-width: 1200px;      /* Matches your product grid width */
-            margin-left: auto;
-            margin-right: auto;
         }
 
+        /* Standardizes button size so they look even regardless of text length */
         .category-btn {
             flex: 0 1 auto;
-            min-width: 130px;       /* Consistent minimum width for buttons */
+            min-width: 140px; 
             text-align: center;
         }
     </style>
