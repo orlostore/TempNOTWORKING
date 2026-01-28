@@ -32,22 +32,21 @@ export async function onRequestPost(context) {
         if (event.type === 'checkout.session.completed') {
             const session = event.data.object;
             
-            // Get customer email
+            // Get customer email and invoice ID
             const customerEmail = session.customer_details?.email || session.customer_email;
-            const paymentIntentId = session.payment_intent;
+            const invoiceId = session.invoice;
             
-            if (customerEmail && paymentIntentId) {
-                // Update the payment intent with receipt_email to trigger Stripe's automatic receipt
-                await fetch(`https://api.stripe.com/v1/payment_intents/${paymentIntentId}`, {
+            if (invoiceId) {
+                // Send the invoice email to customer
+                await fetch(`https://api.stripe.com/v1/invoices/${invoiceId}/send`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
                         'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `receipt_email=${encodeURIComponent(customerEmail)}`
+                    }
                 });
                 
-                console.log(`Receipt will be sent to: ${customerEmail}`);
+                console.log(`Invoice email sent to: ${customerEmail}`);
             }
         }
         
