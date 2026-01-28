@@ -3,24 +3,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Successful - ORLO</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Order Confirmed - ORLO</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8f9fa; }
-        .card { background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; max-width: 400px; }
-        .icon { font-size: 4rem; margin-bottom: 1rem; color: #28a745; }
-        h1 { margin-bottom: 0.5rem; color: #2c4a5c; }
-        p { color: #666; margin-bottom: 2rem; }
-        .btn { background: #2c4a5c; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 6px; font-weight: 600; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #2c4a5c 0%, #1a3a4a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .success-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+            max-width: 550px;
+            width: 100%;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .checkmark-circle {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            animation: scaleIn 0.5s ease-out 0.3s both;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .checkmark {
+            width: 50px;
+            height: 50px;
+            stroke: #28a745;
+            stroke-width: 3;
+            fill: none;
+            animation: drawCheck 0.6s ease-out 0.6s both;
+        }
+
+        @keyframes drawCheck {
+            from {
+                stroke-dashoffset: 100;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .success-header h1 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+        }
+
+        .success-header .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            direction: rtl;
+            margin-top: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .success-body {
+            padding: 2.5rem 2rem;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #e07856;
+        }
+
+        .info-box h3 {
+            color: #2c4a5c;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-box p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .info-box .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin-top: 0.5rem;
+            color: #666;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .timeline-step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .timeline-icon {
+            width: 45px;
+            height: 45px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .timeline-step:not(.active) .timeline-icon {
+            background: #e0e0e0;
+            color: #999;
+            box-shadow: none;
+        }
+
+        .timeline-step span {
+            font-size: 0.8rem;
+            color: #666;
+            display: block;
+        }
+
+        .timeline-step .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(44, 74, 92, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 74, 92, 0.4);
+        }
+
+        .btn-secondary {
+            background: #25d366;
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            display: block;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            opacity: 0.9;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .footer-note a {
+            color: #e07856;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 500px) {
+            .success-container {
+                border-radius: 15px;
+            }
+
+            .success-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .success-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .success-body {
+                padding: 1.5rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .timeline-step span {
+                font-size: 0.7rem;
+            }
+
+            .checkmark-circle {
+                width: 80px;
+                height: 80px;
+            }
+
+            .checkmark {
+                width: 40px;
+                height: 40px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="icon">✓</div>
-        <h1>Payment Successful!</h1>
-        <p>Thank you for your order. We have received your payment and will start processing your order immediately.</p>
-        <a href="/" class="btn" onclick="localStorage.removeItem('cart')">Return to Store</a>
+    <div class="success-container">
+        <div class="success-header">
+            <div class="checkmark-circle">
+                <svg class="checkmark" viewBox="0 0 52 52" stroke-dasharray="100" stroke-dashoffset="100">
+                    <path fill="none" d="M14 27l7 7 16-16"/>
+                </svg>
+            </div>
+            <h1>Order Confirmed!</h1>
+            <p class="arabic-text">تم تأكيد طلبك بنجاح</p>
+            <p>Thank you for shopping with ORLO</p>
+        </div>
+
+        <div class="success-body">
+            <div class="info-box">
+                <h3>📦 What's Next?</h3>
+                <p>We're preparing your order! You'll receive an email with tracking information once your order ships.</p>
+                <p class="arabic-text">نحن نجهز طلبك! ستتلقى بريد إلكتروني يحتوي على معلومات التتبع عند شحن طلبك.</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-step active">
+                    <div class="timeline-icon">✓</div>
+                    <span>Confirmed</span>
+                    <span class="arabic-text">تم التأكيد</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-icon">📦</div>
+                    <span>Processing</span>
+                    <span class="arabic-text">قيد التجهيز</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-icon">🚚</div>
+                    <span>Shipped</span>
+                    <span class="arabic-text">تم الشحن</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-icon">✨</div>
+                    <span>Delivered</span>
+                    <span class="arabic-text">تم التوصيل</span>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>⏱️ Estimated Delivery</h3>
+                <p><strong>2-5 business days</strong> across UAE</p>
+                <p class="arabic-text"><strong>٢-٥ أيام عمل</strong> في جميع أنحاء الإمارات</p>
+            </div>
+
+            <div class="btn-group">
+                <a href="/" class="btn btn-primary" onclick="localStorage.removeItem('cart')">
+                    Continue Shopping
+                    <span class="arabic-text">متابعة التسوق</span>
+                </a>
+                <a href="mailto:info@orlostore.com" class="btn btn-secondary">
+                    ✉️ Email Support
+                    <span class="arabic-text">الدعم عبر البريد</span>
+                </a>
+            </div>
+
+            <div class="footer-note">
+                <p>Questions? Contact us at <a href="mailto:info@orlostore.com">info@orlostore.com</a></p>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Clear cart on page load
+        localStorage.removeItem('cart');
+    </script>
 </body>
 </html>
