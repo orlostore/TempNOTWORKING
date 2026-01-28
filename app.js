@@ -258,41 +258,11 @@ function toggleCart() {
     document.getElementById("cartSidebar").classList.toggle("active"); 
 }
 
-async function checkout() {
-    const btn = document.getElementById("stripeBtn");
-    if (!btn) return; // Safety check
-    
-    const originalText = btn.innerHTML;
-    
-    try {
-        btn.disabled = true;
-        btn.innerHTML = "Connecting...";
-
-        const response = await fetch('/checkout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                cart: cart,
-                deliveryZoneKey: selectedDeliveryZone
-            }),
-        });
-
-        const data = await response.json();
-
-        if (data.url) {
-            window.location.href = data.url;
-        } else {
-            throw new Error('No URL');
-        }
-
-    } catch (err) {
-        console.error(err);
-        alert("Redirecting to WhatsApp to complete your order...");
-        checkoutWhatsApp(); // Falls back to your working WhatsApp function
-        btn.disabled = false;
-        btn.innerHTML = originalText;
-    }
-}
+function checkout() { 
+    if (!cart.length) { 
+        alert("Your cart is empty!"); 
+        return; 
+    } 
     
     const orderNumber = generateOrderNumber(); 
     const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0); 
