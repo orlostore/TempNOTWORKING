@@ -151,6 +151,9 @@ function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee) {
     params.append('billing_address_collection', 'required');
     params.append('shipping_address_collection[allowed_countries][0]', 'AE');
     params.append('phone_number_collection[enabled]', 'true');
+    params.append('invoice_creation[enabled]', 'true');
+    params.append('invoice_creation[invoice_data][description]', 'ORLO Store Order');
+    params.append('invoice_creation[invoice_data][footer]', 'Thank you for shopping with ORLO!');
     params.append('metadata[delivery_zone]', zone.name);
     params.append('metadata[order_subtotal]', subtotal.toFixed(2));
     params.append('metadata[delivery_fee]', deliveryFee.toFixed(2));
