@@ -32,21 +32,35 @@ export async function onRequestPost(context) {
         if (event.type === 'checkout.session.completed') {
             const session = event.data.object;
             
-            // Get customer email and invoice ID
+            // Get customer email and payment intent
             const customerEmail = session.customer_details?.email || session.customer_email;
-            const invoiceId = session.invoice;
+            const paymentIntentId = session.payment_intent;
             
-            if (invoiceId) {
-                // Send the invoice email to customer
-                await fetch(`https://api.stripe.com/v1/invoices/${invoiceId}/send`, {
-                    method: 'POST',
+            if (customerEmail && paymentIntentId) {
+                // Get the charge ID from payment intent
+                const piResponse = await fetch(`https://api.stripe.com/v1/payment_intents/${paymentIntentId}`, {
+                    method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
-                        'Content-Type': 'application/x-www-form-urlencoded',
                     }
                 });
+                const paymentIntent = await piResponse.json();
                 
-                console.log(`Invoice email sent to: ${customerEmail}`);
+                const chargeId = paymentIntent.latest_charge;
+                
+                if (chargeId) {
+                    // Send receipt for this charge
+                    const receiptResponse = await fetch(`https://api.stripe.com/v1/charges/${chargeId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `receipt_email=${encodeURIComponent(customerEmail)}`
+                    });
+                    
+                    console.log(`Receipt sent to: ${customerEmail}`);
+                }
             }
         }
         
