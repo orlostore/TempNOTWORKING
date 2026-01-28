@@ -1231,3 +1231,22 @@ footer p {
 .lightbox-close:hover {
   color: var(--accent);
 }
+/* Mobile Promo Banner */
+.mobile-promo-banner {
+    display: none;
+    background: #2c4a5c;
+    color: white;
+    text-align: center;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .mobile-promo-banner {
+        display: block;
+    }
+    
+    .hero {
+        display: none;
+    }
+}
