@@ -147,7 +147,7 @@ function updateCart() {
     
     cartCount.textContent = totalItems; 
     
-    // Cart items display (top section - already in cartItems div)
+    // Cart items display
     cartItems.innerHTML = cart.map(i => `
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
             <div style="flex:1;">
@@ -164,10 +164,10 @@ function updateCart() {
         </div>
     `).join(""); 
     
-    // Build cart footer: UPSELL FIRST, then SUMMARY, then BUTTON
+    // Build cart footer
     let footerHTML = '';
     
-    // 1. UPSELL SECTION (only if under 100 AED)
+    // 1. UPSELL SECTION
     if (subtotal < 100) {
         const cartProductIds = cart.map(i => i.id);
         const recommendedProducts = products
@@ -198,7 +198,7 @@ function updateCart() {
         }
     }
     
-    // 2. SUMMARY SECTION (always shown)
+    // 2. SUMMARY SECTION
     footerHTML += `
         <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.75rem;">
             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; color: #2c4a5c;">
@@ -217,12 +217,15 @@ function updateCart() {
         </div>
     `;
     
-    // 3. CHECKOUT BUTTON (always shown)
+    // 3. STRIPE CHECKOUT BUTTON
     footerHTML += `
         <div style="padding: 0 1rem 1rem;">
-            <button style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" onclick="alert('Stripe payment coming soon! / الدفع عبر سترايب قريباً!')" onmouseover="this.style.background='#0052CC'" onmouseout="this.style.background='#0066FF'">
-                💳 Pay with Card / الدفع بالبطاقة (Coming Soon)
+            <button id="checkoutBtn" style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" onclick="checkout()" onmouseover="this.style.background='#0052CC'" onmouseout="this.style.background='#0066FF'">
+                💳 Pay with Card / الدفع بالبطاقة
             </button>
+            <div style="text-align: center; margin-top: 10px;">
+                <button onclick="checkoutWhatsApp()" style="background:none; border:none; color:#25D366; cursor:pointer; font-size:0.9rem; text-decoration:underline;">Or order via WhatsApp / أو اطلب عبر واتساب</button>
+            </div>
         </div>
     `;
     
@@ -258,7 +261,52 @@ function toggleCart() {
     document.getElementById("cartSidebar").classList.toggle("active"); 
 }
 
-function checkout() { 
+// NEW: Stripe Checkout Integration
+async function checkout() {
+    if (!cart.length) { 
+        alert("Your cart is empty!"); 
+        return; 
+    }
+
+    const btn = document.getElementById("checkoutBtn");
+    const originalText = btn.innerText;
+    btn.innerText = "Processing... / جاري المعالجة...";
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cart: cart,
+                deliveryZoneKey: selectedDeliveryZone
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        if (data.url) {
+            window.location.href = data.url;
+        } else {
+            alert("Something went wrong. Please try again.");
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert("Unable to connect to payment server. Please try WhatsApp.");
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+}
+
+// OLD: WhatsApp Checkout (Renamed but kept as backup)
+function checkoutWhatsApp() { 
     if (!cart.length) { 
         alert("Your cart is empty!"); 
         return; 
@@ -303,20 +351,16 @@ function showNotification(message, clickEvent) {
     let leftPos = '50%';
     let transform = 'translateX(-50%)';
     
-    // If we have the click event, find the product card and center notification over it
     if (clickEvent && clickEvent.target) {
         const button = clickEvent.target;
-        // Find the parent product card
         const productCard = button.closest('.product-card');
         
         if (productCard) {
             const cardRect = productCard.getBoundingClientRect();
-            // Position notification centered both horizontally AND vertically over the card
-            topPos = (cardRect.top + window.scrollY + (cardRect.height / 2) - 20) + 'px'; // Center vertically (minus half notification height)
+            topPos = (cardRect.top + window.scrollY + (cardRect.height / 2) - 20) + 'px'; 
             leftPos = (cardRect.left + cardRect.width / 2) + 'px';
-            transform = 'translateX(-50%)'; // Center horizontally
+            transform = 'translateX(-50%)'; 
         } else {
-            // Fallback if product card not found
             const rect = button.getBoundingClientRect();
             topPos = (rect.top + window.scrollY - 20) + 'px';
             leftPos = (rect.left + rect.width / 2) + 'px';
