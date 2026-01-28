@@ -144,12 +144,14 @@ function addToCart(id, event) {
 function updateCart() { 
     const cartItems = document.getElementById("cartItems"); 
     const cartCount = document.getElementById("cartCount"); 
+    const bottomCartCount = document.getElementById("bottomCartCount");
     const cartFooter = document.querySelector(".cart-footer"); 
     
     if (!cart.length) { 
         cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
-        cartCount.textContent = 0; 
-        cartFooter.innerHTML = `<div class="cart-total"><span>Total / Ø§Ù„Ø¥Ø¬Ù…Ø§Ù„ÙŠ:</span><span>0.00 AED</span></div>`; 
+        if (cartCount) cartCount.textContent = 0;
+        if (bottomCartCount) bottomCartCount.textContent = 0;
+        cartFooter.innerHTML = `<div class="cart-total"><span>Total / الإجمالي:</span><span>0.00 AED</span></div>`; 
         return; 
     } 
     
@@ -159,7 +161,8 @@ function updateCart() {
     const total = subtotal + deliveryFee; 
     const amountNeeded = Math.max(0, 100 - subtotal);
     
-    cartCount.textContent = totalItems; 
+    if (cartCount) cartCount.textContent = totalItems;
+    if (bottomCartCount) bottomCartCount.textContent = totalItems; 
     
     // Cart items display (top section - already in cartItems div)
     cartItems.innerHTML = cart.map(i => `
@@ -326,6 +329,40 @@ function toggleAbout() {
     }
 }
 
+function toggleMobileMenu() {
+    let overlay = document.querySelector('.mobile-menu-overlay');
+    
+    if (!overlay) {
+        // Create menu overlay
+        overlay = document.createElement('div');
+        overlay.className = 'mobile-menu-overlay';
+        overlay.innerHTML = `
+            <div class="mobile-menu">
+                <a href="#products" onclick="closeMobileMenu()">🛍️ Shop / تسوق</a>
+                <a href="javascript:void(0);" onclick="toggleAbout(); closeMobileMenu();">ℹ️ About / من نحن</a>
+                <a href="#contact" onclick="closeMobileMenu()">📧 Contact / اتصل بنا</a>
+                <a href="#terms" onclick="closeMobileMenu()">📋 Terms / الشروط</a>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                closeMobileMenu();
+            }
+        };
+    }
+    
+    overlay.classList.toggle('active');
+}
+
+function closeMobileMenu() {
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+}
+
 window.onload = () => { 
     createCategoryFilters(); 
     loadProducts(); 
@@ -361,7 +398,19 @@ window.onload = () => {
         if (e.target.id === "policyModal") { 
             closePolicy(); 
         } 
-    }; 
+    };
+    
+    // Mobile bottom nav handlers
+    const bottomCartBtn = document.getElementById("bottomCartBtn");
+    const bottomMenuBtn = document.getElementById("bottomMenuBtn");
+    
+    if (bottomCartBtn) {
+        bottomCartBtn.onclick = toggleCart;
+    }
+    
+    if (bottomMenuBtn) {
+        bottomMenuBtn.onclick = toggleMobileMenu;
+    }
 };
 // --- STRIPE PAYMENT ADD-ON ---
 // This will override the "busy" message without touching your product data.
