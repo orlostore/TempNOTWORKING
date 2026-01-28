@@ -4,22 +4,256 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Cancelled - ORLO</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8f9fa; }
-        .card { background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; max-width: 400px; }
-        .icon { font-size: 4rem; margin-bottom: 1rem; color: #dc3545; }
-        h1 { margin-bottom: 0.5rem; color: #2c4a5c; }
-        p { color: #666; margin-bottom: 2rem; }
-        .btn { background: #2c4a5c; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 6px; font-weight: 600; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #2c4a5c 0%, #1a3a4a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .cancel-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cancel-header {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .cancel-icon {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            font-size: 3rem;
+            animation: scaleIn 0.5s ease-out 0.3s both;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .cancel-header h1 {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .cancel-header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+        }
+
+        .cancel-header .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            direction: rtl;
+            margin-top: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .cancel-body {
+            padding: 2.5rem 2rem;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #e07856;
+        }
+
+        .info-box h3 {
+            color: #2c4a5c;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .info-box .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin-top: 0.5rem;
+            color: #666;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e07856 0%, #d35a3a 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(224, 120, 86, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(224, 120, 86, 0.4);
+        }
+
+        .btn-secondary {
+            background: #25d366;
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            display: block;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            opacity: 0.9;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .footer-note a {
+            color: #e07856;
+            text-decoration: none;
+        }
+
+        @media (max-width: 500px) {
+            .cancel-container {
+                border-radius: 15px;
+            }
+
+            .cancel-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .cancel-header h1 {
+                font-size: 1.4rem;
+            }
+
+            .cancel-body {
+                padding: 1.5rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .cancel-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 2.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="icon">✕</div>
-        <h1>Payment Cancelled</h1>
-        <p>Your payment was not processed. No money has been deducted.</p>
-        <a href="/" class="btn">Return to Cart</a>
+    <div class="cancel-container">
+        <div class="cancel-header">
+            <div class="cancel-icon">🛒</div>
+            <h1>Payment Cancelled</h1>
+            <p class="arabic-text">تم إلغاء الدفع</p>
+            <p>Your cart is still waiting for you</p>
+        </div>
+
+        <div class="cancel-body">
+            <div class="info-box">
+                <h3>💳 No Charges Made</h3>
+                <p>Don't worry! No payment was processed and your card was not charged.</p>
+                <p class="arabic-text">لا تقلق! لم تتم معالجة أي دفعة ولم يتم خصم أي مبلغ من بطاقتك.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>🛍️ Your Items Are Saved</h3>
+                <p>Your shopping cart is still intact. Return anytime to complete your purchase.</p>
+                <p class="arabic-text">سلة التسوق الخاصة بك لا تزال محفوظة. يمكنك العودة في أي وقت لإتمام عملية الشراء.</p>
+            </div>
+
+            <div class="btn-group">
+                <a href="/" class="btn btn-primary">
+                    🛒 Return to Cart
+                    <span class="arabic-text">العودة إلى السلة</span>
+                </a>
+                <a href="mailto:info@orlostore.com" class="btn btn-secondary">
+                    ✉️ Need Help?
+                    <span class="arabic-text">تحتاج مساعدة؟</span>
+                </a>
+            </div>
+
+            <div class="footer-note">
+                <p>Having trouble? Contact us at <a href="mailto:info@orlostore.com">info@orlostore.com</a></p>
+            </div>
+        </div>
     </div>
 </body>
 </html>
