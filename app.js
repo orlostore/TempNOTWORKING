@@ -415,3 +415,44 @@ window.onload = () => {
         } 
     }; 
 };
+// --- STRIPE PAYMENT ADD-ON ---
+// This will override the "busy" message without touching your product data.
+async function checkout() {
+    const btn = document.getElementById("stripeBtn");
+    const originalText = btn ? btn.innerHTML : "Pay with Card";
+    
+    try {
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = "Connecting...";
+        }
+
+        const response = await fetch('/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                cart: cart, // Uses your original cart variable
+                deliveryZoneKey: selectedDeliveryZone // Uses your original zone variable
+            }),
+        });
+
+        const data = await response.json();
+
+        if (data.url) {
+            window.location.href = data.url; 
+        } else {
+            throw new Error('No URL');
+        }
+
+    } catch (err) {
+        console.error("Payment Error:", err);
+        alert("Payment system is syncing. Redirecting to WhatsApp...");
+        if (typeof checkoutWhatsApp === "function") {
+            checkoutWhatsApp(); 
+        }
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    }
+}
