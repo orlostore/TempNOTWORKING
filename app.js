@@ -217,11 +217,15 @@ function updateCart() {
         </div>
     `;
     
-    // 3. CHECKOUT BUTTON (always shown)
+   // 3. CHECKOUT BUTTON (Updated to connect to Stripe)
     footerHTML += `
         <div style="padding: 0 1rem 1rem;">
-            <button style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" onclick="alert('Stripe payment coming soon! / الدفع عبر سترايب قريباً!')" onmouseover="this.style.background='#0052CC'" onmouseout="this.style.background='#0066FF'">
-                💳 Pay with Card / الدفع بالبطاقة (Coming Soon)
+            <button id="stripeBtn" 
+                style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" 
+                onclick="checkout()" 
+                onmouseover="this.style.background='#0052CC'" 
+                onmouseout="this.style.background='#0066FF'">
+                💳 Pay with Card / الدفع بالبطاقة
             </button>
         </div>
     `;
