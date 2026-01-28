@@ -57,7 +57,7 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  font-size: 7.18px; /* 10.72px × 0.67 to match 67% zoom appearance */
+  font-size: 7.18px; /* 10.72px Ã— 0.67 to match 67% zoom appearance */
 }
 
 /* Chrome font will be set to 15.41px via JavaScript at page load */
@@ -90,7 +90,7 @@ nav {
 }
 
 .logo-img {
-  width: 71.82px; /* 107.2px × 0.67 */
+  width: 71.82px; /* 107.2px Ã— 0.67 */
   height: 71.82px;
 }
 
@@ -236,7 +236,7 @@ nav {
 
 .hero-arabic {
   font-size: 1.84rem;
-  margin-bottom: 1.3rem; /* Increased to match arabic-desc → badges spacing */
+  margin-bottom: 1.3rem; /* Increased to match arabic-desc â†’ badges spacing */
   font-weight: 700;
   line-height: 1.2;
 }
@@ -1229,5 +1229,197 @@ footer p {
 }
 
 .lightbox-close:hover {
+  color: var(--accent);
+}
+
+/* =============================================
+   MOBILE-ONLY STYLES
+   ============================================= */
+
+/* Mobile Promo Banner - Hidden on desktop */
+.mobile-promo-banner {
+  display: none;
+  background: var(--primary);
+  color: white;
+  text-align: center;
+  padding: 10px 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.mobile-promo-banner .arabic-text {
+  display: inline;
+  font-size: 0.75rem;
+}
+
+/* Mobile Bottom Navigation - Hidden on desktop */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+  padding: 8px 0 12px;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: #666;
+  text-decoration: none;
+  font-size: 0.65rem;
+  cursor: pointer;
+  flex: 1;
+}
+
+.bottom-nav-item.active {
+  color: var(--accent);
+}
+
+.bottom-nav-item .nav-icon {
+  font-size: 1.4rem;
+  position: relative;
+}
+
+.bottom-nav-item .nav-label {
+  font-weight: 500;
+}
+
+.cart-icon-wrapper {
+  position: relative;
+}
+
+.bottom-cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: var(--accent);
+  color: white;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* Mobile styles - max 768px */
+@media (max-width: 768px) {
+  /* Show mobile promo banner */
+  .mobile-promo-banner {
+    display: block;
+  }
+  
+  /* Hide hero section on mobile */
+  .hero {
+    display: none !important;
+  }
+  
+  /* Show bottom nav */
+  .mobile-bottom-nav {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  /* Add padding to body for bottom nav */
+  body {
+    padding-bottom: 70px;
+  }
+  
+  /* Hide hamburger and mobile cart from header */
+  .hamburger,
+  .mobile-cart-icon {
+    display: none !important;
+  }
+  
+  /* Simplified header: logo + search */
+  nav {
+    padding: 8px 12px;
+    gap: 10px;
+  }
+  
+  .logo-container {
+    flex: 0 0 auto;
+  }
+  
+  .logo-img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .search-container {
+    flex: 1;
+    margin: 0;
+    order: 0;
+  }
+  
+  /* Hide desktop nav links on mobile */
+  .nav-links {
+    display: none !important;
+  }
+  
+  /* Adjust container padding */
+  .container,
+  #products {
+    padding-top: 15px !important;
+    padding-bottom: 20px !important;
+  }
+  
+  /* Footer padding for bottom nav */
+  footer {
+    padding-bottom: 80px;
+  }
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+}
+
+.mobile-menu-overlay.active {
+  display: block;
+}
+
+.mobile-menu {
+  position: fixed;
+  bottom: 60px;
+  left: 10px;
+  right: 10px;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 2001;
+  box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 15px;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.mobile-menu a:last-child {
+  border-bottom: none;
+}
+
+.mobile-menu a:hover {
   color: var(--accent);
 }
