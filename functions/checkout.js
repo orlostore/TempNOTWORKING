@@ -148,6 +148,8 @@ function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee) {
     params.append('mode', 'payment');
     params.append('success_url', `${siteUrl}/success.html`);
     params.append('cancel_url', `${siteUrl}/cancel.html`);
+    params.append('customer_creation', 'always');
+    params.append('invoice_creation[enabled]', 'true');
     params.append('shipping_address_collection[allowed_countries][0]', 'AE');
     params.append('phone_number_collection[enabled]', 'true');
     params.append('metadata[delivery_zone]', zone.name);
