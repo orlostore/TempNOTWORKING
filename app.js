@@ -3,38 +3,38 @@ const WHATSAPP_NUMBER = "971XXXXXXXXX";
 const deliveryZones = {
     dubai: {
         name: "Dubai",
-        nameAr: "Ø¯Ø¨ÙŠ",
+        nameAr: "دبي",
         fee: 18,
         freeThreshold: 100
     },
     sharjah_ajman: {
         name: "Sharjah / Ajman",
-        nameAr: "Ø§Ù„Ø´Ø§Ø±Ù‚Ø© / Ø¹Ø¬Ù…Ø§Ù†",
+        nameAr: "الشارقة / عجمان",
         fee: 18,
         freeThreshold: 100
     },
     abu_dhabi: {
         name: "Abu Dhabi",
-        nameAr: "Ø£Ø¨Ùˆ Ø¸Ø¨ÙŠ",
+        nameAr: "أبو ظبي",
         fee: 18,
         freeThreshold: 100
     },
     other: {
         name: "Other Emirates",
-        nameAr: "Ø¥Ù…Ø§Ø±Ø§Øª Ø£Ø®Ø±Ù‰",
+        nameAr: "إمارات أخرى",
         fee: 18,
         freeThreshold: 100
     }
 };
 
 const DELIVERY_TIME = "2-5 business days";
-const DELIVERY_TIME_AR = "Ù¢-Ù¥ Ø£ÙŠØ§Ù… Ø¹Ù…Ù„";
+const DELIVERY_TIME_AR = "٢-٥ أيام عمل";
 
 const policies = {
-    shipping: `<h2>Shipping & Delivery</h2><h2 class="arabic-heading">Ø§Ù„Ø´Ø­Ù† ÙˆØ§Ù„ØªÙˆØµÙŠÙ„</h2><p><strong>Coverage:</strong> We currently deliver within the UAE only.</p><p class="arabic-text"><strong>Ø§Ù„ØªØºØ·ÙŠØ©:</strong> Ù†Ù‚ÙˆÙ… Ø­Ø§Ù„ÙŠØ§Ù‹ Ø¨Ø§Ù„ØªÙˆØµÙŠÙ„ Ø¯Ø§Ø®Ù„ Ø§Ù„Ø¥Ù…Ø§Ø±Ø§Øª Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© Ø§Ù„Ù…ØªØ­Ø¯Ø© ÙÙ‚Ø·.</p><p><strong>Processing Time:</strong> Orders are processed within 24â€“48 hours of payment confirmation.</p><p class="arabic-text"><strong>ÙˆÙ‚Øª Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø©:</strong> ÙŠØªÙ… Ù…Ø¹Ø§Ù„Ø¬Ø© Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø®Ù„Ø§Ù„ Ù¢Ù¤-Ù¤Ù¨ Ø³Ø§Ø¹Ø© Ù…Ù† ØªØ£ÙƒÙŠØ¯ Ø§Ù„Ø¯ÙØ¹.</p><p><strong>Delivery Timeline:</strong> 2-5 business days for all locations.</p><p class="arabic-text"><strong>Ù…Ø¯Ø© Ø§Ù„ØªÙˆØµÙŠÙ„:</strong> Ù¢-Ù¥ Ø£ÙŠØ§Ù… Ø¹Ù…Ù„ Ù„Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…ÙˆØ§Ù‚Ø¹.</p><p><strong>Delivery Fees:</strong></p><p class="arabic-text"><strong>Ø±Ø³ÙˆÙ… Ø§Ù„ØªÙˆØµÙŠÙ„:</strong></p><ul><li><strong>All UAE:</strong> 18 AED (FREE on orders over 100 AED)</li><li class="arabic-text"><strong>Ø¬Ù…ÙŠØ¹ Ø£Ù†Ø­Ø§Ø¡ Ø§Ù„Ø¥Ù…Ø§Ø±Ø§Øª:</strong> Ù¡Ù¨ Ø¯Ø±Ù‡Ù… (Ù…Ø¬Ø§Ù†Ø§Ù‹ Ù„Ù„Ø·Ù„Ø¨Ø§Øª ÙÙˆÙ‚ Ù¡Ù Ù  Ø¯Ø±Ù‡Ù…)</li></ul><p><strong>Tracking:</strong> You will receive tracking information via WhatsApp once your order ships.</p><p class="arabic-text"><strong>Ø§Ù„ØªØªØ¨Ø¹:</strong> Ø³ØªØªÙ„Ù‚Ù‰ Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„ØªØªØ¨Ø¹ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨ Ø¨Ù…Ø¬Ø±Ø¯ Ø´Ø­Ù† Ø·Ù„Ø¨Ùƒ.</p>`,
-    returns: `<h2>Returns & Refunds</h2><h2 class="arabic-heading">Ø§Ù„Ø¥Ø±Ø¬Ø§Ø¹ ÙˆØ§Ù„Ø§Ø³ØªØ±Ø¯Ø§Ø¯</h2><p><strong>7-Day Return Window:</strong> Returns are accepted within 7 days of delivery only. No exceptions.</p><p class="arabic-text"><strong>ÙØªØ±Ø© Ø§Ù„Ø¥Ø±Ø¬Ø§Ø¹ Ù§ Ø£ÙŠØ§Ù…:</strong> ÙŠØªÙ… Ù‚Ø¨ÙˆÙ„ Ø§Ù„Ù…Ø±ØªØ¬Ø¹Ø§Øª Ø®Ù„Ø§Ù„ Ù§ Ø£ÙŠØ§Ù… Ù…Ù† Ø§Ù„ØªØ³Ù„ÙŠÙ… ÙÙ‚Ø·. Ø¨Ø¯ÙˆÙ† Ø§Ø³ØªØ«Ù†Ø§Ø¡Ø§Øª.</p><p><strong>Unopened Items Only:</strong> Items must be completely unused, unopened, and in original sealed packaging with all tags and seals intact.</p><p class="arabic-text"><strong>Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª ØºÙŠØ± Ø§Ù„Ù…ÙØªÙˆØ­Ø© ÙÙ‚Ø·:</strong> ÙŠØ¬Ø¨ Ø£Ù† ØªÙƒÙˆÙ† Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª ØºÙŠØ± Ù…Ø³ØªØ®Ø¯Ù…Ø© ØªÙ…Ø§Ù…Ø§Ù‹ØŒ ØºÙŠØ± Ù…ÙØªÙˆØ­Ø©ØŒ ÙˆÙÙŠ Ø§Ù„Ø¹Ø¨ÙˆØ© Ø§Ù„Ø£ØµÙ„ÙŠØ© Ø§Ù„Ù…ØºÙ„Ù‚Ø© Ù…Ø¹ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ù„ØµÙ‚Ø§Øª ÙˆØ§Ù„Ø£Ø®ØªØ§Ù… Ø³Ù„ÙŠÙ…Ø©.</p><p><strong>No Returns on Opened Items:</strong> Once opened, used, or packaging is damaged, items cannot be returned for any reason.</p><p class="arabic-text"><strong>Ù„Ø§ Ø¥Ø±Ø¬Ø§Ø¹ Ù„Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…ÙØªÙˆØ­Ø©:</strong> Ø¨Ù…Ø¬Ø±Ø¯ Ø§Ù„ÙØªØ­ Ø£Ùˆ Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø£Ùˆ ØªÙ„Ù Ø§Ù„Ø¹Ø¨ÙˆØ©ØŒ Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø¥Ø±Ø¬Ø§Ø¹ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ù„Ø£ÙŠ Ø³Ø¨Ø¨.</p><p><strong>Return Shipping Costs:</strong> All return shipping costs are the buyer's responsibility. We do not provide prepaid return labels.</p><p class="arabic-text"><strong>ØªÙƒØ§Ù„ÙŠÙ Ø´Ø­Ù† Ø§Ù„Ø¥Ø±Ø¬Ø§Ø¹:</strong> Ø¬Ù…ÙŠØ¹ ØªÙƒØ§Ù„ÙŠÙ Ø´Ø­Ù† Ø§Ù„Ø¥Ø±Ø¬Ø§Ø¹ Ø¹Ù„Ù‰ Ø¹Ø§ØªÙ‚ Ø§Ù„Ù…Ø´ØªØ±ÙŠ. Ù„Ø§ Ù†ÙˆÙØ± Ù…Ù„ØµÙ‚Ø§Øª Ø¥Ø±Ø¬Ø§Ø¹ Ù…Ø¯ÙÙˆØ¹Ø© Ù…Ø³Ø¨Ù‚Ø§Ù‹.</p><p><strong>Inspection Required:</strong> All returns are inspected upon receipt. Items showing any signs of use, missing components, or damaged packaging will be rejected.</p><p class="arabic-text"><strong>Ø§Ù„ÙØ­Øµ Ù…Ø·Ù„ÙˆØ¨:</strong> ÙŠØªÙ… ÙØ­Øµ Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ø±ØªØ¬Ø¹Ø§Øª Ø¹Ù†Ø¯ Ø§Ù„Ø§Ø³ØªÙ„Ø§Ù…. Ø³ÙŠØªÙ… Ø±ÙØ¶ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªÙŠ ØªØ¸Ù‡Ø± Ø£ÙŠ Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø£Ùˆ Ù…ÙƒÙˆÙ†Ø§Øª Ù…ÙÙ‚ÙˆØ¯Ø© Ø£Ùˆ Ø¹Ø¨ÙˆØ© ØªØ§Ù„ÙØ©.</p><p><strong>Refund Process:</strong> Refunds are issued only after inspection confirms the item is unopened and undamaged. Processing takes 5-7 business days after we receive the return.</p><p class="arabic-text"><strong>Ø¹Ù…Ù„ÙŠØ© Ø§Ù„Ø§Ø³ØªØ±Ø¯Ø§Ø¯:</strong> ÙŠØªÙ… Ø¥ØµØ¯Ø§Ø± Ø§Ù„Ù…Ø¨Ø§Ù„Øº Ø§Ù„Ù…Ø³ØªØ±Ø¯Ø© ÙÙ‚Ø· Ø¨Ø¹Ø¯ Ø£Ù† ÙŠØ¤ÙƒØ¯ Ø§Ù„ÙØ­Øµ Ø£Ù† Ø§Ù„Ù…Ù†ØªØ¬ ØºÙŠØ± Ù…ÙØªÙˆØ­ ÙˆØºÙŠØ± ØªØ§Ù„Ù. ØªØ³ØªØºØ±Ù‚ Ø§Ù„Ù…Ø¹Ø§Ù„Ø¬Ø© Ù¥-Ù§ Ø£ÙŠØ§Ù… Ø¹Ù…Ù„ Ø¨Ø¹Ø¯ Ø§Ø³ØªÙ„Ø§Ù… Ø§Ù„Ø¥Ø±Ø¬Ø§Ø¹.</p><p><strong>Non-Returnable Items:</strong> Sale items, clearance items, items with damaged packaging, or items showing any signs of use are not eligible for return.</p><p class="arabic-text"><strong>Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª ØºÙŠØ± Ø§Ù„Ù‚Ø§Ø¨Ù„Ø© Ù„Ù„Ø¥Ø±Ø¬Ø§Ø¹:</strong> Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªØ®ÙÙŠØ¶ØŒ Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªØµÙÙŠØ©ØŒ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø°Ø§Øª Ø§Ù„Ø¹Ø¨ÙˆØ© Ø§Ù„ØªØ§Ù„ÙØ©ØŒ Ø£Ùˆ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ØªÙŠ ØªØ¸Ù‡Ø± Ø£ÙŠ Ø¹Ù„Ø§Ù…Ø§Øª Ø§Ø³ØªØ®Ø¯Ø§Ù… ØºÙŠØ± Ù…Ø¤Ù‡Ù„Ø© Ù„Ù„Ø¥Ø±Ø¬Ø§Ø¹.</p><p><strong>How to Initiate a Return:</strong> Contact us via WhatsApp or email within 7 days of delivery with your order number and reason for return.</p><p class="arabic-text"><strong>ÙƒÙŠÙÙŠØ© Ø¨Ø¯Ø¡ Ø§Ù„Ø¥Ø±Ø¬Ø§Ø¹:</strong> Ø§ØªØµÙ„ Ø¨Ù†Ø§ Ø¹Ø¨Ø± ÙˆØ§ØªØ³Ø§Ø¨ Ø£Ùˆ Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ Ø®Ù„Ø§Ù„ Ù§ Ø£ÙŠØ§Ù… Ù…Ù† Ø§Ù„ØªØ³Ù„ÙŠÙ… Ù…Ø¹ Ø±Ù‚Ù… Ø·Ù„Ø¨Ùƒ ÙˆØ³Ø¨Ø¨ Ø§Ù„Ø¥Ø±Ø¬Ø§Ø¹.</p>`,
-    privacy: `<h2>Privacy Policy</h2><h2 class="arabic-heading">Ø³ÙŠØ§Ø³Ø© Ø§Ù„Ø®ØµÙˆØµÙŠØ©</h2><p><strong>Information Collection:</strong> We collect only the information necessary to process and fulfill your order (name, phone number, delivery address, email).</p><p class="arabic-text"><strong>Ø¬Ù…Ø¹ Ø§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª:</strong> Ù†Ø¬Ù…Ø¹ ÙÙ‚Ø· Ø§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ø¶Ø±ÙˆØ±ÙŠØ© Ù„Ù…Ø¹Ø§Ù„Ø¬Ø© ÙˆØªÙ†ÙÙŠØ° Ø·Ù„Ø¨Ùƒ (Ø§Ù„Ø§Ø³Ù…ØŒ Ø±Ù‚Ù… Ø§Ù„Ù‡Ø§ØªÙØŒ Ø¹Ù†ÙˆØ§Ù† Ø§Ù„ØªÙˆØµÙŠÙ„ØŒ Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ).</p><p><strong>Data Usage:</strong> Your information is used solely for order processing, delivery coordination, and customer support.</p><p class="arabic-text"><strong>Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª:</strong> ØªÙØ³ØªØ®Ø¯Ù… Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÙƒ ÙÙ‚Ø· Ù„Ù…Ø¹Ø§Ù„Ø¬Ø© Ø§Ù„Ø·Ù„Ø¨Ø§ØªØŒ ÙˆØªÙ†Ø³ÙŠÙ‚ Ø§Ù„ØªÙˆØµÙŠÙ„ØŒ ÙˆØ¯Ø¹Ù… Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡.</p><p><strong>Third-Party Sharing:</strong> Your data is never sold or shared with third parties except for delivery partners who need your address to complete delivery.</p><p class="arabic-text"><strong>Ø§Ù„Ù…Ø´Ø§Ø±ÙƒØ© Ù…Ø¹ Ø£Ø·Ø±Ø§Ù Ø«Ø§Ù„Ø«Ø©:</strong> Ù„Ø§ ÙŠØªÙ… Ø¨ÙŠØ¹ Ø¨ÙŠØ§Ù†Ø§ØªÙƒ Ø£Ùˆ Ù…Ø´Ø§Ø±ÙƒØªÙ‡Ø§ Ù…Ø¹ Ø£Ø·Ø±Ø§Ù Ø«Ø§Ù„Ø«Ø© Ø£Ø¨Ø¯Ø§Ù‹ Ø¨Ø§Ø³ØªØ«Ù†Ø§Ø¡ Ø´Ø±ÙƒØ§Ø¡ Ø§Ù„ØªÙˆØµÙŠÙ„ Ø§Ù„Ø°ÙŠÙ† ÙŠØ­ØªØ§Ø¬ÙˆÙ† Ø¥Ù„Ù‰ Ø¹Ù†ÙˆØ§Ù†Ùƒ Ù„Ø¥ØªÙ…Ø§Ù… Ø§Ù„ØªÙˆØµÙŠÙ„.</p><p><strong>Data Security:</strong> We use secure communication channels (WhatsApp, encrypted email) to protect your information.</p><p class="arabic-text"><strong>Ø£Ù…Ù† Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª:</strong> Ù†Ø³ØªØ®Ø¯Ù… Ù‚Ù†ÙˆØ§Øª Ø§ØªØµØ§Ù„ Ø¢Ù…Ù†Ø© (ÙˆØ§ØªØ³Ø§Ø¨ØŒ Ø¨Ø±ÙŠØ¯ Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ Ù…Ø´ÙØ±) Ù„Ø­Ù…Ø§ÙŠØ© Ù…Ø¹Ù„ÙˆÙ…Ø§ØªÙƒ.</p><p><strong>Your Rights:</strong> You may request deletion of your data at any time by contacting us.</p><p class="arabic-text"><strong>Ø­Ù‚ÙˆÙ‚Ùƒ:</strong> ÙŠÙ…ÙƒÙ†Ùƒ Ø·Ù„Ø¨ Ø­Ø°Ù Ø¨ÙŠØ§Ù†Ø§ØªÙƒ ÙÙŠ Ø£ÙŠ ÙˆÙ‚Øª Ø¹Ù† Ø·Ø±ÙŠÙ‚ Ø§Ù„Ø§ØªØµØ§Ù„ Ø¨Ù†Ø§.</p>`,
-    terms: `<h2>Terms of Service</h2><h2 class="arabic-heading">Ø´Ø±ÙˆØ· Ø§Ù„Ø®Ø¯Ù…Ø©</h2><p><strong>Order Agreement:</strong> By placing an order, you agree to provide accurate information and accept these terms.</p><p class="arabic-text"><strong>Ø§ØªÙØ§Ù‚ÙŠØ© Ø§Ù„Ø·Ù„Ø¨:</strong> Ø¨ØªÙ‚Ø¯ÙŠÙ… Ø·Ù„Ø¨ØŒ ÙØ¥Ù†Ùƒ ØªÙˆØ§ÙÙ‚ Ø¹Ù„Ù‰ ØªÙ‚Ø¯ÙŠÙ… Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø¯Ù‚ÙŠÙ‚Ø© ÙˆÙ‚Ø¨ÙˆÙ„ Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø±ÙˆØ·.</p><p><strong>Payment:</strong> Full payment is required before order processing begins. We accept bank transfer and online payment methods.</p><p class="arabic-text"><strong>Ø§Ù„Ø¯ÙØ¹:</strong> ÙŠÙ„Ø²Ù… Ø§Ù„Ø¯ÙØ¹ Ø§Ù„ÙƒØ§Ù…Ù„ Ù‚Ø¨Ù„ Ø¨Ø¯Ø¡ Ù…Ø¹Ø§Ù„Ø¬Ø© Ø§Ù„Ø·Ù„Ø¨. Ù†Ù‚Ø¨Ù„ Ø§Ù„ØªØ­ÙˆÙŠÙ„ Ø§Ù„Ø¨Ù†ÙƒÙŠ ÙˆØ·Ø±Ù‚ Ø§Ù„Ø¯ÙØ¹ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ.</p><p><strong>Product Accuracy:</strong> We strive to display accurate product information and images. Actual products may vary slightly from images shown.</p><p class="arabic-text"><strong>Ø¯Ù‚Ø© Ø§Ù„Ù…Ù†ØªØ¬:</strong> Ù†Ø³Ø¹Ù‰ Ù„Ø¹Ø±Ø¶ Ù…Ø¹Ù„ÙˆÙ…Ø§Øª ÙˆØµÙˆØ± Ø§Ù„Ù…Ù†ØªØ¬ Ø¨Ø¯Ù‚Ø©. Ù‚Ø¯ ØªØ®ØªÙ„Ù Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„ÙØ¹Ù„ÙŠØ© Ù‚Ù„ÙŠÙ„Ø§Ù‹ Ø¹Ù† Ø§Ù„ØµÙˆØ± Ø§Ù„Ù…Ø¹Ø±ÙˆØ¶Ø©.</p><p><strong>Right to Refuse Service:</strong> ORLO reserves the right to refuse or cancel any order if fraud, misuse, or policy violations are detected.</p><p class="arabic-text"><strong>Ø§Ù„Ø­Ù‚ ÙÙŠ Ø±ÙØ¶ Ø§Ù„Ø®Ø¯Ù…Ø©:</strong> ØªØ­ØªÙØ¸ Ø£ÙˆØ±Ù„Ùˆ Ø¨Ø§Ù„Ø­Ù‚ ÙÙŠ Ø±ÙØ¶ Ø£Ùˆ Ø¥Ù„ØºØ§Ø¡ Ø£ÙŠ Ø·Ù„Ø¨ ÙÙŠ Ø­Ø§Ù„Ø© Ø§ÙƒØªØ´Ø§Ù Ø§Ø­ØªÙŠØ§Ù„ Ø£Ùˆ Ø¥Ø³Ø§Ø¡Ø© Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø£Ùˆ Ø§Ù†ØªÙ‡Ø§ÙƒØ§Øª Ù„Ù„Ø³ÙŠØ§Ø³Ø©.</p><p><strong>Liability:</strong> ORLO is not responsible for delivery delays caused by courier services, incorrect addresses provided by customers, or force majeure events.</p><p class="arabic-text"><strong>Ø§Ù„Ù…Ø³Ø¤ÙˆÙ„ÙŠØ©:</strong> Ø£ÙˆØ±Ù„Ùˆ ØºÙŠØ± Ù…Ø³Ø¤ÙˆÙ„Ø© Ø¹Ù† ØªØ£Ø®ÙŠØ±Ø§Øª Ø§Ù„ØªÙˆØµÙŠÙ„ Ø§Ù„Ù†Ø§ØªØ¬Ø© Ø¹Ù† Ø®Ø¯Ù…Ø§Øª Ø§Ù„ØªÙˆØµÙŠÙ„ØŒ Ø£Ùˆ Ø§Ù„Ø¹Ù†Ø§ÙˆÙŠÙ† ØºÙŠØ± Ø§Ù„ØµØ­ÙŠØ­Ø© Ø§Ù„Ù…Ù‚Ø¯Ù…Ø© Ù…Ù† Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡ØŒ Ø£Ùˆ Ø£Ø­Ø¯Ø§Ø« Ø§Ù„Ù‚ÙˆØ© Ø§Ù„Ù‚Ø§Ù‡Ø±Ø©.</p><p><strong>Changes to Terms:</strong> We reserve the right to update these terms at any time. Continued use of our service constitutes acceptance of updated terms.</p><p class="arabic-text"><strong>Ø§Ù„ØªØºÙŠÙŠØ±Ø§Øª Ø¹Ù„Ù‰ Ø§Ù„Ø´Ø±ÙˆØ·:</strong> Ù†Ø­ØªÙØ¸ Ø¨Ø§Ù„Ø­Ù‚ ÙÙŠ ØªØ­Ø¯ÙŠØ« Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø±ÙˆØ· ÙÙŠ Ø£ÙŠ ÙˆÙ‚Øª. Ø§Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„Ù…Ø³ØªÙ…Ø± Ù„Ø®Ø¯Ù…ØªÙ†Ø§ ÙŠØ´ÙƒÙ„ Ù‚Ø¨ÙˆÙ„Ø§Ù‹ Ù„Ù„Ø´Ø±ÙˆØ· Ø§Ù„Ù…Ø­Ø¯Ø«Ø©.</p><p><strong>Contact:</strong> For questions about these terms, contact us at info@orlostore.com</p><p class="arabic-text"><strong>Ø§Ù„Ø§ØªØµØ§Ù„:</strong> Ù„Ù„Ø§Ø³ØªÙØ³Ø§Ø±Ø§Øª Ø­ÙˆÙ„ Ù‡Ø°Ù‡ Ø§Ù„Ø´Ø±ÙˆØ·ØŒ Ø§ØªØµÙ„ Ø¨Ù†Ø§ Ø¹Ù„Ù‰ info@orlostore.com</p>`
+    shipping: `<h2>Shipping & Delivery</h2><h2 class="arabic-heading">الشحن والتوصيل</h2><p><strong>Coverage:</strong> We currently deliver within the UAE only.</p><p class="arabic-text"><strong>التغطية:</strong> نقوم حالياً بالتوصيل داخل الإمارات العربية المتحدة فقط.</p><p><strong>Processing Time:</strong> Orders are processed within 24–48 hours of payment confirmation.</p><p class="arabic-text"><strong>وقت المعالجة:</strong> يتم معالجة الطلبات خلال ٢٤-٤٨ ساعة من تأكيد الدفع.</p><p><strong>Delivery Timeline:</strong> 2-5 business days for all locations.</p><p class="arabic-text"><strong>مدة التوصيل:</strong> ٢-٥ أيام عمل لجميع المواقع.</p><p><strong>Delivery Fees:</strong></p><p class="arabic-text"><strong>رسوم التوصيل:</strong></p><ul><li><strong>All UAE:</strong> 18 AED (FREE on orders over 100 AED)</li><li class="arabic-text"><strong>جميع أنحاء الإمارات:</strong> ١٨ درهم (مجاناً للطلبات فوق ١٠٠ درهم)</li></ul><p><strong>Tracking:</strong> You will receive tracking information via WhatsApp once your order ships.</p><p class="arabic-text"><strong>التتبع:</strong> ستتلقى معلومات التتبع عبر واتساب بمجرد شحن طلبك.</p>`,
+    returns: `<h2>Returns & Refunds</h2><h2 class="arabic-heading">الإرجاع والاسترداد</h2><p><strong>7-Day Return Window:</strong> Returns are accepted within 7 days of delivery only. No exceptions.</p><p class="arabic-text"><strong>فترة الإرجاع ٧ أيام:</strong> يتم قبول المرتجعات خلال ٧ أيام من التسليم فقط. بدون استثناءات.</p><p><strong>Unopened Items Only:</strong> Items must be completely unused, unopened, and in original sealed packaging with all tags and seals intact.</p><p class="arabic-text"><strong>المنتجات غير المفتوحة فقط:</strong> يجب أن تكون المنتجات غير مستخدمة تماماً، غير مفتوحة، وفي العبوة الأصلية المغلقة مع جميع الملصقات والأختام سليمة.</p><p><strong>No Returns on Opened Items:</strong> Once opened, used, or packaging is damaged, items cannot be returned for any reason.</p><p class="arabic-text"><strong>لا إرجاع للمنتجات المفتوحة:</strong> بمجرد الفتح أو الاستخدام أو تلف العبوة، لا يمكن إرجاع المنتجات لأي سبب.</p><p><strong>Return Shipping Costs:</strong> All return shipping costs are the buyer's responsibility. We do not provide prepaid return labels.</p><p class="arabic-text"><strong>تكاليف شحن الإرجاع:</strong> جميع تكاليف شحن الإرجاع على عاتق المشتري. لا نوفر ملصقات إرجاع مدفوعة مسبقاً.</p><p><strong>Inspection Required:</strong> All returns are inspected upon receipt. Items showing any signs of use, missing components, or damaged packaging will be rejected.</p><p class="arabic-text"><strong>الفحص مطلوب:</strong> يتم فحص جميع المرتجعات عند الاستلام. سيتم رفض المنتجات التي تظهر أي علامات استخدام أو مكونات مفقودة أو عبوة تالفة.</p><p><strong>Refund Process:</strong> Refunds are issued only after inspection confirms the item is unopened and undamaged. Processing takes 5-7 business days after we receive the return.</p><p class="arabic-text"><strong>عملية الاسترداد:</strong> يتم إصدار المبالغ المستردة فقط بعد أن يؤكد الفحص أن المنتج غير مفتوح وغير تالف. تستغرق المعالجة ٥-٧ أيام عمل بعد استلام الإرجاع.</p><p><strong>Non-Returnable Items:</strong> Sale items, clearance items, items with damaged packaging, or items showing any signs of use are not eligible for return.</p><p class="arabic-text"><strong>المنتجات غير القابلة للإرجاع:</strong> منتجات التخفيض، منتجات التصفية، المنتجات ذات العبوة التالفة، أو المنتجات التي تظهر أي علامات استخدام غير مؤهلة للإرجاع.</p><p><strong>How to Initiate a Return:</strong> Contact us via WhatsApp or email within 7 days of delivery with your order number and reason for return.</p><p class="arabic-text"><strong>كيفية بدء الإرجاع:</strong> اتصل بنا عبر واتساب أو البريد الإلكتروني خلال ٧ أيام من التسليم مع رقم طلبك وسبب الإرجاع.</p>`,
+    privacy: `<h2>Privacy Policy</h2><h2 class="arabic-heading">سياسة الخصوصية</h2><p><strong>Information Collection:</strong> We collect only the information necessary to process and fulfill your order (name, phone number, delivery address, email).</p><p class="arabic-text"><strong>جمع المعلومات:</strong> نجمع فقط المعلومات الضرورية لمعالجة وتنفيذ طلبك (الاسم، رقم الهاتف، عنوان التوصيل، البريد الإلكتروني).</p><p><strong>Data Usage:</strong> Your information is used solely for order processing, delivery coordination, and customer support.</p><p class="arabic-text"><strong>استخدام البيانات:</strong> تُستخدم معلوماتك فقط لمعالجة الطلبات، وتنسيق التوصيل، ودعم العملاء.</p><p><strong>Third-Party Sharing:</strong> Your data is never sold or shared with third parties except for delivery partners who need your address to complete delivery.</p><p class="arabic-text"><strong>المشاركة مع أطراف ثالثة:</strong> لا يتم بيع بياناتك أو مشاركتها مع أطراف ثالثة أبداً باستثناء شركاء التوصيل الذين يحتاجون إلى عنوانك لإتمام التوصيل.</p><p><strong>Data Security:</strong> We use secure communication channels (WhatsApp, encrypted email) to protect your information.</p><p class="arabic-text"><strong>أمن البيانات:</strong> نستخدم قنوات اتصال آمنة (واتساب، بريد إلكتروني مشفر) لحماية معلوماتك.</p><p><strong>Your Rights:</strong> You may request deletion of your data at any time by contacting us.</p><p class="arabic-text"><strong>حقوقك:</strong> يمكنك طلب حذف بياناتك في أي وقت عن طريق الاتصال بنا.</p>`,
+    terms: `<h2>Terms of Service</h2><h2 class="arabic-heading">شروط الخدمة</h2><p><strong>Order Agreement:</strong> By placing an order, you agree to provide accurate information and accept these terms.</p><p class="arabic-text"><strong>اتفاقية الطلب:</strong> بتقديم طلب، فإنك توافق على تقديم معلومات دقيقة وقبول هذه الشروط.</p><p><strong>Payment:</strong> Full payment is required before order processing begins. We accept bank transfer and online payment methods.</p><p class="arabic-text"><strong>الدفع:</strong> يلزم الدفع الكامل قبل بدء معالجة الطلب. نقبل التحويل البنكي وطرق الدفع الإلكتروني.</p><p><strong>Product Accuracy:</strong> We strive to display accurate product information and images. Actual products may vary slightly from images shown.</p><p class="arabic-text"><strong>دقة المنتج:</strong> نسعى لعرض معلومات وصور المنتج بدقة. قد تختلف المنتجات الفعلية قليلاً عن الصور المعروضة.</p><p><strong>Right to Refuse Service:</strong> ORLO reserves the right to refuse or cancel any order if fraud, misuse, or policy violations are detected.</p><p class="arabic-text"><strong>الحق في رفض الخدمة:</strong> تحتفظ أورلو بالحق في رفض أو إلغاء أي طلب في حالة اكتشاف احتيال أو إساءة استخدام أو انتهاكات للسياسة.</p><p><strong>Liability:</strong> ORLO is not responsible for delivery delays caused by courier services, incorrect addresses provided by customers, or force majeure events.</p><p class="arabic-text"><strong>المسؤولية:</strong> أورلو غير مسؤولة عن تأخيرات التوصيل الناتجة عن خدمات التوصيل، أو العناوين غير الصحيحة المقدمة من العملاء، أو أحداث القوة القاهرة.</p><p><strong>Changes to Terms:</strong> We reserve the right to update these terms at any time. Continued use of our service constitutes acceptance of updated terms.</p><p class="arabic-text"><strong>التغييرات على الشروط:</strong> نحتفظ بالحق في تحديث هذه الشروط في أي وقت. الاستخدام المستمر لخدمتنا يشكل قبولاً للشروط المحدثة.</p><p><strong>Contact:</strong> For questions about these terms, contact us at info@orlostore.com</p><p class="arabic-text"><strong>الاتصال:</strong> للاستفسارات حول هذه الشروط، اتصل بنا على info@orlostore.com</p>`
 };
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -169,14 +169,14 @@ function updateCart() {
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
             <div style="flex:1;">
                 <strong style="font-size:0.9rem; color:#2c4a5c;">${i.name}</strong><br>
-                <span style="color:#888; font-size:0.8rem;">${i.price} AED Ã— ${i.quantity}</span><br>
+                <span style="color:#888; font-size:0.8rem;">${i.price} AED × ${i.quantity}</span><br>
                 <span style="color:#e07856; font-weight:600; font-size:0.9rem;">${(i.price * i.quantity).toFixed(2)} AED</span>
             </div>
             <div style="display:flex; gap:0.4rem; align-items:center;">
                 <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">-</button>
                 <span style="font-size:0.9rem; font-weight:600; min-width:20px; text-align:center;">${i.quantity}</span>
                 <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">+</button>
-                <button onclick="removeFromCart(${i.id})" style="padding:0.3rem 0.6rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:0.85rem;">âœ•</button>
+                <button onclick="removeFromCart(${i.id})" style="padding:0.3rem 0.6rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:0.85rem;">✕</button>
             </div>
         </div>
     `).join(""); 
@@ -219,16 +219,16 @@ function updateCart() {
     footerHTML += `
         <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.75rem;">
             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; color: #2c4a5c;">
-                <span>Subtotal / Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹ Ø§Ù„ÙØ±Ø¹ÙŠ:</span>
+                <span>Subtotal / المجموع الفرعي:</span>
                 <span>${subtotal.toFixed(2)} AED</span>
             </div>
             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; color: #2c4a5c;">
-                <span>Delivery / Ø§Ù„ØªÙˆØµÙŠÙ„:</span>
-                <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE / Ù…Ø¬Ø§Ù†ÙŠ' : deliveryFee.toFixed(2) + ' AED'}</span>
+                <span>Delivery / التوصيل:</span>
+                <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE / مجاني' : deliveryFee.toFixed(2) + ' AED'}</span>
             </div>
             <div style="border-top: 2px solid #ddd; margin: 0.5rem 0;"></div>
             <div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;">
-                <span>Total / Ø§Ù„Ø¥Ø¬Ù…Ø§Ù„ÙŠ:</span>
+                <span>Total / الإجمالي:</span>
                 <span>${total.toFixed(2)} AED</span>
             </div>
         </div>
@@ -242,7 +242,7 @@ function updateCart() {
                 onclick="checkout()" 
                 onmouseover="this.style.background='#0052CC'" 
                 onmouseout="this.style.background='#0066FF'">
-                ðŸ’³ Pay with Card / Ø§Ù„Ø¯ÙØ¹ Ø¨Ø§Ù„Ø¨Ø·Ø§Ù‚Ø©
+                💳 Pay with Card / الدفع بالبطاقة
             </button>
         </div>
     `;
@@ -277,33 +277,6 @@ function removeFromCart(id) {
 
 function toggleCart() { 
     document.getElementById("cartSidebar").classList.toggle("active"); 
-}
-
-function checkout() { 
-    if (!cart.length) { 
-        alert("Your cart is empty!"); 
-        return; 
-    } 
-    
-    const orderNumber = generateOrderNumber(); 
-    const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0); 
-    const deliveryFee = calculateDeliveryFee(subtotal); 
-    const total = subtotal + deliveryFee; 
-    const zone = deliveryZones[selectedDeliveryZone]; 
-    
-    let message = `Hello ORLO, I'd like to order:%0A%0A*Order #${orderNumber}*%0A%0A`; 
-    cart.forEach(i => { 
-        message += `â€¢ ${i.name} Ã— ${i.quantity} = ${(i.price * i.quantity).toFixed(2)} AED%0A`; 
-    }); 
-    message += `%0Aâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€%0A`; 
-    message += `Subtotal: ${subtotal.toFixed(2)} AED%0A`; 
-    message += `Delivery (${zone.name}): ${deliveryFee === 0 ? 'FREE' : deliveryFee.toFixed(2) + ' AED'}%0A`; 
-    message += `%0A*Total: ${total.toFixed(2)} AED*`; 
-    message += `%0A%0ADelivery Location: ${zone.name}`; 
-    message += `%0AEstimated Delivery: ${DELIVERY_TIME}`; 
-    message += `%0A%0APlease confirm my delivery address and payment method.`; 
-    
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank"); 
 }
 
 function openPolicy(type) { 
@@ -412,8 +385,8 @@ window.onload = () => {
         bottomMenuBtn.onclick = toggleMobileMenu;
     }
 };
+
 // --- STRIPE PAYMENT ADD-ON ---
-// This will override the "busy" message without touching your product data.
 async function checkout() {
     const btn = document.getElementById("stripeBtn");
     const originalText = btn ? btn.innerHTML : "Pay with Card";
@@ -428,8 +401,8 @@ async function checkout() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                cart: cart, // Uses your original cart variable
-                deliveryZoneKey: selectedDeliveryZone // Uses your original zone variable
+                cart: cart,
+                deliveryZoneKey: selectedDeliveryZone
             }),
         });
 
@@ -443,10 +416,7 @@ async function checkout() {
 
     } catch (err) {
         console.error("Payment Error:", err);
-        alert("Payment system is syncing. Redirecting to WhatsApp...");
-        if (typeof checkoutWhatsApp === "function") {
-            checkoutWhatsApp(); 
-        }
+        alert("Payment system is syncing. Please try again.");
         if (btn) {
             btn.disabled = false;
             btn.innerHTML = originalText;
