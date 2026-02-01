@@ -10,7 +10,7 @@ function toArabicNumerals(num) {
 
 // Wait for products to load, then display
 async function initProductPage() {
-  // Wait for products to be loaded from Google Sheets
+  // Wait for products to be loaded from API
   let attempts = 0;
   while (products.length === 0 && attempts < 50) {
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -24,6 +24,9 @@ async function initProductPage() {
     document.body.innerHTML = "<h2 style='text-align:center;padding:2.4rem;'>Product not found</h2>";
     return;
   }
+
+  // Check if out of stock
+  const isOutOfStock = product.quantity === 0;
 
   // Get threshold from app.js (will be available after app.js loads)
   const threshold = typeof FREE_DELIVERY_THRESHOLD !== 'undefined' ? FREE_DELIVERY_THRESHOLD : 75;
@@ -150,6 +153,17 @@ async function initProductPage() {
   }
 
   // =====================
+  // DESKTOP: Update Add to Cart button for out of stock
+  // =====================
+  const desktopAddBtn = document.getElementById("addToCartBtn");
+  if (isOutOfStock && desktopAddBtn) {
+    desktopAddBtn.textContent = "Out of Stock | نفذ المخزون";
+    desktopAddBtn.disabled = true;
+    desktopAddBtn.style.background = "#999";
+    desktopAddBtn.style.cursor = "not-allowed";
+  }
+
+  // =====================
   // MOBILE VERSION
   // =====================
   document.getElementById("mobileProductTitle").innerText = product.name;
@@ -190,6 +204,17 @@ async function initProductPage() {
       // Setup gallery click
       setupGalleryOverlay(product);
     }
+  }
+
+  // =====================
+  // MOBILE: Update Add to Cart button for out of stock
+  // =====================
+  const mobileAddBtn = document.getElementById("mobileAddToCartBtn");
+  if (isOutOfStock && mobileAddBtn) {
+    mobileAddBtn.textContent = "Out of Stock | نفذ المخزون";
+    mobileAddBtn.disabled = true;
+    mobileAddBtn.style.background = "#999";
+    mobileAddBtn.style.cursor = "not-allowed";
   }
 
   // =====================
@@ -273,9 +298,21 @@ async function initProductPage() {
   // ADD TO CART BUTTONS
   // =====================
   const addToCartHandler = () => {
+    // Check stock before adding
+    if (product.quantity === 0) {
+      alert('Sorry, this product is out of stock.\n\nعذراً، هذا المنتج غير متوفر حالياً.');
+      return false;
+    }
+
     // Get current cart from localStorage
     let localCart = JSON.parse(localStorage.getItem("cart")) || [];
     const item = localCart.find(i => i.id === product.id);
+    
+    // Check if adding more would exceed available stock
+    if (item && item.quantity >= product.quantity) {
+      alert(`Sorry, only ${product.quantity} available in stock.\n\nعذراً، الكمية المتاحة ${product.quantity} فقط.`);
+      return false;
+    }
     
     if (item) {
       item.quantity++;
@@ -309,31 +346,37 @@ async function initProductPage() {
     return true;
   };
 
-  // Desktop button
-  document.getElementById("addToCartBtn").onclick = function() {
-    addToCartHandler();
-    const btn = this;
-    const originalText = btn.textContent;
-    btn.textContent = "✓ Added!";
-    btn.style.background = "#28a745";
-    setTimeout(() => {
-      btn.textContent = originalText;
-      btn.style.background = "";
-    }, 2000);
-  };
+  // Desktop button - only attach handler if in stock
+  if (!isOutOfStock) {
+    document.getElementById("addToCartBtn").onclick = function() {
+      if (addToCartHandler()) {
+        const btn = this;
+        const originalText = btn.textContent;
+        btn.textContent = "✓ Added!";
+        btn.style.background = "#28a745";
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = "";
+        }, 2000);
+      }
+    };
+  }
 
-  // Mobile button
-  document.getElementById("mobileAddToCartBtn").onclick = function() {
-    addToCartHandler();
-    const btn = this;
-    const originalText = btn.textContent;
-    btn.textContent = "✓ Added! | تمت الإضافة";
-    btn.style.background = "#28a745";
-    setTimeout(() => {
-      btn.textContent = originalText;
-      btn.style.background = "";
-    }, 2000);
-  };
+  // Mobile button - only attach handler if in stock
+  if (!isOutOfStock) {
+    document.getElementById("mobileAddToCartBtn").onclick = function() {
+      if (addToCartHandler()) {
+        const btn = this;
+        const originalText = btn.textContent;
+        btn.textContent = "✓ Added! | تمت الإضافة";
+        btn.style.background = "#28a745";
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = "";
+        }, 2000);
+      }
+    };
+  }
 
   // Desktop lightbox - Enhanced version with product info
   const mainImg = document.getElementById('mainImage');
