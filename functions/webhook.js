@@ -1,11 +1,12 @@
 // Cloudflare Pages Function - Stripe Webhook
-// Automatically sends receipt emails after successful payments
+// Deducts inventory after successful payment + sends receipt
 
 export async function onRequestPost(context) {
     const { request, env } = context;
     
     const STRIPE_SECRET_KEY = env.STRIPE_SECRET_KEY;
     const STRIPE_WEBHOOK_SECRET = env.STRIPE_WEBHOOK_SECRET;
+    const DB = env.DB;
     
     if (!STRIPE_SECRET_KEY) {
         return new Response('Stripe not configured', { status: 500 });
@@ -16,28 +17,41 @@ export async function onRequestPost(context) {
         const signature = request.headers.get('stripe-signature');
         
         // Verify webhook signature (if secret is set)
-        let event;
-        
         if (STRIPE_WEBHOOK_SECRET && signature) {
-            // Verify the webhook signature
             const verified = await verifyStripeSignature(payload, signature, STRIPE_WEBHOOK_SECRET);
             if (!verified) {
                 return new Response('Invalid signature', { status: 400 });
             }
         }
         
-        event = JSON.parse(payload);
+        const event = JSON.parse(payload);
         
         // Handle the checkout.session.completed event
         if (event.type === 'checkout.session.completed') {
             const session = event.data.object;
             
-            // Get customer email and payment intent
+            // === DEDUCT INVENTORY ===
+            if (session.metadata && session.metadata.cart_items) {
+                try {
+                    const cartItems = JSON.parse(session.metadata.cart_items);
+                    
+                    for (const item of cartItems) {
+                        await DB.prepare(
+                            'UPDATE products SET quantity = MAX(0, quantity - ?) WHERE slug = ?'
+                        ).bind(item.quantity, item.slug).run();
+                        
+                        console.log(`Deducted ${item.quantity} from ${item.slug}`);
+                    }
+                } catch (e) {
+                    console.error('Error deducting inventory:', e);
+                }
+            }
+            
+            // === SEND RECEIPT EMAIL ===
             const customerEmail = session.customer_details?.email || session.customer_email;
             const paymentIntentId = session.payment_intent;
             
             if (customerEmail && paymentIntentId) {
-                // Get the charge ID from payment intent
                 const piResponse = await fetch(`https://api.stripe.com/v1/payment_intents/${paymentIntentId}`, {
                     method: 'GET',
                     headers: {
@@ -49,8 +63,7 @@ export async function onRequestPost(context) {
                 const chargeId = paymentIntent.latest_charge;
                 
                 if (chargeId) {
-                    // Send receipt for this charge
-                    const receiptResponse = await fetch(`https://api.stripe.com/v1/charges/${chargeId}`, {
+                    await fetch(`https://api.stripe.com/v1/charges/${chargeId}`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
@@ -78,7 +91,6 @@ export async function onRequestPost(context) {
     }
 }
 
-// Simple signature verification for Stripe webhooks
 async function verifyStripeSignature(payload, signature, secret) {
     try {
         const parts = signature.split(',').reduce((acc, part) => {
