@@ -3,6 +3,9 @@ const WHATSAPP_NUMBER = "971XXXXXXXXX";
 // === FREE DELIVERY THRESHOLD - Change this value to adjust ===
 const FREE_DELIVERY_THRESHOLD = 75;
 
+// === MAX QUANTITY PER PRODUCT ===
+const MAX_QTY_PER_PRODUCT = 10;
+
 const deliveryZones = {
     dubai: {
         name: "Dubai",
@@ -145,17 +148,16 @@ function addToCart(id, event) {
     
     // Check stock
     if (product.quantity === 0) {
-        alert('Sorry, this item is out of stock.');
-        return;
+        return; // Silent - out of stock
     }
     
     const item = cart.find(i => i.id === id);
     const currentInCart = item ? item.quantity : 0;
     
-    // Check if adding more than available
-    if (currentInCart >= product.quantity) {
-        alert(`Sorry, only ${product.quantity} available in stock.`);
-        return;
+    // Silent cap at 10 OR available stock (whichever is lower)
+    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
+    if (currentInCart >= maxAllowed) {
+        return; // Silent - already at max
     }
     
     if (item) { 
@@ -343,10 +345,12 @@ function updateQuantity(id, change) {
     if (item) { 
         const newQty = item.quantity + change;
         
-        // Check stock when increasing
-        if (change > 0 && product && newQty > product.quantity) {
-            alert(`Sorry, only ${product.quantity} available in stock.`);
-            return;
+        // Silent cap at 10 OR available stock (whichever is lower)
+        if (change > 0) {
+            const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
+            if (newQty > maxAllowed) {
+                return; // Silent - already at max
+            }
         }
         
         item.quantity = newQty;
