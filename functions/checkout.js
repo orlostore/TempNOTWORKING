@@ -1,28 +1,24 @@
-// Cloudflare Pages Function for Stripe Checkout
-// This handles POST requests to /checkout
+// Cloudflare Pages Function for Stripe Checkout with Stock Verification
 
 const deliveryZones = {
-    dubai: { name: "Dubai", fee: 18, freeThreshold: 100 },
-    sharjah_ajman: { name: "Sharjah / Ajman", fee: 18, freeThreshold: 100 },
-    abu_dhabi: { name: "Abu Dhabi", fee: 18, freeThreshold: 100 },
-    other: { name: "Other Emirates", fee: 18, freeThreshold: 100 }
+    dubai: { name: "Dubai", fee: 18, freeThreshold: 75 },
+    sharjah_ajman: { name: "Sharjah / Ajman", fee: 18, freeThreshold: 75 },
+    abu_dhabi: { name: "Abu Dhabi", fee: 18, freeThreshold: 75 },
+    other: { name: "Other Emirates", fee: 18, freeThreshold: 75 }
 };
 
 export async function onRequestPost(context) {
     const { request, env } = context;
     
-    // Get Stripe secret key from environment
     const STRIPE_SECRET_KEY = env.STRIPE_SECRET_KEY;
+    const DB = env.DB;
     
     if (!STRIPE_SECRET_KEY) {
         return new Response(JSON.stringify({ 
-            error: 'Stripe is not configured. Please add STRIPE_SECRET_KEY to environment variables.' 
+            error: 'Stripe is not configured.' 
         }), {
             status: 500,
-            headers: { 
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
         });
     }
 
@@ -30,25 +26,65 @@ export async function onRequestPost(context) {
         const body = await request.json();
         const { cart, deliveryZoneKey } = body;
 
-        // Validate cart
         if (!cart || !Array.isArray(cart) || cart.length === 0) {
             return new Response(JSON.stringify({ error: 'Cart is empty' }), {
                 status: 400,
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
+                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
             });
         }
 
-        // Calculate subtotal
-        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        // === STOCK VERIFICATION ===
+        const outOfStock = [];
+        const insufficientStock = [];
+        
+        for (const item of cart) {
+            const result = await DB.prepare('SELECT quantity, name FROM products WHERE slug = ?')
+                .bind(item.slug)
+                .first();
+            
+            if (!result) {
+                outOfStock.push(item.name);
+            } else if (result.quantity < item.quantity) {
+                if (result.quantity === 0) {
+                    outOfStock.push(item.name);
+                } else {
+                    insufficientStock.push({
+                        name: item.name,
+                        requested: item.quantity,
+                        available: result.quantity
+                    });
+                }
+            }
+        }
+        
+        if (outOfStock.length > 0) {
+            return new Response(JSON.stringify({ 
+                error: 'out_of_stock',
+                message: `Sorry, these items are out of stock: ${outOfStock.join(', ')}`,
+                items: outOfStock
+            }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+            });
+        }
+        
+        if (insufficientStock.length > 0) {
+            return new Response(JSON.stringify({ 
+                error: 'insufficient_stock',
+                message: `Not enough stock available`,
+                items: insufficientStock
+            }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+            });
+        }
 
-        // Get delivery zone and calculate fee
+        // === CALCULATE TOTALS ===
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const zone = deliveryZones[deliveryZoneKey] || deliveryZones.dubai;
         const deliveryFee = subtotal >= zone.freeThreshold ? 0 : zone.fee;
 
-        // Build line items for Stripe
+        // === BUILD LINE ITEMS ===
         const lineItems = cart.map(item => ({
             price_data: {
                 currency: 'aed',
@@ -56,12 +92,11 @@ export async function onRequestPost(context) {
                     name: item.name,
                     description: item.description || undefined,
                 },
-                unit_amount: Math.round(item.price * 100), // Stripe uses fils (cents)
+                unit_amount: Math.round(item.price * 100),
             },
             quantity: item.quantity,
         }));
 
-        // Add delivery fee as a line item if applicable
         if (deliveryFee > 0) {
             lineItems.push({
                 price_data: {
@@ -76,42 +111,34 @@ export async function onRequestPost(context) {
             });
         }
 
-        // Get the site URL for redirects
         const url = new URL(request.url);
         const siteUrl = `${url.protocol}//${url.host}`;
 
-        // Create Stripe Checkout Session using fetch (Cloudflare Workers don't support npm packages directly)
+        // === CREATE STRIPE SESSION ===
         const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee)
+            body: buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart)
         });
 
         const session = await stripeResponse.json();
 
         if (session.error) {
-            console.error('Stripe API Error:', session.error);
             return new Response(JSON.stringify({ 
                 error: 'Payment session creation failed',
                 message: session.error.message 
             }), {
                 status: 400,
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
+                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
             });
         }
 
         return new Response(JSON.stringify({ url: session.url }), {
             status: 200,
-            headers: { 
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
         });
 
     } catch (error) {
@@ -121,15 +148,11 @@ export async function onRequestPost(context) {
             message: error.message 
         }), {
             status: 500,
-            headers: { 
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
         });
     }
 }
 
-// Handle CORS preflight requests
 export async function onRequestOptions() {
     return new Response(null, {
         status: 204,
@@ -141,8 +164,7 @@ export async function onRequestOptions() {
     });
 }
 
-// Helper function to build URL-encoded body for Stripe API
-function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee) {
+function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart) {
     const params = new URLSearchParams();
     
     params.append('mode', 'payment');
@@ -157,8 +179,13 @@ function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee) {
     params.append('metadata[delivery_zone]', zone.name);
     params.append('metadata[order_subtotal]', subtotal.toFixed(2));
     params.append('metadata[delivery_fee]', deliveryFee.toFixed(2));
+    
+    // Store cart data for webhook to deduct inventory
+    params.append('metadata[cart_items]', JSON.stringify(cart.map(item => ({
+        slug: item.slug,
+        quantity: item.quantity
+    }))));
 
-    // Add line items
     lineItems.forEach((item, index) => {
         params.append(`line_items[${index}][price_data][currency]`, item.price_data.currency);
         params.append(`line_items[${index}][price_data][product_data][name]`, item.price_data.product_data.name);
