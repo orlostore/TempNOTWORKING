@@ -34,7 +34,7 @@ const DELIVERY_TIME = "2-5 business days";
 const DELIVERY_TIME_AR = "٢-٥ أيام عمل";
 
 const policies = {
-    shipping: `<h2>Shipping & Delivery</h2><h2 class="arabic-heading">الشحن والتوصيل</h2><p><strong>Coverage:</strong> We currently deliver within the UAE only.</p><p class="arabic-text"><strong>التغطية:</strong> نقوم حالياً بالتوصيل داخل الإمارات العربية المتحدة فقط.</p><p><strong>Processing Time:</strong> Orders are processed within 24–48 hours of payment confirmation.</p><p class="arabic-text"><strong>وقت المعالجة:</strong> يتم معالجة الطلبات خلال ٢٤-٤٨ ساعة من تأكيد الدفع.</p><p><strong>Delivery Timeline:</strong> 2-5 business days for all locations.</p><p class="arabic-text"><strong>مدة التوصيل:</strong> ٢-٥ أيام عمل لجميع المواقع.</p><p><strong>Delivery Fees:</strong></p><p class="arabic-text"><strong>رسوم التوصيل:</strong></p><ul><li><strong>All UAE:</strong> 18 AED (FREE on orders over 100 AED)</li><li class="arabic-text"><strong>جميع أنحاء الإمارات:</strong> ١٨ درهم (مجاناً للطلبات فوق ١٠٠ درهم)</li></ul><p><strong>Tracking:</strong> You will receive tracking information via WhatsApp once your order ships.</p><p class="arabic-text"><strong>التتبع:</strong> ستتلقى معلومات التتبع عبر واتساب بمجرد شحن طلبك.</p>`,
+    shipping: `<h2>Shipping & Delivery</h2><h2 class="arabic-heading">الشحن والتوصيل</h2><p><strong>Coverage:</strong> We currently deliver within the UAE only.</p><p class="arabic-text"><strong>التغطية:</strong> نقوم حالياً بالتوصيل داخل الإمارات العربية المتحدة فقط.</p><p><strong>Processing Time:</strong> Orders are processed within 24–48 hours of payment confirmation.</p><p class="arabic-text"><strong>وقت المعالجة:</strong> يتم معالجة الطلبات خلال ٢٤-٤٨ ساعة من تأكيد الدفع.</p><p><strong>Delivery Timeline:</strong> 2-5 business days for all locations.</p><p class="arabic-text"><strong>مدة التوصيل:</strong> ٢-٥ أيام عمل لجميع المواقع.</p><p><strong>Delivery Fees:</strong></p><p class="arabic-text"><strong>رسوم التوصيل:</strong></p><ul><li><strong>All UAE:</strong> 18 AED (FREE on orders over ${FREE_DELIVERY_THRESHOLD} AED)</li><li class="arabic-text"><strong>جميع أنحاء الإمارات:</strong> ١٨ درهم (مجاناً للطلبات فوق ${FREE_DELIVERY_THRESHOLD} درهم)</li></ul><p><strong>Tracking:</strong> You will receive tracking information via WhatsApp once your order ships.</p><p class="arabic-text"><strong>التتبع:</strong> ستتلقى معلومات التتبع عبر واتساب بمجرد شحن طلبك.</p>`,
     returns: `<h2>Returns & Refunds</h2><h2 class="arabic-heading">الإرجاع والاسترداد</h2><p><strong>7-Day Return Window:</strong> Returns are accepted within 7 days of delivery only. No exceptions.</p><p class="arabic-text"><strong>فترة الإرجاع ٧ أيام:</strong> يتم قبول المرتجعات خلال ٧ أيام من التسليم فقط. بدون استثناءات.</p><p><strong>Unopened Items Only:</strong> Items must be completely unused, unopened, and in original sealed packaging with all tags and seals intact.</p><p class="arabic-text"><strong>المنتجات غير المفتوحة فقط:</strong> يجب أن تكون المنتجات غير مستخدمة تماماً، غير مفتوحة، وفي العبوة الأصلية المغلقة مع جميع الملصقات والأختام سليمة.</p><p><strong>No Returns on Opened Items:</strong> Once opened, used, or packaging is damaged, items cannot be returned for any reason.</p><p class="arabic-text"><strong>لا إرجاع للمنتجات المفتوحة:</strong> بمجرد الفتح أو الاستخدام أو تلف العبوة، لا يمكن إرجاع المنتجات لأي سبب.</p><p><strong>Return Shipping Costs:</strong> All return shipping costs are the buyer's responsibility. We do not provide prepaid return labels.</p><p class="arabic-text"><strong>تكاليف شحن الإرجاع:</strong> جميع تكاليف شحن الإرجاع على عاتق المشتري. لا نوفر ملصقات إرجاع مدفوعة مسبقاً.</p><p><strong>Inspection Required:</strong> All returns are inspected upon receipt. Items showing any signs of use, missing components, or damaged packaging will be rejected.</p><p class="arabic-text"><strong>الفحص مطلوب:</strong> يتم فحص جميع المرتجعات عند الاستلام. سيتم رفض المنتجات التي تظهر أي علامات استخدام أو مكونات مفقودة أو عبوة تالفة.</p><p><strong>Refund Process:</strong> Refunds are issued only after inspection confirms the item is unopened and undamaged. Processing takes 5-7 business days after we receive the return.</p><p class="arabic-text"><strong>عملية الاسترداد:</strong> يتم إصدار المبالغ المستردة فقط بعد أن يؤكد الفحص أن المنتج غير مفتوح وغير تالف. تستغرق المعالجة ٥-٧ أيام عمل بعد استلام الإرجاع.</p><p><strong>Non-Returnable Items:</strong> Sale items, clearance items, items with damaged packaging, or items showing any signs of use are not eligible for return.</p><p class="arabic-text"><strong>المنتجات غير القابلة للإرجاع:</strong> منتجات التخفيض، منتجات التصفية، المنتجات ذات العبوة التالفة، أو المنتجات التي تظهر أي علامات استخدام غير مؤهلة للإرجاع.</p><p><strong>How to Initiate a Return:</strong> Contact us via WhatsApp or email within 7 days of delivery with your order number and reason for return.</p><p class="arabic-text"><strong>كيفية بدء الإرجاع:</strong> اتصل بنا عبر واتساب أو البريد الإلكتروني خلال ٧ أيام من التسليم مع رقم طلبك وسبب الإرجاع.</p>`,
     privacy: `<h2>Privacy Policy</h2><h2 class="arabic-heading">سياسة الخصوصية</h2><p><strong>Information Collection:</strong> We collect only the information necessary to process and fulfill your order (name, phone number, delivery address, email).</p><p class="arabic-text"><strong>جمع المعلومات:</strong> نجمع فقط المعلومات الضرورية لمعالجة وتنفيذ طلبك (الاسم، رقم الهاتف، عنوان التوصيل، البريد الإلكتروني).</p><p><strong>Data Usage:</strong> Your information is used solely for order processing, delivery coordination, and customer support.</p><p class="arabic-text"><strong>استخدام البيانات:</strong> تُستخدم معلوماتك فقط لمعالجة الطلبات، وتنسيق التوصيل، ودعم العملاء.</p><p><strong>Third-Party Sharing:</strong> Your data is never sold or shared with third parties except for delivery partners who need your address to complete delivery.</p><p class="arabic-text"><strong>المشاركة مع أطراف ثالثة:</strong> لا يتم بيع بياناتك أو مشاركتها مع أطراف ثالثة أبداً باستثناء شركاء التوصيل الذين يحتاجون إلى عنوانك لإتمام التوصيل.</p><p><strong>Data Security:</strong> We use secure communication channels (WhatsApp, encrypted email) to protect your information.</p><p class="arabic-text"><strong>أمن البيانات:</strong> نستخدم قنوات اتصال آمنة (واتساب، بريد إلكتروني مشفر) لحماية معلوماتك.</p><p><strong>Your Rights:</strong> You may request deletion of your data at any time by contacting us.</p><p class="arabic-text"><strong>حقوقك:</strong> يمكنك طلب حذف بياناتك في أي وقت عن طريق الاتصال بنا.</p>`,
     terms: `<h2>Terms of Service</h2><h2 class="arabic-heading">شروط الخدمة</h2><p><strong>Order Agreement:</strong> By placing an order, you agree to provide accurate information and accept these terms.</p><p class="arabic-text"><strong>اتفاقية الطلب:</strong> بتقديم طلب، فإنك توافق على تقديم معلومات دقيقة وقبول هذه الشروط.</p><p><strong>Payment:</strong> Full payment is required before order processing begins. We accept bank transfer and online payment methods.</p><p class="arabic-text"><strong>الدفع:</strong> يلزم الدفع الكامل قبل بدء معالجة الطلب. نقبل التحويل البنكي وطرق الدفع الإلكتروني.</p><p><strong>Product Accuracy:</strong> We strive to display accurate product information and images. Actual products may vary slightly from images shown.</p><p class="arabic-text"><strong>دقة المنتج:</strong> نسعى لعرض معلومات وصور المنتج بدقة. قد تختلف المنتجات الفعلية قليلاً عن الصور المعروضة.</p><p><strong>Right to Refuse Service:</strong> ORLO reserves the right to refuse or cancel any order if fraud, misuse, or policy violations are detected.</p><p class="arabic-text"><strong>الحق في رفض الخدمة:</strong> تحتفظ أورلو بالحق في رفض أو إلغاء أي طلب في حالة اكتشاف احتيال أو إساءة استخدام أو انتهاكات للسياسة.</p><p><strong>Liability:</strong> ORLO is not responsible for delivery delays caused by courier services, incorrect addresses provided by customers, or force majeure events.</p><p class="arabic-text"><strong>المسؤولية:</strong> أورلو غير مسؤولة عن تأخيرات التوصيل الناتجة عن خدمات التوصيل، أو العناوين غير الصحيحة المقدمة من العملاء، أو أحداث القوة القاهرة.</p><p><strong>Changes to Terms:</strong> We reserve the right to update these terms at any time. Continued use of our service constitutes acceptance of updated terms.</p><p class="arabic-text"><strong>التغييرات على الشروط:</strong> نحتفظ بالحق في تحديث هذه الشروط في أي وقت. الاستخدام المستمر لخدمتنا يشكل قبولاً للشروط المحدثة.</p><p><strong>Contact:</strong> For questions about these terms, contact us at info@orlostore.com</p><p class="arabic-text"><strong>الاتصال:</strong> للاستفسارات حول هذه الشروط، اتصل بنا على info@orlostore.com</p>`
@@ -53,7 +53,6 @@ function calculateDeliveryFee(subtotal) { const zone = deliveryZones[selectedDel
 function getAmountUntilFreeDelivery(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.freeThreshold - subtotal; }
 function generateOrderNumber() { const date = new Date(); const year = date.getFullYear().toString().slice(-2); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const random = Math.floor(Math.random() * 9000) + 1000; return `ORLO-${year}${month}${day}-${random}`; }
 
-// Get Arabic translation for category from products
 function getCategoryArabic(category) {
     if (category === "All Products") return "جميع المنتجات";
     const product = products.find(p => p.category === category);
@@ -67,15 +66,18 @@ function renderProducts(list) {
         return; 
     } 
     grid.innerHTML = list.map(p => {
-        // Check if image is URL or emoji
         const isUrl = p.image && p.image.startsWith('http');
         const imageHTML = isUrl 
             ? `<img src="${p.image}" alt="${p.name}" style="max-width:100%; max-height:100%; object-fit:contain;">` 
             : p.image;
         
+        // Check if out of stock
+        const outOfStock = p.quantity === 0;
+        
         return `
-        <div class="product-card">
+        <div class="product-card ${outOfStock ? 'out-of-stock' : ''}">
             ${p.featured ? `<span class="badge">Best Seller</span>` : ""}
+            ${outOfStock ? `<span class="badge out-of-stock-badge">Out of Stock</span>` : ""}
             <a href="product.html?product=${p.slug}" style="text-decoration:none;">
                 <div class="product-image">${imageHTML}</div>
             </a>
@@ -85,7 +87,10 @@ function renderProducts(list) {
                     ${p.nameAr ? `<p class="product-title-ar">${p.nameAr}</p>` : ''}
                 </a>
                 <div class="product-price">AED ${p.price}</div>
-                <button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart</button>
+                ${outOfStock 
+                    ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>` 
+                    : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart</button>`
+                }
             </div>
         </div>
     `}).join(""); 
@@ -136,8 +141,23 @@ function searchProducts() {
 }
 
 function addToCart(id, event) { 
-    const product = products.find(p => p.id === id); 
-    const item = cart.find(i => i.id === id); 
+    const product = products.find(p => p.id === id);
+    
+    // Check stock
+    if (product.quantity === 0) {
+        alert('Sorry, this item is out of stock.');
+        return;
+    }
+    
+    const item = cart.find(i => i.id === id);
+    const currentInCart = item ? item.quantity : 0;
+    
+    // Check if adding more than available
+    if (currentInCart >= product.quantity) {
+        alert(`Sorry, only ${product.quantity} available in stock.`);
+        return;
+    }
+    
     if (item) { 
         item.quantity++; 
     } else { 
@@ -227,8 +247,10 @@ function updateCart() {
     if (showUpsell) {
         const cartProductIds = cart.map(i => i.id);
         
+        // Filter out-of-stock items from upsell
         const upsellProducts = products
             .filter(p => !cartProductIds.includes(p.id))
+            .filter(p => p.quantity > 0) // Only in-stock items
             .filter(p => p.price >= amountNeededForFree)
             .sort((a, b) => a.price - b.price)
             .slice(0, 2);
@@ -315,9 +337,19 @@ function changeDeliveryZone(zone) {
 }
 
 function updateQuantity(id, change) { 
-    const item = cart.find(i => i.id === id); 
+    const item = cart.find(i => i.id === id);
+    const product = products.find(p => p.id === id);
+    
     if (item) { 
-        item.quantity += change; 
+        const newQty = item.quantity + change;
+        
+        // Check stock when increasing
+        if (change > 0 && product && newQty > product.quantity) {
+            alert(`Sorry, only ${product.quantity} available in stock.`);
+            return;
+        }
+        
+        item.quantity = newQty;
         if (item.quantity <= 0) { 
             removeFromCart(id); 
         } else { 
@@ -424,7 +456,6 @@ window.onload = () => {
     loadProducts(); 
     updateCart(); 
     
-    // Check for showAbout parameter (from product page About link)
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('showAbout') === 'true') {
         const aboutSection = document.getElementById('about');
@@ -436,7 +467,6 @@ window.onload = () => {
         }
     }
     
-    // Check for search parameter (from product page search)
     const searchTerm = urlParams.get('search');
     if (searchTerm) {
         const searchInput = document.getElementById('searchInput');
@@ -446,13 +476,11 @@ window.onload = () => {
         }
     }
     
-    // Update mobile promo banner with current threshold
     const promoBanner = document.querySelector('.mobile-promo-banner');
     if (promoBanner) {
         promoBanner.innerHTML = `🚚 Free delivery over AED ${FREE_DELIVERY_THRESHOLD} | <span class="arabic-text">توصيل مجاني فوق ${FREE_DELIVERY_THRESHOLD} درهم</span>`;
     }
     
-    // Update hero section threshold
     const heroThreshold = document.getElementById('heroThreshold');
     const heroThresholdAr = document.getElementById('heroThresholdAr');
     if (heroThreshold) heroThreshold.textContent = FREE_DELIVERY_THRESHOLD;
@@ -536,10 +564,11 @@ async function checkout() {
     try {
         if (btn) {
             btn.disabled = true;
-            btn.innerHTML = "Connecting...";
+            btn.innerHTML = "Checking stock...";
         }
 
-        const response = await fetch('https://temp-5lr.pages.dev/checkout', {
+        // Use relative URL (same domain)
+        const response = await fetch('/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -549,6 +578,31 @@ async function checkout() {
         });
 
         const data = await response.json();
+
+        if (data.error) {
+            // Handle stock errors
+            if (data.error === 'out_of_stock') {
+                alert(data.message);
+                // Refresh products to get updated stock
+                if (typeof initProducts === 'function') {
+                    initProducts();
+                }
+            } else if (data.error === 'insufficient_stock') {
+                let msg = 'Stock issue:\n';
+                data.items.forEach(item => {
+                    msg += `${item.name}: Only ${item.available} available (you wanted ${item.requested})\n`;
+                });
+                alert(msg);
+            } else {
+                alert(data.message || 'Payment failed. Please try again.');
+            }
+            
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+            return;
+        }
 
         if (data.url) {
             window.location.href = data.url; 
