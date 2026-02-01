@@ -1,29 +1,32 @@
 const WHATSAPP_NUMBER = "971XXXXXXXXX";
 
+// === FREE DELIVERY THRESHOLD - Change this value to adjust ===
+const FREE_DELIVERY_THRESHOLD = 75;
+
 const deliveryZones = {
     dubai: {
         name: "Dubai",
         nameAr: "دبي",
         fee: 18,
-        freeThreshold: 100
+        freeThreshold: FREE_DELIVERY_THRESHOLD
     },
     sharjah_ajman: {
         name: "Sharjah / Ajman",
         nameAr: "الشارقة / عجمان",
         fee: 18,
-        freeThreshold: 100
+        freeThreshold: FREE_DELIVERY_THRESHOLD
     },
     abu_dhabi: {
         name: "Abu Dhabi",
         nameAr: "أبو ظبي",
         fee: 18,
-        freeThreshold: 100
+        freeThreshold: FREE_DELIVERY_THRESHOLD
     },
     other: {
         name: "Other Emirates",
         nameAr: "إمارات أخرى",
         fee: 18,
-        freeThreshold: 100
+        freeThreshold: FREE_DELIVERY_THRESHOLD
     }
 };
 
@@ -38,6 +41,8 @@ const policies = {
 };
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let upsellUsed = false;
+let savedUpsellProducts = null;
 let selectedCategory = "All Products";
 let selectedDeliveryZone = localStorage.getItem("deliveryZone") || "dubai";
 
@@ -48,28 +53,42 @@ function calculateDeliveryFee(subtotal) { const zone = deliveryZones[selectedDel
 function getAmountUntilFreeDelivery(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.freeThreshold - subtotal; }
 function generateOrderNumber() { const date = new Date(); const year = date.getFullYear().toString().slice(-2); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const random = Math.floor(Math.random() * 9000) + 1000; return `ORLO-${year}${month}${day}-${random}`; }
 
+// Get Arabic translation for category from products
+function getCategoryArabic(category) {
+    if (category === "All Products") return "جميع المنتجات";
+    const product = products.find(p => p.category === category);
+    return product && product.categoryAr ? product.categoryAr : '';
+}
+
 function renderProducts(list) { 
     const grid = document.getElementById("productsGrid"); 
     if (!list.length) { 
         grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">No products found</p>`; 
         return; 
     } 
-    grid.innerHTML = list.map(p => `
+    grid.innerHTML = list.map(p => {
+        // Check if image is URL or emoji
+        const isUrl = p.image && p.image.startsWith('http');
+        const imageHTML = isUrl 
+            ? `<img src="${p.image}" alt="${p.name}" style="max-width:100%; max-height:100%; object-fit:contain;">` 
+            : p.image;
+        
+        return `
         <div class="product-card">
             ${p.featured ? `<span class="badge">Best Seller</span>` : ""}
             <a href="product.html?product=${p.slug}" style="text-decoration:none;">
-                <div class="product-image">${p.image}</div>
+                <div class="product-image">${imageHTML}</div>
             </a>
             <div class="product-info">
                 <a href="product.html?product=${p.slug}" style="text-decoration:none; color:inherit;">
                     <h3 class="product-title">${p.name}</h3>
                     ${p.nameAr ? `<p class="product-title-ar">${p.nameAr}</p>` : ''}
                 </a>
-                <div class="product-price">${p.price} AED</div>
+                <div class="product-price">AED ${p.price}</div>
                 <button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart</button>
             </div>
         </div>
-    `).join(""); 
+    `}).join(""); 
 }
 
 function loadProducts(category = "All Products") { 
@@ -86,7 +105,10 @@ function loadProducts(category = "All Products") {
 
 function createCategoryFilters() { 
     const container = document.getElementById("categoryFilters"); 
-    container.innerHTML = getCategories().map(cat => `<button class="category-btn ${cat === selectedCategory ? "active" : ""}" onclick="loadProducts('${cat}')">${cat}<br><span class="arabic-text category-arabic">${categoryTranslations[cat]}</span></button>`).join(""); 
+    container.innerHTML = getCategories().map(cat => {
+        const catAr = getCategoryArabic(cat);
+        return `<button class="category-btn ${cat === selectedCategory ? "active" : ""}" onclick="loadProducts('${cat}')">${cat}${catAr ? `<br><span class="arabic-text category-arabic">${catAr}</span>` : ''}</button>`;
+    }).join(""); 
 }
 
 function updateCategoryButtons() { 
@@ -124,7 +146,6 @@ function addToCart(id, event) {
     saveCart(); 
     updateCart(); 
     
-    // Button turns green with "✓ Added!"
     if (event && event.target) {
         const btn = event.target;
         const originalText = btn.textContent;
@@ -144,13 +165,16 @@ function updateCart() {
     const cartItems = document.getElementById("cartItems"); 
     const cartCount = document.getElementById("cartCount"); 
     const bottomCartCount = document.getElementById("bottomCartCount");
-    const cartFooter = document.querySelector(".cart-footer"); 
+    const cartFooter = document.querySelector(".cart-footer");
+    const cartCheckoutFixed = document.getElementById("cartCheckoutFixed");
+    const isMobile = window.innerWidth <= 768;
     
     if (!cart.length) { 
         cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
         if (cartCount) cartCount.textContent = 0;
         if (bottomCartCount) bottomCartCount.textContent = 0;
-        cartFooter.innerHTML = `<div class="cart-total"><span>Total / الإجمالي:</span><span>0.00 AED</span></div>`; 
+        cartFooter.innerHTML = `<div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;"><span>Total / الإجمالي:</span><span>AED 0.00</span></div>`;
+        if (cartCheckoutFixed) cartCheckoutFixed.innerHTML = '';
         return; 
     } 
     
@@ -158,18 +182,33 @@ function updateCart() {
     const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0); 
     const deliveryFee = calculateDeliveryFee(subtotal); 
     const total = subtotal + deliveryFee; 
-    const amountNeeded = Math.max(0, 100 - subtotal);
+    const amountNeeded = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
     
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems; 
     
-    // Cart items display (top section - already in cartItems div)
+    const checkoutBtnHTML = `
+        <button id="stripeBtn" 
+            style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #2c4a5c; color: white; transition: all 0.3s;" 
+            onclick="checkout()" 
+            onmouseover="this.style.background='#1e3545'" 
+            onmouseout="this.style.background='#2c4a5c'">
+            💳 Pay with Card / الدفع بالبطاقة
+        </button>
+    `;
+    
+    if (isMobile && cartCheckoutFixed) {
+        cartCheckoutFixed.innerHTML = checkoutBtnHTML;
+    } else if (cartCheckoutFixed) {
+        cartCheckoutFixed.innerHTML = '';
+    }
+    
     cartItems.innerHTML = cart.map(i => `
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
             <div style="flex:1;">
                 <strong style="font-size:0.9rem; color:#2c4a5c;">${i.name}</strong><br>
-                <span style="color:#888; font-size:0.8rem;">${i.price} AED × ${i.quantity}</span><br>
-                <span style="color:#e07856; font-weight:600; font-size:0.9rem;">${(i.price * i.quantity).toFixed(2)} AED</span>
+                <span style="color:#888; font-size:0.8rem;">AED ${i.price} × ${i.quantity}</span><br>
+                <span style="color:#e07856; font-weight:600; font-size:0.9rem;">AED ${(i.price * i.quantity).toFixed(2)}</span>
             </div>
             <div style="display:flex; gap:0.4rem; align-items:center;">
                 <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">-</button>
@@ -180,71 +219,91 @@ function updateCart() {
         </div>
     `).join(""); 
     
-    // Build cart footer: UPSELL FIRST, then SUMMARY, then BUTTON
     let footerHTML = '';
     
-    // 1. UPSELL SECTION (only if under 100 AED)
-    if (subtotal < 100) {
+    const amountNeededForFree = FREE_DELIVERY_THRESHOLD - subtotal;
+    const showUpsell = subtotal < FREE_DELIVERY_THRESHOLD && !(isMobile && upsellUsed);
+    
+    if (showUpsell) {
         const cartProductIds = cart.map(i => i.id);
-        const recommendedProducts = products
-            .filter(p => !cartProductIds.includes(p.id))
-            .filter(p => p.price <= amountNeeded + 30)
-            .sort((a, b) => Math.abs(a.price - amountNeeded) - Math.abs(b.price - amountNeeded))
-            .slice(0, 3);
         
-        if (recommendedProducts.length > 0) {
+        const upsellProducts = products
+            .filter(p => !cartProductIds.includes(p.id))
+            .filter(p => p.price >= amountNeededForFree)
+            .sort((a, b) => a.price - b.price)
+            .slice(0, 2);
+        
+        if (subtotal >= 60) {
+            if (upsellProducts.length > 0) {
+                footerHTML += `
+                    <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
+                        <div style="font-weight: 600; margin-bottom: 0.75rem; color: #2c4a5c; font-size: 0.9rem;">
+                            Add AED ${amountNeededForFree.toFixed(0)} more for free delivery:
+                        </div>
+                        ${upsellProducts.map(p => `
+                            <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
+                                <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
+                                <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">AED ${p.price}</div>
+                                <button onclick="addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        } else {
             footerHTML += `
                 <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
-                    <div style="font-weight: 600; margin-bottom: 0.75rem; color: #2c4a5c; font-size: 0.9rem;">
-                        Add these items to unlock free delivery:
+                    <div style="font-weight: 600; color: #2c4a5c; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        🚚 Add AED ${amountNeededForFree.toFixed(0)} more to qualify for free delivery
                     </div>
-                    ${recommendedProducts.map(p => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;">
-                            <div style="flex: 1;">
-                                <div style="font-weight: 500; color: #2c4a5c; font-size: 0.85rem;">${p.name}</div>
-                                <div style="font-size: 0.75rem; color: #888;">${p.price} AED</div>
+                    ${upsellProducts.length > 0 ? `
+                        <div style="cursor: pointer;" onclick="this.querySelector('.upsell-dropdown').style.display = this.querySelector('.upsell-dropdown').style.display === 'none' ? 'block' : 'none'; this.querySelector('.arrow').textContent = this.querySelector('.upsell-dropdown').style.display === 'none' ? '▶' : '▼';">
+                            <span style="font-size: 0.8rem; color: #e07856; font-weight: 500;"><span class="arrow">▶</span> View suggestions</span>
+                            <div class="upsell-dropdown" style="display: none; margin-top: 0.5rem;">
+                                ${upsellProducts.map(p => `
+                                    <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
+                                        <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
+                                        <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">AED ${p.price}</div>
+                                        <button onclick="event.stopPropagation(); addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
+                                    </div>
+                                `).join('')}
                             </div>
-                            <button onclick="addToCart(${p.id}, event)" style="padding: 0.4rem 0.8rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; white-space: nowrap;">
-                                Add
-                            </button>
                         </div>
-                    `).join('')}
+                    ` : ''}
                 </div>
             `;
         }
     }
     
-    // 2. SUMMARY SECTION (always shown)
+    if (subtotal >= FREE_DELIVERY_THRESHOLD) {
+        savedUpsellProducts = null;
+    }
+    
     footerHTML += `
         <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.75rem;">
             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; color: #2c4a5c;">
                 <span>Subtotal / المجموع الفرعي:</span>
-                <span>${subtotal.toFixed(2)} AED</span>
+                <span>AED ${subtotal.toFixed(2)}</span>
             </div>
             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; color: #2c4a5c;">
                 <span>Delivery / التوصيل:</span>
-                <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE / مجاني' : deliveryFee.toFixed(2) + ' AED'}</span>
+                <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE / مجاني' : 'AED ' + deliveryFee.toFixed(2)}</span>
             </div>
             <div style="border-top: 2px solid #ddd; margin: 0.5rem 0;"></div>
             <div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;">
                 <span>Total / الإجمالي:</span>
-                <span>${total.toFixed(2)} AED</span>
+                <span>AED ${total.toFixed(2)}</span>
             </div>
         </div>
     `;
     
-   // 3. CHECKOUT BUTTON (Updated to connect to Stripe)
-    footerHTML += `
-        <div style="padding: 0 1rem 1rem;">
-            <button id="stripeBtn" 
-                style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #0066FF; color: white; transition: all 0.3s;" 
-                onclick="checkout()" 
-                onmouseover="this.style.background='#0052CC'" 
-                onmouseout="this.style.background='#0066FF'">
-                💳 Pay with Card / الدفع بالبطاقة
-            </button>
-        </div>
-    `;
+    if (!isMobile) {
+        footerHTML += `
+            <div style="padding: 0 1rem 1rem;">
+                ${checkoutBtnHTML}
+            </div>
+        `;
+    }
     
     cartFooter.innerHTML = footerHTML;
 }
@@ -270,12 +329,37 @@ function updateQuantity(id, change) {
 
 function removeFromCart(id) { 
     cart = cart.filter(i => i.id !== id); 
+    upsellUsed = false;
     saveCart(); 
     updateCart(); 
 }
 
 function toggleCart() { 
-    document.getElementById("cartSidebar").classList.toggle("active"); 
+    const cartSidebar = document.getElementById("cartSidebar");
+    const bottomCartBtn = document.getElementById("bottomCartBtn");
+    const bottomHomeBtn = document.getElementById("bottomHomeBtn");
+    
+    cartSidebar.classList.toggle("active");
+    
+    if (cartSidebar.classList.contains("active")) {
+        if (bottomCartBtn) bottomCartBtn.classList.add("cart-active");
+        if (bottomHomeBtn) bottomHomeBtn.classList.remove("home-active");
+    } else {
+        if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
+        if (bottomHomeBtn) bottomHomeBtn.classList.add("home-active");
+        upsellUsed = false;
+        savedUpsellProducts = null;
+    }
+    
+    updateCart();
+}
+
+function addUpsellItem(id, event) {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        upsellUsed = true;
+    }
+    addToCart(id, event);
 }
 
 function openPolicy(type) { 
@@ -291,7 +375,8 @@ function closePolicy() {
 
 function toggleAbout() {
     const aboutSection = document.getElementById('about');
-    const isVisible = aboutSection.style.display !== 'none';
+    const computedStyle = window.getComputedStyle(aboutSection);
+    const isVisible = computedStyle.display !== 'none';
     
     if (isVisible) {
         aboutSection.style.display = 'none';
@@ -305,15 +390,14 @@ function toggleMobileMenu() {
     let overlay = document.querySelector('.mobile-menu-overlay');
     
     if (!overlay) {
-        // Create menu overlay
         overlay = document.createElement('div');
         overlay.className = 'mobile-menu-overlay';
         overlay.innerHTML = `
             <div class="mobile-menu">
-                <a href="#products" onclick="closeMobileMenu()">🛍️ Shop / تسوق</a>
-                <a href="javascript:void(0);" onclick="toggleAbout(); closeMobileMenu();">ℹ️ About / من نحن</a>
-                <a href="#contact" onclick="closeMobileMenu()">📧 Contact / اتصل بنا</a>
-                <a href="#terms" onclick="closeMobileMenu()">📋 Terms / الشروط</a>
+                <a href="#products" onclick="closeMobileMenu()"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
+                <a href="javascript:void(0);" onclick="toggleAbout(); closeMobileMenu();"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
+                <a href="#contact" onclick="closeMobileMenu()"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
+                <a href="#terms" onclick="closeMobileMenu()"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
             </div>
         `;
         document.body.appendChild(overlay);
@@ -339,6 +423,40 @@ window.onload = () => {
     createCategoryFilters(); 
     loadProducts(); 
     updateCart(); 
+    
+    // Check for showAbout parameter (from product page About link)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('showAbout') === 'true') {
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+            aboutSection.style.display = 'block';
+            setTimeout(() => {
+                aboutSection.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+    }
+    
+    // Check for search parameter (from product page search)
+    const searchTerm = urlParams.get('search');
+    if (searchTerm) {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.value = searchTerm;
+            searchProducts();
+        }
+    }
+    
+    // Update mobile promo banner with current threshold
+    const promoBanner = document.querySelector('.mobile-promo-banner');
+    if (promoBanner) {
+        promoBanner.innerHTML = `🚚 Free delivery over AED ${FREE_DELIVERY_THRESHOLD} | <span class="arabic-text">توصيل مجاني فوق ${FREE_DELIVERY_THRESHOLD} درهم</span>`;
+    }
+    
+    // Update hero section threshold
+    const heroThreshold = document.getElementById('heroThreshold');
+    const heroThresholdAr = document.getElementById('heroThresholdAr');
+    if (heroThreshold) heroThreshold.textContent = FREE_DELIVERY_THRESHOLD;
+    if (heroThresholdAr) heroThresholdAr.textContent = FREE_DELIVERY_THRESHOLD;
     
     const hamburger = document.getElementById("hamburger");
     const navLinks = document.getElementById("navLinks");
@@ -372,20 +490,45 @@ window.onload = () => {
         } 
     };
     
-    // Mobile bottom nav handlers
+    const bottomHomeBtn = document.getElementById("bottomHomeBtn");
     const bottomCartBtn = document.getElementById("bottomCartBtn");
     const bottomMenuBtn = document.getElementById("bottomMenuBtn");
+    
+    if (bottomHomeBtn) {
+        bottomHomeBtn.classList.add("home-active");
+        
+        bottomHomeBtn.onclick = function() {
+            const cartSidebar = document.getElementById("cartSidebar");
+            if (cartSidebar.classList.contains("active")) {
+                cartSidebar.classList.remove("active");
+                if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
+                upsellUsed = false;
+                savedUpsellProducts = null;
+            }
+            closeMobileMenu();
+            bottomHomeBtn.classList.add("home-active");
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+    }
     
     if (bottomCartBtn) {
         bottomCartBtn.onclick = toggleCart;
     }
     
     if (bottomMenuBtn) {
-        bottomMenuBtn.onclick = toggleMobileMenu;
+        bottomMenuBtn.onclick = function() {
+            const cartSidebar = document.getElementById("cartSidebar");
+            if (cartSidebar.classList.contains("active")) {
+                cartSidebar.classList.remove("active");
+                if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
+                upsellUsed = false;
+                savedUpsellProducts = null;
+            }
+            toggleMobileMenu();
+        };
     }
 };
 
-// --- STRIPE PAYMENT ADD-ON ---
 async function checkout() {
     const btn = document.getElementById("stripeBtn");
     const originalText = btn ? btn.innerHTML : "Pay with Card";

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORLO – Simplify Your Space. Elevate Your Everyday with Essentials That Matter</title>
+    <title>ORLO – Simplify your space with everyday essentials that matter</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=4">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -46,28 +46,44 @@
     🚚 Free delivery over 100 AED | <span class="arabic-text">توصيل مجاني فوق ١٠٠ درهم</span>
 </div>
 
+<!-- HERO SECTION - Option C Design -->
 <section class="hero" id="heroSection">
-    <h1>Simplify Your Space. Elevate Your Everyday with Essentials That Matter</h1>
-    <h1 class="arabic-text hero-arabic">بسّط مساحتك. ارتقِ بيومك مع أساسيات تصنع الفرق</h1>
-    <p>Curated gadgets for your desk, car, and home – delivered across the UAE.</p>
-    <p class="arabic-text">أدوات مختارة لمكتبك وسيارتك ومنزلك - التوصيل لجميع أنحاء الإمارات العربية المتحدة</p>
-    
-    <div class="trust-badges">
-        <div class="trust-badge">
-            <span class="badge-icon">✓</span>
-            <span class="badge-text">Dubai-based<br><span class="arabic-text" style="font-size: 0.85em; margin-top: 2px; display: block;">من دبي</span></span>
+    <div class="hero-main">
+        <div class="hero-headline">
+            <h1>Simplify Your Space with Everyday Essentials That Matter</h1>
+            <p class="headline-ar arabic-text">بسّط مساحتك. ارتقِ بيومك مع أساسيات تصنع الفرق</p>
         </div>
-        <div class="trust-badge">
-            <span class="badge-icon">✓</span>
-            <span class="badge-text">Secure checkout<br><span class="arabic-text" style="font-size: 0.85em; margin-top: 2px; display: block;">دفع آمن</span></span>
+        
+        <div class="hero-trust-badges">
+            <div class="trust-badge-item">
+                <span class="badge-icon">📍</span>
+                <span class="badge-text">Dubai-based</span>
+                <span class="badge-text-ar arabic-text">من دبي</span>
+            </div>
+            <div class="trust-badge-item">
+                <span class="badge-icon">🔒</span>
+                <span class="badge-text">Secure checkout</span>
+                <span class="badge-text-ar arabic-text">دفع آمن</span>
+            </div>
+            <div class="trust-badge-item">
+                <span class="badge-icon">💬</span>
+                <span class="badge-text">WhatsApp support</span>
+                <span class="badge-text-ar arabic-text">دعم واتساب</span>
+            </div>
         </div>
-        <div class="trust-badge">
-            <span class="badge-icon">✓</span>
-            <span class="badge-text">WhatsApp support<br><span class="arabic-text" style="font-size: 0.85em; margin-top: 2px; display: block;">دعم واتساب</span></span>
-        </div>
+        
+        <a href="#products" class="hero-cta">
+            <span>Shop Best Sellers</span>
+            <span class="cta-ar arabic-text">تسوق الأكثر مبيعاً</span>
+        </a>
     </div>
     
-    <a href="#products" class="btn">Shop Best Sellers<br><span class="arabic-text btn-arabic">تسوق الأكثر مبيعاً</span></a>
+    <div class="hero-delivery-box">
+        <span class="delivery-icon">🚚</span>
+        <span class="delivery-title">Free Delivery</span>
+        <span class="delivery-highlight">above <span id="heroThreshold">75</span> AED</span>
+        <span class="delivery-ar arabic-text">توصيل مجاني فوق <span id="heroThresholdAr">٧٥</span> درهم</span>
+    </div>
 </section>
 
 <div class="container" id="products">
@@ -98,7 +114,7 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
             </div>
             <div class="contact-details-row">
                 <div class="contact-detail"><strong>📍 Location:</strong> Dubai, UAE (Online Only)</div>
-                <div class="contact-detail"><strong>✉️ Email:</strong> <a href="mailto:support@orlostore.com">support@orlostore.com</a></div>
+                <div class="contact-detail"><strong>✉️ Email:</strong> <a href="mailto:info@orlostore.com">info@orlostore.com</a></div>
                 <div class="contact-detail"><strong>📱 WhatsApp:</strong> <a href="https://wa.me/971XXXXXXXXX" target="_blank">+971 XX XXX XXXX</a></div>
             </div>
         </div>
@@ -134,6 +150,7 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
 </section>
 
 <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-checkout-fixed" id="cartCheckoutFixed"></div>
     <div class="cart-header">
         <h2>Your Cart / سلة التسوق</h2>
         <button class="close-cart" id="closeCart">✕</button>
@@ -142,9 +159,9 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
     <div class="cart-footer"></div>
 </div>
 
-<div id="policyModal">
+<div id="policyModal" class="policy-modal" style="display: none;">
     <div class="policy-box">
-        <button onclick="closePolicy()" style="float: right; background: none; border: none; font-size: 1.5rem; cursor: pointer;">✕</button>
+        <button onclick="closePolicy()" style="float: right; background: none; border: none; font-size: 1.5em; cursor: pointer;">✕</button>
         <div id="policyText"></div>
     </div>
 </div>
@@ -156,10 +173,10 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
 
 <!-- Mobile Bottom Navigation -->
 <nav class="mobile-bottom-nav">
-    <a href="#products" class="bottom-nav-item active">
+    <div class="bottom-nav-item" id="bottomHomeBtn">
         <span class="nav-icon">🏠</span>
         <span class="nav-label">Home</span>
-    </a>
+    </div>
     <div class="bottom-nav-item" id="bottomCartBtn">
         <span class="nav-icon cart-icon-wrapper">
             🛒
@@ -174,6 +191,6 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
 </nav>
 
 <script src="products.js"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>
