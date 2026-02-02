@@ -2260,3 +2260,11 @@ footer p {
 .cart-items {
   font-family: 'Inter', 'Almarai', sans-serif;
 }
+/* Force Almarai on ALL Arabic characters site-wide */
+.add-to-cart,
+.add-to-cart-btn,
+.mobile-add-to-cart,
+#stripeBtn,
+.checkout-btn {
+  font-family: 'Inter', 'Almarai', sans-serif;
+}
