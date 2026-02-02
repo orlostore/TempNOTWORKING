@@ -352,7 +352,7 @@ nav {
 
 .hero-delivery-box .delivery-ar {
   font-size: 0.65rem;
-  color: white;
+  opacity: 0.85;
   margin-top: 1px;
 }
 
@@ -2043,9 +2043,8 @@ footer p {
 }
 
 .mobile-spec-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  display: flex;
+  justify-content: space-between;
   padding: 10px 0;
   border-bottom: 1px solid #f0f0f0;
   font-size: 0.85rem;
@@ -2057,13 +2056,10 @@ footer p {
 
 .mobile-spec-en {
   color: #333;
-  text-align: left;
 }
 
 .mobile-spec-ar {
   color: #666;
-  text-align: right;
-  direction: rtl;
 }
 
 /* Mobile Description Section */
@@ -2112,23 +2108,14 @@ footer p {
   font-size: 0.85rem;
   color: #555;
   line-height: 1.6;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
 }
 
 .mobile-detail-content p {
+  margin-bottom: 8px;
+}
+
+.mobile-detail-content p:last-child {
   margin-bottom: 0;
-}
-
-.mobile-detail-content p:first-child {
-  text-align: left;
-}
-
-.mobile-detail-content p.arabic-text {
-  text-align: right;
-  direction: rtl;
-  color: #666;
 }
 
 .mobile-description-content {
@@ -2211,4 +2198,94 @@ footer p {
 .desktop-product .back-link:hover {
   background: #2c4a5c;
   transform: translateX(-5px);
+}
+
+/* =============================================
+   ADD TO CART BUTTON WITH CART BADGE
+   ============================================= */
+
+.add-to-cart-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-cart-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.btn-cart-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: white;
+}
+
+.btn-qty-badge {
+  position: absolute;
+  top: -5px;
+  right: -6px;
+  background: #e07856;
+  color: white;
+  min-width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  font-size: 8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.btn-qty-badge.two-digit {
+  min-width: 14px;
+  border-radius: 6px;
+}
+
+.add-to-cart.at-max,
+.add-to-cart-btn.at-max,
+.mobile-add-to-cart.at-max {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-to-cart-btn .btn-cart-icon,
+.mobile-add-to-cart .btn-cart-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.add-to-cart-btn .btn-cart-icon svg,
+.mobile-add-to-cart .btn-cart-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.add-to-cart-btn .btn-qty-badge,
+.mobile-add-to-cart .btn-qty-badge {
+  min-width: 14px;
+  height: 14px;
+  font-size: 9px;
+}
+
+.add-to-cart-btn .btn-qty-badge.two-digit,
+.mobile-add-to-cart .btn-qty-badge.two-digit {
+  min-width: 16px;
+}
+
+@keyframes badge-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.btn-qty-badge.pop {
+  animation: badge-pop 0.3s ease;
 }
