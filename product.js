@@ -11,12 +11,29 @@ function toArabicNumerals(num) {
   return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
 }
 
+// Show max limit message (red notification)
+function showProductPageMaxLimitMessage() {
+    const existing = document.getElementById('maxLimitMsg');
+    if (existing) existing.remove();
+    
+    const msg = document.createElement('div');
+    msg.id = 'maxLimitMsg';
+    msg.innerHTML = `Maximum ${MAX_QTY_PER_PRODUCT} per item | الحد الأقصى ${MAX_QTY_PER_PRODUCT} لكل منتج`;
+    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#dc3545;color:white;padding:12px 24px;border-radius:8px;z-index:9999;font-size:14px;font-weight:600;box-shadow:0 4px 15px rgba(220,53,69,0.4);text-align:center;';
+    document.body.appendChild(msg);
+    
+    setTimeout(() => {
+        if (msg.parentNode) msg.remove();
+    }, 3000);
+}
+
 // Wait for products to load, then display
 async function initProductPage() {
   let attempts = 0;
-  while (products.length === 0 && attempts < 50) {
+  while (typeof products === 'undefined' || products.length === 0) {
     await new Promise(resolve => setTimeout(resolve, 100));
     attempts++;
+    if (attempts > 50) break;
   }
 
   const product = products.find(p => p.slug === slug);
@@ -228,17 +245,20 @@ async function initProductPage() {
 
   if (detailsContainer) detailsContainer.innerHTML = detailsHTML;
 
-  // ADD TO CART HANDLER
+  // ADD TO CART HANDLER - self-contained, uses localStorage directly
   const addToCartHandler = () => {
     if (product.quantity === 0) return false;
 
+    // Get cart from localStorage
     let localCart = JSON.parse(localStorage.getItem("cart")) || [];
     const item = localCart.find(i => i.id === product.id);
     const currentInCart = item ? item.quantity : 0;
     
-    // Silent cap at 10 OR available stock (whichever is lower)
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
-    if (currentInCart >= maxAllowed) return false;
+    if (currentInCart >= maxAllowed) {
+      showProductPageMaxLimitMessage();
+      return false;
+    }
     
     if (item) {
       item.quantity++;
@@ -246,20 +266,26 @@ async function initProductPage() {
       localCart.push({ ...product, quantity: 1 });
     }
     
+    // Save to localStorage
     localStorage.setItem("cart", JSON.stringify(localCart));
     
+    // Sync with app.js cart variable if it exists (app.js loads after)
     if (typeof cart !== 'undefined') {
       cart.length = 0;
-      localCart.forEach(item => cart.push(item));
+      localCart.forEach(i => cart.push(i));
     }
     
+    // Update cart counts
     const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
     const cartCount = document.getElementById("cartCount");
     const bottomCartCount = document.getElementById("bottomCartCount");
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems;
     
-    if (typeof updateCart === 'function') updateCart();
+    // Update cart display if app.js is loaded
+    if (typeof updateCart === 'function') {
+      updateCart();
+    }
     
     return true;
   };
@@ -484,10 +510,14 @@ function toggleCartSidebar() {
   
   if (cartSidebar) {
     cartSidebar.classList.toggle('active');
+    
     if (cartSidebar.classList.contains('active')) {
       if (bottomCartBtn) bottomCartBtn.classList.add('cart-active');
       if (bottomHomeBtn) bottomHomeBtn.classList.remove('home-active');
-      if (typeof updateCart === 'function') updateCart();
+      // Update cart display - app.js should be loaded by now
+      if (typeof updateCart === 'function') {
+        updateCart();
+      }
     } else {
       if (bottomCartBtn) bottomCartBtn.classList.remove('cart-active');
     }
@@ -542,8 +572,9 @@ function productPageToggleMobileMenu() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+  // Update cart count from localStorage
+  const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
   
   const cartCount = document.getElementById("cartCount");
   const bottomCartCount = document.getElementById("bottomCartCount");
