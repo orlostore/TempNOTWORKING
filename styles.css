@@ -2272,3 +2272,33 @@ footer p {
 #products {
   scroll-margin-top: 120px;
 }
+/* About Section - Box & Spacing (match Contact) */
+.about-section {
+  background: var(--bg);
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.about-section .container {
+  max-width: 1234px;
+  margin: 0 auto;
+  padding: 0 1.68rem;
+}
+
+.about-section .container > div {
+  background: white;
+  padding: 2.01rem;
+  border-radius: 8.04px;
+  box-shadow: 0 2.68px 8.04px rgba(0,0,0,.08);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* Consistent spacing between sections */
+.contact-section {
+  margin-top: 1rem;
+}
+
+.terms-section {
+  margin-top: 1rem;
+}
