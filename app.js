@@ -183,7 +183,10 @@ function addToCart(id, event) {
     }
 }
 
-function updateCart() { 
+function updateCart() {
+    // *** FIX: Always sync cart from localStorage first ***
+    cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
     const cartItems = document.getElementById("cartItems"); 
     const cartCount = document.getElementById("cartCount"); 
     const bottomCartCount = document.getElementById("bottomCartCount");
