@@ -2212,3 +2212,44 @@ footer p {
   background: #2c4a5c;
   transform: translateX(-5px);
 }
+
+/* ============================================
+   LOGO FLY TO CART ANIMATION
+   ============================================ */
+.fly-logo {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 9999;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 1;
+}
+
+.fly-logo.flying {
+  transform: scale(0.3);
+  opacity: 0;
+}
+
+.cart-icon.pulse,
+.mobile-cart-icon.pulse,
+.cart-icon-wrapper.pulse {
+  animation: cartPulse 0.4s ease;
+}
+
+@keyframes cartPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.cart-count.bump,
+.bottom-cart-badge.bump {
+  animation: countBump 0.3s ease;
+}
+
+@keyframes countBump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); background: #28a745; }
+  100% { transform: scale(1); }
+}
