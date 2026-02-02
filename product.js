@@ -242,7 +242,6 @@ async function initProductPage() {
     
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
     if (currentInCart >= maxAllowed) {
-      showProductPageMaxLimitMessage();
       return false;
     }
     
