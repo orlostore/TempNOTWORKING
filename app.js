@@ -4,7 +4,9 @@ const WHATSAPP_NUMBER = "971XXXXXXXXX";
 const FREE_DELIVERY_THRESHOLD = 75;
 
 // === MAX QUANTITY PER PRODUCT ===
-const MAX_QTY_PER_PRODUCT = 10;
+if (typeof MAX_QTY_PER_PRODUCT === 'undefined') {
+    var MAX_QTY_PER_PRODUCT = 10;
+}
 
 const deliveryZones = {
     dubai: {
