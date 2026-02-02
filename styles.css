@@ -2253,3 +2253,10 @@ footer p {
   50% { transform: scale(1.5); background: #28a745; }
   100% { transform: scale(1); }
 }
+/* Cart Arabic Font Fix */
+.cart-sidebar,
+.cart-header,
+.cart-footer,
+.cart-items {
+  font-family: 'Inter', 'Almarai', sans-serif;
+}
