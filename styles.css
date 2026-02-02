@@ -546,10 +546,10 @@ nav {
   background: #1e3545;
 }
 
-/* About Section - Box & Spacing (match Contact) */
+/* About Section - Match Contact Box EXACTLY */
 .about-section {
   background: var(--bg);
-  padding: 1rem 0;
+  padding: 0;
 }
 
 .about-section .container {
@@ -560,7 +560,7 @@ nav {
 
 .about-section .container > div {
   background: white;
-  padding: 2.5rem;
+  padding: 2.01rem;
   border-radius: 8.04px;
   box-shadow: 0 2.68px 8.04px rgba(0,0,0,.08);
   max-width: 1180px;
