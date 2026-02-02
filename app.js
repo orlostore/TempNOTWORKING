@@ -160,13 +160,23 @@ function addToCart(id, event) {
         return; // Silent - already at max
     }
     
-    if (item) { 
+   if (item) { 
         item.quantity++; 
     } else { 
         cart.push({ ...product, quantity: 1 }); 
     } 
     saveCart(); 
     updateCart(); 
+    
+    // Auto-open cart drawer
+    const cartSidebar = document.getElementById("cartSidebar");
+    if (cartSidebar && !cartSidebar.classList.contains("active")) {
+        cartSidebar.classList.add("active");
+        const bottomCartBtn = document.getElementById("bottomCartBtn");
+        const bottomHomeBtn = document.getElementById("bottomHomeBtn");
+        if (bottomCartBtn) bottomCartBtn.classList.add("cart-active");
+        if (bottomHomeBtn) bottomHomeBtn.classList.remove("home-active");
+    }
     
     if (event && event.target) {
         const btn = event.target;
