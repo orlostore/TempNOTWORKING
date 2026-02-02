@@ -3,7 +3,7 @@ const params = new URLSearchParams(window.location.search);
 const slug = params.get("product");
 
 // === MAX QUANTITY PER PRODUCT ===
-const MAX_QTY_PER_PRODUCT = 10;
+var MAX_QTY_PER_PRODUCT = 10;
 
 // Convert number to Arabic numerals
 function toArabicNumerals(num) {
