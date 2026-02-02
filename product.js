@@ -11,21 +11,7 @@ function toArabicNumerals(num) {
   return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
 }
 
-// Show max limit message (red notification)
-function showProductPageMaxLimitMessage() {
-    const existing = document.getElementById('maxLimitMsg');
-    if (existing) existing.remove();
-    
-    const msg = document.createElement('div');
-    msg.id = 'maxLimitMsg';
-    msg.innerHTML = `Maximum ${MAX_QTY_PER_PRODUCT} per item | الحد الأقصى ${MAX_QTY_PER_PRODUCT} لكل منتج`;
-    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#dc3545;color:white;padding:12px 24px;border-radius:8px;z-index:9999;font-size:14px;font-weight:600;box-shadow:0 4px 15px rgba(220,53,69,0.4);text-align:center;';
-    document.body.appendChild(msg);
-    
-    setTimeout(() => {
-        if (msg.parentNode) msg.remove();
-    }, 3000);
-}
+
 
 // Wait for products to load, then display
 async function initProductPage() {
