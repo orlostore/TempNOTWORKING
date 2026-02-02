@@ -5,43 +5,37 @@ const slug = params.get("product");
 // === MAX QUANTITY PER PRODUCT ===
 var MAX_QTY_PER_PRODUCT = 10;
 
-// Cart icon SVG for buttons
-const CART_ICON_SVG = '<svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>';
-
-// Generate cart counter HTML for product page buttons
-function getProductCartCounterHTML(qty) {
-    return `<span class="cart-counter-section">
-        <span class="cart-counter-icon">
-            ${CART_ICON_SVG}
-            <span class="cart-counter-badge">
-                <span class="cart-counter-number">
-                    <span class="cart-counter-scroll" data-qty="${qty}">
-                        <span>${qty}</span>
-                        <span>${qty}</span>
-                    </span>
-                </span>
-            </span>
-        </span>
-    </span>`;
-}
-
-
 // Convert number to Arabic numerals
 function toArabicNumerals(num) {
-  const arabicNums = ['Ù ', 'Ù¡', 'Ù¢', 'Ù£', 'Ù¤', 'Ù¥', 'Ù¦', 'Ù§', 'Ù¨', 'Ù©'];
+  const arabicNums = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
   return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
+}
+
+// Show max limit message (red notification)
+function showProductPageMaxLimitMessage() {
+    const existing = document.getElementById('maxLimitMsg');
+    if (existing) existing.remove();
+    
+    const msg = document.createElement('div');
+    msg.id = 'maxLimitMsg';
+    msg.innerHTML = `Maximum ${MAX_QTY_PER_PRODUCT} per item | الحد الأقصى ${MAX_QTY_PER_PRODUCT} لكل منتج`;
+    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#dc3545;color:white;padding:12px 24px;border-radius:8px;z-index:9999;font-size:14px;font-weight:600;box-shadow:0 4px 15px rgba(220,53,69,0.4);text-align:center;';
+    document.body.appendChild(msg);
+    
+    setTimeout(() => {
+        if (msg.parentNode) msg.remove();
+    }, 3000);
 }
 
 // Wait for products to load, then display
 async function initProductPage() {
-  // Wait for products to be loaded from Google Sheets
   let attempts = 0;
-  while (products.length === 0 && attempts < 50) {
+  while (typeof products === 'undefined' || products.length === 0) {
     await new Promise(resolve => setTimeout(resolve, 100));
     attempts++;
+    if (attempts > 50) break;
   }
 
-  // Find product
   const product = products.find(p => p.slug === slug);
 
   if (!product) {
@@ -49,23 +43,18 @@ async function initProductPage() {
     return;
   }
 
-  // Get threshold from app.js (will be available after app.js loads)
+  const isOutOfStock = product.quantity === 0;
   const threshold = typeof FREE_DELIVERY_THRESHOLD !== 'undefined' ? FREE_DELIVERY_THRESHOLD : 75;
   
-  // Update all threshold displays
   document.querySelectorAll('.threshold-value').forEach(el => el.textContent = threshold);
   document.querySelectorAll('.threshold-value-ar').forEach(el => el.textContent = toArabicNumerals(threshold));
 
-  // =====================
   // DESKTOP VERSION
-  // =====================
   document.getElementById("productTitle").innerText = product.name;
   document.getElementById("productCategory").innerText = product.category;
 
-  // Build detailed description with two-column bilingual layout
   let descriptionHTML = '';
   
-  // 1. Description
   const descEn = product.detailedDescription || product.description || '';
   const descAr = product.detailedDescriptionAr || product.descriptionAr || '';
   if (descEn || descAr) {
@@ -76,14 +65,13 @@ async function initProductPage() {
           <div class="product-desc-value">${descEn}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬</div>
+          <div class="product-desc-label">معلومات المنتج</div>
           <div class="product-desc-value">${descAr}</div>
         </div>
       </div>
     `;
   }
 
-  // 2. Colors
   if (product.colors || product.colorsAr) {
     descriptionHTML += `
       <div class="product-desc-block">
@@ -92,14 +80,13 @@ async function initProductPage() {
           <div class="product-desc-value">${product.colors || ''}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ù…ØªØ§Ø­Ø©</div>
+          <div class="product-desc-label">الألوان المتاحة</div>
           <div class="product-desc-value">${product.colorsAr || ''}</div>
         </div>
       </div>
     `;
   }
 
-  // 3. Packaging
   if (product.packaging || product.packagingAr) {
     descriptionHTML += `
       <div class="product-desc-block">
@@ -108,14 +95,13 @@ async function initProductPage() {
           <div class="product-desc-value">${product.packaging || ''}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">Ø§Ù„ØªØ¹Ø¨Ø¦Ø© ÙˆØ§Ù„ØªØºÙ„ÙŠÙ</div>
+          <div class="product-desc-label">التعبئة والتغليف</div>
           <div class="product-desc-value">${product.packagingAr || ''}</div>
         </div>
       </div>
     `;
   }
 
-  // 4. Specifications
   if ((product.specifications && product.specifications.length > 0) || (product.specificationsAr && product.specificationsAr.length > 0)) {
     descriptionHTML += `
       <div class="product-desc-block">
@@ -124,7 +110,7 @@ async function initProductPage() {
           <div class="product-desc-value">${product.specifications ? product.specifications.join('<br>') : ''}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">Ø§Ù„Ù…ÙˆØ§ØµÙØ§Øª</div>
+          <div class="product-desc-label">المواصفات</div>
           <div class="product-desc-value">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</div>
         </div>
       </div>
@@ -134,7 +120,6 @@ async function initProductPage() {
   document.getElementById("productDescription").innerHTML = descriptionHTML;
   document.getElementById("productPrice").innerText = "AED " + product.price;
 
-  // Desktop gallery
   const gallery = document.getElementById("gallery");
   if (product.images && product.images.length > 0) {
     const isEmoji = !product.images[0].startsWith('http');
@@ -148,15 +133,10 @@ async function initProductPage() {
         </div>
       `;
     } else {
-      // Only show thumbnails if more than 1 image
       const thumbnailsHTML = product.images.length > 1 ? `
         <div class="thumbnail-strip">
           ${product.images.map((img, index) => `
-            <img src="${img}" 
-                 alt="${product.name} ${index + 1}" 
-                 class="thumbnail ${index === 0 ? 'active' : ''}" 
-                 onclick="changeMainImage('${img}', ${index})"
-                 style="object-fit:contain;">
+            <img src="${img}" alt="${product.name} ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', ${index})" style="object-fit:contain;">
           `).join('')}
         </div>
       ` : '';
@@ -165,7 +145,7 @@ async function initProductPage() {
         <div class="image-gallery">
           <div class="main-image-container">
             <img id="mainImage" src="${product.images[0]}" alt="${product.name}" class="main-product-image">
-            <div class="zoom-hint">ðŸ” Click to zoom</div>
+            <div class="zoom-hint">🔍 Click to zoom</div>
           </div>
           ${thumbnailsHTML}
         </div>
@@ -173,15 +153,20 @@ async function initProductPage() {
     }
   }
 
-  // =====================
+  const desktopAddBtn = document.getElementById("addToCartBtn");
+  if (isOutOfStock && desktopAddBtn) {
+    desktopAddBtn.textContent = "Out of Stock | نفذ المخزون";
+    desktopAddBtn.disabled = true;
+    desktopAddBtn.style.background = "#999";
+    desktopAddBtn.style.cursor = "not-allowed";
+  }
+
   // MOBILE VERSION
-  // =====================
   document.getElementById("mobileProductTitle").innerText = product.name;
   document.getElementById("mobileProductTitleAr").innerText = product.nameAr || '';
   document.getElementById("mobileProductCategory").innerText = product.category;
   document.getElementById("mobileProductPrice").innerText = "AED " + product.price;
 
-  // Mobile carousel
   const mobileCarousel = document.getElementById("mobileCarousel");
   const mobileDots = document.getElementById("mobileDots");
   
@@ -189,162 +174,90 @@ async function initProductPage() {
     const isEmoji = !product.images[0].startsWith('http');
     
     if (isEmoji) {
-      mobileCarousel.innerHTML = `
-        <div class="mobile-carousel-slide">
-          <div style="font-size: 80px;">${product.images[0]}</div>
-        </div>
-      `;
+      mobileCarousel.innerHTML = `<div class="mobile-carousel-slide"><div style="font-size: 80px;">${product.images[0]}</div></div>`;
       mobileDots.innerHTML = '<div class="mobile-dot active"></div>';
     } else {
-      // Create slides
       mobileCarousel.innerHTML = product.images.map((img, index) => `
         <div class="mobile-carousel-slide" data-index="${index}">
           <img src="${img}" alt="${product.name} ${index + 1}">
         </div>
       `).join('');
       
-      // Create dots
       mobileDots.innerHTML = product.images.map((_, index) => `
         <div class="mobile-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>
       `).join('');
       
-      // Setup carousel scroll detection
       setupMobileCarousel();
-      
-      // Setup gallery click
       setupGalleryOverlay(product);
     }
   }
 
-  // =====================
-  // MOBILE DETAILS SECTION (Colors, Packaging, Specs, Description - in order)
-  // =====================
+  const mobileAddBtn = document.getElementById("mobileAddToCartBtn");
+  if (isOutOfStock && mobileAddBtn) {
+    mobileAddBtn.textContent = "Out of Stock | نفذ المخزون";
+    mobileAddBtn.disabled = true;
+    mobileAddBtn.style.background = "#999";
+    mobileAddBtn.style.cursor = "not-allowed";
+  }
+
+  // MOBILE DETAILS SECTION
   const detailsContainer = document.getElementById("mobileDetailsSection");
   let detailsHTML = '';
 
-  // 1. Colors (if available)
-  if (product.colors) {
-    detailsHTML += `
-      <div class="mobile-detail-block">
-        <div class="mobile-detail-title">
-          <span>Available Colors</span>
-          <span class="arabic-text">Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ù…ØªØ§Ø­Ø©</span>
-        </div>
-        <div class="mobile-detail-content">
-          <p>${product.colors}</p>
-          ${product.colorsAr ? `<p class="arabic-text">${product.colorsAr}</p>` : ''}
-        </div>
-      </div>
-    `;
-  }
-
-  // 2. Packaging (if available)
-  if (product.packaging) {
-    detailsHTML += `
-      <div class="mobile-detail-block">
-        <div class="mobile-detail-title">
-          <span>Packaging</span>
-          <span class="arabic-text">Ø§Ù„ØªØ¹Ø¨Ø¦Ø© ÙˆØ§Ù„ØªØºÙ„ÙŠÙ</span>
-        </div>
-        <div class="mobile-detail-content">
-          <p>${product.packaging}</p>
-          ${product.packagingAr ? `<p class="arabic-text">${product.packagingAr}</p>` : ''}
-        </div>
-      </div>
-    `;
-  }
-
-  // 3. Specifications (if available)
-  if (product.specifications && product.specifications.length > 0) {
-    detailsHTML += `
-      <div class="mobile-detail-block">
-        <div class="mobile-detail-title">
-          <span>Specifications</span>
-          <span class="arabic-text">Ø§Ù„Ù…ÙˆØ§ØµÙØ§Øª</span>
-        </div>
-        <div class="mobile-specs-list">
-          ${product.specifications.map((spec, i) => `
-            <div class="mobile-spec-row">
-              <span class="mobile-spec-en">${spec}</span>
-              <span class="mobile-spec-ar arabic-text">${product.specificationsAr && product.specificationsAr[i] ? product.specificationsAr[i] : ''}</span>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-  }
-
-  // 4. Description (always show if available)
   const mobileDescEn = product.detailedDescription || product.description || '';
   const mobileDescAr = product.detailedDescriptionAr || product.descriptionAr || '';
   
   if (mobileDescEn || mobileDescAr) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-content mobile-description-content">
-          ${mobileDescEn ? `<p>${mobileDescEn}</p>` : ''}
-          ${mobileDescAr ? `<p class="arabic-text">${mobileDescAr}</p>` : ''}
-        </div>
+        <div class="mobile-detail-title"><span>Description</span><span class="arabic-text">معلومات المنتج</span></div>
+        <div class="mobile-detail-content"><p>${mobileDescEn}</p><p class="arabic-text">${mobileDescAr}</p></div>
       </div>
     `;
   }
 
-  if (detailsContainer) {
-    detailsContainer.innerHTML = detailsHTML;
+  if (product.colors) {
+    detailsHTML += `
+      <div class="mobile-detail-block">
+        <div class="mobile-detail-title"><span>Available Colors</span><span class="arabic-text">الألوان المتاحة</span></div>
+        <div class="mobile-detail-content"><p>${product.colors}</p><p class="arabic-text">${product.colorsAr || ''}</p></div>
+      </div>
+    `;
   }
 
-  // =====================
-  // ADD TO CART BUTTONS
-  // =====================
-  
-  // Function to update button appearance based on cart quantity
-  const updateProductButtons = () => {
-    const localCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const cartItem = localCart.find(i => i.id === product.id);
-    const qtyInCart = cartItem ? cartItem.quantity : 0;
-    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity || MAX_QTY_PER_PRODUCT);
-    const isMaxReached = qtyInCart >= maxAllowed;
-    const hasItems = qtyInCart > 0;
-    
-    // Desktop button
-    const desktopBtn = document.getElementById("addToCartBtn");
-    if (desktopBtn && product.quantity !== 0) {
-      desktopBtn.className = `add-to-cart-btn${hasItems ? ' has-items' : ''}${isMaxReached ? ' max-reached' : ''}`;
-      desktopBtn.innerHTML = `<span class="btn-text">Add to Cart</span>${hasItems ? getProductCartCounterHTML(qtyInCart) : ''}`;
-    }
-    
-    // Mobile button
-    const mobileBtn = document.getElementById("mobileAddToCartBtn");
-    if (mobileBtn && product.quantity !== 0) {
-      mobileBtn.className = `mobile-add-to-cart${hasItems ? ' has-items' : ''}${isMaxReached ? ' max-reached' : ''}`;
-      mobileBtn.innerHTML = `<span class="btn-text">Add to Cart | أضف إلى السلة</span>${hasItems ? getProductCartCounterHTML(qtyInCart) : ''}`;
-    }
-  };
-  
-  const addToCartHandler = (btn) => {
-    // Check stock
-    if (product.quantity === 0) {
-      return false;
-    }
-    
-    // Get current cart from localStorage
+  if (product.packaging) {
+    detailsHTML += `
+      <div class="mobile-detail-block">
+        <div class="mobile-detail-title"><span>Packaging</span><span class="arabic-text">التعبئة والتغليف</span></div>
+        <div class="mobile-detail-content"><p>${product.packaging}</p><p class="arabic-text">${product.packagingAr || ''}</p></div>
+      </div>
+    `;
+  }
+
+  if (product.specifications && product.specifications.length > 0) {
+    detailsHTML += `
+      <div class="mobile-detail-block">
+        <div class="mobile-detail-title"><span>Specifications</span><span class="arabic-text">المواصفات</span></div>
+        <div class="mobile-detail-content"><p>${product.specifications.join('<br>')}</p><p class="arabic-text">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</p></div>
+      </div>
+    `;
+  }
+
+  if (detailsContainer) detailsContainer.innerHTML = detailsHTML;
+
+  // ADD TO CART HANDLER - self-contained, uses localStorage directly
+  const addToCartHandler = () => {
+    if (product.quantity === 0) return false;
+
+    // Get cart from localStorage
     let localCart = JSON.parse(localStorage.getItem("cart")) || [];
     const item = localCart.find(i => i.id === product.id);
     const currentInCart = item ? item.quantity : 0;
     
-    // Silent cap at MAX_QTY or available stock
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
     if (currentInCart >= maxAllowed) {
-      return false; // Silent - already at max
-    }
-    
-    // Trigger scroll animation BEFORE updating
-    const scrollEl = btn ? btn.querySelector('.cart-counter-scroll') : null;
-    if (scrollEl) {
-      scrollEl.classList.add('animating');
-      setTimeout(() => {
-        scrollEl.classList.remove('animating');
-      }, 300);
+      showProductPageMaxLimitMessage();
+      return false;
     }
     
     if (item) {
@@ -356,10 +269,10 @@ async function initProductPage() {
     // Save to localStorage
     localStorage.setItem("cart", JSON.stringify(localCart));
     
-    // Sync app.js cart variable with localStorage
+    // Sync with app.js cart variable if it exists (app.js loads after)
     if (typeof cart !== 'undefined') {
       cart.length = 0;
-      localCart.forEach(item => cart.push(item));
+      localCart.forEach(i => cart.push(i));
     }
     
     // Update cart counts
@@ -369,46 +282,49 @@ async function initProductPage() {
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems;
     
-    // Update cart sidebar if app.js is loaded
+    // Update cart display if app.js is loaded
     if (typeof updateCart === 'function') {
       updateCart();
     }
     
-    // Update button appearance
-    updateProductButtons();
-    
     return true;
   };
 
-  // Initialize button state on page load
-  updateProductButtons();
+  if (!isOutOfStock) {
+    document.getElementById("addToCartBtn").onclick = function() {
+      if (addToCartHandler()) {
+        const btn = this;
+        const originalText = btn.textContent;
+        btn.textContent = "✓ Added!";
+        btn.style.background = "#28a745";
+        setTimeout(() => { btn.textContent = originalText; btn.style.background = ""; }, 2000);
+      }
+    };
+  }
 
-  // Desktop button click
-  document.getElementById("addToCartBtn").onclick = function() {
-    addToCartHandler(this);
-  };
+  if (!isOutOfStock) {
+    document.getElementById("mobileAddToCartBtn").onclick = function() {
+      if (addToCartHandler()) {
+        const btn = this;
+        const originalText = btn.textContent;
+        btn.textContent = "✓ Added! | تمت الإضافة";
+        btn.style.background = "#28a745";
+        setTimeout(() => { btn.textContent = originalText; btn.style.background = ""; }, 2000);
+      }
+    };
+  }
 
-  // Mobile button click
-  document.getElementById("mobileAddToCartBtn").onclick = function() {
-    addToCartHandler(this);
-  };
-
-  // Desktop lightbox - Enhanced version with product info
   const mainImg = document.getElementById('mainImage');
   if (mainImg) {
     mainImg.style.cursor = 'zoom-in';
-    mainImg.onclick = () => {
-      openEnhancedLightbox(product, 0);
-    };
+    mainImg.onclick = () => openEnhancedLightbox(product, 0);
   }
 }
 
-// Enhanced Lightbox with product info, thumbnails, and arrows
 function openEnhancedLightbox(product, startIndex) {
   let currentIndex = startIndex;
   const images = product.images;
   
-  // Build info HTML - Two column layout (English left, Arabic right)
   let infoHTML = `
     <div class="lightbox-title-row">
       <div class="lightbox-title">${product.name}</div>
@@ -417,136 +333,57 @@ function openEnhancedLightbox(product, startIndex) {
     <div class="lightbox-divider"></div>
   `;
   
-  // 1. Description (first - what is the product?)
   const lbDescEn = product.detailedDescription || product.description;
   const lbDescAr = product.detailedDescriptionAr || product.descriptionAr;
   if (lbDescEn || lbDescAr) {
-    infoHTML += `
-      <div class="lightbox-detail-block">
-        <div class="lightbox-detail-en">
-          <div class="lightbox-detail-label">Description</div>
-          <div class="lightbox-detail-value">${lbDescEn || ''}</div>
-        </div>
-        <div class="lightbox-detail-ar">
-          <div class="lightbox-detail-label">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬</div>
-          <div class="lightbox-detail-value">${lbDescAr || ''}</div>
-        </div>
-      </div>
-    `;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Description</div><div class="lightbox-detail-value">${lbDescEn || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">معلومات المنتج</div><div class="lightbox-detail-value">${lbDescAr || ''}</div></div></div>`;
   }
   
-  // 2. Colors
   if (product.colors || product.colorsAr) {
-    infoHTML += `
-      <div class="lightbox-detail-block">
-        <div class="lightbox-detail-en">
-          <div class="lightbox-detail-label">Available Colors</div>
-          <div class="lightbox-detail-value">${product.colors || ''}</div>
-        </div>
-        <div class="lightbox-detail-ar">
-          <div class="lightbox-detail-label">Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ù…ØªØ§Ø­Ø©</div>
-          <div class="lightbox-detail-value">${product.colorsAr || ''}</div>
-        </div>
-      </div>
-    `;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Available Colors</div><div class="lightbox-detail-value">${product.colors || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">الألوان المتاحة</div><div class="lightbox-detail-value">${product.colorsAr || ''}</div></div></div>`;
   }
   
-  // 3. Packaging
   if (product.packaging || product.packagingAr) {
-    infoHTML += `
-      <div class="lightbox-detail-block">
-        <div class="lightbox-detail-en">
-          <div class="lightbox-detail-label">Packaging</div>
-          <div class="lightbox-detail-value">${product.packaging || ''}</div>
-        </div>
-        <div class="lightbox-detail-ar">
-          <div class="lightbox-detail-label">Ø§Ù„ØªØ¹Ø¨Ø¦Ø© ÙˆØ§Ù„ØªØºÙ„ÙŠÙ</div>
-          <div class="lightbox-detail-value">${product.packagingAr || ''}</div>
-        </div>
-      </div>
-    `;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Packaging</div><div class="lightbox-detail-value">${product.packaging || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">التعبئة والتغليف</div><div class="lightbox-detail-value">${product.packagingAr || ''}</div></div></div>`;
   }
   
-  // 4. Specifications (last - technical details)
   if ((product.specifications && product.specifications.length > 0) || (product.specificationsAr && product.specificationsAr.length > 0)) {
-    infoHTML += `
-      <div class="lightbox-detail-block">
-        <div class="lightbox-detail-en">
-          <div class="lightbox-detail-label">Specifications</div>
-          <div class="lightbox-detail-value">${product.specifications ? product.specifications.join('<br>') : ''}</div>
-        </div>
-        <div class="lightbox-detail-ar">
-          <div class="lightbox-detail-label">Ø§Ù„Ù…ÙˆØ§ØµÙØ§Øª</div>
-          <div class="lightbox-detail-value">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</div>
-        </div>
-      </div>
-    `;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Specifications</div><div class="lightbox-detail-value">${product.specifications ? product.specifications.join('<br>') : ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">المواصفات</div><div class="lightbox-detail-value">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</div></div></div>`;
   }
   
-  // Build thumbnails HTML
-  const thumbnailsHTML = images.length > 1 ? `
-    <div class="lightbox-thumbnails">
-      ${images.map((img, i) => `
-        <div class="lightbox-thumb ${i === currentIndex ? 'active' : ''}" data-index="${i}">
-          <img src="${img}" alt="Thumbnail ${i + 1}">
-        </div>
-      `).join('')}
-    </div>
-  ` : '';
+  const thumbnailsHTML = images.length > 1 ? `<div class="lightbox-thumbnails">${images.map((img, i) => `<div class="lightbox-thumb ${i === currentIndex ? 'active' : ''}" data-index="${i}"><img src="${img}" alt="Thumbnail ${i + 1}"></div>`).join('')}</div>` : '';
+  const arrowsHTML = images.length > 1 ? `<button class="lightbox-arrow prev">‹</button><button class="lightbox-arrow next">›</button>` : '';
+  const counterHTML = images.length > 1 ? `<div class="lightbox-counter">${currentIndex + 1} / ${images.length}</div>` : '';
   
-  // Build arrows HTML (only if multiple images)
-  const arrowsHTML = images.length > 1 ? `
-    <button class="lightbox-arrow prev">â€¹</button>
-    <button class="lightbox-arrow next">â€º</button>
-  ` : '';
-  
-  // Counter HTML
-  const counterHTML = images.length > 1 ? `
-    <div class="lightbox-counter">${currentIndex + 1} / ${images.length}</div>
-  ` : '';
-  
-  // Create lightbox
   const lightbox = document.createElement('div');
   lightbox.className = 'lightbox';
   lightbox.innerHTML = `
-    <button class="lightbox-close">Ã—</button>
+    <button class="lightbox-close">×</button>
     <div class="lightbox-content">
       <div class="lightbox-image-section">
-        <div class="lightbox-main-image">
-          ${arrowsHTML}
-          <img src="${images[currentIndex]}" alt="${product.name}" id="lightboxMainImg">
-          ${counterHTML}
-        </div>
+        <div class="lightbox-main-image">${arrowsHTML}<img src="${images[currentIndex]}" alt="${product.name}" id="lightboxMainImg">${counterHTML}</div>
         ${thumbnailsHTML}
       </div>
-      <div class="lightbox-info-section">
-        ${infoHTML}
-      </div>
+      <div class="lightbox-info-section">${infoHTML}</div>
     </div>
   `;
   
   document.body.appendChild(lightbox);
   document.body.style.overflow = 'hidden';
   
-  // Get elements
   const lightboxImg = document.getElementById('lightboxMainImg');
   const lightboxMainImageContainer = lightbox.querySelector('.lightbox-main-image');
   const counter = lightbox.querySelector('.lightbox-counter');
   const thumbs = lightbox.querySelectorAll('.lightbox-thumb');
   
-  // Click to toggle 2x zoom
   let isZoomed = false;
   
   lightboxMainImageContainer.addEventListener('click', (e) => {
-    // Don't zoom if clicking on arrows
     if (e.target.classList.contains('lightbox-arrow')) return;
-    
     isZoomed = !isZoomed;
-    
     if (isZoomed) {
       lightboxImg.style.transform = 'scale(2)';
       lightboxImg.style.cursor = 'zoom-out';
-      // Set initial position based on click
       const rect = lightboxMainImageContainer.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -560,84 +397,45 @@ function openEnhancedLightbox(product, startIndex) {
   
   lightboxMainImageContainer.addEventListener('mousemove', (e) => {
     if (!isZoomed) return;
-    
     const rect = lightboxMainImageContainer.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    
     lightboxImg.style.transformOrigin = `${x}% ${y}%`;
   });
   
-  // Update image function
   const updateImage = (index) => {
     currentIndex = index;
     lightboxImg.src = images[currentIndex];
     if (counter) counter.textContent = `${currentIndex + 1} / ${images.length}`;
-    
-    // Update active thumbnail
-    thumbs.forEach((thumb, i) => {
-      thumb.classList.toggle('active', i === currentIndex);
-    });
+    thumbs.forEach((thumb, i) => thumb.classList.toggle('active', i === currentIndex));
   };
   
-  // Arrow click handlers
   const prevBtn = lightbox.querySelector('.lightbox-arrow.prev');
   const nextBtn = lightbox.querySelector('.lightbox-arrow.next');
   
-  if (prevBtn) {
-    prevBtn.onclick = (e) => {
-      e.stopPropagation();
-      const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
-      updateImage(newIndex);
-    };
-  }
+  if (prevBtn) prevBtn.onclick = (e) => { e.stopPropagation(); updateImage(currentIndex === 0 ? images.length - 1 : currentIndex - 1); };
+  if (nextBtn) nextBtn.onclick = (e) => { e.stopPropagation(); updateImage(currentIndex === images.length - 1 ? 0 : currentIndex + 1); };
   
-  if (nextBtn) {
-    nextBtn.onclick = (e) => {
-      e.stopPropagation();
-      const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
-      updateImage(newIndex);
-    };
-  }
+  thumbs.forEach((thumb, i) => { thumb.onclick = (e) => { e.stopPropagation(); updateImage(i); }; });
   
-  // Thumbnail click handlers
-  thumbs.forEach((thumb, i) => {
-    thumb.onclick = (e) => {
-      e.stopPropagation();
-      updateImage(i);
-    };
-  });
-  
-  // Keyboard navigation
   const handleKeydown = (e) => {
-    if (e.key === 'ArrowLeft' && images.length > 1) {
-      const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
-      updateImage(newIndex);
-    } else if (e.key === 'ArrowRight' && images.length > 1) {
-      const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
-      updateImage(newIndex);
-    } else if (e.key === 'Escape') {
-      closeLightbox();
-    }
+    if (e.key === 'ArrowLeft' && images.length > 1) updateImage(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
+    else if (e.key === 'ArrowRight' && images.length > 1) updateImage(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
+    else if (e.key === 'Escape') closeLightbox();
   };
   
   document.addEventListener('keydown', handleKeydown);
   
-  // Close function
   const closeLightbox = () => {
     document.body.removeChild(lightbox);
     document.body.style.overflow = 'auto';
     document.removeEventListener('keydown', handleKeydown);
   };
   
-  // Close handlers
   lightbox.querySelector('.lightbox-close').onclick = closeLightbox;
-  lightbox.onclick = (e) => {
-    if (e.target === lightbox) closeLightbox();
-  };
+  lightbox.onclick = (e) => { if (e.target === lightbox) closeLightbox(); };
 }
 
-// Mobile carousel scroll handler
 function setupMobileCarousel() {
   const carousel = document.getElementById('mobileCarousel');
   const dots = document.querySelectorAll('.mobile-dot');
@@ -646,24 +444,16 @@ function setupMobileCarousel() {
     const scrollLeft = carousel.scrollLeft;
     const slideWidth = carousel.offsetWidth;
     const currentIndex = Math.round(scrollLeft / slideWidth);
-    
-    dots.forEach((dot, index) => {
-      dot.classList.toggle('active', index === currentIndex);
-    });
+    dots.forEach((dot, index) => dot.classList.toggle('active', index === currentIndex));
   });
   
-  // Click on dot to scroll
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
-      carousel.scrollTo({
-        left: index * carousel.offsetWidth,
-        behavior: 'smooth'
-      });
+      carousel.scrollTo({ left: index * carousel.offsetWidth, behavior: 'smooth' });
     });
   });
 }
 
-// Gallery overlay (click image to open full gallery)
 function setupGalleryOverlay(product) {
   const carousel = document.getElementById('mobileCarousel');
   const overlay = document.getElementById('galleryOverlay');
@@ -671,29 +461,19 @@ function setupGalleryOverlay(product) {
   const closeBtn = document.getElementById('galleryClose');
   const bottomNav = document.getElementById('mobileBottomNav');
   
-  // Click on carousel to open gallery
   carousel.addEventListener('click', () => {
-    // Build vertical gallery
-    galleryScroll.innerHTML = product.images.map((img, index) => `
-      <div class="gallery-image-wrapper">
-        <img src="${img}" alt="${product.name} ${index + 1}">
-      </div>
-    `).join('');
-    
-    // Show overlay, hide bottom nav
+    galleryScroll.innerHTML = product.images.map((img, index) => `<div class="gallery-image-wrapper"><img src="${img}" alt="${product.name} ${index + 1}"></div>`).join('');
     overlay.classList.add('active');
     if (bottomNav) bottomNav.style.display = 'none';
     document.body.style.overflow = 'hidden';
   });
   
-  // Close gallery
   closeBtn.addEventListener('click', () => {
     overlay.classList.remove('active');
     if (bottomNav) bottomNav.style.display = '';
     document.body.style.overflow = '';
   });
   
-  // Also close on overlay background click
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
       overlay.classList.remove('active');
@@ -703,50 +483,26 @@ function setupGalleryOverlay(product) {
   });
 }
 
-// Change main image (desktop)
 window.changeMainImage = function(imgSrc, index) {
   const mainImg = document.getElementById('mainImage');
   mainImg.src = imgSrc;
-  
-  document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
-    thumb.classList.toggle('active', i === index);
-  });
+  document.querySelectorAll('.thumbnail').forEach((thumb, i) => thumb.classList.toggle('active', i === index));
 };
 
-// =====================
-// SEARCH FUNCTIONALITY
-// =====================
 function setupSearch() {
   const searchBtn = document.getElementById('searchBtn');
   const searchInput = document.getElementById('searchInput');
   
   const doSearch = () => {
     const term = searchInput.value.trim();
-    if (term) {
-      // Redirect to index.html with search parameter
-      window.location.href = `index.html?search=${encodeURIComponent(term)}`;
-    } else {
-      window.location.href = 'index.html';
-    }
+    if (term) window.location.href = `index.html?search=${encodeURIComponent(term)}`;
+    else window.location.href = 'index.html';
   };
   
-  if (searchBtn) {
-    searchBtn.onclick = doSearch;
-  }
-  
-  if (searchInput) {
-    searchInput.onkeypress = (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        doSearch();
-      }
-    };
-  }
+  if (searchBtn) searchBtn.onclick = doSearch;
+  if (searchInput) searchInput.onkeypress = (e) => { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } };
 }
 
-// =====================
-// CART TOGGLE FUNCTIONALITY (shared by mobile and desktop)
-// =====================
 function toggleCartSidebar() {
   const cartSidebar = document.getElementById('cartSidebar');
   const bottomCartBtn = document.getElementById('bottomCartBtn');
@@ -758,7 +514,7 @@ function toggleCartSidebar() {
     if (cartSidebar.classList.contains('active')) {
       if (bottomCartBtn) bottomCartBtn.classList.add('cart-active');
       if (bottomHomeBtn) bottomHomeBtn.classList.remove('home-active');
-      // Update cart display
+      // Update cart display - app.js should be loaded by now
       if (typeof updateCart === 'function') {
         updateCart();
       }
@@ -768,60 +524,32 @@ function toggleCartSidebar() {
   }
 }
 
-// =====================
-// BOTTOM NAV FUNCTIONALITY
-// =====================
 function setupBottomNav() {
   const bottomHomeBtn = document.getElementById('bottomHomeBtn');
   const bottomCartBtn = document.getElementById('bottomCartBtn');
   const bottomMenuBtn = document.getElementById('bottomMenuBtn');
   const cartSidebar = document.getElementById('cartSidebar');
   
-  // Home button - go to index.html
-  if (bottomHomeBtn) {
-    bottomHomeBtn.onclick = function() {
-      window.location.href = 'index.html';
-    };
-  }
-  
-  // Cart button - toggle cart sidebar
-  if (bottomCartBtn) {
-    bottomCartBtn.onclick = toggleCartSidebar;
-  }
-  
-  // Menu button - show mobile menu overlay
+  if (bottomHomeBtn) bottomHomeBtn.onclick = function() { window.location.href = 'index.html'; };
+  if (bottomCartBtn) bottomCartBtn.onclick = toggleCartSidebar;
   if (bottomMenuBtn) {
     bottomMenuBtn.onclick = function() {
-      // Close cart if open
       if (cartSidebar && cartSidebar.classList.contains('active')) {
         cartSidebar.classList.remove('active');
         if (bottomCartBtn) bottomCartBtn.classList.remove('cart-active');
       }
-      
-      toggleMobileMenu();
+      productPageToggleMobileMenu();
     };
   }
   
-  // Close cart button
   const closeCart = document.getElementById('closeCart');
-  if (closeCart) {
-    closeCart.onclick = function() {
-      if (cartSidebar) {
-        cartSidebar.classList.remove('active');
-        if (bottomCartBtn) bottomCartBtn.classList.remove('cart-active');
-      }
-    };
-  }
+  if (closeCart) closeCart.onclick = function() { if (cartSidebar) { cartSidebar.classList.remove('active'); if (bottomCartBtn) bottomCartBtn.classList.remove('cart-active'); } };
   
-  // Desktop cart icon (in nav)
   const cartIcon = document.getElementById('cartIcon');
-  if (cartIcon) {
-    cartIcon.onclick = toggleCartSidebar;
-  }
+  if (cartIcon) cartIcon.onclick = toggleCartSidebar;
 }
 
-// Mobile menu toggle
-function toggleMobileMenu() {
+function productPageToggleMobileMenu() {
   let overlay = document.querySelector('.mobile-menu-overlay');
   
   if (!overlay) {
@@ -829,50 +557,32 @@ function toggleMobileMenu() {
     overlay.className = 'mobile-menu-overlay';
     overlay.innerHTML = `
       <div class="mobile-menu">
-        <a href="index.html#products" onclick="closeMobileMenu()"><span class="menu-en">ðŸ›ï¸ Shop</span> | <span class="menu-ar">ØªØ³ÙˆÙ‚</span></a>
-        <a href="index.html?showAbout=true#about" onclick="closeMobileMenu()"><span class="menu-en">â„¹ï¸ About</span> | <span class="menu-ar">Ù…Ù† Ù†Ø­Ù†</span></a>
-        <a href="index.html#contact" onclick="closeMobileMenu()"><span class="menu-en">ðŸ“§ Contact</span> | <span class="menu-ar">Ø§ØªØµÙ„ Ø¨Ù†Ø§</span></a>
-        <a href="index.html#terms" onclick="closeMobileMenu()"><span class="menu-en">ðŸ“‹ Terms</span> | <span class="menu-ar">Ø§Ù„Ø´Ø±ÙˆØ·</span></a>
+        <a href="index.html#products"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
+        <a href="index.html?showAbout=true#about"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
+        <a href="index.html#contact"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
+        <a href="index.html#terms"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
       </div>
     `;
     document.body.appendChild(overlay);
-    
-    overlay.onclick = (e) => {
-      if (e.target === overlay) {
-        closeMobileMenu();
-      }
-    };
+    overlay.onclick = (e) => { if (e.target === overlay) overlay.classList.remove('active'); };
+    overlay.querySelectorAll('.mobile-menu a').forEach(link => { link.onclick = () => overlay.classList.remove('active'); });
   }
   
   overlay.classList.toggle('active');
 }
 
-function closeMobileMenu() {
-  const overlay = document.querySelector('.mobile-menu-overlay');
-  if (overlay) {
-    overlay.classList.remove('active');
-  }
-}
-
-// =====================
-// INITIALIZE
-// =====================
 window.addEventListener('DOMContentLoaded', () => {
-  // Update cart count
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+  // Update cart count from localStorage
+  const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
   
   const cartCount = document.getElementById("cartCount");
   const bottomCartCount = document.getElementById("bottomCartCount");
   if (cartCount) cartCount.textContent = totalItems;
   if (bottomCartCount) bottomCartCount.textContent = totalItems;
   
-  // Setup search
   setupSearch();
-  
-  // Setup bottom nav
   setupBottomNav();
 });
 
-// Start loading product page
 initProductPage();
