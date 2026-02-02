@@ -2268,3 +2268,7 @@ footer p {
 .checkout-btn {
   font-family: 'Inter', 'Almarai', sans-serif;
 }
+/* Fix anchor scroll offset for fixed header */
+#products {
+  scroll-margin-top: 100px;
+}
