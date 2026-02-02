@@ -143,6 +143,48 @@ function searchProducts() {
     renderProducts(results); 
 }
 
+// Logo fly to cart animation
+function flyLogoToCart(btn) {
+    const logo = document.createElement('img');
+    logo.src = 'logo.png';
+    logo.className = 'fly-logo';
+    
+    const btnRect = btn.getBoundingClientRect();
+    logo.style.left = (btnRect.left + btnRect.width / 2 - 20) + 'px';
+    logo.style.top = (btnRect.top - 10) + 'px';
+    
+    document.body.appendChild(logo);
+    
+    const isMobile = window.innerWidth <= 768;
+    const cartIcon = isMobile 
+        ? document.getElementById('bottomCartCount') 
+        : document.getElementById('cartCount');
+    
+    if (cartIcon) {
+        const cartRect = cartIcon.getBoundingClientRect();
+        
+        setTimeout(() => {
+            logo.style.left = (cartRect.left + cartRect.width / 2 - 20) + 'px';
+            logo.style.top = (cartRect.top) + 'px';
+            logo.classList.add('flying');
+        }, 50);
+        
+        setTimeout(() => {
+            logo.remove();
+            cartIcon.classList.add('bump');
+            const parentIcon = cartIcon.closest('.cart-icon, .mobile-cart-icon, .cart-icon-wrapper');
+            if (parentIcon) parentIcon.classList.add('pulse');
+            
+            setTimeout(() => {
+                cartIcon.classList.remove('bump');
+                if (parentIcon) parentIcon.classList.remove('pulse');
+            }, 400);
+        }, 850);
+    } else {
+        setTimeout(() => logo.remove(), 900);
+    }
+}
+
 function addToCart(id, event) { 
     const product = products.find(p => p.id === id);
     
@@ -160,23 +202,13 @@ function addToCart(id, event) {
         return; // Silent - already at max
     }
     
-   if (item) { 
+    if (item) { 
         item.quantity++; 
     } else { 
         cart.push({ ...product, quantity: 1 }); 
     } 
     saveCart(); 
     updateCart(); 
-    
-    // Auto-open cart drawer
-    const cartSidebar = document.getElementById("cartSidebar");
-    if (cartSidebar && !cartSidebar.classList.contains("active")) {
-        cartSidebar.classList.add("active");
-        const bottomCartBtn = document.getElementById("bottomCartBtn");
-        const bottomHomeBtn = document.getElementById("bottomHomeBtn");
-        if (bottomCartBtn) bottomCartBtn.classList.add("cart-active");
-        if (bottomHomeBtn) bottomHomeBtn.classList.remove("home-active");
-    }
     
     if (event && event.target) {
         const btn = event.target;
@@ -185,6 +217,9 @@ function addToCart(id, event) {
         
         btn.textContent = "✓ Added!";
         btn.style.background = "#28a745";
+        
+        // Fly logo animation
+        flyLogoToCart(btn);
         
         setTimeout(() => {
             btn.textContent = originalText;
