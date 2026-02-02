@@ -11,8 +11,6 @@ function toArabicNumerals(num) {
   return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
 }
 
-
-
 // Wait for products to load, then display
 async function initProductPage() {
   let attempts = 0;
@@ -282,6 +280,7 @@ async function initProductPage() {
         const originalText = btn.textContent;
         btn.textContent = "✓ Added!";
         btn.style.background = "#28a745";
+        if (typeof flyLogoToCart === 'function') flyLogoToCart(btn);
         setTimeout(() => { btn.textContent = originalText; btn.style.background = ""; }, 2000);
       }
     };
@@ -294,6 +293,7 @@ async function initProductPage() {
         const originalText = btn.textContent;
         btn.textContent = "✓ Added! | تمت الإضافة";
         btn.style.background = "#28a745";
+        if (typeof flyLogoToCart === 'function') flyLogoToCart(btn);
         setTimeout(() => { btn.textContent = originalText; btn.style.background = ""; }, 2000);
       }
     };
