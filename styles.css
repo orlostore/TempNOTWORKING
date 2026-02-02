@@ -546,7 +546,7 @@ nav {
   background: #1e3545;
 }
 
-/* About Section - Match Contact Box EXACTLY */
+/* About Section - Match Contact EXACTLY */
 .about-section {
   background: var(--bg);
   padding: 0;
@@ -565,6 +565,16 @@ nav {
   box-shadow: 0 2.68px 8.04px rgba(0,0,0,.08);
   max-width: 1180px;
   margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .about-section .container {
+    padding: 0 1.01rem;
+  }
+  
+  .about-section .container > div {
+    padding: 1.68rem 1.01rem;
+  }
 }
 
 /* About Section - Bigger Fonts */
