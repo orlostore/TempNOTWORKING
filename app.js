@@ -4,7 +4,7 @@ const WHATSAPP_NUMBER = "971XXXXXXXXX";
 const FREE_DELIVERY_THRESHOLD = 75;
 
 // === MAX QUANTITY PER PRODUCT ===
-var MAX_QTY_PER_PRODUCT = 10;
+const MAX_QTY_PER_PRODUCT = 10;
 
 const deliveryZones = {
     dubai: {
@@ -56,23 +56,6 @@ function calculateDeliveryFee(subtotal) { const zone = deliveryZones[selectedDel
 function getAmountUntilFreeDelivery(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.freeThreshold - subtotal; }
 function generateOrderNumber() { const date = new Date(); const year = date.getFullYear().toString().slice(-2); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const random = Math.floor(Math.random() * 9000) + 1000; return `ORLO-${year}${month}${day}-${random}`; }
 
-// Show max limit message
-function showMaxLimitMessage(productName) {
-    // Remove existing message if any
-    const existing = document.getElementById('maxLimitMsg');
-    if (existing) existing.remove();
-    
-    const msg = document.createElement('div');
-    msg.id = 'maxLimitMsg';
-    msg.innerHTML = `Maximum ${MAX_QTY_PER_PRODUCT} per item | الحد الأقصى ${MAX_QTY_PER_PRODUCT} لكل منتج`;
-    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#dc3545;color:white;padding:12px 24px;border-radius:8px;z-index:9999;font-size:14px;font-weight:600;box-shadow:0 4px 15px rgba(220,53,69,0.4);text-align:center;';
-    document.body.appendChild(msg);
-    
-    setTimeout(() => {
-        if (msg.parentNode) msg.remove();
-    }, 3000);
-}
-
 function getCategoryArabic(category) {
     if (category === "All Products") return "جميع المنتجات";
     const product = products.find(p => p.category === category);
@@ -91,6 +74,7 @@ function renderProducts(list) {
             ? `<img src="${p.image}" alt="${p.name}" style="max-width:100%; max-height:100%; object-fit:contain;">` 
             : p.image;
         
+        // Check if out of stock
         const outOfStock = p.quantity === 0;
         
         return `
@@ -129,7 +113,6 @@ function loadProducts(category = "All Products") {
 
 function createCategoryFilters() { 
     const container = document.getElementById("categoryFilters"); 
-    if (!container) return;
     container.innerHTML = getCategories().map(cat => {
         const catAr = getCategoryArabic(cat);
         return `<button class="category-btn ${cat === selectedCategory ? "active" : ""}" onclick="loadProducts('${cat}')">${cat}${catAr ? `<br><span class="arabic-text category-arabic">${catAr}</span>` : ''}</button>`;
@@ -147,9 +130,7 @@ function updateCategoryButtons() {
 }
 
 function searchProducts() { 
-    const searchInput = document.getElementById("searchInput");
-    if (!searchInput) return;
-    const term = searchInput.value.toLowerCase().trim(); 
+    const term = document.getElementById("searchInput").value.toLowerCase().trim(); 
     const heroSection = document.querySelector(".hero"); 
     if (!term) { 
         loadProducts(selectedCategory); 
@@ -165,17 +146,18 @@ function searchProducts() {
 function addToCart(id, event) { 
     const product = products.find(p => p.id === id);
     
+    // Check stock
     if (product.quantity === 0) {
-        return;
+        return; // Silent - out of stock
     }
     
     const item = cart.find(i => i.id === id);
     const currentInCart = item ? item.quantity : 0;
     
+    // Silent cap at 10 OR available stock (whichever is lower)
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
     if (currentInCart >= maxAllowed) {
-        showMaxLimitMessage(product.name);
-        return;
+        return; // Silent - already at max
     }
     
     if (item) { 
@@ -202,17 +184,12 @@ function addToCart(id, event) {
 }
 
 function updateCart() { 
-    // Always sync cart from localStorage (important for product page)
-    cart = JSON.parse(localStorage.getItem("cart")) || [];
-    
     const cartItems = document.getElementById("cartItems"); 
     const cartCount = document.getElementById("cartCount"); 
     const bottomCartCount = document.getElementById("bottomCartCount");
     const cartFooter = document.querySelector(".cart-footer");
     const cartCheckoutFixed = document.getElementById("cartCheckoutFixed");
     const isMobile = window.innerWidth <= 768;
-    
-    if (!cartItems || !cartFooter) return;
     
     if (!cart.length) { 
         cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
@@ -227,6 +204,7 @@ function updateCart() {
     const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0); 
     const deliveryFee = calculateDeliveryFee(subtotal); 
     const total = subtotal + deliveryFee; 
+    const amountNeeded = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
     
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems; 
@@ -247,27 +225,21 @@ function updateCart() {
         cartCheckoutFixed.innerHTML = '';
     }
     
-    cartItems.innerHTML = cart.map(i => {
-        const product = products.find(p => p.id === i.id);
-        const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
-        const atMax = i.quantity >= maxAllowed;
-        
-        return `
+    cartItems.innerHTML = cart.map(i => `
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
             <div style="flex:1;">
                 <strong style="font-size:0.9rem; color:#2c4a5c;">${i.name}</strong><br>
                 <span style="color:#888; font-size:0.8rem;">AED ${i.price} × ${i.quantity}</span><br>
                 <span style="color:#e07856; font-weight:600; font-size:0.9rem;">AED ${(i.price * i.quantity).toFixed(2)}</span>
-                ${atMax ? `<br><span style="color:#dc3545; font-size:0.7rem;">Max ${maxAllowed} reached</span>` : ''}
             </div>
             <div style="display:flex; gap:0.4rem; align-items:center;">
                 <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">-</button>
                 <span style="font-size:0.9rem; font-weight:600; min-width:20px; text-align:center;">${i.quantity}</span>
-                <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.3rem 0.6rem; background:${atMax ? '#ccc' : '#f0f0f0'}; border:none; border-radius:4px; cursor:${atMax ? 'not-allowed' : 'pointer'}; font-size:0.85rem; font-weight:600;" ${atMax ? 'disabled' : ''}>+</button>
+                <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">+</button>
                 <button onclick="removeFromCart(${i.id})" style="padding:0.3rem 0.6rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:0.85rem;">✕</button>
             </div>
         </div>
-    `}).join(""); 
+    `).join(""); 
     
     let footerHTML = '';
     
@@ -277,9 +249,10 @@ function updateCart() {
     if (showUpsell) {
         const cartProductIds = cart.map(i => i.id);
         
+        // Filter out-of-stock items from upsell
         const upsellProducts = products
             .filter(p => !cartProductIds.includes(p.id))
-            .filter(p => p.quantity > 0)
+            .filter(p => p.quantity > 0) // Only in-stock items
             .filter(p => p.price >= amountNeededForFree)
             .sort((a, b) => a.price - b.price)
             .slice(0, 2);
@@ -372,11 +345,11 @@ function updateQuantity(id, change) {
     if (item) { 
         const newQty = item.quantity + change;
         
+        // Silent cap at 10 OR available stock (whichever is lower)
         if (change > 0) {
             const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
             if (newQty > maxAllowed) {
-                showMaxLimitMessage(item.name);
-                return;
+                return; // Silent - already at max
             }
         }
         
@@ -402,8 +375,6 @@ function toggleCart() {
     const bottomCartBtn = document.getElementById("bottomCartBtn");
     const bottomHomeBtn = document.getElementById("bottomHomeBtn");
     
-    if (!cartSidebar) return;
-    
     cartSidebar.classList.toggle("active");
     
     if (cartSidebar.classList.contains("active")) {
@@ -428,24 +399,18 @@ function addUpsellItem(id, event) {
 }
 
 function openPolicy(type) { 
-    const policyText = document.getElementById("policyText");
-    const policyModal = document.getElementById("policyModal");
-    if (!policyText || !policyModal) return;
-    policyText.innerHTML = policies[type]; 
-    policyModal.style.display = "block"; 
+    document.getElementById("policyText").innerHTML = policies[type]; 
+    document.getElementById("policyModal").style.display = "block"; 
     document.body.style.overflow = "hidden"; 
 }
 
 function closePolicy() { 
-    const policyModal = document.getElementById("policyModal");
-    if (!policyModal) return;
-    policyModal.style.display = "none"; 
+    document.getElementById("policyModal").style.display = "none"; 
     document.body.style.overflow = "auto"; 
 }
 
 function toggleAbout() {
     const aboutSection = document.getElementById('about');
-    if (!aboutSection) return;
     const computedStyle = window.getComputedStyle(aboutSection);
     const isVisible = computedStyle.display !== 'none';
     
@@ -491,9 +456,6 @@ function closeMobileMenu() {
 }
 
 window.onload = () => { 
-    // Sync cart from localStorage
-    cart = JSON.parse(localStorage.getItem("cart")) || [];
-    
     createCategoryFilters(); 
     loadProducts(); 
     updateCart(); 
@@ -545,31 +507,20 @@ window.onload = () => {
         });
     }
     
-    const searchBtn = document.getElementById("searchBtn");
-    const searchInput = document.getElementById("searchInput");
-    if (searchBtn) searchBtn.onclick = searchProducts;
-    if (searchInput) {
-        searchInput.onkeypress = (e) => { 
-            if (e.key === "Enter") { 
-                e.preventDefault(); 
-                searchProducts(); 
-            } 
-        };
-    }
-    
-    const cartIcon = document.getElementById("cartIcon");
-    const closeCart = document.getElementById("closeCart");
-    const policyModal = document.getElementById("policyModal");
-    
-    if (cartIcon) cartIcon.onclick = toggleCart;
-    if (closeCart) closeCart.onclick = toggleCart;
-    if (policyModal) {
-        policyModal.onclick = (e) => { 
-            if (e.target.id === "policyModal") { 
-                closePolicy(); 
-            } 
-        };
-    }
+    document.getElementById("searchBtn").onclick = searchProducts; 
+    document.getElementById("searchInput").onkeypress = (e) => { 
+        if (e.key === "Enter") { 
+            e.preventDefault(); 
+            searchProducts(); 
+        } 
+    }; 
+    document.getElementById("cartIcon").onclick = toggleCart; 
+    document.getElementById("closeCart").onclick = toggleCart; 
+    document.getElementById("policyModal").onclick = (e) => { 
+        if (e.target.id === "policyModal") { 
+            closePolicy(); 
+        } 
+    };
     
     const bottomHomeBtn = document.getElementById("bottomHomeBtn");
     const bottomCartBtn = document.getElementById("bottomCartBtn");
@@ -580,7 +531,7 @@ window.onload = () => {
         
         bottomHomeBtn.onclick = function() {
             const cartSidebar = document.getElementById("cartSidebar");
-            if (cartSidebar && cartSidebar.classList.contains("active")) {
+            if (cartSidebar.classList.contains("active")) {
                 cartSidebar.classList.remove("active");
                 if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
                 upsellUsed = false;
@@ -599,7 +550,7 @@ window.onload = () => {
     if (bottomMenuBtn) {
         bottomMenuBtn.onclick = function() {
             const cartSidebar = document.getElementById("cartSidebar");
-            if (cartSidebar && cartSidebar.classList.contains("active")) {
+            if (cartSidebar.classList.contains("active")) {
                 cartSidebar.classList.remove("active");
                 if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
                 upsellUsed = false;
@@ -620,6 +571,7 @@ async function checkout() {
             btn.innerHTML = "Checking stock...";
         }
 
+        // Use relative URL (same domain)
         const response = await fetch('/checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -632,8 +584,10 @@ async function checkout() {
         const data = await response.json();
 
         if (data.error) {
+            // Handle stock errors
             if (data.error === 'out_of_stock') {
                 alert(data.message);
+                // Refresh products to get updated stock
                 if (typeof initProducts === 'function') {
                     initProducts();
                 }
