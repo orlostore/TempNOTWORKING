@@ -11,6 +11,145 @@ function toArabicNumerals(num) {
   return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
 }
 
+// Show max limit message (red notification)
+function showProductPageMaxLimitMessage() {
+    const existing = document.getElementById('maxLimitMsg');
+    if (existing) existing.remove();
+    
+    const msg = document.createElement('div');
+    msg.id = 'maxLimitMsg';
+    msg.innerHTML = `Maximum ${MAX_QTY_PER_PRODUCT} per item | الحد الأقصى ${MAX_QTY_PER_PRODUCT} لكل منتج`;
+    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#dc3545;color:white;padding:12px 24px;border-radius:8px;z-index:9999;font-size:14px;font-weight:600;box-shadow:0 4px 15px rgba(220,53,69,0.4);text-align:center;';
+    document.body.appendChild(msg);
+    
+    setTimeout(() => {
+        if (msg.parentNode) msg.remove();
+    }, 3000);
+}
+
+// Transform button to quantity control (Premium Glass style)
+function transformToQtyButton(btn, product) {
+  const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const item = localCart.find(i => i.id === product.id);
+  const qty = item ? item.quantity : 1;
+  
+  btn.dataset.originalText = btn.textContent;
+  btn.dataset.productId = product.id;
+  
+  btn.outerHTML = `
+    <div class="product-btn-transformed" id="transformedBtn-${product.id}">
+      <button class="qty-btn minus" onclick="productQtyChange(${product.id}, -1)">−</button>
+      <div class="center-section" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();">
+        <span class="cart-icon">🛒</span>
+        <span class="qty-display" id="qtyDisplay-${product.id}">${qty}</span>
+      </div>
+      <button class="qty-btn plus" onclick="productQtyChange(${product.id}, 1)">+</button>
+    </div>
+  `;
+}
+
+// Handle quantity change from transformed button
+function productQtyChange(productId, change) {
+  let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const item = localCart.find(i => i.id === productId);
+  const product = products.find(p => p.id === productId);
+  
+  if (!item) return;
+  
+  const newQty = item.quantity + change;
+  
+  if (change > 0) {
+    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
+    if (newQty > maxAllowed) {
+      showProductPageMaxLimitMessage();
+      return;
+    }
+  }
+  
+  if (newQty <= 0) {
+    localCart = localCart.filter(i => i.id !== productId);
+    localStorage.setItem("cart", JSON.stringify(localCart));
+    resetToAddButton(productId);
+  } else {
+    item.quantity = newQty;
+    localStorage.setItem("cart", JSON.stringify(localCart));
+    
+    const qtyDisplay = document.getElementById(`qtyDisplay-${productId}`);
+    if (qtyDisplay) qtyDisplay.textContent = newQty;
+  }
+  
+  if (typeof cart !== 'undefined') {
+    cart.length = 0;
+    localCart.forEach(i => cart.push(i));
+  }
+  
+  const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+  const cartCount = document.getElementById("cartCount");
+  const bottomCartCount = document.getElementById("bottomCartCount");
+  const mobileCartCount = document.getElementById("mobileCartCount");
+  if (cartCount) cartCount.textContent = totalItems;
+  if (bottomCartCount) bottomCartCount.textContent = totalItems;
+  if (mobileCartCount) mobileCartCount.textContent = totalItems;
+  
+  if (typeof updateCart === 'function') updateCart();
+}
+
+// Reset transformed button back to Add to Cart
+function resetToAddButton(productId) {
+  const transformed = document.getElementById(`transformedBtn-${productId}`);
+  if (!transformed) return;
+  
+  const product = products.find(p => p.id === productId);
+  const isMobile = transformed.closest('.mobile-product-page') !== null;
+  const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
+  const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
+  
+  transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | أضف إلى السلة</button>`;
+  
+  const newBtn = document.getElementById(btnId);
+  if (newBtn && product) {
+    newBtn.onclick = function() {
+      if (product.quantity === 0) return false;
+      
+      let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+      const item = localCart.find(i => i.id === product.id);
+      const currentInCart = item ? item.quantity : 0;
+      const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
+      
+      if (currentInCart >= maxAllowed) {
+        showProductPageMaxLimitMessage();
+        return false;
+      }
+      
+      if (item) {
+        item.quantity++;
+      } else {
+        localCart.push({ ...product, quantity: 1 });
+      }
+      
+      localStorage.setItem("cart", JSON.stringify(localCart));
+      
+      if (typeof cart !== 'undefined') {
+        cart.length = 0;
+        localCart.forEach(i => cart.push(i));
+      }
+      
+      const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+      const cartCount = document.getElementById("cartCount");
+      const bottomCartCount = document.getElementById("bottomCartCount");
+      const mobileCartCount = document.getElementById("mobileCartCount");
+      if (cartCount) cartCount.textContent = totalItems;
+      if (bottomCartCount) bottomCartCount.textContent = totalItems;
+      if (mobileCartCount) mobileCartCount.textContent = totalItems;
+      
+      if (typeof updateCart === 'function') updateCart();
+      
+      transformToQtyButton(this, product);
+      return true;
+    };
+  }
+}
+
 // Wait for products to load, then display
 async function initProductPage() {
   let attempts = 0;
@@ -229,6 +368,18 @@ async function initProductPage() {
 
   if (detailsContainer) detailsContainer.innerHTML = detailsHTML;
 
+  // Check if product already in cart - show transformed button
+  const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existingItem = existingCart.find(i => i.id === product.id);
+  
+  if (existingItem && !isOutOfStock) {
+    const desktopBtn = document.getElementById("addToCartBtn");
+    if (desktopBtn) transformToQtyButton(desktopBtn, product);
+    
+    const mobileBtn = document.getElementById("mobileAddToCartBtn");
+    if (mobileBtn) transformToQtyButton(mobileBtn, product);
+  }
+
   // ADD TO CART HANDLER - self-contained, uses localStorage directly
   const addToCartHandler = () => {
     if (product.quantity === 0) return false;
@@ -240,6 +391,7 @@ async function initProductPage() {
     
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
     if (currentInCart >= maxAllowed) {
+      showProductPageMaxLimitMessage();
       return false;
     }
     
@@ -262,8 +414,10 @@ async function initProductPage() {
     const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
     const cartCount = document.getElementById("cartCount");
     const bottomCartCount = document.getElementById("bottomCartCount");
+    const mobileCartCount = document.getElementById("mobileCartCount");
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems;
+    if (mobileCartCount) mobileCartCount.textContent = totalItems;
     
     // Update cart display if app.js is loaded
     if (typeof updateCart === 'function') {
@@ -276,12 +430,7 @@ async function initProductPage() {
   if (!isOutOfStock) {
     document.getElementById("addToCartBtn").onclick = function() {
       if (addToCartHandler()) {
-        const btn = this;
-        const originalText = btn.textContent;
-        btn.textContent = "✓ Added!";
-        btn.style.background = "#28a745";
-        if (typeof flyLogoToCart === 'function') flyLogoToCart(btn);
-        setTimeout(() => { btn.textContent = originalText; btn.style.background = ""; }, 2000);
+        transformToQtyButton(this, product);
       }
     };
   }
@@ -289,12 +438,7 @@ async function initProductPage() {
   if (!isOutOfStock) {
     document.getElementById("mobileAddToCartBtn").onclick = function() {
       if (addToCartHandler()) {
-        const btn = this;
-        const originalText = btn.textContent;
-        btn.textContent = "✓ Added! | تمت الإضافة";
-        btn.style.background = "#28a745";
-        if (typeof flyLogoToCart === 'function') flyLogoToCart(btn);
-        setTimeout(() => { btn.textContent = originalText; btn.style.background = ""; }, 2000);
+        transformToQtyButton(this, product);
       }
     };
   }
@@ -563,8 +707,10 @@ window.addEventListener('DOMContentLoaded', () => {
   
   const cartCount = document.getElementById("cartCount");
   const bottomCartCount = document.getElementById("bottomCartCount");
+  const mobileCartCount = document.getElementById("mobileCartCount");
   if (cartCount) cartCount.textContent = totalItems;
   if (bottomCartCount) bottomCartCount.textContent = totalItems;
+  if (mobileCartCount) mobileCartCount.textContent = totalItems;
   
   setupSearch();
   setupBottomNav();

@@ -34,7 +34,7 @@
         
         <ul class="nav-links" id="navLinks">
             <li><a href="#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
-            <li><a href="javascript:void(0);" onclick="toggleAbout();">About<br><span class="arabic-text">من نحن</span></a></li>
+           <li><a href="#about">About<br><span class="arabic-text">من نحن</span></a></li>
             <li><a href="#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
             <li><div class="cart-icon" id="cartIcon">🛒 <span class="cart-count" id="cartCount">0</span></div></li>
         </ul>
@@ -91,14 +91,14 @@
     <div class="products-grid" id="productsGrid"></div>
 </div>
 
-<section class="about-section" id="about" style="display: none;">
-    <div class="container">
-        <h2 class="section-title">Our Story<span class="arabic-text section-arabic">قصتنا</span></h2>
-        <div>
-            <p>ORLO is a family-owned Dubai brand built around practical essentials we genuinely use every day.
+<section class="about-section" id="about">
+    <div class="contact-container">
+        <h2 class="section-title">Our Story <span class="arabic-inline">قصتنا</span></h2>
+        <div class="contact-box">
+            <p class="contact-text-en">ORLO is a family-owned Dubai brand built around practical essentials we genuinely use every day.
 We curate products that simplify your space and your routine — thoughtfully chosen for quality, usefulness, and clean design. No clutter. No gimmicks.
 Every order supports a local UAE business built on trust, simplicity, and fair pricing <span style="color: #e07856; font-size: 1.2em;">♥</span></p>
-            <p class="arabic-text">اورلو علامة تجارية عائلية من دبي،  نختار فيها أدوات أساسية نستخدمها فعلاً في حياتنا اليومية.
+            <p class="contact-text-ar">اورلو علامة تجارية عائلية من دبي،  نختار فيها أدوات أساسية نستخدمها فعلاً في حياتنا اليومية.
 نؤمن بالبساطة، والجودة العملية، والاختيارات الذكية التي ترتّب مساحتك وتسهّل يومك — بدون تعقيد أو إضافات غير ضرورية.
 كل طلب منك يدعم مشروعاً إماراتياً محلياً مبنياً على الثقة، والبساطة، والتسعير العادل <span style="color: #e07856; font-size: 1.2em;">♥</span></p>
         </div>
@@ -107,14 +107,15 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
 
 <section class="contact-section" id="contact">
     <div class="contact-container">
+        <h2 class="section-title">Contact Us <span class="arabic-inline">اتصل بنا</span></h2>
         <div class="contact-box">
             <div class="contact-text-row">
                 <p class="contact-text-en">We'd love to hear from you! Reach out for orders, questions, or support.</p>
                 <p class="contact-text-ar">يسعدنا التواصل معك! لا تتردد في التواصل معنا للطلبات أو الاستفسارات أو الدعم.</p>
             </div>
             <div class="contact-details-row">
-                <div class="contact-detail"><strong>📍 Location:</strong> Dubai, UAE (Online Only)</div>
-                <div class="contact-detail"><strong>✉️ Email:</strong> <a href="/cdn-cgi/l/email-protection#076e6961684768756b6874736875622964686a"><span class="__cf_email__" data-cfemail="cda4a3aba28da2bfa1a2beb9a2bfa8e3aea2a0">[email&#160;protected]</span></a></div>
+                <div class="contact-detail"><strong>📍 Location:</strong> Dubai, UAE </div>
+                <div class="contact-detail"><strong>✉️ Email:</strong> <a href="mailto:info@orlostore.com">info@orlostore.com</a></div>
                 <div class="contact-detail"><strong>📱 WhatsApp:</strong> <a href="https://wa.me/971XXXXXXXXX" target="_blank">+971 XX XXX XXXX</a></div>
             </div>
         </div>
@@ -186,4 +187,16 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
     </div>
     <div class="bottom-nav-item" id="bottomMenuBtn">
         <span class="nav-icon">☰</span>
-        <span cla
+        <span class="nav-label">Menu</span>
+    </div>
+</nav>
+
+<script src="products.js"></script>
+<script src="app.js?v=4"></script>
+    <!-- Cart Popup -->
+<div class="cart-popup-overlay" id="cartPopup" onclick="if(event.target === this) closeCartPopup()">
+    <div class="cart-popup" id="cartPopupContent">
+    </div>
+</div>
+</body>
+</html>

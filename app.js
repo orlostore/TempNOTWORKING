@@ -92,7 +92,7 @@ function renderProducts(list) {
                 <div class="product-price">AED ${p.price}</div>
                 ${outOfStock 
                     ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>` 
-                    : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart</button>`
+                    : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`
                 }
             </div>
         </div>
@@ -143,48 +143,6 @@ function searchProducts() {
     renderProducts(results); 
 }
 
-// Logo fly to cart animation
-function flyLogoToCart(btn) {
-    const logo = document.createElement('img');
-    logo.src = 'logo.png';
-    logo.className = 'fly-logo';
-    
-    const btnRect = btn.getBoundingClientRect();
-    logo.style.left = (btnRect.left + btnRect.width / 2 - 20) + 'px';
-    logo.style.top = (btnRect.top - 10) + 'px';
-    
-    document.body.appendChild(logo);
-    
-    const isMobile = window.innerWidth <= 768;
-    const cartIcon = isMobile 
-        ? document.getElementById('bottomCartCount') 
-        : document.getElementById('cartCount');
-    
-    if (cartIcon) {
-        const cartRect = cartIcon.getBoundingClientRect();
-        
-        setTimeout(() => {
-            logo.style.left = (cartRect.left + cartRect.width / 2 - 20) + 'px';
-            logo.style.top = (cartRect.top) + 'px';
-            logo.classList.add('flying');
-        }, 50);
-        
-        setTimeout(() => {
-            logo.remove();
-            cartIcon.classList.add('bump');
-            const parentIcon = cartIcon.closest('.cart-icon, .mobile-cart-icon, .cart-icon-wrapper');
-            if (parentIcon) parentIcon.classList.add('pulse');
-            
-            setTimeout(() => {
-                cartIcon.classList.remove('bump');
-                if (parentIcon) parentIcon.classList.remove('pulse');
-            }, 400);
-        }, 850);
-    } else {
-        setTimeout(() => logo.remove(), 900);
-    }
-}
-
 function addToCart(id, event) { 
     const product = products.find(p => p.id === id);
     
@@ -210,22 +168,63 @@ function addToCart(id, event) {
     saveCart(); 
     updateCart(); 
     
-    if (event && event.target) {
-        const btn = event.target;
-        const originalText = btn.textContent;
-        const originalBg = btn.style.background;
-        
-        btn.textContent = "✓ Added!";
-        btn.style.background = "#28a745";
-        
-        // Fly logo animation
-        flyLogoToCart(btn);
-        
-        setTimeout(() => {
-            btn.textContent = originalText;
-            btn.style.background = originalBg || "";
-        }, 2000);
-    }
+    // Show grand popup
+    showCartPopup(product);
+}
+
+function showCartPopup(product) {
+    const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const productQty = cart.find(i => i.id === product.id)?.quantity || 1;
+    
+    // Get product image
+    const isUrl = product.image && product.image.startsWith('http');
+    const imageHTML = isUrl 
+        ? `<img src="${product.image}" alt="${product.name}" style="width:100%; height:100%; object-fit:contain;">` 
+        : `<span style="font-size:3rem;">${product.image || '📦'}</span>`;
+    
+    const popup = document.getElementById('cartPopup');
+    const popupContent = document.getElementById('cartPopupContent');
+    
+    popupContent.innerHTML = `
+        <div class="popup-top">
+            <button class="popup-close-btn" onclick="closeCartPopup()">✕</button>
+            <div class="popup-success-badge">✓ Success!</div>
+            <div class="popup-title">Added to Cart</div>
+            <div class="popup-title-ar">تمت الإضافة للسلة</div>
+        </div>
+        <div class="popup-product-float">
+            <div class="popup-product-card">
+                <div class="popup-product-image">${imageHTML}</div>
+                <div class="popup-product-details">
+                    <div class="popup-product-name">${product.name}</div>
+                    ${product.nameAr ? `<div class="popup-product-name-ar">${product.nameAr}</div>` : ''}
+                    <div class="popup-product-price">AED ${product.price}</div>
+                </div>
+            </div>
+        </div>
+        <div class="popup-bottom">
+            <div class="popup-cart-summary">
+                <span class="popup-summary-label">Cart Total (${cartCount} ${cartCount === 1 ? 'item' : 'items'}):</span>
+                <span class="popup-summary-value">AED ${cartTotal.toFixed(2)}</span>
+            </div>
+            <div class="popup-buttons">
+                <button class="popup-btn-view-cart" onclick="closeCartPopup(); toggleCart();">
+                    🛒 View Cart | <span class="arabic-text">عرض السلة</span>
+                </button>
+                <button class="popup-btn-continue" onclick="closeCartPopup()">
+                    Continue Shopping | <span class="arabic-text">متابعة التسوق</span>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    popup.classList.add('active');
+}
+
+function closeCartPopup() {
+    const popup = document.getElementById('cartPopup');
+    popup.classList.remove('active');
 }
 
 function updateCart() {
@@ -479,7 +478,7 @@ function toggleMobileMenu() {
         overlay.innerHTML = `
             <div class="mobile-menu">
                 <a href="#products" onclick="closeMobileMenu()"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
-                <a href="javascript:void(0);" onclick="toggleAbout(); closeMobileMenu();"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
+                <a href="#about" onclick="closeMobileMenu()"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
                 <a href="#contact" onclick="closeMobileMenu()"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
                 <a href="#terms" onclick="closeMobileMenu()"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
             </div>
@@ -671,3 +670,117 @@ async function checkout() {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
