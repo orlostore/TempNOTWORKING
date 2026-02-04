@@ -7,24 +7,77 @@ var MAX_QTY_PER_PRODUCT = 10;
 
 // Convert number to Arabic numerals
 function toArabicNumerals(num) {
-  const arabicNums = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  const arabicNums = ['Ù ', 'Ù¡', 'Ù¢', 'Ù£', 'Ù¤', 'Ù¥', 'Ù¦', 'Ù§', 'Ù¨', 'Ù©'];
   return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
 }
 
-// Show max limit message (red notification)
-function showProductPageMaxLimitMessage() {
-    const existing = document.getElementById('maxLimitMsg');
+// Show limit tooltip above quantity button (Glassmorphism style)
+function showProductPageMaxLimitMessage(productId, maxAllowed) {
+    // Remove any existing tooltip
+    const existing = document.getElementById('limitTooltip');
     if (existing) existing.remove();
     
-    const msg = document.createElement('div');
-    msg.id = 'maxLimitMsg';
-    msg.innerHTML = `Maximum ${MAX_QTY_PER_PRODUCT} per item | الحد الأقصى ${MAX_QTY_PER_PRODUCT} لكل منتج`;
-    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#dc3545;color:white;padding:12px 24px;border-radius:8px;z-index:9999;font-size:14px;font-weight:600;box-shadow:0 4px 15px rgba(220,53,69,0.4);text-align:center;';
-    document.body.appendChild(msg);
+    // Clear any existing timer
+    if (window.limitTooltipTimer) {
+      clearTimeout(window.limitTooltipTimer);
+    }
     
-    setTimeout(() => {
-        if (msg.parentNode) msg.remove();
+    // Determine message type
+    const isStockLimit = maxAllowed < MAX_QTY_PER_PRODUCT;
+    
+    let messageEn, messageAr;
+    if (isStockLimit) {
+      messageEn = `Only <span class="highlight">${maxAllowed}</span> left in stock`;
+      messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط في المخزون`;
+    } else {
+      messageEn = `Limit of <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
+      messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
+    }
+    
+    // Create tooltip
+    const tooltip = document.createElement('div');
+    tooltip.id = 'limitTooltip';
+    tooltip.className = 'limit-tooltip';
+    tooltip.innerHTML = `
+      <button class="close-btn" onclick="closeLimitTooltip()">✕</button>
+      ${messageEn}
+      <span class="tooltip-text-ar">${messageAr}</span>
+    `;
+    
+    // Find the correct container (mobile or desktop)
+    const isMobile = window.innerWidth <= 768;
+    const container = isMobile 
+      ? document.querySelector('.mobile-cart-section')
+      : document.querySelector('.product-buybox');
+    
+    if (container) {
+      container.appendChild(tooltip);
+    }
+    
+    // Auto-dismiss after 3 seconds
+    window.limitTooltipTimer = setTimeout(() => {
+      const tip = document.getElementById('limitTooltip');
+      if (tip) {
+        tip.classList.add('fade-out');
+        setTimeout(() => {
+          if (tip.parentNode) tip.remove();
+        }, 300);
+      }
     }, 3000);
+}
+
+// Close tooltip immediately
+function closeLimitTooltip() {
+  const tooltip = document.getElementById('limitTooltip');
+  if (tooltip) {
+    if (window.limitTooltipTimer) {
+      clearTimeout(window.limitTooltipTimer);
+    }
+    tooltip.classList.add('fade-out');
+    setTimeout(() => {
+      if (tooltip.parentNode) tooltip.remove();
+    }, 300);
+  }
 }
 
 // Transform button to quantity control (Premium Glass style)
@@ -33,19 +86,15 @@ function transformToQtyButton(btn, product) {
   const item = localCart.find(i => i.id === product.id);
   const qty = item ? item.quantity : 1;
   
-  // Determine if this is mobile or desktop button for unique IDs
-  const isMobile = btn.id === 'mobileAddToCartBtn' || btn.classList.contains('mobile-add-to-cart');
-  const suffix = isMobile ? '-mobile' : '-desktop';
-  
   btn.dataset.originalText = btn.textContent;
   btn.dataset.productId = product.id;
   
   btn.outerHTML = `
-    <div class="product-btn-transformed" id="transformedBtn-${product.id}${suffix}">
-      <button class="qty-btn minus" onclick="productQtyChange(${product.id}, -1)">−</button>
+    <div class="product-btn-transformed" id="transformedBtn-${product.id}">
+      <button class="qty-btn minus" onclick="productQtyChange(${product.id}, -1)">âˆ’</button>
       <div class="center-section" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();">
-        <span class="cart-icon">🛒</span>
-        <span class="qty-display" id="qtyDisplay-${product.id}${suffix}">${qty}</span>
+        <span class="cart-icon">ðŸ›’</span>
+        <span class="qty-display" id="qtyDisplay-${product.id}">${qty}</span>
       </div>
       <button class="qty-btn plus" onclick="productQtyChange(${product.id}, 1)">+</button>
     </div>
@@ -65,7 +114,7 @@ function productQtyChange(productId, change) {
   if (change > 0) {
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
     if (newQty > maxAllowed) {
-      showProductPageMaxLimitMessage();
+      showProductPageMaxLimitMessage(productId, maxAllowed);
       return;
     }
   }
@@ -78,11 +127,8 @@ function productQtyChange(productId, change) {
     item.quantity = newQty;
     localStorage.setItem("cart", JSON.stringify(localCart));
     
-    // Update BOTH mobile and desktop qty displays
-    const qtyDisplayDesktop = document.getElementById(`qtyDisplay-${productId}-desktop`);
-    const qtyDisplayMobile = document.getElementById(`qtyDisplay-${productId}-mobile`);
-    if (qtyDisplayDesktop) qtyDisplayDesktop.textContent = newQty;
-    if (qtyDisplayMobile) qtyDisplayMobile.textContent = newQty;
+    const qtyDisplay = document.getElementById(`qtyDisplay-${productId}`);
+    if (qtyDisplay) qtyDisplay.textContent = newQty;
   }
   
   if (typeof cart !== 'undefined') {
@@ -103,104 +149,57 @@ function productQtyChange(productId, change) {
 
 // Reset transformed button back to Add to Cart
 function resetToAddButton(productId) {
-  // Try both mobile and desktop versions
-  const transformedDesktop = document.getElementById(`transformedBtn-${productId}-desktop`);
-  const transformedMobile = document.getElementById(`transformedBtn-${productId}-mobile`);
+  const transformed = document.getElementById(`transformedBtn-${productId}`);
+  if (!transformed) return;
   
-  if (transformedDesktop) {
-    const product = products.find(p => p.id === productId);
-    transformedDesktop.outerHTML = `<button class="add-to-cart-btn" id="addToCartBtn">Add to Cart | أضف إلى السلة</button>`;
-    
-    const newBtn = document.getElementById('addToCartBtn');
-    if (newBtn && product) {
-      newBtn.onclick = function() {
-        if (product.quantity === 0) return false;
-        
-        let localCart = JSON.parse(localStorage.getItem("cart")) || [];
-        const item = localCart.find(i => i.id === product.id);
-        const currentInCart = item ? item.quantity : 0;
-        const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
-        
-        if (currentInCart >= maxAllowed) {
-          showProductPageMaxLimitMessage();
-          return false;
-        }
-        
-        if (item) {
-          item.quantity++;
-        } else {
-          localCart.push({ ...product, quantity: 1 });
-        }
-        
-        localStorage.setItem("cart", JSON.stringify(localCart));
-        
-        if (typeof cart !== 'undefined') {
-          cart.length = 0;
-          localCart.forEach(i => cart.push(i));
-        }
-        
-        const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
-        const cartCount = document.getElementById("cartCount");
-        const bottomCartCount = document.getElementById("bottomCartCount");
-        const mobileCartCount = document.getElementById("mobileCartCount");
-        if (cartCount) cartCount.textContent = totalItems;
-        if (bottomCartCount) bottomCartCount.textContent = totalItems;
-        if (mobileCartCount) mobileCartCount.textContent = totalItems;
-        
-        if (typeof updateCart === 'function') updateCart();
-        
-        transformToQtyButton(this, product);
-        return true;
-      };
-    }
-  }
+  const product = products.find(p => p.id === productId);
+  const isMobile = transformed.closest('.mobile-product-page') !== null;
+  const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
+  const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
   
-  if (transformedMobile) {
-    const product = products.find(p => p.id === productId);
-    transformedMobile.outerHTML = `<button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | أضف إلى السلة</button>`;
-    
-    const newBtn = document.getElementById('mobileAddToCartBtn');
-    if (newBtn && product) {
-      newBtn.onclick = function() {
-        if (product.quantity === 0) return false;
-        
-        let localCart = JSON.parse(localStorage.getItem("cart")) || [];
-        const item = localCart.find(i => i.id === product.id);
-        const currentInCart = item ? item.quantity : 0;
-        const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
-        
-        if (currentInCart >= maxAllowed) {
-          showProductPageMaxLimitMessage();
-          return false;
-        }
-        
-        if (item) {
-          item.quantity++;
-        } else {
-          localCart.push({ ...product, quantity: 1 });
-        }
-        
-        localStorage.setItem("cart", JSON.stringify(localCart));
-        
-        if (typeof cart !== 'undefined') {
-          cart.length = 0;
-          localCart.forEach(i => cart.push(i));
-        }
-        
-        const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
-        const cartCount = document.getElementById("cartCount");
-        const bottomCartCount = document.getElementById("bottomCartCount");
-        const mobileCartCount = document.getElementById("mobileCartCount");
-        if (cartCount) cartCount.textContent = totalItems;
-        if (bottomCartCount) bottomCartCount.textContent = totalItems;
-        if (mobileCartCount) mobileCartCount.textContent = totalItems;
-        
-        if (typeof updateCart === 'function') updateCart();
-        
-        transformToQtyButton(this, product);
-        return true;
-      };
-    }
+  transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©</button>`;
+  
+  const newBtn = document.getElementById(btnId);
+  if (newBtn && product) {
+    newBtn.onclick = function() {
+      if (product.quantity === 0) return false;
+      
+      let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+      const item = localCart.find(i => i.id === product.id);
+      const currentInCart = item ? item.quantity : 0;
+      const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
+      
+      if (currentInCart >= maxAllowed) {
+        showProductPageMaxLimitMessage(product.id, maxAllowed);
+        return false;
+      }
+      
+      if (item) {
+        item.quantity++;
+      } else {
+        localCart.push({ ...product, quantity: 1 });
+      }
+      
+      localStorage.setItem("cart", JSON.stringify(localCart));
+      
+      if (typeof cart !== 'undefined') {
+        cart.length = 0;
+        localCart.forEach(i => cart.push(i));
+      }
+      
+      const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+      const cartCount = document.getElementById("cartCount");
+      const bottomCartCount = document.getElementById("bottomCartCount");
+      const mobileCartCount = document.getElementById("mobileCartCount");
+      if (cartCount) cartCount.textContent = totalItems;
+      if (bottomCartCount) bottomCartCount.textContent = totalItems;
+      if (mobileCartCount) mobileCartCount.textContent = totalItems;
+      
+      if (typeof updateCart === 'function') updateCart();
+      
+      transformToQtyButton(this, product);
+      return true;
+    };
   }
 }
 
@@ -242,7 +241,7 @@ async function initProductPage() {
           <div class="product-desc-value">${descEn}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">معلومات المنتج</div>
+          <div class="product-desc-label">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬</div>
           <div class="product-desc-value">${descAr}</div>
         </div>
       </div>
@@ -257,7 +256,7 @@ async function initProductPage() {
           <div class="product-desc-value">${product.colors || ''}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">الألوان المتاحة</div>
+          <div class="product-desc-label">Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ù…ØªØ§Ø­Ø©</div>
           <div class="product-desc-value">${product.colorsAr || ''}</div>
         </div>
       </div>
@@ -272,7 +271,7 @@ async function initProductPage() {
           <div class="product-desc-value">${product.packaging || ''}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">التعبئة والتغليف</div>
+          <div class="product-desc-label">Ø§Ù„ØªØ¹Ø¨Ø¦Ø© ÙˆØ§Ù„ØªØºÙ„ÙŠÙ</div>
           <div class="product-desc-value">${product.packagingAr || ''}</div>
         </div>
       </div>
@@ -287,7 +286,7 @@ async function initProductPage() {
           <div class="product-desc-value">${product.specifications ? product.specifications.join('<br>') : ''}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">المواصفات</div>
+          <div class="product-desc-label">Ø§Ù„Ù…ÙˆØ§ØµÙØ§Øª</div>
           <div class="product-desc-value">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</div>
         </div>
       </div>
@@ -322,7 +321,7 @@ async function initProductPage() {
         <div class="image-gallery">
           <div class="main-image-container">
             <img id="mainImage" src="${product.images[0]}" alt="${product.name}" class="main-product-image">
-            <div class="zoom-hint">🔍 Click to zoom</div>
+            <div class="zoom-hint">ðŸ” Click to zoom</div>
           </div>
           ${thumbnailsHTML}
         </div>
@@ -332,7 +331,7 @@ async function initProductPage() {
 
   const desktopAddBtn = document.getElementById("addToCartBtn");
   if (isOutOfStock && desktopAddBtn) {
-    desktopAddBtn.textContent = "Out of Stock | نفذ المخزون";
+    desktopAddBtn.textContent = "Out of Stock | Ù†ÙØ° Ø§Ù„Ù…Ø®Ø²ÙˆÙ†";
     desktopAddBtn.disabled = true;
     desktopAddBtn.style.background = "#999";
     desktopAddBtn.style.cursor = "not-allowed";
@@ -371,7 +370,7 @@ async function initProductPage() {
 
   const mobileAddBtn = document.getElementById("mobileAddToCartBtn");
   if (isOutOfStock && mobileAddBtn) {
-    mobileAddBtn.textContent = "Out of Stock | نفذ المخزون";
+    mobileAddBtn.textContent = "Out of Stock | Ù†ÙØ° Ø§Ù„Ù…Ø®Ø²ÙˆÙ†";
     mobileAddBtn.disabled = true;
     mobileAddBtn.style.background = "#999";
     mobileAddBtn.style.cursor = "not-allowed";
@@ -387,7 +386,7 @@ async function initProductPage() {
   if (mobileDescEn || mobileDescAr) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Description</span><span class="arabic-text">معلومات المنتج</span></div>
+        <div class="mobile-detail-title"><span>Description</span><span class="arabic-text">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬</span></div>
         <div class="mobile-detail-content"><p>${mobileDescEn}</p><p class="arabic-text">${mobileDescAr}</p></div>
       </div>
     `;
@@ -396,7 +395,7 @@ async function initProductPage() {
   if (product.colors) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Available Colors</span><span class="arabic-text">الألوان المتاحة</span></div>
+        <div class="mobile-detail-title"><span>Available Colors</span><span class="arabic-text">Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ù…ØªØ§Ø­Ø©</span></div>
         <div class="mobile-detail-content"><p>${product.colors}</p><p class="arabic-text">${product.colorsAr || ''}</p></div>
       </div>
     `;
@@ -405,7 +404,7 @@ async function initProductPage() {
   if (product.packaging) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Packaging</span><span class="arabic-text">التعبئة والتغليف</span></div>
+        <div class="mobile-detail-title"><span>Packaging</span><span class="arabic-text">Ø§Ù„ØªØ¹Ø¨Ø¦Ø© ÙˆØ§Ù„ØªØºÙ„ÙŠÙ</span></div>
         <div class="mobile-detail-content"><p>${product.packaging}</p><p class="arabic-text">${product.packagingAr || ''}</p></div>
       </div>
     `;
@@ -414,7 +413,7 @@ async function initProductPage() {
   if (product.specifications && product.specifications.length > 0) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Specifications</span><span class="arabic-text">المواصفات</span></div>
+        <div class="mobile-detail-title"><span>Specifications</span><span class="arabic-text">Ø§Ù„Ù…ÙˆØ§ØµÙØ§Øª</span></div>
         <div class="mobile-detail-content"><p>${product.specifications.join('<br>')}</p><p class="arabic-text">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</p></div>
       </div>
     `;
@@ -445,7 +444,7 @@ async function initProductPage() {
     
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
     if (currentInCart >= maxAllowed) {
-      showProductPageMaxLimitMessage();
+      showProductPageMaxLimitMessage(product.id, maxAllowed);
       return false;
     }
     
@@ -519,29 +518,29 @@ function openEnhancedLightbox(product, startIndex) {
   const lbDescEn = product.detailedDescription || product.description;
   const lbDescAr = product.detailedDescriptionAr || product.descriptionAr;
   if (lbDescEn || lbDescAr) {
-    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Description</div><div class="lightbox-detail-value">${lbDescEn || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">معلومات المنتج</div><div class="lightbox-detail-value">${lbDescAr || ''}</div></div></div>`;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Description</div><div class="lightbox-detail-value">${lbDescEn || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬</div><div class="lightbox-detail-value">${lbDescAr || ''}</div></div></div>`;
   }
   
   if (product.colors || product.colorsAr) {
-    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Available Colors</div><div class="lightbox-detail-value">${product.colors || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">الألوان المتاحة</div><div class="lightbox-detail-value">${product.colorsAr || ''}</div></div></div>`;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Available Colors</div><div class="lightbox-detail-value">${product.colors || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ù…ØªØ§Ø­Ø©</div><div class="lightbox-detail-value">${product.colorsAr || ''}</div></div></div>`;
   }
   
   if (product.packaging || product.packagingAr) {
-    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Packaging</div><div class="lightbox-detail-value">${product.packaging || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">التعبئة والتغليف</div><div class="lightbox-detail-value">${product.packagingAr || ''}</div></div></div>`;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Packaging</div><div class="lightbox-detail-value">${product.packaging || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">Ø§Ù„ØªØ¹Ø¨Ø¦Ø© ÙˆØ§Ù„ØªØºÙ„ÙŠÙ</div><div class="lightbox-detail-value">${product.packagingAr || ''}</div></div></div>`;
   }
   
   if ((product.specifications && product.specifications.length > 0) || (product.specificationsAr && product.specificationsAr.length > 0)) {
-    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Specifications</div><div class="lightbox-detail-value">${product.specifications ? product.specifications.join('<br>') : ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">المواصفات</div><div class="lightbox-detail-value">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</div></div></div>`;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Specifications</div><div class="lightbox-detail-value">${product.specifications ? product.specifications.join('<br>') : ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">Ø§Ù„Ù…ÙˆØ§ØµÙØ§Øª</div><div class="lightbox-detail-value">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</div></div></div>`;
   }
   
   const thumbnailsHTML = images.length > 1 ? `<div class="lightbox-thumbnails">${images.map((img, i) => `<div class="lightbox-thumb ${i === currentIndex ? 'active' : ''}" data-index="${i}"><img src="${img}" alt="Thumbnail ${i + 1}"></div>`).join('')}</div>` : '';
-  const arrowsHTML = images.length > 1 ? `<button class="lightbox-arrow prev">‹</button><button class="lightbox-arrow next">›</button>` : '';
+  const arrowsHTML = images.length > 1 ? `<button class="lightbox-arrow prev">â€¹</button><button class="lightbox-arrow next">â€º</button>` : '';
   const counterHTML = images.length > 1 ? `<div class="lightbox-counter">${currentIndex + 1} / ${images.length}</div>` : '';
   
   const lightbox = document.createElement('div');
   lightbox.className = 'lightbox';
   lightbox.innerHTML = `
-    <button class="lightbox-close">×</button>
+    <button class="lightbox-close">Ã—</button>
     <div class="lightbox-content">
       <div class="lightbox-image-section">
         <div class="lightbox-main-image">${arrowsHTML}<img src="${images[currentIndex]}" alt="${product.name}" id="lightboxMainImg">${counterHTML}</div>
@@ -740,10 +739,10 @@ function productPageToggleMobileMenu() {
     overlay.className = 'mobile-menu-overlay';
     overlay.innerHTML = `
       <div class="mobile-menu">
-        <a href="index.html#products"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
-        <a href="index.html?showAbout=true#about"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
-        <a href="index.html#contact"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
-        <a href="index.html#terms"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
+        <a href="index.html#products"><span class="menu-en">ðŸ›ï¸ Shop</span> | <span class="menu-ar">ØªØ³ÙˆÙ‚</span></a>
+        <a href="index.html?showAbout=true#about"><span class="menu-en">â„¹ï¸ About</span> | <span class="menu-ar">Ù…Ù† Ù†Ø­Ù†</span></a>
+        <a href="index.html#contact"><span class="menu-en">ðŸ“§ Contact</span> | <span class="menu-ar">Ø§ØªØµÙ„ Ø¨Ù†Ø§</span></a>
+        <a href="index.html#terms"><span class="menu-en">ðŸ“‹ Terms</span> | <span class="menu-ar">Ø§Ù„Ø´Ø±ÙˆØ·</span></a>
       </div>
     `;
     document.body.appendChild(overlay);
@@ -768,6 +767,15 @@ window.addEventListener('DOMContentLoaded', () => {
   
   setupSearch();
   setupBottomNav();
+});
+
+// Listen for products ready event as backup trigger
+window.addEventListener('productsReady', () => {
+  console.log('📦 Product page: Products ready event received');
+  // Re-initialize if products loaded after initial attempt
+  if (document.getElementById('productTitle') && !document.getElementById('productTitle').innerText) {
+    initProductPage();
+  }
 });
 
 initProductPage();
