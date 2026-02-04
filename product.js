@@ -33,15 +33,19 @@ function transformToQtyButton(btn, product) {
   const item = localCart.find(i => i.id === product.id);
   const qty = item ? item.quantity : 1;
   
+  // Determine if this is mobile or desktop button for unique IDs
+  const isMobile = btn.id === 'mobileAddToCartBtn' || btn.classList.contains('mobile-add-to-cart');
+  const suffix = isMobile ? '-mobile' : '-desktop';
+  
   btn.dataset.originalText = btn.textContent;
   btn.dataset.productId = product.id;
   
   btn.outerHTML = `
-    <div class="product-btn-transformed" id="transformedBtn-${product.id}">
+    <div class="product-btn-transformed" id="transformedBtn-${product.id}${suffix}">
       <button class="qty-btn minus" onclick="productQtyChange(${product.id}, -1)">−</button>
       <div class="center-section" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();">
         <span class="cart-icon">🛒</span>
-        <span class="qty-display" id="qtyDisplay-${product.id}">${qty}</span>
+        <span class="qty-display" id="qtyDisplay-${product.id}${suffix}">${qty}</span>
       </div>
       <button class="qty-btn plus" onclick="productQtyChange(${product.id}, 1)">+</button>
     </div>
@@ -74,8 +78,11 @@ function productQtyChange(productId, change) {
     item.quantity = newQty;
     localStorage.setItem("cart", JSON.stringify(localCart));
     
-    const qtyDisplay = document.getElementById(`qtyDisplay-${productId}`);
-    if (qtyDisplay) qtyDisplay.textContent = newQty;
+    // Update BOTH mobile and desktop qty displays
+    const qtyDisplayDesktop = document.getElementById(`qtyDisplay-${productId}-desktop`);
+    const qtyDisplayMobile = document.getElementById(`qtyDisplay-${productId}-mobile`);
+    if (qtyDisplayDesktop) qtyDisplayDesktop.textContent = newQty;
+    if (qtyDisplayMobile) qtyDisplayMobile.textContent = newQty;
   }
   
   if (typeof cart !== 'undefined') {
@@ -96,57 +103,104 @@ function productQtyChange(productId, change) {
 
 // Reset transformed button back to Add to Cart
 function resetToAddButton(productId) {
-  const transformed = document.getElementById(`transformedBtn-${productId}`);
-  if (!transformed) return;
+  // Try both mobile and desktop versions
+  const transformedDesktop = document.getElementById(`transformedBtn-${productId}-desktop`);
+  const transformedMobile = document.getElementById(`transformedBtn-${productId}-mobile`);
   
-  const product = products.find(p => p.id === productId);
-  const isMobile = transformed.closest('.mobile-product-page') !== null;
-  const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
-  const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
+  if (transformedDesktop) {
+    const product = products.find(p => p.id === productId);
+    transformedDesktop.outerHTML = `<button class="add-to-cart-btn" id="addToCartBtn">Add to Cart | أضف إلى السلة</button>`;
+    
+    const newBtn = document.getElementById('addToCartBtn');
+    if (newBtn && product) {
+      newBtn.onclick = function() {
+        if (product.quantity === 0) return false;
+        
+        let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const item = localCart.find(i => i.id === product.id);
+        const currentInCart = item ? item.quantity : 0;
+        const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
+        
+        if (currentInCart >= maxAllowed) {
+          showProductPageMaxLimitMessage();
+          return false;
+        }
+        
+        if (item) {
+          item.quantity++;
+        } else {
+          localCart.push({ ...product, quantity: 1 });
+        }
+        
+        localStorage.setItem("cart", JSON.stringify(localCart));
+        
+        if (typeof cart !== 'undefined') {
+          cart.length = 0;
+          localCart.forEach(i => cart.push(i));
+        }
+        
+        const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+        const cartCount = document.getElementById("cartCount");
+        const bottomCartCount = document.getElementById("bottomCartCount");
+        const mobileCartCount = document.getElementById("mobileCartCount");
+        if (cartCount) cartCount.textContent = totalItems;
+        if (bottomCartCount) bottomCartCount.textContent = totalItems;
+        if (mobileCartCount) mobileCartCount.textContent = totalItems;
+        
+        if (typeof updateCart === 'function') updateCart();
+        
+        transformToQtyButton(this, product);
+        return true;
+      };
+    }
+  }
   
-  transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | أضف إلى السلة</button>`;
-  
-  const newBtn = document.getElementById(btnId);
-  if (newBtn && product) {
-    newBtn.onclick = function() {
-      if (product.quantity === 0) return false;
-      
-      let localCart = JSON.parse(localStorage.getItem("cart")) || [];
-      const item = localCart.find(i => i.id === product.id);
-      const currentInCart = item ? item.quantity : 0;
-      const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
-      
-      if (currentInCart >= maxAllowed) {
-        showProductPageMaxLimitMessage();
-        return false;
-      }
-      
-      if (item) {
-        item.quantity++;
-      } else {
-        localCart.push({ ...product, quantity: 1 });
-      }
-      
-      localStorage.setItem("cart", JSON.stringify(localCart));
-      
-      if (typeof cart !== 'undefined') {
-        cart.length = 0;
-        localCart.forEach(i => cart.push(i));
-      }
-      
-      const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
-      const cartCount = document.getElementById("cartCount");
-      const bottomCartCount = document.getElementById("bottomCartCount");
-      const mobileCartCount = document.getElementById("mobileCartCount");
-      if (cartCount) cartCount.textContent = totalItems;
-      if (bottomCartCount) bottomCartCount.textContent = totalItems;
-      if (mobileCartCount) mobileCartCount.textContent = totalItems;
-      
-      if (typeof updateCart === 'function') updateCart();
-      
-      transformToQtyButton(this, product);
-      return true;
-    };
+  if (transformedMobile) {
+    const product = products.find(p => p.id === productId);
+    transformedMobile.outerHTML = `<button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | أضف إلى السلة</button>`;
+    
+    const newBtn = document.getElementById('mobileAddToCartBtn');
+    if (newBtn && product) {
+      newBtn.onclick = function() {
+        if (product.quantity === 0) return false;
+        
+        let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const item = localCart.find(i => i.id === product.id);
+        const currentInCart = item ? item.quantity : 0;
+        const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
+        
+        if (currentInCart >= maxAllowed) {
+          showProductPageMaxLimitMessage();
+          return false;
+        }
+        
+        if (item) {
+          item.quantity++;
+        } else {
+          localCart.push({ ...product, quantity: 1 });
+        }
+        
+        localStorage.setItem("cart", JSON.stringify(localCart));
+        
+        if (typeof cart !== 'undefined') {
+          cart.length = 0;
+          localCart.forEach(i => cart.push(i));
+        }
+        
+        const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+        const cartCount = document.getElementById("cartCount");
+        const bottomCartCount = document.getElementById("bottomCartCount");
+        const mobileCartCount = document.getElementById("mobileCartCount");
+        if (cartCount) cartCount.textContent = totalItems;
+        if (bottomCartCount) bottomCartCount.textContent = totalItems;
+        if (mobileCartCount) mobileCartCount.textContent = totalItems;
+        
+        if (typeof updateCart === 'function') updateCart();
+        
+        transformToQtyButton(this, product);
+        return true;
+      };
+    }
   }
 }
 
