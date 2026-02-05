@@ -144,6 +144,7 @@ function searchProducts() {
 }
 
 function addToCart(id, event) { 
+    document.title = "ADD:" + id + " cart:" + cart.length + " qty:" + (cart.find(i=>i.id===id)?.quantity||0);
     const product = products.find(p => p.id === id);
     
     // Check stock
