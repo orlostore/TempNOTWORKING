@@ -729,6 +729,9 @@ function setupBottomNav() {
   
   const cartIcon = document.getElementById('cartIcon');
   if (cartIcon) cartIcon.onclick = toggleCartSidebar;
+  
+  const mobileCartIcon = document.getElementById('mobileCartIcon');
+  if (mobileCartIcon) mobileCartIcon.onclick = toggleCartSidebar;
 }
 
 function productPageToggleMobileMenu() {
