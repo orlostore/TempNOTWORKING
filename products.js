@@ -113,6 +113,7 @@ async function initProducts() {
                 updateCart();
             }
         }
+        window.dispatchEvent(new Event('productsReady'));
     }
 }
 
