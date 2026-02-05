@@ -242,6 +242,8 @@ function updateCart() {
     if (!cart.length) { 
         cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
         if (cartCount) cartCount.textContent = 0;
+        const mobileCartCount = document.getElementById("mobileCartCount");
+if (mobileCartCount) mobileCartCount.textContent = 0;
         if (bottomCartCount) bottomCartCount.textContent = 0;
         cartFooter.innerHTML = `<div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;"><span>Total / الإجمالي:</span><span>AED 0.00</span></div>`;
         if (cartCheckoutFixed) cartCheckoutFixed.innerHTML = '';
@@ -256,6 +258,8 @@ function updateCart() {
     
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems;
+    const mobileCartCount = document.getElementById("mobileCartCount");
+if (mobileCartCount) mobileCartCount.textContent = totalItems;
 const mobileCartCount = document.getElementById("mobileCartCount");
 if (mobileCartCount) mobileCartCount.textContent = totalItems; 
     
