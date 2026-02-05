@@ -254,7 +254,9 @@ function updateCart() {
     const amountNeeded = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
     
     if (cartCount) cartCount.textContent = totalItems;
-    if (bottomCartCount) bottomCartCount.textContent = totalItems; 
+    if (bottomCartCount) bottomCartCount.textContent = totalItems;
+const mobileCartCount = document.getElementById("mobileCartCount");
+if (mobileCartCount) mobileCartCount.textContent = totalItems; 
     
     const checkoutBtnHTML = `
         <button id="stripeBtn" 
