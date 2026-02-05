@@ -7,7 +7,7 @@ var MAX_QTY_PER_PRODUCT = 10;
 
 // Convert number to Arabic numerals
 function toArabicNumerals(num) {
-  const arabicNums = ['Ù ', 'Ù¡', 'Ù¢', 'Ù£', 'Ù¤', 'Ù¥', 'Ù¦', 'Ù§', 'Ù¨', 'Ù©'];
+  const arabicNums = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
   return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
 }
 
@@ -91,9 +91,9 @@ function transformToQtyButton(btn, product) {
   
   btn.outerHTML = `
     <div class="product-btn-transformed" id="transformedBtn-${product.id}">
-      <button class="qty-btn minus" onclick="productQtyChange(${product.id}, -1)">âˆ’</button>
+      <button class="qty-btn minus" onclick="productQtyChange(${product.id}, -1)">−</button>
       <div class="center-section" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();">
-        <span class="cart-icon">ðŸ›’</span>
+        <span class="cart-icon">🛒</span>
         <span class="qty-display" id="qtyDisplay-${product.id}">${qty}</span>
       </div>
       <button class="qty-btn plus" onclick="productQtyChange(${product.id}, 1)">+</button>
@@ -157,7 +157,7 @@ function resetToAddButton(productId) {
   const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
   const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
   
-  transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | Ø£Ø¶Ù Ø¥Ù„Ù‰ Ø§Ù„Ø³Ù„Ø©</button>`;
+  transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | أضف إلى السلة</button>`;
   
   const newBtn = document.getElementById(btnId);
   if (newBtn && product) {
@@ -241,7 +241,7 @@ async function initProductPage() {
           <div class="product-desc-value">${descEn}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬</div>
+          <div class="product-desc-label">معلومات المنتج</div>
           <div class="product-desc-value">${descAr}</div>
         </div>
       </div>
@@ -256,7 +256,7 @@ async function initProductPage() {
           <div class="product-desc-value">${product.colors || ''}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ù…ØªØ§Ø­Ø©</div>
+          <div class="product-desc-label">الألوان المتاحة</div>
           <div class="product-desc-value">${product.colorsAr || ''}</div>
         </div>
       </div>
@@ -271,7 +271,7 @@ async function initProductPage() {
           <div class="product-desc-value">${product.packaging || ''}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">Ø§Ù„ØªØ¹Ø¨Ø¦Ø© ÙˆØ§Ù„ØªØºÙ„ÙŠÙ</div>
+          <div class="product-desc-label">التعبئة والتغليف</div>
           <div class="product-desc-value">${product.packagingAr || ''}</div>
         </div>
       </div>
@@ -286,7 +286,7 @@ async function initProductPage() {
           <div class="product-desc-value">${product.specifications ? product.specifications.join('<br>') : ''}</div>
         </div>
         <div class="product-desc-ar">
-          <div class="product-desc-label">Ø§Ù„Ù…ÙˆØ§ØµÙØ§Øª</div>
+          <div class="product-desc-label">المواصفات</div>
           <div class="product-desc-value">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</div>
         </div>
       </div>
@@ -321,7 +321,7 @@ async function initProductPage() {
         <div class="image-gallery">
           <div class="main-image-container">
             <img id="mainImage" src="${product.images[0]}" alt="${product.name}" class="main-product-image">
-            <div class="zoom-hint">ðŸ” Click to zoom</div>
+            <div class="zoom-hint">🔍 Click to zoom</div>
           </div>
           ${thumbnailsHTML}
         </div>
@@ -331,7 +331,7 @@ async function initProductPage() {
 
   const desktopAddBtn = document.getElementById("addToCartBtn");
   if (isOutOfStock && desktopAddBtn) {
-    desktopAddBtn.textContent = "Out of Stock | Ù†ÙØ° Ø§Ù„Ù…Ø®Ø²ÙˆÙ†";
+    desktopAddBtn.textContent = "Out of Stock | نفد المخزون";
     desktopAddBtn.disabled = true;
     desktopAddBtn.style.background = "#999";
     desktopAddBtn.style.cursor = "not-allowed";
@@ -370,7 +370,7 @@ async function initProductPage() {
 
   const mobileAddBtn = document.getElementById("mobileAddToCartBtn");
   if (isOutOfStock && mobileAddBtn) {
-    mobileAddBtn.textContent = "Out of Stock | Ù†ÙØ° Ø§Ù„Ù…Ø®Ø²ÙˆÙ†";
+    mobileAddBtn.textContent = "Out of Stock | نفد المخزون";
     mobileAddBtn.disabled = true;
     mobileAddBtn.style.background = "#999";
     mobileAddBtn.style.cursor = "not-allowed";
@@ -386,7 +386,7 @@ async function initProductPage() {
   if (mobileDescEn || mobileDescAr) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Description</span><span class="arabic-text">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬</span></div>
+        <div class="mobile-detail-title"><span>Description</span><span class="arabic-text">معلومات المنتج</span></div>
         <div class="mobile-detail-content"><p>${mobileDescEn}</p><p class="arabic-text">${mobileDescAr}</p></div>
       </div>
     `;
@@ -395,7 +395,7 @@ async function initProductPage() {
   if (product.colors) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Available Colors</span><span class="arabic-text">Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ù…ØªØ§Ø­Ø©</span></div>
+        <div class="mobile-detail-title"><span>Available Colors</span><span class="arabic-text">الألوان المتاحة</span></div>
         <div class="mobile-detail-content"><p>${product.colors}</p><p class="arabic-text">${product.colorsAr || ''}</p></div>
       </div>
     `;
@@ -404,7 +404,7 @@ async function initProductPage() {
   if (product.packaging) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Packaging</span><span class="arabic-text">Ø§Ù„ØªØ¹Ø¨Ø¦Ø© ÙˆØ§Ù„ØªØºÙ„ÙŠÙ</span></div>
+        <div class="mobile-detail-title"><span>Packaging</span><span class="arabic-text">التعبئة والتغليف</span></div>
         <div class="mobile-detail-content"><p>${product.packaging}</p><p class="arabic-text">${product.packagingAr || ''}</p></div>
       </div>
     `;
@@ -413,7 +413,7 @@ async function initProductPage() {
   if (product.specifications && product.specifications.length > 0) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Specifications</span><span class="arabic-text">Ø§Ù„Ù…ÙˆØ§ØµÙØ§Øª</span></div>
+        <div class="mobile-detail-title"><span>Specifications</span><span class="arabic-text">المواصفات</span></div>
         <div class="mobile-detail-content"><p>${product.specifications.join('<br>')}</p><p class="arabic-text">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</p></div>
       </div>
     `;
@@ -518,29 +518,29 @@ function openEnhancedLightbox(product, startIndex) {
   const lbDescEn = product.detailedDescription || product.description;
   const lbDescAr = product.detailedDescriptionAr || product.descriptionAr;
   if (lbDescEn || lbDescAr) {
-    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Description</div><div class="lightbox-detail-value">${lbDescEn || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬</div><div class="lightbox-detail-value">${lbDescAr || ''}</div></div></div>`;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Description</div><div class="lightbox-detail-value">${lbDescEn || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">معلومات المنتج</div><div class="lightbox-detail-value">${lbDescAr || ''}</div></div></div>`;
   }
   
   if (product.colors || product.colorsAr) {
-    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Available Colors</div><div class="lightbox-detail-value">${product.colors || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">Ø§Ù„Ø£Ù„ÙˆØ§Ù† Ø§Ù„Ù…ØªØ§Ø­Ø©</div><div class="lightbox-detail-value">${product.colorsAr || ''}</div></div></div>`;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Available Colors</div><div class="lightbox-detail-value">${product.colors || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">الألوان المتاحة</div><div class="lightbox-detail-value">${product.colorsAr || ''}</div></div></div>`;
   }
   
   if (product.packaging || product.packagingAr) {
-    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Packaging</div><div class="lightbox-detail-value">${product.packaging || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">Ø§Ù„ØªØ¹Ø¨Ø¦Ø© ÙˆØ§Ù„ØªØºÙ„ÙŠÙ</div><div class="lightbox-detail-value">${product.packagingAr || ''}</div></div></div>`;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Packaging</div><div class="lightbox-detail-value">${product.packaging || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">التعبئة والتغليف</div><div class="lightbox-detail-value">${product.packagingAr || ''}</div></div></div>`;
   }
   
   if ((product.specifications && product.specifications.length > 0) || (product.specificationsAr && product.specificationsAr.length > 0)) {
-    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Specifications</div><div class="lightbox-detail-value">${product.specifications ? product.specifications.join('<br>') : ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">Ø§Ù„Ù…ÙˆØ§ØµÙØ§Øª</div><div class="lightbox-detail-value">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</div></div></div>`;
+    infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Specifications</div><div class="lightbox-detail-value">${product.specifications ? product.specifications.join('<br>') : ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">المواصفات</div><div class="lightbox-detail-value">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</div></div></div>`;
   }
   
   const thumbnailsHTML = images.length > 1 ? `<div class="lightbox-thumbnails">${images.map((img, i) => `<div class="lightbox-thumb ${i === currentIndex ? 'active' : ''}" data-index="${i}"><img src="${img}" alt="Thumbnail ${i + 1}"></div>`).join('')}</div>` : '';
-  const arrowsHTML = images.length > 1 ? `<button class="lightbox-arrow prev">â€¹</button><button class="lightbox-arrow next">â€º</button>` : '';
+  const arrowsHTML = images.length > 1 ? `<button class="lightbox-arrow prev">‹</button><button class="lightbox-arrow next">›</button>` : '';
   const counterHTML = images.length > 1 ? `<div class="lightbox-counter">${currentIndex + 1} / ${images.length}</div>` : '';
   
   const lightbox = document.createElement('div');
   lightbox.className = 'lightbox';
   lightbox.innerHTML = `
-    <button class="lightbox-close">Ã—</button>
+    <button class="lightbox-close">×</button>
     <div class="lightbox-content">
       <div class="lightbox-image-section">
         <div class="lightbox-main-image">${arrowsHTML}<img src="${images[currentIndex]}" alt="${product.name}" id="lightboxMainImg">${counterHTML}</div>
@@ -739,10 +739,10 @@ function productPageToggleMobileMenu() {
     overlay.className = 'mobile-menu-overlay';
     overlay.innerHTML = `
       <div class="mobile-menu">
-        <a href="index.html#products"><span class="menu-en">ðŸ›ï¸ Shop</span> | <span class="menu-ar">ØªØ³ÙˆÙ‚</span></a>
-        <a href="index.html?showAbout=true#about"><span class="menu-en">â„¹ï¸ About</span> | <span class="menu-ar">Ù…Ù† Ù†Ø­Ù†</span></a>
-        <a href="index.html#contact"><span class="menu-en">ðŸ“§ Contact</span> | <span class="menu-ar">Ø§ØªØµÙ„ Ø¨Ù†Ø§</span></a>
-        <a href="index.html#terms"><span class="menu-en">ðŸ“‹ Terms</span> | <span class="menu-ar">Ø§Ù„Ø´Ø±ÙˆØ·</span></a>
+        <a href="index.html#products"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
+        <a href="index.html?showAbout=true#about"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
+        <a href="index.html#contact"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
+        <a href="index.html#terms"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
       </div>
     `;
     document.body.appendChild(overlay);
