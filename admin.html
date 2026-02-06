@@ -623,20 +623,44 @@
                 </div>
 
                 <div class="form-section">
-                    <div class="form-section-title">Images</div>
+                    <div class="form-section-title">Images <span style="font-weight:400;font-size:0.8rem;color:#888;">(Paste Google Drive links - auto-converts)</span></div>
                     <div class="form-group">
                         <label>Main Image URL</label>
-                        <input type="text" id="formMainImage" placeholder="https://drive.google.com/...">
+                        <input type="text" id="formMainImage" placeholder="https://drive.google.com/..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Image 2 URL</label>
-                            <input type="text" id="formImage2" placeholder="https://...">
+                            <input type="text" id="formImage2" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
                         </div>
                         <div class="form-group">
                             <label>Image 3 URL</label>
-                            <input type="text" id="formImage3" placeholder="https://...">
+                            <input type="text" id="formImage3" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
                         </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Image 4 URL</label>
+                            <input type="text" id="formImage4" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>Image 5 URL</label>
+                            <input type="text" id="formImage5" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Image 6 URL</label>
+                            <input type="text" id="formImage6" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>Image 7 URL</label>
+                            <input type="text" id="formImage7" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Image 8 URL</label>
+                        <input type="text" id="formImage8" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
                     </div>
                 </div>
 
@@ -864,6 +888,11 @@
             document.getElementById('formMainImage').value = product.image || '';
             document.getElementById('formImage2').value = product.images && product.images[1] || '';
             document.getElementById('formImage3').value = product.images && product.images[2] || '';
+            document.getElementById('formImage4').value = product.images && product.images[3] || '';
+            document.getElementById('formImage5').value = product.images && product.images[4] || '';
+            document.getElementById('formImage6').value = product.images && product.images[5] || '';
+            document.getElementById('formImage7').value = product.images && product.images[6] || '';
+            document.getElementById('formImage8').value = product.images && product.images[7] || '';
             document.getElementById('formColors').value = product.colors || '';
             document.getElementById('formColorsAr').value = product.colorsAr || '';
             document.getElementById('formPackaging').value = product.packaging || '';
@@ -903,6 +932,11 @@
                 mainImage: document.getElementById('formMainImage').value.trim(),
                 image2: document.getElementById('formImage2').value.trim(),
                 image3: document.getElementById('formImage3').value.trim(),
+                image4: document.getElementById('formImage4').value.trim(),
+                image5: document.getElementById('formImage5').value.trim(),
+                image6: document.getElementById('formImage6').value.trim(),
+                image7: document.getElementById('formImage7').value.trim(),
+                image8: document.getElementById('formImage8').value.trim(),
                 colors: document.getElementById('formColors').value.trim(),
                 colorsAr: document.getElementById('formColorsAr').value.trim(),
                 packaging: document.getElementById('formPackaging').value.trim(),
@@ -989,6 +1023,43 @@
         document.getElementById('authKey').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') authenticate();
         });
+        
+        // Google Drive URL conversion functions
+        function convertGoogleDriveUrl(input) {
+            const url = input.value.trim();
+            if (url.includes('drive.google.com/file/d/')) {
+                const converted = extractAndConvertGoogleDriveUrl(url);
+                if (converted) {
+                    input.value = converted;
+                }
+            }
+        }
+        
+        function handleImagePaste(input) {
+            setTimeout(() => {
+                convertGoogleDriveUrl(input);
+            }, 10);
+        }
+        
+        function extractAndConvertGoogleDriveUrl(url) {
+            // Extract file ID from Google Drive URL
+            // Input: https://drive.google.com/file/d/19ylQVPzfZrZ41zMPuWk_OPHFsKW5lC4W/view?usp=...
+            // Output: https://lh3.googleusercontent.com/d/19ylQVPzfZrZ41zMPuWk_OPHFsKW5lC4W
+            
+            let fileId = null;
+            
+            // Extract from /file/d/ format
+            const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+            if (match) {
+                fileId = match[1];
+            }
+            
+            if (fileId) {
+                return `https://lh3.googleusercontent.com/d/${fileId}`;
+            }
+            
+            return null;
+        }
         
         checkAuth();
     </script>
