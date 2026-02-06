@@ -63,9 +63,8 @@ function getCategoryArabic(category) {
 }
 
 function renderProducts(list) { 
-    const grid = document.getElementById("productsGrid");
-    if (!grid) return;
-    if (!list.length) {
+    const grid = document.getElementById("productsGrid"); 
+    if (!list.length) { 
         grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">No products found</p>`; 
         return; 
     } 
@@ -113,8 +112,7 @@ function loadProducts(category = "All Products") {
 }
 
 function createCategoryFilters() { 
-    const container = document.getElementById("categoryFilters");
-    if (!container) return;
+    const container = document.getElementById("categoryFilters"); 
     container.innerHTML = getCategories().map(cat => {
         const catAr = getCategoryArabic(cat);
         return `<button class="category-btn ${cat === selectedCategory ? "active" : ""}" onclick="loadProducts('${cat}')">${cat}${catAr ? `<br><span class="arabic-text category-arabic">${catAr}</span>` : ''}</button>`;
@@ -132,9 +130,7 @@ function updateCategoryButtons() {
 }
 
 function searchProducts() { 
-    const searchInput = document.getElementById("searchInput");
-    if (!searchInput) return;
-    const term = searchInput.value.toLowerCase().trim(); 
+    const term = document.getElementById("searchInput").value.toLowerCase().trim(); 
     const heroSection = document.querySelector(".hero"); 
     if (!term) { 
         loadProducts(selectedCategory); 
@@ -189,7 +185,6 @@ function showCartPopup(product) {
     
     const popup = document.getElementById('cartPopup');
     const popupContent = document.getElementById('cartPopupContent');
-    if (!popup || !popupContent) return;
     
     popupContent.innerHTML = `
         <div class="popup-top">
@@ -229,7 +224,7 @@ function showCartPopup(product) {
 
 function closeCartPopup() {
     const popup = document.getElementById('cartPopup');
-    if (popup) popup.classList.remove('active');
+    popup.classList.remove('active');
 }
 
 function updateCart() {
@@ -239,22 +234,14 @@ function updateCart() {
     const cartItems = document.getElementById("cartItems"); 
     const cartCount = document.getElementById("cartCount"); 
     const bottomCartCount = document.getElementById("bottomCartCount");
-    const mobileCartCount = document.getElementById("mobileCartCount");
     const cartFooter = document.querySelector(".cart-footer");
     const cartCheckoutFixed = document.getElementById("cartCheckoutFixed");
     const isMobile = window.innerWidth <= 768;
     
-    // Update all cart count badges regardless of cartItems existence
-    const totalItemsForBadge = cart.reduce((s, i) => s + i.quantity, 0);
-    if (cartCount) cartCount.textContent = totalItemsForBadge;
-    if (bottomCartCount) bottomCartCount.textContent = totalItemsForBadge;
-    if (mobileCartCount) mobileCartCount.textContent = totalItemsForBadge;
-    
-    // If no cartItems element (product page without full cart sidebar), stop here
-    if (!cartItems || !cartFooter) return;
-    
     if (!cart.length) { 
         cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
+        if (cartCount) cartCount.textContent = 0;
+        if (bottomCartCount) bottomCartCount.textContent = 0;
         cartFooter.innerHTML = `<div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;"><span>Total / الإجمالي:</span><span>AED 0.00</span></div>`;
         if (cartCheckoutFixed) cartCheckoutFixed.innerHTML = '';
         return; 
@@ -265,6 +252,9 @@ function updateCart() {
     const deliveryFee = calculateDeliveryFee(subtotal); 
     const total = subtotal + deliveryFee; 
     const amountNeeded = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
+    
+    if (cartCount) cartCount.textContent = totalItems;
+    if (bottomCartCount) bottomCartCount.textContent = totalItems; 
     
     const checkoutBtnHTML = `
         <button id="stripeBtn" 
@@ -429,8 +419,6 @@ function removeFromCart(id) {
 
 function toggleCart() { 
     const cartSidebar = document.getElementById("cartSidebar");
-    if (!cartSidebar) return;
-    
     const bottomCartBtn = document.getElementById("bottomCartBtn");
     const bottomHomeBtn = document.getElementById("bottomHomeBtn");
     
@@ -458,24 +446,18 @@ function addUpsellItem(id, event) {
 }
 
 function openPolicy(type) { 
-    const policyText = document.getElementById("policyText");
-    const policyModal = document.getElementById("policyModal");
-    if (!policyText || !policyModal) return;
-    policyText.innerHTML = policies[type]; 
-    policyModal.style.display = "block"; 
+    document.getElementById("policyText").innerHTML = policies[type]; 
+    document.getElementById("policyModal").style.display = "block"; 
     document.body.style.overflow = "hidden"; 
 }
 
 function closePolicy() { 
-    const policyModal = document.getElementById("policyModal");
-    if (!policyModal) return;
-    policyModal.style.display = "none"; 
+    document.getElementById("policyModal").style.display = "none"; 
     document.body.style.overflow = "auto"; 
 }
 
 function toggleAbout() {
     const aboutSection = document.getElementById('about');
-    if (!aboutSection) return;
     const computedStyle = window.getComputedStyle(aboutSection);
     const isVisible = computedStyle.display !== 'none';
     
@@ -572,17 +554,20 @@ window.onload = () => {
         });
     }
     
-    const searchBtn = document.getElementById("searchBtn");
-    const searchInput = document.getElementById("searchInput");
-    const cartIcon = document.getElementById("cartIcon");
-    const closeCart = document.getElementById("closeCart");
-    const policyModal = document.getElementById("policyModal");
-    
-    if (searchBtn) searchBtn.onclick = searchProducts;
-    if (searchInput) searchInput.onkeypress = (e) => { if (e.key === "Enter") { e.preventDefault(); searchProducts(); } };
-    if (cartIcon) cartIcon.onclick = toggleCart;
-    if (closeCart) closeCart.onclick = toggleCart;
-    if (policyModal) policyModal.onclick = (e) => { if (e.target.id === "policyModal") { closePolicy(); } };
+    document.getElementById("searchBtn").onclick = searchProducts; 
+    document.getElementById("searchInput").onkeypress = (e) => { 
+        if (e.key === "Enter") { 
+            e.preventDefault(); 
+            searchProducts(); 
+        } 
+    }; 
+    document.getElementById("cartIcon").onclick = toggleCart; 
+    document.getElementById("closeCart").onclick = toggleCart; 
+    document.getElementById("policyModal").onclick = (e) => { 
+        if (e.target.id === "policyModal") { 
+            closePolicy(); 
+        } 
+    };
     
     const bottomHomeBtn = document.getElementById("bottomHomeBtn");
     const bottomCartBtn = document.getElementById("bottomCartBtn");
@@ -592,8 +577,15 @@ window.onload = () => {
         bottomHomeBtn.classList.add("home-active");
         
         bottomHomeBtn.onclick = function() {
+            // If not on index page, navigate to it
+            const path = window.location.pathname;
+            if (!path.endsWith('index.html') && !path.endsWith('/') && path !== '/') {
+                window.location.href = 'index.html';
+                return;
+            }
+            
             const cartSidebar = document.getElementById("cartSidebar");
-            if (cartSidebar && cartSidebar.classList.contains("active")) {
+            if (cartSidebar.classList.contains("active")) {
                 cartSidebar.classList.remove("active");
                 if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
                 upsellUsed = false;
@@ -612,7 +604,7 @@ window.onload = () => {
     if (bottomMenuBtn) {
         bottomMenuBtn.onclick = function() {
             const cartSidebar = document.getElementById("cartSidebar");
-            if (cartSidebar && cartSidebar.classList.contains("active")) {
+            if (cartSidebar.classList.contains("active")) {
                 cartSidebar.classList.remove("active");
                 if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
                 upsellUsed = false;
