@@ -2241,7 +2241,7 @@ footer p {
 }
 
 /* ============================================
-   GRAND CART POPUP
+   GRAND CART POPUP (75% scaled)
    ============================================ */
 .cart-popup-overlay {
     display: none;
@@ -2254,7 +2254,7 @@ footer p {
     z-index: 9999;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 15px;
 }
 
 .cart-popup-overlay.active {
@@ -2269,13 +2269,12 @@ footer p {
 
 .cart-popup {
     background: white;
-    border-radius: 24px;
-    max-width: 420px;
+    border-radius: 18px;
+    max-width: 315px;
     width: 100%;
     overflow: hidden;
     animation: popupBounceIn 0.5s ease;
-    box-shadow: 0 30px 100px rgba(0,0,0,0.3);
-    transform: scale(0.75);
+    box-shadow: 0 22px 75px rgba(0,0,0,0.3);
 }
 
 @keyframes popupBounceIn {
@@ -2297,22 +2296,22 @@ footer p {
 
 .popup-top {
     background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
-    padding: 35px 25px 80px;
+    padding: 26px 19px 60px;
     text-align: center;
     position: relative;
 }
 
 .popup-close-btn {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 36px;
-    height: 36px;
+    top: 11px;
+    right: 11px;
+    width: 27px;
+    height: 27px;
     background: rgba(255,255,255,0.15);
     border: none;
     border-radius: 50%;
     color: white;
-    font-size: 1.3rem;
+    font-size: 1rem;
     cursor: pointer;
     transition: background 0.2s;
     display: flex;
@@ -2327,14 +2326,14 @@ footer p {
 .popup-success-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: #28a745;
     color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
+    padding: 6px 12px;
+    border-radius: 15px;
     font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: 10px;
+    font-size: 0.68rem;
+    margin-bottom: 8px;
     animation: popupPopIn 0.4s ease 0.3s both;
 }
 
@@ -2346,38 +2345,38 @@ footer p {
 
 .popup-title {
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.13rem;
     font-weight: 700;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .popup-title-ar {
     color: rgba(255,255,255,0.8);
-    font-size: 1.1rem;
+    font-size: 0.83rem;
     font-family: 'Almarai', sans-serif;
 }
 
 .popup-product-float {
     position: relative;
-    margin-top: -60px;
-    padding: 0 25px;
+    margin-top: -45px;
+    padding: 0 19px;
 }
 
 .popup-product-card {
     background: white;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 11px;
 }
 
 .popup-product-image {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     background: #f8f9fa;
-    border-radius: 12px;
+    border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2392,36 +2391,36 @@ footer p {
 .popup-product-name {
     font-weight: 700;
     color: #2c4a5c;
-    font-size: 1rem;
-    margin-bottom: 5px;
+    font-size: 0.75rem;
+    margin-bottom: 4px;
 }
 
 .popup-product-name-ar {
-    font-size: 0.85rem;
+    font-size: 0.64rem;
     color: #888;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-family: 'Almarai', sans-serif;
 }
 
 .popup-product-price {
     color: #e07856;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 0.9rem;
 }
 
 .popup-bottom {
-    padding: 25px;
+    padding: 19px;
 }
 
 .popup-cart-summary {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 15px;
+    padding: 9px 11px;
     background: #f8f9fa;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.68rem;
 }
 
 .popup-summary-label {
@@ -2436,23 +2435,23 @@ footer p {
 .popup-buttons {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .popup-btn-view-cart {
-    padding: 16px 20px;
+    padding: 12px 15px;
     background: #e07856;
     color: white;
     border: none;
-    border-radius: 12px;
-    font-size: 1rem;
+    border-radius: 9px;
+    font-size: 0.75rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     font-family: 'Inter', 'Almarai', sans-serif;
 }
 
@@ -2462,12 +2461,12 @@ footer p {
 }
 
 .popup-btn-continue {
-    padding: 16px 20px;
+    padding: 12px 15px;
     background: #2c4a5c;
     color: white;
     border: none;
-    border-radius: 12px;
-    font-size: 1rem;
+    border-radius: 9px;
+    font-size: 0.75rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
@@ -2481,50 +2480,50 @@ footer p {
 /* Mobile adjustments for popup */
 @media (max-width: 768px) {
     .cart-popup-overlay {
-        padding: 15px;
+        padding: 11px;
         align-items: flex-end;
     }
     
     .cart-popup {
         max-width: 100%;
-        border-radius: 20px 20px 0 0;
+        border-radius: 15px 15px 0 0;
         margin-bottom: 0;
     }
     
     .popup-top {
-        padding: 25px 20px 70px;
+        padding: 19px 15px 53px;
     }
     
     .popup-title {
-        font-size: 1.3rem;
+        font-size: 0.98rem;
     }
     
     .popup-product-float {
-        margin-top: -50px;
-        padding: 0 20px;
+        margin-top: -38px;
+        padding: 0 15px;
     }
     
     .popup-product-card {
-        padding: 15px;
+        padding: 11px;
     }
     
     .popup-product-image {
-        width: 65px;
-        height: 65px;
+        width: 49px;
+        height: 49px;
     }
     
     .popup-product-name {
-        font-size: 0.9rem;
+        font-size: 0.68rem;
     }
     
     .popup-bottom {
-        padding: 20px;
+        padding: 15px;
     }
     
     .popup-btn-view-cart,
     .popup-btn-continue {
-        padding: 14px 18px;
-        font-size: 0.95rem;
+        padding: 11px 14px;
+        font-size: 0.71rem;
     }
 }
 /* ============================================
