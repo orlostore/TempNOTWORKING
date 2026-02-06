@@ -127,6 +127,11 @@ function productQtyChange(productId, change) {
     item.quantity = newQty;
     localStorage.setItem("cart", JSON.stringify(localCart));
     
+    // Update ALL qty displays for this product (desktop and mobile)
+    document.querySelectorAll(`[id^="qtyDisplay-${productId}"]`).forEach(el => {
+      el.textContent = newQty;
+    });
+    // Also try the exact ID
     const qtyDisplay = document.getElementById(`qtyDisplay-${productId}`);
     if (qtyDisplay) qtyDisplay.textContent = newQty;
   }
@@ -426,11 +431,8 @@ async function initProductPage() {
   const existingItem = existingCart.find(i => i.id === product.id);
   
   if (existingItem && !isOutOfStock) {
-    const desktopBtn = document.getElementById("addToCartBtn");
-    if (desktopBtn) transformToQtyButton(desktopBtn, product);
-    
-    const mobileBtn = document.getElementById("mobileAddToCartBtn");
-    if (mobileBtn) transformToQtyButton(mobileBtn, product);
+    if (desktopAddBtn) transformToQtyButton(desktopAddBtn, product);
+    if (mobileAddBtn) transformToQtyButton(mobileAddBtn, product);
   }
 
   // ADD TO CART HANDLER - self-contained, uses localStorage directly
@@ -667,7 +669,7 @@ function setupGalleryOverlay(product) {
 
 window.changeMainImage = function(imgSrc, index) {
   const mainImg = document.getElementById('mainImage');
-  mainImg.src = imgSrc;
+  if (mainImg) mainImg.src = imgSrc;
   document.querySelectorAll('.thumbnail').forEach((thumb, i) => thumb.classList.toggle('active', i === index));
 };
 
@@ -676,6 +678,7 @@ function setupSearch() {
   const searchInput = document.getElementById('searchInput');
   
   const doSearch = () => {
+    if (!searchInput) return;
     const term = searchInput.value.trim();
     if (term) window.location.href = `index.html?search=${encodeURIComponent(term)}`;
     else window.location.href = 'index.html';
@@ -729,6 +732,9 @@ function setupBottomNav() {
   
   const cartIcon = document.getElementById('cartIcon');
   if (cartIcon) cartIcon.onclick = toggleCartSidebar;
+  
+  const mobileCartIcon = document.getElementById('mobileCartIcon');
+  if (mobileCartIcon) mobileCartIcon.onclick = toggleCartSidebar;
 }
 
 function productPageToggleMobileMenu() {
