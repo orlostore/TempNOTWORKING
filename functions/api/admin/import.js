@@ -56,6 +56,7 @@ export async function onRequestGet(context) {
                             name = ?, nameAr = ?, description = ?, descriptionAr = ?,
                             price = ?, category = ?, categoryAr = ?, featured = ?,
                             mainImage = ?, image2 = ?, image3 = ?, image4 = ?, image5 = ?,
+                            image6 = ?, image7 = ?, image8 = ?,
                             colors = ?, colorsAr = ?, packaging = ?, packagingAr = ?,
                             specifications = ?, specificationsAr = ?
                         WHERE slug = ?
@@ -73,6 +74,9 @@ export async function onRequestGet(context) {
                         row.image3 || '',
                         row.image4 || '',
                         row.image5 || '',
+                        row.image6 || '',
+                        row.image7 || '',
+                        row.image8 || '',
                         row.colors || '',
                         row.colorsAR || row.colorsAr || '',
                         row.packaging || '',
@@ -88,10 +92,10 @@ export async function onRequestGet(context) {
                         INSERT INTO products (
                             slug, name, nameAr, description, descriptionAr,
                             price, quantity, category, categoryAr, featured,
-                            mainImage, image2, image3, image4, image5,
+                            mainImage, image2, image3, image4, image5, image6, image7, image8,
                             colors, colorsAr, packaging, packagingAr,
                             specifications, specificationsAr
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     `).bind(
                         row.slug,
                         row.name,
@@ -108,6 +112,9 @@ export async function onRequestGet(context) {
                         row.image3 || '',
                         row.image4 || '',
                         row.image5 || '',
+                        row.image6 || '',
+                        row.image7 || '',
+                        row.image8 || '',
                         row.colors || '',
                         row.colorsAR || row.colorsAr || '',
                         row.packaging || '',
