@@ -260,8 +260,7 @@ if (mobileCartCount) mobileCartCount.textContent = 0;
     if (bottomCartCount) bottomCartCount.textContent = totalItems;
     const mobileCartCount = document.getElementById("mobileCartCount");
 if (mobileCartCount) mobileCartCount.textContent = totalItems;
-const mobileCartCount = document.getElementById("mobileCartCount");
-if (mobileCartCount) mobileCartCount.textContent = totalItems; 
+
     
     const checkoutBtnHTML = `
         <button id="stripeBtn" 
