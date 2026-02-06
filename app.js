@@ -63,8 +63,9 @@ function getCategoryArabic(category) {
 }
 
 function renderProducts(list) { 
-    const grid = document.getElementById("productsGrid"); 
-    if (!list.length) { 
+    const grid = document.getElementById("productsGrid");
+    if (!grid) return;
+    if (!list.length) {
         grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">No products found</p>`; 
         return; 
     } 
