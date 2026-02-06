@@ -66,10 +66,10 @@ export async function onRequestPost(context) {
                 INSERT INTO products (
                     slug, name, nameAr, description, descriptionAr,
                     price, quantity, category, categoryAr, featured,
-                    mainImage, image2, image3, image4, image5,
+                    mainImage, image2, image3, image4, image5, image6, image7, image8,
                     colors, colorsAr, packaging, packagingAr,
                     specifications, specificationsAr
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `).bind(
                 data.slug,
                 data.name,
@@ -86,6 +86,9 @@ export async function onRequestPost(context) {
                 data.image3 || '',
                 data.image4 || '',
                 data.image5 || '',
+                data.image6 || '',
+                data.image7 || '',
+                data.image8 || '',
                 data.colors || '',
                 data.colorsAr || '',
                 data.packaging || '',
@@ -107,6 +110,7 @@ export async function onRequestPost(context) {
                     slug = ?, name = ?, nameAr = ?, description = ?, descriptionAr = ?,
                     price = ?, quantity = ?, category = ?, categoryAr = ?, featured = ?,
                     mainImage = ?, image2 = ?, image3 = ?, image4 = ?, image5 = ?,
+                    image6 = ?, image7 = ?, image8 = ?,
                     colors = ?, colorsAr = ?, packaging = ?, packagingAr = ?,
                     specifications = ?, specificationsAr = ?
                 WHERE id = ?
@@ -126,6 +130,9 @@ export async function onRequestPost(context) {
                 data.image3 || '',
                 data.image4 || '',
                 data.image5 || '',
+                data.image6 || '',
+                data.image7 || '',
+                data.image8 || '',
                 data.colors || '',
                 data.colorsAr || '',
                 data.packaging || '',
