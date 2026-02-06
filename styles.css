@@ -2275,6 +2275,7 @@ footer p {
     overflow: hidden;
     animation: popupBounceIn 0.5s ease;
     box-shadow: 0 30px 100px rgba(0,0,0,0.3);
+    transform: scale(0.75);
 }
 
 @keyframes popupBounceIn {
