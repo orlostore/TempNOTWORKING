@@ -480,16 +480,14 @@ async function initProductPage() {
     return true;
   };
 
-  const addBtn = document.getElementById("addToCartBtn");
-  if (!isOutOfStock && addBtn) {
-    addBtn.onclick = function() {
+  if (!isOutOfStock && desktopAddBtn) {
+    desktopAddBtn.onclick = function() {
       if (addToCartHandler()) {
         transformToQtyButton(this, product);
       }
     };
   }
 
-  const mobileAddBtn = document.getElementById("mobileAddToCartBtn");
   if (!isOutOfStock && mobileAddBtn) {
     mobileAddBtn.onclick = function() {
       if (addToCartHandler()) {
