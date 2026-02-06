@@ -154,58 +154,64 @@ function productQtyChange(productId, change) {
 
 // Reset transformed button back to Add to Cart
 function resetToAddButton(productId) {
-  const transformed = document.getElementById(`transformedBtn-${productId}`);
-  if (!transformed) return;
+  // Reset ALL transformed buttons for this product (both desktop and mobile)
+  document.querySelectorAll(`[id="transformedBtn-${productId}"]`).forEach(transformed => {
+    const isMobile = transformed.closest('.mobile-product-page') !== null;
+    const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
+    const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
+    
+    transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | أضف إلى السلة</button>`;
+  });
   
+  // Re-attach click handlers
   const product = products.find(p => p.id === productId);
-  const isMobile = transformed.closest('.mobile-product-page') !== null;
-  const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
-  const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
+  if (!product) return;
   
-  transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | أضف إلى السلة</button>`;
+  const desktopBtn = document.getElementById('addToCartBtn');
+  const mobileBtn = document.getElementById('mobileAddToCartBtn');
   
-  const newBtn = document.getElementById(btnId);
-  if (newBtn && product) {
-    newBtn.onclick = function() {
-      if (product.quantity === 0) return false;
-      
-      let localCart = JSON.parse(localStorage.getItem("cart")) || [];
-      const item = localCart.find(i => i.id === product.id);
-      const currentInCart = item ? item.quantity : 0;
-      const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
-      
-      if (currentInCart >= maxAllowed) {
-        showProductPageMaxLimitMessage(product.id, maxAllowed);
-        return false;
-      }
-      
-      if (item) {
-        item.quantity++;
-      } else {
-        localCart.push({ ...product, quantity: 1 });
-      }
-      
-      localStorage.setItem("cart", JSON.stringify(localCart));
-      
-      if (typeof cart !== 'undefined') {
-        cart.length = 0;
-        localCart.forEach(i => cart.push(i));
-      }
-      
-      const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
-      const cartCount = document.getElementById("cartCount");
-      const bottomCartCount = document.getElementById("bottomCartCount");
-      const mobileCartCount = document.getElementById("mobileCartCount");
-      if (cartCount) cartCount.textContent = totalItems;
-      if (bottomCartCount) bottomCartCount.textContent = totalItems;
-      if (mobileCartCount) mobileCartCount.textContent = totalItems;
-      
-      if (typeof updateCart === 'function') updateCart();
-      
-      transformToQtyButton(this, product);
-      return true;
-    };
-  }
+  const handler = function() {
+    if (product.quantity === 0) return false;
+    
+    let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const item = localCart.find(i => i.id === product.id);
+    const currentInCart = item ? item.quantity : 0;
+    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
+    
+    if (currentInCart >= maxAllowed) {
+      showProductPageMaxLimitMessage(product.id, maxAllowed);
+      return false;
+    }
+    
+    if (item) {
+      item.quantity++;
+    } else {
+      localCart.push({ ...product, quantity: 1 });
+    }
+    
+    localStorage.setItem("cart", JSON.stringify(localCart));
+    
+    if (typeof cart !== 'undefined') {
+      cart.length = 0;
+      localCart.forEach(i => cart.push(i));
+    }
+    
+    const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+    const cartCount = document.getElementById("cartCount");
+    const bottomCartCount = document.getElementById("bottomCartCount");
+    const mobileCartCount = document.getElementById("mobileCartCount");
+    if (cartCount) cartCount.textContent = totalItems;
+    if (bottomCartCount) bottomCartCount.textContent = totalItems;
+    if (mobileCartCount) mobileCartCount.textContent = totalItems;
+    
+    if (typeof updateCart === 'function') updateCart();
+    
+    transformToQtyButton(this, product);
+    return true;
+  };
+  
+  if (desktopBtn) desktopBtn.onclick = handler;
+  if (mobileBtn) mobileBtn.onclick = handler;
 }
 
 // Wait for products to load, then display
