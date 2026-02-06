@@ -1,5 +1,4 @@
 // Cloudflare Pages Function - Serve products from D1
-
 export async function onRequestGet(context) {
     const { env } = context;
     const DB = env.DB;
@@ -25,7 +24,7 @@ export async function onRequestGet(context) {
             categoryAr: row.categoryAr,
             featured: row.featured === 1,
             image: row.mainImage,
-            images: [row.mainImage, row.image2, row.image3, row.image4, row.image5].filter(Boolean),
+            images: [row.mainImage, row.image2, row.image3, row.image4, row.image5, row.image6, row.image7, row.image8].filter(Boolean),
             colors: row.colors,
             colorsAr: row.colorsAr,
             packaging: row.packaging,
@@ -51,7 +50,6 @@ export async function onRequestGet(context) {
         });
     }
 }
-
 export async function onRequestOptions() {
     return new Response(null, {
         status: 204,
