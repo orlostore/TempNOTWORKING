@@ -231,6 +231,17 @@ function updateCart() {
     // *** FIX: Always sync cart from localStorage first ***
     cart = JSON.parse(localStorage.getItem("cart")) || [];
     
+    // *** FIX: Update cart prices from current product data ***
+    cart = cart.map(item => {
+        const currentProduct = products.find(p => p.id === item.id);
+        if (currentProduct && currentProduct.price !== item.price) {
+            showPriceToast(item.name, item.price, currentProduct.price);
+            return { ...item, price: currentProduct.price };
+        }
+        return item;
+    });
+    saveCart();
+    
     const cartItems = document.getElementById("cartItems"); 
     const cartCount = document.getElementById("cartCount"); 
     const bottomCartCount = document.getElementById("bottomCartCount");
@@ -614,6 +625,60 @@ window.onload = () => {
         };
     }
 };
+
+function showPriceToast(productName, oldPrice, newPrice) {
+    // Remove existing toast if any
+    const existing = document.getElementById('priceToast');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.id = 'priceToast';
+    toast.innerHTML = `
+        <span>💰 Price updated: ${productName} is now AED ${newPrice}</span>
+        <button onclick="this.parentElement.remove()">✕</button>
+    `;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 90px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        z-index: 9999;
+        font-size: 0.9rem;
+        max-width: 90%;
+        animation: toastSlideUp 0.3s ease;
+    `;
+    toast.querySelector('button').style.cssText = `
+        background: rgba(255,255,255,0.2);
+        border: none;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+    
+    // Add animation keyframes if not exists
+    if (!document.getElementById('toastStyles')) {
+        const style = document.createElement('style');
+        style.id = 'toastStyles';
+        style.textContent = `@keyframes toastSlideUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }`;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(toast);
+}
 
 async function checkout() {
     const btn = document.getElementById("stripeBtn");
