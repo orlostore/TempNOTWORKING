@@ -2486,11 +2486,11 @@ footer p {
         align-items: flex-end;
     }
     
-    .cart-popup {
-        max-width: 100%;
-        border-radius: 15px 15px 0 0;
-        margin-bottom: 0;
-    }
+   .cart-popup {
+    max-width: 100%;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
     
     .popup-top {
         padding: 19px 15px 53px;
