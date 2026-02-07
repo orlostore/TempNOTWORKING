@@ -66,6 +66,7 @@ export async function onRequestGet(context) {
                     customer_email: session.customer_details?.email || session.customer_email || 'N/A',
                     customer_phone: session.customer_details?.phone || 'N/A',
                     shipping_address: session.customer_details?.address || session.shipping_details?.address || null,
+                    shipping_amount: session.shipping_cost?.amount_total || lineItems.find(i => i.description?.toLowerCase().includes('delivery'))?.amount_total || 0,
                     items: lineItems.map(item => ({
                         name: item.description || item.price?.product?.name || 'Item',
                         quantity: item.quantity,
