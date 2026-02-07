@@ -965,13 +965,9 @@
                 const result = await response.json();
                 
                 if (result.success) {
-    closeModal();
-    loadProducts();
-    // Clear customer cache so changes show immediately
-    localStorage.removeItem('orlo_products_cache');
-    localStorage.removeItem('orlo_products_cache_time');
-}
-                else {
+                    closeModal();
+                    loadProducts();
+                } else {
                     alert('Error: ' + (result.error || 'Unknown error'));
                 }
             } catch (error) {
@@ -1013,7 +1009,12 @@
             try {
                 const response = await fetch(`/api/admin/restock?key=${authKey}&slug=${slug}&set=${newQty}`);
                 const result = await response.json();
-                if (result.success) { closeStockModal(); loadProducts(); }
+                if (result.success) { 
+                    closeStockModal(); 
+                    loadProducts();
+                    localStorage.removeItem('orlo_products_cache');
+                    localStorage.removeItem('orlo_products_cache_time');
+                }
                 else alert('Error: ' + (result.error || 'Unknown error'));
             } catch (error) {
                 alert('Error updating stock: ' + error.message);
