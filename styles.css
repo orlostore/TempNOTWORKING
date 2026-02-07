@@ -2740,3 +2740,44 @@ footer p {
 .limit-tooltip.fade-out {
   animation: tooltipFadeOut 0.3s ease forwards;
 }
+/* ============================================
+   GRID PRODUCT CARD - QTY STEPPER
+   ============================================ */
+.grid-qty-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background: linear-gradient(135deg, #2c4a5c 0%, #3d5a6a 50%, #e07856 100%);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.grid-qty-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: rgba(0,0,0,0.15);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.grid-qty-btn:hover {
+    background: rgba(0,0,0,0.25);
+}
+
+.grid-qty-btn:active {
+    background: rgba(0,0,0,0.35);
+}
+
+.grid-qty-display {
+    flex: 1;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+}
