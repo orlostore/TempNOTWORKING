@@ -179,7 +179,16 @@ function addToCart(id, event) {
     updateCart(); 
     
     // Show grand popup
-    showCartPopup(product);
+showCartPopup(product);
+
+// Transform button to stepper
+const btn = event.target;
+const qty = cart.find(i => i.id === id)?.quantity || 1;
+btn.outerHTML = `<div class="grid-qty-control" data-id="${id}">
+    <button class="grid-qty-btn" onclick="gridQtyChange(${id}, -1)">−</button>
+    <span class="grid-qty-display" id="gridQty-${id}">${qty}</span>
+    <button class="grid-qty-btn" onclick="gridQtyChange(${id}, 1)">+</button>
+</div>`;
 }
 
 function showCartPopup(product) {
