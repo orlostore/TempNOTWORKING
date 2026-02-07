@@ -794,6 +794,9 @@ window.addEventListener('pageshow', function(event) {
     if (btn && btn.disabled) {
         btn.disabled = false;
         btn.innerHTML = '💳 Pay with Card / الدفع بالبطاقة';
+        // Close cart sidebar
+        const cartSidebar = document.getElementById('cartSidebar');
+        if (cartSidebar) cartSidebar.classList.remove('active');
         // Redirect to cancel page
         window.location.href = 'cancel.html';
     }
