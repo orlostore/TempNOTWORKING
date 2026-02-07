@@ -1524,8 +1524,20 @@
         function populateProductFilter() {
             const select = document.getElementById('productFilter');
             select.innerHTML = '<option value="all">All Products</option>';
-            products.forEach(p => {
-                select.innerHTML += `<option value="${p.slug}">${p.name}</option>`;
+            
+            // Get unique product names from orders (excluding delivery)
+            const productNames = new Set();
+            orders.forEach(order => {
+                order.items.forEach(item => {
+                    if (!item.name.toLowerCase().includes('delivery')) {
+                        productNames.add(item.name);
+                    }
+                });
+            });
+            
+            // Sort alphabetically and add to dropdown
+            Array.from(productNames).sort().forEach(name => {
+                select.innerHTML += `<option value="${name}">${name}</option>`;
             });
         }
         
@@ -1555,12 +1567,9 @@
                 if (shippingFilter === 'paid' && order.shipping_amount === 0) return false;
                 if (shippingFilter === 'free' && order.shipping_amount > 0) return false;
                 
-                // Product filter
+                // Product filter - exact match on item name
                 if (productFilter !== 'all') {
-                    const hasProduct = order.items.some(item => 
-                        item.name.toLowerCase().includes(productFilter.toLowerCase()) ||
-                        (item.slug && item.slug === productFilter)
-                    );
+                    const hasProduct = order.items.some(item => item.name === productFilter);
                     if (!hasProduct) return false;
                 }
                 
