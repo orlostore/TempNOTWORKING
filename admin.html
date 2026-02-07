@@ -1189,7 +1189,7 @@
 
         async function loadProducts() {
             try {
-                const response = await fetch('/api/products');
+                const response = await fetch('/api/products?t=' + Date.now());
                 products = await response.json();
                 renderProducts();
                 updateStats();
