@@ -965,9 +965,13 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    closeModal();
-                    loadProducts();
-                } else {
+    closeModal();
+    loadProducts();
+    // Clear customer cache so changes show immediately
+    localStorage.removeItem('orlo_products_cache');
+    localStorage.removeItem('orlo_products_cache_time');
+}
+                else {
                     alert('Error: ' + (result.error || 'Unknown error'));
                 }
             } catch (error) {
