@@ -788,3 +788,13 @@ async function checkout() {
         }
     }
 }
+// Show cancel popup if user comes back via browser back
+window.addEventListener('pageshow', function(event) {
+    const btn = document.getElementById('stripeBtn');
+    if (btn && btn.disabled) {
+        btn.disabled = false;
+        btn.innerHTML = '💳 Pay with Card / الدفع بالبطاقة';
+        // Redirect to cancel page
+        window.location.href = 'cancel.html';
+    }
+});
