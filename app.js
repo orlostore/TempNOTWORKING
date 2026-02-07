@@ -91,9 +91,19 @@ function renderProducts(list) {
                 </a>
                 <div class="product-price">AED ${p.price}</div>
                 ${outOfStock 
-                    ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>` 
-                    : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`
-                }
+    ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>` 
+    : (function() {
+        const cartItem = cart.find(i => i.id === p.id);
+        if (cartItem) {
+            return `<div class="grid-qty-control" data-id="${p.id}">
+                <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, -1)">−</button>
+                <span class="grid-qty-display" id="gridQty-${p.id}">${cartItem.quantity}</span>
+                <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, 1)">+</button>
+            </div>`;
+        }
+        return `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`;
+    })()
+}
             </div>
         </div>
     `}).join(""); 
@@ -512,7 +522,34 @@ function closeMobileMenu() {
         overlay.classList.remove('active');
     }
 }
-
+function gridQtyChange(id, change) {
+    const product = products.find(p => p.id === id);
+    const item = cart.find(i => i.id === id);
+    
+    if (!item) return;
+    
+    const newQty = item.quantity + change;
+    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
+    
+    if (change > 0 && newQty > maxAllowed) {
+        return; // Silent - at max
+    }
+    
+    if (newQty <= 0) {
+        // Remove from cart and re-render grid
+        cart = cart.filter(i => i.id !== id);
+        saveCart();
+        updateCart();
+        loadProducts(selectedCategory); // Re-render to show "Add to Cart" button
+    } else {
+        item.quantity = newQty;
+        saveCart();
+        updateCart();
+        // Update display
+        const display = document.getElementById(`gridQty-${id}`);
+        if (display) display.textContent = newQty;
+    }
+}
 window.onload = () => { 
     createCategoryFilters(); 
     loadProducts(); 
