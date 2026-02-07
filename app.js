@@ -792,12 +792,12 @@ async function checkout() {
 window.addEventListener('pageshow', function(event) {
     const btn = document.getElementById('stripeBtn');
     if (btn && btn.disabled) {
+        // Show instant overlay
+        document.body.style.opacity = '0';
         btn.disabled = false;
         btn.innerHTML = '💳 Pay with Card / الدفع بالبطاقة';
-        // Close cart sidebar
         const cartSidebar = document.getElementById('cartSidebar');
         if (cartSidebar) cartSidebar.classList.remove('active');
-        // Redirect to cancel page
         window.location.href = 'cancel.html';
     }
 });
