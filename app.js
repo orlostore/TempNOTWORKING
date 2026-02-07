@@ -239,6 +239,17 @@ function showCartPopup(product) {
     `;
     
     popup.classList.add('active');
+
+// Auto-dismiss after 2.5 seconds
+setTimeout(() => {
+    popup.style.transition = 'opacity 0.4s ease';
+    popup.style.opacity = '0';
+    setTimeout(() => {
+        popup.classList.remove('active');
+        popup.style.opacity = '';
+        popup.style.transition = '';
+    }, 400);
+}, 2500);
 }
 
 function closeCartPopup() {
