@@ -51,15 +51,21 @@ let selectedDeliveryZone = localStorage.getItem("deliveryZone") || "dubai";
 
 function saveCart() { localStorage.setItem("cart", JSON.stringify(cart)); }
 function saveDeliveryZone() { localStorage.setItem("deliveryZone", selectedDeliveryZone); }
-function getCategories() { return ["All Products", ...new Set(products.map(p => p.category))]; }
 function calculateDeliveryFee(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.fee; }
 function getAmountUntilFreeDelivery(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.freeThreshold - subtotal; }
 function generateOrderNumber() { const date = new Date(); const year = date.getFullYear().toString().slice(-2); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const random = Math.floor(Math.random() * 9000) + 1000; return `ORLO-${year}${month}${day}-${random}`; }
 
 function getCategoryArabic(category) {
     if (category === "All Products") return "جميع المنتجات";
-    const product = products.find(p => p.category === category);
-    return product && product.categoryAr ? product.categoryAr : '';
+    // Find first product with this category that has Arabic translation
+    const product = products.find(p => p.category === category && p.categoryAr);
+    return product ? product.categoryAr : '';
+}
+
+function getCategories() { 
+    // Get unique categories, filter out empty ones
+    const cats = [...new Set(products.map(p => p.category).filter(c => c && c.trim()))];
+    return ["All Products", ...cats]; 
 }
 
 function renderProducts(list) { 
@@ -91,19 +97,9 @@ function renderProducts(list) {
                 </a>
                 <div class="product-price">AED ${p.price}</div>
                 ${outOfStock 
-    ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>` 
-    : (function() {
-        const cartItem = cart.find(i => i.id === p.id);
-        if (cartItem) {
-            return `<div class="grid-qty-control" data-id="${p.id}">
-                <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, -1)">−</button>
-                <span class="grid-qty-display" id="gridQty-${p.id}">${cartItem.quantity}</span>
-                <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, 1)">+</button>
-            </div>`;
-        }
-        return `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`;
-    })()
-}
+                    ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>` 
+                    : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`
+                }
             </div>
         </div>
     `}).join(""); 
@@ -179,16 +175,7 @@ function addToCart(id, event) {
     updateCart(); 
     
     // Show grand popup
-showCartPopup(product);
-
-// Transform button to stepper
-const btn = event.target;
-const qty = cart.find(i => i.id === id)?.quantity || 1;
-btn.outerHTML = `<div class="grid-qty-control" data-id="${id}">
-    <button class="grid-qty-btn" onclick="gridQtyChange(${id}, -1)">−</button>
-    <span class="grid-qty-display" id="gridQty-${id}">${qty}</span>
-    <button class="grid-qty-btn" onclick="gridQtyChange(${id}, 1)">+</button>
-</div>`;
+    showCartPopup(product);
 }
 
 function showCartPopup(product) {
@@ -239,17 +226,6 @@ function showCartPopup(product) {
     `;
     
     popup.classList.add('active');
-
-// Auto-dismiss after 2.5 seconds
-setTimeout(() => {
-    popup.style.transition = 'opacity 0.4s ease';
-    popup.style.opacity = '0';
-    setTimeout(() => {
-        popup.classList.remove('active');
-        popup.style.opacity = '';
-        popup.style.transition = '';
-    }, 400);
-}, 2500);
 }
 
 function closeCartPopup() {
@@ -542,34 +518,7 @@ function closeMobileMenu() {
         overlay.classList.remove('active');
     }
 }
-function gridQtyChange(id, change) {
-    const product = products.find(p => p.id === id);
-    const item = cart.find(i => i.id === id);
-    
-    if (!item) return;
-    
-    const newQty = item.quantity + change;
-    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
-    
-    if (change > 0 && newQty > maxAllowed) {
-        return; // Silent - at max
-    }
-    
-    if (newQty <= 0) {
-        // Remove from cart and re-render grid
-        cart = cart.filter(i => i.id !== id);
-        saveCart();
-        updateCart();
-        loadProducts(selectedCategory); // Re-render to show "Add to Cart" button
-    } else {
-        item.quantity = newQty;
-        saveCart();
-        updateCart();
-        // Update display
-        const display = document.getElementById(`gridQty-${id}`);
-        if (display) display.textContent = newQty;
-    }
-}
+
 window.onload = () => { 
     createCategoryFilters(); 
     loadProducts(); 
@@ -799,16 +748,3 @@ async function checkout() {
         }
     }
 }
-// Show cancel popup if user comes back via browser back
-window.addEventListener('pageshow', function(event) {
-    const btn = document.getElementById('stripeBtn');
-    if (btn && btn.disabled) {
-        // Show instant overlay
-        document.body.style.opacity = '0';
-        btn.disabled = false;
-        btn.innerHTML = '💳 Pay with Card / الدفع بالبطاقة';
-        const cartSidebar = document.getElementById('cartSidebar');
-        if (cartSidebar) cartSidebar.classList.remove('active');
-        window.location.href = 'cancel.html';
-    }
-});
