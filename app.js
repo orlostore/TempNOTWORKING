@@ -319,12 +319,34 @@ function showCartPopup(product) {
         </div>
     `;
     
+    // Clear any existing timer
+    if (window.cartPopupTimer) {
+        clearTimeout(window.cartPopupTimer);
+    }
+    
     popup.classList.add('active');
+    
+    // Auto-fade after 2 seconds
+    window.cartPopupTimer = setTimeout(() => {
+        closeCartPopup();
+    }, 2000);
 }
 
 function closeCartPopup() {
     const popup = document.getElementById('cartPopup');
-    popup.classList.remove('active');
+    
+    // Clear timer if manually closed
+    if (window.cartPopupTimer) {
+        clearTimeout(window.cartPopupTimer);
+    }
+    
+    // Add fade-out class for smooth animation
+    popup.classList.add('fade-out');
+    
+    setTimeout(() => {
+        popup.classList.remove('active');
+        popup.classList.remove('fade-out');
+    }, 300);
 }
 
 function updateCart() {
