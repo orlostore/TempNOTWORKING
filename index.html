@@ -37,7 +37,6 @@
             <li><a href="#about">About<br><span class="arabic-text">من نحن</span></a></li>
             <li><a href="#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
             <li><a href="#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
-            <li><a href="#" id="accountLink" class="account-nav-link">👤 Login<br><span class="arabic-text">دخول</span></a></li>
             <li><div class="cart-icon" id="cartIcon">🛒 <span class="cart-count" id="cartCount">0</span></div></li>
         </ul>
     </nav>
@@ -180,10 +179,6 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
         <span class="nav-icon">🏠</span>
         <span class="nav-label">Home</span>
     </div>
-    <div class="bottom-nav-item" id="bottomAccountBtn">
-        <span class="nav-icon">👤</span>
-        <span class="nav-label" id="bottomAccountLabel">Login</span>
-    </div>
     <div class="bottom-nav-item" id="bottomCartBtn">
         <span class="nav-icon cart-icon-wrapper">
             🛒
@@ -198,51 +193,8 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
 </nav>
 
 <script src="products.js"></script>
-<script src="app.js?v=5"></script>
-<script>
-// Account link handler - updates nav based on login state
-function updateAccountLink() {
-    const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
-    const customer = JSON.parse(localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer') || 'null');
-    
-    const accountLink = document.getElementById('accountLink');
-    const bottomAccountBtn = document.getElementById('bottomAccountBtn');
-    const bottomAccountLabel = document.getElementById('bottomAccountLabel');
-    
-    if (token && customer) {
-        // User is logged in - show name and link to account
-        const firstName = customer.name ? customer.name.split(' ')[0] : 'Account';
-        
-        if (accountLink) {
-            accountLink.innerHTML = `👤 ${firstName}<br><span class="arabic-text">حسابي</span>`;
-            accountLink.href = 'account.html';
-        }
-        if (bottomAccountLabel) {
-            bottomAccountLabel.textContent = firstName;
-        }
-        if (bottomAccountBtn) {
-            bottomAccountBtn.onclick = () => window.location.href = 'account.html';
-        }
-    } else {
-        // User is not logged in - show login link
-        if (accountLink) {
-            accountLink.innerHTML = `👤 Login<br><span class="arabic-text">دخول</span>`;
-            accountLink.href = 'login.html';
-        }
-        if (bottomAccountLabel) {
-            bottomAccountLabel.textContent = 'Login';
-        }
-        if (bottomAccountBtn) {
-            bottomAccountBtn.onclick = () => window.location.href = 'login.html';
-        }
-    }
-}
-
-// Run on page load
-document.addEventListener('DOMContentLoaded', updateAccountLink);
-</script>
-
-<!-- Cart Popup -->
+<script src="app.js?v=4"></script>
+    <!-- Cart Popup -->
 <div class="cart-popup-overlay" id="cartPopup" onclick="if(event.target === this) closeCartPopup()">
     <div class="cart-popup" id="cartPopupContent">
     </div>
