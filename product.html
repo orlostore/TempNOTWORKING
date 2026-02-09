@@ -40,6 +40,7 @@
             <li><a href="index.html?showAbout=true#about">About<br><span class="arabic-text">من نحن</span></a></li>
            <li><a href="index.html#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
             <li><a href="index.html#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
+          <li><a href="login.html" id="accountLink">👤 Login<br><span class="arabic-text">دخول</span></a></li>
             <li><div class="cart-icon" id="cartIcon">🛒 <span class="cart-count" id="cartCount">0</span></div></li>
         </ul>
     </nav>
@@ -152,10 +153,14 @@
 <!-- Mobile Bottom Navigation -->
 <nav class="mobile-bottom-nav" id="mobileBottomNav">
     <div class="bottom-nav-item" id="bottomHomeBtn">
-        <span class="nav-icon">🏠</span>
-        <span class="nav-label">Home</span>
-    </div>
-    <div class="bottom-nav-item" id="bottomCartBtn">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+</div>
+<div class="bottom-nav-item" id="bottomAccountBtn">
+    <span class="nav-icon">👤</span>
+    <span class="nav-label" id="bottomAccountLabel">Login</span>
+</div>
+<div class="bottom-nav-item" id="bottomCartBtn">
         <span class="nav-icon cart-icon-wrapper">
             🛒
             <span class="bottom-cart-badge" id="bottomCartCount">0</span>
