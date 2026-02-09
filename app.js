@@ -49,6 +49,15 @@ let savedUpsellProducts = null;
 let selectedCategory = "All Products";
 let selectedDeliveryZone = localStorage.getItem("deliveryZone") || "dubai";
 
+//PRESS BACK DURING CHECKOUT
+window.addEventListener('pageshow', function(event) {
+    const btn = document.getElementById("stripeBtn");
+    if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = "💳 Pay with Card / الدفع بالبطاقة";
+    }
+});
+
 function saveCart() { localStorage.setItem("cart", JSON.stringify(cart)); }
 function saveDeliveryZone() { localStorage.setItem("deliveryZone", selectedDeliveryZone); }
 function getCategories() { return ["All Products", ...new Set(products.map(p => p.category))]; }
