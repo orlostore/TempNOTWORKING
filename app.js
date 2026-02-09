@@ -51,21 +51,78 @@ let selectedDeliveryZone = localStorage.getItem("deliveryZone") || "dubai";
 
 function saveCart() { localStorage.setItem("cart", JSON.stringify(cart)); }
 function saveDeliveryZone() { localStorage.setItem("deliveryZone", selectedDeliveryZone); }
+function getCategories() { return ["All Products", ...new Set(products.map(p => p.category))]; }
+
+// Update all cart count displays
+function updateCartCounts() {
+    const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+    
+    const cartCount = document.getElementById("cartCount");
+    const bottomCartCount = document.getElementById("bottomCartCount");
+    const mobileCartCount = document.getElementById("mobileCartCount");
+    
+    if (cartCount) cartCount.textContent = totalItems;
+    if (bottomCartCount) bottomCartCount.textContent = totalItems;
+    if (mobileCartCount) mobileCartCount.textContent = totalItems;
+}
+
+// Grid quantity change handler for product cards
+function gridQtyChange(productId, change, event) {
+    if (event) event.stopPropagation();
+    
+    let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const item = localCart.find(i => i.id === productId);
+    const product = products.find(p => p.id === productId);
+    
+    if (!item) return;
+    
+    const newQty = item.quantity + change;
+    
+    // Check max limit
+    if (change > 0) {
+        const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
+        if (newQty > maxAllowed) {
+            return;
+        }
+    }
+    
+    if (newQty <= 0) {
+        // Remove from cart and reset button to original
+        localCart = localCart.filter(i => i.id !== productId);
+        localStorage.setItem("cart", JSON.stringify(localCart));
+        
+        // Reset button to original "Add to Cart"
+        const container = document.getElementById(`gridQty-${productId}`);
+        if (container) {
+            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${productId}, event)">Add to Cart | أضف إلى السلة</button>`;
+        }
+    } else {
+        item.quantity = newQty;
+        localStorage.setItem("cart", JSON.stringify(localCart));
+        
+        // Update qty display
+        const qtyDisplay = document.getElementById(`gridQtyNum-${productId}`);
+        if (qtyDisplay) qtyDisplay.textContent = newQty;
+    }
+    
+    // Sync cart variable
+    cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    // Update cart counts immediately
+    updateCartCounts();
+    
+    // Update cart sidebar if open
+    updateCart();
+}
 function calculateDeliveryFee(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.fee; }
 function getAmountUntilFreeDelivery(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.freeThreshold - subtotal; }
 function generateOrderNumber() { const date = new Date(); const year = date.getFullYear().toString().slice(-2); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const random = Math.floor(Math.random() * 9000) + 1000; return `ORLO-${year}${month}${day}-${random}`; }
 
 function getCategoryArabic(category) {
     if (category === "All Products") return "جميع المنتجات";
-    // Find first product with this category that has Arabic translation
-    const product = products.find(p => p.category === category && p.categoryAr);
-    return product ? product.categoryAr : '';
-}
-
-function getCategories() { 
-    // Get unique categories, filter out empty ones
-    const cats = [...new Set(products.map(p => p.category).filter(c => c && c.trim()))];
-    return ["All Products", ...cats]; 
+    const product = products.find(p => p.category === category);
+    return product && product.categoryAr ? product.categoryAr : '';
 }
 
 function renderProducts(list) { 
@@ -73,7 +130,11 @@ function renderProducts(list) {
     if (!list.length) { 
         grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">No products found</p>`; 
         return; 
-    } 
+    }
+    
+    // Get current cart state
+    const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+    
     grid.innerHTML = list.map(p => {
         const isUrl = p.image && p.image.startsWith('http');
         const imageHTML = isUrl 
@@ -82,6 +143,24 @@ function renderProducts(list) {
         
         // Check if out of stock
         const outOfStock = p.quantity === 0;
+        const cartItem = localCart.find(i => i.id === p.id);
+        const inCart = cartItem && cartItem.quantity > 0;
+        
+        let buttonHTML;
+        if (outOfStock) {
+            buttonHTML = `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>`;
+        } else if (inCart) {
+            // Show qty stepper
+            buttonHTML = `
+                <div class="grid-qty-control" id="gridQty-${p.id}">
+                    <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, -1, event)">−</button>
+                    <span class="grid-qty-display" id="gridQtyNum-${p.id}">${cartItem.quantity}</span>
+                    <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, 1, event)">+</button>
+                </div>
+            `;
+        } else {
+            buttonHTML = `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`;
+        }
         
         return `
         <div class="product-card ${outOfStock ? 'out-of-stock' : ''}">
@@ -96,10 +175,7 @@ function renderProducts(list) {
                     ${p.nameAr ? `<p class="product-title-ar">${p.nameAr}</p>` : ''}
                 </a>
                 <div class="product-price">AED ${p.price}</div>
-                ${outOfStock 
-                    ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>` 
-                    : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`
-                }
+                ${buttonHTML}
             </div>
         </div>
     `}).join(""); 
@@ -150,6 +226,8 @@ function searchProducts() {
 }
 
 function addToCart(id, event) { 
+    if (event) event.stopPropagation();
+    
     const product = products.find(p => p.id === id);
     
     // Check stock
@@ -171,7 +249,23 @@ function addToCart(id, event) {
     } else { 
         cart.push({ ...product, quantity: 1 }); 
     } 
-    saveCart(); 
+    saveCart();
+    
+    // Transform button to qty stepper
+    const btn = event ? event.target : null;
+    if (btn && btn.classList.contains('add-to-cart')) {
+        const qty = cart.find(i => i.id === id)?.quantity || 1;
+        btn.outerHTML = `
+            <div class="grid-qty-control" id="gridQty-${id}">
+                <button class="grid-qty-btn" onclick="gridQtyChange(${id}, -1, event)">−</button>
+                <span class="grid-qty-display" id="gridQtyNum-${id}">${qty}</span>
+                <button class="grid-qty-btn" onclick="gridQtyChange(${id}, 1, event)">+</button>
+            </div>
+        `;
+    }
+    
+    // Update cart counts immediately
+    updateCartCounts();
     updateCart(); 
     
     // Show grand popup
@@ -236,17 +330,6 @@ function closeCartPopup() {
 function updateCart() {
     // *** FIX: Always sync cart from localStorage first ***
     cart = JSON.parse(localStorage.getItem("cart")) || [];
-    
-    // *** FIX: Update cart prices from current product data ***
-    cart = cart.map(item => {
-        const currentProduct = products.find(p => p.id === item.id);
-        if (currentProduct && currentProduct.price !== item.price) {
-            showPriceToast(item.name, item.price, currentProduct.price);
-            return { ...item, price: currentProduct.price };
-        }
-        return item;
-    });
-    saveCart();
     
     const cartItems = document.getElementById("cartItems"); 
     const cartCount = document.getElementById("cartCount"); 
@@ -431,7 +514,13 @@ function removeFromCart(id) {
     cart = cart.filter(i => i.id !== id); 
     upsellUsed = false;
     saveCart(); 
-    updateCart(); 
+    updateCart();
+    
+    // Reset grid button if visible
+    const gridQty = document.getElementById(`gridQty-${id}`);
+    if (gridQty) {
+        gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)">Add to Cart | أضف إلى السلة</button>`;
+    }
 }
 
 function toggleCart() { 
@@ -594,13 +683,6 @@ window.onload = () => {
         bottomHomeBtn.classList.add("home-active");
         
         bottomHomeBtn.onclick = function() {
-            // If not on index page, navigate to it
-            const path = window.location.pathname;
-            if (!path.endsWith('index.html') && !path.endsWith('/') && path !== '/') {
-                window.location.href = 'index.html';
-                return;
-            }
-            
             const cartSidebar = document.getElementById("cartSidebar");
             if (cartSidebar.classList.contains("active")) {
                 cartSidebar.classList.remove("active");
@@ -630,61 +712,20 @@ window.onload = () => {
             toggleMobileMenu();
         };
     }
-};
-
-function showPriceToast(productName, oldPrice, newPrice) {
-    // Remove existing toast if any
-    const existing = document.getElementById('priceToast');
-    if (existing) existing.remove();
     
-    const toast = document.createElement('div');
-    toast.id = 'priceToast';
-    toast.innerHTML = `
-        <span>💰 Price updated: ${productName} is now AED ${newPrice}</span>
-        <button onclick="this.parentElement.remove()">✕</button>
-    `;
-    toast.style.cssText = `
-        position: fixed;
-        bottom: 90px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        z-index: 9999;
-        font-size: 0.9rem;
-        max-width: 90%;
-        animation: toastSlideUp 0.3s ease;
-    `;
-    toast.querySelector('button').style.cssText = `
-        background: rgba(255,255,255,0.2);
-        border: none;
-        color: white;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 0.8rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    `;
-    
-    // Add animation keyframes if not exists
-    if (!document.getElementById('toastStyles')) {
-        const style = document.createElement('style');
-        style.id = 'toastStyles';
-        style.textContent = `@keyframes toastSlideUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }`;
-        document.head.appendChild(style);
+    // Handle account button in bottom nav
+    const bottomAccountBtn = document.getElementById("bottomAccountBtn");
+    if (bottomAccountBtn) {
+        bottomAccountBtn.onclick = function() {
+            const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
+            if (token) {
+                window.location.href = 'account.html';
+            } else {
+                window.location.href = 'login.html';
+            }
+        };
     }
-    
-    document.body.appendChild(toast);
-}
+};
 
 async function checkout() {
     const btn = document.getElementById("stripeBtn");
