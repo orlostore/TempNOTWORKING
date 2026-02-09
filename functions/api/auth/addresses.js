@@ -12,7 +12,7 @@ export async function onRequestGet(context) {
         }
         
         const { results } = await DB.prepare(`
-            SELECT id, label, address_line1, address_line2, city, emirate, is_default
+            SELECT id, full_name, phone, street, building, area, emirate, landmark, address_type, is_default
             FROM customer_addresses
             WHERE customer_id = ?
             ORDER BY is_default DESC, id DESC
@@ -39,10 +39,11 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'Unauthorized' }, { status: 401 });
         }
         
-        const { label, address_line1, address_line2, city, emirate, is_default } = await request.json();
+        const { full_name, phone, street, building, area, emirate, landmark, address_type, is_default } = await request.json();
         
-        if (!address_line1 || !city || !emirate) {
-            return Response.json({ error: 'Address, city and emirate are required' }, { status: 400 });
+        // Validate required fields
+        if (!full_name || !phone || !street || !building || !area || !emirate) {
+            return Response.json({ error: 'Please fill all required fields' }, { status: 400 });
         }
         
         // If setting as default, unset other defaults first
@@ -53,15 +54,18 @@ export async function onRequestPost(context) {
         }
         
         const result = await DB.prepare(`
-            INSERT INTO customer_addresses (customer_id, label, address_line1, address_line2, city, emirate, is_default)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO customer_addresses (customer_id, full_name, phone, street, building, area, emirate, landmark, address_type, is_default)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).bind(
             customer.id,
-            label || 'Home',
-            address_line1,
-            address_line2 || '',
-            city,
+            full_name,
+            phone,
+            street,
+            building,
+            area,
             emirate,
+            landmark || '',
+            address_type || 'Home',
             is_default ? 1 : 0
         ).run();
         
