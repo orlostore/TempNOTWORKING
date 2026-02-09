@@ -1,18 +1,596 @@
-customerName').textContent = name;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | ORLO</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css?v=4">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .account-container {
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+        
+        .account-header {
+            background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
+            color: white;
+            padding: 30px 20px;
+        }
+        
+        .account-header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .account-header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .account-header-left img {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .account-welcome h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .account-welcome p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .account-header-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: #e07856;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #c96644;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .account-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .account-tabs {
+            display: flex;
+            gap: 5px;
+            background: white;
+            padding: 5px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+        
+        .account-tab {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #666;
+            border-radius: 8px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .account-tab:hover {
+            background: #f0f0f0;
+        }
+        
+        .account-tab.active {
+            background: #2c4a5c;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header h2 {
+            font-size: 1.1rem;
+            color: #2c4a5c;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .order-item {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .order-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .order-id {
+            font-weight: 700;
+            color: #2c4a5c;
+        }
+        
+        .order-date {
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        .order-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .order-status.pending { background: #fff3cd; color: #856404; }
+        .order-status.shipped { background: #d4edda; color: #155724; }
+        .order-status.delivered { background: #cce5ff; color: #004085; }
+        
+        .order-body { padding: 15px 20px; }
+        .order-products { margin-bottom: 15px; }
+        
+        .order-product {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+        }
+        
+        .order-product:last-child { border-bottom: none; }
+        
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 10px;
+            border-top: 2px solid #eee;
+            font-weight: 700;
+            color: #2c4a5c;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #e07856;
+        }
+        
+        .form-group input:disabled {
+            background: #f5f5f5;
+            color: #999;
+        }
+        
+        .address-card {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .address-card.default { border-color: #e07856; }
+        
+        .address-default-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e07856;
+            color: white;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .address-name { font-weight: 600; color: #2c4a5c; margin-bottom: 5px; }
+        .address-details { color: #666; font-size: 0.9rem; line-height: 1.6; }
+        .address-actions { margin-top: 15px; display: flex; gap: 10px; }
+        
+        .btn-small { padding: 6px 14px; font-size: 0.8rem; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        
+        .empty-state { text-align: center; padding: 60px 20px; color: #666; }
+        .empty-state-icon { font-size: 4rem; margin-bottom: 15px; }
+        .empty-state h3 { margin-bottom: 10px; color: #2c4a5c; }
+        
+        .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
+        .alert-success { background: #d4edda; color: #155724; }
+        .alert-error { background: #f8d7da; color: #721c24; }
+        
+        .loading { text-align: center; padding: 40px; color: #666; }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #e07856;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="account-container">
+        <div class="account-header">
+            <div class="account-header-inner">
+                <div class="account-header-left">
+                    <a href="/"><img src="logo.png" alt="ORLO"></a>
+                    <div class="account-welcome">
+                        <h1>Hello, <span id="customerName">Customer</span>!</h1>
+                        <p>مرحباً بك في حسابك</p>
+                    </div>
+                </div>
+                <div class="account-header-actions">
+                    <a href="/" class="btn btn-outline">🛒 Continue Shopping</a>
+                    <button class="btn btn-primary" onclick="logout()">Logout | خروج</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="account-content">
+            <div class="account-tabs">
+                <button class="account-tab active" onclick="switchTab('orders')">📦 Orders | طلباتي</button>
+                <button class="account-tab" onclick="switchTab('profile')">👤 Profile | الملف الشخصي</button>
+                <button class="account-tab" onclick="switchTab('addresses')">📍 Addresses | العناوين</button>
+            </div>
+            
+            <div id="ordersTab" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📦 My Orders | طلباتي</h2>
+                    </div>
+                    <div class="card-body" id="ordersContainer">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                            <div>Loading orders...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="profileTab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>👤 My Profile | الملف الشخصي</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="profileAlert"></div>
+                        <form id="profileForm" onsubmit="updateProfile(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Full Name | الاسم الكامل</label>
+                                    <input type="text" id="profileName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email | البريد الإلكتروني</label>
+                                    <input type="email" id="profileEmail" disabled>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Phone | رقم الهاتف</label>
+                                    <input type="tel" id="profilePhone" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes | حفظ التغييرات</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>🔒 Change Password | تغيير كلمة المرور</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="passwordAlert"></div>
+                        <form id="passwordForm" onsubmit="changePassword(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Current Password | كلمة المرور الحالية</label>
+                                    <input type="password" id="currentPassword" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>New Password | كلمة المرور الجديدة</label>
+                                    <input type="password" id="newPassword" required minlength="8">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Password | تحديث كلمة المرور</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="addressesTab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📍 Saved Addresses | العناوين المحفوظة</h2>
+                        <button class="btn btn-primary btn-small" onclick="showAddAddress()">+ Add Address</button>
+                    </div>
+                    <div class="card-body" id="addressesContainer">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                            <div>Loading addresses...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
+        const customerData = JSON.parse(localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer') || 'null');
+        
+        if (!token || !customerData) {
+            window.location.href = 'login.html';
+        }
+        
+        document.getElementById('customerName').textContent = customerData?.name || 'Customer';
+        document.getElementById('profileName').value = customerData?.name || '';
+        document.getElementById('profileEmail').value = customerData?.email || '';
+        document.getElementById('profilePhone').value = customerData?.phone || '';
+        
+        function switchTab(tabName) {
+            document.querySelectorAll('.account-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+            if (tabName === 'orders') loadOrders();
+            if (tabName === 'addresses') loadAddresses();
+        }
+        
+        function logout() {
+            localStorage.removeItem('orlo_token');
+            localStorage.removeItem('orlo_customer');
+            sessionStorage.removeItem('orlo_token');
+            sessionStorage.removeItem('orlo_customer');
+            window.location.href = '/';
+        }
+        
+        async function loadOrders() {
+            const container = document.getElementById('ordersContainer');
+            try {
+                const response = await fetch('/api/auth/orders', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await response.json();
+                
+                if (data.orders && data.orders.length > 0) {
+                    container.innerHTML = data.orders.map(order => {
+                        const date = new Date(order.created * 1000);
+                        const dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                        return `
+                            <div class="order-item">
+                                <div class="order-header">
+                                    <div>
+                                        <span class="order-id">#${order.id.slice(-8).toUpperCase()}</span>
+                                        <span class="order-date">${dateStr}</span>
+                                    </div>
+                                    <span class="order-status ${order.status}">${order.status}</span>
+                                </div>
+                                <div class="order-body">
+                                    <div class="order-products">
+                                        ${order.items.map(item => `
+                                            <div class="order-product">
+                                                <span>${item.name} × ${item.quantity}</span>
+                                                <span>AED ${(item.amount / 100).toFixed(2)}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                    <div class="order-total">
+                                        <span>Total</span>
+                                        <span>AED ${(order.amount_total / 100).toFixed(2)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
                 } else {
-                    document.getElementById('profileAlert').innerHTML = 
-                        `<div class="alert alert-error">${data.error || 'Failed to update'}</div>`;
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <h3>No orders yet</h3>
+                            <p>Start shopping to see your orders here!</p>
+                            <a href="/" class="btn btn-primary" style="margin-top:15px;">Shop Now</a>
+                        </div>
+                    `;
                 }
             } catch (error) {
-                document.getElementById('profileAlert').innerHTML = 
-                    '<div class="alert alert-error">Connection error</div>';
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <h3>Error loading orders</h3>
+                        <p>Please try again later</p>
+                    </div>
+                `;
             }
         }
         
-        // Change password
+        async function loadAddresses() {
+            const container = document.getElementById('addressesContainer');
+            try {
+                const response = await fetch('/api/auth/addresses', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await response.json();
+                
+                if (data.addresses && data.addresses.length > 0) {
+                    container.innerHTML = data.addresses.map(addr => `
+                        <div class="address-card ${addr.is_default ? 'default' : ''}">
+                            ${addr.is_default ? '<span class="address-default-badge">Default</span>' : ''}
+                            <div class="address-name">${addr.label || 'Address'}</div>
+                            <div class="address-details">
+                                ${addr.address_line1}<br>
+                                ${addr.address_line2 ? addr.address_line2 + '<br>' : ''}
+                                ${addr.city}, ${addr.emirate}<br>
+                                UAE
+                            </div>
+                            <div class="address-actions">
+                                ${!addr.is_default ? `<button class="btn btn-secondary btn-small" onclick="setDefaultAddress(${addr.id})">Set Default</button>` : ''}
+                                <button class="btn btn-danger btn-small" onclick="deleteAddress(${addr.id})">Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📍</div>
+                            <h3>No saved addresses</h3>
+                            <p>Add an address for faster checkout</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <h3>Error loading addresses</h3>
+                    </div>
+                `;
+            }
+        }
+        
+        async function updateProfile(e) {
+            e.preventDefault();
+            const name = document.getElementById('profileName').value;
+            const phone = document.getElementById('profilePhone').value;
+            
+            try {
+                const response = await fetch('/api/auth/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ name, phone })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('profileAlert').innerHTML = '<div class="alert alert-success">Profile updated successfully!</div>';
+                    customerData.name = name;
+                    customerData.phone = phone;
+                    localStorage.setItem('orlo_customer', JSON.stringify(customerData));
+                    document.getElementById('customerName').textContent = name;
+                } else {
+                    document.getElementById('profileAlert').innerHTML = `<div class="alert alert-error">${data.error || 'Failed to update'}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('profileAlert').innerHTML = '<div class="alert alert-error">Connection error</div>';
+            }
+        }
+        
         async function changePassword(e) {
             e.preventDefault();
-            
             const currentPassword = document.getElementById('currentPassword').value;
             const newPassword = document.getElementById('newPassword').value;
             
@@ -25,24 +603,19 @@ customerName').textContent = name;
                     },
                     body: JSON.stringify({ currentPassword, newPassword })
                 });
-                
                 const data = await response.json();
                 
                 if (data.success) {
-                    document.getElementById('passwordAlert').innerHTML = 
-                        '<div class="alert alert-success">Password changed successfully!</div>';
+                    document.getElementById('passwordAlert').innerHTML = '<div class="alert alert-success">Password changed successfully!</div>';
                     document.getElementById('passwordForm').reset();
                 } else {
-                    document.getElementById('passwordAlert').innerHTML = 
-                        `<div class="alert alert-error">${data.error || 'Failed to change password'}</div>`;
+                    document.getElementById('passwordAlert').innerHTML = `<div class="alert alert-error">${data.error || 'Failed to change password'}</div>`;
                 }
             } catch (error) {
-                document.getElementById('passwordAlert').innerHTML = 
-                    '<div class="alert alert-error">Connection error</div>';
+                document.getElementById('passwordAlert').innerHTML = '<div class="alert alert-error">Connection error</div>';
             }
         }
         
-        // Show add address modal (simplified - just prompt for now)
         function showAddAddress() {
             alert('Add address feature coming soon!');
         }
@@ -61,7 +634,6 @@ customerName').textContent = name;
         
         async function deleteAddress(id) {
             if (!confirm('Delete this address?')) return;
-            
             try {
                 await fetch('/api/auth/addresses/' + id, {
                     method: 'DELETE',
@@ -73,87 +645,6 @@ customerName').textContent = name;
             }
         }
         
-        // Load orders on page load
-        loadOrders();
-    </script>
-</body>
-</html>
-customerName').textContent = name;
-                } else {
-                    document.getElementById('profileAlert').innerHTML = 
-                        `<div class="alert alert-error">${data.error || 'Failed to update'}</div>`;
-                }
-            } catch (error) {
-                document.getElementById('profileAlert').innerHTML = 
-                    '<div class="alert alert-error">Connection error</div>';
-            }
-        }
-        
-        // Change password
-        async function changePassword(e) {
-            e.preventDefault();
-            
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            
-            try {
-                const response = await fetch('/api/auth/password', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({ currentPassword, newPassword })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    document.getElementById('passwordAlert').innerHTML = 
-                        '<div class="alert alert-success">Password changed successfully!</div>';
-                    document.getElementById('passwordForm').reset();
-                } else {
-                    document.getElementById('passwordAlert').innerHTML = 
-                        `<div class="alert alert-error">${data.error || 'Failed to change password'}</div>`;
-                }
-            } catch (error) {
-                document.getElementById('passwordAlert').innerHTML = 
-                    '<div class="alert alert-error">Connection error</div>';
-            }
-        }
-        
-        // Show add address modal
-        function showAddAddress() {
-            alert('Add address feature coming soon!');
-        }
-        
-        async function setDefaultAddress(id) {
-            try {
-                await fetch('/api/auth/addresses/' + id + '/default', {
-                    method: 'PUT',
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-                loadAddresses();
-            } catch (error) {
-                alert('Error setting default address');
-            }
-        }
-        
-        async function deleteAddress(id) {
-            if (!confirm('Delete this address?')) return;
-            
-            try {
-                await fetch('/api/auth/addresses/' + id, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-                loadAddresses();
-            } catch (error) {
-                alert('Error deleting address');
-            }
-        }
-        
-        // Load orders on page load
         loadOrders();
     </script>
 </body>
