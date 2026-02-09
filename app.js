@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "971XXXXXXXXX";
+const WHATSAPP_NUMBER = "971XXXXXXXXX"; 
 
 // === FREE DELIVERY THRESHOLD - Change this value to adjust ===
 const FREE_DELIVERY_THRESHOLD = 75;
