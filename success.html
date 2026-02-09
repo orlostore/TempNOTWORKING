@@ -7,12 +7,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: linear-gradient(135deg, #2c4a5c 0%, #1a3a4a 100%);
@@ -23,7 +18,7 @@
             justify-content: center;
             padding: 2rem;
         }
-
+        .arabic-text { font-family: 'Almarai', sans-serif; direction: rtl; }
         .success-container {
             background: white;
             border-radius: 20px;
@@ -33,27 +28,14 @@
             overflow: hidden;
             animation: slideUp 0.6s ease-out;
         }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .success-header {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             padding: 3rem 2rem;
             text-align: center;
         }
-
         .checkmark-circle {
-            width: 100px;
-            height: 100px;
+            width: 100px; height: 100px;
             background: white;
             border-radius: 50%;
             display: flex;
@@ -63,57 +45,13 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             animation: scaleIn 0.5s ease-out 0.3s both;
         }
-
-        @keyframes scaleIn {
-            from {
-                transform: scale(0);
-            }
-            to {
-                transform: scale(1);
-            }
-        }
-
-        .checkmark {
-            width: 50px;
-            height: 50px;
-            stroke: #28a745;
-            stroke-width: 3;
-            fill: none;
-            animation: drawCheck 0.6s ease-out 0.6s both;
-        }
-
-        @keyframes drawCheck {
-            from {
-                stroke-dashoffset: 100;
-            }
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        .success-header h1 {
-            color: white;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .success-header p {
-            color: rgba(255,255,255,0.9);
-            font-size: 1.1rem;
-        }
-
-        .success-header .arabic-text {
-            font-family: 'Almarai', sans-serif;
-            direction: rtl;
-            margin-top: 0.5rem;
-            font-size: 1.3rem;
-        }
-
-        .success-body {
-            padding: 2.5rem 2rem;
-        }
-
+        @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
+        .checkmark { width: 50px; height: 50px; stroke: #28a745; stroke-width: 3; fill: none; animation: drawCheck 0.6s ease-out 0.6s both; }
+        @keyframes drawCheck { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+        .success-header h1 { color: white; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .success-header p { color: rgba(255,255,255,0.9); font-size: 1.1rem; }
+        .success-header .arabic-text { margin-top: 0.5rem; font-size: 1.3rem; }
+        .success-body { padding: 2.5rem 2rem; }
         .info-box {
             background: #f8f9fa;
             border-radius: 12px;
@@ -121,58 +59,69 @@
             margin-bottom: 1.5rem;
             border-left: 4px solid #e07856;
         }
+        .info-box h3 { color: #2c4a5c; font-size: 1rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .info-box p { color: #555; font-size: 0.95rem; line-height: 1.6; }
+        .info-box .arabic-text { text-align: right; margin-top: 0.5rem; color: #666; }
 
-        .info-box h3 {
-            color: #2c4a5c;
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        /* Guest to Account Box */
+        .create-account-box {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid #2c4a5c;
         }
-
-        .info-box p {
-            color: #555;
+        .create-account-box h3 { color: #2c4a5c; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .create-account-box > p { color: #555; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.5; }
+        .create-account-box .arabic-text { display: block; text-align: right; margin-top: 0.25rem; color: #666; }
+        .guest-info { background: white; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+        .guest-info-row { display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.9rem; border-bottom: 1px solid #eee; }
+        .guest-info-row:last-child { border-bottom: none; }
+        .guest-info-row span:first-child { color: #666; }
+        .guest-info-row span:last-child { color: #2c4a5c; font-weight: 500; }
+        .password-field { margin-bottom: 1rem; }
+        .password-field label { display: block; font-size: 0.9rem; font-weight: 500; color: #2c4a5c; margin-bottom: 0.4rem; }
+        .password-field label .arabic-text { float: right; font-weight: 400; color: #666; }
+        .password-field input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 0.95rem;
-            line-height: 1.6;
+            font-family: 'Inter', system-ui, sans-serif;
         }
-
-        .info-box .arabic-text {
-            font-family: 'Almarai', sans-serif;
-            direction: rtl;
-            text-align: right;
-            margin-top: 0.5rem;
-            color: #666;
+        .password-field input:focus { outline: none; border-color: #2c4a5c; }
+        .create-account-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', system-ui, sans-serif;
         }
+        .create-account-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(44, 74, 92, 0.3); }
+        .create-account-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .create-account-btn .arabic-text { display: block; font-size: 0.85rem; margin-top: 0.2rem; opacity: 0.9; }
+        .account-created-msg { text-align: center; padding: 1rem; }
+        .account-created-msg .success-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .account-created-msg h4 { color: #28a745; margin-bottom: 0.5rem; }
+        .account-created-msg p { font-size: 0.9rem; color: #666; }
+        .account-created-msg a { color: #e07856; font-weight: 600; }
+        .skip-link { text-align: center; margin-top: 0.75rem; }
+        .skip-link a { color: #999; font-size: 0.85rem; text-decoration: none; }
+        .skip-link a:hover { color: #666; }
+        .alert { padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem; }
+        .alert-error { background: #f8d7da; color: #721c24; }
 
-        .timeline {
-            display: flex;
-            justify-content: space-between;
-            margin: 2rem 0;
-            position: relative;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 10%;
-            right: 10%;
-            height: 3px;
-            background: #e0e0e0;
-            z-index: 1;
-        }
-
-        .timeline-step {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            flex: 1;
-        }
-
+        .timeline { display: flex; justify-content: space-between; margin: 2rem 0; position: relative; }
+        .timeline::before { content: ''; position: absolute; top: 20px; left: 10%; right: 10%; height: 3px; background: #e0e0e0; z-index: 1; }
+        .timeline-step { text-align: center; position: relative; z-index: 2; flex: 1; }
         .timeline-icon {
-            width: 45px;
-            height: 45px;
+            width: 45px; height: 45px;
             background: #28a745;
             border-radius: 50%;
             display: flex;
@@ -183,31 +132,10 @@
             font-size: 1.2rem;
             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
         }
-
-        .timeline-step:not(.active) .timeline-icon {
-            background: #e0e0e0;
-            color: #999;
-            box-shadow: none;
-        }
-
-        .timeline-step span {
-            font-size: 0.8rem;
-            color: #666;
-            display: block;
-        }
-
-        .timeline-step .arabic-text {
-            font-family: 'Almarai', sans-serif;
-            font-size: 0.75rem;
-            color: #888;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
+        .timeline-step:not(.active) .timeline-icon { background: #e0e0e0; color: #999; box-shadow: none; }
+        .timeline-step span { font-size: 0.8rem; color: #666; display: block; }
+        .timeline-step .arabic-text { font-size: 0.75rem; color: #888; }
+        .btn-group { display: flex; gap: 1rem; margin-top: 1.5rem; }
         .btn {
             flex: 1;
             padding: 1rem 1.5rem;
@@ -217,94 +145,26 @@
             text-decoration: none;
             text-align: center;
             transition: all 0.3s ease;
-            cursor: pointer;
+            font-family: 'Inter', system-ui, sans-serif;
             border: none;
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(44, 74, 92, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(44, 74, 92, 0.4);
-        }
-
-        .btn-secondary {
-            background: #25d366;
-            color: white;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-        }
-
-        .btn .arabic-text {
-            font-family: 'Almarai', sans-serif;
-            display: block;
-            font-size: 0.85rem;
-            margin-top: 0.25rem;
-            opacity: 0.9;
-        }
-
-        .footer-note {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
-            color: #888;
-            font-size: 0.85rem;
-        }
-
-        .footer-note a {
-            color: #e07856;
-            text-decoration: none;
-        }
-
-        .logo {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 1rem;
-        }
+        .btn-primary { background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(44, 74, 92, 0.4); }
+        .btn-secondary { background: #25d366; color: white; }
+        .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); }
+        .btn .arabic-text { display: block; font-size: 0.85rem; margin-top: 0.25rem; opacity: 0.9; }
+        .footer-note { text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #eee; color: #888; font-size: 0.85rem; }
+        .footer-note a { color: #e07856; text-decoration: none; }
 
         @media (max-width: 500px) {
-            .success-container {
-                border-radius: 15px;
-            }
-
-            .success-header {
-                padding: 2rem 1.5rem;
-            }
-
-            .success-header h1 {
-                font-size: 1.5rem;
-            }
-
-            .success-body {
-                padding: 1.5rem;
-            }
-
-            .btn-group {
-                flex-direction: column;
-            }
-
-            .timeline-step span {
-                font-size: 0.7rem;
-            }
-
-            .checkmark-circle {
-                width: 80px;
-                height: 80px;
-            }
-
-            .checkmark {
-                width: 40px;
-                height: 40px;
-            }
+            .success-container { border-radius: 15px; }
+            .success-header { padding: 2rem 1.5rem; }
+            .success-header h1 { font-size: 1.5rem; }
+            .success-body { padding: 1.5rem; }
+            .btn-group { flex-direction: column; }
+            .timeline-step span { font-size: 0.7rem; }
+            .checkmark-circle { width: 80px; height: 80px; }
+            .checkmark { width: 40px; height: 40px; }
         }
     </style>
 </head>
@@ -328,26 +188,49 @@
                 <p class="arabic-text">نحن نجهز طلبك! ستتلقى بريد إلكتروني يحتوي على معلومات التتبع عند شحن طلبك.</p>
             </div>
 
+            <!-- Guest to Account Section -->
+            <div class="create-account-box" id="createAccountBox" style="display: none;">
+                <h3>🎁 Create Your Account</h3>
+                <p>Save your details for faster checkout next time!<span class="arabic-text">احفظ بياناتك لتسوق أسرع في المرة القادمة!</span></p>
+                
+                <div id="accountFormContainer">
+                    <div class="guest-info">
+                        <div class="guest-info-row"><span>Name</span><span id="guestName">-</span></div>
+                        <div class="guest-info-row"><span>Email</span><span id="guestEmail">-</span></div>
+                        <div class="guest-info-row"><span>Phone</span><span id="guestPhone">-</span></div>
+                    </div>
+                    
+                    <div id="accountAlert"></div>
+                    
+                    <div class="password-field">
+                        <label>Create Password <span class="arabic-text">أنشئ كلمة مرور</span></label>
+                        <input type="password" id="guestPassword" placeholder="Min 8 characters" minlength="8">
+                    </div>
+                    
+                    <button class="create-account-btn" id="createAccountBtn" onclick="createGuestAccount()">
+                        Create Account<span class="arabic-text">إنشاء حساب</span>
+                    </button>
+                    
+                    <div class="skip-link"><a href="/" onclick="localStorage.removeItem('cart')">Skip for now</a></div>
+                </div>
+            </div>
+
             <div class="timeline">
                 <div class="timeline-step active">
                     <div class="timeline-icon">✓</div>
-                    <span>Confirmed</span>
-                    <span class="arabic-text">تم التأكيد</span>
+                    <span>Confirmed</span><span class="arabic-text">تم التأكيد</span>
                 </div>
                 <div class="timeline-step">
                     <div class="timeline-icon">📦</div>
-                    <span>Processing</span>
-                    <span class="arabic-text">قيد التجهيز</span>
+                    <span>Processing</span><span class="arabic-text">قيد التجهيز</span>
                 </div>
                 <div class="timeline-step">
                     <div class="timeline-icon">🚚</div>
-                    <span>Shipped</span>
-                    <span class="arabic-text">تم الشحن</span>
+                    <span>Shipped</span><span class="arabic-text">تم الشحن</span>
                 </div>
                 <div class="timeline-step">
                     <div class="timeline-icon">✨</div>
-                    <span>Delivered</span>
-                    <span class="arabic-text">تم التوصيل</span>
+                    <span>Delivered</span><span class="arabic-text">تم التوصيل</span>
                 </div>
             </div>
 
@@ -359,12 +242,10 @@
 
             <div class="btn-group">
                 <a href="/" class="btn btn-primary" onclick="localStorage.removeItem('cart')">
-                    Continue Shopping
-                    <span class="arabic-text">متابعة التسوق</span>
+                    Continue Shopping<span class="arabic-text">متابعة التسوق</span>
                 </a>
                 <a href="mailto:info@orlostore.com" class="btn btn-secondary">
-                    ✉️ Email Support
-                    <span class="arabic-text">الدعم عبر البريد</span>
+                    ✉️ Email Support<span class="arabic-text">الدعم عبر البريد</span>
                 </a>
             </div>
 
@@ -375,8 +256,79 @@
     </div>
 
     <script>
-        // Clear cart on page load
         localStorage.removeItem('cart');
+        
+        const existingToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
+        let guestData = null;
+        try { guestData = JSON.parse(sessionStorage.getItem('orlo_guest_checkout') || 'null'); } catch(e) {}
+        
+        if (guestData && !existingToken) {
+            document.getElementById('createAccountBox').style.display = 'block';
+            document.getElementById('guestName').textContent = guestData.name || '-';
+            document.getElementById('guestEmail').textContent = guestData.email || '-';
+            document.getElementById('guestPhone').textContent = guestData.phone || '-';
+        }
+        
+        async function createGuestAccount() {
+            const password = document.getElementById('guestPassword').value;
+            const alertBox = document.getElementById('accountAlert');
+            const btn = document.getElementById('createAccountBtn');
+            
+            if (!password || password.length < 8) {
+                alertBox.innerHTML = '<div class="alert alert-error">Password must be at least 8 characters</div>';
+                return;
+            }
+            
+            if (!guestData || !guestData.email) {
+                alertBox.innerHTML = '<div class="alert alert-error">Guest data not found</div>';
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.innerHTML = 'Creating...<span class="arabic-text">جاري الإنشاء...</span>';
+            
+            try {
+                const response = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: guestData.name,
+                        email: guestData.email,
+                        phone: guestData.phone || '',
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    localStorage.setItem('orlo_token', data.token);
+                    localStorage.setItem('orlo_customer', JSON.stringify(data.customer));
+                    sessionStorage.removeItem('orlo_guest_checkout');
+                    
+                    document.getElementById('accountFormContainer').innerHTML = `
+                        <div class="account-created-msg">
+                            <div class="success-icon">✅</div>
+                            <h4>Account Created!</h4>
+                            <p>You can now <a href="account.html">view your orders</a> and manage your account.</p>
+                            <p class="arabic-text">يمكنك الآن عرض طلباتك وإدارة حسابك</p>
+                        </div>
+                    `;
+                } else {
+                    if (data.error && data.error.includes('already registered')) {
+                        alertBox.innerHTML = '<div class="alert alert-error">Email already has an account. <a href="login.html" style="color:#721c24;font-weight:600;">Login instead</a></div>';
+                    } else {
+                        alertBox.innerHTML = '<div class="alert alert-error">' + (data.error || 'Failed to create account') + '</div>';
+                    }
+                    btn.disabled = false;
+                    btn.innerHTML = 'Create Account<span class="arabic-text">إنشاء حساب</span>';
+                }
+            } catch (error) {
+                alertBox.innerHTML = '<div class="alert alert-error">Connection error. Please try again.</div>';
+                btn.disabled = false;
+                btn.innerHTML = 'Create Account<span class="arabic-text">إنشاء حساب</span>';
+            }
+        }
     </script>
 </body>
 </html>

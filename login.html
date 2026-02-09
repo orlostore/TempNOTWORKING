@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | ORLO</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css?v=4">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            direction: rtl;
+        }
+        
+        .auth-wrapper {
+            width: 100%;
+            max-width: 420px;
+        }
+        
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+        
+        .back-home:hover {
+            color: #2c4a5c;
+        }
+        
+        .back-home .arabic-text {
+            font-size: 0.95rem;
+        }
+
+        .auth-box {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.1);
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .auth-header {
+            background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+        
+        .auth-header img {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 1rem;
+        }
+        
+        .auth-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-header .arabic-text {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+        
+        .auth-form {
+            padding: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2c4a5c;
+            font-size: 0.95rem;
+        }
+        
+        .form-group label .arabic-text {
+            float: right;
+            font-weight: 400;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #e07856;
+            box-shadow: 0 0 0 3px rgba(224, 120, 86, 0.1);
+        }
+        
+        .form-group input.error {
+            border-color: #dc3545;
+        }
+        
+        .form-error {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 0.4rem;
+            display: none;
+        }
+        
+        .form-error.show {
+            display: block;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #e07856 0%, #c96644 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', system-ui, sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(224, 120, 86, 0.3);
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(224, 120, 86, 0.4);
+        }
+        
+        .auth-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .auth-btn .arabic-text {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+            opacity: 0.95;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            padding: 1.5rem 2rem 2rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .auth-footer p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .auth-footer a {
+            color: #e07856;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .forgot-link {
+            display: block;
+            text-align: right;
+            margin-top: -0.5rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .forgot-link a {
+            color: #666;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .forgot-link a:hover {
+            color: #e07856;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .remember-me input {
+            width: auto;
+            cursor: pointer;
+        }
+        
+        .remember-me label {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #666;
+            cursor: pointer;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <a href="/" class="back-home">← Back to Shop <span class="arabic-text">العودة للمتجر</span></a>
+        
+        <div class="auth-box">
+            <div class="auth-header">
+                <img src="logo.png" alt="ORLO" onerror="this.style.display='none'">
+                <h1>Welcome Back</h1>
+                <p class="arabic-text">مرحباً بعودتك</p>
+            </div>
+            
+            <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+                <div id="alertBox"></div>
+                
+                <div class="form-group">
+                    <label>Email <span class="arabic-text">البريد الإلكتروني</span></label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    <div class="form-error" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Password <span class="arabic-text">كلمة المرور</span></label>
+                    <input type="password" id="password" name="password" required placeholder="Enter password">
+                    <div class="form-error" id="passwordError"></div>
+                </div>
+                
+                <div class="forgot-link">
+                    <a href="forgot-password.html">Forgot password? <span class="arabic-text">نسيت كلمة المرور؟</span></a>
+                </div>
+                
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember me <span class="arabic-text">تذكرني</span></label>
+                </div>
+                
+                <button type="submit" class="auth-btn" id="submitBtn">
+                    Login
+                    <span class="arabic-text">تسجيل الدخول</span>
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="signup.html">Sign Up <span class="arabic-text">إنشاء حساب</span></a></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Check if already logged in
+        if (localStorage.getItem('orlo_token')) {
+            window.location.href = 'account.html';
+        }
+        
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        }
+        
+        function clearErrors() {
+            document.querySelectorAll('.form-error').forEach(el => {
+                el.classList.remove('show');
+                el.textContent = '';
+            });
+            document.querySelectorAll('input').forEach(el => el.classList.remove('error'));
+        }
+        
+        function showError(field, message) {
+            const input = document.getElementById(field);
+            const error = document.getElementById(field + 'Error');
+            input.classList.add('error');
+            error.textContent = message;
+            error.classList.add('show');
+        }
+        
+        async function handleLogin(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            // Validation
+            let hasError = false;
+            
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError('email', 'Please enter a valid email');
+                hasError = true;
+            }
+            
+            if (password.length < 1) {
+                showError('password', 'Please enter your password');
+                hasError = true;
+            }
+            
+            if (hasError) return;
+            
+            // Submit
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Logging in...';
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, remember })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Login successful! Redirecting...', 'success');
+                    
+                    if (remember) {
+                        localStorage.setItem('orlo_token', data.token);
+                        localStorage.setItem('orlo_customer', JSON.stringify(data.customer));
+                    } else {
+                        sessionStorage.setItem('orlo_token', data.token);
+                        sessionStorage.setItem('orlo_customer', JSON.stringify(data.customer));
+                    }
+                    
+                    // Check if there's a redirect URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirect = urlParams.get('redirect') || 'account.html';
+                    
+                    setTimeout(() => {
+                        window.location.href = redirect;
+                    }, 1000);
+                } else {
+                    showAlert(data.error || 'Invalid email or password', 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Login <span class="arabic-text">تسجيل الدخول</span>';
+                }
+            } catch (error) {
+                showAlert('Connection error. Please try again.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Login <span class="arabic-text">تسجيل الدخول</span>';
+            }
+        }
+    </script>
+</body>
+</html>
