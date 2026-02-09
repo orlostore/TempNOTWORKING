@@ -10,17 +10,17 @@
     <style>
         .account-container {
             min-height: 100vh;
-            background: #f8f9fa;
+            background: var(--bg);
         }
         
         .account-header {
-            background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, #1e3545 100%);
             color: white;
             padding: 30px 20px;
         }
         
         .account-header-inner {
-            max-width: 1200px;
+            max-width: 1180px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -41,13 +41,16 @@
         }
         
         .account-welcome h1 {
-            font-size: 1.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.34rem;
+            font-weight: 700;
             margin-bottom: 5px;
         }
         
         .account-welcome p {
+            font-family: 'Almarai', sans-serif;
             opacity: 0.9;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
         
         .account-header-actions {
@@ -56,10 +59,11 @@
         }
         
         .btn {
+            font-family: 'Inter', 'Almarai', sans-serif;
             padding: 10px 20px;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             cursor: pointer;
             text-decoration: none;
             display: inline-flex;
@@ -70,7 +74,7 @@
         }
         
         .btn-primary {
-            background: #e07856;
+            background: var(--accent);
             color: white;
         }
         
@@ -89,7 +93,7 @@
         }
         
         .account-content {
-            max-width: 1200px;
+            max-width: 1180px;
             margin: 0 auto;
             padding: 30px 20px;
         }
@@ -106,12 +110,13 @@
         }
         
         .account-tab {
+            font-family: 'Inter', 'Almarai', sans-serif;
             padding: 12px 24px;
             border: none;
             background: transparent;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #666;
             border-radius: 8px;
             transition: all 0.2s;
@@ -123,7 +128,7 @@
         }
         
         .account-tab.active {
-            background: #2c4a5c;
+            background: var(--primary);
             color: white;
         }
         
@@ -152,8 +157,10 @@
         }
         
         .card-header h2 {
-            font-size: 1.1rem;
-            color: #2c4a5c;
+            font-family: 'Inter', 'Almarai', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
         }
         
         .card-body {
@@ -178,19 +185,23 @@
         }
         
         .order-id {
+            font-family: 'Inter', sans-serif;
             font-weight: 700;
-            color: #2c4a5c;
+            font-size: 0.85rem;
+            color: var(--primary);
         }
         
         .order-date {
+            font-family: 'Inter', sans-serif;
             color: #666;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
         }
         
         .order-status {
+            font-family: 'Inter', sans-serif;
             padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             font-weight: 600;
             text-transform: uppercase;
         }
@@ -203,22 +214,25 @@
         .order-products { margin-bottom: 15px; }
         
         .order-product {
+            font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
             border-bottom: 1px solid #f0f0f0;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
         
         .order-product:last-child { border-bottom: none; }
         
         .order-total {
+            font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: space-between;
             padding-top: 10px;
             border-top: 2px solid #eee;
             font-weight: 700;
-            color: #2c4a5c;
+            font-size: 0.9rem;
+            color: var(--primary);
         }
         
         .form-row {
@@ -235,27 +249,29 @@
         .form-group { margin-bottom: 20px; }
         
         .form-group label {
+            font-family: 'Inter', 'Almarai', sans-serif;
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
             color: #333;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
         
         .form-group input,
         .form-group select {
+            font-family: 'Inter', sans-serif;
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             transition: border-color 0.2s;
         }
         
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #e07856;
+            border-color: var(--accent);
         }
         
         .form-group input:disabled {
@@ -264,8 +280,9 @@
         }
         
         .form-group input::placeholder {
+            font-family: 'Inter', sans-serif;
             color: #999;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
         }
         
         .address-card {
@@ -276,44 +293,103 @@
             position: relative;
         }
         
-        .address-card.default { border-color: #e07856; }
+        .address-card.default { border-color: var(--accent); }
         
         .address-default-badge {
+            font-family: 'Inter', sans-serif;
             position: absolute;
             top: 10px;
             right: 10px;
-            background: #e07856;
+            background: var(--accent);
             color: white;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             padding: 3px 10px;
             border-radius: 10px;
             font-weight: 600;
         }
         
-        .address-name { font-weight: 600; color: #2c4a5c; margin-bottom: 5px; }
-        .address-details { color: #666; font-size: 0.9rem; line-height: 1.6; }
-        .address-actions { margin-top: 15px; display: flex; gap: 10px; }
+        .address-name {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
         
-        .btn-small { padding: 6px 14px; font-size: 0.8rem; }
-        .btn-danger { background: #dc3545; color: white; }
-        .btn-secondary { background: #6c757d; color: white; }
+        .address-details {
+            font-family: 'Inter', sans-serif;
+            color: #666;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
         
-        .empty-state { text-align: center; padding: 60px 20px; color: #666; }
-        .empty-state-icon { font-size: 4rem; margin-bottom: 15px; }
-        .empty-state h3 { margin-bottom: 10px; color: #2c4a5c; }
+        .address-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
         
-        .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
+        .btn-small {
+            padding: 6px 14px;
+            font-size: 0.7rem;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        
+        .empty-state h3 {
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: var(--primary);
+        }
+        
+        .empty-state p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+        }
+        
+        .alert {
+            font-family: 'Inter', sans-serif;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+        }
+        
         .alert-success { background: #d4edda; color: #155724; }
         .alert-error { background: #f8d7da; color: #721c24; }
         
-        .loading { text-align: center; padding: 40px; color: #666; }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
         
         .loading-spinner {
             display: inline-block;
             width: 30px;
             height: 30px;
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #e07856;
+            border-top: 3px solid var(--accent);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 10px;
@@ -361,8 +437,10 @@
         }
         
         .modal-header h2 {
-            font-size: 1.2rem;
-            color: #2c4a5c;
+            font-family: 'Inter', 'Almarai', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
         }
         
         .modal-close {
@@ -384,7 +462,7 @@
         }
         
         .modal-body .form-group label {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             margin-bottom: 6px;
         }
         
@@ -404,7 +482,8 @@
         }
         
         .checkbox-group label {
-            font-size: 0.9rem;
+            font-family: 'Inter', 'Almarai', sans-serif;
+            font-size: 0.8rem;
             color: #333;
             cursor: pointer;
         }
@@ -429,7 +508,8 @@
         }
         
         .radio-option label {
-            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
             color: #333;
             cursor: pointer;
             margin-bottom: 0;
@@ -450,6 +530,13 @@
         
         .btn-cancel:hover {
             background: #e0e0e0;
+        }
+
+        /* Arabic text styling */
+        .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.7rem;
+            color: #888;
         }
     </style>
 </head>
@@ -502,17 +589,17 @@
                         <form id="profileForm" onsubmit="updateProfile(event)">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Full Name | الاسم الكامل</label>
+                                    <label>Full Name <span class="arabic-text">| الاسم الكامل</span></label>
                                     <input type="text" id="profileName" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Email | البريد الإلكتروني</label>
+                                    <label>Email <span class="arabic-text">| البريد الإلكتروني</span></label>
                                     <input type="email" id="profileEmail" disabled>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Phone | رقم الهاتف</label>
+                                    <label>Phone <span class="arabic-text">| رقم الهاتف</span></label>
                                     <input type="tel" id="profilePhone" required>
                                 </div>
                             </div>
@@ -530,11 +617,11 @@
                         <form id="passwordForm" onsubmit="changePassword(event)">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Current Password | كلمة المرور الحالية</label>
+                                    <label>Current Password <span class="arabic-text">| كلمة المرور الحالية</span></label>
                                     <input type="password" id="currentPassword" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>New Password | كلمة المرور الجديدة</label>
+                                    <label>New Password <span class="arabic-text">| كلمة المرور الجديدة</span></label>
                                     <input type="password" id="newPassword" required minlength="8">
                                 </div>
                             </div>
@@ -565,39 +652,39 @@
     <div class="modal-overlay" id="addressModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add a new address | إضافة عنوان جديد</h2>
+                <h2>Add a new address <span class="arabic-text">| إضافة عنوان جديد</span></h2>
                 <button class="modal-close" onclick="closeAddressModal()">✕</button>
             </div>
             <div class="modal-body">
                 <div id="addressAlert"></div>
                 <form id="addressForm" onsubmit="saveAddress(event)">
                     <div class="form-group">
-                        <label>Full Name | الاسم الكامل *</label>
+                        <label>Full Name <span class="arabic-text">| الاسم الكامل</span> *</label>
                         <input type="text" id="addrFullName" required placeholder="e.g. Ahmed Ali">
                     </div>
                     
                     <div class="form-group">
-                        <label>Mobile Number | رقم الجوال *</label>
+                        <label>Mobile Number <span class="arabic-text">| رقم الجوال</span> *</label>
                         <input type="tel" id="addrPhone" required placeholder="e.g. 0551234567">
                     </div>
                     
                     <div class="form-group">
-                        <label>Street Name | اسم الشارع *</label>
+                        <label>Street Name <span class="arabic-text">| اسم الشارع</span> *</label>
                         <input type="text" id="addrStreet" required placeholder="e.g. Omar Ibn Al Khattab Street">
                     </div>
                     
                     <div class="form-group">
-                        <label>Building Name/No | اسم/رقم المبنى *</label>
+                        <label>Building Name/No <span class="arabic-text">| اسم/رقم المبنى</span> *</label>
                         <input type="text" id="addrBuilding" required placeholder="e.g. Princess Tower, Apt 1205">
                     </div>
                     
                     <div class="form-group">
-                        <label>Area/District | المنطقة *</label>
+                        <label>Area/District <span class="arabic-text">| المنطقة</span> *</label>
                         <input type="text" id="addrArea" required placeholder="e.g. Dubai Marina">
                     </div>
                     
                     <div class="form-group">
-                        <label>Emirate | الإمارة *</label>
+                        <label>Emirate <span class="arabic-text">| الإمارة</span> *</label>
                         <select id="addrEmirate" required>
                             <option value="">Select Emirate</option>
                             <option value="Dubai">Dubai | دبي</option>
@@ -611,12 +698,12 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Nearest Landmark | أقرب معلم</label>
+                        <label>Nearest Landmark <span class="arabic-text">| أقرب معلم</span></label>
                         <input type="text" id="addrLandmark" placeholder="e.g. Near Galleria Mall">
                     </div>
                     
                     <div class="form-group">
-                        <label>Address Type | نوع العنوان</label>
+                        <label>Address Type <span class="arabic-text">| نوع العنوان</span></label>
                         <div class="radio-group">
                             <div class="radio-option">
                                 <input type="radio" id="typeHome" name="addrType" value="Home" checked>
