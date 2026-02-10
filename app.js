@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "971XXXXXXXXX";
+const WHATSAPP_NUMBER = "971XXXXXXXXX"; 
 
 // === FREE DELIVERY THRESHOLD - Change this value to adjust ===
 const FREE_DELIVERY_THRESHOLD = 75;
@@ -45,61 +45,85 @@ const policies = {
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let upsellUsed = false;
-
-// Helper: Convert to Arabic numerals
-function toArabicNumerals(num) {
-    const arabicNums = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-    return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
-}
-
-// Show limit tooltip on any element
-function showLimitTooltip(element, maxAllowed, isStockLimit) {
-    // Remove any existing tooltip
-    const existingTooltip = document.querySelector('.limit-tooltip');
-    if (existingTooltip) existingTooltip.remove();
-    
-    let messageEn, messageAr;
-    if (isStockLimit) {
-        messageEn = `Only <span class="highlight">${maxAllowed}</span> left in stock`;
-        messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط في المخزون`;
-    } else {
-        messageEn = `Limit of <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
-        messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
-    }
-    
-    const tooltip = document.createElement('div');
-    tooltip.className = 'limit-tooltip';
-    tooltip.innerHTML = `
-        ${messageEn}
-        <span class="tooltip-text-ar">${messageAr}</span>
-        <button class="close-btn" onclick="this.parentElement.remove()">✕</button>
-    `;
-    
-    // Position relative to element
-    const rect = element.getBoundingClientRect();
-    tooltip.style.position = 'fixed';
-    tooltip.style.top = (rect.top - 60) + 'px';
-    tooltip.style.left = (rect.left + rect.width / 2) + 'px';
-    tooltip.style.transform = 'translateX(-50%)';
-    tooltip.style.zIndex = '10000';
-    
-    document.body.appendChild(tooltip);
-    
-    // Auto-remove after 3 seconds
-    setTimeout(() => {
-        if (tooltip.parentElement) {
-            tooltip.classList.add('fade-out');
-            setTimeout(() => tooltip.remove(), 300);
-        }
-    }, 3000);
-}
 let savedUpsellProducts = null;
 let selectedCategory = "All Products";
 let selectedDeliveryZone = localStorage.getItem("deliveryZone") || "dubai";
 
+//PRESS BACK DURING CHECKOUT
+window.addEventListener('pageshow', function(event) {
+    const btn = document.getElementById("stripeBtn");
+    if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = "💳 Pay with Card / الدفع بالبطاقة";
+    }
+});
+
 function saveCart() { localStorage.setItem("cart", JSON.stringify(cart)); }
 function saveDeliveryZone() { localStorage.setItem("deliveryZone", selectedDeliveryZone); }
 function getCategories() { return ["All Products", ...new Set(products.map(p => p.category))]; }
+
+// Update all cart count displays
+function updateCartCounts() {
+    const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+    
+    const cartCount = document.getElementById("cartCount");
+    const bottomCartCount = document.getElementById("bottomCartCount");
+    const mobileCartCount = document.getElementById("mobileCartCount");
+    
+    if (cartCount) cartCount.textContent = totalItems;
+    if (bottomCartCount) bottomCartCount.textContent = totalItems;
+    if (mobileCartCount) mobileCartCount.textContent = totalItems;
+}
+
+// Grid quantity change handler for product cards
+function gridQtyChange(productId, change, event) {
+    if (event) event.stopPropagation();
+    
+    let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const item = localCart.find(i => i.id === productId);
+    const product = products.find(p => p.id === productId);
+    
+    if (!item) return;
+    
+    const newQty = item.quantity + change;
+    
+    // Check max limit
+    if (change > 0) {
+        const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
+        if (newQty > maxAllowed) {
+            return;
+        }
+    }
+    
+    if (newQty <= 0) {
+        // Remove from cart and reset button to original
+        localCart = localCart.filter(i => i.id !== productId);
+        localStorage.setItem("cart", JSON.stringify(localCart));
+        
+        // Reset button to original "Add to Cart"
+        const container = document.getElementById(`gridQty-${productId}`);
+        if (container) {
+            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${productId}, event)">Add to Cart | أضف إلى السلة</button>`;
+        }
+    } else {
+        item.quantity = newQty;
+        localStorage.setItem("cart", JSON.stringify(localCart));
+        
+        // Update qty display
+        const qtyDisplay = document.getElementById(`gridQtyNum-${productId}`);
+        if (qtyDisplay) qtyDisplay.textContent = newQty;
+    }
+    
+    // Sync cart variable
+    cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    // Update cart counts immediately
+    updateCartCounts();
+    
+    // Update cart sidebar if open
+    updateCart();
+}
 function calculateDeliveryFee(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.fee; }
 function getAmountUntilFreeDelivery(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.freeThreshold - subtotal; }
 function generateOrderNumber() { const date = new Date(); const year = date.getFullYear().toString().slice(-2); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const random = Math.floor(Math.random() * 9000) + 1000; return `ORLO-${year}${month}${day}-${random}`; }
@@ -115,7 +139,11 @@ function renderProducts(list) {
     if (!list.length) { 
         grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">No products found</p>`; 
         return; 
-    } 
+    }
+    
+    // Get current cart state
+    const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+    
     grid.innerHTML = list.map(p => {
         const isUrl = p.image && p.image.startsWith('http');
         const imageHTML = isUrl 
@@ -124,6 +152,24 @@ function renderProducts(list) {
         
         // Check if out of stock
         const outOfStock = p.quantity === 0;
+        const cartItem = localCart.find(i => i.id === p.id);
+        const inCart = cartItem && cartItem.quantity > 0;
+        
+        let buttonHTML;
+        if (outOfStock) {
+            buttonHTML = `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>`;
+        } else if (inCart) {
+            // Show qty stepper
+            buttonHTML = `
+                <div class="grid-qty-control" id="gridQty-${p.id}">
+                    <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, -1, event)">−</button>
+                    <span class="grid-qty-display" id="gridQtyNum-${p.id}">${cartItem.quantity}</span>
+                    <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, 1, event)">+</button>
+                </div>
+            `;
+        } else {
+            buttonHTML = `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`;
+        }
         
         return `
         <div class="product-card ${outOfStock ? 'out-of-stock' : ''}">
@@ -138,10 +184,7 @@ function renderProducts(list) {
                     ${p.nameAr ? `<p class="product-title-ar">${p.nameAr}</p>` : ''}
                 </a>
                 <div class="product-price">AED ${p.price}</div>
-                ${outOfStock 
-                    ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>` 
-                    : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`
-                }
+                ${buttonHTML}
             </div>
         </div>
     `}).join(""); 
@@ -204,16 +247,10 @@ function addToCart(id, event) {
     const item = cart.find(i => i.id === id);
     const currentInCart = item ? item.quantity : 0;
     
-    // Cap at 10 OR available stock (whichever is lower)
+    // Silent cap at 10 OR available stock (whichever is lower)
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
     if (currentInCart >= maxAllowed) {
-        // Show limit tooltip
-        const btn = event ? event.target : null;
-        if (btn) {
-            const isStockLimit = product.quantity < MAX_QTY_PER_PRODUCT;
-            showLimitTooltip(btn, maxAllowed, isStockLimit);
-        }
-        return;
+        return; // Silent - already at max
     }
     
     if (item) { 
@@ -221,7 +258,23 @@ function addToCart(id, event) {
     } else { 
         cart.push({ ...product, quantity: 1 }); 
     } 
-    saveCart(); 
+    saveCart();
+    
+    // Transform button to qty stepper
+    const btn = event ? event.target : null;
+    if (btn && btn.classList.contains('add-to-cart')) {
+        const qty = cart.find(i => i.id === id)?.quantity || 1;
+        btn.outerHTML = `
+            <div class="grid-qty-control" id="gridQty-${id}">
+                <button class="grid-qty-btn" onclick="gridQtyChange(${id}, -1, event)">−</button>
+                <span class="grid-qty-display" id="gridQtyNum-${id}">${qty}</span>
+                <button class="grid-qty-btn" onclick="gridQtyChange(${id}, 1, event)">+</button>
+            </div>
+        `;
+    }
+    
+    // Update cart counts immediately
+    updateCartCounts();
     updateCart(); 
     
     // Show grand popup
@@ -275,12 +328,34 @@ function showCartPopup(product) {
         </div>
     `;
     
+    // Clear any existing timer
+    if (window.cartPopupTimer) {
+        clearTimeout(window.cartPopupTimer);
+    }
+    
     popup.classList.add('active');
+    
+    // Auto-fade after 2 seconds
+    window.cartPopupTimer = setTimeout(() => {
+        closeCartPopup();
+    }, 2000);
 }
 
 function closeCartPopup() {
     const popup = document.getElementById('cartPopup');
-    popup.classList.remove('active');
+    
+    // Clear timer if manually closed
+    if (window.cartPopupTimer) {
+        clearTimeout(window.cartPopupTimer);
+    }
+    
+    // Add fade-out class for smooth animation
+    popup.classList.add('fade-out');
+    
+    setTimeout(() => {
+        popup.classList.remove('active');
+        popup.classList.remove('fade-out');
+    }, 300);
 }
 
 function updateCart() {
@@ -336,9 +411,9 @@ function updateCart() {
                 <span style="color:#e07856; font-weight:600; font-size:0.9rem;">AED ${(i.price * i.quantity).toFixed(2)}</span>
             </div>
             <div style="display:flex; gap:0.4rem; align-items:center;">
-                <button onclick="updateQuantity(${i.id}, -1, event)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">-</button>
+                <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">-</button>
                 <span style="font-size:0.9rem; font-weight:600; min-width:20px; text-align:center;">${i.quantity}</span>
-                <button onclick="updateQuantity(${i.id}, 1, event)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">+</button>
+                <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">+</button>
                 <button onclick="removeFromCart(${i.id})" style="padding:0.3rem 0.6rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:0.85rem;">✕</button>
             </div>
         </div>
@@ -441,24 +516,18 @@ function changeDeliveryZone(zone) {
     updateCart(); 
 }
 
-function updateQuantity(id, change, event) { 
+function updateQuantity(id, change) { 
     const item = cart.find(i => i.id === id);
     const product = products.find(p => p.id === id);
     
     if (item) { 
         const newQty = item.quantity + change;
         
-        // Cap at 10 OR available stock (whichever is lower)
+        // Silent cap at 10 OR available stock (whichever is lower)
         if (change > 0) {
             const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
             if (newQty > maxAllowed) {
-                // Show limit tooltip
-                const btn = event ? event.target : null;
-                if (btn) {
-                    const isStockLimit = product && product.quantity < MAX_QTY_PER_PRODUCT;
-                    showLimitTooltip(btn, maxAllowed, isStockLimit);
-                }
-                return;
+                return; // Silent - already at max
             }
         }
         
@@ -476,7 +545,13 @@ function removeFromCart(id) {
     cart = cart.filter(i => i.id !== id); 
     upsellUsed = false;
     saveCart(); 
-    updateCart(); 
+    updateCart();
+    
+    // Reset grid button if visible
+    const gridQty = document.getElementById(`gridQty-${id}`);
+    if (gridQty) {
+        gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)">Add to Cart | أضف إلى السلة</button>`;
+    }
 }
 
 function toggleCart() { 
@@ -666,6 +741,19 @@ window.onload = () => {
                 savedUpsellProducts = null;
             }
             toggleMobileMenu();
+        };
+    }
+    
+    // Handle account button in bottom nav
+    const bottomAccountBtn = document.getElementById("bottomAccountBtn");
+    if (bottomAccountBtn) {
+        bottomAccountBtn.onclick = function() {
+            const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
+            if (token) {
+                window.location.href = 'account.html';
+            } else {
+                window.location.href = 'login.html';
+            }
         };
     }
 };
