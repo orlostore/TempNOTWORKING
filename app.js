@@ -45,13 +45,12 @@ function showGridMaxLimitMessage(productId, maxAllowed) {
       <span class="tooltip-text-ar">${messageAr}</span>
     `;
     
-    // Find the product card's .product-info container
+    // Find the product card's grid qty control
     const gridQty = document.getElementById(`gridQty-${productId}`);
-    const container = gridQty ? gridQty.closest('.product-info') : null;
     
-    if (container) {
-      container.style.position = 'relative';
-      container.appendChild(tooltip);
+    if (gridQty) {
+      gridQty.style.position = 'relative';
+      gridQty.appendChild(tooltip);
     }
     
     // Auto-dismiss after 3 seconds
