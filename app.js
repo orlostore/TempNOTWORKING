@@ -938,9 +938,13 @@ async function checkout() {
         }
 
         // Use relative URL (same domain)
+        const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        
         const response = await fetch('/checkout', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             body: JSON.stringify({
                 cart: cart,
                 deliveryZoneKey: selectedDeliveryZone
