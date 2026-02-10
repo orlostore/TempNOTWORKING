@@ -3,257 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Cancelled - ORLO</title>
+    <title>Payment Cancelled - ORLO Store</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #2c4a5c 0%, #1a3a4a 100%);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .arabic-text { font-family: 'Almarai', sans-serif; direction: rtl; }
+
+        .page-container {
+            width: 100%;
+            max-width: 700px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            animation: slideUp 0.5s ease-out;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* LEFT PANEL */
+        .left-panel {
+            width: 240px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-        }
-
-        .cancel-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
-            max-width: 500px;
-            width: 100%;
+            padding: 40px 25px;
+            position: relative;
             overflow: hidden;
-            animation: slideUp 0.6s ease-out;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cancel-header {
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-            padding: 3rem 2rem;
-            text-align: center;
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -40%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .cancel-icon {
-            width: 100px;
-            height: 100px;
+            width: 70px; height: 70px;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            font-size: 3rem;
-            animation: scaleIn 0.5s ease-out 0.3s both;
+            font-size: 2rem;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            animation: scaleIn 0.4s ease-out 0.2s both;
+            position: relative;
+            z-index: 1;
         }
+        @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
 
-        @keyframes scaleIn {
-            from {
-                transform: scale(0);
-            }
-            to {
-                transform: scale(1);
-            }
-        }
-
-        .cancel-header h1 {
+        .left-panel h2 {
             color: white;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .cancel-header p {
-            color: rgba(255,255,255,0.9);
-            font-size: 1rem;
-        }
-
-        .cancel-header .arabic-text {
-            font-family: 'Almarai', sans-serif;
-            direction: rtl;
-            margin-top: 0.5rem;
             font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
         }
 
-        .cancel-body {
-            padding: 2.5rem 2rem;
-        }
-
-        .info-box {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid #e07856;
-        }
-
-        .info-box h3 {
-            color: #2c4a5c;
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .info-box p {
-            color: #555;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .info-box .arabic-text {
+        .left-panel .ar-title {
+            color: rgba(255,255,255,0.85);
             font-family: 'Almarai', sans-serif;
-            direction: rtl;
-            text-align: right;
-            margin-top: 0.5rem;
-            color: #666;
+            font-size: 0.95rem;
+            text-align: center;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 1;
         }
 
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+        .left-panel .reassure {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            text-align: center;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
         }
+
+        /* RIGHT PANEL */
+        .right-panel {
+            flex: 1;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-left: 3px solid #e07856;
+        }
+
+        .info-card h3 {
+            color: #2c4a5c;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-card p { color: #666; font-size: 0.8rem; line-height: 1.5; }
+        .info-card .arabic-text { text-align: right; margin-top: 3px; color: #888; font-size: 0.75rem; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 8px; }
 
         .btn {
-            flex: 1;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
+            flex: 1; padding: 11px 14px; border-radius: 10px;
+            font-size: 0.85rem; font-weight: 600; text-decoration: none;
+            text-align: center; border: none; cursor: pointer;
+            font-family: 'Inter', sans-serif; transition: all 0.2s;
         }
+        .btn .arabic-text { display: block; font-size: 0.7rem; margin-top: 2px; opacity: 0.9; }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #e07856 0%, #d35a3a 100%);
+        .btn-shop {
+            background: linear-gradient(135deg, #2c4a5c, #1e3545);
             color: white;
-            box-shadow: 0 4px 15px rgba(224, 120, 86, 0.3);
+            box-shadow: 0 4px 15px rgba(44,74,92,0.3);
         }
+        .btn-shop:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(44,74,92,0.4); }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(224, 120, 86, 0.4);
-        }
+        .btn-help { background: linear-gradient(135deg, #e07856, #c96644); color: white; }
+        .btn-help:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(224,120,86,0.3); }
 
-        .btn-secondary {
-            background: #25d366;
-            color: white;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-        }
+        .footer-note { text-align: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid #eee; color: #aaa; font-size: 0.75rem; }
+        .footer-note a { color: #e07856; text-decoration: none; }
 
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-        }
+        /* MOBILE */
+        @media (max-width: 768px) {
+            body { padding: 15px; }
 
-        .btn .arabic-text {
-            font-family: 'Almarai', sans-serif;
-            display: block;
-            font-size: 0.85rem;
-            margin-top: 0.25rem;
-            opacity: 0.9;
-        }
-
-        .footer-note {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
-            color: #888;
-            font-size: 0.85rem;
-        }
-
-        .footer-note a {
-            color: #e07856;
-            text-decoration: none;
-        }
-
-        @media (max-width: 500px) {
-            .cancel-container {
-                border-radius: 15px;
-            }
-
-            .cancel-header {
-                padding: 2rem 1.5rem;
-            }
-
-            .cancel-header h1 {
-                font-size: 1.4rem;
-            }
-
-            .cancel-body {
-                padding: 1.5rem;
-            }
-
-            .btn-group {
+            .page-container {
                 flex-direction: column;
+                max-width: 420px;
             }
 
-            .cancel-icon {
-                width: 80px;
-                height: 80px;
-                font-size: 2.5rem;
+            .left-panel {
+                width: 100%;
+                padding: 24px 20px;
+                flex-shrink: initial;
             }
+
+            .cancel-icon { width: 55px; height: 55px; font-size: 1.6rem; margin-bottom: 10px; }
+            .left-panel h2 { font-size: 1.05rem; }
+            .left-panel .ar-title { font-size: 0.85rem; margin-bottom: 8px; }
+            .left-panel .reassure { font-size: 0.75rem; }
+
+            .right-panel { padding: 18px 20px; }
+            .btn-row { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <div class="cancel-container">
-        <div class="cancel-header">
+    <div class="page-container">
+        <div class="left-panel">
             <div class="cancel-icon">🛒</div>
-            <h1>Payment Cancelled</h1>
-            <p class="arabic-text">تم إلغاء الدفع</p>
-            <p>Your cart is still waiting for you</p>
+            <h2>Payment Cancelled</h2>
+            <p class="ar-title">تم إلغاء الدفع</p>
+            <p class="reassure">Your cart is still waiting for you</p>
         </div>
 
-        <div class="cancel-body">
-            <div class="info-box">
+        <div class="right-panel">
+            <div class="info-card">
                 <h3>💳 No Charges Made</h3>
                 <p>Don't worry! No payment was processed and your card was not charged.</p>
-                <p class="arabic-text">لا تقلق! لم تتم معالجة أي دفعة ولم يتم خصم أي مبلغ من بطاقتك.</p>
+                <p class="arabic-text">لا تقلق! لم تتم معالجة أي دفعة ولم يتم خصم أي مبلغ.</p>
             </div>
 
-            <div class="info-box">
+            <div class="info-card">
                 <h3>🛍️ Your Items Are Saved</h3>
                 <p>Your shopping cart is still intact. Return anytime to complete your purchase.</p>
-                <p class="arabic-text">سلة التسوق الخاصة بك لا تزال محفوظة. يمكنك العودة في أي وقت لإتمام عملية الشراء.</p>
+                <p class="arabic-text">سلة التسوق لا تزال محفوظة. يمكنك العودة لإتمام الشراء.</p>
             </div>
 
-            <div class="btn-group">
-               <a href="/" class="btn btn-primary">
-                🛍️ Continue Shopping
-                  <span class="arabic-text">متابعة التسوق</span>
+            <div class="btn-row">
+                <a href="/" class="btn btn-shop">
+                    🛍️ Continue Shopping<span class="arabic-text">متابعة التسوق</span>
                 </a>
-                <a href="mailto:info@orlostore.com" class="btn btn-secondary">
-                    ✉️ Need Help?
-                    <span class="arabic-text">تحتاج مساعدة؟</span>
+                <a href="/cdn-cgi/l/email-protection#3851565e5778574a54574b4c574a5d165b5755" class="btn btn-help">
+                    ✉️ Need Help?<span class="arabic-text">تحتاج مساعدة؟</span>
                 </a>
             </div>
 
             <div class="footer-note">
-                <p>Having trouble? Contact us at <a href="mailto:info@orlostore.com">info@orlostore.com</a></p>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+                Having trouble? <a href="/cdn-cgi/l/email-protection#94fdfaf2fbd4fbe6f8fbe7e0fbe6f1baf7fbf9"><s
