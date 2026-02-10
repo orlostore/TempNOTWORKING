@@ -2758,6 +2758,8 @@ footer p {
   border: 1px solid rgba(0,0,0,0.08) !important;
   background: rgba(255, 255, 255, 0.97) !important;
   overflow: visible !important;
+  white-space: normal !important;
+  max-width: calc(100% - 16px) !important;
 }
 
 .product-info .limit-tooltip::after {
