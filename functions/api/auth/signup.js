@@ -62,27 +62,34 @@ export async function onRequestPost(context) {
                         to: email.toLowerCase(),
                         subject: 'Verify Your Email | تأكيد بريدك الإلكتروني',
                         html: `
-                            <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
-                                <div style="text-align: center; margin-bottom: 20px;">
-                                    <h1 style="color: #2c4a5c; margin: 0;">ORLO</h1>
+                            <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden;">
+                                <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 20px; text-align: center;">
+                                    <img src="https://temp-5lr.pages.dev/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
+                                    <div style="color: white; font-size: 22px; font-weight: 700; letter-spacing: 1px;">ORLO Store</div>
                                 </div>
-                                <h2 style="color: #2c4a5c;">Welcome, ${name}!</h2>
-                                <p style="color: #555; font-size: 15px; line-height: 1.6;">
-                                    Thank you for creating an account. Please verify your email address by clicking the button below:
-                                </p>
-                                <div style="text-align: center; margin: 30px 0;">
-                                    <a href="${verifyUrl}" style="background: #e07856; color: white; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block;">
-                                        Verify Email | تأكيد البريد
-                                    </a>
+                                <div style="background: white; padding: 30px 25px;">
+                                    <h2 style="color: #2c4a5c; margin: 0 0 15px; font-size: 18px; font-weight: 600;">Welcome, ${name}!</h2>
+                                    <p style="color: #555; font-size: 14px; line-height: 1.7; margin: 0 0 10px;">
+                                        Thank you for creating an account with ORLO Store. Please verify your email address by clicking the button below:
+                                    </p>
+                                    <p style="color: #888; font-size: 13px; line-height: 1.6; margin: 0 0 25px; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
+                                        شكراً لإنشاء حساب في متجر أورلو. يرجى تأكيد بريدك الإلكتروني بالضغط على الزر أدناه:
+                                    </p>
+                                    <div style="text-align: center; margin: 25px 0;">
+                                        <a href="${verifyUrl}" style="background: #e07856; color: white; padding: 14px 35px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block;">
+                                            Verify Email | تأكيد البريد
+                                        </a>
+                                    </div>
+                                    <p style="color: #999; font-size: 12px; line-height: 1.5; margin: 20px 0 0;">
+                                        If the button doesn't work, copy and paste this link:<br>
+                                        <a href="${verifyUrl}" style="color: #e07856; word-break: break-all;">${verifyUrl}</a>
+                                    </p>
                                 </div>
-                                <p style="color: #888; font-size: 13px; line-height: 1.5;">
-                                    If the button doesn't work, copy and paste this link:<br>
-                                    <a href="${verifyUrl}" style="color: #e07856;">${verifyUrl}</a>
-                                </p>
-                                <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-                                <p style="color: #aaa; font-size: 12px; text-align: center; font-family: 'Almarai', Arial, sans-serif; direction: rtl;">
-                                    مرحباً ${name}، يرجى تأكيد بريدك الإلكتروني بالضغط على الزر أعلاه
-                                </p>
+                                <div style="background: #f8f9fa; padding: 20px 25px; text-align: center; border-top: 1px solid #eee;">
+                                    <p style="color: #aaa; font-size: 11px; margin: 0;">
+                                        © ORLO Store | info@orlostore.com
+                                    </p>
+                                </div>
                             </div>
                         `
                     })
