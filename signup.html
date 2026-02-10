@@ -32,7 +32,7 @@
         
         .auth-wrapper {
             width: 100%;
-            max-width: 420px;
+            max-width: 380px;
         }
         
         .back-home {
@@ -65,29 +65,29 @@
         .auth-header {
             background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
             color: white;
-            padding: 2.5rem 2rem;
+            padding: 2rem 1.8rem;
             text-align: center;
         }
         
         .auth-header img {
-            width: 70px;
-            height: 70px;
-            margin-bottom: 1rem;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 0.8rem;
         }
         
         .auth-header h1 {
-            font-size: 1.75rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
         
         .auth-header .arabic-text {
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             opacity: 0.95;
         }
         
         .auth-form {
-            padding: 2rem;
+            padding: 1.8rem;
         }
         
         .form-group {
@@ -111,10 +111,10 @@
         
         .form-group input {
             width: 100%;
-            padding: 0.9rem 1rem;
+            padding: 0.8rem 0.9rem;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-family: 'Inter', system-ui, sans-serif;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
@@ -142,12 +142,12 @@
         
         .auth-btn {
             width: 100%;
-            padding: 1rem 1.5rem;
+            padding: 0.85rem 1.3rem;
             background: linear-gradient(135deg, #e07856 0%, #c96644 100%);
             color: white;
             border: none;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             font-family: 'Inter', system-ui, sans-serif;
             cursor: pointer;
@@ -175,7 +175,7 @@
         
         .auth-footer {
             text-align: center;
-            padding: 1.5rem 2rem 2rem;
+            padding: 1.2rem 1.8rem 1.8rem;
             border-top: 1px solid #eee;
         }
         
@@ -412,7 +412,7 @@
             // Submit
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.textContent = 'Creating account...';
+            btn.innerHTML = 'Creating account...';
             
             try {
                 const response = await fetch('/api/auth/signup', {
@@ -433,12 +433,12 @@
                 } else {
                     showAlert(data.error || 'Failed to create account', 'error');
                     btn.disabled = false;
-                    btn.textContent = 'Create Account <span class="arabic-text">إنشاء حساب</span>';
+                    btn.innerHTML = 'Create Account <span class="arabic-text">إنشاء حساب</span>';
                 }
             } catch (error) {
                 showAlert('Connection error. Please try again.', 'error');
                 btn.disabled = false;
-                btn.textContent = 'Create Account <span class="arabic-text">إنشاء حساب</span>';
+                btn.innerHTML = 'Create Account <span class="arabic-text">إنشاء حساب</span>';
             }
         }
     </script>
