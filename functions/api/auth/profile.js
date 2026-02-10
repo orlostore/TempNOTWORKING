@@ -56,7 +56,7 @@ export async function onRequestGet(context) {
         
         // Find customer by token
         const customer = await DB.prepare(`
-            SELECT id, email, name, phone, created_at
+            SELECT id, email, name, phone, email_verified, created_at
             FROM customers 
             WHERE token = ?
         `).bind(token).first();
@@ -72,6 +72,7 @@ export async function onRequestGet(context) {
                 email: customer.email,
                 name: customer.name,
                 phone: customer.phone,
+                email_verified: customer.email_verified === 1,
                 created_at: customer.created_at
             }
         });
