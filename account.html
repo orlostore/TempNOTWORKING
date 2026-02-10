@@ -562,6 +562,48 @@
         .password-toggle:hover {
             color: #2c4a5c;
         }
+
+        /* Email verification banner */
+        .verify-banner {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 14px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .verify-banner-text {
+            font-size: 0.9rem;
+            color: #856404;
+            font-weight: 500;
+        }
+        .verify-banner-text .arabic-text {
+            font-size: 0.8rem;
+            color: #a07b10;
+        }
+        .verify-banner-btn {
+            background: #e07856;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .verify-banner-btn:hover {
+            background: #c96644;
+        }
+        .verify-banner-btn:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -583,6 +625,15 @@
         </div>
         
         <div class="account-content">
+            <!-- Email verification banner (hidden by default) -->
+            <div id="verifyBanner" class="verify-banner" style="display: none;">
+                <div class="verify-banner-text">
+                    ⚠️ Your email is not verified. Please check your inbox.
+                    <span class="arabic-text">بريدك الإلكتروني غير مُفعّل، يرجى التحقق من صندوق الوارد</span>
+                </div>
+                <button class="verify-banner-btn" onclick="resendVerification(this)">Resend Email | إعادة إرسال</button>
+            </div>
+
             <div class="account-tabs">
                 <button class="account-tab active" onclick="switchTab('orders')">📦 Orders | طلباتي</button>
                 <button class="account-tab" onclick="switchTab('profile')">👤 Profile | الملف الشخصي</button>
@@ -768,6 +819,46 @@
             } else {
                 input.type = 'password';
                 btn.textContent = '👁️';
+            }
+        }
+
+        // Check email verification status
+        async function checkEmailVerification() {
+            try {
+                const response = await fetch('/api/auth/profile', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                if (data.success && !data.customer.email_verified) {
+                    document.getElementById('verifyBanner').style.display = 'flex';
+                }
+            } catch (e) {
+                // Silent fail
+            }
+        }
+
+        async function resendVerification(btn) {
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            try {
+                const response = await fetch('/api/auth/verify', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    btn.textContent = '✓ Sent! | تم الإرسال';
+                    setTimeout(() => {
+                        btn.textContent = 'Resend Email | إعادة إرسال';
+                        btn.disabled = false;
+                    }, 30000);
+                } else {
+                    btn.textContent = 'Failed | فشل';
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                btn.textContent = 'Error | خطأ';
+                btn.disabled = false;
             }
         }
 
@@ -1044,6 +1135,7 @@
         });
         
         loadOrders();
+        checkEmailVerification();
     </script>
 </body>
 </html>
