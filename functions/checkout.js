@@ -253,7 +253,7 @@ function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, 
     const params = new URLSearchParams();
     
     params.append('mode', 'payment');
-    params.append('success_url', `${siteUrl}/success.html`);
+    params.append('success_url', `${siteUrl}/success.html?session_id={CHECKOUT_SESSION_ID}`);
     params.append('cancel_url', `${siteUrl}/cancel.html`);
     params.append('billing_address_collection', 'required');
     params.append('shipping_address_collection[allowed_countries][0]', 'AE');
