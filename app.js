@@ -660,6 +660,9 @@ function updateQuantity(id, change) {
         } else { 
             saveCart(); 
             updateCart();
+            // Sync product page stepper
+            const qtyDisplay = document.getElementById(`qtyDisplay-${id}`);
+            if (qtyDisplay) qtyDisplay.textContent = newQty;
             // ADD THIS LINE TO SYNC CART PAGE COUNT WITH INDEX PAGE COUNT OF PRODUCTS:
             const gridQtyNum = document.getElementById(`gridQtyNum-${id}`);
             if (gridQtyNum) gridQtyNum.textContent = newQty;
