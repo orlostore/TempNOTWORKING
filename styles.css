@@ -2751,12 +2751,12 @@ footer p {
 /* ============================================
    INDEX PAGE GRID - LIMIT TOOLTIP OVERRIDES
    ============================================ */
-.product-info .limit-tooltip {
-  bottom: calc(100% + 4px);
+.grid-qty-control .limit-tooltip {
+  bottom: calc(100% + 6px);
   border-radius: 8px;
 }
 
-.product-info .limit-tooltip::after {
+.grid-qty-control .limit-tooltip::after {
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-top: 6px solid rgba(255, 255, 255, 0.95);
