@@ -659,7 +659,10 @@ function updateQuantity(id, change) {
             removeFromCart(id); 
         } else { 
             saveCart(); 
-            updateCart(); 
+            updateCart();
+            // ADD THIS LINE TO SYNC CART PAGE COUNT WITH INDEX PAGE COUNT OF PRODUCTS:
+            const gridQtyNum = document.getElementById(`gridQtyNum-${id}`);
+            if (gridQtyNum) gridQtyNum.textContent = newQty;
         } 
     } 
 }
