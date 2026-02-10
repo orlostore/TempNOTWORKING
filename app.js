@@ -6,6 +6,80 @@ const FREE_DELIVERY_THRESHOLD = 75;
 // === MAX QUANTITY PER PRODUCT ===
 var MAX_QTY_PER_PRODUCT = MAX_QTY_PER_PRODUCT || 10;
 
+// Convert number to Arabic numerals
+function toArabicNumerals(num) {
+  const arabicNums = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
+}
+
+// Show limit tooltip on index page grid cards (same style as product page)
+function showGridMaxLimitMessage(productId, maxAllowed) {
+    // Remove any existing tooltip
+    const existing = document.getElementById('limitTooltip');
+    if (existing) existing.remove();
+    
+    // Clear any existing timer
+    if (window.limitTooltipTimer) {
+      clearTimeout(window.limitTooltipTimer);
+    }
+    
+    // Determine message type
+    const isStockLimit = maxAllowed < MAX_QTY_PER_PRODUCT;
+    
+    let messageEn, messageAr;
+    if (isStockLimit) {
+      messageEn = `Only <span class="highlight">${maxAllowed}</span> left in stock`;
+      messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط في المخزون`;
+    } else {
+      messageEn = `Limit of <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
+      messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
+    }
+    
+    // Create tooltip
+    const tooltip = document.createElement('div');
+    tooltip.id = 'limitTooltip';
+    tooltip.className = 'limit-tooltip';
+    tooltip.innerHTML = `
+      <button class="close-btn" onclick="closeLimitTooltip()">✕</button>
+      ${messageEn}
+      <span class="tooltip-text-ar">${messageAr}</span>
+    `;
+    
+    // Find the product card's .product-info container
+    const gridQty = document.getElementById(`gridQty-${productId}`);
+    const container = gridQty ? gridQty.closest('.product-info') : null;
+    
+    if (container) {
+      container.style.position = 'relative';
+      container.appendChild(tooltip);
+    }
+    
+    // Auto-dismiss after 3 seconds
+    window.limitTooltipTimer = setTimeout(() => {
+      const tip = document.getElementById('limitTooltip');
+      if (tip) {
+        tip.classList.add('fade-out');
+        setTimeout(() => {
+          if (tip.parentNode) tip.remove();
+        }, 300);
+      }
+    }, 3000);
+}
+
+// Close tooltip immediately
+function closeLimitTooltip() {
+  const tooltip = document.getElementById('limitTooltip');
+  if (tooltip) {
+    if (window.limitTooltipTimer) {
+      clearTimeout(window.limitTooltipTimer);
+    }
+    tooltip.classList.add('fade-out');
+    setTimeout(() => {
+      if (tooltip.parentNode) tooltip.remove();
+    }, 300);
+  }
+}
+
 const deliveryZones = {
     dubai: {
         name: "Dubai",
@@ -92,6 +166,7 @@ function gridQtyChange(productId, change, event) {
     if (change > 0) {
         const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
         if (newQty > maxAllowed) {
+            showGridMaxLimitMessage(productId, maxAllowed);
             return;
         }
     }
@@ -250,7 +325,8 @@ function addToCart(id, event) {
     // Silent cap at 10 OR available stock (whichever is lower)
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
     if (currentInCart >= maxAllowed) {
-        return; // Silent - already at max
+        showGridMaxLimitMessage(id, maxAllowed);
+        return; // Already at max
     }
     
     if (item) { 
@@ -527,7 +603,7 @@ function updateQuantity(id, change) {
         if (change > 0) {
             const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
             if (newQty > maxAllowed) {
-                return; // Silent - already at max
+                return; // Keep silent in cart sidebar
             }
         }
         
