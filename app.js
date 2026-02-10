@@ -22,6 +22,79 @@ const FREE_DELIVERY_THRESHOLD = 75;
 // === MAX QUANTITY PER PRODUCT ===
 var MAX_QTY_PER_PRODUCT = MAX_QTY_PER_PRODUCT || 10;
 
+// Convert number to Arabic numerals
+function toArabicNumerals(num) {
+  const arabicNums = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
+}
+
+// Show limit tooltip on index page grid cards
+function showGridMaxLimitMessage(productId, maxAllowed) {
+    const existing = document.getElementById('gridLimitTooltip');
+    if (existing) existing.remove();
+    
+    if (window.gridLimitTooltipTimer) {
+      clearTimeout(window.gridLimitTooltipTimer);
+    }
+    
+    const isStockLimit = maxAllowed < MAX_QTY_PER_PRODUCT;
+    
+    let messageEn, messageAr;
+    if (isStockLimit) {
+      messageEn = `Only <span class="highlight">${maxAllowed}</span> left in stock`;
+      messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط في المخزون`;
+    } else {
+      messageEn = `Limit of <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
+      messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
+    }
+    
+    const tooltip = document.createElement('div');
+    tooltip.id = 'gridLimitTooltip';
+    tooltip.className = 'grid-limit-tooltip';
+    tooltip.innerHTML = `
+      <button class="close-btn" onclick="closeGridLimitTooltip()">✕</button>
+      ${messageEn}
+      <span class="tooltip-text-ar">${messageAr}</span>
+    `;
+    
+    const gridQty = document.getElementById(`gridQty-${productId}`);
+    const card = gridQty ? gridQty.closest('.product-card') : null;
+    
+    if (card) {
+      card.style.overflow = 'visible';
+      card.appendChild(tooltip);
+    }
+    
+    window.gridLimitTooltipTimer = setTimeout(() => {
+      const tip = document.getElementById('gridLimitTooltip');
+      if (tip) {
+        tip.classList.add('fade-out');
+        setTimeout(() => {
+          if (tip.parentNode) {
+            tip.parentNode.style.overflow = '';
+            tip.remove();
+          }
+        }, 300);
+      }
+    }, 3000);
+}
+
+function closeGridLimitTooltip() {
+  const tooltip = document.getElementById('gridLimitTooltip');
+  if (tooltip) {
+    if (window.gridLimitTooltipTimer) {
+      clearTimeout(window.gridLimitTooltipTimer);
+    }
+    tooltip.classList.add('fade-out');
+    setTimeout(() => {
+      if (tooltip.parentNode) {
+        tooltip.parentNode.style.overflow = '';
+        tooltip.remove();
+      }
+    }, 300);
+  }
+}
+
 const deliveryZones = {
     dubai: {
         name: "Dubai",
