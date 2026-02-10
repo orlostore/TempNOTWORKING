@@ -2759,7 +2759,7 @@ footer p {
    ============================================ */
 .grid-limit-tooltip {
   position: absolute;
-  bottom: 48px;
+  bottom: 63px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.95);
