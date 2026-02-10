@@ -1,99 +1,10 @@
 const WHATSAPP_NUMBER = "971XXXXXXXXX"; 
 
-// Inject cart shake animation
-if (!document.getElementById('cartLimitStyles')) {
-    const style = document.createElement('style');
-    style.id = 'cartLimitStyles';
-    style.textContent = `
-        @keyframes cartQtyShake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-3px); }
-            40% { transform: translateX(3px); }
-            60% { transform: translateX(-2px); }
-            80% { transform: translateX(2px); }
-        }
-    `;
-    document.head.appendChild(style);
-}
-
 // === FREE DELIVERY THRESHOLD - Change this value to adjust ===
 const FREE_DELIVERY_THRESHOLD = 75;
 
 // === MAX QUANTITY PER PRODUCT ===
 var MAX_QTY_PER_PRODUCT = MAX_QTY_PER_PRODUCT || 10;
-
-// Convert number to Arabic numerals
-function toArabicNumerals(num) {
-  const arabicNums = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-  return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
-}
-
-// Show limit tooltip on index page grid cards
-function showGridMaxLimitMessage(productId, maxAllowed) {
-    const existing = document.getElementById('gridLimitTooltip');
-    if (existing) existing.remove();
-    
-    if (window.gridLimitTooltipTimer) {
-      clearTimeout(window.gridLimitTooltipTimer);
-    }
-    
-    const isStockLimit = maxAllowed < MAX_QTY_PER_PRODUCT;
-    
-    let messageEn, messageAr;
-    if (isStockLimit) {
-      messageEn = `Only <span class="highlight">${maxAllowed}</span> left in stock`;
-      messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط في المخزون`;
-    } else {
-      messageEn = `Limit of <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
-      messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
-    }
-    
-    const tooltip = document.createElement('div');
-    tooltip.id = 'gridLimitTooltip';
-    tooltip.className = 'grid-limit-tooltip';
-    tooltip.innerHTML = `
-      <button class="close-btn" onclick="closeGridLimitTooltip()">✕</button>
-      ${messageEn}
-      <span class="tooltip-text-ar">${messageAr}</span>
-    `;
-    
-    const gridQty = document.getElementById(`gridQty-${productId}`);
-    const card = gridQty ? gridQty.closest('.product-card') : null;
-    
-    if (card) {
-      card.style.overflow = 'visible';
-      card.appendChild(tooltip);
-    }
-    
-    window.gridLimitTooltipTimer = setTimeout(() => {
-      const tip = document.getElementById('gridLimitTooltip');
-      if (tip) {
-        tip.classList.add('fade-out');
-        setTimeout(() => {
-          if (tip.parentNode) {
-            tip.parentNode.style.overflow = '';
-            tip.remove();
-          }
-        }, 300);
-      }
-    }, 3000);
-}
-
-function closeGridLimitTooltip() {
-  const tooltip = document.getElementById('gridLimitTooltip');
-  if (tooltip) {
-    if (window.gridLimitTooltipTimer) {
-      clearTimeout(window.gridLimitTooltipTimer);
-    }
-    tooltip.classList.add('fade-out');
-    setTimeout(() => {
-      if (tooltip.parentNode) {
-        tooltip.parentNode.style.overflow = '';
-        tooltip.remove();
-      }
-    }, 300);
-  }
-}
 
 const deliveryZones = {
     dubai: {
@@ -140,12 +51,10 @@ let selectedDeliveryZone = localStorage.getItem("deliveryZone") || "dubai";
 
 //PRESS BACK DURING CHECKOUT
 window.addEventListener('pageshow', function(event) {
-    const btn = document.getElementById("stripeBtnGuest") || document.getElementById("stripeBtn");
+    const btn = document.getElementById("stripeBtn");
     if (btn) {
         btn.disabled = false;
-        if (btn.id === 'stripeBtn') {
-            btn.innerHTML = "💳 Pay with Card / الدفع بالبطاقة";
-        }
+        btn.innerHTML = "💳 Pay with Card / الدفع بالبطاقة";
     }
 });
 
@@ -183,7 +92,6 @@ function gridQtyChange(productId, change, event) {
     if (change > 0) {
         const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
         if (newQty > maxAllowed) {
-            showGridMaxLimitMessage(productId, maxAllowed);
             return;
         }
     }
@@ -339,11 +247,10 @@ function addToCart(id, event) {
     const item = cart.find(i => i.id === id);
     const currentInCart = item ? item.quantity : 0;
     
-    // Cap at 10 OR available stock (whichever is lower)
+    // Silent cap at 10 OR available stock (whichever is lower)
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
     if (currentInCart >= maxAllowed) {
-        showGridMaxLimitMessage(id, maxAllowed);
-        return;
+        return; // Silent - already at max
     }
     
     if (item) { 
@@ -480,44 +387,15 @@ function updateCart() {
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems; 
     
-    const isLoggedIn = !!(localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token'));
-    
-    let checkoutBtnHTML;
-    
-    if (isLoggedIn) {
-        checkoutBtnHTML = `
-            <button id="stripeBtn" 
-                style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #2c4a5c; color: white; transition: all 0.3s;" 
-                onclick="checkout()" 
-                onmouseover="this.style.background='#1e3545'" 
-                onmouseout="this.style.background='#2c4a5c'">
-                💳 Pay with Card / الدفع بالبطاقة
-            </button>
-        `;
-    } else {
-        checkoutBtnHTML = `
-            <div style="border-radius: 9px; overflow: hidden; box-shadow: 0 3px 10px rgba(44,74,92,0.15);">
-                <div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 9px 10px; font-size: 0.78rem; font-weight: 600;">
-                    💳 Pay with Card / <span style="font-family: 'Almarai', sans-serif; font-size: 0.66rem; opacity: 0.85;">الدفع بالبطاقة</span>
-                </div>
-                <div style="display: flex; align-items: center; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 12px 9px;">
-                    <button id="stripeBtn" onclick="window.location.href='login.html?redirect='+encodeURIComponent(window.location.href)" 
-                        style="flex: 1; padding: 6px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 500; cursor: pointer; text-align: center; background: transparent; color: rgba(255,255,255,0.8); border-radius: 4px; transition: all 0.2s;"
-                        onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='white'"
-                        onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.8)'">
-                        🔐 Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.54rem; display: block; opacity: 0.65;">تسجيل الدخول</span>
-                    </button>
-                    <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.18); flex-shrink: 0;"></div>
-                    <button id="stripeBtnGuest" onclick="checkout()" 
-                        style="flex: 1; padding: 6px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 500; cursor: pointer; text-align: center; background: transparent; color: rgba(255,255,255,0.8); border-radius: 4px; transition: all 0.2s;"
-                        onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='white'"
-                        onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.8)'">
-                        👤 As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.54rem; display: block; opacity: 0.65;">كضيف</span>
-                    </button>
-                </div>
-            </div>
-        `;
-    }
+    const checkoutBtnHTML = `
+        <button id="stripeBtn" 
+            style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #2c4a5c; color: white; transition: all 0.3s;" 
+            onclick="checkout()" 
+            onmouseover="this.style.background='#1e3545'" 
+            onmouseout="this.style.background='#2c4a5c'">
+            💳 Pay with Card / الدفع بالبطاقة
+        </button>
+    `;
     
     if (isMobile && cartCheckoutFixed) {
         cartCheckoutFixed.innerHTML = checkoutBtnHTML;
@@ -526,7 +404,7 @@ function updateCart() {
     }
     
     cartItems.innerHTML = cart.map(i => `
-        <div id="cartItem-${i.id}" style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee; position:relative;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
             <div style="flex:1;">
                 <strong style="font-size:0.9rem; color:#2c4a5c;">${i.name}</strong><br>
                 <span style="color:#888; font-size:0.8rem;">AED ${i.price} × ${i.quantity}</span><br>
@@ -645,12 +523,11 @@ function updateQuantity(id, change) {
     if (item) { 
         const newQty = item.quantity + change;
         
-        // Cap at 10 OR available stock (whichever is lower)
+        // Silent cap at 10 OR available stock (whichever is lower)
         if (change > 0) {
             const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
             if (newQty > maxAllowed) {
-                showCartLimitMessage(id, maxAllowed);
-                return;
+                return; // Silent - already at max
             }
         }
         
@@ -659,55 +536,12 @@ function updateQuantity(id, change) {
             removeFromCart(id); 
         } else { 
             saveCart(); 
-            updateCart(); 
+            updateCart();
+            // Sync grid stepper on index page
+            const gridQtyNum = document.getElementById(`gridQtyNum-${id}`);
+            if (gridQtyNum) gridQtyNum.textContent = newQty;
         } 
     } 
-}
-
-// Show limit message inside cart sidebar for a specific item
-function showCartLimitMessage(productId, maxAllowed) {
-    // Remove any existing
-    const existing = document.getElementById('cartLimitMsg');
-    if (existing) existing.remove();
-    if (window.cartLimitTimer) clearTimeout(window.cartLimitTimer);
-    
-    const isStockLimit = maxAllowed < MAX_QTY_PER_PRODUCT;
-    
-    let messageEn, messageAr;
-    if (isStockLimit) {
-      messageEn = `Only <span class="highlight">${maxAllowed}</span> left in stock`;
-      messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط في المخزون`;
-    } else {
-      messageEn = `Limit of <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
-      messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
-    }
-    
-    const cartItem = document.getElementById(`cartItem-${productId}`);
-    if (!cartItem) return;
-    
-    // Shake the + button
-    const plusBtn = cartItem.querySelectorAll('button')[1];
-    if (plusBtn) {
-        plusBtn.style.animation = 'none';
-        plusBtn.offsetHeight;
-        plusBtn.style.animation = 'cartQtyShake 0.4s ease';
-    }
-    
-    const msg = document.createElement('div');
-    msg.id = 'cartLimitMsg';
-    msg.className = 'cart-limit-msg';
-    msg.innerHTML = `${messageEn} <span class="cart-limit-ar">${messageAr}</span>`;
-    
-    cartItem.appendChild(msg);
-    
-    // Auto-dismiss
-    window.cartLimitTimer = setTimeout(() => {
-      const tip = document.getElementById('cartLimitMsg');
-      if (tip) {
-        tip.style.opacity = '0';
-        setTimeout(() => { if (tip.parentNode) tip.remove(); }, 300);
-      }
-    }, 3000);
 }
 
 function removeFromCart(id) { 
@@ -928,7 +762,7 @@ window.onload = () => {
 };
 
 async function checkout() {
-    const btn = document.getElementById("stripeBtnGuest") || document.getElementById("stripeBtn");
+    const btn = document.getElementById("stripeBtn");
     const originalText = btn ? btn.innerHTML : "Pay with Card";
     
     try {
@@ -938,13 +772,9 @@ async function checkout() {
         }
 
         // Use relative URL (same domain)
-        const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
-        const headers = { 'Content-Type': 'application/json' };
-        if (token) headers['Authorization'] = `Bearer ${token}`;
-        
         const response = await fetch('/checkout', {
             method: 'POST',
-            headers: headers,
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 cart: cart,
                 deliveryZoneKey: selectedDeliveryZone
