@@ -110,6 +110,7 @@ function gridQtyChange(productId, change, event) {
     if (change > 0) {
         const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
         if (newQty > maxAllowed) {
+            showGridMaxLimitMessage(productId, maxAllowed);
             return;
         }
     }
@@ -265,10 +266,11 @@ function addToCart(id, event) {
     const item = cart.find(i => i.id === id);
     const currentInCart = item ? item.quantity : 0;
     
-    // Silent cap at 10 OR available stock (whichever is lower)
+    // Cap at 10 OR available stock (whichever is lower)
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
     if (currentInCart >= maxAllowed) {
-        return; // Silent - already at max
+        showGridMaxLimitMessage(id, maxAllowed);
+        return;
     }
     
     if (item) { 
@@ -597,37 +599,42 @@ function showCartLimitMessage(productId, maxAllowed) {
     if (window.cartLimitTimer) clearTimeout(window.cartLimitTimer);
     
     const isStockLimit = maxAllowed < MAX_QTY_PER_PRODUCT;
-    const msgText = isStockLimit 
-        ? `Only ${maxAllowed} in stock · متبقي ${toArabicNumerals(maxAllowed)} فقط`
-        : `Max ${MAX_QTY_PER_PRODUCT} per order · الحد ${toArabicNumerals(MAX_QTY_PER_PRODUCT)} لكل طلب`;
+    
+    let messageEn, messageAr;
+    if (isStockLimit) {
+      messageEn = `Only <span class="highlight">${maxAllowed}</span> left in stock`;
+      messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط في المخزون`;
+    } else {
+      messageEn = `Limit of <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
+      messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
+    }
     
     const cartItem = document.getElementById(`cartItem-${productId}`);
     if (!cartItem) return;
     
-    // Shake the quantity number
-    const qtySpan = cartItem.querySelector('span[style*="min-width"]');
-    if (qtySpan) {
-        qtySpan.style.animation = 'none';
-        qtySpan.offsetHeight; // trigger reflow
-        qtySpan.style.animation = 'cartQtyShake 0.4s ease';
+    // Shake the + button
+    const plusBtn = cartItem.querySelectorAll('button')[1];
+    if (plusBtn) {
+        plusBtn.style.animation = 'none';
+        plusBtn.offsetHeight;
+        plusBtn.style.animation = 'cartQtyShake 0.4s ease';
     }
     
-    // Show inline pill message
     const msg = document.createElement('div');
     msg.id = 'cartLimitMsg';
-    msg.style.cssText = 'position:absolute; bottom:-22px; left:50%; transform:translateX(-50%); background:#2c4a5c; color:white; font-size:0.62rem; font-weight:500; padding:3px 10px; border-radius:10px; white-space:nowrap; z-index:10; opacity:0; transition:opacity 0.25s; box-shadow:0 2px 8px rgba(0,0,0,0.15);';
-    msg.textContent = msgText;
+    msg.className = 'cart-limit-msg';
+    msg.innerHTML = `${messageEn} <span class="cart-limit-ar">${messageAr}</span>`;
     
     cartItem.appendChild(msg);
     
-    // Fade in
-    requestAnimationFrame(() => { msg.style.opacity = '1'; });
-    
     // Auto-dismiss
     window.cartLimitTimer = setTimeout(() => {
-        msg.style.opacity = '0';
-        setTimeout(() => { if (msg.parentNode) msg.remove(); }, 250);
-    }, 2200);
+      const tip = document.getElementById('cartLimitMsg');
+      if (tip) {
+        tip.style.opacity = '0';
+        setTimeout(() => { if (tip.parentNode) tip.remove(); }, 300);
+      }
+    }, 3000);
 }
 
 function removeFromCart(id) { 
