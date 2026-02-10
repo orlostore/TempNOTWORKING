@@ -2762,20 +2762,6 @@ footer p {
   border-top: 6px solid rgba(255, 255, 255, 0.95);
 }
 
-@media (max-width: 768px) {
-  .product-info .limit-tooltip {
-    font-size: 0.75rem;
-    padding: 10px 30px 10px 12px;
-    white-space: normal;
-    min-width: 0;
-    max-width: 90vw;
-  }
-
-  .product-info .limit-tooltip .tooltip-text-ar {
-    font-size: 0.65rem;
-  }
-}
-
 /* ============================================
    GRID PRODUCT CARD - QTY STEPPER
    ============================================ */
