@@ -2759,11 +2759,14 @@ footer p {
    ============================================ */
 .grid-limit-tooltip {
   position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: #2c4a5c;
-  padding: 10px 32px 10px 14px;
+  padding: 10px 24px;
   border-radius: 8px;
   font-size: 0.78rem;
   font-weight: 500;
@@ -2773,8 +2776,33 @@ footer p {
   white-space: nowrap;
   text-align: center;
   z-index: 9999;
-  animation: tooltipFadeIn 0.3s ease forwards;
-  transform: translateX(-50%);
+  animation: gridTooltipFadeIn 0.3s ease forwards;
+}
+
+@keyframes gridTooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes gridTooltipFadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+}
+
+.grid-limit-tooltip.fade-out {
+  animation: gridTooltipFadeOut 0.3s ease forwards;
 }
 
 .grid-limit-tooltip::after {
@@ -2803,8 +2831,8 @@ footer p {
 
 .grid-limit-tooltip .close-btn {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: -6px;
+  right: -6px;
   width: 16px;
   height: 16px;
   background: rgba(0,0,0,0.08);
@@ -2823,10 +2851,6 @@ footer p {
 .grid-limit-tooltip .close-btn:hover {
   background: rgba(0,0,0,0.15);
   color: #555;
-}
-
-.grid-limit-tooltip.fade-out {
-  animation: tooltipFadeOut 0.3s ease forwards;
 }
 
 /* ============================================
