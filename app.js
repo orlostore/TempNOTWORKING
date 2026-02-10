@@ -86,6 +86,46 @@ function closeGridLimitTooltip() {
   }
 }
 
+// Show limit message inside cart sidebar for a specific item
+function showCartLimitMessage(productId, maxAllowed) {
+    // Remove any existing cart tooltip
+    const existing = document.getElementById('cartLimitMsg');
+    if (existing) existing.remove();
+    
+    if (window.cartLimitTimer) {
+      clearTimeout(window.cartLimitTimer);
+    }
+    
+    const isStockLimit = maxAllowed < MAX_QTY_PER_PRODUCT;
+    
+    let messageEn, messageAr;
+    if (isStockLimit) {
+      messageEn = `Only <span class="highlight">${maxAllowed}</span> left in stock`;
+      messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط في المخزون`;
+    } else {
+      messageEn = `Limit of <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
+      messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
+    }
+    
+    const msg = document.createElement('div');
+    msg.id = 'cartLimitMsg';
+    msg.className = 'cart-limit-msg';
+    msg.innerHTML = `${messageEn} <span class="cart-limit-ar">${messageAr}</span>`;
+    
+    const cartItem = document.getElementById(`cartItem-${productId}`);
+    if (cartItem) {
+      cartItem.appendChild(msg);
+    }
+    
+    window.cartLimitTimer = setTimeout(() => {
+      const tip = document.getElementById('cartLimitMsg');
+      if (tip) {
+        tip.style.opacity = '0';
+        setTimeout(() => { if (tip.parentNode) tip.remove(); }, 300);
+      }
+    }, 3000);
+}
+
 const deliveryZones = {
     dubai: {
         name: "Dubai",
@@ -486,7 +526,7 @@ function updateCart() {
     }
     
     cartItems.innerHTML = cart.map(i => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
+        <div id="cartItem-${i.id}" style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee; position:relative;">
             <div style="flex:1;">
                 <strong style="font-size:0.9rem; color:#2c4a5c;">${i.name}</strong><br>
                 <span style="color:#888; font-size:0.8rem;">AED ${i.price} × ${i.quantity}</span><br>
@@ -605,11 +645,12 @@ function updateQuantity(id, change) {
     if (item) { 
         const newQty = item.quantity + change;
         
-        // Silent cap at 10 OR available stock (whichever is lower)
+        // Cap at 10 OR available stock (whichever is lower)
         if (change > 0) {
             const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
             if (newQty > maxAllowed) {
-                return; // Keep silent in cart sidebar
+                showCartLimitMessage(id, maxAllowed);
+                return;
             }
         }
         
