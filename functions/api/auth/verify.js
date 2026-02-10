@@ -76,7 +76,7 @@ export async function onRequestPost(context) {
         
         // Send verification email via Resend
         if (env.RESEND_API_KEY) {
-            const verifyUrl = `https://orlostore.com/verify-email.html?token=${verificationToken}`;
+            const verifyUrl = `https://temp-5lr.pages.dev/verify-email.html?token=${verificationToken}`;
             
             await fetch('https://api.resend.com/emails', {
                 method: 'POST',
