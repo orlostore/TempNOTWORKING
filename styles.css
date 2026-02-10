@@ -2751,23 +2751,75 @@ footer p {
 /* ============================================
    INDEX PAGE GRID - LIMIT TOOLTIP OVERRIDES
    ============================================ */
-.product-info .limit-tooltip {
-  bottom: 68px;
-  border-radius: 8px !important;
-  font-size: 0.78rem !important;
-  padding: 10px 32px 10px 14px !important;
+.grid-limit-tooltip {
+  position: fixed;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #2c4a5c;
+  padding: 10px 32px 10px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.06);
+  white-space: nowrap;
+  text-align: center;
+  z-index: 9999;
+  animation: tooltipFadeIn 0.3s ease forwards;
+  transform: translateX(-50%);
 }
 
-.product-info .limit-tooltip::after {
+.grid-limit-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-top: 6px solid rgba(255, 255, 255, 0.95);
 }
 
-@media (max-width: 768px) {
-  .product-card:has(.limit-tooltip) {
-    overflow: visible !important;
-  }
+.grid-limit-tooltip .tooltip-text-ar {
+  font-family: 'Almarai', sans-serif;
+  display: block;
+  font-size: 0.65rem;
+  color: #888;
+  margin-top: 4px;
+}
+
+.grid-limit-tooltip .highlight {
+  color: #2c4a5c;
+  font-weight: 700;
+}
+
+.grid-limit-tooltip .close-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 16px;
+  height: 16px;
+  background: rgba(0,0,0,0.08);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.55rem;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.grid-limit-tooltip .close-btn:hover {
+  background: rgba(0,0,0,0.15);
+  color: #555;
+}
+
+.grid-limit-tooltip.fade-out {
+  animation: tooltipFadeOut 0.3s ease forwards;
 }
 
 /* ============================================
