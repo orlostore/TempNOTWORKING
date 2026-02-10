@@ -2752,8 +2752,8 @@ footer p {
    INDEX PAGE GRID - LIMIT TOOLTIP OVERRIDES
    ============================================ */
 .product-info .limit-tooltip {
-  bottom: 42px;
-  border-radius: 8px;
+  bottom: 48px;
+  border-radius: 8px !important;
 }
 
 .product-info .limit-tooltip::after {
