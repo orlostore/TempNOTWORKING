@@ -51,8 +51,8 @@ function showGridMaxLimitMessage(productId, maxAllowed) {
     const gridQty = document.getElementById(`gridQty-${productId}`);
     if (gridQty) {
       const rect = gridQty.getBoundingClientRect();
-      tooltip.style.left = (rect.left + rect.width / 2) + 'px';
-      tooltip.style.top = (rect.top - tooltip.offsetHeight - 8) + 'px';
+      tooltip.style.left = (rect.left + rect.width / 2 + window.scrollX) + 'px';
+      tooltip.style.top = (rect.top + window.scrollY - tooltip.offsetHeight - 8) + 'px';
     }
     
     // Auto-dismiss after 3 seconds
