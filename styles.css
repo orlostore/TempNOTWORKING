@@ -2752,7 +2752,7 @@ footer p {
    INDEX PAGE GRID - LIMIT TOOLTIP OVERRIDES
    ============================================ */
 .grid-limit-tooltip {
-  position: fixed;
+  position: absolute;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
