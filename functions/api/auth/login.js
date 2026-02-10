@@ -31,17 +31,18 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'Invalid email or password' }, { status: 401 });
         }
         
-        // Generate new token
-        const newToken = generateToken();
-        
-        // Update token in database
-        await DB.prepare('UPDATE customers SET token = ? WHERE id = ?')
-            .bind(newToken, customer.id)
-            .run();
+        // Reuse existing token or generate new one
+        let token = customer.token;
+        if (!token) {
+            token = generateToken();
+            await DB.prepare('UPDATE customers SET token = ? WHERE id = ?')
+                .bind(token, customer.id)
+                .run();
+        }
         
         return Response.json({
             success: true,
-            token: newToken,
+            token: token,
             customer: {
                 id: customer.id,
                 name: customer.name,
