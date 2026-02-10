@@ -58,7 +58,7 @@ export async function onRequestPost(context) {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        from: 'ORLO <noreply@orlostore.com>',
+                        from: 'ORLO Store <noreply@orlostore.com>',
                         to: email.toLowerCase(),
                         subject: 'Verify Your Email | تأكيد بريدك الإلكتروني',
                         html: `
