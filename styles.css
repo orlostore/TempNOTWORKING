@@ -2755,6 +2755,7 @@ footer p {
   bottom: 68px;
   border-radius: 8px !important;
   font-size: 0.78rem !important;
+  padding: 10px 32px 10px 14px !important;
 }
 
 .product-info .limit-tooltip::after {
@@ -2764,12 +2765,6 @@ footer p {
 }
 
 @media (max-width: 768px) {
-  .product-info .limit-tooltip {
-    border-radius: 8px !important;
-    -webkit-border-radius: 8px !important;
-    -moz-border-radius: 8px !important;
-  }
-  
   .product-card:has(.limit-tooltip) {
     overflow: visible !important;
   }
