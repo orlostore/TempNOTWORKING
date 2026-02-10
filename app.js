@@ -727,6 +727,12 @@ function removeFromCart(id) {
     if (gridQty) {
         gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)">Add to Cart | أضف إلى السلة</button>`;
     }
+    // ADD THESE LINES - Reset product page transformed button if visible
+    const transformedBtn = document.getElementById(`transformedBtn-${id}`);
+    if (transformedBtn && typeof resetToAddButton === 'function') {
+        resetToAddButton(id);
+    }
+}
 }
 
 function toggleCart() { 
