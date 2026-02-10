@@ -2763,7 +2763,7 @@ footer p {
   font-weight: 500;
   box-shadow: 0 8px 32px rgba(0,0,0,0.12);
   border: none;
-  overflow: hidden;
+  overflow: visible;
   white-space: nowrap;
   text-align: center;
   z-index: 9999;
