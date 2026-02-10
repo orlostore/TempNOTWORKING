@@ -65,7 +65,7 @@ export async function onRequestPost(context) {
                             <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden;">
                                 <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 20px; text-align: center;">
                                     <img src="https://temp-5lr.pages.dev/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
-                                    <div style="color: white; font-size: 22px; font-weight: 700; letter-spacing: 1px;">ORLO Store</div>
+                                    <div style="color: #2c4a5c; font-size: 22px; font-weight: 700; letter-spacing: 1px;">ORLO Store</div>
                                 </div>
                                 <div style="background: white; padding: 30px 25px;">
                                     <h2 style="color: #2c4a5c; margin: 0 0 15px; font-size: 18px; font-weight: 600;">Welcome, ${name}!</h2>
