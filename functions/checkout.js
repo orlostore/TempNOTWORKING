@@ -33,6 +33,37 @@ export async function onRequestPost(context) {
             });
         }
 
+        // === CHECK IF LOGGED-IN CUSTOMER ===
+        let customerEmail = null;
+        let customerAddress = null;
+        let customerPhone = null;
+        
+        const authHeader = request.headers.get('Authorization');
+        if (authHeader && authHeader.startsWith('Bearer ') && DB) {
+            const token = authHeader.replace('Bearer ', '');
+            const customer = await DB.prepare('SELECT id, email, name FROM customers WHERE token = ?')
+                .bind(token)
+                .first();
+            
+            if (customer) {
+                customerEmail = customer.email;
+                
+                // Get default address (or most recent)
+                const address = await DB.prepare(`
+                    SELECT full_name, phone, street, building, area, emirate, landmark
+                    FROM customer_addresses
+                    WHERE customer_id = ?
+                    ORDER BY is_default DESC, id DESC
+                    LIMIT 1
+                `).bind(customer.id).first();
+                
+                if (address) {
+                    customerAddress = address;
+                    customerPhone = address.phone;
+                }
+            }
+        }
+
         // === STOCK VERIFICATION ===
         const outOfStock = [];
         const insufficientStock = [];
@@ -115,13 +146,67 @@ export async function onRequestPost(context) {
         const siteUrl = `${url.protocol}//${url.host}`;
 
         // === CREATE STRIPE SESSION ===
+        let stripeCustomerId = null;
+        
+        // If logged in with address, create/update Stripe customer for pre-fill
+        if (customerEmail && customerAddress) {
+            // Search for existing Stripe customer by email
+            const searchRes = await fetch(`https://api.stripe.com/v1/customers/search?query=email:'${encodeURIComponent(customerEmail)}'`, {
+                headers: { 'Authorization': `Bearer ${STRIPE_SECRET_KEY}` }
+            });
+            const searchData = await searchRes.json();
+            
+            const line1 = `${customerAddress.building}, ${customerAddress.street}`;
+            const line2Parts = [];
+            if (customerAddress.area) line2Parts.push(customerAddress.area);
+            if (customerAddress.landmark) line2Parts.push(`Near ${customerAddress.landmark}`);
+            const line2 = line2Parts.join(', ') || undefined;
+            
+            const customerParams = new URLSearchParams();
+            customerParams.append('email', customerEmail);
+            customerParams.append('name', customerAddress.full_name);
+            if (customerPhone) customerParams.append('phone', customerPhone);
+            customerParams.append('shipping[name]', customerAddress.full_name);
+            customerParams.append('shipping[phone]', customerPhone || '');
+            customerParams.append('shipping[address][line1]', line1);
+            if (line2) customerParams.append('shipping[address][line2]', line2);
+            customerParams.append('shipping[address][city]', customerAddress.emirate || 'Dubai');
+            customerParams.append('shipping[address][state]', customerAddress.emirate || 'Dubai');
+            customerParams.append('shipping[address][country]', 'AE');
+            
+            if (searchData.data && searchData.data.length > 0) {
+                // Update existing customer
+                stripeCustomerId = searchData.data[0].id;
+                await fetch(`https://api.stripe.com/v1/customers/${stripeCustomerId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: customerParams.toString()
+                });
+            } else {
+                // Create new customer
+                const createRes = await fetch('https://api.stripe.com/v1/customers', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: customerParams.toString()
+                });
+                const newCustomer = await createRes.json();
+                stripeCustomerId = newCustomer.id;
+            }
+        }
+
         const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart)
+            body: buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, customerEmail, stripeCustomerId)
         });
 
         const session = await stripeResponse.json();
@@ -159,12 +244,12 @@ export async function onRequestOptions() {
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         }
     });
 }
 
-function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart) {
+function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, customerEmail, stripeCustomerId) {
     const params = new URLSearchParams();
     
     params.append('mode', 'payment');
@@ -179,6 +264,14 @@ function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart) 
     params.append('metadata[delivery_zone]', zone.name);
     params.append('metadata[order_subtotal]', subtotal.toFixed(2));
     params.append('metadata[delivery_fee]', deliveryFee.toFixed(2));
+    
+    // Pre-fill customer info
+    if (stripeCustomerId) {
+        params.append('customer', stripeCustomerId);
+        params.append('customer_update[shipping]', 'auto');
+    } else if (customerEmail) {
+        params.append('customer_email', customerEmail);
+    }
     
     // Store cart data for webhook to deduct inventory
     params.append('metadata[cart_items]', JSON.stringify(cart.map(item => ({
