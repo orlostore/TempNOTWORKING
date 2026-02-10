@@ -2655,7 +2655,7 @@ footer p {
 
 @media (min-width: 769px) {
   .product-buybox .limit-tooltip {
-    bottom: calc(100% - 59px);
+    bottom: calc(100% - 62px);
   }
 }
 
