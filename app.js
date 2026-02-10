@@ -45,14 +45,13 @@ function showGridMaxLimitMessage(productId, maxAllowed) {
       <span class="tooltip-text-ar">${messageAr}</span>
     `;
     
-    document.body.appendChild(tooltip);
-    
-    // Position above the grid qty control
+    // Append inside the product card itself
     const gridQty = document.getElementById(`gridQty-${productId}`);
-    if (gridQty) {
-      const rect = gridQty.getBoundingClientRect();
-      tooltip.style.left = (rect.left + rect.width / 2 + window.scrollX) + 'px';
-      tooltip.style.top = (rect.top + window.scrollY - tooltip.offsetHeight - 8) + 'px';
+    const card = gridQty ? gridQty.closest('.product-card') : null;
+    
+    if (card) {
+      card.style.overflow = 'visible';
+      card.appendChild(tooltip);
     }
     
     // Auto-dismiss after 3 seconds
@@ -61,7 +60,10 @@ function showGridMaxLimitMessage(productId, maxAllowed) {
       if (tip) {
         tip.classList.add('fade-out');
         setTimeout(() => {
-          if (tip.parentNode) tip.remove();
+          if (tip.parentNode) {
+            tip.parentNode.style.overflow = '';
+            tip.remove();
+          }
         }, 300);
       }
     }, 3000);
@@ -76,7 +78,10 @@ function closeGridLimitTooltip() {
     }
     tooltip.classList.add('fade-out');
     setTimeout(() => {
-      if (tooltip.parentNode) tooltip.remove();
+      if (tooltip.parentNode) {
+        tooltip.parentNode.style.overflow = '';
+        tooltip.remove();
+      }
     }, 300);
   }
 }
