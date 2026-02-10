@@ -1,5 +1,21 @@
 const WHATSAPP_NUMBER = "971XXXXXXXXX"; 
 
+// Inject cart shake animation
+if (!document.getElementById('cartLimitStyles')) {
+    const style = document.createElement('style');
+    style.id = 'cartLimitStyles';
+    style.textContent = `
+        @keyframes cartQtyShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-3px); }
+            40% { transform: translateX(3px); }
+            60% { transform: translateX(-2px); }
+            80% { transform: translateX(2px); }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 // === FREE DELIVERY THRESHOLD - Change this value to adjust ===
 const FREE_DELIVERY_THRESHOLD = 75;
 
@@ -435,7 +451,7 @@ function updateCart() {
     }
     
     cartItems.innerHTML = cart.map(i => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
+        <div id="cartItem-${i.id}" style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee; position:relative;">
             <div style="flex:1;">
                 <strong style="font-size:0.9rem; color:#2c4a5c;">${i.name}</strong><br>
                 <span style="color:#888; font-size:0.8rem;">AED ${i.price} × ${i.quantity}</span><br>
@@ -554,11 +570,12 @@ function updateQuantity(id, change) {
     if (item) { 
         const newQty = item.quantity + change;
         
-        // Silent cap at 10 OR available stock (whichever is lower)
+        // Cap at 10 OR available stock (whichever is lower)
         if (change > 0) {
             const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
             if (newQty > maxAllowed) {
-                return; // Silent - already at max
+                showCartLimitMessage(id, maxAllowed);
+                return;
             }
         }
         
@@ -570,6 +587,47 @@ function updateQuantity(id, change) {
             updateCart(); 
         } 
     } 
+}
+
+// Show limit message inside cart sidebar for a specific item
+function showCartLimitMessage(productId, maxAllowed) {
+    // Remove any existing
+    const existing = document.getElementById('cartLimitMsg');
+    if (existing) existing.remove();
+    if (window.cartLimitTimer) clearTimeout(window.cartLimitTimer);
+    
+    const isStockLimit = maxAllowed < MAX_QTY_PER_PRODUCT;
+    const msgText = isStockLimit 
+        ? `Only ${maxAllowed} in stock · متبقي ${toArabicNumerals(maxAllowed)} فقط`
+        : `Max ${MAX_QTY_PER_PRODUCT} per order · الحد ${toArabicNumerals(MAX_QTY_PER_PRODUCT)} لكل طلب`;
+    
+    const cartItem = document.getElementById(`cartItem-${productId}`);
+    if (!cartItem) return;
+    
+    // Shake the quantity number
+    const qtySpan = cartItem.querySelector('span[style*="min-width"]');
+    if (qtySpan) {
+        qtySpan.style.animation = 'none';
+        qtySpan.offsetHeight; // trigger reflow
+        qtySpan.style.animation = 'cartQtyShake 0.4s ease';
+    }
+    
+    // Show inline pill message
+    const msg = document.createElement('div');
+    msg.id = 'cartLimitMsg';
+    msg.style.cssText = 'position:absolute; bottom:-22px; left:50%; transform:translateX(-50%); background:#2c4a5c; color:white; font-size:0.62rem; font-weight:500; padding:3px 10px; border-radius:10px; white-space:nowrap; z-index:10; opacity:0; transition:opacity 0.25s; box-shadow:0 2px 8px rgba(0,0,0,0.15);';
+    msg.textContent = msgText;
+    
+    cartItem.appendChild(msg);
+    
+    // Fade in
+    requestAnimationFrame(() => { msg.style.opacity = '1'; });
+    
+    // Auto-dismiss
+    window.cartLimitTimer = setTimeout(() => {
+        msg.style.opacity = '0';
+        setTimeout(() => { if (msg.parentNode) msg.remove(); }, 250);
+    }, 2200);
 }
 
 function removeFromCart(id) { 
