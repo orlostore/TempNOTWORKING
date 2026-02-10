@@ -2754,18 +2754,20 @@ footer p {
 .product-info .limit-tooltip {
   bottom: 68px;
   border-radius: 8px !important;
-  -webkit-border-radius: 8px !important;
-  border: 1px solid rgba(0,0,0,0.08) !important;
-  background: rgba(255, 255, 255, 0.97) !important;
-  overflow: visible !important;
-  white-space: normal !important;
-  max-width: calc(100% - 16px) !important;
 }
 
 .product-info .limit-tooltip::after {
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-top: 6px solid rgba(255, 255, 255, 0.95);
+}
+
+@media (max-width: 768px) {
+  .product-info .limit-tooltip {
+    border-radius: 8px !important;
+    -webkit-border-radius: 8px !important;
+    -moz-border-radius: 8px !important;
+  }
 }
 
 /* ============================================
