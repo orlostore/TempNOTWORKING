@@ -12,15 +12,15 @@ function toArabicNumerals(num) {
   return String(num).split('').map(d => arabicNums[parseInt(d)] || d).join('');
 }
 
-// Show limit tooltip on index page grid cards (same style as product page)
+// Show limit tooltip on index page grid cards (fixed to viewport, no card interference)
 function showGridMaxLimitMessage(productId, maxAllowed) {
     // Remove any existing tooltip
-    const existing = document.getElementById('limitTooltip');
+    const existing = document.getElementById('gridLimitTooltip');
     if (existing) existing.remove();
     
     // Clear any existing timer
-    if (window.limitTooltipTimer) {
-      clearTimeout(window.limitTooltipTimer);
+    if (window.gridLimitTooltipTimer) {
+      clearTimeout(window.gridLimitTooltipTimer);
     }
     
     // Determine message type
@@ -37,26 +37,27 @@ function showGridMaxLimitMessage(productId, maxAllowed) {
     
     // Create tooltip
     const tooltip = document.createElement('div');
-    tooltip.id = 'limitTooltip';
-    tooltip.className = 'limit-tooltip';
+    tooltip.id = 'gridLimitTooltip';
+    tooltip.className = 'grid-limit-tooltip';
     tooltip.innerHTML = `
-      <button class="close-btn" onclick="closeLimitTooltip()">✕</button>
+      <button class="close-btn" onclick="closeGridLimitTooltip()">✕</button>
       ${messageEn}
       <span class="tooltip-text-ar">${messageAr}</span>
     `;
     
-    // Find the product card's .product-info container
-    const gridQty = document.getElementById(`gridQty-${productId}`);
-    const container = gridQty ? gridQty.closest('.product-info') : null;
+    document.body.appendChild(tooltip);
     
-    if (container) {
-      container.style.position = 'relative';
-      container.appendChild(tooltip);
+    // Position above the grid qty control
+    const gridQty = document.getElementById(`gridQty-${productId}`);
+    if (gridQty) {
+      const rect = gridQty.getBoundingClientRect();
+      tooltip.style.left = (rect.left + rect.width / 2) + 'px';
+      tooltip.style.top = (rect.top - tooltip.offsetHeight - 8) + 'px';
     }
     
     // Auto-dismiss after 3 seconds
-    window.limitTooltipTimer = setTimeout(() => {
-      const tip = document.getElementById('limitTooltip');
+    window.gridLimitTooltipTimer = setTimeout(() => {
+      const tip = document.getElementById('gridLimitTooltip');
       if (tip) {
         tip.classList.add('fade-out');
         setTimeout(() => {
@@ -66,12 +67,12 @@ function showGridMaxLimitMessage(productId, maxAllowed) {
     }, 3000);
 }
 
-// Close tooltip immediately
-function closeLimitTooltip() {
-  const tooltip = document.getElementById('limitTooltip');
+// Close grid tooltip immediately
+function closeGridLimitTooltip() {
+  const tooltip = document.getElementById('gridLimitTooltip');
   if (tooltip) {
-    if (window.limitTooltipTimer) {
-      clearTimeout(window.limitTooltipTimer);
+    if (window.gridLimitTooltipTimer) {
+      clearTimeout(window.gridLimitTooltipTimer);
     }
     tooltip.classList.add('fade-out');
     setTimeout(() => {
