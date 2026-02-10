@@ -2749,6 +2749,34 @@ footer p {
 }
 
 /* ============================================
+   INDEX PAGE GRID - LIMIT TOOLTIP OVERRIDES
+   ============================================ */
+.product-info .limit-tooltip {
+  bottom: calc(100% + 4px);
+  border-radius: 8px;
+}
+
+.product-info .limit-tooltip::after {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(255, 255, 255, 0.95);
+}
+
+@media (max-width: 768px) {
+  .product-info .limit-tooltip {
+    font-size: 0.75rem;
+    padding: 10px 30px 10px 12px;
+    white-space: normal;
+    min-width: 0;
+    max-width: 90vw;
+  }
+
+  .product-info .limit-tooltip .tooltip-text-ar {
+    font-size: 0.65rem;
+  }
+}
+
+/* ============================================
    GRID PRODUCT CARD - QTY STEPPER
    ============================================ */
 .grid-qty-control {
