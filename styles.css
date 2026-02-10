@@ -2754,7 +2754,7 @@ footer p {
 .product-info .limit-tooltip {
   bottom: 68px;
   border-radius: 8px !important;
-  padding: 12px 33px 12px 14px !important;
+  font-size: 0.78rem !important;
 }
 
 .product-info .limit-tooltip::after {
