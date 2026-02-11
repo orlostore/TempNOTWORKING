@@ -64,7 +64,7 @@ export async function onRequestPost(context) {
         const addr = details.address;
         if (addr && addr.line1) {
             await DB.prepare(`
-                INSERT INTO addresses (customer_id, full_name, phone, street, building, area, emirate, landmark, address_type, is_default, created_at)
+                INSERT INTO customer_addresses (customer_id, full_name, phone, street, building, area, emirate, landmark, address_type, is_default, created_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'home', 1, datetime('now'))
             `).bind(
                 customerId,
