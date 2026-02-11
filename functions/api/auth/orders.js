@@ -51,7 +51,9 @@ export async function onRequestGet(context) {
         const completedSessions = (stripeData.data || []).filter(
             session => session.payment_status === 'paid'
         );
-        
+        // Get shipped orders from D1
+const { results: shippedRows } = await DB.prepare('SELECT order_id FROM shipped_orders').all();
+const shippedIds = new Set(shippedRows.map(r => r.order_id));
         // Format orders
         const orders = completedSessions.map(session => {
             const items = session.line_items?.data?.map(item => ({
@@ -65,7 +67,7 @@ export async function onRequestGet(context) {
                 created: session.created,
                 amount_total: session.amount_total,
                 currency: session.currency,
-                status: session.metadata?.shipped === 'true' ? 'shipped' : 'pending',
+                status: (session.metadata?.shipped === 'true' || shippedIds.has(session.id)) ? 'shipped' : 'pending',
                 items: items
             };
         });
