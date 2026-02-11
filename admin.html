@@ -1864,24 +1864,35 @@
         }
         
         async function markShipped(orderId, customerEmail) {
-            if (!confirm('Mark this order as shipped? An email will be sent to the customer.')) return;
-            
-            try {
-                // Save to local storage (Stripe sessions can't be updated)
-                shippedOrders.push(orderId);
-                localStorage.setItem('orlo_shipped_orders', JSON.stringify(shippedOrders));
-                
-                // Update UI immediately
-                orders = orders.map(o => o.id === orderId ? {...o, status: 'shipped'} : o);
-                applyFilters();
-                
-                // TODO: Send shipping email to customer
-                alert(`Order marked as shipped!\n\nCustomer email: ${customerEmail}\n\nNote: Email notification feature coming soon.`);
-                
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
+    if (!confirm('Mark this order as shipped? An email will be sent to the customer.')) return;
+    
+    const order = orders.find(o => o.id === orderId);
+    
+    try {
+        const response = await fetch(`/api/admin/ship-order?key=${authKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                order_id: orderId,
+                customer_email: customerEmail,
+                customer_name: order?.customer_name || '',
+                items: order?.items || []
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            orders = orders.map(o => o.id === orderId ? {...o, status: 'shipped'} : o);
+            applyFilters();
+            alert('Shipped! Email sent to ' + customerEmail);
+        } else {
+            alert('Error: ' + (data.error || 'Unknown error'));
         }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
         
         checkAuth();
     </script>
