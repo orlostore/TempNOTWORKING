@@ -1,0 +1,10 @@
+/account*
+  Cache-Control: no-cache, no-store, must-revalidate
+/login*
+  Cache-Control: no-cache, no-store, must-revalidate
+/signup*
+  Cache-Control: no-cache, no-store, must-revalidate
+/success*
+  Cache-Control: no-cache, no-store, must-revalidate
+/cancel*
+  Cache-Control: no-cache, no-store, must-revalidate
