@@ -93,7 +93,7 @@ function transformToQtyButton(btn, product) {
     <div class="product-btn-transformed" id="transformedBtn-${product.id}">
       <button class="qty-btn minus" onclick="productQtyChange(${product.id}, -1)">−</button>
       <div class="center-section" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();">
-        //<span class="cart-icon">🛒</span>
+        // <span class="cart-icon">🛒</span>
         <span class="qty-display" id="qtyDisplay-${product.id}">${qty}</span>
       </div>
       <button class="qty-btn plus" onclick="productQtyChange(${product.id}, 1)">+</button>
