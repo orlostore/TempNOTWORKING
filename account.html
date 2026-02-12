@@ -17,12 +17,12 @@
         .account-header {
             background: linear-gradient(135deg, var(--primary) 0%, #1e3545 100%);
             color: white;
+            border-radius: 12px;
+            margin-bottom: 25px;
         }
         
         .account-header-inner {
-            max-width: 1220px;
-            margin: 0 auto;
-            padding: 25px 40px;
+            padding: 25px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -88,9 +88,9 @@
         }
         
         .account-content {
-            max-width: 1220px;
+            max-width: 1180px;
             margin: 0 auto;
-            padding: 30px 40px;
+            padding: 30px 20px;
         }
         
         .account-tabs {
@@ -716,22 +716,21 @@
 </header>
 
     <div class="account-container">
-        <div class="account-header">
-            <div class="account-header-inner">
-                <div class="account-header-left">
-                    <div class="account-welcome">
-                        <h1>Hello, <span id="customerName">Customer</span>!</h1>
-                        <p>مرحباً بك في حسابك</p>
+        <div class="account-content">
+            <div class="account-header">
+                <div class="account-header-inner">
+                    <div class="account-header-left">
+                        <div class="account-welcome">
+                            <h1>Hello, <span id="customerName">Customer</span>!</h1>
+                            <p>مرحباً بك في حسابك</p>
+                        </div>
+                    </div>
+                    <div class="account-header-actions">
+                        <a href="/" class="btn btn-outline">🛒 Continue Shopping</a>
+                        <button class="btn btn-primary" onclick="logout()">Logout | خروج</button>
                     </div>
                 </div>
-                <div class="account-header-actions">
-                    <a href="/" class="btn btn-outline">🛒 Continue Shopping</a>
-                    <button class="btn btn-primary" onclick="logout()">Logout | خروج</button>
-                </div>
             </div>
-        </div>
-        
-        <div class="account-content">
             <!-- Email verification banner (hidden by default) -->
             <div id="verifyBanner" class="verify-banner" style="display: none;">
                 <div class="verify-banner-text">
