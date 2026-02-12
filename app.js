@@ -370,85 +370,23 @@ function addToCart(id, event) {
     updateCartCounts();
     updateCart(); 
     
-    // Show grand popup
-    showCartPopup(product);
+    // Pulse the cart badge
+    pulseBadge();
 }
 
-function showCartPopup(product) {
-    const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const productQty = cart.find(i => i.id === product.id)?.quantity || 1;
-    
-    // Get product image
-    const isUrl = product.image && product.image.startsWith('http');
-    const imageHTML = isUrl 
-        ? `<img src="${product.image}" alt="${product.name}" style="width:100%; height:100%; object-fit:contain;">` 
-        : `<span style="font-size:3rem;">${product.image || '📦'}</span>`;
-    
-    const popup = document.getElementById('cartPopup');
-    const popupContent = document.getElementById('cartPopupContent');
-    
-    popupContent.innerHTML = `
-        <div class="popup-top">
-            <button class="popup-close-btn" onclick="closeCartPopup()">✕</button>
-            <div class="popup-success-badge">✓ Success!</div>
-            <div class="popup-title">Added to Cart</div>
-            <div class="popup-title-ar">تمت الإضافة للسلة</div>
-        </div>
-        <div class="popup-product-float">
-            <div class="popup-product-card">
-                <div class="popup-product-image">${imageHTML}</div>
-                <div class="popup-product-details">
-                    <div class="popup-product-name">${product.name}</div>
-                    ${product.nameAr ? `<div class="popup-product-name-ar">${product.nameAr}</div>` : ''}
-                    <div class="popup-product-price">AED ${product.price}</div>
-                </div>
-            </div>
-        </div>
-        <div class="popup-bottom">
-            <div class="popup-cart-summary">
-                <span class="popup-summary-label">Cart Total (${cartCount} ${cartCount === 1 ? 'item' : 'items'}):</span>
-                <span class="popup-summary-value">AED ${cartTotal.toFixed(2)}</span>
-            </div>
-            <div class="popup-buttons">
-                <button class="popup-btn-view-cart" onclick="closeCartPopup(); toggleCart();">
-                    🛒 View Cart | <span class="arabic-text">عرض السلة</span>
-                </button>
-                <button class="popup-btn-continue" onclick="closeCartPopup()">
-                    Continue Shopping | <span class="arabic-text">متابعة التسوق</span>
-                </button>
-            </div>
-        </div>
-    `;
-    
-    // Clear any existing timer
-    if (window.cartPopupTimer) {
-        clearTimeout(window.cartPopupTimer);
-    }
-    
-    popup.classList.add('active');
-    
-    // Auto-fade after 2 seconds
-    window.cartPopupTimer = setTimeout(() => {
-        closeCartPopup();
-    }, 2000);
-}
-
-function closeCartPopup() {
-    const popup = document.getElementById('cartPopup');
-    
-    // Clear timer if manually closed
-    if (window.cartPopupTimer) {
-        clearTimeout(window.cartPopupTimer);
-    }
-    
-    // Add fade-out class for smooth animation
-    popup.classList.add('fade-out');
-    
-    setTimeout(() => {
-        popup.classList.remove('active');
-        popup.classList.remove('fade-out');
-    }, 300);
+function pulseBadge() {
+    const badges = [
+        document.getElementById('cartCount'),
+        document.getElementById('bottomCartCount'),
+        document.getElementById('mobileCartCount')
+    ];
+    badges.forEach(badge => {
+        if (!badge) return;
+        badge.classList.remove('badge-pulse');
+        badge.offsetHeight;
+        badge.classList.add('badge-pulse');
+        setTimeout(() => badge.classList.remove('badge-pulse'), 600);
+    });
 }
 
 function updateCart() {
@@ -605,16 +543,16 @@ function updateCart() {
     
     footerHTML += `
         <div style="padding: 0.6rem 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
-            <div style="display: flex; justify-content: space-between; padding: 0.25rem 0; font-size: 0.9rem; color: #2c4a5c;">
+            <div style="display: flex; justify-content: space-between; padding: 0.2rem 0; font-size: 0.9rem; color: #2c4a5c;">
                 <span>Subtotal / المجموع الفرعي:</span>
                 <span>AED ${subtotal.toFixed(2)}</span>
             </div>
-            <div style="display: flex; justify-content: space-between; padding: 0.25rem 0; font-size: 0.9rem; color: #2c4a5c;">
+            <div style="display: flex; justify-content: space-between; padding: 0.2rem 0; font-size: 0.9rem; color: #2c4a5c;">
                 <span>Delivery / التوصيل:</span>
                 <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE / مجاني' : 'AED ' + deliveryFee.toFixed(2)}</span>
             </div>
             <div style="border-top: 2px solid #ddd; margin: 0.3rem 0;"></div>
-            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0 0.25rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;">
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0 0.2rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;">
                 <span>Total / الإجمالي:</span>
                 <span>AED ${total.toFixed(2)}</span>
             </div>
@@ -623,7 +561,7 @@ function updateCart() {
     
     if (!isMobile) {
         footerHTML += `
-            <div style="padding: 0 1rem 1rem;">
+            <div style="padding: 0 1rem 0.75rem;">
                 ${checkoutBtnHTML}
             </div>
         `;
@@ -670,7 +608,7 @@ function updateQuantity(id, change) {
     } 
 }
 
-// Show limit message inside cart sidebar for a specific item
+// Show limit message inside cart sidebar for a specific item (Option B - inline red text)
 function showCartLimitMessage(productId, maxAllowed) {
     // Remove any existing
     const existing = document.getElementById('cartLimitMsg');
@@ -682,7 +620,7 @@ function showCartLimitMessage(productId, maxAllowed) {
     let messageEn, messageAr;
     if (isStockLimit) {
       messageEn = `⚠ Only <span class="highlight">${maxAllowed}</span> left in stock`;
-      messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط`;
+      messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط في المخزون`;
     } else {
       messageEn = `⚠ Max <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
       messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
@@ -699,14 +637,14 @@ function showCartLimitMessage(productId, maxAllowed) {
         plusBtn.style.animation = 'cartQtyShake 0.4s ease';
     }
     
-    // Append inline red text under the price (inside the info div)
+    // Find the info div (first child div) and append inline message
     const infoDiv = cartItem.querySelector('div');
     if (!infoDiv) return;
     
     const msg = document.createElement('div');
     msg.id = 'cartLimitMsg';
-    msg.className = 'cart-limit-msg';
-    msg.innerHTML = `${messageEn} <span class="cart-limit-ar">${messageAr}</span>`;
+    msg.className = 'cart-limit-msg-inline';
+    msg.innerHTML = `${messageEn} <span class="cart-limit-ar-inline">${messageAr}</span>`;
     
     infoDiv.appendChild(msg);
     
@@ -715,7 +653,8 @@ function showCartLimitMessage(productId, maxAllowed) {
       const tip = document.getElementById('cartLimitMsg');
       if (tip) {
         tip.style.opacity = '0';
-        setTimeout(() => { if (tip.parentNode) tip.remove(); }, 300);
+        tip.style.transition = 'opacity 0.4s';
+        setTimeout(() => { if (tip.parentNode) tip.remove(); }, 400);
       }
     }, 3000);
 }
