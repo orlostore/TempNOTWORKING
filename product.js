@@ -150,6 +150,9 @@ function productQtyChange(productId, change) {
   if (mobileCartCount) mobileCartCount.textContent = totalItems;
   
   if (typeof updateCart === 'function') updateCart();
+  
+  // Pulse badge on quantity increase
+  if (change > 0 && typeof pulseBadge === 'function') pulseBadge();
 }
 
 // Reset transformed button back to Add to Cart
@@ -205,6 +208,8 @@ function resetToAddButton(productId) {
     if (mobileCartCount) mobileCartCount.textContent = totalItems;
     
     if (typeof updateCart === 'function') updateCart();
+    
+    if (typeof pulseBadge === 'function') pulseBadge();
     
     transformToQtyButton(this, product);
     return true;
@@ -484,6 +489,9 @@ async function initProductPage() {
     if (typeof updateCart === 'function') {
       updateCart();
     }
+    
+    // Pulse the cart badge
+    if (typeof pulseBadge === 'function') pulseBadge();
     
     return true;
   };
