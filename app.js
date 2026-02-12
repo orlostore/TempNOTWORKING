@@ -370,87 +370,23 @@ function addToCart(id, event) {
     updateCartCounts();
     updateCart(); 
     
-    // Show grand popup
-    showCartPopup(product);
+    // Pulse the cart badge
+    pulseBadge();
 }
 
-function showCartPopup(product) {
-    const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const productQty = cart.find(i => i.id === product.id)?.quantity || 1;
-    
-    // Get product image
-    const isUrl = product.image && product.image.startsWith('http');
-    const imageHTML = isUrl 
-        ? `<img src="${product.image}" alt="${product.name}" style="width:100%; height:100%; object-fit:contain;">` 
-        : `<span style="font-size:3rem;">${product.image || '📦'}</span>`;
-    
-    const popup = document.getElementById('cartPopup');
-    const popupContent = document.getElementById('cartPopupContent');
-    
-    popupContent.innerHTML = `
-        <div class="popup-top">
-            <button class="popup-close-btn" onclick="closeCartPopup()">✕</button>
-            <div class="popup-success-badge">✓ Success!</div>
-            <div class="popup-title">Added to Cart</div>
-            <div class="popup-title-ar">تمت الإضافة للسلة</div>
-        </div>
-        <div class="popup-product-float">
-            <div class="popup-product-card">
-                <div class="popup-product-image">${imageHTML}</div>
-                <div class="popup-product-details">
-                    <div class="popup-product-name">${product.name}</div>
-                    ${product.nameAr ? `<div class="popup-product-name-ar">${product.nameAr}</div>` : ''}
-                    <div class="popup-product-price">AED ${product.price}</div>
-                </div>
-            </div>
-        </div>
-        <div class="popup-bottom">
-            <div class="popup-cart-summary">
-                <span class="popup-summary-label">Cart Total (${cartCount} ${cartCount === 1 ? 'item' : 'items'}):</span>
-                <span class="popup-summary-value">AED ${cartTotal.toFixed(2)}</span>
-            </div>
-            <div class="popup-buttons">
-                <button class="popup-btn-view-cart" onclick="closeCartPopup(); toggleCart();">
-                    🛒 View Cart | <span class="arabic-text">عرض السلة</span>
-                </button>
-                <button class="popup-btn-continue" onclick="closeCartPopup()">
-                    Continue Shopping | <span class="arabic-text">متابعة التسوق</span>
-                </button>
-            </div>
-        </div>
-    `;
-    
-    // Clear any existing timer
-    if (window.cartPopupTimer) {
-        clearTimeout(window.cartPopupTimer);
-    }
-    
-    popup.classList.add('active');
-    
-    // Auto-fade after 2 seconds
-    window.cartPopupTimer = setTimeout(() => {
-        closeCartPopup();
-    }, 2000);
-}
-
-function closeCartPopup() {
-    const popup = document.getElementById('cartPopup');
-    
-    // Clear timer if manually closed
-    if (window.cartPopupTimer) {
-        clearTimeout(window.cartPopupTimer);
-    }
-    
-    // Add fade-out class for smooth animation
-    popup.classList.add('fade-out');
-    
-    // Match the longer mobile fade duration (0.8s)
-    const isMobile = window.innerWidth <= 768;
-    setTimeout(() => {
-        popup.classList.remove('active');
-        popup.classList.remove('fade-out');
-    }, isMobile ? 800 : 600);
+function pulseBadge() {
+    const badges = [
+        document.getElementById('cartCount'),
+        document.getElementById('bottomCartCount'),
+        document.getElementById('mobileCartCount')
+    ];
+    badges.forEach(badge => {
+        if (!badge) return;
+        badge.classList.remove('badge-pulse');
+        badge.offsetHeight;
+        badge.classList.add('badge-pulse');
+        setTimeout(() => badge.classList.remove('badge-pulse'), 600);
+    });
 }
 
 function updateCart() {
