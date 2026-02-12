@@ -163,6 +163,10 @@
             color: var(--primary);
         }
         
+        .card-header h2 svg {
+            vertical-align: -3px;
+        }
+        
         .card-body {
             padding: 20px;
         }
@@ -573,7 +577,13 @@
             
             .account-tab .tab-icon {
                 font-size: 1rem;
-                display: block;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .account-tab .tab-icon svg {
+                vertical-align: middle;
             }
             
             .account-tab .tab-en {
@@ -606,7 +616,7 @@
                 font-size: 0.88rem;
                 padding: 13px 26px;
             }
-            .account-tab .tab-icon { margin-right: 4px; }
+            .account-tab .tab-icon { margin-right: 4px; display: inline-flex; vertical-align: middle; }
             .account-tab .tab-en { margin-right: 4px; }
             .account-tab .tab-ar {
                 font-family: 'Almarai', sans-serif;
