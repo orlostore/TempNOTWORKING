@@ -215,6 +215,9 @@ function gridQtyChange(productId, change, event) {
     
     // Update cart sidebar if open
     updateCart();
+    
+    // Pulse badge on quantity increase
+    if (change > 0) pulseBadge();
 }
 function calculateDeliveryFee(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.fee; }
 function getAmountUntilFreeDelivery(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.freeThreshold - subtotal; }
