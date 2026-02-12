@@ -1658,6 +1658,20 @@ footer p {
   font-weight: 700;
 }
 
+/* Badge pulse animation on add to cart */
+@keyframes badgePulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(224,120,86,0.6); }
+  50% { transform: scale(1.25); box-shadow: 0 0 0 8px rgba(224,120,86,0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(224,120,86,0); }
+}
+.badge-pulse {
+  animation: badgePulse 0.6s ease;
+}
+.cart-count.badge-pulse,
+.bottom-cart-badge.badge-pulse {
+  animation: badgePulse 0.6s ease;
+}
+
 /* Mobile styles - max 768px */
 @media (max-width: 768px) {
   /* Show mobile promo banner */
