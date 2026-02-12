@@ -445,10 +445,12 @@ function closeCartPopup() {
     // Add fade-out class for smooth animation
     popup.classList.add('fade-out');
     
+    // Match the longer mobile fade duration (0.8s)
+    const isMobile = window.innerWidth <= 768;
     setTimeout(() => {
         popup.classList.remove('active');
         popup.classList.remove('fade-out');
-    }, 300);
+    }, isMobile ? 800 : 600);
 }
 
 function updateCart() {
