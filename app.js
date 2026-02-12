@@ -439,7 +439,7 @@ function updateCart() {
                     💳 Pay with Card / <span style="font-family: 'Almarai', sans-serif; font-size: 0.66rem; opacity: 0.85;">الدفع بالبطاقة</span>
                 </div>
                 <div style="display: flex; align-items: center; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 12px 9px;">
-                    <button id="stripeBtn" onclick="window.location.href='login.html?redirect='+encodeURIComponent(window.location.href)" 
+                    <button id="stripeBtn" onclick="window.location.href='login.html?redirect='+encodeURIComponent(window.location.href.split('?')[0]+'?openCart=true')" 
                         style="flex: 1; padding: 6px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 500; cursor: pointer; text-align: center; background: transparent; color: rgba(255,255,255,0.8); border-radius: 4px; transition: all 0.2s;"
                         onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='white'"
                         onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.8)'">
@@ -768,6 +768,15 @@ window.onload = () => {
     updateCart(); 
     
     const urlParams = new URLSearchParams(window.location.search);
+    
+    // Auto-open cart if redirected back from login
+    if (urlParams.get('openCart') === 'true') {
+        setTimeout(() => { toggleCart(); }, 300);
+        // Clean URL
+        const cleanUrl = window.location.href.split('?')[0];
+        window.history.replaceState({}, '', cleanUrl);
+    }
+    
     if (urlParams.get('showAbout') === 'true') {
         const aboutSection = document.getElementById('about');
         if (aboutSection) {
