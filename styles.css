@@ -2263,7 +2263,7 @@ footer p {
 }
 
 .cart-popup-overlay.fade-out {
-    animation: popupFadeOut 0.3s ease forwards;
+    animation: popupFadeOut 0.6s ease forwards;
 }
 
 @keyframes popupFadeIn {
@@ -2274,6 +2274,17 @@ footer p {
 @keyframes popupFadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
+}
+
+@keyframes popupSlideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .cart-popup {
@@ -2489,50 +2500,99 @@ footer p {
 /* Mobile adjustments for popup */
 @media (max-width: 768px) {
     .cart-popup-overlay {
-        padding: 11px;
+        padding: 10px 14px;
         align-items: flex-end;
+    }
+    
+    .cart-popup-overlay.active {
+        animation: popupFadeIn 0.5s ease;
+    }
+    
+    .cart-popup-overlay.fade-out {
+        animation: popupFadeOut 0.8s ease forwards;
     }
     
     .cart-popup {
         max-width: 100%;
-        border-radius: 15px;
+        border-radius: 13px;
         margin-bottom: 0;
+        animation: popupSlideUp 0.5s ease;
     }
     
     .popup-top {
-        padding: 19px 15px 53px;
+        padding: 14px 13px 38px;
+    }
+    
+    .popup-success-badge {
+        padding: 4px 9px;
+        font-size: 0.6rem;
+        margin-bottom: 5px;
     }
     
     .popup-title {
-        font-size: 0.98rem;
+        font-size: 0.88rem;
+    }
+    
+    .popup-title-ar {
+        font-size: 0.72rem;
+    }
+    
+    .popup-close-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 0.85rem;
+        top: 8px;
+        right: 8px;
     }
     
     .popup-product-float {
-        margin-top: -38px;
-        padding: 0 15px;
+        margin-top: -30px;
+        padding: 0 12px;
     }
     
     .popup-product-card {
-        padding: 11px;
+        padding: 9px;
+        gap: 9px;
     }
     
     .popup-product-image {
-        width: 49px;
-        height: 49px;
+        width: 42px;
+        height: 42px;
+        border-radius: 7px;
     }
     
     .popup-product-name {
-        font-size: 0.68rem;
+        font-size: 0.64rem;
+        margin-bottom: 2px;
+    }
+    
+    .popup-product-name-ar {
+        font-size: 0.58rem;
+        margin-bottom: 4px;
+    }
+    
+    .popup-product-price {
+        font-size: 0.78rem;
     }
     
     .popup-bottom {
-        padding: 15px;
+        padding: 12px;
+    }
+    
+    .popup-cart-summary {
+        padding: 7px 9px;
+        margin-bottom: 10px;
+        font-size: 0.63rem;
     }
     
     .popup-btn-view-cart,
     .popup-btn-continue {
-        padding: 11px 14px;
-        font-size: 0.71rem;
+        padding: 9px 12px;
+        font-size: 0.68rem;
+    }
+    
+    .popup-buttons {
+        gap: 6px;
     }
 }
 /* ============================================
