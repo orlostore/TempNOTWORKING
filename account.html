@@ -539,6 +539,40 @@
             color: #888;
             display: inline;
         }
+
+        /* Mobile pill tabs */
+        @media (max-width: 768px) {
+            .account-tabs {
+                display: flex;
+                gap: 8px;
+                padding: 10px 12px;
+                background: #f0f2f4;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                overflow-x: visible;
+            }
+            
+            .account-tab {
+                flex: 1;
+                padding: 8px 6px;
+                font-size: 0.62rem;
+                font-weight: 600;
+                color: #666;
+                text-align: center;
+                border-radius: 8px;
+                background: white;
+                border: 1px solid #e0e0e0;
+                white-space: normal;
+                line-height: 1.4;
+                transition: all 0.2s;
+            }
+            
+            .account-tab.active {
+                color: white;
+                background: var(--primary);
+                border-color: var(--primary);
+            }
+        }
         /* Password toggle */
         .password-input-wrap {
             position: relative;
