@@ -3,249 +3,397 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ORLO – Simplify your space with everyday essentials that matter</title>
+    <title>Login | ORLO Store</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="styles.css?v=4">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            direction: rtl;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 820px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            min-height: 480px;
+        }
+
+        /* LEFT BRAND PANEL */
+        .auth-brand {
+            flex: 1;
+            background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-brand::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -40%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(224,120,86,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .auth-brand::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -30%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .auth-brand img {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+        }
+
+        .trust-badges {
+            display: flex;
+            gap: 28px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .trust-item {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .trust-item .icon { font-size: 1.6rem; margin-bottom: 6px; }
+        .trust-item .en { font-size: 0.75rem; font-weight: 500; display: block; margin-bottom: 2px; }
+        .trust-item .ar { font-size: 0.65rem; font-family: 'Almarai', sans-serif; opacity: 0.7; display: block; }
+
+        /* RIGHT FORM PANEL */
+        .auth-form-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 16px 24px 0;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #2c4a5c; }
+
+        .form-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 24px 28px;
+        }
+
+        .form-content h2 {
+            color: #2c4a5c;
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .form-content .subtitle {
+            color: #888;
+            font-size: 0.85rem;
+            font-family: 'Almarai', sans-serif;
+            margin-bottom: 22px;
+        }
+
+        .form-group { margin-bottom: 14px; }
+
+        .form-group label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c4a5c;
+            font-size: 0.85rem;
+        }
+
+        .form-group label .arabic-text {
+            font-weight: 400;
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #e07856;
+            box-shadow: 0 0 0 3px rgba(224, 120, 86, 0.1);
+        }
+
+        .form-group input.error { border-color: #dc3545; }
+
+        .form-error { color: #dc3545; font-size: 0.8rem; margin-top: 4px; display: none; }
+        .form-error.show { display: block; }
+
+        .password-input-wrap { position: relative; }
+        .password-input-wrap input { padding-right: 42px; }
+        .password-toggle {
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer;
+            font-size: 1rem; color: #888; padding: 4px; line-height: 1;
+        }
+        .password-toggle:hover { color: #2c4a5c; }
+
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            font-size: 0.8rem;
+        }
+
+        .remember-me {
+            display: flex; align-items: center; gap: 6px;
+            color: #666; cursor: pointer;
+        }
+        .remember-me input { width: auto; cursor: pointer; }
+
+        .forgot-link { color: #888; text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+        .forgot-link:hover { color: #e07856; }
+
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #e07856 0%, #c96644 100%);
+            color: white; border: none; border-radius: 10px;
+            font-size: 0.9rem; font-weight: 600;
+            font-family: 'Inter', system-ui, sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(224, 120, 86, 0.3);
+        }
+        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(224, 120, 86, 0.4); }
+        .auth-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .auth-btn .arabic-text { display: block; font-size: 0.8rem; margin-top: 2px; opacity: 0.9; }
+
+        .auth-footer {
+            text-align: center;
+            padding: 14px 24px 20px;
+            border-top: 1px solid #eee;
+            color: #666; font-size: 0.85rem;
+        }
+        .auth-footer a { color: #e07856; text-decoration: none; font-weight: 600; }
+        .auth-footer a:hover { text-decoration: underline; }
+
+        .alert { padding: 10px 12px; border-radius: 8px; margin-bottom: 14px; font-size: 0.85rem; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            body { padding: 15px; }
+
+            .auth-container {
+                flex-direction: column;
+                max-width: 420px;
+                min-height: auto;
+            }
+
+            .auth-brand {
+                padding: 22px 20px;
+                flex: none;
+            }
+
+            .auth-brand img { width: 55px; height: 55px; margin-bottom: 14px; }
+
+            .trust-badges { gap: 20px; }
+            .trust-item .icon { font-size: 1.3rem; }
+            .trust-item .en { font-size: 0.7rem; }
+            .trust-item .ar { font-size: 0.6rem; }
+
+            .back-link { padding: 12px 18px 0; font-size: 0.8rem; }
+            .form-content { padding: 18px 20px; }
+            .form-content h2 { font-size: 1.25rem; }
+            .auth-footer { padding: 12px 18px 16px; }
+        }
+    </style>
 </head>
 <body>
-<header>
-    <nav>
-        <div class="logo-container">
-            <a href="/">
-                <img src="logo.png" class="logo-img" alt="ORLO Logo">
-            </a>
-        </div>
-        
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        
-        <div class="mobile-cart-icon" id="mobileCartIcon">
-            🛒 <span class="cart-count" id="mobileCartCount">0</span>
-        </div>
-        
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | البحث عن منتجات...">
-            <button class="search-btn" id="searchBtn">🔍</button>
-        </div>
-        
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
-            <li><a href="#about">About<br><span class="arabic-text">من نحن</span></a></li>
-            <li><a href="#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
-            <li><a href="#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
-            <li><a href="#" id="accountLink" class="account-nav-link">Login<br><span class="arabic-text">دخول</span></a></li>
-            <li><div class="cart-icon" id="cartIcon">🛒 <span class="cart-count" id="cartCount">0</span></div></li>
-        </ul>
-    </nav>
-</header>
-
-<!-- Mobile Promo Banner -->
-<div class="mobile-promo-banner">
-    🚚 Free delivery over 100 AED | <span class="arabic-text">توصيل مجاني فوق ١٠٠ درهم</span>
-</div>
-
-<!-- HERO SECTION - Option C Design -->
-<section class="hero" id="heroSection">
-    <div class="hero-main">
-        <div class="hero-headline">
-            <h1>Simplify Your Space with Everyday Essentials That Matter</h1>
-            <p class="headline-ar arabic-text">بسّط مساحتك. ارتقِ بيومك مع أساسيات تصنع الفرق</p>
-        </div>
-        
-        <div class="hero-trust-badges">
-            <div class="trust-badge-item">
-                <span class="badge-icon">📍</span>
-                <span class="badge-text">Dubai-based</span>
-                <span class="badge-text-ar arabic-text">من دبي</span>
-            </div>
-            <div class="trust-badge-item">
-                <span class="badge-icon">🔒</span>
-                <span class="badge-text">Secure checkout</span>
-                <span class="badge-text-ar arabic-text">دفع آمن</span>
-            </div>
-            <div class="trust-badge-item">
-                <span class="badge-icon">💬</span>
-                <span class="badge-text">WhatsApp support</span>
-                <span class="badge-text-ar arabic-text">دعم واتساب</span>
+    <div class="auth-container">
+        <div class="auth-brand">
+            <img src="logo.png" alt="ORLO Store">
+            <div class="trust-badges">
+                <div class="trust-item">
+                    <div class="icon">ðŸšš</div>
+                    <span class="en">UAE Delivery</span>
+                    <span class="ar">ØªÙˆØµÙŠÙ„ Ø§Ù„Ø¥Ù…Ø§Ø±Ø§Øª</span>
+                </div>
+                <div class="trust-item">
+                    <div class="icon">ðŸ”’</div>
+                    <span class="en">Secure Payment</span>
+                    <span class="ar">Ø¯ÙØ¹ Ø¢Ù…Ù†</span>
+                </div>
             </div>
         </div>
-        
-        <a href="#products" class="hero-cta">
-            <span>Shop Best Sellers</span>
-            <span class="cta-ar arabic-text">تسوق الأكثر مبيعاً</span>
-        </a>
-    </div>
-    
-    <div class="hero-delivery-box">
-        <span class="delivery-icon">🚚</span>
-        <span class="delivery-title">Free Delivery</span>
-        <span class="delivery-highlight">above <span id="heroThreshold">75</span> AED</span>
-        <span class="delivery-ar arabic-text">توصيل مجاني فوق <span id="heroThresholdAr">٧٥</span> درهم</span>
-    </div>
-</section>
 
-<div class="container" id="products">
-    <div class="category-filters" id="categoryFilters"></div>
-    <div class="products-grid" id="productsGrid"></div>
-</div>
+        <div class="auth-form-panel">
+            <a href="/" class="back-link">â† Back to Shop <span class="arabic-text">Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ù„Ù…ØªØ¬Ø±</span></a>
 
-<section class="about-section" id="about">
-    <div class="contact-container">
-        <h2 class="section-title">Our Story <span class="arabic-inline">قصتنا</span></h2>
-        <div class="contact-box">
-            <p class="contact-text-en">ORLO is a family-owned Dubai brand built around practical essentials we genuinely use every day.
-We curate products that simplify your space and your routine — thoughtfully chosen for quality, usefulness, and clean design. No clutter. No gimmicks.
-Every order supports a local UAE business built on trust, simplicity, and fair pricing <span style="color: #e07856; font-size: 1.2em;">♥</span></p>
-            <p class="contact-text-ar">اورلو علامة تجارية عائلية من دبي،  نختار فيها أدوات أساسية نستخدمها فعلاً في حياتنا اليومية.
-نؤمن بالبساطة، والجودة العملية، والاختيارات الذكية التي ترتّب مساحتك وتسهّل يومك — بدون تعقيد أو إضافات غير ضرورية.
-كل طلب منك يدعم مشروعاً إماراتياً محلياً مبنياً على الثقة، والبساطة، والتسعير العادل <span style="color: #e07856; font-size: 1.2em;">♥</span></p>
-        </div>
-    </div>
-</section>
+            <div class="form-content">
+                <h2>Welcome Back</h2>
+                <p class="subtitle">Ù…Ø±Ø­Ø¨Ø§Ù‹ Ø¨Ø¹ÙˆØ¯ØªÙƒ</p>
 
-<section class="contact-section" id="contact">
-    <div class="contact-container">
-        <h2 class="section-title">Contact Us <span class="arabic-inline">اتصل بنا</span></h2>
-        <div class="contact-box">
-            <div class="contact-text-row">
-                <p class="contact-text-en">We'd love to hear from you! Reach out for orders, questions, or support.</p>
-                <p class="contact-text-ar">يسعدنا التواصل معك! لا تتردد في التواصل معنا للطلبات أو الاستفسارات أو الدعم.</p>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div id="alertBox"></div>
+
+                    <div class="form-group">
+                        <label>Email <span class="arabic-text">Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ</span></label>
+                        <input type="email" id="email" required placeholder="your@email.com">
+                        <div class="form-error" id="emailError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password <span class="arabic-text">ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±</span></label>
+                        <div class="password-input-wrap">
+                            <input type="password" id="password" required placeholder="Enter password">
+                            <button type="button" class="password-toggle" onclick="togglePassword('password', this)">ðŸ‘ï¸</button>
+                        </div>
+                        <div class="form-error" id="passwordError"></div>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="remember"> Remember me <span class="arabic-text" style="font-size:0.75rem;">ØªØ°ÙƒØ±Ù†ÙŠ</span>
+                        </label>
+                        <a href="forgot-password.html" class="forgot-link">Forgot? <span class="arabic-text" style="font-size:0.75rem;">Ù†Ø³ÙŠØªØŸ</span></a>
+                    </div>
+
+                    <button type="submit" class="auth-btn" id="submitBtn">
+                        Login
+                        <span class="arabic-text">ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„</span>
+                    </button>
+                </form>
             </div>
-            <div class="contact-details-row">
-                <div class="contact-detail"><strong>📍 Location:</strong> Dubai, UAE </div>
-                <div class="contact-detail"><strong>✉️ Email:</strong> <a href="/cdn-cgi/l/email-protection#2b42454d446b44594744585f44594e05484446"><span class="__cf_email__" data-cfemail="e1888f878ea18e938d8e92958e9384cf828e8c">[email&#160;protected]</span></a></div>
-                <div class="contact-detail"><strong>📱 WhatsApp:</strong> <a href="https://wa.me/971XXXXXXXXX" target="_blank">+971 XX XXX XXXX</a></div>
+
+            <div class="auth-footer">
+                Don't have an account? <a href="signup.html">Sign Up <span class="arabic-text">Ø¥Ù†Ø´Ø§Ø¡ Ø­Ø³Ø§Ø¨</span></a>
             </div>
         </div>
     </div>
-</section>
 
-<section class="terms-section" id="terms">
-    <div class="container">
-        <h2 class="section-title">Terms & Conditions <span class="arabic-inline">الشروط والأحكام</span></h2>
-        <div class="terms-grid">
-            <div class="term-card" onclick="openPolicy('shipping')">
-                <h3><span class="term-title">📦 Shipping</span><br><span class="arabic-text term-title-ar">الشحن</span></h3>
-                <p>Delivery process & timelines</p>
-                <p class="arabic-text">عملية التوصيل والمواعيد</p>
-            </div>
-            <div class="term-card" onclick="openPolicy('returns')">
-                <h3><span class="term-title">↩️ Returns</span><br><span class="arabic-text term-title-ar">الإرجاع</span></h3>
-                <p>7-day return policy</p>
-                <p class="arabic-text">سياسة الإرجاع خلال ٧ أيام</p>
-            </div>
-            <div class="term-card" onclick="openPolicy('privacy')">
-                <h3><span class="term-title">🔒 Privacy</span><br><span class="arabic-text term-title-ar">الخصوصية</span></h3>
-                <p>How we protect your data</p>
-                <p class="arabic-text">كيف نحمي بياناتك</p>
-            </div>
-            <div class="term-card" onclick="openPolicy('terms')">
-                <h3><span class="term-title">📋 Terms</span><br><span class="arabic-text term-title-ar">الشروط</span></h3>
-                <p>General conditions</p>
-                <p class="arabic-text">الشروط العامة</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<div class="cart-sidebar" id="cartSidebar">
-    <div class="cart-checkout-fixed" id="cartCheckoutFixed"></div>
-    <div class="cart-header">
-        <h2>Your Cart / سلة التسوق</h2>
-        <button class="close-cart" id="closeCart">✕</button>
-    </div>
-    <div class="cart-items" id="cartItems"></div>
-    <div class="cart-footer"></div>
-</div>
-
-<div id="policyModal" class="policy-modal" style="display: none;">
-    <div class="policy-box">
-        <button onclick="closePolicy()" style="float: right; background: none; border: none; font-size: 1.5em; cursor: pointer;">✕</button>
-        <div id="policyText"></div>
-    </div>
-</div>
-
-<footer>
-    <p>&copy; 2026 ORLO – Dubai, UAE / دبي، الإمارات العربية المتحدة</p>
-    <p class="footer-subtitle">Licensed & Family-Owned / شركة عائلية مرخصة </p>
-</footer>
-
-<!-- Mobile Bottom Navigation -->
-<nav class="mobile-bottom-nav">
-    <div class="bottom-nav-item" id="bottomHomeBtn">
-        <span class="nav-icon">🏠</span>
-        <span class="nav-label">Home</span>
-    </div>
-    <div class="bottom-nav-item" id="bottomAccountBtn">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px;vertical-align:middle;"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></span>
-        <span class="nav-label" id="bottomAccountLabel">Login</span>
-    </div>
-    <div class="bottom-nav-item" id="bottomCartBtn">
-        <span class="nav-icon cart-icon-wrapper">
-            🛒
-            <span class="bottom-cart-badge" id="bottomCartCount">0</span>
-        </span>
-        <span class="nav-label">Cart</span>
-    </div>
-    <div class="bottom-nav-item" id="bottomMenuBtn">
-        <span class="nav-icon">☰</span>
-        <span class="nav-label">Menu</span>
-    </div>
-</nav>
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="products.js"></script>
-<script src="app.js?v=5"></script>
-<script>
-// Account link handler - updates nav based on login state
-function updateAccountLink() {
-    const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
-    const customer = JSON.parse(localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer') || 'null');
-    
-    const accountLink = document.getElementById('accountLink');
-    const bottomAccountBtn = document.getElementById('bottomAccountBtn');
-    const bottomAccountLabel = document.getElementById('bottomAccountLabel');
-    
-    if (token && customer) {
-        // User is logged in - show name and link to account
-        const firstName = customer.name ? customer.name.split(' ')[0] : 'Account';
-        
-        if (accountLink) {
-            accountLink.innerHTML = `${firstName}<br><span class="arabic-text">حسابي</span>`;
-            accountLink.href = 'account.html';
+    <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') { input.type = 'text'; btn.textContent = 'ðŸ™ˆ'; }
+            else { input.type = 'password'; btn.textContent = 'ðŸ‘ï¸'; }
         }
-        if (bottomAccountLabel) {
-            bottomAccountLabel.textContent = firstName;
-        }
-        if (bottomAccountBtn) {
-            bottomAccountBtn.onclick = () => window.location.href = 'account.html';
-        }
-    } else {
-        // User is not logged in - show login link
-        if (accountLink) {
-            accountLink.innerHTML = `Login<br><span class="arabic-text">دخول</span>`;
-            accountLink.href = 'login.html';
-        }
-        if (bottomAccountLabel) {
-            bottomAccountLabel.textContent = 'Login';
-        }
-        if (bottomAccountBtn) {
-            bottomAccountBtn.onclick = () => window.location.href = 'login.html';
-        }
-    }
-}
 
-// Run on page load
-document.addEventListener('DOMContentLoaded', updateAccountLink);
-</script>
+        if (localStorage.getItem('orlo_token')) { window.location.href = 'account.html'; }
 
-<!-- Cart Popup -->
-<div class="cart-popup-overlay" id="cartPopup" onclick="if(event.target === this) closeCartPopup()">
-    <div class="cart-popup" id="cartPopupContent">
-    </div>
-</div>
+        function showAlert(message, type) {
+            document.getElementById('alertBox').innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.form-error').forEach(el => { el.classList.remove('show'); el.textContent = ''; });
+            document.querySelectorAll('input').forEach(el => el.classList.remove('error'));
+        }
+
+        function showError(field, message) {
+            const input = document.getElementById(field);
+            const error = document.getElementById(field + 'Error');
+            input.classList.add('error');
+            error.textContent = message;
+            error.classList.add('show');
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            clearErrors();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+
+            let hasError = false;
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', 'Please enter a valid email'); hasError = true; }
+            if (password.length < 1) { showError('password', 'Please enter your password'); hasError = true; }
+            if (hasError) return;
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = 'Logging in...';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, remember })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('Login successful! Redirecting...', 'success');
+                    if (remember) {
+                        localStorage.setItem('orlo_token', data.token);
+                        localStorage.setItem('orlo_customer', JSON.stringify(data.customer));
+                    } else {
+                        sessionStorage.setItem('orlo_token', data.token);
+                        sessionStorage.setItem('orlo_customer', JSON.stringify(data.customer));
+                    }
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirect = urlParams.get('redirect') || 'account.html';
+                    setTimeout(() => { window.location.href = redirect; }, 1000);
+                } else {
+                    showAlert(data.error || 'Invalid email or password', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = 'Login <span class="arabic-text">ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„</span>';
+                }
+            } catch (error) {
+                showAlert('Connection error. Please try again.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = 'Login <span class="arabic-text">ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„</span>';
+            }
+        }
+    </script>
 </body>
 </html>
