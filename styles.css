@@ -2602,7 +2602,7 @@ footer p {
   display: flex;
   align-items: stretch;
   width: 100%;
-  background: linear-gradient(135deg, #2c4a5c 0%, #3d5a6a 50%, #e07856 100%);
+  background: #1a3a52;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(44,74,92,0.25);
   margin-bottom: 1rem;
@@ -2954,7 +2954,7 @@ footer p {
     align-items: center;
     justify-content: center;
     width: 100%;
-    background: linear-gradient(135deg, #2c4a5c 0%, #3d5a6a 50%, #e07856 100%);
+    background: #1a3a52;
     border-radius: 4px;
     overflow: hidden;
 }
