@@ -239,4 +239,13 @@ function updateAccountLink() {
 }
 
 // Run on page load
-document.addEventListener('DOMContentLoade
+document.addEventListener('DOMContentLoaded', updateAccountLink);
+</script>
+
+<!-- Cart Popup -->
+<div class="cart-popup-overlay" id="cartPopup" onclick="if(event.target === this) closeCartPopup()">
+    <div class="cart-popup" id="cartPopupContent">
+    </div>
+</div>
+</body>
+</html>
