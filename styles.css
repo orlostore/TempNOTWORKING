@@ -1188,13 +1188,13 @@ footer p {
 }
 
 .add-to-cart-btn {
-  width: 100%;
-  padding: 1rem;
+  width: auto;
+  padding: 0.85rem 2.5rem;
   background: #1a3a52;
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 0.92rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
@@ -2764,7 +2764,8 @@ footer p {
 /* Product page - cart button width (Layout D) */
 .product-buybox .add-to-cart-btn,
 .product-buybox .product-btn-transformed {
-  width: 75%;
+  width: auto;
+  max-width: 280px;
   margin-left: 0;
   margin-right: auto;
   display: block;
