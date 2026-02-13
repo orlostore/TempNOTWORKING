@@ -1071,7 +1071,10 @@ footer p {
 .product-gallery {
   position: sticky;
   top: 90px;
-  margin-top: -6px;
+}
+
+.product-gallery .image-gallery {
+  margin-top: -12px;
 }
 
 /* Right side: Details + Buybox combined */
