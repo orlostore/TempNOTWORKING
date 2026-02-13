@@ -417,9 +417,10 @@ nav {
 }
 
 .category-btn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
+  background: #ececec;
+  border-color: #2c4a5c;
+  color: var(--primary);
+  font-weight: 700;
 }
 
 .category-arabic {
