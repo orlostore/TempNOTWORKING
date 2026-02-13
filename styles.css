@@ -1258,7 +1258,7 @@ footer p {
 
 /* Hover zoom effect */
 .main-image-container:hover .main-product-image {
-  transform: scale(1.08);
+  transform: scale(1.15);
 }
 
 .zoom-hint {
