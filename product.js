@@ -84,7 +84,7 @@ function closeLimitTooltip() {
 function transformToQtyButton(btn, product) {
   const localCart = JSON.parse(localStorage.getItem("cart")) || [];
   const item = localCart.find(i => i.id === product.id);
-  const qty = item ? item.quantity : 1;
+  const qty = item ? item.qty : 1;
   
   btn.dataset.originalText = btn.textContent;
   btn.dataset.productId = product.id;
@@ -109,10 +109,10 @@ function productQtyChange(productId, change) {
   
   if (!item) return;
   
-  const newQty = item.quantity + change;
+  const newQty = item.qty + change;
   
   if (change > 0) {
-    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
+    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.qty : MAX_QTY_PER_PRODUCT);
     if (newQty > maxAllowed) {
       showProductPageMaxLimitMessage(productId, maxAllowed);
       return;
@@ -124,7 +124,7 @@ function productQtyChange(productId, change) {
     localStorage.setItem("cart", JSON.stringify(localCart));
     resetToAddButton(productId);
   } else {
-    item.quantity = newQty;
+    item.qty = newQty;
     localStorage.setItem("cart", JSON.stringify(localCart));
     
     // Update ALL qty displays for this product (desktop and mobile)
@@ -141,7 +141,7 @@ function productQtyChange(productId, change) {
     localCart.forEach(i => cart.push(i));
   }
   
-  const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+  const totalItems = localCart.reduce((s, i) => s + i.qty, 0);
   const cartCount = document.getElementById("cartCount");
   const bottomCartCount = document.getElementById("bottomCartCount");
   const mobileCartCount = document.getElementById("mobileCartCount");
@@ -174,12 +174,12 @@ function resetToAddButton(productId) {
   const mobileBtn = document.getElementById('mobileAddToCartBtn');
   
   const handler = function() {
-    if (product.quantity === 0) return false;
+    if (product.qty === 0) return false;
     
     let localCart = JSON.parse(localStorage.getItem("cart")) || [];
     const item = localCart.find(i => i.id === product.id);
-    const currentInCart = item ? item.quantity : 0;
-    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
+    const currentInCart = item ? item.qty : 0;
+    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.qty);
     
     if (currentInCart >= maxAllowed) {
       showProductPageMaxLimitMessage(product.id, maxAllowed);
@@ -187,7 +187,7 @@ function resetToAddButton(productId) {
     }
     
     if (item) {
-      item.quantity++;
+      item.qty++;
     } else {
       localCart.push({ ...product, quantity: 1 });
     }
@@ -199,7 +199,7 @@ function resetToAddButton(productId) {
       localCart.forEach(i => cart.push(i));
     }
     
-    const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+    const totalItems = localCart.reduce((s, i) => s + i.qty, 0);
     const cartCount = document.getElementById("cartCount");
     const bottomCartCount = document.getElementById("bottomCartCount");
     const mobileCartCount = document.getElementById("mobileCartCount");
@@ -235,7 +235,7 @@ async function initProductPage() {
     return;
   }
 
-  const isOutOfStock = product.quantity === 0;
+  const isOutOfStock = product.qty === 0;
   const threshold = typeof FREE_DELIVERY_THRESHOLD !== 'undefined' ? FREE_DELIVERY_THRESHOLD : 75;
   
   document.querySelectorAll('.threshold-value').forEach(el => el.textContent = threshold);
@@ -450,21 +450,21 @@ async function initProductPage() {
 
   // ADD TO CART HANDLER - self-contained, uses localStorage directly
   const addToCartHandler = () => {
-    if (product.quantity === 0) return false;
+    if (product.qty === 0) return false;
 
     // Get cart from localStorage
     let localCart = JSON.parse(localStorage.getItem("cart")) || [];
     const item = localCart.find(i => i.id === product.id);
-    const currentInCart = item ? item.quantity : 0;
+    const currentInCart = item ? item.qty : 0;
     
-    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
+    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.qty);
     if (currentInCart >= maxAllowed) {
       showProductPageMaxLimitMessage(product.id, maxAllowed);
       return false;
     }
     
     if (item) {
-      item.quantity++;
+      item.qty++;
     } else {
       localCart.push({ ...product, quantity: 1 });
     }
@@ -479,7 +479,7 @@ async function initProductPage() {
     }
     
     // Update cart counts
-    const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+    const totalItems = localCart.reduce((s, i) => s + i.qty, 0);
     const cartCount = document.getElementById("cartCount");
     const bottomCartCount = document.getElementById("bottomCartCount");
     const mobileCartCount = document.getElementById("mobileCartCount");
@@ -791,7 +791,7 @@ function productPageToggleMobileMenu() {
 window.addEventListener('DOMContentLoaded', () => {
   // Update cart count from localStorage
   const localCart = JSON.parse(localStorage.getItem("cart")) || [];
-  const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+  const totalItems = localCart.reduce((s, i) => s + i.qty, 0);
   
   const cartCount = document.getElementById("cartCount");
   const bottomCartCount = document.getElementById("bottomCartCount");
