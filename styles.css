@@ -5,7 +5,7 @@
 }
 
 /* ============================================
-   PREVENT HORIZONTAL SCROLLING 
+   PREVENT HORIZONTAL SCROLLING (Like Amazon)
    ============================================ */
 html {
   overflow-x: hidden;
@@ -1062,7 +1062,7 @@ footer p {
 .product-page {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
-  gap: 3rem;
+  gap: 2rem;
   margin-bottom: 2.4rem;
   align-items: start;
 }
@@ -1244,6 +1244,8 @@ footer p {
   position: relative;
   text-align: center;
   overflow: hidden;
+  background: #f8f9fa;
+  border-radius: 8px;
 }
 
 .main-product-image {
@@ -1968,7 +1970,7 @@ footer p {
 }
 
 /* =============================================
-   MOBILE PRODUCT PAGE -  STYLE
+   MOBILE PRODUCT PAGE - AMAZON STYLE
    ============================================= */
 
 /* Hide mobile version on desktop */
