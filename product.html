@@ -7,51 +7,27 @@
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
-      .inline-icon {
-          width: 1em;
-          height: 1em;
-          vertical-align: -0.15em;
-          stroke: currentColor;
-          fill: none;
-          stroke-width: 1.8;
-          stroke-linecap: round;
-          stroke-linejoin: round;
-          display: inline-block;
-      }
-      .close-cart svg,
-      .gallery-close svg {
-          width: 1.2rem;
-          height: 1.2rem;
-          stroke: currentColor;
-          fill: none;
-          stroke-width: 2;
-          stroke-linecap: round;
-          stroke-linejoin: round;
-          vertical-align: middle;
-      }
+      .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
+      .close-cart svg, .gallery-close svg { width: 1.2rem; height: 1.2rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
   </style>
 </head>
 <body>
 <header>
     <nav>
         <div class="logo-container">
-            <a href="index.html">
-                <img src="logo.png" class="logo-img" alt="ORLO Logo">
-            </a>
+            <a href="index.html"><img src="logo.png" class="logo-img" alt="ORLO Logo"></a>
         </div>
         
         <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </button>
         
         <div class="mobile-cart-icon" id="mobileCartIcon">
-            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> <span class="cart-count" id="mobileCartCount">0</span>
+            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> 
+            <span class="cart-count" id="mobileCartCount"></span>
         </div>
         
         <div class="search-container">
@@ -62,122 +38,79 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="index.html#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
             <li><a href="index.html?showAbout=true#about">About<br><span class="arabic-text">من نحن</span></a></li>
-           <li><a href="index.html#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
+            <li><a href="index.html#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
             <li><a href="index.html#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
-          <li><a href="login.html" id="accountLink">Login<br><span class="arabic-text">دخول</span></a></li>
-            <li><div class="cart-icon" id="cartIcon"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> <span class="cart-count" id="cartCount"></span><script>document.getElementById('cartCount').textContent=(JSON.parse(localStorage.getItem('cart')||'[]')).reduce((s,i)=>s+(i.qty||0),0)</script></div></li>
+            <li><a href="login.html" id="accountLink">Login<br><span class="arabic-text">دخول</span></a></li>
+            <li>
+              <div class="cart-icon" id="cartIcon">
+                <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> 
+                <span class="cart-count" id="cartCount"></span>
+              </div>
+            </li>
         </ul>
     </nav>
 </header>
+
 <script>
-  // Instantly set cart badge from localStorage to prevent 0-flash
+  /** * ANTI-FLICKER SCRIPT 
+   * Runs immediately before the DOM paints to set the correct cart numbers.
+   */
   (function(){
     try {
       var c = JSON.parse(localStorage.getItem('cart') || '[]');
-      var n = c.reduce(function(s,i){ return s + (i.qty||0); }, 0);
-      var el = document.getElementById('cartCount');
-      var mel = document.getElementById('mobileCartCount');
-      if(el) el.textContent = n;
-      if(mel) mel.textContent = n;
-    } catch(e){}
+      var n = c.reduce(function(s, i){ return s + (i.quantity || 0); }, 0);
+      var targets = ['cartCount', 'mobileCartCount', 'bottomCartCount'];
+      targets.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = n;
+      });
+    } catch(e){ console.log("Init cart error", e); }
   })();
 </script>
 
-<!-- DESKTOP LAYOUT -->
 <div class="product-page-container desktop-product">
   <a href="index.html" class="back-link">
-    <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-    Back to Products
+    <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Back to Products
   </a>
-  
   <div class="product-page">
-    <!-- Left: Gallery -->
     <div class="product-gallery" id="gallery"></div>
-    
-    <!-- Right: Details + Buybox -->
     <div class="product-details">
       <h1 id="productTitle"></h1>
       <p class="product-title-ar" id="productTitleAr"></p>
       <div class="product-category" id="productCategory"></div>
-      
-      <!-- Buybox inside details -->
       <div class="product-buybox">
         <div class="price" id="productPrice"></div>
-       <button class="add-to-cart-btn" id="addToCartBtn">Add to Cart | أضف إلى السلة</button>
+        <button class="add-to-cart-btn" id="addToCartBtn">Add to Cart | أضف إلى السلة</button>
         <div class="delivery-info">
           <div class="delivery-item">
             <span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
             <div class="delivery-en">Free delivery over AED <span class="threshold-value"></span></div>
             <div class="delivery-ar arabic-text">توصيل مجاني فوق <span class="threshold-value-ar"></span> درهم</div>
           </div>
-          <div class="delivery-item">
-            <span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M12 4v16M2 10h20"/></svg></span>
-            <div class="delivery-en">2-5 business days</div>
-            <div class="delivery-ar arabic-text">٢-٥ أيام عمل</div>
-          </div>
         </div>
       </div>
-      
-      <!-- Product description below buybox -->
       <div id="productDescription"></div>
     </div>
   </div>
 </div>
 
-<!-- MOBILE LAYOUT (Amazon-style) -->
 <div class="mobile-product-page">
-  <!-- Product Header -->
   <div class="mobile-product-header">
     <h1 class="mobile-product-title" id="mobileProductTitle"></h1>
     <p class="mobile-product-title-ar arabic-text" id="mobileProductTitleAr"></p>
     <span class="mobile-product-category" id="mobileProductCategory"></span>
   </div>
-  
-  <!-- Image Carousel -->
   <div class="mobile-carousel-container">
     <div class="mobile-carousel" id="mobileCarousel"></div>
     <div class="mobile-dots" id="mobileDots"></div>
   </div>
-  
-  <!-- Price Section -->
-  <div class="mobile-price-section">
-    <div class="mobile-price" id="mobileProductPrice"></div>
-  </div>
-  
-  <!-- Add to Cart -->
-  <div class="mobile-cart-section">
-    <button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | أضف إلى السلة</button>
-  </div>
-  
-  <!-- Delivery Info -->
+  <div class="mobile-price-section"><div class="mobile-price" id="mobileProductPrice"></div></div>
+  <div class="mobile-cart-section"><button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | أضف إلى السلة</button></div>
   <div class="mobile-delivery-info">
-    <div class="mobile-delivery-item">
-      <span class="mobile-delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
-      <div>
-        <div>Free delivery over AED <span class="threshold-value"></span></div>
-        <div class="mobile-delivery-ar arabic-text">توصيل مجاني فوق <span class="threshold-value-ar"></span> درهم</div>
-      </div>
     </div>
-    <div class="mobile-delivery-item">
-      <span class="mobile-delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M12 4v16M2 10h20"/></svg></span>
-      <div>
-        <div>2-5 business days</div>
-        <div class="mobile-delivery-ar arabic-text">٢-٥ أيام عمل</div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Details Section (Colors, Packaging, Specs, Description - in order) -->
   <div class="mobile-details-section" id="mobileDetailsSection"></div>
 </div>
 
-<!-- Full Gallery Overlay -->
-<div class="gallery-overlay" id="galleryOverlay">
-  <button class="gallery-close" id="galleryClose"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-  <div class="gallery-scroll" id="galleryScroll"></div>
-</div>
-
-<!-- Cart Sidebar -->
 <div class="cart-sidebar" id="cartSidebar">
   <div class="cart-checkout-fixed" id="cartCheckoutFixed"></div>
   <div class="cart-header">
@@ -188,7 +121,6 @@
   <div class="cart-footer"></div>
 </div>
 
-<!-- Mobile Bottom Navigation - Option D -->
 <nav class="mobile-bottom-nav" id="mobileBottomNav">
     <div class="bottom-nav-indicator" id="bottomNavIndicator"></div>
     <div class="bottom-nav-item" id="bottomHomeBtn" data-index="0">
@@ -201,7 +133,7 @@
     </div>
     <div class="bottom-nav-item" id="bottomCartBtn" data-index="2">
         <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-        <span class="bottom-cart-badge" id="bottomCartCount">0</span>
+        <span class="bottom-cart-badge" id="bottomCartCount"></span>
         <span class="nav-label">Cart</span>
     </div>
     <div class="bottom-nav-item" id="bottomMenuBtn" data-index="3">
@@ -209,30 +141,6 @@
         <span class="nav-label">Menu</span>
     </div>
 </nav>
-
-<!-- Option D indicator sliding -->
-<script>
-(function() {
-    function moveIndicator(index) {
-        const indicator = document.getElementById('bottomNavIndicator');
-        if (indicator) {
-            indicator.style.left = 'calc(' + (index * 25) + '% + 12.5% - 25px)';
-        }
-    }
-    const navItems = document.querySelectorAll('.mobile-bottom-nav .bottom-nav-item');
-    const observer = new MutationObserver(function() {
-        navItems.forEach(function(item, i) {
-            if (item.classList.contains('active') || item.classList.contains('home-active') || item.classList.contains('cart-active')) {
-                moveIndicator(i);
-            }
-        });
-    });
-    navItems.forEach(function(item) {
-        observer.observe(item, { attributes: true, attributeFilter: ['class'] });
-    });
-    moveIndicator(0);
-})();
-</script>
 
 <script src="products.js"></script>
 <script src="product.js"></script>
