@@ -666,7 +666,7 @@ function setupGalleryOverlay(product) {
   carousel.addEventListener('click', () => {
     galleryScroll.innerHTML = product.images.map((img, index) => `
       <div class="gallery-image-wrapper" style="overflow:hidden;">
-        <img src="${img}" alt="${product.name} ${index + 1}" style="touch-action:none;transform-origin:center center;">
+        <img src="${img}" alt="${product.name} ${index + 1}" style="transform-origin:center center;">
       </div>
     `).join('');
 
@@ -691,14 +691,13 @@ function setupGalleryOverlay(product) {
         img.style.transform = 'scale(' + scale + ') translate(' + translateX + 'px, ' + translateY + 'px)';
       }
 
-      img.addEventListener('touchstart', function(e) {
+     img.addEventListener('touchstart', function(e) {
         if (e.touches.length === 2) {
           e.preventDefault();
           isPinching = true;
           startDist = getDistance(e.touches[0], e.touches[1]);
           startScale = scale;
         } else if (e.touches.length === 1 && scale > 1) {
-          e.preventDefault();
           startX = e.touches[0].clientX - translateX;
           startY = e.touches[0].clientY - translateY;
         }
@@ -710,8 +709,8 @@ function setupGalleryOverlay(product) {
           var dist = getDistance(e.touches[0], e.touches[1]);
           scale = Math.min(Math.max(startScale * (dist / startDist), 1), 3);
           applyTransform();
-        } else if (e.touches.length === 1 && scale > 1) {
-          e.preventDefault();
+         } else if (e.touches.length === 1 && scale > 1) {
+          e.stopPropagation();
           translateX = e.touches[0].clientX - startX;
           translateY = e.touches[0].clientY - startY;
           applyTransform();
