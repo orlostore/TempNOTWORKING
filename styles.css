@@ -417,10 +417,12 @@ nav {
 }
 
 .category-btn.active {
-  background: #ececec;
-  border-color: #2c4a5c;
+  border-color: transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, #e07856, #1a3a52) border-box;
   color: var(--primary);
   font-weight: 700;
+  box-shadow: 0 0 0 1px rgba(224,120,86,0.15), 0 3px 10px rgba(224,120,86,0.12);
 }
 
 .category-arabic {
