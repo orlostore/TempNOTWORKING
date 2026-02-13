@@ -676,22 +676,35 @@ function setupGalleryOverlay(product) {
 
     // Pinch-to-zoom on each image
     galleryScroll.querySelectorAll('.gallery-image-wrapper img').forEach(img => {
-      let scale = 1;
-      let startDist = 0;
-      let startScale = 1;
-      let translateX = 0, translateY = 0;
-      let startX = 0, startY = 0;
-      let isPinching = false;
+      var scale = 1;
+      var startDist = 0;
+      var startScale = 1;
+      var translateX = 0, translateY = 0;
+      var startX = 0, startY = 0;
+      var isPinching = false;
 
       function getDistance(t1, t2) {
         return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      }
+
+      function clampTranslate() {
+        if (scale <= 1) { translateX = 0; translateY = 0; return; }
+        var parent = img.parentElement.getBoundingClientRect();
+        var maxX = ((img.offsetWidth * scale) - parent.width) / (2 * scale);
+        var maxY = ((img.offsetHeight * scale) - parent.height) / (2 * scale);
+        if (maxX < 0) maxX = 0;
+        if (maxY < 0) maxY = 0;
+        if (translateX > maxX) translateX = maxX;
+        if (translateX < -maxX) translateX = -maxX;
+        if (translateY > maxY) translateY = maxY;
+        if (translateY < -maxY) translateY = -maxY;
       }
 
       function applyTransform() {
         img.style.transform = 'scale(' + scale + ') translate(' + translateX + 'px, ' + translateY + 'px)';
       }
 
-     img.addEventListener('touchstart', function(e) {
+      img.addEventListener('touchstart', function(e) {
         if (e.touches.length === 2) {
           e.preventDefault();
           isPinching = true;
@@ -708,18 +721,20 @@ function setupGalleryOverlay(product) {
           e.preventDefault();
           var dist = getDistance(e.touches[0], e.touches[1]);
           scale = Math.min(Math.max(startScale * (dist / startDist), 1), 3);
+          clampTranslate();
           applyTransform();
-         } else if (e.touches.length === 1 && scale > 1) {
+        } else if (e.touches.length === 1 && scale > 1) {
           e.stopPropagation();
           translateX = e.touches[0].clientX - startX;
           translateY = e.touches[0].clientY - startY;
+          clampTranslate();
           applyTransform();
         }
       }, { passive: false });
 
       img.addEventListener('touchend', function(e) {
         isPinching = false;
-        if (e.touches.length === 0) {
+        if (scale <= 1) {
           scale = 1;
           translateX = 0;
           translateY = 0;
@@ -735,7 +750,7 @@ function setupGalleryOverlay(product) {
         if (e.touches.length > 0) return;
         var now = Date.now();
         if (now - lastTap < 300) {
-          scale = scale > 1 ? 1 : 3;
+          scale = 1;
           translateX = 0;
           translateY = 0;
           img.style.transition = 'transform 0.3s';
