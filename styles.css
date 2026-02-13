@@ -2317,12 +2317,12 @@ footer p {
   background: #e07856;
   color: white;
   text-decoration: none;
-  padding: 10px 20px;
+  padding: 7px 16px;
   border-radius: 25px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   transition: all 0.3s;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .desktop-product .back-link:hover {
