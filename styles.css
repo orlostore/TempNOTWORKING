@@ -394,13 +394,13 @@ nav {
 
 .category-filters {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 0.84rem;
   margin-bottom: 1rem;
   max-width: 1180px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 1.68rem;
+  padding: 0;
 }
 
 .category-btn {
@@ -1729,6 +1729,12 @@ footer p {
   /* Show mobile promo banner */
   .mobile-promo-banner {
     display: block;
+  }
+  
+  /* Category filters - 3 columns on mobile */
+  .category-filters {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 0.5rem;
   }
   
   /* Hide hero section on mobile */
