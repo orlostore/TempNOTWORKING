@@ -1599,13 +1599,13 @@ footer p {
   color: white;
   text-align: center;
   padding: 10px 15px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
 }
 
 .mobile-promo-banner .arabic-text {
   display: inline;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 /* Mobile Bottom Navigation - Option D (Minimal Line Draw) */
@@ -1734,7 +1734,7 @@ footer p {
   /* Category filters - 3 columns on mobile */
   .category-filters {
     grid-template-columns: repeat(3, 1fr);
-    padding: 0 0.5rem;
+    padding: 0 1.01rem;
   }
   
   /* Hide hero section on mobile */
