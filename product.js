@@ -719,11 +719,13 @@ function setupGalleryOverlay(product) {
 
       img.addEventListener('touchend', function(e) {
         isPinching = false;
-        if (scale <= 1) {
+        if (e.touches.length === 0) {
           scale = 1;
           translateX = 0;
           translateY = 0;
+          img.style.transition = 'transform 0.3s';
           applyTransform();
+          setTimeout(function() { img.style.transition = ''; }, 300);
         }
       });
 
