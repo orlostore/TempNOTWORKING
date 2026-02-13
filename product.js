@@ -243,6 +243,8 @@ async function initProductPage() {
 
   // DESKTOP VERSION
   document.getElementById("productTitle").innerText = product.name;
+  const titleArEl = document.getElementById("productTitleAr");
+  if (titleArEl) titleArEl.innerText = product.nameAr || '';
   document.getElementById("productCategory").innerText = product.category;
 
   let descriptionHTML = '';
