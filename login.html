@@ -266,7 +266,7 @@
             display: inline-block;
         }
 
-        /* MOBILE */
+        /* MOBILE - compressed to avoid scrolling */
         @media (max-width: 768px) {
             body { padding: 8px; min-height: auto; }
 
@@ -276,20 +276,63 @@
                 min-height: auto;
             }
 
+            /* 1. Trust banner - reduced height */
             .auth-brand {
-                padding: 22px 20px;
+                padding: 10px 20px;
                 flex: none;
             }
-
             .trust-badges { gap: 20px; }
-            .trust-item .icon svg { width: 1.3rem; height: 1.3rem; }
-            .trust-item .en { font-size: 0.7rem; }
-            .trust-item .ar { font-size: 0.6rem; }
+            .trust-item .icon { margin-bottom: 1px; }
+            .trust-item .icon svg { width: 1rem; height: 1rem; }
+            .trust-item .en { font-size: 0.62rem; margin-bottom: 0; }
+            .trust-item .ar { font-size: 0.52rem; }
 
-            .back-link { padding: 12px 18px 0; font-size: 0.8rem; }
-            .form-content { padding: 18px 20px; }
-            .form-content h2 { font-size: 1.25rem; }
-            .auth-footer { padding: 12px 18px 16px; }
+            /* Back link */
+            .back-link { padding: 8px 18px 0; font-size: 0.78rem; }
+
+            /* 2. Smaller heading + tighter */
+            .form-content {
+                padding: 10px 20px;
+            }
+            .form-content h2 {
+                font-size: 1.05rem;
+                margin-bottom: 0;
+            }
+            .form-content .subtitle {
+                font-size: 0.7rem;
+                margin-bottom: 10px;
+            }
+
+            /* 3. Tighter form field spacing */
+            .form-group {
+                margin-bottom: 8px;
+            }
+            .form-group label {
+                margin-bottom: 2px;
+                font-size: 0.78rem;
+            }
+            .form-group input {
+                padding: 7px 10px;
+                font-size: 0.8rem;
+            }
+            .form-options {
+                margin-bottom: 10px;
+                font-size: 0.72rem;
+            }
+            .auth-btn {
+                padding: 9px;
+                font-size: 0.82rem;
+            }
+            .auth-btn .arabic-text {
+                font-size: 0.7rem;
+                margin-top: 1px;
+            }
+
+            /* 5. Footer closer to button */
+            .auth-footer {
+                padding: 8px 18px 10px;
+                font-size: 0.78rem;
+            }
         }
     </style>
 </head>
