@@ -393,11 +393,14 @@ nav {
 }
 
 .category-filters {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 0.84rem;
   margin-bottom: 1rem;
-  flex-wrap: wrap;
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.68rem;
 }
 
 .category-btn {
@@ -409,6 +412,8 @@ nav {
   font-size: 0.74rem;
   font-weight: 500;
   transition: all 0.3s;
+  width: 100%;
+  text-align: center;
 }
 
 .category-btn:hover {
