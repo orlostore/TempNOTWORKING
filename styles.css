@@ -1602,8 +1602,8 @@ footer p {
   padding: 10px 15px;
   font-size: 0.75rem;
   font-weight: 500;
-  margin: 0 1.01rem;
-  border-radius: 8px;
+  max-width: 1180px;
+  margin: 0 auto;
 }
 
 .mobile-promo-banner .arabic-text {
@@ -1732,6 +1732,8 @@ footer p {
   /* Show mobile promo banner */
   .mobile-promo-banner {
     display: block;
+    margin: 0 1.01rem;
+    border-radius: 8px;
   }
   
   /* Category filters - 3 columns on mobile */
