@@ -1038,8 +1038,8 @@ footer p {
 /* Product Detail Page Styles */
 .product-page-container {
   max-width: 1180px;
-  margin: 0 auto;
-  margin-top: 0;
+  margin: 0.5rem auto;
+  margin-top: 1.5rem;
   padding: 0 1.34rem;
   transform: scale(0.9);
   transform-origin: top center;
