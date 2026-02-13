@@ -2733,7 +2733,7 @@ footer p {
 /* Product page - narrower and centered Add to Cart button */
 .product-buybox .add-to-cart-btn,
 .product-buybox .product-btn-transformed {
-  width: 50%;
+  width: 70%;
   margin-left: auto;
   margin-right: auto;
   display: block;
@@ -2745,7 +2745,7 @@ footer p {
 /* Mobile product page - narrower and centered Add to Cart button */
 .mobile-cart-section .mobile-add-to-cart,
 .mobile-cart-section .product-btn-transformed {
-  width: 60%;
+  width: 75%;
   margin-left: auto;
   margin-right: auto;
   display: block;
