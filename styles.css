@@ -5,7 +5,7 @@
 }
 
 /* ============================================
-   PREVENT HORIZONTAL SCROLLING (Like Amazon)
+   PREVENT HORIZONTAL SCROLLING 
    ============================================ */
 html {
   overflow-x: hidden;
@@ -1968,7 +1968,7 @@ footer p {
 }
 
 /* =============================================
-   MOBILE PRODUCT PAGE - AMAZON STYLE
+   MOBILE PRODUCT PAGE -  STYLE
    ============================================= */
 
 /* Hide mobile version on desktop */
@@ -2322,7 +2322,7 @@ footer p {
   font-weight: 600;
   font-size: 0.82rem;
   transition: all 0.3s;
-  margin-bottom: 0.9rem;
+  margin-bottom: 1.1rem;
 }
 
 .desktop-product .back-link:hover {
