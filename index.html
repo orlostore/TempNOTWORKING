@@ -179,8 +179,11 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
 <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-checkout-fixed" id="cartCheckoutFixed"></div>
     <div class="cart-header">
-        <h2><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> Your Cart | سلة التسوق</h2>
-        <button class="close-cart" id="closeCart"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        <h2 style="display:flex; align-items:center; gap:8px;">Your Cart <span style="font-family:'Almarai',sans-serif; font-size:0.85rem; opacity:0.7;">سلة التسوق</span></h2>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <svg style="width:1.6rem;height:1.6rem;stroke:white;fill:none;stroke-width:1.5;opacity:0.5;" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+            <button class="close-cart" id="closeCart"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
     </div>
     <div class="cart-items" id="cartItems"></div>
     <div class="cart-footer"></div>
