@@ -72,13 +72,7 @@
             pointer-events: none;
         }
 
-        .auth-brand img {
-            width: 100px;
-            height: 100px;
-            position: relative;
-            z-index: 1;
-            margin-bottom: 30px;
-        }
+        .auth-brand img { display: none; }
 
         .trust-badges {
             display: flex;
@@ -287,8 +281,6 @@
                 flex: none;
             }
 
-            .auth-brand img { width: 55px; height: 55px; margin-bottom: 14px; }
-
             .trust-badges { gap: 20px; }
             .trust-item .icon svg { width: 1.3rem; height: 1.3rem; }
             .trust-item .en { font-size: 0.7rem; }
@@ -337,7 +329,6 @@
 </header>
     <div class="auth-container">
         <div class="auth-brand">
-            <img src="logo.png" alt="ORLO Store">
             <div class="trust-badges">
                 <div class="trust-item">
                     <div class="icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
