@@ -660,20 +660,98 @@ function setupGalleryOverlay(product) {
   const galleryScroll = document.getElementById('galleryScroll');
   const closeBtn = document.getElementById('galleryClose');
   const bottomNav = document.getElementById('mobileBottomNav');
-  
+
+  if (!overlay || !closeBtn) return;
+
   carousel.addEventListener('click', () => {
-    galleryScroll.innerHTML = product.images.map((img, index) => `<div class="gallery-image-wrapper"><img src="${img}" alt="${product.name} ${index + 1}"></div>`).join('');
+    galleryScroll.innerHTML = product.images.map((img, index) => `
+      <div class="gallery-image-wrapper">
+        <img src="${img}" alt="${product.name} ${index + 1}" style="touch-action:none;">
+      </div>
+    `).join('');
+
     overlay.classList.add('active');
     if (bottomNav) bottomNav.style.display = 'none';
     document.body.style.overflow = 'hidden';
+
+    // Pinch-to-zoom on each image
+    galleryScroll.querySelectorAll('.gallery-image-wrapper img').forEach(img => {
+      let scale = 1;
+      let startDist = 0;
+      let startScale = 1;
+      let translateX = 0, translateY = 0;
+      let startX = 0, startY = 0;
+      let isPinching = false;
+
+      function getDistance(t1, t2) {
+        return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      }
+
+      function applyTransform() {
+        img.style.transform = 'scale(' + scale + ') translate(' + translateX + 'px, ' + translateY + 'px)';
+      }
+
+      img.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 2) {
+          e.preventDefault();
+          isPinching = true;
+          startDist = getDistance(e.touches[0], e.touches[1]);
+          startScale = scale;
+        } else if (e.touches.length === 1 && scale > 1) {
+          e.preventDefault();
+          startX = e.touches[0].clientX - translateX;
+          startY = e.touches[0].clientY - translateY;
+        }
+      }, { passive: false });
+
+      img.addEventListener('touchmove', function(e) {
+        if (e.touches.length === 2 && isPinching) {
+          e.preventDefault();
+          var dist = getDistance(e.touches[0], e.touches[1]);
+          scale = Math.min(Math.max(startScale * (dist / startDist), 1), 5);
+          applyTransform();
+        } else if (e.touches.length === 1 && scale > 1) {
+          e.preventDefault();
+          translateX = e.touches[0].clientX - startX;
+          translateY = e.touches[0].clientY - startY;
+          applyTransform();
+        }
+      }, { passive: false });
+
+      img.addEventListener('touchend', function(e) {
+        isPinching = false;
+        if (scale <= 1) {
+          scale = 1;
+          translateX = 0;
+          translateY = 0;
+          applyTransform();
+        }
+      });
+
+      // Double-tap to reset
+      var lastTap = 0;
+      img.addEventListener('touchend', function(e) {
+        if (e.touches.length > 0) return;
+        var now = Date.now();
+        if (now - lastTap < 300) {
+          scale = scale > 1 ? 1 : 3;
+          translateX = 0;
+          translateY = 0;
+          img.style.transition = 'transform 0.3s';
+          applyTransform();
+          setTimeout(function() { img.style.transition = ''; }, 300);
+        }
+        lastTap = now;
+      });
+    });
   });
-  
+
   closeBtn.addEventListener('click', () => {
     overlay.classList.remove('active');
     if (bottomNav) bottomNav.style.display = '';
     document.body.style.overflow = '';
   });
-  
+
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
       overlay.classList.remove('active');
