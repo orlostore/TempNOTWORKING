@@ -1082,7 +1082,7 @@ footer p {
 }
 
 .product-details h1 {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   color: #1a3a52;
   margin-top: 0;
   margin-bottom: 0.3rem;
@@ -1090,7 +1090,7 @@ footer p {
 }
 
 .product-title-ar {
-  font-size: 1.05rem;
+  font-size: 1.01rem;
   color: #999;
   font-family: 'Almarai', sans-serif;
   direction: rtl;
@@ -1152,14 +1152,14 @@ footer p {
 }
 
 .product-desc-label {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: #1a3a52;
   margin-bottom: 0.5rem;
 }
 
 .product-desc-value {
-  font-size: 0.82rem;
+  font-size: 0.77rem;
   color: #555;
   line-height: 1.7;
 }
@@ -1178,7 +1178,7 @@ footer p {
 }
 
 .product-buybox .price {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #e76f51;
   margin-bottom: 1.2rem;
@@ -1194,7 +1194,7 @@ footer p {
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
@@ -1231,14 +1231,14 @@ footer p {
 }
 
 .delivery-en {
-  font-size: 0.82rem;
+  font-size: 0.77rem;
   color: #1a3a52;
   font-weight: 600;
   text-align: left;
 }
 
 .delivery-ar {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: #999;
   text-align: left;
   direction: rtl;
