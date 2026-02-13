@@ -169,15 +169,42 @@ function getCategories() { return ["All Products", ...new Set(products.map(p => 
 // Update all cart count displays
 function updateCartCounts() {
     const localCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+    // Ensure we use .quantity to match the rest of the logic
+    const totalItems = localCart.reduce((s, i) => s + (i.quantity || 0), 0);
     
-    const cartCount = document.getElementById("cartCount");
-    const bottomCartCount = document.getElementById("bottomCartCount");
-    const mobileCartCount = document.getElementById("mobileCartCount");
+    const ids = ["cartCount", "bottomCartCount", "mobileCartCount"];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = totalItems;
+    });
+}
+
+function updateCart() {
+    // SYNC FIRST
+    cart = JSON.parse(localStorage.getItem("cart")) || [];
     
-    if (cartCount) cartCount.textContent = totalItems;
-    if (bottomCartCount) bottomCartCount.textContent = totalItems;
-    if (mobileCartCount) mobileCartCount.textContent = totalItems;
+    const cartItems = document.getElementById("cartItems"); 
+    const cartFooter = document.querySelector(".cart-footer");
+    const cartCheckoutFixed = document.getElementById("cartCheckoutFixed");
+    const isMobile = window.innerWidth <= 768;
+    
+    // UPDATE COUNTS IMMEDIATELY (Don't wait for empty check)
+    updateCartCounts();
+    
+    if (!cart.length) { 
+        cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
+        // We removed the lines here that were forcing textContent = 0 
+        // updateCartCounts already handled the logic correctly.
+        cartFooter.innerHTML = `<div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;"><span>Total | الإجمالي:</span><span>AED 0.00</span></div>`;
+        if (cartCheckoutFixed) cartCheckoutFixed.innerHTML = '';
+        return; 
+    } 
+
+    const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0); 
+    const deliveryFee = calculateDeliveryFee(subtotal); 
+    const total = subtotal + deliveryFee; 
+    
+    // ... rest of your checkout button and cart item mapping logic
 }
 
 // Grid quantity change handler for product cards
