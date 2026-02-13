@@ -580,7 +580,7 @@ function openEnhancedLightbox(product, startIndex) {
     if (e.target.classList.contains('lightbox-arrow')) return;
     isZoomed = !isZoomed;
     if (isZoomed) {
-      lightboxImg.style.transform = 'scale(2)';
+      lightboxImg.style.transform = 'scale(3)';
       lightboxImg.style.cursor = 'zoom-out';
       const rect = lightboxMainImageContainer.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
