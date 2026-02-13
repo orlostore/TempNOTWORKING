@@ -1806,39 +1806,34 @@ footer p {
   display: block;
 }
 
+/* ============================================
+   MOBILE MENU - OPTION A (Icon Box Layout)
+   ============================================ */
 .mobile-menu {
   position: fixed;
   bottom: 60px;
   left: 10px;
   right: 10px;
   background: white;
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 14px;
+  padding: 8px;
   z-index: 2001;
   box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
+  overflow: hidden;
 }
 
 .mobile-menu a {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 8px;
-  padding: 15px;
+  gap: 14px;
+  padding: 14px 16px;
   color: var(--primary);
   text-decoration: none;
   font-weight: 600;
   font-size: 1.13rem;
-  border-bottom: 1px solid #eee;
-  text-align: center;
-}
-
-.mobile-menu a .menu-en {
-  direction: ltr;
-}
-
-.mobile-menu a .menu-ar {
-  direction: rtl;
-  font-family: 'Almarai', sans-serif;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: left;
+  transition: background 0.2s;
 }
 
 .mobile-menu a:last-child {
@@ -1846,7 +1841,59 @@ footer p {
 }
 
 .mobile-menu a:hover {
-  color: var(--accent);
+  background: #fdf5f2;
+}
+
+.mobile-menu .menu-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #fdf5f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mobile-menu .menu-icon-box svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mobile-menu .menu-text {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-menu .menu-en {
+  font-weight: 600;
+  font-size: 0.92rem;
+  direction: ltr;
+}
+
+.mobile-menu .menu-ar {
+  font-family: 'Almarai', sans-serif;
+  font-size: 0.82rem;
+  color: #999;
+  direction: rtl;
+}
+
+.mobile-menu .menu-chevron {
+  width: 16px;
+  height: 16px;
+  stroke: #ccc;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
 }
 
 /* =============================================
