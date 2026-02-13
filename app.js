@@ -312,6 +312,7 @@ function loadProducts(category = "All Products") {
 
 function createCategoryFilters() { 
     const container = document.getElementById("categoryFilters"); 
+    if (!container) return;
     container.innerHTML = getCategories().map(cat => {
         const catAr = getCategoryArabic(cat);
         return `<button class="category-btn ${cat === selectedCategory ? "active" : ""}" onclick="loadProducts('${cat}')">${cat}${catAr ? `<br><span class="arabic-text category-arabic">${catAr}</span>` : ''}</button>`;
