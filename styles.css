@@ -1188,6 +1188,7 @@ footer p {
 }
 
 .add-to-cart-btn {
+  height: 48px;
   width: fit-content;
   padding: 0.9rem 2.5rem;
   background: #1a3a52;
@@ -2125,6 +2126,7 @@ footer p {
 }
 
 .mobile-add-to-cart {
+  height: 50px;
   width: 100%;
   padding: 14px;
   background: #2c4a5c;
@@ -2680,6 +2682,7 @@ footer p {
    PRODUCT PAGE - TRANSFORMED BUTTON (Premium Glass)
    ============================================ */
 .product-btn-transformed {
+  height: 48px;
   display: flex;
   align-items: stretch;
   width: 100%;
@@ -2743,8 +2746,10 @@ footer p {
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
+  .product-btn-transformed {
+    height: 50px;
+  }
   .product-btn-transformed .qty-btn {
-    width: 48px;
     font-size: 1.2rem;
   }
   
