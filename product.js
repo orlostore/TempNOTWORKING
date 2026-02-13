@@ -687,23 +687,11 @@ function setupGalleryOverlay(product) {
         return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
       }
 
-      function clampTranslate() {
-        if (scale <= 1) { translateX = 0; translateY = 0; return; }
-        var rect = img.getBoundingClientRect();
-        var parent = img.parentElement.getBoundingClientRect();
-        var maxX = (rect.width - parent.width) / (2 * scale);
-        var maxY = (rect.height - parent.height) / (2 * scale);
-        if (maxX < 0) maxX = 0;
-        if (maxY < 0) maxY = 0;
-        translateX = Math.min(Math.max(translateX, -maxX), maxX);
-        translateY = Math.min(Math.max(translateY, -maxY), maxY);
-      }
-
       function applyTransform() {
         img.style.transform = 'scale(' + scale + ') translate(' + translateX + 'px, ' + translateY + 'px)';
       }
 
-      img.addEventListener('touchstart', function(e) {
+     img.addEventListener('touchstart', function(e) {
         if (e.touches.length === 2) {
           e.preventDefault();
           isPinching = true;
@@ -720,20 +708,18 @@ function setupGalleryOverlay(product) {
           e.preventDefault();
           var dist = getDistance(e.touches[0], e.touches[1]);
           scale = Math.min(Math.max(startScale * (dist / startDist), 1), 3);
-          clampTranslate();
           applyTransform();
-        } else if (e.touches.length === 1 && scale > 1) {
+         } else if (e.touches.length === 1 && scale > 1) {
           e.stopPropagation();
           translateX = e.touches[0].clientX - startX;
           translateY = e.touches[0].clientY - startY;
-          clampTranslate();
           applyTransform();
         }
       }, { passive: false });
 
       img.addEventListener('touchend', function(e) {
         isPinching = false;
-        if (scale <= 1) {
+        if (e.touches.length === 0) {
           scale = 1;
           translateX = 0;
           translateY = 0;
@@ -743,22 +729,6 @@ function setupGalleryOverlay(product) {
         }
       });
 
-      // Double-tap to reset
-      var lastTap = 0;
-      img.addEventListener('touchend', function(e) {
-        if (e.touches.length > 0) return;
-        var now = Date.now();
-        if (now - lastTap < 300) {
-          scale = 1;
-          translateX = 0;
-          translateY = 0;
-          img.style.transition = 'transform 0.3s';
-          applyTransform();
-          setTimeout(function() { img.style.transition = ''; }, 300);
-        }
-        lastTap = now;
-      });
-    });
       // Double-tap to reset
       var lastTap = 0;
       img.addEventListener('touchend', function(e) {
