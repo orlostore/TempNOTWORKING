@@ -1056,11 +1056,11 @@ footer p {
   text-decoration: underline;
 }
 
-/* Desktop Product Page - Option B Layout */
+/* Desktop Product Page - Layout D Clean Minimal */
 .product-page {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
   margin-bottom: 2.4rem;
   align-items: start;
 }
@@ -1072,7 +1072,7 @@ footer p {
 }
 
 .product-gallery .image-gallery {
-  margin-top: -12px;
+  margin-top: 0;
 }
 
 /* Right side: Details + Buybox combined */
@@ -1082,19 +1082,30 @@ footer p {
 }
 
 .product-details h1 {
-  font-size: 1.35rem;
-  color: var(--primary);
+  font-size: 1.6rem;
+  color: #1a3a52;
   margin-top: 0;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
   line-height: 1.3;
 }
 
+.product-title-ar {
+  font-size: 1.1rem;
+  color: #999;
+  font-family: 'Almarai', sans-serif;
+  direction: rtl;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
 .product-category {
-  color: #888;
-  font-size: 0.75rem;
-  margin-bottom: 1.5rem;
+  color: #aaa;
+  font-size: 0.72rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.2rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .product-details p {
@@ -1120,14 +1131,14 @@ footer p {
 .product-desc-block {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
   margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid #eee;
+  padding-left: 16px;
+  border-left: 3px solid #e76f51;
 }
 
 .product-desc-block:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
 }
 
 .product-desc-en {
@@ -1142,8 +1153,8 @@ footer p {
 
 .product-desc-label {
   font-size: 0.92rem;
-  font-weight: 600;
-  color: var(--primary);
+  font-weight: 700;
+  color: #1a3a52;
   margin-bottom: 0.5rem;
 }
 
@@ -1157,68 +1168,79 @@ footer p {
   color: #666;
 }
 
-/* Buybox integrated into details */
+/* Buybox - open layout */
 .product-buybox {
-  background: white;
-  border-radius: 10px;
-  padding: 1.5rem;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
   margin-bottom: 1.5rem;
-  border: 1px solid #e0e0e0;
+  border: none;
 }
 
 .product-buybox .price {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--accent);
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #e76f51;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
 }
 
 .add-to-cart-btn {
   width: 100%;
-  padding: 0.85rem;
-  background: var(--primary);
+  padding: 1rem;
+  background: #1a3a52;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.3px;
 }
 
 .add-to-cart-btn:hover {
-  background: #1e3545;
+  background: #15303f;
   transform: translateY(-1px);
 }
 
 .delivery-info {
-  padding-top: 0.5rem;
+  display: flex;
+  gap: 12px;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .delivery-item {
-  display: grid;
-  grid-template-columns: auto 1fr 1fr;
-  gap: 0.5rem;
+  flex: 1;
+  display: flex;
   align-items: center;
-  padding: 0.4rem 0;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #f8fafb;
+  border-radius: 12px;
 }
 
 .delivery-icon {
-  font-size: 1rem;
+  font-size: 1.3rem;
+  flex-shrink: 0;
 }
 
 .delivery-en {
-  font-size: 0.8rem;
-  color: #333;
-  font-weight: 500;
+  font-size: 0.78rem;
+  color: #1a3a52;
+  font-weight: 600;
   text-align: left;
 }
 
 .delivery-ar {
-  font-size: 0.8rem;
-  color: #666;
-  text-align: right;
+  font-size: 0.68rem;
+  color: #999;
+  text-align: left;
   direction: rtl;
 }
 
@@ -1247,6 +1269,9 @@ footer p {
   position: relative;
   text-align: center;
   overflow: hidden;
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #eee;
 }
 
 .main-product-image {
@@ -1259,7 +1284,7 @@ footer p {
   object-position: top;
   cursor: zoom-in;
   transition: transform 0.3s ease;
-  border-radius: 8px;
+  border-radius: 14px;
 }
 
 /* Hover zoom effect */
@@ -1288,16 +1313,16 @@ footer p {
 .thumbnail-strip {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 10px;
   justify-content: center;
-  padding: 0.5rem 0;
+  padding: 12px 0;
 }
 
 .thumbnail {
-  width: 70px;
-  height: 70px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  width: 68px;
+  height: 68px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
   padding: 0.3rem;
   display: flex;
   align-items: center;
@@ -1320,9 +1345,9 @@ footer p {
 }
 
 .thumbnail.active {
-  border-color: var(--accent);
+  border-color: #e76f51;
   border-width: 2.5px;
-  box-shadow: 0 0 0 3px rgba(224,120,86,0.15);
+  box-shadow: 0 0 0 3px rgba(231,111,81,0.15);
 }
 
 /* Lightbox */
@@ -2318,7 +2343,7 @@ footer p {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #e07856;
+  background: #e76f51;
   color: white;
   text-decoration: none;
   padding: 5px 14px;
@@ -2330,7 +2355,7 @@ footer p {
 }
 
 .desktop-product .back-link:hover {
-  background: #2c4a5c;
+  background: #1a3a52;
   transform: translateX(-5px);
 }
 /* Force Almarai on ALL Arabic characters site-wide */
@@ -2659,8 +2684,8 @@ footer p {
   align-items: stretch;
   width: 100%;
   background: #1a3a52;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(44,74,92,0.25);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(26,58,82,0.25);
   margin-bottom: 1rem;
 }
 
@@ -2676,11 +2701,11 @@ footer p {
 }
 
 .product-btn-transformed .qty-btn:first-child {
-  border-radius: 8px 0 0 8px;
+  border-radius: 12px 0 0 12px;
 }
 
 .product-btn-transformed .qty-btn:last-child {
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 12px 12px 0;
 }
 
 .product-btn-transformed .qty-btn:hover {
@@ -2736,10 +2761,10 @@ footer p {
     font-weight: 600;
   }
 }
-/* Product page - narrower and centered Add to Cart button */
+/* Product page - full width Add to Cart button (Layout D) */
 .product-buybox .add-to-cart-btn,
 .product-buybox .product-btn-transformed {
-  width: 70%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   display: block;
