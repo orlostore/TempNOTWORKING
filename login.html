@@ -276,12 +276,15 @@
                 min-height: auto;
                 border-radius: 0;
                 box-shadow: none;
+                overflow: visible;
             }
 
-            /* 1. Trust banner - reduced height */
+            /* 1. Trust banner - reduced height + keep rounded corners */
             .auth-brand {
                 padding: 12px 20px;
                 flex: none;
+                border-radius: 14px;
+                margin: 8px 8px 0;
             }
             .trust-badges { gap: 20px; }
             .trust-item .icon { margin-bottom: 2px; }
