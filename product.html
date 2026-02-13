@@ -69,6 +69,19 @@
         </ul>
     </nav>
 </header>
+<script>
+  // Instantly set cart badge from localStorage to prevent 0-flash
+  (function(){
+    try {
+      var c = JSON.parse(localStorage.getItem('cart') || '[]');
+      var n = c.reduce(function(s,i){ return s + (i.qty||0); }, 0);
+      var el = document.getElementById('cartCount');
+      var mel = document.getElementById('mobileCartCount');
+      if(el) el.textContent = n;
+      if(mel) mel.textContent = n;
+    } catch(e){}
+  })();
+</script>
 
 <!-- DESKTOP LAYOUT -->
 <div class="product-page-container desktop-product">
