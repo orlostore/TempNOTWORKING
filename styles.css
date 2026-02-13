@@ -1601,6 +1601,8 @@ footer p {
   padding: 10px 15px;
   font-size: 0.75rem;
   font-weight: 500;
+  margin: 0 1.01rem;
+  border-radius: 8px;
 }
 
 .mobile-promo-banner .arabic-text {
