@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "971XXXXXXXXX"; 
+const WHATSAPP_NUMBER = "971555477206"; 
 
 // SVG icon constants for JS-generated HTML
 const SVG_TRUCK_INLINE = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>';
@@ -454,19 +454,14 @@ function updateCart() {
                 <div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 10px 10px; font-size: 0.78rem; font-weight: 600; display:flex; align-items:center; justify-content:center; gap:5px;">
                     ${SVG_CARD} Pay with Card | <span style="font-family: 'Almarai', sans-serif; font-size: 0.72rem; opacity: 0.85;">الدفع بالبطاقة</span>
                 </div>
-                <div style="display: flex; align-items: center; background: #3d6178; padding: 6px 12px 12px;">
+                <div style="display: flex; gap: 8px; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 10px 8px;">
                     <button id="stripeBtn" onclick="window.location.href='login.html?redirect='+encodeURIComponent(window.location.href.split('?')[0]+'?openCart=true')" 
-                        style="flex: 1; padding: 10px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; cursor: pointer; text-align: center; background: transparent; color: white; border-radius: 4px; transition: all 0.2s;"
-                        onmouseover="this.style.background='rgba(255,255,255,0.1)'"
-                        onmouseout="this.style.background='transparent'">
-                        ${SVG_LOCK_SM} Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.64rem; display: block; opacity: 0.8;">تسجيل الدخول</span>
+                        style="flex: 1; padding: 7px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
+                        ${SVG_LOCK_SM} Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.58rem; display: block; opacity: 0.8;">تسجيل الدخول</span>
                     </button>
-                    <div style="width: 1px; height: 30px; background: rgba(255,255,255,0.2); flex-shrink: 0;"></div>
                     <button id="stripeBtnGuest" onclick="checkout()" 
-                        style="flex: 1; padding: 10px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; cursor: pointer; text-align: center; background: transparent; color: white; border-radius: 4px; transition: all 0.2s;"
-                        onmouseover="this.style.background='rgba(255,255,255,0.1)'"
-                        onmouseout="this.style.background='transparent'">
-                        ${SVG_PERSON} As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.64rem; display: block; opacity: 0.8;">كضيف</span>
+                        style="flex: 1; padding: 7px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
+                        ${SVG_PERSON} As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.58rem; display: block; opacity: 0.8;">كضيف</span>
                     </button>
                 </div>
             </div>
