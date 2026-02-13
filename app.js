@@ -451,22 +451,22 @@ function updateCart() {
     } else {
         checkoutBtnHTML = `
             <div style="border-radius: 9px; overflow: hidden; box-shadow: 0 3px 10px rgba(44,74,92,0.15);">
-                <div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 9px 10px; font-size: 0.78rem; font-weight: 600;">
-                    ${SVG_CARD} Pay with Card / <span style="font-family: 'Almarai', sans-serif; font-size: 0.66rem; opacity: 0.85;">الدفع بالبطاقة</span>
+                <div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 10px 10px; font-size: 0.78rem; font-weight: 600; display:flex; align-items:center; justify-content:center; gap:5px;">
+                    ${SVG_CARD} Pay with Card | <span style="font-family: 'Almarai', sans-serif; font-size: 0.72rem; opacity: 0.85;">الدفع بالبطاقة</span>
                 </div>
-                <div style="display: flex; align-items: center; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 12px 9px;">
+                <div style="display: flex; align-items: center; background: #3d6178; padding: 6px 12px 12px;">
                     <button id="stripeBtn" onclick="window.location.href='login.html?redirect='+encodeURIComponent(window.location.href.split('?')[0]+'?openCart=true')" 
-                        style="flex: 1; padding: 6px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 500; cursor: pointer; text-align: center; background: transparent; color: rgba(255,255,255,0.8); border-radius: 4px; transition: all 0.2s;"
-                        onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='white'"
-                        onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.8)'">
-                        ${SVG_LOCK_SM} Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.54rem; display: block; opacity: 0.65;">تسجيل الدخول</span>
+                        style="flex: 1; padding: 10px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; cursor: pointer; text-align: center; background: transparent; color: white; border-radius: 4px; transition: all 0.2s;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                        onmouseout="this.style.background='transparent'">
+                        ${SVG_LOCK_SM} Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.64rem; display: block; opacity: 0.8;">تسجيل الدخول</span>
                     </button>
-                    <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.18); flex-shrink: 0;"></div>
+                    <div style="width: 1px; height: 30px; background: rgba(255,255,255,0.2); flex-shrink: 0;"></div>
                     <button id="stripeBtnGuest" onclick="checkout()" 
-                        style="flex: 1; padding: 6px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 500; cursor: pointer; text-align: center; background: transparent; color: rgba(255,255,255,0.8); border-radius: 4px; transition: all 0.2s;"
-                        onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='white'"
-                        onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.8)'">
-                        ${SVG_PERSON} As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.54rem; display: block; opacity: 0.65;">كضيف</span>
+                        style="flex: 1; padding: 10px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; cursor: pointer; text-align: center; background: transparent; color: white; border-radius: 4px; transition: all 0.2s;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                        onmouseout="this.style.background='transparent'">
+                        ${SVG_PERSON} As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.64rem; display: block; opacity: 0.8;">كضيف</span>
                     </button>
                 </div>
             </div>
