@@ -256,12 +256,12 @@
                     <a href="/" class="btn btn-blue" onclick="localStorage.removeItem('cart')">
                         🛍️ Continue Shopping<span class="ar">متابعة التسوق</span>
                     </a>
-                    <a href="/cdn-cgi/l/email-protection#97fef9f1f8d7f8e5fbf8e4e3f8e5f2b9f4f8fa" class="btn btn-orange">
+                    <a href="mailto:info@orlostore.com" class="btn btn-orange">
                         ✉️ Need Help?<span class="ar">تحتاج مساعدة؟</span>
                     </a>
                 </div>
                 <!-- Guest only: Create Account button -->
-                <button class="btn btn-green" id="registerBtn"  onclick="oneClickAccount()">
+                <button class="btn btn-green" id="registerBtn" style="display:none" onclick="oneClickAccount()">
                     🔐 Create Hassle-Free Account in One Click<span class="ar">إنشاء حساب بدون عناء بنقرة واحدة</span>
                 </button>
             </div>
@@ -281,8 +281,33 @@
         const urlParams = new URLSearchParams(window.location.search);
         const sessionId = urlParams.get('session_id');
 
-        if (!existingToken && sessionId) {
-            document.getElementById('registerBtn').style.display = 'block';
+        if (existingToken) {
+            // Logged in user - hide register button
+            document.getElementById('registerBtn').style.display = 'none';
+        } else if (sessionId) {
+            // Guest - check if email already has an account before showing button
+            (async function() {
+                try {
+                    const res = await fetch('/api/auth/check-session-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ session_id: sessionId })
+                    });
+                    const data = await res.json();
+                    if (data.registered) {
+                        // Already has account - show login prompt instead
+                        document.getElementById('registerBtn').style.display = 'none';
+                        const msg = document.getElementById('accountMsg');
+                        msg.className = 'account-msg success';
+                        msg.innerHTML = 'You already have an account! <a href="login.html">Login to track your order</a><p class="arabic-text">لديك حساب بالفعل! <a href="login.html">سجل دخول لتتبع طلبك</a></p>';
+                    } else {
+                        document.getElementById('registerBtn').style.display = 'block';
+                    }
+                } catch (e) {
+                    // If check fails, show button anyway (fallback to current behavior)
+                    document.getElementById('registerBtn').style.display = 'block';
+                }
+            })();
         }
 
         async function oneClickAccount() {
