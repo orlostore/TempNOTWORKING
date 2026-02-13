@@ -1189,12 +1189,12 @@ footer p {
 
 .add-to-cart-btn {
   width: auto;
-  padding: 0.85rem 2.5rem;
+  padding: 0.9rem 2.5rem;
   background: #1a3a52;
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 0.92rem;
+  font-size: 1.05rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
