@@ -1059,7 +1059,7 @@ footer p {
 /* Desktop Product Page - Option B Layout */
 .product-page {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.3fr 1fr;
   gap: 3rem;
   margin-bottom: 2.4rem;
   align-items: start;
@@ -1246,8 +1246,8 @@ footer p {
 
 .main-product-image {
   width: 100%;
-  max-width: 450px;
-  max-height: 450px;
+  max-width: 550px;
+  max-height: 550px;
   display: block;
   margin: 0 auto;
   object-fit: contain;
