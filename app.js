@@ -1,5 +1,18 @@
 const WHATSAPP_NUMBER = "971XXXXXXXXX"; 
 
+// SVG icon constants for JS-generated HTML
+const SVG_TRUCK_INLINE = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>';
+const SVG_CLOSE_SM = '<svg style="width:0.7em;height:0.7em;vertical-align:-0.1em;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+const SVG_CLOSE_CART = '<svg style="width:0.85em;height:0.85em;vertical-align:-0.1em;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+const SVG_CARD = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>';
+const SVG_LOCK_SM = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>';
+const SVG_PERSON = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>';
+const SVG_WARNING = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+const SVG_SHOP_BAG = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>';
+const SVG_INFO = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+const SVG_MAIL_SM = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
+const SVG_CLIPBOARD_SM = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>';
+
 // Inject cart shake animation
 if (!document.getElementById('cartLimitStyles')) {
     const style = document.createElement('style');
@@ -52,7 +65,7 @@ function showGridMaxLimitMessage(productId, maxAllowed) {
     tooltip.id = 'gridLimitTooltip';
     tooltip.className = 'grid-limit-tooltip';
     tooltip.innerHTML = `
-      <button class="close-btn" onclick="closeGridLimitTooltip()">✕</button>
+      <button class="close-btn" onclick="closeGridLimitTooltip()">${SVG_CLOSE_SM}</button>
       ${messageEn}
       <span class="tooltip-text-ar">${messageAr}</span>
     `;
@@ -144,7 +157,7 @@ window.addEventListener('pageshow', function(event) {
     if (btn) {
         btn.disabled = false;
         if (btn.id === 'stripeBtn') {
-            btn.innerHTML = "💳 Pay with Card / الدفع بالبطاقة";
+            btn.innerHTML = `${SVG_CARD} Pay with Card / الدفع بالبطاقة`;
         }
     }
 });
@@ -432,28 +445,28 @@ function updateCart() {
                 onclick="checkout()" 
                 onmouseover="this.style.background='#1e3545'" 
                 onmouseout="this.style.background='#2c4a5c'">
-                💳 Pay with Card / الدفع بالبطاقة
+                ${SVG_CARD} Pay with Card / الدفع بالبطاقة
             </button>
         `;
     } else {
         checkoutBtnHTML = `
             <div style="border-radius: 9px; overflow: hidden; box-shadow: 0 3px 10px rgba(44,74,92,0.15);">
                 <div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 9px 10px; font-size: 0.78rem; font-weight: 600;">
-                    💳 Pay with Card / <span style="font-family: 'Almarai', sans-serif; font-size: 0.66rem; opacity: 0.85;">الدفع بالبطاقة</span>
+                    ${SVG_CARD} Pay with Card / <span style="font-family: 'Almarai', sans-serif; font-size: 0.66rem; opacity: 0.85;">الدفع بالبطاقة</span>
                 </div>
                 <div style="display: flex; align-items: center; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 12px 9px;">
                     <button id="stripeBtn" onclick="window.location.href='login.html?redirect='+encodeURIComponent(window.location.href.split('?')[0]+'?openCart=true')" 
                         style="flex: 1; padding: 6px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 500; cursor: pointer; text-align: center; background: transparent; color: rgba(255,255,255,0.8); border-radius: 4px; transition: all 0.2s;"
                         onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='white'"
                         onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.8)'">
-                        🔐 Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.54rem; display: block; opacity: 0.65;">تسجيل الدخول</span>
+                        ${SVG_LOCK_SM} Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.54rem; display: block; opacity: 0.65;">تسجيل الدخول</span>
                     </button>
                     <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.18); flex-shrink: 0;"></div>
                     <button id="stripeBtnGuest" onclick="checkout()" 
                         style="flex: 1; padding: 6px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 500; cursor: pointer; text-align: center; background: transparent; color: rgba(255,255,255,0.8); border-radius: 4px; transition: all 0.2s;"
                         onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.color='white'"
                         onmouseout="this.style.background='transparent'; this.style.color='rgba(255,255,255,0.8)'">
-                        👤 As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.54rem; display: block; opacity: 0.65;">كضيف</span>
+                        ${SVG_PERSON} As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.54rem; display: block; opacity: 0.65;">كضيف</span>
                     </button>
                 </div>
             </div>
@@ -477,7 +490,7 @@ function updateCart() {
                 <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">-</button>
                 <span style="font-size:0.9rem; font-weight:600; min-width:20px; text-align:center;">${i.quantity}</span>
                 <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">+</button>
-                <button onclick="removeFromCart(${i.id})" style="padding:0.3rem 0.6rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:0.85rem;">✕</button>
+                <button onclick="removeFromCart(${i.id})" style="padding:0.3rem 0.6rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:0.85rem;">${SVG_CLOSE_CART}</button>
             </div>
         </div>
     `).join(""); 
@@ -519,7 +532,7 @@ function updateCart() {
             footerHTML += `
                 <div style="padding: 0.75rem 1rem; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.75rem;">
                     <div style="font-weight: 600; color: #2c4a5c; font-size: 0.9rem; margin-bottom: 0.5rem;">
-                        🚚 Add AED ${amountNeededForFree.toFixed(0)} more to qualify for free delivery
+                        ${SVG_TRUCK_INLINE} Add AED ${amountNeededForFree.toFixed(0)} more to qualify for free delivery
                     </div>
                     ${upsellProducts.length > 0 ? `
                         <div style="cursor: pointer;" onclick="this.querySelector('.upsell-dropdown').style.display = this.querySelector('.upsell-dropdown').style.display === 'none' ? 'block' : 'none'; this.querySelector('.arrow').textContent = this.querySelector('.upsell-dropdown').style.display === 'none' ? '▶' : '▼';">
@@ -622,10 +635,10 @@ function showCartLimitMessage(productId, maxAllowed) {
     
     let messageEn, messageAr;
     if (isStockLimit) {
-      messageEn = `⚠ Only <span class="highlight">${maxAllowed}</span> left in stock`;
+      messageEn = `${SVG_WARNING} Only <span class="highlight">${maxAllowed}</span> left in stock`;
       messageAr = `متبقي <span class="highlight">${toArabicNumerals(maxAllowed)}</span> فقط في المخزون`;
     } else {
-      messageEn = `⚠ Max <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
+      messageEn = `${SVG_WARNING} Max <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
       messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
     }
     
@@ -740,10 +753,10 @@ function toggleMobileMenu() {
         overlay.className = 'mobile-menu-overlay';
         overlay.innerHTML = `
             <div class="mobile-menu">
-                <a href="#products" onclick="closeMobileMenu()"><span class="menu-en">🛍️ Shop</span> | <span class="menu-ar">تسوق</span></a>
-                <a href="#about" onclick="closeMobileMenu()"><span class="menu-en">ℹ️ About</span> | <span class="menu-ar">من نحن</span></a>
-                <a href="#contact" onclick="closeMobileMenu()"><span class="menu-en">📧 Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
-                <a href="#terms" onclick="closeMobileMenu()"><span class="menu-en">📋 Terms</span> | <span class="menu-ar">الشروط</span></a>
+                <a href="#products" onclick="closeMobileMenu()"><span class="menu-en">${SVG_SHOP_BAG} Shop</span> | <span class="menu-ar">تسوق</span></a>
+                <a href="#about" onclick="closeMobileMenu()"><span class="menu-en">${SVG_INFO} About</span> | <span class="menu-ar">من نحن</span></a>
+                <a href="#contact" onclick="closeMobileMenu()"><span class="menu-en">${SVG_MAIL_SM} Contact</span> | <span class="menu-ar">اتصل بنا</span></a>
+                <a href="#terms" onclick="closeMobileMenu()"><span class="menu-en">${SVG_CLIPBOARD_SM} Terms</span> | <span class="menu-ar">الشروط</span></a>
             </div>
         `;
         document.body.appendChild(overlay);
@@ -801,7 +814,7 @@ window.onload = () => {
     
     const promoBanner = document.querySelector('.mobile-promo-banner');
     if (promoBanner) {
-        promoBanner.innerHTML = `🚚 Free delivery over AED ${FREE_DELIVERY_THRESHOLD} | <span class="arabic-text">توصيل مجاني فوق ${FREE_DELIVERY_THRESHOLD} درهم</span>`;
+        promoBanner.innerHTML = `${SVG_TRUCK_INLINE} Free delivery over AED ${FREE_DELIVERY_THRESHOLD} | <span class="arabic-text">توصيل مجاني فوق ${FREE_DELIVERY_THRESHOLD} درهم</span>`;
     }
     
     const heroThreshold = document.getElementById('heroThreshold');
