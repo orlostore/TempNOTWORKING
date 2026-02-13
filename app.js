@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "971XXXXXXXXX"; 
+const WHATSAPP_NUMBER = "97155477206"; 
 
 // SVG icon constants for JS-generated HTML
 const SVG_TRUCK_INLINE = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>';
