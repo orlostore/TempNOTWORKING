@@ -1041,6 +1041,8 @@ footer p {
   margin: 1.6rem auto;
   margin-top: 2.5rem;
   padding: 0 1.34rem;
+  transform: scale(0.9);
+  transform-origin: top center;
 }
 
 .back-link {
