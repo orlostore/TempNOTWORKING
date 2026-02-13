@@ -1188,7 +1188,7 @@ footer p {
 }
 
 .add-to-cart-btn {
-  width: auto;
+  width: fit-content;
   padding: 0.9rem 2.5rem;
   background: #1a3a52;
   color: white;
@@ -2764,7 +2764,7 @@ footer p {
 /* Product page - cart button width (Layout D) */
 .product-buybox .add-to-cart-btn,
 .product-buybox .product-btn-transformed {
-  width: auto;
+  width: fit-content;
   max-width: 280px;
   margin-left: 0;
   margin-right: auto;
@@ -2773,6 +2773,8 @@ footer p {
 
 .product-buybox .product-btn-transformed {
   display: flex;
+  width: fit-content;
+  max-width: 280px;
 }
 /* Mobile product page - narrower and centered Add to Cart button */
 .mobile-cart-section .mobile-add-to-cart,
