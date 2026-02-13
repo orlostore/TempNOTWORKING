@@ -141,7 +141,7 @@ function productQtyChange(productId, change) {
     localCart.forEach(i => cart.push(i));
   }
   
-  const totalItems = localCart.reduce((s, i) => s + i.qty, 0);
+  const totalItems = localCart.reduce((s, i) => s + (Number(i.qty) || 0), 0);
   const cartCount = document.getElementById("cartCount");
   const bottomCartCount = document.getElementById("bottomCartCount");
   const mobileCartCount = document.getElementById("mobileCartCount");
@@ -199,7 +199,7 @@ function resetToAddButton(productId) {
       localCart.forEach(i => cart.push(i));
     }
     
-    const totalItems = localCart.reduce((s, i) => s + i.qty, 0);
+    const totalItems = localCart.reduce((s, i) => s + (Number(i.qty) || 0), 0);
     const cartCount = document.getElementById("cartCount");
     const bottomCartCount = document.getElementById("bottomCartCount");
     const mobileCartCount = document.getElementById("mobileCartCount");
@@ -479,7 +479,7 @@ async function initProductPage() {
     }
     
     // Update cart counts
-    const totalItems = localCart.reduce((s, i) => s + i.qty, 0);
+    const totalItems = localCart.reduce((s, i) => s + (Number(i.qty) || 0), 0);
     const cartCount = document.getElementById("cartCount");
     const bottomCartCount = document.getElementById("bottomCartCount");
     const mobileCartCount = document.getElementById("mobileCartCount");
@@ -667,7 +667,16 @@ function setupGalleryOverlay(product) {
     if (bottomNav) bottomNav.style.display = 'none';
     document.body.style.overflow = 'hidden';
   });
+  function setupGalleryOverlay(product) {
+  const carousel = document.getElementById('mobileCarousel');
   
+  // ADD THIS LINE: It stops the red error so the rest of the code can run
+  if (!carousel) return; 
+
+  carousel.addEventListener('click', () => { 
+    // ...
+  });
+}
   closeBtn.addEventListener('click', () => {
     overlay.classList.remove('active');
     if (bottomNav) bottomNav.style.display = '';
@@ -791,7 +800,7 @@ function productPageToggleMobileMenu() {
 window.addEventListener('DOMContentLoaded', () => {
   // Update cart count from localStorage
   const localCart = JSON.parse(localStorage.getItem("cart")) || [];
-  const totalItems = localCart.reduce((s, i) => s + i.qty, 0);
+  const totalItems = localCart.reduce((s, i) => s + (Number(i.qty) || 0), 0);
   
   const cartCount = document.getElementById("cartCount");
   const bottomCartCount = document.getElementById("bottomCartCount");
