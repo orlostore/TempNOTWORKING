@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "971555477206"; 
+const WHATSAPP_NUMBER = "971XXXXXXXXX"; 
 
 // SVG icon constants for JS-generated HTML
 const SVG_TRUCK_INLINE = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>';
@@ -157,7 +157,7 @@ window.addEventListener('pageshow', function(event) {
     if (btn) {
         btn.disabled = false;
         if (btn.id === 'stripeBtn') {
-            btn.innerHTML = `${SVG_CARD} Pay with Card | الدفع بالبطاقة`;
+            btn.innerHTML = `${SVG_CARD} Pay by Card | الدفع بالبطاقة`;
         }
     }
 });
@@ -445,14 +445,14 @@ function updateCart() {
                 onclick="checkout()" 
                 onmouseover="this.style.background='#1e3545'" 
                 onmouseout="this.style.background='#2c4a5c'">
-                ${SVG_CARD} Pay with Card | الدفع بالبطاقة
+                ${SVG_CARD} Pay by Card | الدفع بالبطاقة
             </button>
         `;
     } else {
         checkoutBtnHTML = `
             <div style="border-radius: 9px; overflow: hidden; box-shadow: 0 3px 10px rgba(44,74,92,0.15);">
                 <div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 10px 10px; font-size: 0.78rem; font-weight: 600; display:flex; align-items:center; justify-content:center; gap:5px;">
-                    ${SVG_CARD} Pay with Card | <span style="font-family: 'Almarai', sans-serif; font-size: 0.72rem; opacity: 0.85;">الدفع بالبطاقة</span>
+                    ${SVG_CARD} Pay by Card | <span style="font-family: 'Almarai', sans-serif; font-size: 0.72rem; opacity: 0.85;">الدفع بالبطاقة</span>
                 </div>
                 <div style="display: flex; gap: 8px; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 10px 8px;">
                     <button id="stripeBtn" onclick="window.location.href='login.html?redirect='+encodeURIComponent(window.location.href.split('?')[0]+'?openCart=true')" 
@@ -920,7 +920,7 @@ window.onload = () => {
 
 async function checkout() {
     const btn = document.getElementById("stripeBtnGuest") || document.getElementById("stripeBtn");
-    const originalText = btn ? btn.innerHTML : "Pay with Card";
+    const originalText = btn ? btn.innerHTML : "Pay by Card";
     
     try {
         if (btn) {
