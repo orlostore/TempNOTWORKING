@@ -48,7 +48,7 @@
         </button>
         
         <div class="mobile-cart-icon" id="mobileCartIcon">
-            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> <span class="cart-count" id="mobileCartCount">0</span>
+            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> <span class="cart-count" id="mobileCartCount"></span>
         </div>
         
         <div class="search-container">
@@ -62,25 +62,10 @@
             <li><a href="#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
             <li><a href="#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
             <li><a href="login.html" id="accountLink" class="account-nav-link">Login<br><span class="arabic-text">دخول</span></a></li>
-            <li><div class="cart-icon" id="cartIcon"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> <span class="cart-count" id="cartCount">0</span></div></li>
+            <li><div class="cart-icon" id="cartIcon"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> <span class="cart-count" id="cartCount"></span></div></li>
         </ul>
     </nav>
 </header>
-<script>
-  // Instantly set cart badge from localStorage to prevent 0-flash
-  (function(){
-    try {
-      var c = JSON.parse(localStorage.getItem('cart') || '[]');
-      var n = c.reduce(function(s,i){ return s + (i.qty||0); }, 0);
-      var el = document.getElementById('cartCount');
-      var mel = document.getElementById('mobileCartCount');
-      var bel = document.getElementById('bottomCartCount');
-      if(el) el.textContent = n;
-      if(mel) mel.textContent = n;
-      if(bel) bel.textContent = n;
-    } catch(e){}
-  })();
-</script>
 
 <!-- Mobile Promo Banner -->
 <div class="mobile-promo-banner">
@@ -229,7 +214,7 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
     </div>
     <div class="bottom-nav-item" id="bottomCartBtn" data-index="2">
         <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-        <span class="bottom-cart-badge" id="bottomCartCount">0</span>
+        <span class="bottom-cart-badge" id="bottomCartCount"></span>
         <span class="nav-label">Cart</span>
     </div>
     <div class="bottom-nav-item" id="bottomMenuBtn" data-index="3">
@@ -240,7 +225,6 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
 
 <script src="products.js"></script>
 <script src="app.js?v=5"></script>
-<script>
 // Account link handler - updates nav based on login state
 function updateAccountLink() {
     const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
@@ -284,7 +268,6 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
 </script>
 
 <!-- Option D indicator sliding -->
-<script>
 (function() {
     function moveIndicator(index) {
         const indicator = document.getElementById('bottomNavIndicator');
