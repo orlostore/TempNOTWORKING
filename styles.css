@@ -1038,8 +1038,8 @@ footer p {
 /* Product Detail Page Styles */
 .product-page-container {
   max-width: 1180px;
-  margin: 0.5rem auto;
-  margin-top: 1rem;
+  margin: 0 auto;
+  margin-top: 0;
   padding: 0 1.34rem;
   transform: scale(0.9);
   transform-origin: top center;
@@ -2319,12 +2319,12 @@ footer p {
   background: #e07856;
   color: white;
   text-decoration: none;
-  padding: 7px 16px;
+  padding: 5px 14px;
   border-radius: 25px;
   font-weight: 600;
   font-size: 0.82rem;
   transition: all 0.3s;
-  margin-bottom: 1.1rem;
+  margin-bottom: 0.3rem;
 }
 
 .desktop-product .back-link:hover {
