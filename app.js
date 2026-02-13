@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "97155477206"; 
+const WHATSAPP_NUMBER = "971XXXXXXXXX"; 
 
 // SVG icon constants for JS-generated HTML
 const SVG_TRUCK_INLINE = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>';
@@ -157,7 +157,7 @@ window.addEventListener('pageshow', function(event) {
     if (btn) {
         btn.disabled = false;
         if (btn.id === 'stripeBtn') {
-            btn.innerHTML = `${SVG_CARD} Pay with Card / الدفع بالبطاقة`;
+            btn.innerHTML = `${SVG_CARD} Pay with Card | الدفع بالبطاقة`;
         }
     }
 });
@@ -420,7 +420,7 @@ function updateCart() {
         cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
         if (cartCount) cartCount.textContent = 0;
         if (bottomCartCount) bottomCartCount.textContent = 0;
-        cartFooter.innerHTML = `<div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;"><span>Total / الإجمالي:</span><span>AED 0.00</span></div>`;
+        cartFooter.innerHTML = `<div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;"><span>Total | الإجمالي:</span><span>AED 0.00</span></div>`;
         if (cartCheckoutFixed) cartCheckoutFixed.innerHTML = '';
         return; 
     } 
@@ -445,7 +445,7 @@ function updateCart() {
                 onclick="checkout()" 
                 onmouseover="this.style.background='#1e3545'" 
                 onmouseout="this.style.background='#2c4a5c'">
-                ${SVG_CARD} Pay with Card / الدفع بالبطاقة
+                ${SVG_CARD} Pay with Card | الدفع بالبطاقة
             </button>
         `;
     } else {
@@ -560,16 +560,16 @@ function updateCart() {
     footerHTML += `
         <div style="padding: 0.6rem 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
             <div style="display: flex; justify-content: space-between; padding: 0.2rem 0; font-size: 0.9rem; color: #2c4a5c;">
-                <span>Subtotal / المجموع الفرعي:</span>
+                <span>Subtotal | المجموع الفرعي:</span>
                 <span>AED ${subtotal.toFixed(2)}</span>
             </div>
             <div style="display: flex; justify-content: space-between; padding: 0.2rem 0; font-size: 0.9rem; color: #2c4a5c;">
-                <span>Delivery / التوصيل:</span>
-                <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE / مجاني' : 'AED ' + deliveryFee.toFixed(2)}</span>
+                <span>Delivery | التوصيل:</span>
+                <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE | مجاني' : 'AED ' + deliveryFee.toFixed(2)}</span>
             </div>
             <div style="border-top: 2px solid #ddd; margin: 0.3rem 0;"></div>
             <div style="display: flex; justify-content: space-between; padding: 0.4rem 0 0.2rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;">
-                <span>Total / الإجمالي:</span>
+                <span>Total | الإجمالي:</span>
                 <span>AED ${total.toFixed(2)}</span>
             </div>
         </div>
