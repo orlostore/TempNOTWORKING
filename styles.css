@@ -1193,12 +1193,12 @@ footer p {
 .add-to-cart-btn {
   height: 48px;
   width: fit-content;
-  padding: 0.4rem 2.5rem;
+  padding: 0.4rem 1.2rem;
   background: #1a3a52;
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
@@ -2136,7 +2136,7 @@ footer p {
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s;
@@ -2696,11 +2696,11 @@ footer p {
 }
 
 .product-btn-transformed .qty-btn {
-  width: 44px;
+  width: 38px;
   border: none;
   background: rgba(0,0,0,0.15);
   color: white;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
@@ -2743,7 +2743,7 @@ footer p {
 }
 
 .product-btn-transformed .qty-display {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
@@ -2753,7 +2753,7 @@ footer p {
     height: 50px;
   }
   .product-btn-transformed .qty-btn {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
   
   .product-btn-transformed .center-section {
@@ -2765,13 +2765,13 @@ footer p {
   }
   
   .product-btn-transformed .qty-display {
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 600;
   }
 }
 /* Product page - cart button width (Layout D) */
 .product-buybox .add-to-cart-btn {
-  width: 260px;
+  width: 200px;
   margin-left: 0;
   margin-right: auto;
   display: block;
@@ -2779,14 +2779,14 @@ footer p {
 
 .product-buybox .product-btn-transformed {
   display: flex;
-  width: 260px;
+  width: 200px;
   margin-left: 0;
   margin-right: auto;
 }
 /* Mobile product page - narrower and centered Add to Cart button */
 .mobile-cart-section .mobile-add-to-cart,
 .mobile-cart-section .product-btn-transformed {
-  width: 75%;
+  width: 60%;
   margin-left: auto;
   margin-right: auto;
   display: block;
