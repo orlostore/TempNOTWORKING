@@ -2741,94 +2741,10 @@ footer p {
     }
 }
 /* ============================================
-   PRODUCT PAGE - TRANSFORMED BUTTON (Premium Glass)
+   PRODUCT PAGE - TRANSFORMED BUTTON (matches grid cart)
    ============================================ */
-.product-btn-transformed {
-  height: 48px;
-  display: flex;
-  align-items: stretch;
-  width: 100%;
-  background: #1a3a52;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(26,58,82,0.25);
-  margin-bottom: 1rem;
-  position: relative;
-}
-
-.product-btn-transformed .qty-btn {
-  width: 38px;
-  border: none;
-  background: rgba(0,0,0,0.15);
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.product-btn-transformed .qty-btn:first-child {
-  border-radius: 12px 0 0 12px;
-}
-
-.product-btn-transformed .qty-btn:last-child {
-  border-radius: 0 12px 12px 0;
-}
-
-.product-btn-transformed .qty-btn:hover {
-  background: rgba(0,0,0,0.25);
-}
-
-.product-btn-transformed .qty-btn:active {
-  background: rgba(0,0,0,0.35);
-}
-
-.product-btn-transformed .center-section {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 1rem;
-  color: white;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.product-btn-transformed .center-section:hover {
-  background: rgba(255,255,255,0.1);
-}
-
-.product-btn-transformed .cart-icon {
-  font-size: 1rem;
-}
-
-.product-btn-transformed .qty-display {
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-  .product-btn-transformed {
-    height: 50px;
-  }
-  .product-btn-transformed .qty-btn {
-    font-size: 1rem;
-  }
-  
-  .product-btn-transformed .center-section {
-    padding: 14px;
-  }
-  
-  .product-btn-transformed .cart-icon {
-    font-size: 1.1rem;
-  }
-  
-  .product-btn-transformed .qty-display {
-    font-size: 0.85rem;
-    font-weight: 600;
-  }
-}
+/* Product page transformed button now uses .grid-qty-control classes directly.
+   Only layout overrides (width/margin) are needed here. */
 /* Product page - cart button width (Layout D) */
 .product-buybox .add-to-cart-btn {
   width: 200px;
@@ -2838,14 +2754,12 @@ footer p {
 }
 
 .product-buybox .product-btn-transformed {
-  display: flex;
   width: 200px;
   margin-left: 0;
   margin-right: auto;
 }
 /* Mobile product page - narrower and centered Add to Cart button */
-.mobile-cart-section .mobile-add-to-cart,
-.mobile-cart-section .product-btn-transformed {
+.mobile-cart-section .mobile-add-to-cart {
   width: 60%;
   margin-left: auto;
   margin-right: auto;
@@ -2853,7 +2767,9 @@ footer p {
 }
 
 .mobile-cart-section .product-btn-transformed {
-  display: flex;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ============================================
