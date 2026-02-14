@@ -519,18 +519,26 @@ function updateCart() {
         cartCheckoutFixed.innerHTML = '';
     }
     
+    const itemPad = isMobile ? '0.3rem 0.4rem' : '0.5rem';
+    const itemNameSize = isMobile ? '0.82rem' : '0.9rem';
+    const itemSubSize = isMobile ? '0.73rem' : '0.8rem';
+    const itemTotalSize = isMobile ? '0.82rem' : '0.9rem';
+    const btnPad = isMobile ? '0.25rem 0.5rem' : '0.3rem 0.6rem';
+    const btnFont = isMobile ? '0.8rem' : '0.85rem';
+    const qtyFont = isMobile ? '0.8rem' : '0.9rem';
+
     cartItems.innerHTML = cart.map(i => `
-        <div id="cartItem-${i.id}" style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee; position:relative;">
-            <div style="flex:1;">
-                <strong style="font-size:0.9rem; color:#2c4a5c;">${i.name}</strong><br>
-                <span style="color:#888; font-size:0.8rem;">AED ${i.price} × ${i.quantity}</span><br>
-                <span style="color:#e07856; font-weight:600; font-size:0.9rem;">AED ${(i.price * i.quantity).toFixed(2)}</span>
+        <div id="cartItem-${i.id}" style="display:flex; justify-content:space-between; align-items:center; padding:${itemPad}; border-bottom:1px solid #eee; position:relative;">
+            <div style="flex:1; line-height:1.3;">
+                <strong style="font-size:${itemNameSize}; color:#2c4a5c;">${i.name}</strong><br>
+                <span style="color:#888; font-size:${itemSubSize};">AED ${i.price} × ${i.quantity}</span><br>
+                <span style="color:#e07856; font-weight:600; font-size:${itemTotalSize};">AED ${(i.price * i.quantity).toFixed(2)}</span>
             </div>
-            <div style="display:flex; gap:0.4rem; align-items:center;">
-                <button onclick="updateQuantity(${i.id}, -1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">-</button>
-                <span style="font-size:0.9rem; font-weight:600; min-width:20px; text-align:center;">${i.quantity}</span>
-                <button onclick="updateQuantity(${i.id}, 1)" style="padding:0.3rem 0.6rem; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:0.85rem; font-weight:600;">+</button>
-                <button onclick="removeFromCart(${i.id})" style="padding:0.3rem 0.6rem; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.3rem; font-size:0.85rem;">${SVG_CLOSE_CART}</button>
+            <div style="display:flex; gap:0.3rem; align-items:center;">
+                <button onclick="updateQuantity(${i.id}, -1)" style="padding:${btnPad}; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:${btnFont}; font-weight:600;">-</button>
+                <span style="font-size:${qtyFont}; font-weight:600; min-width:18px; text-align:center;">${i.quantity}</span>
+                <button onclick="updateQuantity(${i.id}, 1)" style="padding:${btnPad}; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:${btnFont}; font-weight:600;">+</button>
+                <button onclick="removeFromCart(${i.id})" style="padding:${btnPad}; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.2rem; font-size:${btnFont};">${SVG_CLOSE_CART}</button>
             </div>
         </div>
     `).join(""); 
@@ -597,18 +605,25 @@ function updateCart() {
         savedUpsellProducts = null;
     }
     
+    const sumPad = isMobile ? '0.4rem 0.75rem' : '0.6rem 1rem';
+    const sumFont = isMobile ? '0.78rem' : '0.9rem';
+    const sumTotalFont = isMobile ? '0.95rem' : '1.1rem';
+    const sumDivMargin = isMobile ? '0.2rem 0' : '0.3rem 0';
+    const sumTotalPad = isMobile ? '0.3rem 0 0.15rem' : '0.4rem 0 0.2rem';
+    const sumMb = isMobile ? '0.3rem' : '0.5rem';
+
     footerHTML += `
-        <div style="padding: 0.6rem 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
-            <div style="display: flex; justify-content: space-between; padding: 0.2rem 0; font-size: 0.9rem; color: #2c4a5c;">
+        <div style="padding: ${sumPad}; background: #f8f9fa; border-radius: 8px; margin-bottom: ${sumMb};">
+            <div style="display: flex; justify-content: space-between; padding: 0.15rem 0; font-size: ${sumFont}; color: #2c4a5c;">
                 <span>Subtotal | المجموع الفرعي:</span>
                 <span>AED ${subtotal.toFixed(2)}</span>
             </div>
-            <div style="display: flex; justify-content: space-between; padding: 0.2rem 0; font-size: 0.9rem; color: #2c4a5c;">
+            <div style="display: flex; justify-content: space-between; padding: 0.15rem 0; font-size: ${sumFont}; color: #2c4a5c;">
                 <span>Delivery | التوصيل:</span>
                 <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE | مجاني' : 'AED ' + deliveryFee.toFixed(2)}</span>
             </div>
-            <div style="border-top: 2px solid #ddd; margin: 0.3rem 0;"></div>
-            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0 0.2rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;">
+            <div style="border-top: 2px solid #ddd; margin: ${sumDivMargin};"></div>
+            <div style="display: flex; justify-content: space-between; padding: ${sumTotalPad}; font-size: ${sumTotalFont}; font-weight: 700; color: #2c4a5c;">
                 <span>Total | الإجمالي:</span>
                 <span>AED ${total.toFixed(2)}</span>
             </div>
