@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Category Filter Mockups - ORLO</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2c4a5c;
+    --accent: #e07856;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #333; }
+
+  .mockup-section {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    border-bottom: 3px solid #ddd;
+  }
+  .mockup-section h2 {
+    text-align: center;
+    font-size: 1.4rem;
+    color: var(--primary);
+    margin-bottom: 0.3rem;
+  }
+  .mockup-section .desc {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 1.5rem;
+  }
+
+  .arabic-text { font-family: 'Almarai', sans-serif; }
+  .cat-ar { font-family: 'Almarai', sans-serif; font-size: 0.6rem; margin-top: 2px; display: block; opacity: 0.7; }
+
+  /* ============================
+     OPTION A: Minimal Underline Tabs
+     ============================ */
+  .opt-a {
+    display: flex;
+    gap: 0;
+    justify-content: center;
+    border-bottom: 2px solid #e0e0e0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .opt-a button {
+    padding: 0.7rem 1.4rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #888;
+    position: relative;
+    transition: color 0.3s;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .opt-a button::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2.5px;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+  .opt-a button:hover { color: var(--primary); }
+  .opt-a button:hover::after { width: 60%; }
+  .opt-a button.active { color: var(--primary); font-weight: 700; }
+  .opt-a button.active::after { width: 80%; }
+
+  @media (max-width: 768px) {
+    .opt-a { justify-content: flex-start; padding: 0 0.5rem; }
+    .opt-a button { padding: 0.6rem 1rem; font-size: 0.72rem; }
+  }
+
+  /* ============================
+     OPTION B: Pill Chips (Horizontal Scroll on Mobile)
+     ============================ */
+  .opt-b {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .opt-b button {
+    padding: 0.45rem 1.2rem;
+    border: none;
+    background: white;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.25s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    white-space: nowrap;
+    text-align: center;
+  }
+  .opt-b button:hover {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(44,74,92,0.2);
+  }
+  .opt-b button.active {
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(44,74,92,0.25);
+  }
+
+  @media (max-width: 768px) {
+    .opt-b {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      padding: 0 1rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .opt-b::-webkit-scrollbar { display: none; }
+    .opt-b button { padding: 0.4rem 1rem; font-size: 0.7rem; flex-shrink: 0; }
+  }
+
+  /* ============================
+     OPTION C: Floating Segmented Control
+     ============================ */
+  .opt-c-wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .opt-c {
+    display: inline-flex;
+    gap: 0;
+    background: #e8ecef;
+    border-radius: 10px;
+    padding: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .opt-c::-webkit-scrollbar { display: none; }
+  .opt-c button {
+    padding: 0.5rem 1.1rem;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.73rem;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.25s;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .opt-c button:hover {
+    color: var(--primary);
+  }
+  .opt-c button.active {
+    background: white;
+    color: var(--primary);
+    font-weight: 700;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+
+  @media (max-width: 768px) {
+    .opt-c {
+      border-radius: 8px;
+      padding: 3px;
+    }
+    .opt-c button { padding: 0.45rem 0.8rem; font-size: 0.68rem; }
+  }
+
+  /* ============================
+     OPTION D: Vertical Sidebar Tags (Desktop) + Scroll Chips (Mobile)
+     ============================ */
+  .opt-d-desktop {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    max-width: 200px;
+  }
+  .opt-d-desktop button {
+    padding: 0.55rem 1rem;
+    border: none;
+    background: transparent;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #888;
+    text-align: left;
+    transition: all 0.25s;
+    border-radius: 0 6px 6px 0;
+  }
+  .opt-d-desktop button:hover {
+    background: rgba(44,74,92,0.04);
+    color: var(--primary);
+    border-left-color: #ccc;
+  }
+  .opt-d-desktop button.active {
+    background: rgba(44,74,92,0.06);
+    color: var(--primary);
+    font-weight: 700;
+    border-left-color: var(--accent);
+  }
+
+  .opt-d-mobile {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .opt-d-desktop { display: none; }
+    .opt-d-mobile {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      padding: 0 1rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .opt-d-mobile::-webkit-scrollbar { display: none; }
+    .opt-d-mobile button {
+      padding: 0.4rem 0.9rem;
+      border: 1.5px solid #ddd;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #777;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.25s;
+    }
+    .opt-d-mobile button.active {
+      border-color: var(--accent);
+      color: var(--primary);
+      font-weight: 700;
+      background: rgba(224,120,86,0.05);
+    }
+  }
+
+  /* ============================
+     OPTION E: Accent Line Chips (Clean & Modern)
+     ============================ */
+  .opt-e {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .opt-e button {
+    padding: 0.5rem 1.3rem;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: #999;
+    transition: all 0.25s;
+    position: relative;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .opt-e button:hover {
+    color: var(--primary);
+    background: rgba(44,74,92,0.04);
+  }
+  .opt-e button.active {
+    color: var(--primary);
+    font-weight: 700;
+    background: rgba(44,74,92,0.06);
+  }
+  .opt-e button.active::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 3px;
+    height: calc(100% - 8px);
+    background: var(--accent);
+    border-radius: 3px;
+  }
+
+  @media (max-width: 768px) {
+    .opt-e {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      padding: 0 1rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .opt-e::-webkit-scrollbar { display: none; }
+    .opt-e button { padding: 0.45rem 1rem; font-size: 0.7rem; flex-shrink: 0; }
+  }
+
+  /* ============================
+     OPTION F: Dropdown (Mobile) + Inline (Desktop)
+     ============================ */
+  .opt-f-desktop {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+  }
+  .opt-f-desktop button {
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #aaa;
+    transition: all 0.3s;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .opt-f-desktop button:hover { color: var(--primary); }
+  .opt-f-desktop button.active {
+    color: var(--primary);
+    font-weight: 700;
+  }
+  .opt-f-desktop .divider {
+    width: 1px;
+    height: 16px;
+    background: #ddd;
+  }
+
+  .opt-f-mobile { display: none; }
+
+  @media (max-width: 768px) {
+    .opt-f-desktop { display: none; }
+    .opt-f-mobile {
+      display: block;
+      text-align: center;
+    }
+    .opt-f-mobile select {
+      padding: 0.55rem 2.5rem 0.55rem 1rem;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: white;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232c4a5c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.8rem center;
+      cursor: pointer;
+      min-width: 200px;
+    }
+  }
+
+  /* Click handler */
+  .mockup-section button:focus { outline: none; }
+
+  /* Header */
+  .page-header {
+    text-align: center;
+    padding: 2rem 1rem 1rem;
+    background: white;
+    border-bottom: 1px solid #eee;
+  }
+  .page-header h1 { font-size: 1.6rem; color: var(--primary); }
+  .page-header p { font-size: 0.85rem; color: #888; margin-top: 0.3rem; }
+
+  /* Layout demo for Option D */
+  .opt-d-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  .opt-d-products-placeholder {
+    flex: 1;
+    background: #f0f0f0;
+    border-radius: 8px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bbb;
+    font-size: 0.8rem;
+  }
+  @media (max-width: 768px) {
+    .opt-d-layout { flex-direction: column; gap: 1rem; }
+    .opt-d-products-placeholder { height: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Category Filter Mockups</h1>
+  <p>Click buttons to preview active states. Resize browser for mobile view.</p>
+</div>
+
+<!-- OPTION A -->
+<div class="mockup-section">
+  <h2>A — Underline Tabs</h2>
+  <p class="desc">Minimal. Clean horizontal line with accent underline on active. No borders, no backgrounds.</p>
+  <div class="opt-a" data-group="a">
+    <button class="active" onclick="activate(this)">All Products<span class="cat-ar arabic-text">جميع المنتجات</span></button>
+    <button onclick="activate(this)">Skincare<span class="cat-ar arabic-text">العناية بالبشرة</span></button>
+    <button onclick="activate(this)">Hair Care<span class="cat-ar arabic-text">العناية بالشعر</span></button>
+    <button onclick="activate(this)">Perfumes<span class="cat-ar arabic-text">العطور</span></button>
+    <button onclick="activate(this)">Makeup<span class="cat-ar arabic-text">المكياج</span></button>
+    <button onclick="activate(this)">Body Care<span class="cat-ar arabic-text">العناية بالجسم</span></button>
+  </div>
+</div>
+
+<!-- OPTION B -->
+<div class="mockup-section">
+  <h2>B — Pill Chips</h2>
+  <p class="desc">Rounded pills. Light shadow, fills solid on active. Horizontal scroll on mobile.</p>
+  <div class="opt-b" data-group="b">
+    <button class="active" onclick="activate(this)">All Products<span class="cat-ar arabic-text">جميع المنتجات</span></button>
+    <button onclick="activate(this)">Skincare<span class="cat-ar arabic-text">العناية بالبشرة</span></button>
+    <button onclick="activate(this)">Hair Care<span class="cat-ar arabic-text">العناية بالشعر</span></button>
+    <button onclick="activate(this)">Perfumes<span class="cat-ar arabic-text">العطور</span></button>
+    <button onclick="activate(this)">Makeup<span class="cat-ar arabic-text">المكياج</span></button>
+    <button onclick="activate(this)">Body Care<span class="cat-ar arabic-text">العناية بالجسم</span></button>
+  </div>
+</div>
+
+<!-- OPTION C -->
+<div class="mockup-section">
+  <h2>C — Segmented Control</h2>
+  <p class="desc">iOS-style. Grey track, white active tile. Compact and unified. Scrolls on mobile.</p>
+  <div class="opt-c-wrap">
+    <div class="opt-c" data-group="c">
+      <button class="active" onclick="activate(this)">All<span class="cat-ar arabic-text">الكل</span></button>
+      <button onclick="activate(this)">Skincare<span class="cat-ar arabic-text">البشرة</span></button>
+      <button onclick="activate(this)">Hair Care<span class="cat-ar arabic-text">الشعر</span></button>
+      <button onclick="activate(this)">Perfumes<span class="cat-ar arabic-text">العطور</span></button>
+      <button onclick="activate(this)">Makeup<span class="cat-ar arabic-text">المكياج</span></button>
+      <button onclick="activate(this)">Body Care<span class="cat-ar arabic-text">الجسم</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION D -->
+<div class="mockup-section">
+  <h2>D — Vertical Sidebar (Desktop) + Scroll Tags (Mobile)</h2>
+  <p class="desc">Desktop: side nav with accent left-border. Mobile: compact bordered tags that scroll.</p>
+  <div class="opt-d-layout">
+    <div class="opt-d-desktop" data-group="d1">
+      <button class="active" onclick="activate(this)">All Products<span class="cat-ar arabic-text">جميع المنتجات</span></button>
+      <button onclick="activate(this)">Skincare<span class="cat-ar arabic-text">العناية بالبشرة</span></button>
+      <button onclick="activate(this)">Hair Care<span class="cat-ar arabic-text">العناية بالشعر</span></button>
+      <button onclick="activate(this)">Perfumes<span class="cat-ar arabic-text">العطور</span></button>
+      <button onclick="activate(this)">Makeup<span class="cat-ar arabic-text">المكياج</span></button>
+      <button onclick="activate(this)">Body Care<span class="cat-ar arabic-text">العناية بالجسم</span></button>
+    </div>
+    <div class="opt-d-mobile" data-group="d2">
+      <button class="active" onclick="activate(this)">All Products</button>
+      <button onclick="activate(this)">Skincare</button>
+      <button onclick="activate(this)">Hair Care</button>
+      <button onclick="activate(this)">Perfumes</button>
+      <button onclick="activate(this)">Makeup</button>
+      <button onclick="activate(this)">Body Care</button>
+    </div>
+    <div class="opt-d-products-placeholder">[ Product Grid ]</div>
+  </div>
+</div>
+
+<!-- OPTION E -->
+<div class="mockup-section">
+  <h2>E — Accent Bar Chips</h2>
+  <p class="desc">Borderless. Subtle background tint on active with a small accent bar on the left. Scrolls on mobile.</p>
+  <div class="opt-e" data-group="e">
+    <button class="active" onclick="activate(this)">All Products<span class="cat-ar arabic-text">جميع المنتجات</span></button>
+    <button onclick="activate(this)">Skincare<span class="cat-ar arabic-text">العناية بالبشرة</span></button>
+    <button onclick="activate(this)">Hair Care<span class="cat-ar arabic-text">العناية بالشعر</span></button>
+    <button onclick="activate(this)">Perfumes<span class="cat-ar arabic-text">العطور</span></button>
+    <button onclick="activate(this)">Makeup<span class="cat-ar arabic-text">المكياج</span></button>
+    <button onclick="activate(this)">Body Care<span class="cat-ar arabic-text">العناية بالجسم</span></button>
+  </div>
+</div>
+
+<!-- OPTION F -->
+<div class="mockup-section">
+  <h2>F — Text Links (Desktop) + Dropdown (Mobile)</h2>
+  <p class="desc">Desktop: ultra-minimal uppercase text. Mobile: native select dropdown, saves all the space.</p>
+  <div class="opt-f-desktop" data-group="f">
+    <button class="active" onclick="activate(this)">All</button>
+    <div class="divider"></div>
+    <button onclick="activate(this)">Skincare</button>
+    <div class="divider"></div>
+    <button onclick="activate(this)">Hair Care</button>
+    <div class="divider"></div>
+    <button onclick="activate(this)">Perfumes</button>
+    <div class="divider"></div>
+    <button onclick="activate(this)">Makeup</button>
+    <div class="divider"></div>
+    <button onclick="activate(this)">Body Care</button>
+  </div>
+  <div class="opt-f-mobile">
+    <select>
+      <option>All Products | جميع المنتجات</option>
+      <option>Skincare | العناية بالبشرة</option>
+      <option>Hair Care | العناية بالشعر</option>
+      <option>Perfumes | العطور</option>
+      <option>Makeup | المكياج</option>
+      <option>Body Care | العناية بالجسم</option>
+    </select>
+  </div>
+</div>
+
+<script>
+function activate(btn) {
+  const parent = btn.closest('[data-group]');
+  if (!parent) return;
+  parent.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
