@@ -540,14 +540,19 @@ nav {
 
 .add-to-cart {
   width: 100%;
-  padding: 0.67rem;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.67rem;
   background: var(--primary);
   color: white;
   border: none;
-  border-radius: 4.02px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
   font-size: 0.7rem;
+  white-space: nowrap;
   transition: background 0.3s;
 }
 
@@ -1035,6 +1040,19 @@ footer p {
 
   footer p {
     font-size: 0.64rem;
+  }
+
+  .product-info {
+    padding: 0.75rem;
+  }
+
+  .add-to-cart {
+    font-size: 0.62rem;
+  }
+
+  .grid-qty-btn {
+    width: 32px;
+    height: 36px;
   }
 }
 
@@ -3078,8 +3096,9 @@ footer p {
     align-items: center;
     justify-content: center;
     width: 100%;
+    height: 36px;
     background: #1a3a52;
-    border-radius: 4px;
+    border-radius: 12px;
     overflow: hidden;
 }
 
@@ -3093,6 +3112,14 @@ footer p {
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
+}
+
+.grid-qty-btn:first-child {
+    border-radius: 12px 0 0 12px;
+}
+
+.grid-qty-btn:last-child {
+    border-radius: 0 12px 12px 0;
 }
 
 .grid-qty-btn:hover {
@@ -3109,5 +3136,5 @@ footer p {
     color: white;
     font-weight: 600;
     font-size: 0.9rem;
-    padding: 0.5rem;
+    padding: 0 0.5rem;
 }
