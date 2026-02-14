@@ -191,6 +191,20 @@
     </div>
 </nav>
 
+<script>
+  /* Anti-flicker: fill bottomCartCount immediately after it exists in DOM */
+  (function(){
+    try {
+      var c = JSON.parse(localStorage.getItem('cart') || '[]');
+      var n = c.reduce(function(s, i){ return s + (i.quantity || 0); }, 0);
+      if (n > 0) {
+        var el = document.getElementById('bottomCartCount');
+        if (el) el.textContent = n;
+      }
+    } catch(e){}
+  })();
+</script>
+
 <script src="products.js"></script>
 <script src="app.js?v=5"></script>
 <script>
