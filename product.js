@@ -86,7 +86,7 @@ function closeLimitTooltip() {
   }
 }
 
-// Transform button to quantity control (Premium Glass style)
+// Transform button to quantity control (matches grid cart style)
 function transformToQtyButton(btn, product) {
   const localCart = JSON.parse(localStorage.getItem("cart")) || [];
   const item = localCart.find(i => i.id === product.id);
@@ -96,13 +96,10 @@ function transformToQtyButton(btn, product) {
   btn.dataset.productId = product.id;
   
   btn.outerHTML = `
-    <div class="product-btn-transformed" id="transformedBtn-${product.id}">
-      <button class="qty-btn minus" onclick="productQtyChange(${product.id}, -1)">−</button>
-      <div class="center-section" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();">
-        
-        <span class="qty-display" id="qtyDisplay-${product.id}">${qty}</span>
-      </div>
-      <button class="qty-btn plus" onclick="productQtyChange(${product.id}, 1)">+</button>
+    <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}">
+      <button class="grid-qty-btn" onclick="productQtyChange(${product.id}, -1)">−</button>
+      <span class="grid-qty-display" id="qtyDisplay-${product.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
+      <button class="grid-qty-btn" onclick="productQtyChange(${product.id}, 1)">+</button>
     </div>
   `;
 }
