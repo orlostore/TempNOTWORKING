@@ -1748,6 +1748,12 @@ footer p {
   padding: 0 4px;
 }
 
+/* Hide cart badges until they have content — prevents empty-dot flash */
+.bottom-cart-badge:empty,
+.cart-count:empty {
+  display: none;
+}
+
 /* Badge pulse animation on add to cart */
 @keyframes badgePulse {
   0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(224,120,86,0.6); }
