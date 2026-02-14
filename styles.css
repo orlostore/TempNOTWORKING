@@ -685,6 +685,7 @@ nav {
   line-height: 1.6;
   font-size: 0.88rem;
   font-family: 'Inter', 'Almarai', sans-serif;
+  color: var(--primary);
 }
 
 .term-card h3 .term-title {
