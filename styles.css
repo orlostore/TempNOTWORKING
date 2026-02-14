@@ -2693,6 +2693,7 @@ footer p {
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(26,58,82,0.25);
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .product-btn-transformed .qty-btn {
@@ -2804,15 +2805,10 @@ footer p {
   position: relative;
 }
 
-@media (min-width: 769px) {
-  .product-buybox .limit-tooltip {
-    bottom: calc(100% - 62px);
-  }
-}
 
 .limit-tooltip {
   position: absolute;
-  bottom: calc(100% + 12px);
+  bottom: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.95);
