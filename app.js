@@ -338,13 +338,29 @@ function loadProducts(category = "All Products") {
     } 
 }
 
-function createCategoryFilters() { 
-    const container = document.getElementById("categoryFilters"); 
+function createCategoryFilters() {
+    const container = document.getElementById("categoryFilters");
     if (!container) return;
     container.innerHTML = getCategories().map(cat => {
         const catAr = getCategoryArabic(cat);
         return `<button class="category-btn ${cat === selectedCategory ? "active" : ""}" onclick="loadProducts('${cat}')">${cat}${catAr ? `<br><span class="arabic-text category-arabic">${catAr}</span>` : ''}</button>`;
-    }).join(""); 
+    }).join("");
+    setupCategoryScrollIndicators();
+}
+
+function setupCategoryScrollIndicators() {
+    const tabs = document.getElementById("categoryFilters");
+    const fadeLeft = document.getElementById("catFadeLeft");
+    const fadeRight = document.getElementById("catFadeRight");
+    if (!tabs || !fadeLeft || !fadeRight) return;
+    function updateFades() {
+        var atStart = tabs.scrollLeft <= 5;
+        var atEnd = tabs.scrollLeft + tabs.clientWidth >= tabs.scrollWidth - 5;
+        fadeLeft.style.opacity = atStart ? '0' : '1';
+        fadeRight.style.opacity = atEnd ? '0' : '1';
+    }
+    tabs.addEventListener('scroll', updateFades);
+    updateFades();
 }
 
 function updateCategoryButtons() { 
