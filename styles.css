@@ -2757,6 +2757,11 @@ footer p {
   width: 200px;
   margin-left: 0;
   margin-right: auto;
+  height: 38px;
+}
+
+.product-buybox .product-btn-transformed .grid-qty-btn {
+  height: 38px;
 }
 /* Mobile product page - narrower and centered Add to Cart button */
 .mobile-cart-section .mobile-add-to-cart {
@@ -2770,6 +2775,11 @@ footer p {
   width: 60%;
   margin-left: auto;
   margin-right: auto;
+  height: 40px;
+}
+
+.mobile-cart-section .product-btn-transformed .grid-qty-btn {
+  height: 40px;
 }
 
 /* ============================================
