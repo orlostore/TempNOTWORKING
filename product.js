@@ -671,6 +671,15 @@ function setupGalleryOverlay(product) {
       </div>
     `).join('');
 
+    // Add reset button if not already present
+    let resetBtn = overlay.querySelector('.gallery-reset-btn');
+    if (!resetBtn) {
+      resetBtn = document.createElement('button');
+      resetBtn.className = 'gallery-reset-btn';
+      resetBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 105.64-8.36L1 10"/></svg> Reset';
+      overlay.appendChild(resetBtn);
+    }
+
     overlay.classList.add('active');
     if (bottomNav) bottomNav.style.display = 'none';
     document.body.style.overflow = 'hidden';
@@ -683,6 +692,21 @@ function setupGalleryOverlay(product) {
       var translateX = 0, translateY = 0;
       var startX = 0, startY = 0;
       var isPinching = false;
+      var currentResetBtn = overlay.querySelector('.gallery-reset-btn');
+
+      function resetZoom() {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        img.style.transition = 'transform 0.3s';
+        applyTransform();
+        if (currentResetBtn) currentResetBtn.classList.remove('visible');
+        setTimeout(function() { img.style.transition = ''; }, 300);
+      }
+
+      if (currentResetBtn) {
+        currentResetBtn.addEventListener('click', resetZoom);
+      }
 
       function getDistance(t1, t2) {
         return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
@@ -724,7 +748,10 @@ function setupGalleryOverlay(product) {
           scale = Math.min(Math.max(startScale * (dist / startDist), 1), 3);
           clampTranslate();
           applyTransform();
+          if (scale > 1 && currentResetBtn) currentResetBtn.classList.add('visible');
+          if (scale <= 1 && currentResetBtn) currentResetBtn.classList.remove('visible');
         } else if (e.touches.length === 1 && scale > 1) {
+          e.preventDefault();
           e.stopPropagation();
           translateX = e.touches[0].clientX - startX;
           translateY = e.touches[0].clientY - startY;
@@ -741,6 +768,7 @@ function setupGalleryOverlay(product) {
           translateY = 0;
           img.style.transition = 'transform 0.3s';
           applyTransform();
+          if (currentResetBtn) currentResetBtn.classList.remove('visible');
           setTimeout(function() { img.style.transition = ''; }, 300);
         }
       });
@@ -751,12 +779,7 @@ function setupGalleryOverlay(product) {
         if (e.touches.length > 0) return;
         var now = Date.now();
         if (now - lastTap < 300) {
-          scale = 1;
-          translateX = 0;
-          translateY = 0;
-          img.style.transition = 'transform 0.3s';
-          applyTransform();
-          setTimeout(function() { img.style.transition = ''; }, 300);
+          resetZoom();
         }
         lastTap = now;
       });
@@ -765,6 +788,8 @@ function setupGalleryOverlay(product) {
 
   closeBtn.addEventListener('click', () => {
     overlay.classList.remove('active');
+    const rb = overlay.querySelector('.gallery-reset-btn');
+    if (rb) rb.classList.remove('visible');
     if (bottomNav) bottomNav.style.display = '';
     document.body.style.overflow = '';
   });
@@ -772,6 +797,8 @@ function setupGalleryOverlay(product) {
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
       overlay.classList.remove('active');
+      const rb = overlay.querySelector('.gallery-reset-btn');
+      if (rb) rb.classList.remove('visible');
       if (bottomNav) bottomNav.style.display = '';
       document.body.style.overflow = '';
     }
