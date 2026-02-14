@@ -45,11 +45,16 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
     `;
     
     // Find the correct container (the transformed button itself)
+    // On mobile, desktop section is hidden so we must look within the mobile section
     const isMobile = window.innerWidth <= 768;
-    const container = document.getElementById(`transformedBtn-${productId}`)
-      || (isMobile 
-        ? document.querySelector('.mobile-cart-section')
-        : document.querySelector('.product-buybox'));
+    let container;
+    if (isMobile) {
+      container = document.querySelector(`.mobile-cart-section [id="transformedBtn-${productId}"]`)
+        || document.querySelector('.mobile-cart-section');
+    } else {
+      container = document.getElementById(`transformedBtn-${productId}`)
+        || document.querySelector('.product-buybox');
+    }
     
     if (container) {
       container.appendChild(tooltip);
