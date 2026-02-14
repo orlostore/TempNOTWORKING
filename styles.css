@@ -826,6 +826,7 @@ nav {
 
 .cart-items {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 1rem;
   padding-bottom: 0.5rem;
@@ -842,6 +843,7 @@ nav {
   border-top: 2px solid #eee;
   padding: 1rem;
   background: #f8f9fa;
+  flex-shrink: 0;
 }
 
 .cart-total {
