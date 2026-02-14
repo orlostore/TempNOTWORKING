@@ -605,11 +605,11 @@ function updateCart() {
         savedUpsellProducts = null;
     }
     
-    const sumPad = isMobile ? '0.3rem 0.75rem 0' : '0.6rem 1rem';
+    const sumPad = isMobile ? '0.3rem 0.75rem 0.25rem' : '0.6rem 1rem';
     const sumFont = isMobile ? '0.78rem' : '0.9rem';
     const sumTotalFont = isMobile ? '0.95rem' : '1.1rem';
     const sumDivMargin = isMobile ? '0.2rem 0' : '0.3rem 0';
-    const sumTotalPad = isMobile ? '0.25rem 0 0' : '0.4rem 0 0.2rem';
+    const sumTotalPad = isMobile ? '0.25rem 0 0.1rem' : '0.4rem 0 0.2rem';
     const sumMb = isMobile ? '0' : '0.5rem';
 
     footerHTML += `
