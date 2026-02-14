@@ -389,7 +389,15 @@
       var badges = ['cartCount', 'mobileCartCount', 'bottomCartCount'];
       badges.forEach(function(id) {
         var el = document.getElementById(id);
-        if (el) el.textContent = totalCount;
+        if (el) {
+          if (totalCount > 0) {
+            el.textContent = totalCount;
+            el.style.display = 'flex';
+          } else {
+            el.textContent = '';
+            el.style.display = 'none';
+          }
+        }
       });
     } catch(e) {}
   })();
