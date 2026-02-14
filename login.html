@@ -703,5 +703,27 @@
             <span class="nav-label">Menu</span>
         </div>
     </nav>
+
+    <script>
+    /** Populate all cart badges after full DOM is rendered **/
+    (function(){
+      try {
+        var cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+        var totalCount = cartData.reduce(function(sum, item){ return sum + (item.quantity || 0); }, 0);
+        ['cartCount', 'mobileCartCount', 'bottomCartCount'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) {
+            if (totalCount > 0) {
+              el.textContent = totalCount;
+              el.style.display = 'flex';
+            } else {
+              el.textContent = '';
+              el.style.display = 'none';
+            }
+          }
+        });
+      } catch(e) {}
+    })();
+    </script>
 </body>
 </html>
