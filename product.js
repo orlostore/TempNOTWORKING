@@ -44,11 +44,12 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
       <span class="tooltip-text-ar">${messageAr}</span>
     `;
     
-    // Find the correct container (mobile or desktop)
+    // Find the correct container (the transformed button itself)
     const isMobile = window.innerWidth <= 768;
-    const container = isMobile 
-      ? document.querySelector('.mobile-cart-section')
-      : document.querySelector('.product-buybox');
+    const container = document.getElementById(`transformedBtn-${productId}`)
+      || (isMobile 
+        ? document.querySelector('.mobile-cart-section')
+        : document.querySelector('.product-buybox'));
     
     if (container) {
       container.appendChild(tooltip);
