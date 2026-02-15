@@ -838,8 +838,8 @@ nav {
   border-top: 2px solid #eee;
   padding: 1rem;
   background: #f8f9fa;
-  position: sticky;
-  bottom: 0;
+  flex-shrink: 0;
+  margin-top: auto;
 }
 
 .cart-total {
