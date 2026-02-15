@@ -792,6 +792,7 @@ nav {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  border-radius: 12px 0 0 12px;
 }
 
 .cart-sidebar.active {
@@ -808,7 +809,7 @@ nav {
 }
 
 .cart-header h2 {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
 }
 
 .close-cart {
@@ -850,15 +851,15 @@ nav {
 .cart-total {
   display: flex;
   justify-content: space-between;
-  font-size: 2rem;
+  font-size: 1.15rem;
   font-weight: bold;
-  margin-bottom: 1.34rem;
+  margin-bottom: 0.75rem;
   color: var(--primary);
 }
 
 .checkout-btn {
   width: 100%;
-  padding: 1.5rem;
+  padding: 0.85rem;
   background: var(--accent);
   color: white;
   border: none;
@@ -1052,10 +1053,11 @@ footer p {
   .cart-sidebar {
     width: 100%;
     right: -100%;
+    border-radius: 0;
   }
 
   .cart-footer {
-    padding: 0.25rem 0.75rem 0;
+    padding: 0.25rem 0.75rem 0.5rem;
   }
 
   .terms-grid {

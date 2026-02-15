@@ -868,7 +868,7 @@ function setupBottomNav() {
   }
   
   const closeCart = document.getElementById('closeCart');
-  if (closeCart) closeCart.onclick = function() { if (cartSidebar) { cartSidebar.classList.remove('active'); if (bottomCartBtn) bottomCartBtn.classList.remove('cart-active'); } };
+  if (closeCart) closeCart.onclick = function() { if (cartSidebar) { cartSidebar.classList.remove('active'); if (bottomCartBtn) bottomCartBtn.classList.remove('cart-active'); document.body.style.overflow = ''; } };
   
   // Handle account button in bottom nav
   const bottomAccountBtn = document.getElementById('bottomAccountBtn');

@@ -757,9 +757,11 @@ function toggleCart() {
     if (cartSidebar.classList.contains("active")) {
         if (bottomCartBtn) bottomCartBtn.classList.add("cart-active");
         if (bottomHomeBtn) bottomHomeBtn.classList.remove("home-active");
+        document.body.style.overflow = "hidden";
     } else {
         if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
         if (bottomHomeBtn) bottomHomeBtn.classList.add("home-active");
+        document.body.style.overflow = "";
         upsellUsed = false;
         savedUpsellProducts = null;
     }
@@ -937,6 +939,7 @@ window.onload = () => {
             if (cartSidebar.classList.contains("active")) {
                 cartSidebar.classList.remove("active");
                 if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
+                document.body.style.overflow = "";
                 upsellUsed = false;
                 savedUpsellProducts = null;
             }
@@ -956,6 +959,7 @@ window.onload = () => {
             if (cartSidebar.classList.contains("active")) {
                 cartSidebar.classList.remove("active");
                 if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
+                document.body.style.overflow = "";
                 upsellUsed = false;
                 savedUpsellProducts = null;
             }
