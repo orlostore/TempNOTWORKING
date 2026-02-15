@@ -844,6 +844,7 @@ nav {
   padding: 1rem;
   background: #f8f9fa;
   flex-shrink: 0;
+  margin-top: auto;
 }
 
 .cart-total {
