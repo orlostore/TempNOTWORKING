@@ -605,15 +605,22 @@ function updateCart() {
         savedUpsellProducts = null;
     }
     
-    const sumPad = isMobile ? '0.3rem 0.75rem 0' : '0.6rem 1rem';
+    if (!isMobile) {
+        footerHTML += `
+            <div style="padding: 0 1rem 0.75rem;">
+                ${checkoutBtnHTML}
+            </div>
+        `;
+    }
+
+    const sumPad = isMobile ? '0.3rem 0.75rem 0.25rem' : '0.6rem 1rem';
     const sumFont = isMobile ? '0.78rem' : '0.9rem';
     const sumTotalFont = isMobile ? '0.95rem' : '1.1rem';
     const sumDivMargin = isMobile ? '0.2rem 0' : '0.3rem 0';
-    const sumTotalPad = isMobile ? '0.25rem 0 0' : '0.4rem 0 0.2rem';
-    const sumMb = isMobile ? '0' : '0.5rem';
+    const sumTotalPad = isMobile ? '0.25rem 0 0.1rem' : '0.4rem 0 0.2rem';
 
     footerHTML += `
-        <div style="padding: ${sumPad}; background: #f8f9fa; border-radius: 8px; margin-bottom: ${sumMb};">
+        <div style="padding: ${sumPad}; background: #f8f9fa; border-radius: 8px;">
             <div style="display: flex; justify-content: space-between; padding: 0.15rem 0; font-size: ${sumFont}; color: #2c4a5c;">
                 <span>Subtotal | المجموع الفرعي:</span>
                 <span>AED ${subtotal.toFixed(2)}</span>
@@ -629,14 +636,6 @@ function updateCart() {
             </div>
         </div>
     `;
-    
-    if (!isMobile) {
-        footerHTML += `
-            <div style="padding: 0 1rem 0.75rem;">
-                ${checkoutBtnHTML}
-            </div>
-        `;
-    }
     
     cartFooter.innerHTML = footerHTML;
 }
