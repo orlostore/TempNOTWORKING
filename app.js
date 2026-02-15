@@ -912,19 +912,26 @@ window.onload = () => {
         });
     }
     
-    document.getElementById("searchBtn").onclick = searchProducts; 
-    document.getElementById("searchInput").onkeypress = (e) => { 
-        if (e.key === "Enter") { 
-            e.preventDefault(); 
-            searchProducts(); 
-        } 
-    }; 
-    document.getElementById("cartIcon").onclick = toggleCart; 
-    document.getElementById("closeCart").onclick = toggleCart; 
-    document.getElementById("policyModal").onclick = (e) => { 
-        if (e.target.id === "policyModal") { 
-            closePolicy(); 
-        } 
+    var searchBtn = document.getElementById("searchBtn");
+    var searchInput = document.getElementById("searchInput");
+    if (searchBtn) searchBtn.onclick = searchProducts;
+    if (searchInput) searchInput.onkeypress = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            searchProducts();
+        }
+    };
+    var cartIcon = document.getElementById("cartIcon");
+    var closeCartBtn = document.getElementById("closeCart");
+    var mobileCartIcon = document.getElementById("mobileCartIcon");
+    if (cartIcon) cartIcon.onclick = toggleCart;
+    if (closeCartBtn) closeCartBtn.onclick = toggleCart;
+    if (mobileCartIcon) mobileCartIcon.onclick = toggleCart;
+    var policyModal = document.getElementById("policyModal");
+    if (policyModal) policyModal.onclick = (e) => {
+        if (e.target.id === "policyModal") {
+            closePolicy();
+        }
     };
     
     const bottomHomeBtn = document.getElementById("bottomHomeBtn");
