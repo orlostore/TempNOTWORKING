@@ -240,9 +240,12 @@
         @media (max-width: 600px) {
             .form-row { grid-template-columns: 1fr; }
             .account-container { padding-bottom: 80px; }
-            .account-content { padding: 65px 10px 30px; }
-            .account-header { border-radius: 10px; margin-bottom: 15px; }
-            .account-header-inner { padding: 20px 16px; }
+            .account-content { padding: 58px 10px 30px; }
+            .account-header { border-radius: 10px; margin-bottom: 10px; }
+            .account-header-inner { padding: 14px 16px; }
+            .account-welcome h1 { font-size: 1.1rem; margin-bottom: 2px; }
+            .account-welcome p { font-size: 0.72rem; }
+            .account-tabs { margin-bottom: 10px; }
         }
         
         .form-group { margin-bottom: 20px; }
@@ -292,14 +295,14 @@
             position: relative;
         }
         
-        .address-card.default { border-color: var(--accent); }
-        
+        .address-card.default { border-color: var(--primary); }
+
         .address-default-badge {
             font-family: 'Inter', sans-serif;
             position: absolute;
             top: 10px;
             right: 10px;
-            background: var(--accent);
+            background: var(--primary);
             color: white;
             font-size: 0.6rem;
             padding: 3px 10px;
@@ -1347,12 +1350,12 @@
         <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
         <span class="nav-label" id="bottomAccountLabel">Account</span>
     </div>
-    <div class="bottom-nav-item" onclick="window.location.href='/'">
+    <div class="bottom-nav-item" onclick="window.location.href='index.html?openCart=true'">
         <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
         <span class="bottom-cart-badge" id="bottomCartCount"></span>
         <span class="nav-label">Cart</span>
     </div>
-    <div class="bottom-nav-item" onclick="window.location.href='/'">
+    <div class="bottom-nav-item" onclick="window.location.href='index.html'">
         <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         <span class="nav-label">Menu</span>
     </div>
