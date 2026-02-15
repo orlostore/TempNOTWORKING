@@ -772,6 +772,21 @@
     </nav>
 </header>
 
+<script>
+  /** ANTI-FLICKER: Set cart counts immediately from localStorage **/
+  (function(){
+    try {
+      var cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+      var totalCount = cartData.reduce(function(sum, item){ return sum + (item.quantity || 0); }, 0);
+      var badges = ['cartCount', 'mobileCartCount'];
+      badges.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = totalCount > 0 ? totalCount : '';
+      });
+    } catch(e) {}
+  })();
+</script>
+
     <div class="account-container">
         <div class="account-content">
             <div class="account-header">
@@ -1310,6 +1325,17 @@
         checkEmailVerification();
     </script>
 
+<script>
+(function() {
+    var customer = JSON.parse(localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer') || 'null');
+    if (customer && customer.name) {
+        var firstName = customer.name.split(' ')[0];
+        var accountLink = document.getElementById('accountLink');
+        if (accountLink) { accountLink.innerHTML = firstName + '<br><span class="arabic-text">حسابي</span>'; }
+    }
+})();
+</script>
+
 <!-- Mobile Bottom Navigation - Option D -->
 <nav class="mobile-bottom-nav">
     <div class="bottom-nav-indicator" style="left: calc(25% + 12.5% - 25px);"></div>
@@ -1319,10 +1345,11 @@
     </div>
     <div class="bottom-nav-item active">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
-        <span class="nav-label">Account</span>
+        <span class="nav-label" id="bottomAccountLabel">Account</span>
     </div>
     <div class="bottom-nav-item" onclick="window.location.href='/'">
         <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+        <span class="bottom-cart-badge" id="bottomCartCount"></span>
         <span class="nav-label">Cart</span>
     </div>
     <div class="bottom-nav-item" onclick="window.location.href='/'">
@@ -1330,5 +1357,27 @@
         <span class="nav-label">Menu</span>
     </div>
 </nav>
+
+<script>
+  /* Anti-flicker: fill cart badge + account label immediately */
+  (function(){
+    try {
+      var c = JSON.parse(localStorage.getItem('cart') || '[]');
+      var n = c.reduce(function(s, i){ return s + (i.quantity || 0); }, 0);
+      if (n > 0) {
+        var el = document.getElementById('bottomCartCount');
+        if (el) el.textContent = n;
+      }
+    } catch(e){}
+    try {
+      var customer = JSON.parse(localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer') || 'null');
+      if (customer && customer.name) {
+        var firstName = customer.name.split(' ')[0];
+        var lbl = document.getElementById('bottomAccountLabel');
+        if (lbl) lbl.textContent = firstName;
+      }
+    } catch(e){}
+  })();
+</script>
 </body>
 </html>
