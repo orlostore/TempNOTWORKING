@@ -789,7 +789,9 @@ nav {
   z-index: 5000;
   box-shadow: -2px 0 13.4px rgba(0,0,0,.3);
   transition: right .3s ease;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .cart-sidebar.active {
@@ -825,6 +827,9 @@ nav {
 .cart-items {
   padding: 1rem;
   padding-bottom: 0.5rem;
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 768px) {
@@ -2078,7 +2083,7 @@ footer p {
   }
   
   .cart-items {
-    overflow-y: visible;
+    overflow-y: auto;
   }
 }
 
