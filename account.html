@@ -782,7 +782,7 @@
       var badges = ['cartCount', 'mobileCartCount'];
       badges.forEach(function(id) {
         var el = document.getElementById(id);
-        if (el) el.textContent = totalCount > 0 ? totalCount : '';
+        if (el) el.textContent = totalCount > 0 ? totalCount : 0;
       });
     } catch(e) {}
   })();
