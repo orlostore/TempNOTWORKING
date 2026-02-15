@@ -162,5 +162,20 @@
 <script src="products.js"></script>
 <script src="product.js"></script>
 <script src="app.js?v=5"></script>
+<script>
+function updateAccountLink() {
+    const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
+    const customer = JSON.parse(localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer') || 'null');
+    const accountLink = document.getElementById('accountLink');
+    const bottomAccountLabel = document.getElementById('bottomAccountLabel');
+
+    if (token && customer) {
+        const firstName = customer.name ? customer.name.split(' ')[0] : 'Account';
+        if (accountLink) { accountLink.innerHTML = `${firstName}<br><span class="arabic-text">حسابي</span>`; accountLink.href = 'account.html'; }
+        if (bottomAccountLabel) { bottomAccountLabel.textContent = firstName; }
+    }
+}
+document.addEventListener('DOMContentLoaded', updateAccountLink);
+</script>
 </body>
 </html>
