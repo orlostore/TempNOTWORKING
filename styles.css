@@ -2081,9 +2081,8 @@ footer p {
 .mobile-menu .menu-text {
   flex: 1;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .mobile-menu .menu-en {
@@ -2094,7 +2093,7 @@ footer p {
 
 .mobile-menu .menu-ar {
   font-family: 'Almarai', sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.75rem;
   color: #999;
   direction: rtl;
   text-align: right;
