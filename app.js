@@ -157,7 +157,7 @@ window.addEventListener('pageshow', function(event) {
     if (btn) {
         btn.disabled = false;
         if (btn.id === 'stripeBtn') {
-            btn.innerHTML = `${SVG_CARD} Pay by Card | الدفع بالبطاقة`;
+            btn.innerHTML = `${SVG_CARD} Pay by Card | <span class="arabic-text">الدفع بالبطاقة</span>`;
         }
     }
 });
@@ -238,7 +238,7 @@ function gridQtyChange(productId, change, event) {
         // Reset button to original "Add to Cart"
         const container = document.getElementById(`gridQty-${productId}`);
         if (container) {
-            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${productId}, event)">Add to Cart | أضف إلى السلة</button>`;
+            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${productId}, event)">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
         }
     } else {
         item.quantity = newQty;
@@ -296,9 +296,9 @@ function renderProducts(list) {
         const hasVariants = p.variants && p.variants.length > 0;
         let buttonHTML;
         if (outOfStock) {
-            buttonHTML = `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>`;
+            buttonHTML = `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | <span class="arabic-text">نفذ المخزون</span></button>`;
         } else if (hasVariants) {
-            buttonHTML = `<a href="product.html?product=${p.slug}" class="view-options-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg> View Options | عرض الخيارات</a>`;
+            buttonHTML = `<a href="product.html?product=${p.slug}" class="view-options-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg> View Options | <span class="arabic-text">عرض الخيارات</span></a>`;
         } else if (inCart) {
             // Show qty stepper
             buttonHTML = `
@@ -309,7 +309,7 @@ function renderProducts(list) {
                 </div>
             `;
         } else {
-            buttonHTML = `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | أضف إلى السلة</button>`;
+            buttonHTML = `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
         }
         
         return `
@@ -476,7 +476,7 @@ function updateCart() {
         cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
         if (cartCount) cartCount.textContent = 0;
         if (bottomCartCount) bottomCartCount.textContent = 0;
-        cartFooter.innerHTML = `<div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;"><span>Total | الإجمالي:</span><span>AED 0.00</span></div>`;
+        cartFooter.innerHTML = `<div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;"><span>Total | <span class="arabic-text">الإجمالي</span>:</span><span>AED 0.00</span></div>`;
         if (cartCheckoutFixed) cartCheckoutFixed.innerHTML = '';
         return; 
     } 
@@ -650,16 +650,16 @@ function updateCart() {
     footerHTML += `
         <div style="padding: ${sumPad}; background: #f8f9fa; border-radius: 8px;">
             <div style="display: flex; justify-content: space-between; padding: 0.15rem 0; font-size: ${sumFont}; color: #2c4a5c;">
-                <span>Subtotal | المجموع الفرعي:</span>
+                <span>Subtotal | <span class="arabic-text">المجموع الفرعي</span>:</span>
                 <span>AED ${subtotal.toFixed(2)}</span>
             </div>
             <div style="display: flex; justify-content: space-between; padding: 0.15rem 0; font-size: ${sumFont}; color: #2c4a5c;">
-                <span>Delivery | التوصيل:</span>
-                <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE | مجاني' : 'AED ' + deliveryFee.toFixed(2)}</span>
+                <span>Delivery | <span class="arabic-text">التوصيل</span>:</span>
+                <span style="${deliveryFee === 0 ? 'color: #28a745; font-weight: 600;' : ''}">${deliveryFee === 0 ? 'FREE | <span class="arabic-text">مجاني</span>' : 'AED ' + deliveryFee.toFixed(2)}</span>
             </div>
             <div style="border-top: 2px solid #ddd; margin: ${sumDivMargin};"></div>
             <div style="display: flex; justify-content: space-between; padding: ${sumTotalPad}; font-size: ${sumTotalFont}; font-weight: 700; color: #2c4a5c;">
-                <span>Total | الإجمالي:</span>
+                <span>Total | <span class="arabic-text">الإجمالي</span>:</span>
                 <span>AED ${total.toFixed(2)}</span>
             </div>
         </div>
@@ -797,7 +797,7 @@ function removeFromCart(id, variantId) {
                 const isMobile = el.closest('.mobile-product-page') !== null;
                 const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
                 const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
-                el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | أضف إلى السلة</button>`;
+                el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
             });
             // Re-attach click handlers if on product page
             if (typeof addToCartHandlerRef === 'function' && typeof transformToQtyButtonVariant === 'function') {
@@ -822,7 +822,7 @@ function removeFromCart(id, variantId) {
         // Reset grid button if visible (non-variant products only)
         const gridQty = document.getElementById(`gridQty-${id}`);
         if (gridQty) {
-            gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)">Add to Cart | أضف إلى السلة</button>`;
+            gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
         }
 
         // Reset product page button if visible

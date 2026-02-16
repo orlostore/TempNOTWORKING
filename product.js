@@ -166,7 +166,7 @@ function resetToAddButton(productId) {
     const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
     const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
     
-    transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | أضف إلى السلة</button>`;
+    transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
   });
   
   // Re-attach click handlers
@@ -373,12 +373,12 @@ async function initProductPage() {
 
   const desktopAddBtn = document.getElementById("addToCartBtn");
   if (isOutOfStock && desktopAddBtn) {
-    desktopAddBtn.textContent = "Out of Stock | نفد المخزون";
+    desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
     desktopAddBtn.disabled = true;
     desktopAddBtn.style.background = "#999";
     desktopAddBtn.style.cursor = "not-allowed";
   } else if (hasVariants && desktopAddBtn && !isOutOfStock) {
-    desktopAddBtn.textContent = "Select a design | اختر تصميم";
+    desktopAddBtn.innerHTML = 'Select a design | <span class="arabic-text">اختر تصميم</span>';
     desktopAddBtn.disabled = true;
     desktopAddBtn.style.background = "#999";
     desktopAddBtn.style.cursor = "not-allowed";
@@ -427,12 +427,12 @@ async function initProductPage() {
 
   const mobileAddBtn = document.getElementById("mobileAddToCartBtn");
   if (isOutOfStock && mobileAddBtn) {
-    mobileAddBtn.textContent = "Out of Stock | نفد المخزون";
+    mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
     mobileAddBtn.disabled = true;
     mobileAddBtn.style.background = "#999";
     mobileAddBtn.style.cursor = "not-allowed";
   } else if (hasVariants && mobileAddBtn && !isOutOfStock) {
-    mobileAddBtn.textContent = "Select a design | اختر تصميم";
+    mobileAddBtn.innerHTML = 'Select a design | <span class="arabic-text">اختر تصميم</span>';
     mobileAddBtn.disabled = true;
     mobileAddBtn.style.background = "#999";
     mobileAddBtn.style.cursor = "not-allowed";
@@ -1044,7 +1044,7 @@ function selectVariant(variantId, productId, prefix) {
 
   [desktopBtn, mobileBtn].forEach(btn => {
     if (btn && !btn.classList.contains('product-btn-transformed') && btn.tagName === 'BUTTON') {
-      btn.textContent = 'Add to Cart | أضف إلى السلة';
+      btn.innerHTML = 'Add to Cart | <span class="arabic-text">أضف إلى السلة</span>';
       btn.disabled = false;
       btn.style.background = '#1a3a52';
       btn.style.cursor = 'pointer';
@@ -1073,7 +1073,7 @@ function selectVariant(variantId, productId, prefix) {
     // Reset to "Add to Cart" if not in cart — check if currently transformed
     const desktopTransformed = document.querySelector('.desktop-product .product-btn-transformed');
     if (desktopTransformed) {
-      desktopTransformed.outerHTML = `<button class="add-to-cart-btn" id="addToCartBtn">Add to Cart | أضف إلى السلة</button>`;
+      desktopTransformed.outerHTML = `<button class="add-to-cart-btn" id="addToCartBtn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
       const newBtn = document.getElementById('addToCartBtn');
       if (newBtn) {
         newBtn.onclick = function() {
@@ -1083,7 +1083,7 @@ function selectVariant(variantId, productId, prefix) {
     }
     const mobileTransformed = document.querySelector('.mobile-product-page .product-btn-transformed');
     if (mobileTransformed) {
-      mobileTransformed.outerHTML = `<button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | أضف إلى السلة</button>`;
+      mobileTransformed.outerHTML = `<button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
       const newBtn = document.getElementById('mobileAddToCartBtn');
       if (newBtn) {
         newBtn.onclick = function() {
@@ -1151,7 +1151,7 @@ function productVariantQtyChange(productId, variantId, change) {
       const isMobile = el.closest('.mobile-product-page') !== null;
       const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
       const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
-      el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | أضف إلى السلة</button>`;
+      el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
     });
     // Re-attach handlers
     const newDesktopBtn = document.getElementById('addToCartBtn');
