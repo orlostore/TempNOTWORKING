@@ -944,7 +944,16 @@ window.onload = () => {
         bottomHomeBtn.classList.add("home-active");
 
         const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+        const isProductPage = window.location.pathname.includes('product.html');
         bottomHomeBtn.onclick = function() {
+            if (isProductPage) {
+                if (window.scrollY > 0) {
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                    return;
+                }
+                window.location.href = 'index.html';
+                return;
+            }
             if (!isIndexPage) {
                 window.location.href = 'index.html';
                 return;
