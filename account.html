@@ -1399,8 +1399,12 @@
     var btn = document.getElementById('bottomHomeBtn');
     if (btn) {
       btn.onclick = function() {
-        var lastProduct = sessionStorage.getItem('lastProduct');
-        window.location.href = lastProduct || 'index.html';
+        var lp = localStorage.getItem('lastProduct');
+        if (lp) {
+          window.location.href = lp;
+        } else {
+          window.location.href = 'index.html';
+        }
       };
     }
   })();
