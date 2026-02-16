@@ -331,16 +331,16 @@ function renderProducts(list) {
     `}).join(""); 
 }
 
-function loadProducts(category = "All Products") { 
-    selectedCategory = category; 
-    const list = category === "All Products" ? products : products.filter(p => p.category === category); 
-    renderProducts(list); 
-    updateCategoryButtons(); 
-    const heroSection = document.querySelector(".hero"); 
-    const searchInput = document.getElementById("searchInput"); 
-    if (heroSection && (!searchInput || !searchInput.value.trim())) { 
-        heroSection.classList.remove("hidden"); 
-    } 
+function loadProducts(category = "All Products") {
+    selectedCategory = category;
+    const list = category === "All Products" ? products : products.filter(p => p.category === category);
+    renderProducts(applyFiltersAndSort(list));
+    updateCategoryButtons();
+    const heroSection = document.querySelector(".hero");
+    const searchInput = document.getElementById("searchInput");
+    if (heroSection && (!searchInput || !searchInput.value.trim())) {
+        heroSection.classList.remove("hidden");
+    }
 }
 
 function createCategoryFilters() {
@@ -378,18 +378,102 @@ function updateCategoryButtons() {
     }); 
 }
 
-function searchProducts() { 
-    const term = document.getElementById("searchInput").value.toLowerCase().trim(); 
-    const heroSection = document.querySelector(".hero"); 
-    if (!term) { 
-        loadProducts(selectedCategory); 
-        if (heroSection) heroSection.classList.remove("hidden"); 
-        return; 
-    } 
-    if (heroSection) heroSection.classList.add("hidden"); 
-    const scoped = selectedCategory === "All Products" ? products : products.filter(p => p.category === selectedCategory); 
-    const results = scoped.filter(p => p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term) || p.category.toLowerCase().includes(term)); 
-    renderProducts(results); 
+// === ACTIVE FILTERS STATE ===
+let activePriceMin = null;
+let activePriceMax = null;
+let activeSort = 'default';
+
+function applyFiltersAndSort(list) {
+    let filtered = list;
+    // Price filter
+    if (activePriceMin !== null) {
+        filtered = filtered.filter(p => p.price >= activePriceMin);
+    }
+    if (activePriceMax !== null) {
+        filtered = filtered.filter(p => p.price <= activePriceMax);
+    }
+    // Sort
+    if (activeSort === 'price-asc') {
+        filtered = [...filtered].sort((a, b) => a.price - b.price);
+    } else if (activeSort === 'price-desc') {
+        filtered = [...filtered].sort((a, b) => b.price - a.price);
+    }
+    // default: featured first (already sorted from API)
+    return filtered;
+}
+
+function searchProducts() {
+    const term = document.getElementById("searchInput").value.toLowerCase().trim();
+    const heroSection = document.querySelector(".hero");
+    if (!term) {
+        loadProducts(selectedCategory);
+        if (heroSection) heroSection.classList.remove("hidden");
+        return;
+    }
+    if (heroSection) heroSection.classList.add("hidden");
+    const scoped = selectedCategory === "All Products" ? products : products.filter(p => p.category === selectedCategory);
+    const results = scoped.filter(p => p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term) || p.category.toLowerCase().includes(term));
+    renderProducts(applyFiltersAndSort(results));
+}
+
+// === AUTOCOMPLETE ===
+let autocompleteIndex = -1;
+
+function showAutocomplete(term) {
+    const dropdown = document.getElementById('searchAutocomplete');
+    if (!dropdown) return;
+    if (!term || term.length < 1) {
+        dropdown.classList.remove('active');
+        dropdown.innerHTML = '';
+        autocompleteIndex = -1;
+        return;
+    }
+    const matches = products.filter(p =>
+        p.name.toLowerCase().includes(term) ||
+        p.category.toLowerCase().includes(term)
+    ).slice(0, 6);
+    if (!matches.length) {
+        dropdown.classList.remove('active');
+        dropdown.innerHTML = '';
+        autocompleteIndex = -1;
+        return;
+    }
+    dropdown.innerHTML = matches.map((p, i) => {
+        const imgSrc = p.image && p.image.startsWith('http') ? p.image : '';
+        const imgHTML = imgSrc ? `<img src="${imgSrc}" alt="">` : '';
+        return `<div class="autocomplete-item" data-index="${i}" data-slug="${p.slug}" data-name="${p.name}">
+            ${imgHTML}
+            <div class="autocomplete-item-info">
+                <div class="autocomplete-item-name">${p.name}</div>
+                <div class="autocomplete-item-price">AED ${p.price}</div>
+            </div>
+        </div>`;
+    }).join('');
+    dropdown.classList.add('active');
+    autocompleteIndex = -1;
+
+    dropdown.querySelectorAll('.autocomplete-item').forEach(item => {
+        item.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            const name = this.dataset.name;
+            document.getElementById('searchInput').value = name;
+            dropdown.classList.remove('active');
+            searchProducts();
+        });
+    });
+}
+
+function navigateAutocomplete(direction) {
+    const dropdown = document.getElementById('searchAutocomplete');
+    if (!dropdown) return;
+    const items = dropdown.querySelectorAll('.autocomplete-item');
+    if (!items.length) return;
+    items.forEach(it => it.classList.remove('active'));
+    autocompleteIndex += direction;
+    if (autocompleteIndex < 0) autocompleteIndex = items.length - 1;
+    if (autocompleteIndex >= items.length) autocompleteIndex = 0;
+    items[autocompleteIndex].classList.add('active');
+    document.getElementById('searchInput').value = items[autocompleteIndex].dataset.name;
 }
 
 function addToCart(id, event) {
@@ -1001,13 +1085,71 @@ window.onload = () => {
     
     var searchBtn = document.getElementById("searchBtn");
     var searchInput = document.getElementById("searchInput");
-    if (searchBtn) searchBtn.onclick = searchProducts;
-    if (searchInput) searchInput.onkeypress = (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            searchProducts();
-        }
+    if (searchBtn) searchBtn.onclick = function() {
+        var dd = document.getElementById('searchAutocomplete');
+        if (dd) dd.classList.remove('active');
+        searchProducts();
     };
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            showAutocomplete(this.value.toLowerCase().trim());
+        });
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown') { e.preventDefault(); navigateAutocomplete(1); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); navigateAutocomplete(-1); }
+            else if (e.key === 'Enter') {
+                e.preventDefault();
+                var dd = document.getElementById('searchAutocomplete');
+                if (dd) dd.classList.remove('active');
+                searchProducts();
+            } else if (e.key === 'Escape') {
+                var dd = document.getElementById('searchAutocomplete');
+                if (dd) dd.classList.remove('active');
+            }
+        });
+        searchInput.addEventListener('blur', function() {
+            setTimeout(function() {
+                var dd = document.getElementById('searchAutocomplete');
+                if (dd) dd.classList.remove('active');
+            }, 150);
+        });
+    }
+
+    // Sort control
+    var sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            activeSort = this.value;
+            var term = document.getElementById('searchInput').value.trim();
+            if (term) { searchProducts(); } else { loadProducts(selectedCategory); }
+        });
+    }
+
+    // Price filter
+    var priceFilterBtn = document.getElementById('priceFilterBtn');
+    var priceFilterClear = document.getElementById('priceFilterClear');
+    if (priceFilterBtn) {
+        priceFilterBtn.addEventListener('click', function() {
+            var minVal = document.getElementById('priceMin').value;
+            var maxVal = document.getElementById('priceMax').value;
+            activePriceMin = minVal ? parseFloat(minVal) : null;
+            activePriceMax = maxVal ? parseFloat(maxVal) : null;
+            if (priceFilterClear) priceFilterClear.style.display = (activePriceMin !== null || activePriceMax !== null) ? 'inline-block' : 'none';
+            var term = document.getElementById('searchInput').value.trim();
+            if (term) { searchProducts(); } else { loadProducts(selectedCategory); }
+        });
+    }
+    if (priceFilterClear) {
+        priceFilterClear.addEventListener('click', function() {
+            activePriceMin = null;
+            activePriceMax = null;
+            document.getElementById('priceMin').value = '';
+            document.getElementById('priceMax').value = '';
+            this.style.display = 'none';
+            var term = document.getElementById('searchInput').value.trim();
+            if (term) { searchProducts(); } else { loadProducts(selectedCategory); }
+        });
+    }
     var cartIcon = document.getElementById("cartIcon");
     var closeCartBtn = document.getElementById("closeCart");
     var mobileCartIcon = document.getElementById("mobileCartIcon");
