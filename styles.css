@@ -375,20 +375,20 @@ nav {
   text-align: center;
   margin-bottom: 1.68rem;
   color: var(--primary);
-  font-size: 1.68rem;
+  font-size: 1.45rem;
   font-weight: 700;
   line-height: 1.4;
 }
 
 .section-arabic {
-  font-size: 1.47rem;
+  font-size: 1.25rem;
   color: #555;
   margin-top: 0.34rem;
 }
 
 .arabic-inline {
   font-family: 'Almarai', sans-serif;
-  font-size: 1.47rem;
+  font-size: 1.25rem;
   color: #555;
   margin-left: 1.01rem;
 }
@@ -1137,11 +1137,11 @@ footer p {
   }
 
   .section-title {
-    font-size: 1.17rem;
-  }
-  
-  .section-arabic, .arabic-inline {
     font-size: 1.01rem;
+  }
+
+  .section-arabic, .arabic-inline {
+    font-size: 0.88rem;
   }
 
   .contact-container {
