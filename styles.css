@@ -2083,6 +2083,7 @@ footer p {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .mobile-menu .menu-en {
