@@ -685,7 +685,7 @@
 
     <nav class="mobile-bottom-nav">
         <div class="bottom-nav-indicator" id="bottomNavIndicator"></div>
-        <div class="bottom-nav-item" id="bottomHomeBtn" data-index="0" onclick="window.location.href='/'">
+        <div class="bottom-nav-item" id="bottomHomeBtn" data-index="0" onclick="window.location.href=localStorage.getItem('lastProduct')||'index.html'">
             <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
             <span class="nav-label">Home</span>
         </div>
@@ -704,19 +704,6 @@
         </div>
     </nav>
 
-    <script>
-    /* Home button: go back to product user was viewing, or index */
-    (function(){
-      var btn = document.getElementById('bottomHomeBtn');
-      if (btn) {
-        btn.onclick = function(e) {
-          e.preventDefault();
-          var lp = localStorage.getItem('lastProduct');
-          window.location.href = lp || 'index.html';
-        };
-      }
-    })();
-    </script>
     <script>
     /** Populate all cart badges after full DOM is rendered **/
     (function(){
