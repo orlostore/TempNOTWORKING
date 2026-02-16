@@ -1282,10 +1282,11 @@
                     ? `<img src="${p.image}" class="product-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22><rect fill=%22%23f5f5f5%22 width=%22100%25%22 height=%22100%25%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2220%22>📦</text></svg>'">` 
                     : `<div class="product-img" style="display:flex;align-items:center;justify-content:center;font-size:28px;">${p.image || '📦'}</div>`;
                 
+                const stock = p.totalStock !== undefined ? p.totalStock : p.quantity;
                 let qtyClass = 'qty-ok';
-                if (p.quantity === 0) qtyClass = 'qty-out';
-                else if (p.quantity < 10) qtyClass = 'qty-low';
-                
+                if (stock === 0) qtyClass = 'qty-out';
+                else if (stock < 10) qtyClass = 'qty-low';
+
                 return `
                     <tr>
                         <td>${img}</td>
@@ -1297,8 +1298,8 @@
                         <td>${p.category ? `<span class="category-tag">${p.category}</span>` : '-'}</td>
                         <td><span class="price-tag">AED ${p.price}</span></td>
                         <td>
-                            <span class="qty-badge ${qtyClass}" onclick="openStockModal('${p.slug}', '${p.name.replace(/'/g, "\\'")}', ${p.quantity})">
-                                ${p.quantity}
+                            <span class="qty-badge ${qtyClass}" onclick="openStockModal('${p.slug}', '${p.name.replace(/'/g, "\\'")}', ${stock})">
+                                ${stock}
                             </span>
                         </td>
                         <td class="actions">
@@ -1312,9 +1313,10 @@
 
         function updateStats() {
             document.getElementById('statTotal').textContent = products.length;
-            document.getElementById('statInStock').textContent = products.filter(p => p.quantity > 0).length;
-            document.getElementById('statLowStock').textContent = products.filter(p => p.quantity > 0 && p.quantity < 10).length;
-            document.getElementById('statOutOfStock').textContent = products.filter(p => p.quantity === 0).length;
+            const getStock = p => p.totalStock !== undefined ? p.totalStock : p.quantity;
+            document.getElementById('statInStock').textContent = products.filter(p => getStock(p) > 0).length;
+            document.getElementById('statLowStock').textContent = products.filter(p => getStock(p) > 0 && getStock(p) < 10).length;
+            document.getElementById('statOutOfStock').textContent = products.filter(p => getStock(p) === 0).length;
         }
 
         function filterProducts() {
