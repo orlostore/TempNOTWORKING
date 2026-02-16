@@ -2021,10 +2021,14 @@
         }
         
         async function markShipped(orderId, customerEmail) {
-    if (!confirm('Mark this order as shipped? An email will be sent to the customer.')) return;
-    
+    if (!customerEmail || customerEmail === 'N/A') {
+        alert('Cannot ship: no customer email on this order.');
+        return;
+    }
+    if (!confirm('Mark this order as shipped? An email will be sent to ' + customerEmail)) return;
+
     const order = orders.find(o => o.id === orderId);
-    
+
     try {
         const response = await fetch(`/api/admin/ship-order?key=${authKey}`, {
             method: 'POST',
@@ -2036,13 +2040,24 @@
                 items: order?.items || []
             })
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
+            // Persist shipped status to localStorage
+            if (!shippedOrders.includes(orderId)) {
+                shippedOrders.push(orderId);
+                localStorage.setItem('orlo_shipped_orders', JSON.stringify(shippedOrders));
+            }
+
             orders = orders.map(o => o.id === orderId ? {...o, status: 'shipped'} : o);
             applyFilters();
-            alert('Shipped! Email sent to ' + customerEmail);
+
+            if (data.email_sent) {
+                alert('Shipped! Email sent to ' + customerEmail);
+            } else {
+                alert('Marked as shipped, but email failed: ' + (data.email_error || 'Unknown error'));
+            }
         } else {
             alert('Error: ' + (data.error || 'Unknown error'));
         }

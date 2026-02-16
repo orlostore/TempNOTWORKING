@@ -1,9 +1,8 @@
-// Cloudflare Pages Function - Mark Order as Shipped + Send Email
+// Cloudflare Pages Function - Mark Order as Shipped + Send Email via Resend
 // Location: /functions/api/admin/ship-order.js
 
 export async function onRequestPost(context) {
     const { env, request } = context;
-    const DB = env.DB;
 
     try {
         const url = new URL(request.url);
@@ -15,24 +14,33 @@ export async function onRequestPost(context) {
 
         const { order_id, customer_email, customer_name, items } = await request.json();
 
-        if (!order_id || !customer_email) {
+        if (!order_id || !customer_email || customer_email === 'N/A') {
             return Response.json({ error: 'Missing order_id or customer_email' }, { status: 400 });
         }
 
-        // 1. Save shipped status to D1
-        await DB.prepare(`
-            INSERT OR REPLACE INTO shipped_orders (order_id, shipped_at)
-            VALUES (?, datetime('now'))
-        `).bind(order_id).run();
+        // 1. Save shipped status to D1 (optional — skip if DB not configured)
+        if (env.DB) {
+            try {
+                await env.DB.prepare(`
+                    INSERT OR REPLACE INTO shipped_orders (order_id, shipped_at)
+                    VALUES (?, datetime('now'))
+                `).bind(order_id).run();
+            } catch (dbError) {
+                console.error('D1 save failed (non-blocking):', dbError);
+            }
+        }
 
-        // 2. Send shipping email
+        // 2. Send shipping email via Resend
+        let emailSent = false;
+        let emailError = null;
+
         if (env.RESEND_API_KEY) {
             const itemsList = (items || [])
                 .filter(i => !i.name.toLowerCase().includes('delivery'))
                 .map(i => `<tr><td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;">${i.name}</td><td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#666;text-align:center;">× ${i.quantity}</td></tr>`)
                 .join('');
 
-            await fetch('https://api.resend.com/emails', {
+            const emailResponse = await fetch('https://api.resend.com/emails', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${env.RESEND_API_KEY}`,
@@ -97,12 +105,27 @@ export async function onRequestPost(context) {
                     `
                 })
             });
+
+            const emailResult = await emailResponse.json();
+
+            if (emailResponse.ok && emailResult.id) {
+                emailSent = true;
+            } else {
+                emailError = emailResult.message || emailResult.error || 'Unknown Resend error';
+                console.error('Resend error:', emailError);
+            }
+        } else {
+            emailError = 'RESEND_API_KEY not configured';
         }
 
-        return Response.json({ success: true });
+        return Response.json({
+            success: true,
+            email_sent: emailSent,
+            email_error: emailError
+        });
 
     } catch (error) {
         console.error('Ship order error:', error);
-        return Response.json({ error: 'Failed to process' }, { status: 500 });
+        return Response.json({ error: 'Failed to process: ' + error.message }, { status: 500 });
     }
 }
