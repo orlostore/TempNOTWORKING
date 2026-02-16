@@ -25,7 +25,7 @@ body {
 }
 
 /* Prevent any child elements from breaking out */
-body > * {
+body > *:not(header) {
   max-width: 100%;
   overflow-x: hidden;
 }
