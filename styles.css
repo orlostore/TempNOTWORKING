@@ -3288,6 +3288,30 @@ footer p {
   font-size: 0.56rem;
 }
 
+/* Cart limit message - centered above cart items */
+.cart-limit-msg-top {
+  text-align: center;
+  font-size: 0.72rem;
+  color: #dc3545;
+  font-weight: 600;
+  padding: 6px 12px;
+  margin-bottom: 2px;
+  animation: cartLimitFlash 0.4s ease;
+}
+
+.cart-limit-msg-top .highlight {
+  font-weight: 700;
+  color: #dc3545;
+}
+
+.cart-limit-msg-top .cart-limit-ar-inline {
+  font-family: 'Almarai', sans-serif;
+  font-weight: 400;
+  color: #e07856;
+  margin-left: 6px;
+  font-size: 0.6rem;
+}
+
 @keyframes cartLimitFlash {
   0% { opacity: 0; transform: translateY(-3px); }
   100% { opacity: 1; transform: translateY(0); }

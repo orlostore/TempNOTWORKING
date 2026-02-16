@@ -288,8 +288,8 @@ function renderProducts(list) {
             ? `<img src="${p.image}" alt="${p.name}" style="max-width:100%; max-height:100%; object-fit:contain;">` 
             : p.image;
         
-        // Check if out of stock
-        const outOfStock = p.quantity === 0;
+        // Check if out of stock (use totalStock for variant products)
+        const outOfStock = (p.totalStock !== undefined ? p.totalStock : p.quantity) === 0;
         const cartItem = localCart.find(i => i.id === p.id);
         const inCart = cartItem && cartItem.quantity > 0;
         
@@ -579,7 +579,7 @@ function updateCart() {
         // Filter out-of-stock items from upsell
         const upsellProducts = products
             .filter(p => !cartProductIds.includes(p.id))
-            .filter(p => p.quantity > 0) // Only in-stock items
+            .filter(p => (p.totalStock !== undefined ? p.totalStock : p.quantity) > 0) // Only in-stock items
             .filter(p => p.price >= amountNeededForFree)
             .sort((a, b) => a.price - b.price)
             .slice(0, 2);
@@ -715,7 +715,7 @@ function updateQuantity(id, change, variantId) {
     }
 }
 
-// Show limit message inside cart sidebar for a specific item (Option B - inline red text)
+// Show limit message at top of cart sidebar, centered
 function showCartLimitMessage(cartItemId, maxAllowed) {
     // cartItemId can be "5" or "5-v12" for variant items
     const productId = cartItemId;
@@ -723,9 +723,9 @@ function showCartLimitMessage(cartItemId, maxAllowed) {
     const existing = document.getElementById('cartLimitMsg');
     if (existing) existing.remove();
     if (window.cartLimitTimer) clearTimeout(window.cartLimitTimer);
-    
+
     const isStockLimit = maxAllowed < MAX_QTY_PER_PRODUCT;
-    
+
     let messageEn, messageAr;
     if (isStockLimit) {
       messageEn = `${SVG_WARNING} Only <span class="highlight">${maxAllowed}</span> left in stock`;
@@ -734,29 +734,29 @@ function showCartLimitMessage(cartItemId, maxAllowed) {
       messageEn = `${SVG_WARNING} Max <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
       messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
     }
-    
+
+    // Shake the + button on the specific cart item
     const cartItem = document.getElementById(`cartItem-${productId}`);
-    if (!cartItem) return;
-    
-    // Shake the + button
-    const plusBtn = cartItem.querySelectorAll('button')[1];
-    if (plusBtn) {
-        plusBtn.style.animation = 'none';
-        plusBtn.offsetHeight;
-        plusBtn.style.animation = 'cartQtyShake 0.4s ease';
+    if (cartItem) {
+      const plusBtn = cartItem.querySelectorAll('button')[1];
+      if (plusBtn) {
+          plusBtn.style.animation = 'none';
+          plusBtn.offsetHeight;
+          plusBtn.style.animation = 'cartQtyShake 0.4s ease';
+      }
     }
-    
-    // Find the info div (first child div) and append inline message
-    const infoDiv = cartItem.querySelector('div');
-    if (!infoDiv) return;
-    
+
+    // Insert message at top of cart items, centered
+    const cartItems = document.getElementById('cartItems');
+    if (!cartItems) return;
+
     const msg = document.createElement('div');
     msg.id = 'cartLimitMsg';
-    msg.className = 'cart-limit-msg-inline';
+    msg.className = 'cart-limit-msg-top';
     msg.innerHTML = `${messageEn} <span class="cart-limit-ar-inline">${messageAr}</span>`;
-    
-    infoDiv.appendChild(msg);
-    
+
+    cartItems.insertBefore(msg, cartItems.firstChild);
+
     // Auto-dismiss
     window.cartLimitTimer = setTimeout(() => {
       const tip = document.getElementById('cartLimitMsg');

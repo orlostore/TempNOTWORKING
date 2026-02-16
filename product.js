@@ -893,7 +893,7 @@ function renderVariantSelector(containerId, product, isMobile) {
   let tilesHTML = product.variants.map(v => {
     const isOOS = v.quantity === 0;
     const isLow = v.quantity > 0 && v.quantity <= 3;
-    let stockLabel = v.quantity > 0 ? `${v.quantity} left` : 'Sold out';
+    let stockLabel = v.quantity > 0 ? 'In Stock' : 'Sold out';
     let classes = 'variant-tile';
     if (isOOS) classes += ' out-of-stock';
     if (isLow) classes += ' low-stock';
@@ -907,7 +907,7 @@ function renderVariantSelector(containerId, product, isMobile) {
            onclick="${isOOS ? '' : `selectVariant(${v.id}, ${product.id}, '${prefix}')`}">
         ${imgHTML}
         <div class="variant-tile-name">${v.name}</div>
-        <div class="variant-tile-stock">${isLow ? stockLabel + '!' : stockLabel}</div>
+        <div class="variant-tile-stock">${stockLabel}</div>
       </div>
     `;
   }).join('');

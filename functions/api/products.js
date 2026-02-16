@@ -62,38 +62,46 @@ export async function onRequestGet(context) {
             console.log('Pricing tiers table not ready:', e.message);
         }
 
-        const products = results.map(row => ({
-            id: row.id,
-            slug: row.slug,
-            name: row.name,
-            nameAr: row.nameAr,
-            category: row.category,
-            categoryAr: row.categoryAr,
-            price: row.price,
-            cost: row.cost || 0,
-            quantity: row.quantity,
-            description: row.description,
-            descriptionAr: row.descriptionAr,
-            image: row.mainImage,
-            images: [row.mainImage, row.image2, row.image3, row.image4, row.image5, row.image6, row.image7, row.image8].filter(Boolean),
-            colors: row.colors,
-            colorsAr: row.colorsAr,
-            packaging: row.packaging,
-            packagingAr: row.packagingAr,
-            specifications: row.specifications ? row.specifications.split(' | ').filter(Boolean) : [],
-            specificationsAr: row.specificationsAr ? row.specificationsAr.split(' | ').filter(Boolean) : [],
-            featured: row.featured === 1,
-            wattage: row.wattage || '',
-            voltage: row.voltage || '',
-            plugType: row.plugType || '',
-            plugTypeAr: row.plugTypeAr || '',
-            baseType: row.baseType || '',
-            baseTypeAr: row.baseTypeAr || '',
-            material: row.material || '',
-            materialAr: row.materialAr || '',
-            variants: variantsMap[row.id] || [],
-            pricingTiers: tiersMap[row.id] || []
-        }));
+        const products = results.map(row => {
+            const variants = variantsMap[row.id] || [];
+            const totalStock = variants.length > 0
+                ? variants.reduce((sum, v) => sum + v.quantity, 0)
+                : row.quantity;
+
+            return {
+                id: row.id,
+                slug: row.slug,
+                name: row.name,
+                nameAr: row.nameAr,
+                category: row.category,
+                categoryAr: row.categoryAr,
+                price: row.price,
+                cost: row.cost || 0,
+                quantity: row.quantity,
+                totalStock,
+                description: row.description,
+                descriptionAr: row.descriptionAr,
+                image: row.mainImage,
+                images: [row.mainImage, row.image2, row.image3, row.image4, row.image5, row.image6, row.image7, row.image8].filter(Boolean),
+                colors: row.colors,
+                colorsAr: row.colorsAr,
+                packaging: row.packaging,
+                packagingAr: row.packagingAr,
+                specifications: row.specifications ? row.specifications.split(' | ').filter(Boolean) : [],
+                specificationsAr: row.specificationsAr ? row.specificationsAr.split(' | ').filter(Boolean) : [],
+                featured: row.featured === 1,
+                wattage: row.wattage || '',
+                voltage: row.voltage || '',
+                plugType: row.plugType || '',
+                plugTypeAr: row.plugTypeAr || '',
+                baseType: row.baseType || '',
+                baseTypeAr: row.baseTypeAr || '',
+                material: row.material || '',
+                materialAr: row.materialAr || '',
+                variants,
+                pricingTiers: tiersMap[row.id] || []
+            };
+        });
 
         return new Response(JSON.stringify(products), {
             headers: {
