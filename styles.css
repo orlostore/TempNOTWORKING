@@ -1232,10 +1232,6 @@ footer p {
     height: 36px;
   }
 
-  /* Drop grid tooltip closer to button on mobile (less padding) */
-  .grid-limit-tooltip {
-    bottom: 50px;
-  }
 }
 
 /* Product Detail Page Styles */
@@ -3312,6 +3308,14 @@ footer p {
 .grid-limit-tooltip .close-btn:hover {
   background: rgba(0,0,0,0.15);
   color: #555;
+}
+
+/* Mobile: product-info padding shrinks from 1.34rem to 0.75rem,
+   so drop the tooltip closer to the button */
+@media (max-width: 514.56px) {
+  .grid-limit-tooltip {
+    bottom: 55px;
+  }
 }
 
 /* ============================================
