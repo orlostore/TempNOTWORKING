@@ -856,6 +856,12 @@ nav {
   direction: rtl;
 }
 
+.inline-heart {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
 .contact-details-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
