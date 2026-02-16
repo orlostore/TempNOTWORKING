@@ -705,6 +705,19 @@
     </nav>
 
     <script>
+    /* Home button: go back to product user was viewing, or index */
+    (function(){
+      var btn = document.getElementById('bottomHomeBtn');
+      if (btn) {
+        btn.onclick = function(e) {
+          e.preventDefault();
+          var lp = localStorage.getItem('lastProduct');
+          window.location.href = lp || 'index.html';
+        };
+      }
+    })();
+    </script>
+    <script>
     /** Populate all cart badges after full DOM is rendered **/
     (function(){
       try {
