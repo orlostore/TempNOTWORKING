@@ -693,7 +693,7 @@
             <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
             <span class="nav-label" id="bottomAccountLabel">Login</span>
         </div>
-        <div class="bottom-nav-item" id="bottomCartBtn" data-index="2" onclick="window.location.href='/?openCart=true'">
+        <div class="bottom-nav-item" id="bottomCartBtn" data-index="2" onclick="var lp=localStorage.getItem('lastProduct')||'index.html';window.location.href=lp+(lp.includes('?')?'&amp;':'?')+'openCart=true'">
             <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
             <span class="bottom-cart-badge" id="bottomCartCount" style="display:none"></span>
             <span class="nav-label">Cart</span>
