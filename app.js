@@ -945,16 +945,39 @@ window.onload = () => {
 
         const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
         const isProductPage = window.location.pathname.includes('product.html');
+
+        // Remember the product page the user is viewing
+        if (isProductPage) {
+            sessionStorage.setItem('lastProduct', window.location.href);
+        }
+
         bottomHomeBtn.onclick = function() {
             if (isProductPage) {
+                // On product page: close cart/scroll to top first, then go to index
+                const cartSidebar = document.getElementById("cartSidebar");
+                if (cartSidebar && cartSidebar.classList.contains("active")) {
+                    cartSidebar.classList.remove("active");
+                    if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
+                    document.body.style.overflow = "";
+                    upsellUsed = false;
+                    savedUpsellProducts = null;
+                    return;
+                }
                 if (window.scrollY > 0) {
                     window.scrollTo({top: 0, behavior: 'smooth'});
                     return;
                 }
+                sessionStorage.removeItem('lastProduct');
                 window.location.href = 'index.html';
                 return;
             }
             if (!isIndexPage) {
+                // On account/other pages: go back to product if there was one, else index
+                var lastProduct = sessionStorage.getItem('lastProduct');
+                if (lastProduct) {
+                    window.location.href = lastProduct;
+                    return;
+                }
                 window.location.href = 'index.html';
                 return;
             }
