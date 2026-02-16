@@ -961,6 +961,20 @@ window.onload = () => {
                 bottomHomeBtn.classList.add("home-active");
                 window.scrollTo({top: 0, behavior: 'smooth'});
             };
+        } else {
+            bottomHomeBtn.onclick = function() {
+                // If cart is open, just close it
+                const cartSidebar = document.getElementById("cartSidebar");
+                if (cartSidebar && cartSidebar.classList.contains("active")) {
+                    cartSidebar.classList.remove("active");
+                    if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
+                    document.body.style.overflow = "";
+                    upsellUsed = false;
+                    savedUpsellProducts = null;
+                    return;
+                }
+                window.location.href = 'index.html';
+            };
         }
     }
     
