@@ -803,29 +803,31 @@ function toggleAbout() {
 
 function toggleMobileMenu() {
     let overlay = document.querySelector('.mobile-menu-overlay');
-    
+
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.className = 'mobile-menu-overlay';
         const chevron = '<svg class="menu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+        const isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+        const base = isIndex ? '' : 'index.html';
         overlay.innerHTML = `
             <div class="mobile-menu">
-                <a href="#products" onclick="closeMobileMenu()">
+                <a href="${base}#products" onclick="closeMobileMenu()">
                     <div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
                     <div class="menu-text"><span class="menu-en">Shop</span><span class="menu-ar">تسوق</span></div>
                     ${chevron}
                 </a>
-                <a href="#about" onclick="closeMobileMenu()">
+                <a href="${base}#about" onclick="closeMobileMenu()">
                     <div class="menu-icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
                     <div class="menu-text"><span class="menu-en">About</span><span class="menu-ar">من نحن</span></div>
                     ${chevron}
                 </a>
-                <a href="#contact" onclick="closeMobileMenu()">
+                <a href="${base}#contact" onclick="closeMobileMenu()">
                     <div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
                     <div class="menu-text"><span class="menu-en">Contact</span><span class="menu-ar">اتصل بنا</span></div>
                     ${chevron}
                 </a>
-                <a href="#terms" onclick="closeMobileMenu()">
+                <a href="${base}#terms" onclick="closeMobileMenu()">
                     <div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>
                     <div class="menu-text"><span class="menu-en">Terms</span><span class="menu-ar">الشروط</span></div>
                     ${chevron}
@@ -940,8 +942,13 @@ window.onload = () => {
     
     if (bottomHomeBtn) {
         bottomHomeBtn.classList.add("home-active");
-        
+
+        const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
         bottomHomeBtn.onclick = function() {
+            if (!isIndexPage) {
+                window.location.href = 'index.html';
+                return;
+            }
             const cartSidebar = document.getElementById("cartSidebar");
             if (cartSidebar.classList.contains("active")) {
                 cartSidebar.classList.remove("active");
