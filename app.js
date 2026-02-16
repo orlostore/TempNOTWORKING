@@ -293,9 +293,12 @@ function renderProducts(list) {
         const cartItem = localCart.find(i => i.id === p.id);
         const inCart = cartItem && cartItem.quantity > 0;
         
+        const hasVariants = p.variants && p.variants.length > 0;
         let buttonHTML;
         if (outOfStock) {
             buttonHTML = `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | نفذ المخزون</button>`;
+        } else if (hasVariants) {
+            buttonHTML = `<a href="product.html?product=${p.slug}" class="view-options-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg> View Options | عرض الخيارات</a>`;
         } else if (inCart) {
             // Show qty stepper
             buttonHTML = `
