@@ -162,6 +162,36 @@ window.addEventListener('pageshow', function(event) {
     }
 });
 
+// Calculate tier pricing for cart items
+// Groups items by product ID, sums quantities across variants, finds applicable tier
+function calculateTierPricing(cartItems) {
+    // Group quantities by product id
+    const qtyByProduct = {};
+    cartItems.forEach(i => {
+        qtyByProduct[i.id] = (qtyByProduct[i.id] || 0) + i.quantity;
+    });
+
+    return cartItems.map(i => {
+        const copy = { ...i };
+        if (i.pricingTiers && i.pricingTiers.length > 0) {
+            const totalQty = qtyByProduct[i.id] || i.quantity;
+            // Find the best matching tier (highest minQty that is <= totalQty)
+            let bestTier = null;
+            for (const tier of i.pricingTiers) {
+                if (totalQty >= tier.minQty) {
+                    if (!bestTier || tier.minQty > bestTier.minQty) {
+                        bestTier = tier;
+                    }
+                }
+            }
+            if (bestTier) {
+                copy._tierPrice = bestTier.pricePerUnit;
+            }
+        }
+        return copy;
+    });
+}
+
 function saveCart() { localStorage.setItem("cart", JSON.stringify(cart)); }
 function saveDeliveryZone() { localStorage.setItem("deliveryZone", selectedDeliveryZone); }
 function getCategories() { return ["All Products", ...new Set(products.map(p => p.category))]; }
@@ -177,34 +207,6 @@ function updateCartCounts() {
         const el = document.getElementById(id);
         if (el) el.textContent = totalItems;
     });
-}
-
-function updateCart() {
-    // SYNC FIRST
-    cart = JSON.parse(localStorage.getItem("cart")) || [];
-    
-    const cartItems = document.getElementById("cartItems"); 
-    const cartFooter = document.querySelector(".cart-footer");
-    const cartCheckoutFixed = document.getElementById("cartCheckoutFixed");
-    const isMobile = window.innerWidth <= 768;
-    
-    // UPDATE COUNTS IMMEDIATELY (Don't wait for empty check)
-    updateCartCounts();
-    
-    if (!cart.length) { 
-        cartItems.innerHTML = "<p style='text-align:center;padding:3rem;color:#999;font-size:1.1rem;'>Your cart is empty</p>"; 
-        // We removed the lines here that were forcing textContent = 0 
-        // updateCartCounts already handled the logic correctly.
-        cartFooter.innerHTML = `<div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;"><span>Total | الإجمالي:</span><span>AED 0.00</span></div>`;
-        if (cartCheckoutFixed) cartCheckoutFixed.innerHTML = '';
-        return; 
-    } 
-
-    const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0); 
-    const deliveryFee = calculateDeliveryFee(subtotal); 
-    const total = subtotal + deliveryFee; 
-    
-    // ... rest of your checkout button and cart item mapping logic
 }
 
 // Grid quantity change handler for product cards
@@ -387,11 +389,17 @@ function searchProducts() {
     renderProducts(results); 
 }
 
-function addToCart(id, event) { 
+function addToCart(id, event) {
     if (event) event.stopPropagation();
-    
+
     const product = products.find(p => p.id === id);
-    
+
+    // If product has variants, redirect to product page
+    if (product.variants && product.variants.length > 0) {
+        window.location.href = `product.html?product=${product.slug}`;
+        return;
+    }
+
     // Check stock
     if (product.quantity === 0) {
         return; // Silent - out of stock
@@ -470,10 +478,11 @@ function updateCart() {
         return; 
     } 
     
-    const totalItems = cart.reduce((s, i) => s + i.quantity, 0); 
-    const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0); 
-    const deliveryFee = calculateDeliveryFee(subtotal); 
-    const total = subtotal + deliveryFee; 
+    const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+    const cartWithPricing = calculateTierPricing(cart);
+    const subtotal = cartWithPricing.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
+    const deliveryFee = calculateDeliveryFee(subtotal);
+    const total = subtotal + deliveryFee;
     const amountNeeded = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
     
     if (cartCount) cartCount.textContent = totalItems;
@@ -527,21 +536,37 @@ function updateCart() {
     const btnFont = isMobile ? '0.8rem' : '0.85rem';
     const qtyFont = isMobile ? '0.8rem' : '0.9rem';
 
-    cartItems.innerHTML = cart.map(i => `
-        <div id="cartItem-${i.id}" style="display:flex; justify-content:space-between; align-items:center; padding:${itemPad}; border-bottom:1px solid #eee; position:relative;">
+    // Calculate tier pricing for each cart item
+    const cartWithTierPricing = calculateTierPricing(cart);
+
+    cartItems.innerHTML = cartWithTierPricing.map(i => {
+        const cartItemId = i.variantId ? `${i.id}-v${i.variantId}` : `${i.id}`;
+        const variantLine = i.variantName ? `<div style="color:#e07856; font-size:0.7rem; font-weight:500;">${i.variantName}</div>` : '';
+        const effectivePrice = i._tierPrice || i.price;
+        const showOrigPrice = i._tierPrice && i._tierPrice < i.price;
+        const priceDisplay = showOrigPrice
+            ? `<span style="text-decoration:line-through;color:#bbb;font-size:0.65rem;">AED ${i.price}</span> AED ${effectivePrice} × ${i.quantity}`
+            : `AED ${effectivePrice} × ${i.quantity}`;
+        const updateArgs = i.variantId ? `${i.id}, -1, ${i.variantId}` : `${i.id}, -1`;
+        const updateArgsPlus = i.variantId ? `${i.id}, 1, ${i.variantId}` : `${i.id}, 1`;
+        const removeArgs = i.variantId ? `${i.id}, ${i.variantId}` : `${i.id}`;
+
+        return `
+        <div id="cartItem-${cartItemId}" style="display:flex; justify-content:space-between; align-items:center; padding:${itemPad}; border-bottom:1px solid #eee; position:relative;">
             <div style="flex:1; line-height:1.3;">
-                <strong style="font-size:${itemNameSize}; color:#2c4a5c;">${i.name}</strong><br>
-                <span style="color:#888; font-size:${itemSubSize};">AED ${i.price} × ${i.quantity}</span><br>
-                <span style="color:#e07856; font-weight:600; font-size:${itemTotalSize};">AED ${(i.price * i.quantity).toFixed(2)}</span>
+                <strong style="font-size:${itemNameSize}; color:#2c4a5c;">${i.name}</strong>
+                ${variantLine}
+                <span style="color:#888; font-size:${itemSubSize};">${priceDisplay}</span><br>
+                <span style="color:#e07856; font-weight:600; font-size:${itemTotalSize};">AED ${(effectivePrice * i.quantity).toFixed(2)}</span>
             </div>
             <div style="display:flex; gap:0.3rem; align-items:center;">
-                <button onclick="updateQuantity(${i.id}, -1)" style="padding:${btnPad}; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:${btnFont}; font-weight:600;">-</button>
+                <button onclick="updateQuantity(${updateArgs})" style="padding:${btnPad}; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:${btnFont}; font-weight:600;">-</button>
                 <span style="font-size:${qtyFont}; font-weight:600; min-width:18px; text-align:center;">${i.quantity}</span>
-                <button onclick="updateQuantity(${i.id}, 1)" style="padding:${btnPad}; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:${btnFont}; font-weight:600;">+</button>
-                <button onclick="removeFromCart(${i.id})" style="padding:${btnPad}; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.2rem; font-size:${btnFont};">${SVG_CLOSE_CART}</button>
+                <button onclick="updateQuantity(${updateArgsPlus})" style="padding:${btnPad}; background:#f0f0f0; border:none; border-radius:4px; cursor:pointer; font-size:${btnFont}; font-weight:600;">+</button>
+                <button onclick="removeFromCart(${removeArgs})" style="padding:${btnPad}; background:#dc3545; color:white; border:none; border-radius:4px; cursor:pointer; margin-left:0.2rem; font-size:${btnFont};">${SVG_CLOSE_CART}</button>
             </div>
         </div>
-    `).join(""); 
+    `}).join(""); 
     
     let footerHTML = '';
     
@@ -646,40 +671,54 @@ function changeDeliveryZone(zone) {
     updateCart(); 
 }
 
-function updateQuantity(id, change) { 
-    const item = cart.find(i => i.id === id);
+function updateQuantity(id, change, variantId) {
+    const item = variantId
+        ? cart.find(i => i.id === id && i.variantId === variantId)
+        : cart.find(i => i.id === id && !i.variantId);
     const product = products.find(p => p.id === id);
-    
-    if (item) { 
+
+    if (item) {
         const newQty = item.quantity + change;
-        
+
         // Cap at 10 OR available stock (whichever is lower)
         if (change > 0) {
-            const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product ? product.quantity : MAX_QTY_PER_PRODUCT);
+            let stockQty = product ? product.quantity : MAX_QTY_PER_PRODUCT;
+            if (variantId && product && product.variants) {
+                const variant = product.variants.find(v => v.id === variantId);
+                if (variant) stockQty = variant.quantity;
+            }
+            const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, stockQty);
             if (newQty > maxAllowed) {
-                showCartLimitMessage(id, maxAllowed);
+                const cartItemId = variantId ? `${id}-v${variantId}` : `${id}`;
+                showCartLimitMessage(cartItemId, maxAllowed);
                 return;
             }
         }
-        
+
         item.quantity = newQty;
-        if (item.quantity <= 0) { 
-            removeFromCart(id); 
-        } else { 
-            saveCart(); 
+        if (item.quantity <= 0) {
+            removeFromCart(id, variantId);
+        } else {
+            saveCart();
             updateCart();
             // Sync product page stepper
-            const qtyDisplay = document.getElementById(`qtyDisplay-${id}`);
-            if (qtyDisplay) qtyDisplay.textContent = newQty;
-            // ADD THIS LINE TO SYNC CART PAGE COUNT WITH INDEX PAGE COUNT OF PRODUCTS:
-            const gridQtyNum = document.getElementById(`gridQtyNum-${id}`);
-            if (gridQtyNum) gridQtyNum.textContent = newQty;
-        } 
-    } 
+            if (variantId) {
+                const qtyDisplay = document.getElementById(`qtyDisplay-${id}-${variantId}`);
+                if (qtyDisplay) qtyDisplay.textContent = newQty;
+            } else {
+                const qtyDisplay = document.getElementById(`qtyDisplay-${id}`);
+                if (qtyDisplay) qtyDisplay.textContent = newQty;
+                const gridQtyNum = document.getElementById(`gridQtyNum-${id}`);
+                if (gridQtyNum) gridQtyNum.textContent = newQty;
+            }
+        }
+    }
 }
 
 // Show limit message inside cart sidebar for a specific item (Option B - inline red text)
-function showCartLimitMessage(productId, maxAllowed) {
+function showCartLimitMessage(cartItemId, maxAllowed) {
+    // cartItemId can be "5" or "5-v12" for variant items
+    const productId = cartItemId;
     // Remove any existing
     const existing = document.getElementById('cartLimitMsg');
     if (existing) existing.remove();
@@ -729,21 +768,27 @@ function showCartLimitMessage(productId, maxAllowed) {
     }, 3000);
 }
 
-function removeFromCart(id) { 
-    cart = cart.filter(i => i.id !== id); 
-    upsellUsed = false;
-    saveCart(); 
-    updateCart();
-    
-    // Reset grid button if visible
-    const gridQty = document.getElementById(`gridQty-${id}`);
-    if (gridQty) {
-        gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)">Add to Cart | أضف إلى السلة</button>`;
+function removeFromCart(id, variantId) {
+    if (variantId) {
+        cart = cart.filter(i => !(i.id === id && i.variantId === variantId));
+    } else {
+        cart = cart.filter(i => i.id !== id);
     }
-    
-    // Reset product page button if visible
-    if (typeof resetToAddButton === 'function') {
-        resetToAddButton(id);
+    upsellUsed = false;
+    saveCart();
+    updateCart();
+
+    if (!variantId) {
+        // Reset grid button if visible (non-variant products only)
+        const gridQty = document.getElementById(`gridQty-${id}`);
+        if (gridQty) {
+            gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)">Add to Cart | أضف إلى السلة</button>`;
+        }
+
+        // Reset product page button if visible
+        if (typeof resetToAddButton === 'function') {
+            resetToAddButton(id);
+        }
     }
 }
 

@@ -9,13 +9,13 @@ const deliveryZones = {
 
 export async function onRequestPost(context) {
     const { request, env } = context;
-    
+
     const STRIPE_SECRET_KEY = env.STRIPE_SECRET_KEY;
     const DB = env.DB;
-    
+
     if (!STRIPE_SECRET_KEY) {
-        return new Response(JSON.stringify({ 
-            error: 'Stripe is not configured.' 
+        return new Response(JSON.stringify({
+            error: 'Stripe is not configured.'
         }), {
             status: 500,
             headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
@@ -37,18 +37,17 @@ export async function onRequestPost(context) {
         let customerEmail = null;
         let customerAddress = null;
         let customerPhone = null;
-        
+
         const authHeader = request.headers.get('Authorization');
         if (authHeader && authHeader.startsWith('Bearer ') && DB) {
             const token = authHeader.replace('Bearer ', '');
             const customer = await DB.prepare('SELECT id, email, name FROM customers WHERE token = ?')
                 .bind(token)
                 .first();
-            
+
             if (customer) {
                 customerEmail = customer.email;
-                
-                // Get default address (or most recent)
+
                 const address = await DB.prepare(`
                     SELECT full_name, phone, street, building, area, emirate, landmark
                     FROM customer_addresses
@@ -56,7 +55,7 @@ export async function onRequestPost(context) {
                     ORDER BY is_default DESC, id DESC
                     LIMIT 1
                 `).bind(customer.id).first();
-                
+
                 if (address) {
                     customerAddress = address;
                     customerPhone = address.phone;
@@ -64,32 +63,78 @@ export async function onRequestPost(context) {
             }
         }
 
-        // === STOCK VERIFICATION ===
+        // === STOCK VERIFICATION (variant-aware) ===
         const outOfStock = [];
         const insufficientStock = [];
-        
+
+        // Load pricing tiers for tier calculation
+        let tiersMap = {};
+        try {
+            const { results: tierRows } = await DB.prepare(`
+                SELECT product_id, min_qty, price_per_unit
+                FROM product_pricing_tiers
+                ORDER BY min_qty ASC
+            `).all();
+            for (const t of tierRows) {
+                if (!tiersMap[t.product_id]) tiersMap[t.product_id] = [];
+                tiersMap[t.product_id].push({ minQty: t.min_qty, pricePerUnit: t.price_per_unit });
+            }
+        } catch (e) {
+            // Table may not exist yet
+        }
+
+        // Group cart quantities by product ID for tier calculation
+        const qtyByProduct = {};
+        cart.forEach(item => {
+            qtyByProduct[item.id] = (qtyByProduct[item.id] || 0) + item.quantity;
+        });
+
         for (const item of cart) {
-            const result = await DB.prepare('SELECT quantity, name FROM products WHERE slug = ?')
-                .bind(item.slug)
-                .first();
-            
-            if (!result) {
-                outOfStock.push(item.name);
-            } else if (result.quantity < item.quantity) {
-                if (result.quantity === 0) {
+            if (item.variantId) {
+                // Check variant stock
+                const variant = await DB.prepare('SELECT quantity, name FROM product_variants WHERE id = ?')
+                    .bind(item.variantId)
+                    .first();
+
+                const displayName = `${item.name} — ${item.variantName || 'variant'}`;
+
+                if (!variant) {
+                    outOfStock.push(displayName);
+                } else if (variant.quantity < item.quantity) {
+                    if (variant.quantity === 0) {
+                        outOfStock.push(displayName);
+                    } else {
+                        insufficientStock.push({
+                            name: displayName,
+                            requested: item.quantity,
+                            available: variant.quantity
+                        });
+                    }
+                }
+            } else {
+                // Check product stock (no variant)
+                const result = await DB.prepare('SELECT quantity, name FROM products WHERE slug = ?')
+                    .bind(item.slug)
+                    .first();
+
+                if (!result) {
                     outOfStock.push(item.name);
-                } else {
-                    insufficientStock.push({
-                        name: item.name,
-                        requested: item.quantity,
-                        available: result.quantity
-                    });
+                } else if (result.quantity < item.quantity) {
+                    if (result.quantity === 0) {
+                        outOfStock.push(item.name);
+                    } else {
+                        insufficientStock.push({
+                            name: item.name,
+                            requested: item.quantity,
+                            available: result.quantity
+                        });
+                    }
                 }
             }
         }
-        
+
         if (outOfStock.length > 0) {
-            return new Response(JSON.stringify({ 
+            return new Response(JSON.stringify({
                 error: 'out_of_stock',
                 message: `Sorry, these items are out of stock: ${outOfStock.join(', ')}`,
                 items: outOfStock
@@ -98,9 +143,9 @@ export async function onRequestPost(context) {
                 headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
             });
         }
-        
+
         if (insufficientStock.length > 0) {
-            return new Response(JSON.stringify({ 
+            return new Response(JSON.stringify({
                 error: 'insufficient_stock',
                 message: `Not enough stock available`,
                 items: insufficientStock
@@ -110,23 +155,51 @@ export async function onRequestPost(context) {
             });
         }
 
-        // === CALCULATE TOTALS ===
-        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        // === CALCULATE TOTALS (with tier pricing) ===
+        let subtotal = 0;
+        const lineItems = [];
+
+        for (const item of cart) {
+            let unitPrice = item.price;
+            const tiers = tiersMap[item.id];
+
+            // Apply tier pricing if applicable
+            if (tiers && tiers.length > 0) {
+                const totalQtyForProduct = qtyByProduct[item.id] || item.quantity;
+                let bestTier = null;
+                for (const tier of tiers) {
+                    if (totalQtyForProduct >= tier.minQty) {
+                        if (!bestTier || tier.minQty > bestTier.minQty) {
+                            bestTier = tier;
+                        }
+                    }
+                }
+                if (bestTier) {
+                    unitPrice = bestTier.pricePerUnit;
+                }
+            }
+
+            subtotal += unitPrice * item.quantity;
+
+            const displayName = item.variantName
+                ? `${item.name} — ${item.variantName}`
+                : item.name;
+
+            lineItems.push({
+                price_data: {
+                    currency: 'aed',
+                    product_data: {
+                        name: displayName,
+                        description: item.description || undefined,
+                    },
+                    unit_amount: Math.round(unitPrice * 100),
+                },
+                quantity: item.quantity,
+            });
+        }
+
         const zone = deliveryZones[deliveryZoneKey] || deliveryZones.dubai;
         const deliveryFee = subtotal >= zone.freeThreshold ? 0 : zone.fee;
-
-        // === BUILD LINE ITEMS ===
-        const lineItems = cart.map(item => ({
-            price_data: {
-                currency: 'aed',
-                product_data: {
-                    name: item.name,
-                    description: item.description || undefined,
-                },
-                unit_amount: Math.round(item.price * 100),
-            },
-            quantity: item.quantity,
-        }));
 
         if (deliveryFee > 0) {
             lineItems.push({
@@ -147,21 +220,19 @@ export async function onRequestPost(context) {
 
         // === CREATE STRIPE SESSION ===
         let stripeCustomerId = null;
-        
-        // If logged in with address, create/update Stripe customer for pre-fill
+
         if (customerEmail && customerAddress) {
-            // Search for existing Stripe customer by email
             const searchRes = await fetch(`https://api.stripe.com/v1/customers/search?query=email:'${encodeURIComponent(customerEmail)}'`, {
                 headers: { 'Authorization': `Bearer ${STRIPE_SECRET_KEY}` }
             });
             const searchData = await searchRes.json();
-            
+
             const line1 = `${customerAddress.building}, ${customerAddress.street}`;
             const line2Parts = [];
             if (customerAddress.area) line2Parts.push(customerAddress.area);
             if (customerAddress.landmark) line2Parts.push(`Near ${customerAddress.landmark}`);
             const line2 = line2Parts.join(', ') || undefined;
-            
+
             const customerParams = new URLSearchParams();
             customerParams.append('email', customerEmail);
             customerParams.append('name', customerAddress.full_name);
@@ -173,9 +244,8 @@ export async function onRequestPost(context) {
             customerParams.append('shipping[address][city]', customerAddress.emirate || 'Dubai');
             customerParams.append('shipping[address][state]', customerAddress.emirate || 'Dubai');
             customerParams.append('shipping[address][country]', 'AE');
-            
+
             if (searchData.data && searchData.data.length > 0) {
-                // Update existing customer
                 stripeCustomerId = searchData.data[0].id;
                 await fetch(`https://api.stripe.com/v1/customers/${stripeCustomerId}`, {
                     method: 'POST',
@@ -186,7 +256,6 @@ export async function onRequestPost(context) {
                     body: customerParams.toString()
                 });
             } else {
-                // Create new customer
                 const createRes = await fetch('https://api.stripe.com/v1/customers', {
                     method: 'POST',
                     headers: {
@@ -212,9 +281,9 @@ export async function onRequestPost(context) {
         const session = await stripeResponse.json();
 
         if (session.error) {
-            return new Response(JSON.stringify({ 
+            return new Response(JSON.stringify({
                 error: 'Payment session creation failed',
-                message: session.error.message 
+                message: session.error.message
             }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
@@ -228,9 +297,9 @@ export async function onRequestPost(context) {
 
     } catch (error) {
         console.error('Checkout Error:', error);
-        return new Response(JSON.stringify({ 
+        return new Response(JSON.stringify({
             error: 'Payment processing failed',
-            message: error.message 
+            message: error.message
         }), {
             status: 500,
             headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
@@ -251,7 +320,7 @@ export async function onRequestOptions() {
 
 function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, customerEmail, stripeCustomerId) {
     const params = new URLSearchParams();
-    
+
     params.append('mode', 'payment');
     params.append('success_url', `${siteUrl}/success.html?session_id={CHECKOUT_SESSION_ID}`);
     params.append('cancel_url', `${siteUrl}/cancel.html`);
@@ -264,7 +333,7 @@ function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, 
     params.append('metadata[delivery_zone]', zone.name);
     params.append('metadata[order_subtotal]', subtotal.toFixed(2));
     params.append('metadata[delivery_fee]', deliveryFee.toFixed(2));
-    
+
     // Pre-fill customer info
     if (stripeCustomerId) {
         params.append('customer', stripeCustomerId);
@@ -272,11 +341,12 @@ function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, 
     } else if (customerEmail) {
         params.append('customer_email', customerEmail);
     }
-    
-    // Store cart data for webhook to deduct inventory
+
+    // Store cart data for webhook to deduct inventory (includes variantId)
     params.append('metadata[cart_items]', JSON.stringify(cart.map(item => ({
         slug: item.slug,
-        quantity: item.quantity
+        quantity: item.quantity,
+        variantId: item.variantId || null
     }))));
 
     lineItems.forEach((item, index) => {
