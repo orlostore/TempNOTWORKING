@@ -412,7 +412,7 @@ function searchProducts() {
     }
     if (heroSection) heroSection.classList.add("hidden");
     const scoped = selectedCategory === "All Products" ? products : products.filter(p => p.category === selectedCategory);
-    const results = scoped.filter(p => p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term) || p.category.toLowerCase().includes(term));
+    const results = scoped.filter(p => p.name.toLowerCase().includes(term) || (p.nameAr && p.nameAr.includes(term)) || p.description.toLowerCase().includes(term) || (p.descriptionAr && p.descriptionAr.toLowerCase().includes(term)) || p.category.toLowerCase().includes(term) || (p.categoryAr && p.categoryAr.includes(term)));
     renderProducts(applyFiltersAndSort(results));
 }
 
@@ -430,7 +430,9 @@ function showAutocomplete(term) {
     }
     const matches = products.filter(p =>
         p.name.toLowerCase().includes(term) ||
-        p.category.toLowerCase().includes(term)
+        (p.nameAr && p.nameAr.includes(term)) ||
+        p.category.toLowerCase().includes(term) ||
+        (p.categoryAr && p.categoryAr.includes(term))
     ).slice(0, 6);
     if (!matches.length) {
         dropdown.classList.remove('active');
