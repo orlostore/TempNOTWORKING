@@ -50,6 +50,9 @@
 </header>
 
 <script>
+  /** Clear lastProduct so Home doesn't go to a stale product page */
+  try { localStorage.removeItem('lastProduct'); } catch(e){}
+
   /** ANTI-FLICKER SCRIPT **/
   (function(){
     try {
