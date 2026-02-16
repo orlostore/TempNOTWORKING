@@ -96,7 +96,7 @@ header {
 nav {
   max-width: 1180px;
   margin: auto;
-  padding: 0.25rem 1.34rem;
+  padding: 0.4rem 1.34rem;
   display: flex;
   align-items: center;
   gap: 0;
@@ -154,22 +154,20 @@ nav {
 
 .search-input {
   flex: 1;
-  padding: 0.55rem 1.01rem;
+  padding: 0.67rem 1.01rem;
   border: 2px solid #ddd;
-  border-radius: 24px;
-  border-right: none;
-  font-size: 0.85rem;
+  border-radius: 18.76px 0 0 18.76px;
+  font-size: 0.9rem;
 }
 
 .search-btn {
-  padding: 0.55rem 1.2rem;
-  border-radius: 24px;
+  padding: 0.67rem 1.34rem;
+  border-radius: 0 18.76px 18.76px 0;
   border: none;
   background: var(--accent);
   color: #fff;
   cursor: pointer;
-  font-size: 0.88rem;
-  margin-left: -12px;
+  font-size: 0.94rem;
 }
 
 .nav-links {
@@ -523,12 +521,13 @@ nav {
 .search-autocomplete {
   display: none;
   position: absolute;
-  top: calc(100% + 4px);
+  top: 100%;
   left: 0;
   right: 0;
   background: #fff;
   border: 1px solid #ddd;
-  border-radius: 16px;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
   box-shadow: 0 6px 16px rgba(0,0,0,0.18);
   z-index: 9999;
   max-height: 280px;
