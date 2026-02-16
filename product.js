@@ -855,7 +855,15 @@ function setupBottomNav() {
   const bottomMenuBtn = document.getElementById('bottomMenuBtn');
   const cartSidebar = document.getElementById('cartSidebar');
   
-  if (bottomHomeBtn) bottomHomeBtn.onclick = function() { window.location.href = 'index.html'; };
+  if (bottomHomeBtn) bottomHomeBtn.onclick = function() {
+    if (cartSidebar && cartSidebar.classList.contains('active')) {
+      cartSidebar.classList.remove('active');
+      if (bottomCartBtn) bottomCartBtn.classList.remove('cart-active');
+      document.body.style.overflow = '';
+      return;
+    }
+    window.location.href = 'index.html';
+  };
   if (bottomCartBtn) bottomCartBtn.onclick = toggleCartSidebar;
   if (bottomMenuBtn) {
     bottomMenuBtn.onclick = function() {
