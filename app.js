@@ -423,6 +423,12 @@ function isArabic(text) {
 
 function searchProducts() {
     const term = document.getElementById("searchInput").value.toLowerCase().trim();
+    // If not on index page, redirect to index with search param
+    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname.endsWith('/');
+    if (!isIndex && term) {
+        window.location.href = 'index.html?search=' + encodeURIComponent(term);
+        return;
+    }
     const heroSection = document.querySelector(".hero");
     if (!term) {
         loadProducts(selectedCategory);

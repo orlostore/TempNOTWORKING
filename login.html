@@ -570,6 +570,18 @@
             });
         }
 
+        // Search redirect to index
+        var searchBtn = document.getElementById('searchBtn');
+        var searchInput = document.getElementById('searchInput');
+        function doSearchRedirect() {
+            var term = searchInput ? searchInput.value.trim() : '';
+            if (term) window.location.href = 'index.html?search=' + encodeURIComponent(term);
+        }
+        if (searchBtn) searchBtn.addEventListener('click', doSearchRedirect);
+        if (searchInput) searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); doSearchRedirect(); }
+        });
+
         // Mobile menu for login page bottom nav
         window.toggleLoginMobileMenu = function() {
             var overlay = document.querySelector('.mobile-menu-overlay');
