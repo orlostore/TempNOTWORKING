@@ -829,7 +829,7 @@ function toggleMobileMenu() {
                 </a>
                 <a href="${base}#terms" onclick="closeMobileMenu()">
                     <div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>
-                    <div class="menu-text"><span class="menu-en">Terms</span><span class="menu-ar">الشروط</span></div>
+                    <div class="menu-text"><span class="menu-en">Terms & Conditions</span><span class="menu-ar">الشروط والأحكام</span></div>
                     ${chevron}
                 </a>
             </div>
