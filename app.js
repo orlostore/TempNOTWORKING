@@ -349,8 +349,12 @@ function loadProducts(category = "All Products") {
     updateCategoryButtons();
     const heroSection = document.querySelector(".hero");
     const searchInput = document.getElementById("searchInput");
-    if (heroSection && (!searchInput || !searchInput.value.trim())) {
-        heroSection.classList.remove("hidden");
+    if (heroSection) {
+        if (category === "All Products" && (!searchInput || !searchInput.value.trim())) {
+            heroSection.classList.remove("hidden");
+        } else {
+            heroSection.classList.add("hidden");
+        }
     }
 }
 

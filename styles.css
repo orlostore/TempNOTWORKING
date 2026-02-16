@@ -96,7 +96,7 @@ header {
 nav {
   max-width: 1180px;
   margin: auto;
-  padding: 0.4rem 1.34rem;
+  padding: 0.2rem 1.34rem;
   display: flex;
   align-items: center;
   gap: 0;
@@ -110,8 +110,8 @@ nav {
 }
 
 .logo-img {
-  width: 58px;
-  height: 58px;
+  width: 46px;
+  height: 46px;
 }
 
 .hamburger {
