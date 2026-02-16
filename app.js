@@ -778,7 +778,39 @@ function removeFromCart(id, variantId) {
     saveCart();
     updateCart();
 
-    if (!variantId) {
+    if (variantId) {
+        // Only reset product page button if the removed variant is the currently selected one
+        const currentlySelected = window._selectedVariant;
+        const removedIsSelected = currentlySelected && currentlySelected.id === variantId;
+
+        if (removedIsSelected) {
+            // Reset product page variant buttons back to "Add to Cart"
+            document.querySelectorAll(`[id="transformedBtn-${id}"]`).forEach(el => {
+                const isMobile = el.closest('.mobile-product-page') !== null;
+                const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
+                const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
+                el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | أضف إلى السلة</button>`;
+            });
+            // Re-attach click handlers if on product page
+            if (typeof addToCartHandlerRef === 'function' && typeof transformToQtyButtonVariant === 'function') {
+                const sv = window._selectedVariant;
+                const product = products.find(p => p.id === id);
+                const newDesktopBtn = document.getElementById('addToCartBtn');
+                const newMobileBtn = document.getElementById('mobileAddToCartBtn');
+                if (newDesktopBtn && sv && product) {
+                    newDesktopBtn.onclick = function() {
+                        if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, sv);
+                    };
+                }
+                if (newMobileBtn && sv && product) {
+                    newMobileBtn.onclick = function() {
+                        if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, sv);
+                    };
+                }
+            }
+        }
+        // If a different variant is selected and still in cart, don't touch the button
+    } else {
         // Reset grid button if visible (non-variant products only)
         const gridQty = document.getElementById(`gridQty-${id}`);
         if (gridQty) {
