@@ -1105,6 +1105,14 @@ window.onload = () => {
             });
         });
     }
+
+    // Hide hero when "Shop" nav link or "Shop Best Sellers" CTA is clicked
+    document.querySelectorAll('a[href="#products"]').forEach(link => {
+        link.addEventListener('click', function() {
+            const heroSection = document.querySelector('.hero');
+            if (heroSection) heroSection.classList.add('hidden');
+        });
+    });
     
     var searchBtn = document.getElementById("searchBtn");
     var searchInput = document.getElementById("searchInput");
