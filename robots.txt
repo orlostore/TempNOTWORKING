@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /account.html
+Disallow: /success.html
+Disallow: /cancel.html
+Disallow: /verify-email.html
+Disallow: /forgot-password.html
+Disallow: /category-mockups.html
+Disallow: /mockup-variant-selector.html
+
+Sitemap: https://www.orlostore.com/sitemap.xml
