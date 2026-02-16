@@ -102,6 +102,7 @@ function transformToQtyButton(btn, product) {
       <button class="grid-qty-btn" onclick="productQtyChange(${product.id}, 1)">+</button>
     </div>
   `;
+  updateTierHighlight(product.id);
 }
 
 // Handle quantity change from transformed button
@@ -153,7 +154,8 @@ function productQtyChange(productId, change) {
   if (mobileCartCount) mobileCartCount.textContent = totalItems;
   
   if (typeof updateCart === 'function') updateCart();
-  
+  updateTierHighlight(productId);
+
   // Pulse badge on quantity increase
   if (change > 0 && typeof pulseBadge === 'function') pulseBadge();
 }
@@ -931,14 +933,24 @@ function renderPricingTiers(containerId, product) {
   const tiers = product.pricingTiers;
   const basePrice = product.price;
 
+  // Get current total qty in cart for this product (all variants combined)
+  const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const totalQty = localCart.filter(i => i.id === product.id).reduce((s, i) => s + i.quantity, 0);
+
+  // Find the active tier based on cart qty
+  let activeTierIndex = 0;
+  for (let i = tiers.length - 1; i >= 0; i--) {
+    if (totalQty >= tiers[i].minQty) { activeTierIndex = i; break; }
+  }
+
   let tiersHTML = tiers.map((t, i) => {
-    const isFirst = i === 0;
+    const isActive = i === activeTierIndex;
     const isLast = i === tiers.length - 1;
     const savePercent = basePrice > 0 ? Math.round((1 - t.pricePerUnit / basePrice) * 100) : 0;
     const qtyLabel = t.minQty === 1 ? '1 pc' : `${t.minQty}+ pcs`;
 
     return `
-      <div class="tier-item ${isFirst ? 'active' : ''} ${isLast && tiers.length > 1 ? 'best-deal' : ''}">
+      <div class="tier-item ${isActive ? 'active' : ''} ${isLast && tiers.length > 1 ? 'best-deal' : ''}" data-min-qty="${t.minQty}">
         <div class="tier-qty">${qtyLabel}</div>
         <div class="tier-price">AED ${t.pricePerUnit}</div>
         <div class="tier-each">each</div>
@@ -948,11 +960,29 @@ function renderPricingTiers(containerId, product) {
   }).join('');
 
   container.innerHTML = `
-    <div class="pricing-tiers" style="margin-bottom:1rem; ${containerId.includes('Mobile') ? 'padding: 0 16px;' : ''}">
+    <div class="pricing-tiers" data-product-id="${product.id}" style="margin-bottom:1rem; ${containerId.includes('Mobile') ? 'padding: 0 16px;' : ''}">
       <div class="pricing-tiers-label">Quantity Pricing | <span class="arabic-text">تسعير الكمية</span></div>
       <div class="tier-table">${tiersHTML}</div>
     </div>
   `;
+}
+
+// Update tier highlight based on current cart quantity
+function updateTierHighlight(productId) {
+  const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const totalQty = localCart.filter(i => i.id === productId).reduce((s, i) => s + i.quantity, 0);
+
+  document.querySelectorAll(`.pricing-tiers[data-product-id="${productId}"]`).forEach(container => {
+    const tierItems = container.querySelectorAll('.tier-item');
+    let activeTierIndex = 0;
+    tierItems.forEach((item, i) => {
+      const minQty = parseInt(item.dataset.minQty) || 1;
+      if (totalQty >= minQty) activeTierIndex = i;
+    });
+    tierItems.forEach((item, i) => {
+      item.classList.toggle('active', i === activeTierIndex);
+    });
+  });
 }
 
 // === EXTRA SPECS HELPER (Desktop) ===
@@ -1122,6 +1152,7 @@ function transformToQtyButtonVariant(btn, product, variant) {
       <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
     </div>
   `;
+  updateTierHighlight(product.id);
 }
 
 // Handle quantity change for variant items on product page
@@ -1185,6 +1216,7 @@ function productVariantQtyChange(productId, variantId, change) {
   if (mobileCartCount) mobileCartCount.textContent = totalItems;
 
   if (typeof updateCart === 'function') updateCart();
+  updateTierHighlight(productId);
   if (change > 0 && typeof pulseBadge === 'function') pulseBadge();
 }
 
