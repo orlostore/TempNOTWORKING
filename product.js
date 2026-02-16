@@ -1165,8 +1165,10 @@ function productVariantQtyChange(productId, variantId, change) {
   } else {
     item.quantity = newQty;
     localStorage.setItem("cart", JSON.stringify(localCart));
-    const qtyDisplay = document.getElementById(`qtyDisplay-${productId}-${variantId}`);
-    if (qtyDisplay) qtyDisplay.textContent = newQty;
+    // Update ALL matching qty displays (desktop + mobile have same ID)
+    document.querySelectorAll(`[id="qtyDisplay-${productId}-${variantId}"]`).forEach(el => {
+      el.textContent = newQty;
+    });
   }
 
   if (typeof cart !== 'undefined') {
