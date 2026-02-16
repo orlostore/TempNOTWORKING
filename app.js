@@ -271,36 +271,39 @@ function getCategoryArabic(category) {
     return product && product.categoryAr ? product.categoryAr : '';
 }
 
-function renderProducts(list) {
+function renderProducts(list, arabicMode) {
     const grid = document.getElementById("productsGrid");
     if (!grid) return;
     if (!list.length) {
-        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">No products found</p>`;
+        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">${arabicMode ? 'لم يتم العثور على منتجات' : 'No products found'}</p>`;
         return;
     }
-    
+
     // Get current cart state
     const localCart = JSON.parse(localStorage.getItem("cart")) || [];
-    
+
     grid.innerHTML = list.map(p => {
         const isUrl = p.image && p.image.startsWith('http');
-        const imageHTML = isUrl 
-            ? `<img src="${p.image}" alt="${p.name}" style="max-width:100%; max-height:100%; object-fit:contain;">` 
+        const imageHTML = isUrl
+            ? `<img src="${p.image}" alt="${p.name}" style="max-width:100%; max-height:100%; object-fit:contain;">`
             : p.image;
-        
+
         // Check if out of stock (use totalStock for variant products)
         const outOfStock = (p.totalStock !== undefined ? p.totalStock : p.quantity) === 0;
         const cartItem = localCart.find(i => i.id === p.id);
         const inCart = cartItem && cartItem.quantity > 0;
-        
+
         const hasVariants = p.variants && p.variants.length > 0;
         let buttonHTML;
         if (outOfStock) {
-            buttonHTML = `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | <span class="arabic-text">نفذ المخزون</span></button>`;
+            buttonHTML = arabicMode
+                ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;"><span class="arabic-text">نفذ المخزون</span> | Out of Stock</button>`
+                : `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | <span class="arabic-text">نفذ المخزون</span></button>`;
         } else if (hasVariants) {
-            buttonHTML = `<a href="product.html?product=${p.slug}" class="view-options-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg> View Options | <span class="arabic-text">عرض الخيارات</span></a>`;
+            buttonHTML = arabicMode
+                ? `<a href="product.html?product=${p.slug}" class="view-options-btn" style="direction:rtl;"><span class="arabic-text">عرض الخيارات</span> | View Options <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></a>`
+                : `<a href="product.html?product=${p.slug}" class="view-options-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg> View Options | <span class="arabic-text">عرض الخيارات</span></a>`;
         } else if (inCart) {
-            // Show qty stepper
             buttonHTML = `
                 <div class="grid-qty-control" id="gridQty-${p.id}">
                     <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, -1, event)">−</button>
@@ -309,26 +312,34 @@ function renderProducts(list) {
                 </div>
             `;
         } else {
-            buttonHTML = `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+            buttonHTML = arabicMode
+                ? `<button class="add-to-cart" onclick="addToCart(${p.id}, event)"><span class="arabic-text">أضف إلى السلة</span> | Add to Cart</button>`
+                : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
         }
-        
+
+        // Arabic mode: show Arabic name first, English secondary
+        const titleHTML = arabicMode
+            ? `<p class="product-title-ar" style="font-size:0.95rem;">${p.nameAr || p.name}</p>
+               <h3 class="product-title" style="font-size:0.75rem;color:#888;">${p.name}</h3>`
+            : `<h3 class="product-title">${p.name}</h3>
+               ${p.nameAr ? `<p class="product-title-ar">${p.nameAr}</p>` : ''}`;
+
         return `
-        <div class="product-card ${outOfStock ? 'out-of-stock' : ''}">
-            ${p.featured ? `<span class="badge">Best Seller</span>` : ""}
-            ${outOfStock ? `<span class="badge out-of-stock-badge">Out of Stock</span>` : ""}
+        <div class="product-card ${outOfStock ? 'out-of-stock' : ''}" ${arabicMode ? 'dir="rtl"' : ''}>
+            ${p.featured ? `<span class="badge">${arabicMode ? 'الأكثر مبيعاً' : 'Best Seller'}</span>` : ""}
+            ${outOfStock ? `<span class="badge out-of-stock-badge">${arabicMode ? 'نفذ المخزون' : 'Out of Stock'}</span>` : ""}
             <a href="product.html?product=${p.slug}" style="text-decoration:none;">
                 <div class="product-image">${imageHTML}</div>
             </a>
             <div class="product-info">
                 <a href="product.html?product=${p.slug}" style="text-decoration:none; color:inherit;">
-                    <h3 class="product-title">${p.name}</h3>
-                    ${p.nameAr ? `<p class="product-title-ar">${p.nameAr}</p>` : ''}
+                    ${titleHTML}
                 </a>
-                <div class="product-price">AED ${p.price}</div>
+                <div class="product-price">${p.price} ${arabicMode ? 'د.إ' : 'AED'}</div>
                 ${buttonHTML}
             </div>
         </div>
-    `}).join(""); 
+    `}).join("");
 }
 
 function loadProducts(category = "All Products") {
@@ -402,6 +413,10 @@ function applyFiltersAndSort(list) {
     return filtered;
 }
 
+function isArabic(text) {
+    return /[\u0600-\u06FF]/.test(text);
+}
+
 function searchProducts() {
     const term = document.getElementById("searchInput").value.toLowerCase().trim();
     const heroSection = document.querySelector(".hero");
@@ -413,7 +428,7 @@ function searchProducts() {
     if (heroSection) heroSection.classList.add("hidden");
     const scoped = selectedCategory === "All Products" ? products : products.filter(p => p.category === selectedCategory);
     const results = scoped.filter(p => p.name.toLowerCase().includes(term) || (p.nameAr && p.nameAr.includes(term)) || p.description.toLowerCase().includes(term) || (p.descriptionAr && p.descriptionAr.toLowerCase().includes(term)) || p.category.toLowerCase().includes(term) || (p.categoryAr && p.categoryAr.includes(term)));
-    renderProducts(applyFiltersAndSort(results));
+    renderProducts(applyFiltersAndSort(results), isArabic(term));
 }
 
 // === AUTOCOMPLETE ===
@@ -440,14 +455,16 @@ function showAutocomplete(term) {
         autocompleteIndex = -1;
         return;
     }
+    const arMode = isArabic(term);
     dropdown.innerHTML = matches.map((p, i) => {
         const imgSrc = p.image && p.image.startsWith('http') ? p.image : '';
         const imgHTML = imgSrc ? `<img src="${imgSrc}" alt="">` : '';
-        return `<div class="autocomplete-item" data-index="${i}" data-slug="${p.slug}" data-name="${p.name}">
+        const displayName = arMode ? (p.nameAr || p.name) : p.name;
+        return `<div class="autocomplete-item" data-index="${i}" data-slug="${p.slug}" data-name="${displayName}" ${arMode ? 'dir="rtl"' : ''}>
             ${imgHTML}
             <div class="autocomplete-item-info">
-                <div class="autocomplete-item-name">${p.name}</div>
-                <div class="autocomplete-item-price">AED ${p.price}</div>
+                <div class="autocomplete-item-name">${arMode ? `<span class="arabic-text">${p.nameAr || p.name}</span>` : p.name}</div>
+                <div class="autocomplete-item-price">${arMode ? `${p.price} د.إ` : `AED ${p.price}`}</div>
             </div>
         </div>`;
     }).join('');
