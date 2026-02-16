@@ -2083,6 +2083,7 @@ footer p {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .mobile-menu .menu-en {
@@ -2096,6 +2097,7 @@ footer p {
   font-size: 0.82rem;
   color: #999;
   direction: rtl;
+  text-align: right;
 }
 
 .mobile-menu .menu-chevron {
