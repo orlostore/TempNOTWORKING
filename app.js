@@ -946,6 +946,7 @@ window.onload = () => {
         const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
         const isProductPage = window.location.pathname.includes('product.html');
 
+        // Remember which product the user was viewing
         if (isProductPage) {
             sessionStorage.setItem('lastProduct', window.location.href);
         }
@@ -961,22 +962,21 @@ window.onload = () => {
                 savedUpsellProducts = null;
                 return;
             }
+            // Index page: scroll to top
+            if (isIndexPage) {
+                closeMobileMenu();
+                bottomHomeBtn.classList.add("home-active");
+                window.scrollTo({top: 0, behavior: 'smooth'});
+                return;
+            }
             // Product page: go to index
             if (isProductPage) {
-                sessionStorage.removeItem('lastProduct');
                 window.location.href = 'index.html';
                 return;
             }
-            // Account/other pages: back to product if came from one, else index
-            if (!isIndexPage) {
-                var lastProduct = sessionStorage.getItem('lastProduct');
-                window.location.href = lastProduct || 'index.html';
-                return;
-            }
-            // Index page
-            closeMobileMenu();
-            bottomHomeBtn.classList.add("home-active");
-            window.scrollTo({top: 0, behavior: 'smooth'});
+            // Any other page (account etc): go back to last product, or index
+            var lastProduct = sessionStorage.getItem('lastProduct');
+            window.location.href = lastProduct || 'index.html';
         };
     }
     
