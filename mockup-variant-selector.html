@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOCKUP - Product Page with Variants</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2c4a5c;
+      --accent: #e07856;
+      --text: #333;
+      --bg: #f8f9fa;
+      --white: #ffffff;
+    }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .arabic-text {
+      font-family: 'Almarai', sans-serif;
+      direction: rtl;
+      display: block;
+    }
+
+    /* === MOCKUP NOTICE === */
+    .mockup-banner {
+      background: linear-gradient(135deg, #e07856, #c96644);
+      color: white;
+      text-align: center;
+      padding: 12px 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .mockup-banner small {
+      display: block;
+      font-weight: 400;
+      opacity: 0.9;
+      font-size: 0.78rem;
+      margin-top: 4px;
+    }
+
+    /* === PRODUCT PAGE LAYOUT === */
+    .product-page {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    /* Gallery */
+    .product-gallery {
+      position: sticky;
+      top: 20px;
+    }
+    .main-image-container {
+      background: #f5f5f5;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .main-image-container img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: opacity 0.3s;
+    }
+    .thumbnail-strip {
+      display: flex;
+      gap: 8px;
+    }
+    .thumbnail {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      object-fit: contain;
+      border: 2px solid transparent;
+      cursor: pointer;
+      background: #f5f5f5;
+      padding: 4px;
+      transition: all 0.2s;
+    }
+    .thumbnail.active {
+      border-color: var(--primary);
+    }
+
+    /* Details */
+    .product-details {
+      display: flex;
+      flex-direction: column;
+    }
+    .product-details h1 {
+      font-size: 1.35rem;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+    }
+    .product-title-ar {
+      font-size: 1rem;
+      color: #999;
+      font-family: 'Almarai', sans-serif;
+      direction: rtl;
+      margin-bottom: 0.5rem;
+    }
+    .product-category {
+      color: #888;
+      font-size: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    /* === VARIANT SELECTOR === */
+    .variant-section {
+      margin-bottom: 1.2rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    .variant-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .variant-label .selected-name {
+      font-weight: 400;
+      color: var(--accent);
+      font-size: 0.78rem;
+    }
+    .variant-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 8px;
+    }
+    .variant-tile {
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      background: white;
+      position: relative;
+    }
+    .variant-tile:hover {
+      border-color: #aaa;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .variant-tile.selected {
+      border-color: var(--primary);
+      background: #f0f5f8;
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+    .variant-tile.out-of-stock {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .variant-tile.out-of-stock::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      right: 10%;
+      height: 1.5px;
+      background: #999;
+      transform: rotate(-15deg);
+    }
+    .variant-tile img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: contain;
+      border-radius: 6px;
+      background: #f8f8f8;
+    }
+    .variant-tile-name {
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-top: 4px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .variant-tile-stock {
+      font-size: 0.55rem;
+      color: #999;
+      margin-top: 1px;
+    }
+    .variant-tile.low-stock .variant-tile-stock {
+      color: #e07856;
+      font-weight: 600;
+    }
+
+    /* === PRICING TIERS === */
+    .pricing-tiers {
+      margin-bottom: 1rem;
+    }
+    .pricing-tiers-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .tier-table {
+      display: flex;
+      gap: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
+    }
+    .tier-item {
+      flex: 1;
+      text-align: center;
+      padding: 8px 6px;
+      border-right: 1px solid #e0e0e0;
+      transition: all 0.2s;
+    }
+    .tier-item:last-child {
+      border-right: none;
+    }
+    .tier-item.active {
+      background: #f0f5f8;
+      box-shadow: inset 0 -3px 0 var(--primary);
+    }
+    .tier-item.best-deal {
+      background: #fff8f5;
+    }
+    .tier-qty {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .tier-price {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .tier-each {
+      font-size: 0.6rem;
+      color: #888;
+    }
+    .tier-save {
+      font-size: 0.55rem;
+      color: #28a745;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* === PRICE + BUY BOX === */
+    .product-buybox {
+      margin-bottom: 1.2rem;
+    }
+    .price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    .price .original-price {
+      text-decoration: line-through;
+      color: #999;
+      font-size: 0.85rem;
+      font-weight: 400;
+      margin-left: 8px;
+    }
+    .price .tier-badge {
+      font-size: 0.65rem;
+      background: #28a745;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 8px;
+      font-weight: 600;
+    }
+
+    .add-to-cart-btn {
+      height: 42px;
+      padding: 0 1.5rem;
+      background: #1a3a52;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 0.3px;
+    }
+    .add-to-cart-btn:hover {
+      background: #15303f;
+      transform: translateY(-1px);
+    }
+    .add-to-cart-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .delivery-info {
+      display: flex;
+      gap: 12px;
+      padding-bottom: 1.2rem;
+      margin-bottom: 1.2rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    .delivery-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: #f8fafb;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      color: #333;
+    }
+
+    /* === SPECS SECTION (existing + new fields) === */
+    .product-desc-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+      padding-left: 14px;
+      border-left: 3px solid #e76f51;
+    }
+    .product-desc-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    .product-desc-value {
+      font-size: 0.75rem;
+      color: #555;
+      line-height: 1.6;
+    }
+    .product-desc-ar {
+      text-align: right;
+      direction: rtl;
+      font-family: 'Almarai', sans-serif;
+    }
+    .product-desc-ar .product-desc-value {
+      color: #666;
+    }
+
+    /* === MOBILE VERSION === */
+    @media (max-width: 768px) {
+      .product-page {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      .product-gallery {
+        position: static;
+      }
+      .variant-grid {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      }
+      .tier-table {
+        flex-wrap: wrap;
+      }
+      .tier-item {
+        min-width: 33%;
+      }
+    }
+
+    /* === CART SIDEBAR MOCKUP === */
+    .cart-mockup {
+      max-width: 380px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .cart-mockup h3 {
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .cart-item-mockup {
+      display: flex;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      align-items: center;
+    }
+    .cart-item-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 6px;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .cart-item-variant {
+      font-size: 0.7rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .cart-item-price {
+      font-size: 0.75rem;
+      color: #888;
+    }
+    .cart-item-total {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .cart-summary {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 2px solid #f0f0f0;
+    }
+    .cart-summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      padding: 4px 0;
+    }
+    .cart-summary-row.total {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--primary);
+      border-top: 1px solid #eee;
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+    .cart-tier-savings {
+      background: #f0fff4;
+      border: 1px solid #c6f6d5;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-top: 8px;
+      font-size: 0.72rem;
+      color: #28a745;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    /* Section Dividers */
+    .section-divider {
+      text-align: center;
+      margin: 40px 0 20px;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .section-divider small {
+      display: block;
+      font-weight: 400;
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* Admin mockup */
+    .admin-mockup {
+      max-width: 700px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .admin-mockup h3 {
+      color: var(--primary);
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+    }
+    .admin-variant-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 80px 40px;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .admin-variant-row input {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-family: 'Inter', sans-serif;
+    }
+    .admin-variant-row input:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+    .admin-variant-header {
+      font-size: 0.7rem;
+      color: #888;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .admin-btn-add {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .admin-btn-del {
+      background: none;
+      border: 1px solid #ddd;
+      color: #dc3545;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .admin-tier-row {
+      display: grid;
+      grid-template-columns: 120px 120px 40px;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .admin-tier-row input {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<div class="mockup-banner">
+  MOCKUP - Product Page with Variant Selector + Tier Pricing
+  <small>This is a visual preview. Nothing is functional. For your approval before implementation.</small>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 1: PRODUCT PAGE WITH VARIANTS        -->
+<!-- ============================================ -->
+
+<div class="product-page">
+  <!-- LEFT: Gallery -->
+  <div class="product-gallery">
+    <div class="main-image-container">
+      <img id="mainImg" src="https://placehold.co/500x500/f5f5f5/888?text=Cat+Design" alt="Fridge Magnet">
+    </div>
+    <div class="thumbnail-strip">
+      <img class="thumbnail active" src="https://placehold.co/80x80/f5f5f5/888?text=Cat" onclick="selectVariant(this, 'Cat Design', 'Cat+Design')">
+      <img class="thumbnail" src="https://placehold.co/80x80/f5f5f5/888?text=Dog" onclick="selectVariant(this, 'Dog Design', 'Dog+Design')">
+      <img class="thumbnail" src="https://placehold.co/80x80/f5f5f5/888?text=Flower" onclick="selectVariant(this, 'Flower Design', 'Flower+Design')">
+    </div>
+  </div>
+
+  <!-- RIGHT: Details -->
+  <div class="product-details">
+    <h1>Fridge Magnet</h1>
+    <p class="product-title-ar">مغناطيس ثلاجة</p>
+    <div class="product-category">Home Accessories</div>
+
+    <!-- === VARIANT SELECTOR (NEW) === -->
+    <div class="variant-section">
+      <div class="variant-label">
+        <span>Choose Design | اختر التصميم</span>
+        <span class="selected-name" id="selectedVariantName">Cat Design</span>
+      </div>
+      <div class="variant-grid">
+        <div class="variant-tile selected" onclick="selectTile(this, 'Cat Design', 'Cat+Design')">
+          <img src="https://placehold.co/100x100/f5f5f5/555?text=Cat">
+          <div class="variant-tile-name">Cat</div>
+          <div class="variant-tile-stock">5 left</div>
+        </div>
+        <div class="variant-tile" onclick="selectTile(this, 'Dog Design', 'Dog+Design')">
+          <img src="https://placehold.co/100x100/f5f5f5/555?text=Dog">
+          <div class="variant-tile-name">Dog</div>
+          <div class="variant-tile-stock">8 left</div>
+        </div>
+        <div class="variant-tile" onclick="selectTile(this, 'Flower Design', 'Flower+Design')">
+          <img src="https://placehold.co/100x100/f5f5f5/555?text=Flower">
+          <div class="variant-tile-name">Flower</div>
+          <div class="variant-tile-stock">12 left</div>
+        </div>
+        <div class="variant-tile" onclick="selectTile(this, 'Star Design', 'Star+Design')">
+          <img src="https://placehold.co/100x100/f5f5f5/555?text=Star">
+          <div class="variant-tile-name">Star</div>
+          <div class="variant-tile-stock">3 left</div>
+        </div>
+        <div class="variant-tile low-stock" onclick="selectTile(this, 'Moon Design', 'Moon+Design')">
+          <img src="https://placehold.co/100x100/f5f5f5/555?text=Moon">
+          <div class="variant-tile-name">Moon</div>
+          <div class="variant-tile-stock">1 left!</div>
+        </div>
+        <div class="variant-tile out-of-stock">
+          <img src="https://placehold.co/100x100/f5f5f5/ccc?text=Heart">
+          <div class="variant-tile-name">Heart</div>
+          <div class="variant-tile-stock">Sold out</div>
+        </div>
+        <div class="variant-tile" onclick="selectTile(this, 'Car Design', 'Car+Design')">
+          <img src="https://placehold.co/100x100/f5f5f5/555?text=Car">
+          <div class="variant-tile-name">Car</div>
+          <div class="variant-tile-stock">6 left</div>
+        </div>
+        <div class="variant-tile" onclick="selectTile(this, 'Plane Design', 'Plane+Design')">
+          <img src="https://placehold.co/100x100/f5f5f5/555?text=Plane">
+          <div class="variant-tile-name">Plane</div>
+          <div class="variant-tile-stock">4 left</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === PRICING TIERS (NEW) === -->
+    <div class="pricing-tiers">
+      <div class="pricing-tiers-label">Quantity Pricing | تسعير الكمية</div>
+      <div class="tier-table">
+        <div class="tier-item active">
+          <div class="tier-qty">1 pc</div>
+          <div class="tier-price">AED 15</div>
+          <div class="tier-each">each</div>
+        </div>
+        <div class="tier-item">
+          <div class="tier-qty">3+ pcs</div>
+          <div class="tier-price">AED 12</div>
+          <div class="tier-each">each</div>
+          <div class="tier-save">Save 20%</div>
+        </div>
+        <div class="tier-item best-deal">
+          <div class="tier-qty">5+ pcs</div>
+          <div class="tier-price">AED 10</div>
+          <div class="tier-each">each</div>
+          <div class="tier-save">Save 33%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === BUYBOX === -->
+    <div class="product-buybox">
+      <div class="price">
+        AED 15
+      </div>
+      <button class="add-to-cart-btn">Add to Cart | اضف الى السلة</button>
+    </div>
+
+    <div class="delivery-info">
+      <div class="delivery-item">
+        <span>🚚</span>
+        <span>Free delivery over AED 75 | توصيل مجاني فوق ٧٥ درهم</span>
+      </div>
+    </div>
+
+    <!-- === PRODUCT SPECS (existing + new fields like wattage) === -->
+    <div class="product-desc-block">
+      <div class="product-desc-en">
+        <div class="product-desc-label">Description</div>
+        <div class="product-desc-value">High-quality decorative fridge magnets with unique designs. Perfect for home or office.</div>
+      </div>
+      <div class="product-desc-ar">
+        <div class="product-desc-label">معلومات المنتج</div>
+        <div class="product-desc-value">مغناطيسات ثلاجة ديكورية عالية الجودة بتصاميم فريدة.</div>
+      </div>
+    </div>
+
+    <div class="product-desc-block">
+      <div class="product-desc-en">
+        <div class="product-desc-label">Specifications</div>
+        <div class="product-desc-value">Size: 5cm x 5cm<br>Material: Ceramic + Magnet</div>
+      </div>
+      <div class="product-desc-ar">
+        <div class="product-desc-label">المواصفات</div>
+        <div class="product-desc-value">الحجم: ٥ سم × ٥ سم<br>المادة: سيراميك + مغناطيس</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- SECTION 2: HOW IT LOOKS IN CART              -->
+<!-- ============================================ -->
+
+<div class="section-divider">
+  Cart Preview (3 magnets = tier discount)
+  <small>This is how the cart sidebar would look when 3 different designs are added</small>
+</div>
+
+<div class="cart-mockup">
+  <h3>Your Cart / سلة التسوق</h3>
+
+  <div class="cart-item-mockup">
+    <div class="cart-item-img">🐱</div>
+    <div class="cart-item-info">
+      <div class="cart-item-name">Fridge Magnet</div>
+      <div class="cart-item-variant">Cat Design</div>
+      <div class="cart-item-price">AED 12 x 1</div>
+    </div>
+    <div class="cart-item-total">AED 12</div>
+  </div>
+
+  <div class="cart-item-mockup">
+    <div class="cart-item-img">🐶</div>
+    <div class="cart-item-info">
+      <div class="cart-item-name">Fridge Magnet</div>
+      <div class="cart-item-variant">Dog Design</div>
+      <div class="cart-item-price">AED 12 x 1</div>
+    </div>
+    <div class="cart-item-total">AED 12</div>
+  </div>
+
+  <div class="cart-item-mockup">
+    <div class="cart-item-img">🌸</div>
+    <div class="cart-item-info">
+      <div class="cart-item-name">Fridge Magnet</div>
+      <div class="cart-item-variant">Flower Design</div>
+      <div class="cart-item-price">AED 12 x 1</div>
+    </div>
+    <div class="cart-item-total">AED 12</div>
+  </div>
+
+  <div class="cart-tier-savings">
+    You're getting the 3+ quantity price — saving AED 9!<br>
+    <span style="font-family: 'Almarai', sans-serif; font-size: 0.68rem;">حصلت على سعر الكمية ٣+ — وفرت ٩ درهم</span>
+  </div>
+
+  <div class="cart-summary">
+    <div class="cart-summary-row">
+      <span>Subtotal (3 items)</span>
+      <span>AED 36.00</span>
+    </div>
+    <div class="cart-summary-row">
+      <span>Delivery</span>
+      <span>AED 18.00</span>
+    </div>
+    <div class="cart-summary-row total">
+      <span>Total</span>
+      <span>AED 54.00</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- SECTION 3: LED LIGHT PRODUCT (extra fields)  -->
+<!-- ============================================ -->
+
+<div class="section-divider">
+  Example: LED Light Product (with extra spec fields)
+  <small>Shows how wattage, voltage, plug type, base type display when filled in</small>
+</div>
+
+<div class="product-page" style="max-width: 600px;">
+  <div style="grid-column: 1 / -1;">
+    <h1 style="font-size: 1.2rem; color: var(--primary); margin-bottom: 1rem;">LED Smart Bulb</h1>
+
+    <div class="product-desc-block">
+      <div class="product-desc-en">
+        <div class="product-desc-label">Description</div>
+        <div class="product-desc-value">Smart LED bulb with WiFi control and color changing.</div>
+      </div>
+      <div class="product-desc-ar">
+        <div class="product-desc-label">معلومات المنتج</div>
+        <div class="product-desc-value">مصباح LED ذكي مع التحكم عبر WiFi وتغيير الألوان.</div>
+      </div>
+    </div>
+
+    <div class="product-desc-block">
+      <div class="product-desc-en">
+        <div class="product-desc-label">Wattage</div>
+        <div class="product-desc-value">9W</div>
+      </div>
+      <div class="product-desc-ar">
+        <div class="product-desc-label">القدرة الكهربائية</div>
+        <div class="product-desc-value">٩ واط</div>
+      </div>
+    </div>
+
+    <div class="product-desc-block">
+      <div class="product-desc-en">
+        <div class="product-desc-label">Voltage</div>
+        <div class="product-desc-value">220-240V AC</div>
+      </div>
+      <div class="product-desc-ar">
+        <div class="product-desc-label">الجهد الكهربائي</div>
+        <div class="product-desc-value">٢٢٠-٢٤٠ فولت</div>
+      </div>
+    </div>
+
+    <div class="product-desc-block">
+      <div class="product-desc-en">
+        <div class="product-desc-label">Plug Type</div>
+        <div class="product-desc-value">UK Type G (3-pin)</div>
+      </div>
+      <div class="product-desc-ar">
+        <div class="product-desc-label">نوع القابس</div>
+        <div class="product-desc-value">بريطاني ثلاثي</div>
+      </div>
+    </div>
+
+    <div class="product-desc-block">
+      <div class="product-desc-en">
+        <div class="product-desc-label">Base Type</div>
+        <div class="product-desc-value">E27 (Standard screw)</div>
+      </div>
+      <div class="product-desc-ar">
+        <div class="product-desc-label">نوع القاعدة</div>
+        <div class="product-desc-value">E27 (لولبي قياسي)</div>
+      </div>
+    </div>
+
+    <div class="product-desc-block">
+      <div class="product-desc-en">
+        <div class="product-desc-label">Material</div>
+        <div class="product-desc-value">Polycarbonate + Aluminum</div>
+      </div>
+      <div class="product-desc-ar">
+        <div class="product-desc-label">المادة</div>
+        <div class="product-desc-value">بولي كربونات + ألومنيوم</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- SECTION 4: ADMIN PANEL MOCKUP                -->
+<!-- ============================================ -->
+
+<div class="section-divider">
+  Admin Panel — Variant Management
+  <small>This is what the admin form would look like when adding/editing a product with variants</small>
+</div>
+
+<div class="admin-mockup">
+  <h3>Variants (Optional)</h3>
+  <p style="font-size: 0.75rem; color: #888; margin-bottom: 12px;">Add design variants with individual stock tracking. Leave empty for products without variants.</p>
+
+  <div class="admin-variant-row">
+    <span class="admin-variant-header">Name (EN)</span>
+    <span class="admin-variant-header">Name (AR)</span>
+    <span class="admin-variant-header">Image URL</span>
+    <span class="admin-variant-header">Stock</span>
+    <span></span>
+  </div>
+
+  <div class="admin-variant-row">
+    <input type="text" value="Cat Design" placeholder="Name EN">
+    <input type="text" value="تصميم القطة" dir="rtl" placeholder="Name AR">
+    <input type="text" value="https://lh3.google..." placeholder="Image URL">
+    <input type="number" value="5" style="text-align:center;">
+    <button class="admin-btn-del">x</button>
+  </div>
+
+  <div class="admin-variant-row">
+    <input type="text" value="Dog Design" placeholder="Name EN">
+    <input type="text" value="تصميم الكلب" dir="rtl" placeholder="Name AR">
+    <input type="text" value="https://lh3.google..." placeholder="Image URL">
+    <input type="number" value="8" style="text-align:center;">
+    <button class="admin-btn-del">x</button>
+  </div>
+
+  <div class="admin-variant-row">
+    <input type="text" value="Flower Design" placeholder="Name EN">
+    <input type="text" value="تصميم الزهرة" dir="rtl" placeholder="Name AR">
+    <input type="text" value="https://lh3.google..." placeholder="Image URL">
+    <input type="number" value="12" style="text-align:center;">
+    <button class="admin-btn-del">x</button>
+  </div>
+
+  <button class="admin-btn-add">+ Add Variant</button>
+
+  <hr style="margin: 20px 0; border: none; border-top: 1px solid #eee;">
+
+  <h3>Pricing Tiers (Optional)</h3>
+  <p style="font-size: 0.75rem; color: #888; margin-bottom: 12px;">Set quantity-based discounts. Leave empty for single-price products.</p>
+
+  <div class="admin-tier-row">
+    <span class="admin-variant-header">Min Quantity</span>
+    <span class="admin-variant-header">Price Per Unit (AED)</span>
+    <span></span>
+  </div>
+
+  <div class="admin-tier-row">
+    <input type="number" value="1" placeholder="Min qty">
+    <input type="number" value="15" step="0.01" placeholder="Price">
+    <button class="admin-btn-del">x</button>
+  </div>
+
+  <div class="admin-tier-row">
+    <input type="number" value="3" placeholder="Min qty">
+    <input type="number" value="12" step="0.01" placeholder="Price">
+    <button class="admin-btn-del">x</button>
+  </div>
+
+  <div class="admin-tier-row">
+    <input type="number" value="5" placeholder="Min qty">
+    <input type="number" value="10" step="0.01" placeholder="Price">
+    <button class="admin-btn-del">x</button>
+  </div>
+
+  <button class="admin-btn-add">+ Add Tier</button>
+</div>
+
+<div style="text-align: center; padding: 40px 20px; color: #888; font-size: 0.8rem;">
+  End of mockup. All sections above show the visual design for your approval.
+</div>
+
+<script>
+  // Simple interactivity for the mockup demo
+  function selectTile(tile, name, imgText) {
+    document.querySelectorAll('.variant-tile').forEach(t => t.classList.remove('selected'));
+    tile.classList.add('selected');
+    document.getElementById('selectedVariantName').textContent = name;
+    document.getElementById('mainImg').src = 'https://placehold.co/500x500/f5f5f5/888?text=' + imgText;
+
+    // Update thumbnails
+    document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+  }
+
+  function selectVariant(thumb, name, imgText) {
+    document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+    document.getElementById('selectedVariantName').textContent = name;
+    document.getElementById('mainImg').src = 'https://placehold.co/500x500/f5f5f5/888?text=' + imgText;
+
+    // Update variant tiles
+    document.querySelectorAll('.variant-tile').forEach(t => t.classList.remove('selected'));
+  }
+</script>
+
+</body>
+</html>
