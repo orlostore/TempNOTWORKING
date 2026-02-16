@@ -855,7 +855,7 @@ function setupBottomNav() {
   const bottomMenuBtn = document.getElementById('bottomMenuBtn');
   const cartSidebar = document.getElementById('cartSidebar');
   
-  if (bottomHomeBtn) bottomHomeBtn.onclick = function() { window.location.href = 'index.html'; };
+  // Home button handled by app.js (saves lastProduct, smart navigation)
   if (bottomCartBtn) bottomCartBtn.onclick = toggleCartSidebar;
   if (bottomMenuBtn) {
     bottomMenuBtn.onclick = function() {
