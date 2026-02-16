@@ -1231,6 +1231,11 @@ footer p {
     width: 32px;
     height: 36px;
   }
+
+  /* Drop grid tooltip closer to button on mobile (less padding) */
+  .grid-limit-tooltip {
+    bottom: 50px;
+  }
 }
 
 /* Product Detail Page Styles */
