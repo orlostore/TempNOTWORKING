@@ -52,7 +52,10 @@
 </header>
 
 <script>
-  /** * ANTI-FLICKER SCRIPT 
+  /* Remember this product page so account Home button can return here */
+  try { sessionStorage.setItem('lastProduct', window.location.href); } catch(e){}
+
+  /** * ANTI-FLICKER SCRIPT
    * Runs immediately before the DOM paints to set the correct cart numbers.
    */
   (function(){
