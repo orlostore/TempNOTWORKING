@@ -715,7 +715,7 @@ function updateQuantity(id, change, variantId) {
     }
 }
 
-// Show limit message at top of cart sidebar, centered
+// Show limit message inline within the specific cart item row
 function showCartLimitMessage(cartItemId, maxAllowed) {
     // cartItemId can be "5" or "5-v12" for variant items
     const productId = cartItemId;
@@ -746,16 +746,19 @@ function showCartLimitMessage(cartItemId, maxAllowed) {
       }
     }
 
-    // Insert message at top of cart items, centered
-    const cartItems = document.getElementById('cartItems');
-    if (!cartItems) return;
+    // Insert message inline inside the specific cart item row, below the price
+    if (!cartItem) return;
 
     const msg = document.createElement('div');
     msg.id = 'cartLimitMsg';
-    msg.className = 'cart-limit-msg-top';
+    msg.className = 'cart-limit-msg-inline';
     msg.innerHTML = `${messageEn} <span class="cart-limit-ar-inline">${messageAr}</span>`;
 
-    cartItems.insertBefore(msg, cartItems.firstChild);
+    // Append inside the left text column (first child div) of the cart item
+    const textCol = cartItem.querySelector('div');
+    if (textCol) {
+      textCol.appendChild(msg);
+    }
 
     // Auto-dismiss
     window.cartLimitTimer = setTimeout(() => {
