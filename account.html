@@ -994,7 +994,7 @@
         const SVG_EYE_OPEN = '<svg class="inline-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
         const SVG_EYE_CLOSED = '<svg class="inline-icon" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
         const SVG_MAIL = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:3.5rem;height:3.5rem"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
-        const SVG_WARNING = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:3.5rem;height:3.5rem"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>';
+        const ACCT_SVG_WARNING = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:3.5rem;height:3.5rem"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>';
         const SVG_PIN = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:3.5rem;height:3.5rem"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
         const SVG_PHONE = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:0.9em;height:0.9em"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
         const SVG_CHECK = '<svg class="inline-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
@@ -1130,7 +1130,7 @@
             } catch (error) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <div class="empty-state-icon">${SVG_WARNING}</div>
+                        <div class="empty-state-icon">${ACCT_SVG_WARNING}</div>
                         <h3>Error loading orders</h3>
                         <p>Please try again later</p>
                     </div>
@@ -1176,7 +1176,7 @@
             } catch (error) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <div class="empty-state-icon">${SVG_WARNING}</div>
+                        <div class="empty-state-icon">${ACCT_SVG_WARNING}</div>
                         <h3>Error loading addresses</h3>
                     </div>
                 `;
