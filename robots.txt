@@ -9,4 +9,4 @@ Disallow: /forgot-password.html
 Disallow: /category-mockups.html
 Disallow: /mockup-variant-selector.html
 
-Sitemap: https://www.orlostore.com/sitemap.xml
+Sitemap: https://temp-5lr.pages.dev/sitemap.xml
