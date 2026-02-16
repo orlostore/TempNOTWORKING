@@ -34,13 +34,21 @@ export async function onRequestPost(context) {
             if (session.metadata && session.metadata.cart_items) {
                 try {
                     const cartItems = JSON.parse(session.metadata.cart_items);
-                    
+
                     for (const item of cartItems) {
-                        await DB.prepare(
-                            'UPDATE products SET quantity = MAX(0, quantity - ?) WHERE slug = ?'
-                        ).bind(item.quantity, item.slug).run();
-                        
-                        console.log(`Deducted ${item.quantity} from ${item.slug}`);
+                        if (item.variantId) {
+                            // Deduct from variant stock
+                            await DB.prepare(
+                                'UPDATE product_variants SET quantity = MAX(0, quantity - ?) WHERE id = ?'
+                            ).bind(item.quantity, item.variantId).run();
+                            console.log(`Deducted ${item.quantity} from variant ${item.variantId} (${item.slug})`);
+                        } else {
+                            // Deduct from product stock (no variant)
+                            await DB.prepare(
+                                'UPDATE products SET quantity = MAX(0, quantity - ?) WHERE slug = ?'
+                            ).bind(item.quantity, item.slug).run();
+                            console.log(`Deducted ${item.quantity} from ${item.slug}`);
+                        }
                     }
                 } catch (e) {
                     console.error('Error deducting inventory:', e);

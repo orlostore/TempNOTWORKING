@@ -1125,6 +1125,62 @@
                         <input type="text" id="formSpecificationsAr" dir="rtl" placeholder="الحجم: ١٠ سم | الوزن: ٥٠ غ">
                     </div>
                 </div>
+
+                <div class="form-section">
+                    <div class="form-section-title">Extra Specifications <span style="font-weight:400;font-size:0.8rem;color:#888;">(only shown when filled)</span></div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Wattage</label>
+                            <input type="text" id="formWattage" placeholder="e.g. 9W">
+                        </div>
+                        <div class="form-group">
+                            <label>Voltage</label>
+                            <input type="text" id="formVoltage" placeholder="e.g. 220-240V AC">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Plug Type</label>
+                            <input type="text" id="formPlugType" placeholder="e.g. UK Type G (3-pin)">
+                        </div>
+                        <div class="form-group">
+                            <label>Plug Type (Arabic)</label>
+                            <input type="text" id="formPlugTypeAr" dir="rtl" placeholder="بريطاني ثلاثي">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Base Type</label>
+                            <input type="text" id="formBaseType" placeholder="e.g. E27 (Standard screw)">
+                        </div>
+                        <div class="form-group">
+                            <label>Base Type (Arabic)</label>
+                            <input type="text" id="formBaseTypeAr" dir="rtl" placeholder="E27 (لولبي قياسي)">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Material</label>
+                            <input type="text" id="formMaterial" placeholder="e.g. Polycarbonate + Aluminum">
+                        </div>
+                        <div class="form-group">
+                            <label>Material (Arabic)</label>
+                            <input type="text" id="formMaterialAr" dir="rtl" placeholder="بولي كربونات + ألومنيوم">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-title">Product Variants <span style="font-weight:400;font-size:0.8rem;color:#888;">(optional - for products with design options)</span></div>
+                    <div id="variantsContainer"></div>
+                    <button type="button" class="btn btn-small btn-primary" onclick="addVariantRow()" style="margin-top:8px;">+ Add Variant</button>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-title">Pricing Tiers <span style="font-weight:400;font-size:0.8rem;color:#888;">(optional - quantity discounts)</span></div>
+                    <div id="tiersContainer"></div>
+                    <button type="button" class="btn btn-small btn-primary" onclick="addTierRow()" style="margin-top:8px;">+ Add Pricing Tier</button>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
@@ -1295,6 +1351,8 @@
             document.getElementById('modalTitle').innerHTML = 'Add Product';
             document.getElementById('editId').value = '';
             clearForm();
+            document.getElementById('variantsContainer').innerHTML = '';
+            document.getElementById('tiersContainer').innerHTML = '';
             document.getElementById('productModal').classList.add('active');
             document.getElementById('formName').focus();
         }
@@ -1332,7 +1390,28 @@
             document.getElementById('formSpecifications').value = product.specifications ? product.specifications.join(' | ') : '';
             document.getElementById('formSpecificationsAr').value = product.specificationsAr ? product.specificationsAr.join(' | ') : '';
             document.getElementById('formFeatured').checked = product.featured;
-            
+            // Extra specs
+            document.getElementById('formWattage').value = product.wattage || '';
+            document.getElementById('formVoltage').value = product.voltage || '';
+            document.getElementById('formPlugType').value = product.plugType || '';
+            document.getElementById('formPlugTypeAr').value = product.plugTypeAr || '';
+            document.getElementById('formBaseType').value = product.baseType || '';
+            document.getElementById('formBaseTypeAr').value = product.baseTypeAr || '';
+            document.getElementById('formMaterial').value = product.material || '';
+            document.getElementById('formMaterialAr').value = product.materialAr || '';
+
+            // Variants
+            document.getElementById('variantsContainer').innerHTML = '';
+            if (product.variants && product.variants.length > 0) {
+                product.variants.forEach(v => addVariantRow(v));
+            }
+
+            // Pricing tiers
+            document.getElementById('tiersContainer').innerHTML = '';
+            if (product.pricingTiers && product.pricingTiers.length > 0) {
+                product.pricingTiers.forEach(t => addTierRow(t));
+            }
+
             document.getElementById('productModal').classList.add('active');
         }
 
@@ -1347,6 +1426,8 @@
                 else input.value = '';
             });
             document.getElementById('formSlug').dataset.autoGenerated = 'true';
+            document.getElementById('variantsContainer').innerHTML = '';
+            document.getElementById('tiersContainer').innerHTML = '';
         }
 
         async function saveProduct() {
@@ -1376,7 +1457,17 @@
                 packagingAr: document.getElementById('formPackagingAr').value.trim(),
                 specifications: document.getElementById('formSpecifications').value.trim(),
                 specificationsAr: document.getElementById('formSpecificationsAr').value.trim(),
-                featured: document.getElementById('formFeatured').checked ? 1 : 0
+                featured: document.getElementById('formFeatured').checked ? 1 : 0,
+                wattage: document.getElementById('formWattage').value.trim(),
+                voltage: document.getElementById('formVoltage').value.trim(),
+                plugType: document.getElementById('formPlugType').value.trim(),
+                plugTypeAr: document.getElementById('formPlugTypeAr').value.trim(),
+                baseType: document.getElementById('formBaseType').value.trim(),
+                baseTypeAr: document.getElementById('formBaseTypeAr').value.trim(),
+                material: document.getElementById('formMaterial').value.trim(),
+                materialAr: document.getElementById('formMaterialAr').value.trim(),
+                variants: getVariantsFromForm(),
+                pricingTiers: getTiersFromForm()
             };
 
             if (!data.slug || !data.name || !data.price) {
@@ -1457,6 +1548,62 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') { closeModal(); closeStockModal(); }
         });
+
+        function addVariantRow(data) {
+            const container = document.getElementById('variantsContainer');
+            const row = document.createElement('div');
+            row.className = 'variant-row';
+            row.style.cssText = 'display:grid; grid-template-columns:1fr 1fr 1fr 80px 40px; gap:8px; margin-bottom:8px; align-items:center;';
+            row.innerHTML = `
+                <input type="text" class="v-name" value="${data ? (data.name || '') : ''}" placeholder="Name EN">
+                <input type="text" class="v-nameAr" value="${data ? (data.nameAr || '') : ''}" dir="rtl" placeholder="Name AR">
+                <input type="text" class="v-image" value="${data ? (data.image || '') : ''}" placeholder="Image URL" onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                <input type="number" class="v-qty" value="${data ? (data.quantity || 0) : 0}" min="0" style="text-align:center;" placeholder="Stock">
+                <button type="button" class="btn btn-small btn-danger" onclick="this.parentElement.remove()" style="padding:4px 8px;">&#10005;</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function addTierRow(data) {
+            const container = document.getElementById('tiersContainer');
+            const row = document.createElement('div');
+            row.className = 'tier-row';
+            row.style.cssText = 'display:grid; grid-template-columns:120px 120px 40px; gap:8px; margin-bottom:8px; align-items:center;';
+            row.innerHTML = `
+                <input type="number" class="t-minQty" value="${data ? (data.minQty || '') : ''}" min="1" placeholder="Min Qty">
+                <input type="number" class="t-price" value="${data ? (data.pricePerUnit || '') : ''}" step="0.01" min="0" placeholder="Price/unit AED">
+                <button type="button" class="btn btn-small btn-danger" onclick="this.parentElement.remove()" style="padding:4px 8px;">&#10005;</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function getVariantsFromForm() {
+            const rows = document.querySelectorAll('#variantsContainer .variant-row');
+            const variants = [];
+            rows.forEach(row => {
+                const name = row.querySelector('.v-name').value.trim();
+                if (!name) return;
+                variants.push({
+                    name: name,
+                    nameAr: row.querySelector('.v-nameAr').value.trim(),
+                    image: row.querySelector('.v-image').value.trim(),
+                    quantity: parseInt(row.querySelector('.v-qty').value) || 0
+                });
+            });
+            return variants;
+        }
+
+        function getTiersFromForm() {
+            const rows = document.querySelectorAll('#tiersContainer .tier-row');
+            const tiers = [];
+            rows.forEach(row => {
+                const minQty = parseInt(row.querySelector('.t-minQty').value);
+                const price = parseFloat(row.querySelector('.t-price').value);
+                if (!minQty || !price) return;
+                tiers.push({ minQty: minQty, pricePerUnit: price });
+            });
+            return tiers;
+        }
 
         document.getElementById('authKey').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') authenticate();

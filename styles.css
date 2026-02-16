@@ -2911,6 +2911,157 @@ footer p {
 }
 
 /* ============================================
+   PRODUCT PAGE - VARIANT SELECTOR
+   ============================================ */
+.variant-section {
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+.variant-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.variant-selected-name {
+  font-weight: 400;
+  color: var(--accent);
+  font-size: 0.78rem;
+}
+.variant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
+}
+.variant-tile {
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  background: white;
+  position: relative;
+}
+.variant-tile:hover {
+  border-color: #aaa;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.variant-tile.selected {
+  border-color: var(--primary);
+  background: #f0f5f8;
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.variant-tile.out-of-stock {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.variant-tile.out-of-stock::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 1.5px;
+  background: #999;
+  transform: rotate(-15deg);
+}
+.variant-tile-name {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-top: 4px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.variant-tile-stock {
+  font-size: 0.55rem;
+  color: #999;
+  margin-top: 1px;
+}
+.variant-tile.low-stock .variant-tile-stock {
+  color: #e07856;
+  font-weight: 600;
+}
+
+/* ============================================
+   PRODUCT PAGE - PRICING TIERS
+   ============================================ */
+.pricing-tiers {
+  margin-bottom: 1rem;
+}
+.pricing-tiers-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+.tier-table {
+  display: flex;
+  gap: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+.tier-item {
+  flex: 1;
+  text-align: center;
+  padding: 8px 6px;
+  border-right: 1px solid #e0e0e0;
+  transition: all 0.2s;
+}
+.tier-item:last-child {
+  border-right: none;
+}
+.tier-item.active {
+  background: #f0f5f8;
+  box-shadow: inset 0 -3px 0 var(--primary);
+}
+.tier-item.best-deal {
+  background: #fff8f5;
+}
+.tier-qty {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+.tier-price {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.tier-each {
+  font-size: 0.6rem;
+  color: #888;
+}
+.tier-save {
+  font-size: 0.55rem;
+  color: #28a745;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+@media (max-width: 768px) {
+  .variant-grid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  }
+  .tier-table {
+    flex-wrap: wrap;
+  }
+  .tier-item {
+    min-width: 33%;
+  }
+}
+
+/* ============================================
    PRODUCT PAGE - LIMIT TOOLTIP (Glassmorphism)
    ============================================ */
 .product-buybox,

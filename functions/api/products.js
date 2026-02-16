@@ -4,17 +4,64 @@
 export async function onRequestGet(context) {
     const { env } = context;
     const DB = env.DB;
-    
+
     try {
         const { results } = await DB.prepare(`
             SELECT id, slug, name, nameAr, category, categoryAr, price, cost, quantity,
                    description, descriptionAr, mainImage, image2, image3, image4, image5,
                    image6, image7, image8, colors, colorsAr, packaging, packagingAr,
-                   specifications, specificationsAr, featured
+                   specifications, specificationsAr, featured,
+                   wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
+                   material, materialAr
             FROM products
             ORDER BY featured DESC, id DESC
         `).all();
-        
+
+        // Fetch all variants grouped by product
+        let variantsMap = {};
+        try {
+            const { results: variantRows } = await DB.prepare(`
+                SELECT id, product_id, name, nameAr, image, quantity, sort_order
+                FROM product_variants
+                ORDER BY sort_order ASC, id ASC
+            `).all();
+            for (const v of variantRows) {
+                if (!variantsMap[v.product_id]) variantsMap[v.product_id] = [];
+                variantsMap[v.product_id].push({
+                    id: v.id,
+                    name: v.name,
+                    nameAr: v.nameAr || '',
+                    image: v.image || '',
+                    quantity: v.quantity,
+                    sortOrder: v.sort_order
+                });
+            }
+        } catch (e) {
+            // Table may not exist yet - graceful fallback
+            console.log('Variants table not ready:', e.message);
+        }
+
+        // Fetch all pricing tiers grouped by product
+        let tiersMap = {};
+        try {
+            const { results: tierRows } = await DB.prepare(`
+                SELECT id, product_id, min_qty, price_per_unit
+                FROM product_pricing_tiers
+                ORDER BY min_qty ASC
+            `).all();
+            for (const t of tierRows) {
+                if (!tiersMap[t.product_id]) tiersMap[t.product_id] = [];
+                tiersMap[t.product_id].push({
+                    id: t.id,
+                    minQty: t.min_qty,
+                    pricePerUnit: t.price_per_unit
+                });
+            }
+        } catch (e) {
+            // Table may not exist yet - graceful fallback
+            console.log('Pricing tiers table not ready:', e.message);
+        }
+
         const products = results.map(row => ({
             id: row.id,
             slug: row.slug,
@@ -35,16 +82,26 @@ export async function onRequestGet(context) {
             packagingAr: row.packagingAr,
             specifications: row.specifications ? row.specifications.split(' | ').filter(Boolean) : [],
             specificationsAr: row.specificationsAr ? row.specificationsAr.split(' | ').filter(Boolean) : [],
-            featured: row.featured === 1
+            featured: row.featured === 1,
+            wattage: row.wattage || '',
+            voltage: row.voltage || '',
+            plugType: row.plugType || '',
+            plugTypeAr: row.plugTypeAr || '',
+            baseType: row.baseType || '',
+            baseTypeAr: row.baseTypeAr || '',
+            material: row.material || '',
+            materialAr: row.materialAr || '',
+            variants: variantsMap[row.id] || [],
+            pricingTiers: tiersMap[row.id] || []
         }));
-        
+
         return new Response(JSON.stringify(products), {
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Cache-Control': 'public, max-age=60'
             }
         });
-        
+
     } catch (error) {
         return new Response(JSON.stringify({ error: error.message }), {
             status: 500,

@@ -238,8 +238,16 @@ async function initProductPage() {
     return;
   }
 
-  const isOutOfStock = product.quantity === 0;
+  const hasVariants = product.variants && product.variants.length > 0;
+  const hasTiers = product.pricingTiers && product.pricingTiers.length > 0;
+  // For variant products, out-of-stock means ALL variants are 0
+  const isOutOfStock = hasVariants
+    ? product.variants.every(v => v.quantity === 0)
+    : product.quantity === 0;
   const threshold = typeof FREE_DELIVERY_THRESHOLD !== 'undefined' ? FREE_DELIVERY_THRESHOLD : 75;
+
+  // Track selected variant (product-page-scoped)
+  window._selectedVariant = null;
   
   document.querySelectorAll('.threshold-value').forEach(el => el.textContent = threshold);
   document.querySelectorAll('.threshold-value-ar').forEach(el => el.textContent = toArabicNumerals(threshold));
@@ -314,8 +322,21 @@ async function initProductPage() {
     `;
   }
 
+  // Extra spec fields (only shown when filled)
+  descriptionHTML += buildExtraSpecsHTML(product);
+
   document.getElementById("productDescription").innerHTML = descriptionHTML;
   document.getElementById("productPrice").innerText = "AED " + product.price;
+
+  // === VARIANT SELECTOR (Desktop) ===
+  if (hasVariants) {
+    renderVariantSelector('variantSelectorDesktop', product, false);
+  }
+
+  // === PRICING TIERS (Desktop) ===
+  if (hasTiers) {
+    renderPricingTiers('pricingTiersDesktop', product);
+  }
 
   const gallery = document.getElementById("gallery");
   if (product.images && product.images.length > 0) {
@@ -356,6 +377,11 @@ async function initProductPage() {
     desktopAddBtn.disabled = true;
     desktopAddBtn.style.background = "#999";
     desktopAddBtn.style.cursor = "not-allowed";
+  } else if (hasVariants && desktopAddBtn && !isOutOfStock) {
+    desktopAddBtn.textContent = "Select a design | اختر تصميم";
+    desktopAddBtn.disabled = true;
+    desktopAddBtn.style.background = "#999";
+    desktopAddBtn.style.cursor = "not-allowed";
   }
 
   // MOBILE VERSION
@@ -363,6 +389,16 @@ async function initProductPage() {
   document.getElementById("mobileProductTitleAr").innerText = product.nameAr || '';
   document.getElementById("mobileProductCategory").innerText = product.category;
   document.getElementById("mobileProductPrice").innerText = "AED " + product.price;
+
+  // === VARIANT SELECTOR (Mobile) ===
+  if (hasVariants) {
+    renderVariantSelector('variantSelectorMobile', product, true);
+  }
+
+  // === PRICING TIERS (Mobile) ===
+  if (hasTiers) {
+    renderPricingTiers('pricingTiersMobile', product);
+  }
 
   const mobileCarousel = document.getElementById("mobileCarousel");
   const mobileDots = document.getElementById("mobileDots");
@@ -392,6 +428,11 @@ async function initProductPage() {
   const mobileAddBtn = document.getElementById("mobileAddToCartBtn");
   if (isOutOfStock && mobileAddBtn) {
     mobileAddBtn.textContent = "Out of Stock | نفد المخزون";
+    mobileAddBtn.disabled = true;
+    mobileAddBtn.style.background = "#999";
+    mobileAddBtn.style.cursor = "not-allowed";
+  } else if (hasVariants && mobileAddBtn && !isOutOfStock) {
+    mobileAddBtn.textContent = "Select a design | اختر تصميم";
     mobileAddBtn.disabled = true;
     mobileAddBtn.style.background = "#999";
     mobileAddBtn.style.cursor = "not-allowed";
@@ -440,47 +481,71 @@ async function initProductPage() {
     `;
   }
 
+  // Extra specs for mobile
+  detailsHTML += buildMobileExtraSpecsHTML(product);
+
   if (detailsContainer) detailsContainer.innerHTML = detailsHTML;
 
   // Check if product already in cart - show transformed button
-  const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-  const existingItem = existingCart.find(i => i.id === product.id);
-  
-  if (existingItem && !isOutOfStock) {
-    if (desktopAddBtn) transformToQtyButton(desktopAddBtn, product);
-    if (mobileAddBtn) transformToQtyButton(mobileAddBtn, product);
+  // For variant products, don't auto-transform (variant must be selected first)
+  if (!hasVariants) {
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingItem = existingCart.find(i => i.id === product.id && !i.variantId);
+
+    if (existingItem && !isOutOfStock) {
+      if (desktopAddBtn) transformToQtyButton(desktopAddBtn, product);
+      if (mobileAddBtn) transformToQtyButton(mobileAddBtn, product);
+    }
   }
 
   // ADD TO CART HANDLER - self-contained, uses localStorage directly
   const addToCartHandler = () => {
-    if (product.quantity === 0) return false;
+    const sv = window._selectedVariant;
+
+    // For variant products, must have a variant selected
+    if (hasVariants && !sv) return false;
+
+    // Check stock
+    const stockQty = hasVariants ? sv.quantity : product.quantity;
+    if (stockQty === 0) return false;
 
     // Get cart from localStorage
     let localCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const item = localCart.find(i => i.id === product.id);
+
+    // Find matching cart item (variant-aware)
+    const item = hasVariants
+      ? localCart.find(i => i.id === product.id && i.variantId === sv.id)
+      : localCart.find(i => i.id === product.id && !i.variantId);
     const currentInCart = item ? item.quantity : 0;
-    
-    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
+
+    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, stockQty);
     if (currentInCart >= maxAllowed) {
       showProductPageMaxLimitMessage(product.id, maxAllowed);
       return false;
     }
-    
+
     if (item) {
       item.quantity++;
     } else {
-      localCart.push({ ...product, quantity: 1 });
+      const cartItem = { ...product, quantity: 1 };
+      if (hasVariants) {
+        cartItem.variantId = sv.id;
+        cartItem.variantName = sv.name;
+        cartItem.variantNameAr = sv.nameAr || '';
+        cartItem.variantImage = sv.image || '';
+      }
+      localCart.push(cartItem);
     }
-    
+
     // Save to localStorage
     localStorage.setItem("cart", JSON.stringify(localCart));
-    
+
     // Sync with app.js cart variable if it exists (app.js loads after)
     if (typeof cart !== 'undefined') {
       cart.length = 0;
       localCart.forEach(i => cart.push(i));
     }
-    
+
     // Update cart counts
     const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
     const cartCount = document.getElementById("cartCount");
@@ -489,22 +554,29 @@ async function initProductPage() {
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems;
     if (mobileCartCount) mobileCartCount.textContent = totalItems;
-    
+
     // Update cart display if app.js is loaded
     if (typeof updateCart === 'function') {
       updateCart();
     }
-    
+
     // Pulse the cart badge
     if (typeof pulseBadge === 'function') pulseBadge();
-    
+
     return true;
   };
+
+  // Store reference for use in selectVariant
+  addToCartHandlerRef = addToCartHandler;
 
   if (!isOutOfStock && desktopAddBtn) {
     desktopAddBtn.onclick = function() {
       if (addToCartHandler()) {
-        transformToQtyButton(this, product);
+        if (hasVariants && window._selectedVariant) {
+          transformToQtyButtonVariant(this, product, window._selectedVariant);
+        } else {
+          transformToQtyButton(this, product);
+        }
       }
     };
   }
@@ -512,7 +584,11 @@ async function initProductPage() {
   if (!isOutOfStock && mobileAddBtn) {
     mobileAddBtn.onclick = function() {
       if (addToCartHandler()) {
-        transformToQtyButton(this, product);
+        if (hasVariants && window._selectedVariant) {
+          transformToQtyButtonVariant(this, product, window._selectedVariant);
+        } else {
+          transformToQtyButton(this, product);
+        }
       }
     };
   }
@@ -806,6 +882,286 @@ function setupGalleryOverlay(product) {
     }
   });
 }
+
+// === VARIANT SELECTOR RENDERING ===
+function renderVariantSelector(containerId, product, isMobile) {
+  const container = document.getElementById(containerId);
+  if (!container || !product.variants || product.variants.length === 0) return;
+
+  const prefix = isMobile ? 'mob' : 'dsk';
+
+  let tilesHTML = product.variants.map(v => {
+    const isOOS = v.quantity === 0;
+    const isLow = v.quantity > 0 && v.quantity <= 3;
+    let stockLabel = v.quantity > 0 ? `${v.quantity} left` : 'Sold out';
+    let classes = 'variant-tile';
+    if (isOOS) classes += ' out-of-stock';
+    if (isLow) classes += ' low-stock';
+
+    const imgHTML = v.image
+      ? `<img src="${v.image}" alt="${v.name}" style="width:100%;aspect-ratio:1;object-fit:contain;border-radius:6px;background:#f8f8f8;">`
+      : `<div style="width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#f8f8f8;border-radius:6px;font-size:1.5rem;">📦</div>`;
+
+    return `
+      <div class="${classes}" data-variant-id="${v.id}" id="${prefix}-vtile-${v.id}"
+           onclick="${isOOS ? '' : `selectVariant(${v.id}, ${product.id}, '${prefix}')`}">
+        ${imgHTML}
+        <div class="variant-tile-name">${v.name}</div>
+        <div class="variant-tile-stock">${isLow ? stockLabel + '!' : stockLabel}</div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="variant-section" style="${isMobile ? 'padding: 0 16px;' : ''}">
+      <div class="variant-label">
+        <span>Choose Design | اختر التصميم</span>
+        <span class="variant-selected-name" id="${prefix}-selectedName"></span>
+      </div>
+      <div class="variant-grid">${tilesHTML}</div>
+    </div>
+  `;
+}
+
+// === PRICING TIERS RENDERING ===
+function renderPricingTiers(containerId, product) {
+  const container = document.getElementById(containerId);
+  if (!container || !product.pricingTiers || product.pricingTiers.length === 0) return;
+
+  const tiers = product.pricingTiers;
+  const basePrice = product.price;
+
+  let tiersHTML = tiers.map((t, i) => {
+    const isFirst = i === 0;
+    const isLast = i === tiers.length - 1;
+    const savePercent = basePrice > 0 ? Math.round((1 - t.pricePerUnit / basePrice) * 100) : 0;
+    const qtyLabel = t.minQty === 1 ? '1 pc' : `${t.minQty}+ pcs`;
+
+    return `
+      <div class="tier-item ${isFirst ? 'active' : ''} ${isLast && tiers.length > 1 ? 'best-deal' : ''}">
+        <div class="tier-qty">${qtyLabel}</div>
+        <div class="tier-price">AED ${t.pricePerUnit}</div>
+        <div class="tier-each">each</div>
+        ${savePercent > 0 ? `<div class="tier-save">Save ${savePercent}%</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="pricing-tiers" style="margin-bottom:1rem; ${containerId.includes('Mobile') ? 'padding: 0 16px;' : ''}">
+      <div class="pricing-tiers-label">Quantity Pricing | تسعير الكمية</div>
+      <div class="tier-table">${tiersHTML}</div>
+    </div>
+  `;
+}
+
+// === EXTRA SPECS HELPER (Desktop) ===
+function buildExtraSpecsHTML(product) {
+  let html = '';
+  const specs = [
+    { en: 'Wattage', ar: 'القدرة الكهربائية', val: product.wattage, valAr: product.wattage },
+    { en: 'Voltage', ar: 'الجهد الكهربائي', val: product.voltage, valAr: product.voltage },
+    { en: 'Plug Type', ar: 'نوع القابس', val: product.plugType, valAr: product.plugTypeAr || product.plugType },
+    { en: 'Base Type', ar: 'نوع القاعدة', val: product.baseType, valAr: product.baseTypeAr || product.baseType },
+    { en: 'Material', ar: 'المادة', val: product.material, valAr: product.materialAr || product.material },
+  ];
+  specs.forEach(s => {
+    if (s.val) {
+      html += `
+        <div class="product-desc-block">
+          <div class="product-desc-en">
+            <div class="product-desc-label">${s.en}</div>
+            <div class="product-desc-value">${s.val}</div>
+          </div>
+          <div class="product-desc-ar">
+            <div class="product-desc-label">${s.ar}</div>
+            <div class="product-desc-value">${s.valAr || ''}</div>
+          </div>
+        </div>
+      `;
+    }
+  });
+  return html;
+}
+
+// === EXTRA SPECS HELPER (Mobile) ===
+function buildMobileExtraSpecsHTML(product) {
+  let html = '';
+  const specs = [
+    { en: 'Wattage', ar: 'القدرة الكهربائية', val: product.wattage, valAr: product.wattage },
+    { en: 'Voltage', ar: 'الجهد الكهربائي', val: product.voltage, valAr: product.voltage },
+    { en: 'Plug Type', ar: 'نوع القابس', val: product.plugType, valAr: product.plugTypeAr || product.plugType },
+    { en: 'Base Type', ar: 'نوع القاعدة', val: product.baseType, valAr: product.baseTypeAr || product.baseType },
+    { en: 'Material', ar: 'المادة', val: product.material, valAr: product.materialAr || product.material },
+  ];
+  specs.forEach(s => {
+    if (s.val) {
+      html += `
+        <div class="mobile-detail-block">
+          <div class="mobile-detail-title"><span>${s.en}</span><span class="arabic-text">${s.ar}</span></div>
+          <div class="mobile-detail-content"><p>${s.val}</p><p class="arabic-text">${s.valAr || ''}</p></div>
+        </div>
+      `;
+    }
+  });
+  return html;
+}
+
+// === VARIANT SELECTION HANDLER ===
+function selectVariant(variantId, productId, prefix) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  const variant = product.variants.find(v => v.id === variantId);
+  if (!variant || variant.quantity === 0) return;
+
+  window._selectedVariant = variant;
+
+  // Highlight selected tile (for both desktop and mobile)
+  ['dsk', 'mob'].forEach(p => {
+    document.querySelectorAll(`[id^="${p}-vtile-"]`).forEach(el => el.classList.remove('selected'));
+    const tile = document.getElementById(`${p}-vtile-${variantId}`);
+    if (tile) tile.classList.add('selected');
+    const nameEl = document.getElementById(`${p}-selectedName`);
+    if (nameEl) nameEl.textContent = variant.name;
+  });
+
+  // Swap main image to variant image
+  if (variant.image) {
+    const mainImg = document.getElementById('mainImage');
+    if (mainImg) mainImg.src = variant.image;
+    // Mobile carousel — scroll to first or swap first image
+    const mobileCarousel = document.getElementById('mobileCarousel');
+    if (mobileCarousel) {
+      const firstSlideImg = mobileCarousel.querySelector('.mobile-carousel-slide img');
+      if (firstSlideImg) firstSlideImg.src = variant.image;
+      mobileCarousel.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Enable Add to Cart buttons
+  const desktopBtn = document.getElementById('addToCartBtn');
+  const mobileBtn = document.getElementById('mobileAddToCartBtn');
+
+  [desktopBtn, mobileBtn].forEach(btn => {
+    if (btn && !btn.classList.contains('product-btn-transformed') && btn.tagName === 'BUTTON') {
+      btn.textContent = 'Add to Cart | أضف إلى السلة';
+      btn.disabled = false;
+      btn.style.background = '#1a3a52';
+      btn.style.cursor = 'pointer';
+    }
+  });
+
+  // If this variant is already in cart, show quantity stepper
+  const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existingItem = localCart.find(i => i.id === product.id && i.variantId === variantId);
+  if (existingItem) {
+    // Transform button to qty control for this variant
+    if (desktopBtn && desktopBtn.tagName === 'BUTTON') transformToQtyButtonVariant(desktopBtn, product, variant);
+    if (mobileBtn && mobileBtn.tagName === 'BUTTON') transformToQtyButtonVariant(mobileBtn, product, variant);
+  } else {
+    // Reset to "Add to Cart" if not in cart — check if currently transformed
+    const desktopTransformed = document.querySelector('.desktop-product .product-btn-transformed');
+    if (desktopTransformed) {
+      desktopTransformed.outerHTML = `<button class="add-to-cart-btn" id="addToCartBtn">Add to Cart | أضف إلى السلة</button>`;
+      const newBtn = document.getElementById('addToCartBtn');
+      if (newBtn) {
+        newBtn.onclick = function() {
+          if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, window._selectedVariant);
+        };
+      }
+    }
+    const mobileTransformed = document.querySelector('.mobile-product-page .product-btn-transformed');
+    if (mobileTransformed) {
+      mobileTransformed.outerHTML = `<button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | أضف إلى السلة</button>`;
+      const newBtn = document.getElementById('mobileAddToCartBtn');
+      if (newBtn) {
+        newBtn.onclick = function() {
+          if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, window._selectedVariant);
+        };
+      }
+    }
+  }
+}
+
+// Transform button to qty control for variant items
+function transformToQtyButtonVariant(btn, product, variant) {
+  const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const item = localCart.find(i => i.id === product.id && i.variantId === variant.id);
+  const qty = item ? item.quantity : 1;
+
+  btn.outerHTML = `
+    <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}">
+      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, -1)">−</button>
+      <span class="grid-qty-display" id="qtyDisplay-${product.id}-${variant.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
+      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
+    </div>
+  `;
+}
+
+// Handle quantity change for variant items on product page
+function productVariantQtyChange(productId, variantId, change) {
+  let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const item = localCart.find(i => i.id === productId && i.variantId === variantId);
+  const product = products.find(p => p.id === productId);
+  const variant = product ? product.variants.find(v => v.id === variantId) : null;
+
+  if (!item) return;
+
+  const newQty = item.quantity + change;
+
+  if (change > 0) {
+    const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, variant ? variant.quantity : MAX_QTY_PER_PRODUCT);
+    if (newQty > maxAllowed) {
+      showProductPageMaxLimitMessage(productId, maxAllowed);
+      return;
+    }
+  }
+
+  if (newQty <= 0) {
+    localCart = localCart.filter(i => !(i.id === productId && i.variantId === variantId));
+    localStorage.setItem("cart", JSON.stringify(localCart));
+    // Reset buttons back to "Add to Cart"
+    document.querySelectorAll(`[id="transformedBtn-${productId}"]`).forEach(el => {
+      const isMobile = el.closest('.mobile-product-page') !== null;
+      const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
+      const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
+      el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | أضف إلى السلة</button>`;
+    });
+    // Re-attach handlers
+    const newDesktopBtn = document.getElementById('addToCartBtn');
+    const newMobileBtn = document.getElementById('mobileAddToCartBtn');
+    if (newDesktopBtn) newDesktopBtn.onclick = function() {
+      if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, window._selectedVariant);
+    };
+    if (newMobileBtn) newMobileBtn.onclick = function() {
+      if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, window._selectedVariant);
+    };
+  } else {
+    item.quantity = newQty;
+    localStorage.setItem("cart", JSON.stringify(localCart));
+    const qtyDisplay = document.getElementById(`qtyDisplay-${productId}-${variantId}`);
+    if (qtyDisplay) qtyDisplay.textContent = newQty;
+  }
+
+  if (typeof cart !== 'undefined') {
+    cart.length = 0;
+    localCart.forEach(i => cart.push(i));
+  }
+
+  const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
+  const cartCount = document.getElementById("cartCount");
+  const bottomCartCount = document.getElementById("bottomCartCount");
+  const mobileCartCount = document.getElementById("mobileCartCount");
+  if (cartCount) cartCount.textContent = totalItems;
+  if (bottomCartCount) bottomCartCount.textContent = totalItems;
+  if (mobileCartCount) mobileCartCount.textContent = totalItems;
+
+  if (typeof updateCart === 'function') updateCart();
+  if (change > 0 && typeof pulseBadge === 'function') pulseBadge();
+}
+
+// Reference to addToCartHandler (set inside initProductPage, used by selectVariant)
+var addToCartHandlerRef = function() { return false; };
 
 window.changeMainImage = function(imgSrc, index) {
   const mainImg = document.getElementById('mainImage');
