@@ -704,13 +704,15 @@ function updateQuantity(id, change, variantId) {
         } else {
             saveCart();
             updateCart();
-            // Sync product page stepper
+            // Sync product page stepper (use querySelectorAll for duplicate desktop/mobile IDs)
             if (variantId) {
-                const qtyDisplay = document.getElementById(`qtyDisplay-${id}-${variantId}`);
-                if (qtyDisplay) qtyDisplay.textContent = newQty;
+                document.querySelectorAll(`[id="qtyDisplay-${id}-${variantId}"]`).forEach(el => {
+                    el.textContent = newQty;
+                });
             } else {
-                const qtyDisplay = document.getElementById(`qtyDisplay-${id}`);
-                if (qtyDisplay) qtyDisplay.textContent = newQty;
+                document.querySelectorAll(`[id="qtyDisplay-${id}"]`).forEach(el => {
+                    el.textContent = newQty;
+                });
                 const gridQtyNum = document.getElementById(`gridQtyNum-${id}`);
                 if (gridQtyNum) gridQtyNum.textContent = newQty;
             }
