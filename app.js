@@ -944,40 +944,24 @@ window.onload = () => {
         bottomHomeBtn.classList.add("home-active");
 
         const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
-        const isProductPage = window.location.pathname.includes('product.html');
 
-        // Remember which product the user was viewing
-        if (isProductPage) {
-            sessionStorage.setItem('lastProduct', window.location.href);
-        }
-
-        bottomHomeBtn.onclick = function() {
-            // If cart is open, just close it
-            const cartSidebar = document.getElementById("cartSidebar");
-            if (cartSidebar && cartSidebar.classList.contains("active")) {
-                cartSidebar.classList.remove("active");
-                if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
-                document.body.style.overflow = "";
-                upsellUsed = false;
-                savedUpsellProducts = null;
-                return;
-            }
-            // Index page: scroll to top
-            if (isIndexPage) {
+        if (isIndexPage) {
+            bottomHomeBtn.onclick = function() {
+                // If cart is open, just close it
+                const cartSidebar = document.getElementById("cartSidebar");
+                if (cartSidebar && cartSidebar.classList.contains("active")) {
+                    cartSidebar.classList.remove("active");
+                    if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
+                    document.body.style.overflow = "";
+                    upsellUsed = false;
+                    savedUpsellProducts = null;
+                    return;
+                }
                 closeMobileMenu();
                 bottomHomeBtn.classList.add("home-active");
                 window.scrollTo({top: 0, behavior: 'smooth'});
-                return;
-            }
-            // Product page: go to index
-            if (isProductPage) {
-                window.location.href = 'index.html';
-                return;
-            }
-            // Any other page (account etc): go back to last product, or index
-            var lastProduct = sessionStorage.getItem('lastProduct');
-            window.location.href = lastProduct || 'index.html';
-        };
+            };
+        }
     }
     
     if (bottomCartBtn) {
