@@ -2081,22 +2081,21 @@ footer p {
 .mobile-menu .menu-text {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .mobile-menu .menu-en {
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: 0.8rem;
   direction: ltr;
 }
 
 .mobile-menu .menu-ar {
   font-family: 'Almarai', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #999;
   direction: rtl;
-  text-align: right;
 }
 
 .mobile-menu .menu-chevron {
