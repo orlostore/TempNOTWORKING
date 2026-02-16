@@ -1055,9 +1055,20 @@ function selectVariant(variantId, productId, prefix) {
   const localCart = JSON.parse(localStorage.getItem("cart")) || [];
   const existingItem = localCart.find(i => i.id === product.id && i.variantId === variantId);
   if (existingItem) {
-    // Transform button to qty control for this variant
-    if (desktopBtn && desktopBtn.tagName === 'BUTTON') transformToQtyButtonVariant(desktopBtn, product, variant);
-    if (mobileBtn && mobileBtn.tagName === 'BUTTON') transformToQtyButtonVariant(mobileBtn, product, variant);
+    // Transform button OR replace existing stepper with this variant's stepper
+    if (desktopBtn && desktopBtn.tagName === 'BUTTON') {
+      transformToQtyButtonVariant(desktopBtn, product, variant);
+    } else {
+      // Button is already a stepper (for a different variant) — swap it
+      const desktopTransformed = document.querySelector('.desktop-product .product-btn-transformed');
+      if (desktopTransformed) replaceStepperForVariant(desktopTransformed, product, variant);
+    }
+    if (mobileBtn && mobileBtn.tagName === 'BUTTON') {
+      transformToQtyButtonVariant(mobileBtn, product, variant);
+    } else {
+      const mobileTransformed = document.querySelector('.mobile-product-page .product-btn-transformed');
+      if (mobileTransformed) replaceStepperForVariant(mobileTransformed, product, variant);
+    }
   } else {
     // Reset to "Add to Cart" if not in cart — check if currently transformed
     const desktopTransformed = document.querySelector('.desktop-product .product-btn-transformed');
@@ -1081,6 +1092,21 @@ function selectVariant(variantId, productId, prefix) {
       }
     }
   }
+}
+
+// Replace an existing stepper div with a different variant's stepper
+function replaceStepperForVariant(stepperDiv, product, variant) {
+  const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const item = localCart.find(i => i.id === product.id && i.variantId === variant.id);
+  const qty = item ? item.quantity : 1;
+
+  stepperDiv.outerHTML = `
+    <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}">
+      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, -1)">−</button>
+      <span class="grid-qty-display" id="qtyDisplay-${product.id}-${variant.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
+      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
+    </div>
+  `;
 }
 
 // Transform button to qty control for variant items
