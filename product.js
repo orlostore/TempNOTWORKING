@@ -915,7 +915,7 @@ function renderVariantSelector(containerId, product, isMobile) {
   container.innerHTML = `
     <div class="variant-section" style="${isMobile ? 'padding: 0 16px;' : ''}">
       <div class="variant-label">
-        <span>Choose Design | اختر التصميم</span>
+        <span>Choose Design | <span class="arabic-text">اختر التصميم</span></span>
         <span class="variant-selected-name" id="${prefix}-selectedName"></span>
       </div>
       <div class="variant-grid">${tilesHTML}</div>
@@ -949,7 +949,7 @@ function renderPricingTiers(containerId, product) {
 
   container.innerHTML = `
     <div class="pricing-tiers" style="margin-bottom:1rem; ${containerId.includes('Mobile') ? 'padding: 0 16px;' : ''}">
-      <div class="pricing-tiers-label">Quantity Pricing | تسعير الكمية</div>
+      <div class="pricing-tiers-label">Quantity Pricing | <span class="arabic-text">تسعير الكمية</span></div>
       <div class="tier-table">${tiersHTML}</div>
     </div>
   `;
