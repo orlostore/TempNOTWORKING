@@ -1450,29 +1450,38 @@ footer p {
   margin-bottom: 0.5rem;
 }
 
+.early-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
 .early-price-en,
 .early-price-ar {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--accent);
-  display: inline-block;
 }
 
 .early-price-ar {
-  float: right;
   direction: rtl;
 }
 
 .early-price-hint {
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
   font-size: 0.68rem;
   color: var(--accent);
   margin-top: 3px;
-  clear: both;
   cursor: pointer;
   text-decoration: none;
   opacity: 0.85;
   transition: opacity 0.2s;
+}
+.early-price-hint .arabic-text {
+  direction: rtl;
+  text-align: right;
 }
 .early-price-hint:hover {
   opacity: 1;
