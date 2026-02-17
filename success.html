@@ -250,6 +250,7 @@
     </nav>
 </header>
 <script>
+sessionStorage.removeItem('orlo_checkout_pending');
 (function(){
     try { var c=JSON.parse(localStorage.getItem('cart')||'[]'); var n=c.reduce(function(s,i){return s+(i.quantity||0);},0); ['cartCount','mobileCartCount'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=n>0?n:'';}); } catch(e){}
     var searchBtn=document.getElementById('searchBtn'),searchInput=document.getElementById('searchInput'),acIndex=-1;
