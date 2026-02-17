@@ -647,9 +647,9 @@ nav {
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(214.4px, 214.4px));
-  column-gap: 1.68rem;
+  column-gap: 1rem;
   row-gap: 1rem;
-  max-width: 1180px;
+  max-width: calc(1180px - 2 * 1.34rem);
   margin: 0 auto;
   justify-content: center;
 }
