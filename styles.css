@@ -3163,6 +3163,7 @@ footer p {
   padding-bottom: 1.2rem;
   border-top: 2px solid #f0f0f0;
   border-bottom: 2px solid #f0f0f0;
+  scroll-margin-top: 80px;
 }
 .variant-label {
   font-size: 0.85rem;

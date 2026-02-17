@@ -339,14 +339,14 @@ async function initProductPage() {
     if (earlyPriceDesktop) {
       earlyPriceDesktop.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintDesktop');
       document.getElementById('earlyHintDesktop').onclick = function() {
-        const target = document.querySelector('.product-buybox') || document.querySelector('#variantSelectorDesktop .variant-section');
-        if (target) target.scrollIntoView({behavior:'smooth', block:'center'});
+        const target = document.querySelector('#variantSelectorDesktop .variant-section');
+        if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
       };
     }
     if (earlyPriceMobile) {
       earlyPriceMobile.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintMobile');
       document.getElementById('earlyHintMobile').onclick = function() {
-        const target = document.getElementById('variantSelectorMobile') || document.querySelector('.mobile-cart-section');
+        const target = document.querySelector('#variantSelectorMobile .variant-section') || document.getElementById('variantSelectorMobile');
         if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
       };
     }
