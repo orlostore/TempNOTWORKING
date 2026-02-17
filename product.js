@@ -335,7 +335,7 @@ async function initProductPage() {
   const earlyPriceMobile = document.getElementById("earlyPriceMobile");
   if (hasVariants && product.price) {
     const earlyHTML = `<div class="early-price-row"><span class="early-price-en">AED ${product.price} or less</span><span class="early-price-ar arabic-text">${product.price} درهم أو أقل</span></div>`;
-    const hintHTML = `<a class="early-price-hint" id="__HINT_ID__"><span>▼ Click to choose design & quantity for exact price</span><span class="arabic-text">اضغط لاختيار التصميم والكمية للسعر الدقيق ▼</span></a>`;
+    const hintHTML = `<a class="early-price-hint" id="__HINT_ID__"><span>Click to choose design & quantity for exact price ▼</span><span class="arabic-text">▼ اضغط لاختيار التصميم والكمية للسعر الدقيق</span></a>`;
     if (earlyPriceDesktop) {
       earlyPriceDesktop.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintDesktop');
       document.getElementById('earlyHintDesktop').onclick = function() {
