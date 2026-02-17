@@ -389,9 +389,9 @@ nav {
 }
 
 .container {
-  max-width: 1234px;
+  max-width: 1180px;
   margin: auto;
-  padding: 0 1.68rem 1rem 1.68rem;
+  padding: 0 1.34rem 1rem 1.34rem;
 }
 
 .section-title {
@@ -823,9 +823,9 @@ nav {
 }
 
 .contact-container {
-  max-width: 1234px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 0 1.68rem;
+  padding: 0 1.34rem;
 }
 
 .contact-box {
