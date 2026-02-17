@@ -992,7 +992,7 @@ nav {
 }
 
 .cart-header h2 {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
 }
 
 .close-cart {
@@ -1034,7 +1034,7 @@ nav {
 .cart-total {
   display: flex;
   justify-content: space-between;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: bold;
   margin-bottom: 0.75rem;
   color: var(--primary);
@@ -1047,7 +1047,7 @@ nav {
   color: white;
   border: none;
   border-radius: 5.36px;
-  font-size: 0.77rem;
+  font-size: 0.7rem;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.3s;
@@ -2884,14 +2884,14 @@ footer p {
 
 .popup-title {
     color: white;
-    font-size: 1.13rem;
+    font-size: 1.03rem;
     font-weight: 700;
     margin-bottom: 4px;
 }
 
 .popup-title-ar {
     color: rgba(255,255,255,0.8);
-    font-size: 0.83rem;
+    font-size: 0.73rem;
     font-family: 'Almarai', sans-serif;
 }
 
@@ -2930,12 +2930,12 @@ footer p {
 .popup-product-name {
     font-weight: 700;
     color: #2c4a5c;
-    font-size: 0.75rem;
+    font-size: 0.67rem;
     margin-bottom: 4px;
 }
 
 .popup-product-name-ar {
-    font-size: 0.64rem;
+    font-size: 0.56rem;
     color: #888;
     margin-bottom: 6px;
     font-family: 'Almarai', sans-serif;
@@ -2944,7 +2944,7 @@ footer p {
 .popup-product-price {
     color: #e07856;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .popup-bottom {
@@ -2959,7 +2959,7 @@ footer p {
     background: #f8f9fa;
     border-radius: 8px;
     margin-bottom: 15px;
-    font-size: 0.68rem;
+    font-size: 0.6rem;
 }
 
 .popup-summary-label {
@@ -2983,7 +2983,7 @@ footer p {
     color: white;
     border: none;
     border-radius: 9px;
-    font-size: 0.75rem;
+    font-size: 0.67rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
@@ -3005,7 +3005,7 @@ footer p {
     color: white;
     border: none;
     border-radius: 9px;
-    font-size: 0.75rem;
+    font-size: 0.67rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
