@@ -1446,6 +1446,13 @@ footer p {
   border-bottom: 2px solid #f0f0f0;
 }
 
+.early-price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
 .product-details p {
   line-height: 1.7;
   color: #444;
