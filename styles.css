@@ -1439,18 +1439,35 @@ footer p {
 .product-category {
   color: #888;
   font-size: 0.75rem;
-  margin-bottom: 1.2rem;
-  padding-bottom: 1.2rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 2px solid #f0f0f0;
 }
 
 .early-price {
+  margin-bottom: 0.5rem;
+}
+
+.early-price-en,
+.early-price-ar {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--accent);
-  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.early-price-ar {
+  float: right;
+  direction: rtl;
+}
+
+.early-price-hint {
+  font-size: 0.68rem;
+  color: #999;
+  margin-top: 2px;
+  clear: both;
 }
 
 .product-details p {
@@ -1477,7 +1494,7 @@ footer p {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.6rem;
   padding-left: 16px;
   border-left: 3px solid #e76f51;
 }
@@ -1500,13 +1517,13 @@ footer p {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .product-desc-value {
   font-size: 0.78rem;
   color: #555;
-  line-height: 1.7;
+  line-height: 1.5;
 }
 
 .product-desc-ar .product-desc-value {
@@ -3123,8 +3140,11 @@ footer p {
    PRODUCT PAGE - VARIANT SELECTOR
    ============================================ */
 .variant-section {
+  margin-top: 1rem;
   margin-bottom: 1.2rem;
+  padding-top: 0.8rem;
   padding-bottom: 1.2rem;
+  border-top: 2px solid #f0f0f0;
   border-bottom: 2px solid #f0f0f0;
 }
 .variant-label {
