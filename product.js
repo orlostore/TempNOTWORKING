@@ -344,7 +344,11 @@ async function initProductPage() {
       };
     }
     if (earlyPriceMobile) {
-      earlyPriceMobile.innerHTML = earlyHTML;
+      earlyPriceMobile.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintMobile');
+      document.getElementById('earlyHintMobile').onclick = function() {
+        const target = document.querySelector('#variantSelectorMobile .variant-section') || document.getElementById('variantSelectorMobile');
+        if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+      };
     }
   } else {
     if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
