@@ -3329,7 +3329,7 @@ footer p {
 .your-price-value {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--primary);
 }
 .your-price-each {
   font-size: 0.62rem;
