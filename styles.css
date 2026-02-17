@@ -242,8 +242,8 @@ nav {
 .hero {
   background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
   color: #fff;
-  padding: 12px 25px;
-  max-width: 1180px;
+  padding: 12px 1.34rem;
+  max-width: calc(1180px - 2 * 1.34rem);
   margin: 0.7rem auto 1rem auto;
   border-radius: 10px;
   display: flex;
