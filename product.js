@@ -976,10 +976,8 @@ function renderPricingTiers(containerId, product) {
 
     return `
       <div class="tier-item ${isActive ? 'active' : ''} ${isLast && tiers.length > 1 ? 'best-deal' : ''}" data-min-qty="${t.minQty}">
-        <div class="tier-qty">${qtyLabel}</div>
-        <div class="tier-price">AED ${t.pricePerUnit}</div>
-        <div class="tier-each">each</div>
-        ${savePercent > 0 ? `<div class="tier-save">Save ${savePercent}%</div>` : ''}
+        <div class="tier-row-top"><span class="tier-qty">${qtyLabel}</span><span class="tier-price">AED ${t.pricePerUnit}</span></div>
+        <div class="tier-row-bottom">each${savePercent > 0 ? ` · <span class="tier-save">Save ${savePercent}%</span>` : ''}</div>
       </div>
     `;
   }).join('');
