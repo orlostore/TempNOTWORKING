@@ -3163,6 +3163,7 @@ footer p {
   padding-bottom: 1.2rem;
   border-top: 2px solid #f0f0f0;
   border-bottom: 2px solid #f0f0f0;
+  scroll-margin-top: 80px;
 }
 .variant-label {
   font-size: 0.85rem;
@@ -3245,7 +3246,7 @@ footer p {
   margin-bottom: 0.6rem;
 }
 .pricing-tiers-label {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--primary);
   margin-bottom: 4px;
@@ -3260,7 +3261,7 @@ footer p {
 .tier-item {
   flex: 1;
   text-align: center;
-  padding: 4px 3px;
+  padding: 3px 3px;
   border-right: 1px solid #e0e0e0;
   transition: all 0.2s;
 }
@@ -3274,25 +3275,30 @@ footer p {
 .tier-item.best-deal {
   background: #fff8f5;
 }
+.tier-row-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 3px;
+}
 .tier-qty {
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 600;
   color: var(--primary);
 }
 .tier-price {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: var(--accent);
 }
-.tier-each {
-  font-size: 0.6rem;
+.tier-row-bottom {
+  font-size: 0.55rem;
   color: #888;
+  line-height: 1.2;
 }
 .tier-save {
-  font-size: 0.58rem;
   color: #28a745;
   font-weight: 600;
-  margin-top: 1px;
 }
 
 @media (max-width: 768px) {
