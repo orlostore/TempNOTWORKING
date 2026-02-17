@@ -335,7 +335,7 @@ async function initProductPage() {
   const earlyPriceMobile = document.getElementById("earlyPriceMobile");
   if (hasVariants && product.price) {
     const earlyHTML = `<span class="early-price-en">AED ${product.price} or less</span><span class="early-price-ar arabic-text">${product.price} درهم أو أقل</span>`;
-    const hintHTML = `<div class="early-price-hint">Select design & quantity for exact price <span class="arabic-text">اختر التصميم والكمية للسعر الدقيق</span></div>`;
+    const hintHTML = `<a class="early-price-hint" onclick="document.querySelector('.variant-section')?.scrollIntoView({behavior:'smooth',block:'center'})">▼ Click to choose design & quantity for exact price <span class="arabic-text">▼ اضغط لاختيار التصميم والكمية للسعر الدقيق</span></a>`;
     if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTML + hintHTML;
     if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTML + hintHTML;
   } else {
@@ -1065,7 +1065,7 @@ function selectVariant(variantId, productId, prefix) {
     const tile = document.getElementById(`${p}-vtile-${variantId}`);
     if (tile) tile.classList.add('selected');
     const nameEl = document.getElementById(`${p}-selectedName`);
-    if (nameEl) nameEl.textContent = variant.name;
+    if (nameEl) nameEl.textContent = '✓ ' + variant.name;
   });
 
   // Swap main image to variant image

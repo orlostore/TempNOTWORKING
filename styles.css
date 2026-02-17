@@ -1464,10 +1464,19 @@ footer p {
 }
 
 .early-price-hint {
+  display: block;
   font-size: 0.68rem;
-  color: #999;
-  margin-top: 2px;
+  color: var(--accent);
+  margin-top: 3px;
   clear: both;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+.early-price-hint:hover {
+  opacity: 1;
+  text-decoration: underline;
 }
 
 .product-details p {
@@ -3225,25 +3234,25 @@ footer p {
    PRODUCT PAGE - PRICING TIERS
    ============================================ */
 .pricing-tiers {
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 }
 .pricing-tiers-label {
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--primary);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .tier-table {
   display: flex;
   gap: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
   border: 1px solid #e0e0e0;
 }
 .tier-item {
   flex: 1;
   text-align: center;
-  padding: 8px 6px;
+  padding: 4px 3px;
   border-right: 1px solid #e0e0e0;
   transition: all 0.2s;
 }
@@ -3252,30 +3261,30 @@ footer p {
 }
 .tier-item.active {
   background: #f0f5f8;
-  box-shadow: inset 0 -3px 0 var(--primary);
+  box-shadow: inset 0 -2px 0 var(--primary);
 }
 .tier-item.best-deal {
   background: #fff8f5;
 }
 .tier-qty {
-  font-size: 0.8rem;
+  font-size: 0.68rem;
   font-weight: 600;
   color: var(--primary);
 }
 .tier-price {
-  font-size: 0.92rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--accent);
 }
 .tier-each {
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   color: #888;
 }
 .tier-save {
-  font-size: 0.65rem;
+  font-size: 0.58rem;
   color: #28a745;
   font-weight: 600;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 @media (max-width: 768px) {
