@@ -2475,8 +2475,8 @@ footer p {
 
 .mobile-carousel-slide img {
   width: 100%;
-  height: 300px;
-  object-fit: contain;
+  height: auto;
+  display: block;
   background: white;
 }
 
@@ -2754,14 +2754,14 @@ footer p {
 }
 
 .gallery-scroll {
-  padding: 60px 15px 30px;
+  padding: 60px 0 30px;
 }
 
 .gallery-image-wrapper {
   margin-bottom: 20px;
   background: white;
-  border-radius: 8px;
-  padding: 15px;
+  border-radius: 0;
+  padding: 0;
 }
 
 .gallery-image-wrapper img {
