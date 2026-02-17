@@ -2690,6 +2690,8 @@ footer p {
   background: #ececec;
   z-index: 10000;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: auto;
 }
 
 .gallery-overlay.active {
@@ -2755,6 +2757,7 @@ footer p {
 
 .gallery-scroll {
   padding: 60px 0 30px;
+  scroll-snap-type: y proximity;
 }
 
 .gallery-image-wrapper {
@@ -2762,6 +2765,8 @@ footer p {
   background: white;
   border-radius: 0;
   padding: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
 }
 
 .gallery-image-wrapper img {
