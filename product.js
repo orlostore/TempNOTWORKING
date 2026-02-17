@@ -335,9 +335,21 @@ async function initProductPage() {
   const earlyPriceMobile = document.getElementById("earlyPriceMobile");
   if (hasVariants && product.price) {
     const earlyHTML = `<div class="early-price-row"><span class="early-price-en">AED ${product.price} or less</span><span class="early-price-ar arabic-text">${product.price} درهم أو أقل</span></div>`;
-    const hintHTML = `<a class="early-price-hint" onclick="document.querySelector('.variant-section')?.scrollIntoView({behavior:'smooth',block:'center'})"><span>▼ Click to choose design & quantity for exact price</span><span class="arabic-text">اضغط لاختيار التصميم والكمية للسعر الدقيق ▼</span></a>`;
-    if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTML + hintHTML;
-    if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTML + hintHTML;
+    const hintHTML = `<a class="early-price-hint" id="__HINT_ID__"><span>▼ Click to choose design & quantity for exact price</span><span class="arabic-text">اضغط لاختيار التصميم والكمية للسعر الدقيق ▼</span></a>`;
+    if (earlyPriceDesktop) {
+      earlyPriceDesktop.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintDesktop');
+      document.getElementById('earlyHintDesktop').onclick = function() {
+        const target = document.querySelector('.product-buybox') || document.querySelector('#variantSelectorDesktop .variant-section');
+        if (target) target.scrollIntoView({behavior:'smooth', block:'center'});
+      };
+    }
+    if (earlyPriceMobile) {
+      earlyPriceMobile.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintMobile');
+      document.getElementById('earlyHintMobile').onclick = function() {
+        const target = document.getElementById('variantSelectorMobile') || document.querySelector('.mobile-cart-section');
+        if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+      };
+    }
   } else {
     if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
     if (earlyPriceMobile) earlyPriceMobile.style.display = 'none';
