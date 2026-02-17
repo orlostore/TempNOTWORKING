@@ -797,7 +797,7 @@ nav {
 
 .about-section {
   background: var(--bg);
-  padding: 0;
+  padding: 1rem 0;
 }
 
 .about-section p {
@@ -885,6 +885,20 @@ nav {
   font-size: 0.8rem;
 }
 
+.contact-detail strong .arabic-text {
+  display: inline;
+  font-size: 0.7rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.contact-detail > .arabic-text {
+  display: block;
+  font-size: 0.7rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
 .contact-detail a {
   color: #e07856;
   text-decoration: none;
@@ -935,12 +949,14 @@ nav {
 }
 
 .term-card h3 .term-title {
+  display: block;
   color: var(--primary);
   font-size: 0.77rem;
   transition: color 0.3s;
 }
 
 .term-card h3 .term-title-ar {
+  display: block;
   font-size: 0.7rem;
   color: #666;
   margin-top: 2.68px;

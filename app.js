@@ -345,7 +345,7 @@ function renderProducts(list, arabicMode) {
                 <a href="product.html?product=${p.slug}" style="text-decoration:none; color:inherit;">
                     ${titleHTML}
                 </a>
-                <div class="product-price">${p.price} ${arabicMode ? 'د.إ' : 'AED'}</div>
+                <div class="product-price">${arabicMode ? `${p.price} د.إ` : `AED ${p.price}`}</div>
                 ${buttonHTML}
             </div>
         </div>
