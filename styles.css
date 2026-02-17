@@ -686,7 +686,8 @@ nav {
 }
 
 .product-image {
-  height: 174.2px;
+  width: 172.5px;
+  height: 172.5px;
   display: flex;
   align-items: center;
   justify-content: center;
