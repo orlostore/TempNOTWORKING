@@ -13,6 +13,16 @@ const SVG_INFO = '<svg style="width:1.3em;height:1.3em;vertical-align:-0.2em;str
 const SVG_MAIL_SM = '<svg style="width:1.3em;height:1.3em;vertical-align:-0.2em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
 const SVG_CLIPBOARD_SM = '<svg style="width:1.3em;height:1.3em;vertical-align:-0.2em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>';
 
+// Redirect to cancel page if user presses back from Stripe payment
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+        if (sessionStorage.getItem('orlo_checkout_pending')) {
+            sessionStorage.removeItem('orlo_checkout_pending');
+            window.location.replace('cancel.html');
+        }
+    }
+});
+
 // Inject cart shake animation
 if (!document.getElementById('cartLimitStyles')) {
     const style = document.createElement('style');
@@ -1326,7 +1336,8 @@ async function checkout() {
         }
 
         if (data.url) {
-            window.location.href = data.url; 
+            sessionStorage.setItem('orlo_checkout_pending', '1');
+            window.location.href = data.url;
         } else {
             throw new Error('No URL');
         }
