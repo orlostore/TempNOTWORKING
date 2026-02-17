@@ -1019,8 +1019,9 @@ function renderPricingTiers(containerId, product) {
       <div class="pricing-tiers-label">Quantity Pricing | <span class="arabic-text">تسعير الكمية</span></div>
       <div class="tier-table">${tiersHTML}</div>
       <div class="your-price-bar${activeSave > 0 ? ' has-savings' : ''}" style="margin-top:6px;">
-        <span class="your-price-label">Your price</span><span class="your-price-label-ar arabic-text">سعرك</span>
-        <span class="your-price-value">AED ${activePrice}</span><span class="your-price-each">each</span>
+        <span class="your-price-label">Your price per piece</span>
+        <span class="your-price-value">AED ${activePrice}</span>
+        <span class="your-price-label-ar arabic-text">سعرك لكل قطعة</span>
         ${activeSave > 0 ? `<span class="your-price-badge">Save ${activeSave}%</span>` : ''}
       </div>
     </div>
@@ -1052,7 +1053,7 @@ function updateTierHighlight(productId) {
       const bar = container.querySelector('.your-price-bar');
       if (bar) {
         bar.classList.toggle('has-savings', savePct > 0);
-        bar.querySelector('.your-price-value').innerHTML = `AED ${activePrice} <span class="your-price-each">each</span>`;
+        bar.querySelector('.your-price-value').textContent = `AED ${activePrice}`;
         const existingBadge = bar.querySelector('.your-price-badge');
         if (savePct > 0) {
           if (existingBadge) {

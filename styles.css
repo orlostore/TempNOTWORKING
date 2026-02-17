@@ -3331,11 +3331,6 @@ footer p {
   font-weight: 700;
   color: var(--primary);
 }
-.your-price-each {
-  font-size: 0.62rem;
-  font-weight: 400;
-  color: #999;
-}
 .your-price-badge {
   background: #28a745;
   color: white;
