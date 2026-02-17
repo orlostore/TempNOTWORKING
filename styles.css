@@ -3121,7 +3121,7 @@ footer p {
   border-bottom: 2px solid #f0f0f0;
 }
 .variant-label {
-  font-size: 0.92rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--primary);
   margin-bottom: 8px;
