@@ -3329,12 +3329,7 @@ footer p {
 .your-price-value {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--accent);
-}
-.your-price-each {
-  font-size: 0.62rem;
-  font-weight: 400;
-  color: #999;
+  color: var(--primary);
 }
 .your-price-badge {
   background: #28a745;
