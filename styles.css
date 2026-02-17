@@ -389,9 +389,9 @@ nav {
 }
 
 .container {
-  max-width: 1180px;
+  max-width: calc(1180px - 2 * 1.34rem);
   margin: auto;
-  padding: 0 1.34rem 1rem 1.34rem;
+  padding-bottom: 1rem;
 }
 
 .section-title {
@@ -823,9 +823,9 @@ nav {
 }
 
 .contact-container {
-  max-width: 1180px;
+  max-width: calc(1180px - 2 * 1.34rem);
   margin: 0 auto;
-  padding: 0 1.34rem;
+  padding: 0;
 }
 
 .contact-box {
@@ -2166,13 +2166,23 @@ footer p {
 
 /* Mobile styles - max 768px */
 @media (max-width: 768px) {
+  /* Restore side padding for container/contact on mobile */
+  .container {
+    padding-left: 1.34rem;
+    padding-right: 1.34rem;
+  }
+  .contact-container {
+    padding-left: 1.34rem;
+    padding-right: 1.34rem;
+  }
+
   /* Show mobile promo banner */
   .mobile-promo-banner {
     display: block;
     margin: 0 1.01rem;
     border-radius: 8px;
   }
-  
+
   /* Category filters - scrollable row on mobile */
   .category-filters {
     padding: 0 0.3rem;
