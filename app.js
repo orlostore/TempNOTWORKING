@@ -611,7 +611,7 @@ function updateCart() {
     if (isLoggedIn) {
         checkoutBtnHTML = `
             <button id="stripeBtn" 
-                style="width: 100%; padding: 0.9rem; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #2c4a5c; color: white; transition: all 0.3s;" 
+                style="width: 100%; padding: 0.9rem; font-size: 0.85rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; background: #2c4a5c; color: white; transition: all 0.3s;" 
                 onclick="checkout()" 
                 onmouseover="this.style.background='#1e3545'" 
                 onmouseout="this.style.background='#2c4a5c'">
@@ -621,17 +621,17 @@ function updateCart() {
     } else {
         checkoutBtnHTML = `
             <div style="border-radius: 9px; overflow: hidden; box-shadow: 0 3px 10px rgba(44,74,92,0.15);">
-                <div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 10px 10px; font-size: 0.78rem; font-weight: 600; display:flex; align-items:center; justify-content:center; gap:5px;">
-                    ${SVG_CARD} Pay by Card | <span style="font-family: 'Almarai', sans-serif; font-size: 0.72rem; opacity: 0.85;">الدفع بالبطاقة</span>
+                <div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 10px 10px; font-size: 0.7rem; font-weight: 600; display:flex; align-items:center; justify-content:center; gap:5px;">
+                    ${SVG_CARD} Pay by Card | <span style="font-family: 'Almarai', sans-serif; font-size: 0.64rem; opacity: 0.85;">الدفع بالبطاقة</span>
                 </div>
                 <div style="display: flex; gap: 8px; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 10px 8px;">
                     <button id="stripeBtn" onclick="window.location.href='login.html?redirect='+encodeURIComponent(window.location.href.split('?')[0]+'?openCart=true')" 
-                        style="flex: 1; padding: 7px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
-                        ${SVG_LOCK_SM} Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.58rem; display: block; opacity: 0.8;">تسجيل الدخول</span>
+                        style="flex: 1; padding: 7px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.58rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
+                        ${SVG_LOCK_SM} Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.5rem; display: block; opacity: 0.8;">تسجيل الدخول</span>
                     </button>
                     <button id="stripeBtnGuest" onclick="checkout()" 
-                        style="flex: 1; padding: 7px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.66rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
-                        ${SVG_PERSON} As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.58rem; display: block; opacity: 0.8;">كضيف</span>
+                        style="flex: 1; padding: 7px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.58rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
+                        ${SVG_PERSON} As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.5rem; display: block; opacity: 0.8;">كضيف</span>
                     </button>
                 </div>
             </div>
@@ -645,12 +645,12 @@ function updateCart() {
     }
     
     const itemPad = isMobile ? '0.3rem 0.4rem' : '0.5rem';
-    const itemNameSize = isMobile ? '0.82rem' : '0.9rem';
-    const itemSubSize = isMobile ? '0.73rem' : '0.8rem';
-    const itemTotalSize = isMobile ? '0.82rem' : '0.9rem';
+    const itemNameSize = isMobile ? '0.82rem' : '0.8rem';
+    const itemSubSize = isMobile ? '0.73rem' : '0.7rem';
+    const itemTotalSize = isMobile ? '0.82rem' : '0.8rem';
     const btnPad = isMobile ? '0.25rem 0.5rem' : '0.3rem 0.6rem';
-    const btnFont = isMobile ? '0.8rem' : '0.85rem';
-    const qtyFont = isMobile ? '0.8rem' : '0.9rem';
+    const btnFont = isMobile ? '0.8rem' : '0.75rem';
+    const qtyFont = isMobile ? '0.8rem' : '0.8rem';
 
     // Calculate tier pricing for each cart item
     const cartWithTierPricing = calculateTierPricing(cart);
@@ -755,8 +755,8 @@ function updateCart() {
     }
 
     const sumPad = isMobile ? '0.3rem 0.75rem 0.25rem' : '0.6rem 1rem';
-    const sumFont = isMobile ? '0.7rem' : '0.8rem';
-    const sumTotalFont = isMobile ? '0.85rem' : '1rem';
+    const sumFont = isMobile ? '0.78rem' : '0.8rem';
+    const sumTotalFont = isMobile ? '0.95rem' : '1rem';
     const sumDivMargin = isMobile ? '0.2rem 0' : '0.3rem 0';
     const sumTotalPad = isMobile ? '0.25rem 0 0.1rem' : '0.4rem 0 0.2rem';
 
