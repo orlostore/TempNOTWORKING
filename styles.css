@@ -197,6 +197,7 @@ nav {
   font-size: 0.65rem;
   color: #666;
   margin-top: 2px;
+  text-align: center;
 }
 
 .nav-links a:hover,
