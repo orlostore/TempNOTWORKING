@@ -330,6 +330,18 @@ async function initProductPage() {
   document.getElementById("productDescription").innerHTML = descriptionHTML;
   document.getElementById("productPrice").innerText = "AED " + product.price;
 
+  // === EARLY PRICE (variant products only) ===
+  const earlyPriceDesktop = document.getElementById("earlyPriceDesktop");
+  const earlyPriceMobile = document.getElementById("earlyPriceMobile");
+  if (hasVariants && product.price) {
+    const earlyHTML = `AED ${product.price} or less | <span class="arabic-text">${product.price} درهم أو أقل</span>`;
+    if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTML;
+    if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTML;
+  } else {
+    if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
+    if (earlyPriceMobile) earlyPriceMobile.style.display = 'none';
+  }
+
   // === VARIANT SELECTOR (Desktop) ===
   if (hasVariants) {
     renderVariantSelector('variantSelectorDesktop', product, false);
