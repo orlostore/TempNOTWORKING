@@ -625,13 +625,13 @@ function updateCart() {
                     ${SVG_CARD} Pay by Card | <span style="font-family: 'Almarai', sans-serif; font-size: 0.64rem; opacity: 0.85;">الدفع بالبطاقة</span>
                 </div>
                 <div style="display: flex; gap: 8px; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 10px 8px;">
-                    <button id="stripeBtn" onclick="window.location.href='login.html?redirect='+encodeURIComponent(window.location.href.split('?')[0]+'?openCart=true')" 
-                        style="flex: 1; padding: 7px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.58rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
-                        ${SVG_LOCK_SM} Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.5rem; display: block; opacity: 0.8;">تسجيل الدخول</span>
+                    <button id="stripeBtn" onclick="window.location.href='login.html?redirect='+encodeURIComponent(window.location.href.split('?')[0]+'?openCart=true')"
+                        style="flex: 1; padding: 9px 7px; border: none; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
+                        ${SVG_LOCK_SM} Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.62rem; display: block; opacity: 0.8;">تسجيل الدخول</span>
                     </button>
-                    <button id="stripeBtnGuest" onclick="checkout()" 
-                        style="flex: 1; padding: 7px 5px; border: none; font-family: 'Inter', sans-serif; font-size: 0.58rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
-                        ${SVG_PERSON} As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.5rem; display: block; opacity: 0.8;">كضيف</span>
+                    <button id="stripeBtnGuest" onclick="checkout()"
+                        style="flex: 1; padding: 9px 7px; border: none; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
+                        ${SVG_PERSON} As Guest<span style="font-family: 'Almarai', sans-serif; font-size: 0.62rem; display: block; opacity: 0.8;">كضيف</span>
                     </button>
                 </div>
             </div>
