@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing Ideas - ORLO Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2c4a5c;
+    --accent: #e07856;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f5f5f5; padding: 20px; }
+
+  h1 { text-align: center; color: var(--primary); margin-bottom: 8px; font-size: 1.3rem; }
+  .subtitle { text-align: center; color: #888; margin-bottom: 30px; font-size: 0.85rem; }
+
+  .mockup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  @media (max-width: 700px) {
+    .mockup-grid { grid-template-columns: 1fr; }
+  }
+
+  .mockup-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border: 2px solid transparent;
+  }
+  .mockup-card.current { border-color: #ddd; opacity: 0.7; }
+  .mockup-card.recommended { border-color: var(--accent); }
+
+  .card-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+  .card-label.old { background: #eee; color: #888; }
+  .card-label.idea { background: #fff3ee; color: var(--accent); }
+  .card-label.best { background: var(--accent); color: white; }
+
+  /* ---- Tier Table (matches real site) ---- */
+  .pricing-tiers-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+  .tier-table {
+    display: flex;
+    gap: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 12px;
+  }
+  .tier-item {
+    flex: 1;
+    text-align: center;
+    padding: 3px 3px;
+    border-right: 1px solid #e0e0e0;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .tier-item:last-child { border-right: none; }
+  .tier-item.active {
+    background: #f0f5f8;
+    box-shadow: inset 0 -2px 0 var(--primary);
+  }
+  .tier-item.best-deal { background: #fff8f5; }
+  .tier-row-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 3px;
+  }
+  .tier-qty { font-size: 0.72rem; font-weight: 600; color: var(--primary); }
+  .tier-price { font-size: 0.82rem; font-weight: 700; color: var(--accent); }
+  .tier-row-bottom { font-size: 0.65rem; color: #888; line-height: 1.2; }
+  .tier-save { color: #28a745; font-weight: 600; }
+
+  /* ---- Static Price (current) ---- */
+  .static-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  /* ---- Idea 1: No price, just table ---- */
+  /* Nothing extra needed */
+
+  /* ---- Idea 2: Dynamic your-price ---- */
+  .your-price-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #f0f5f8, #eef7f0);
+    border: 1px solid #d4e6d9;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+  }
+  .your-price-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .your-price-label {
+    font-size: 0.68rem;
+    color: #666;
+    font-weight: 500;
+  }
+  .your-price-value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .your-price-badge {
+    background: #28a745;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  /* ---- Idea 3: Best deal nudge ---- */
+  .best-deal-nudge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff8f5;
+    border: 1px dashed var(--accent);
+    border-radius: 8px;
+    padding: 9px 12px;
+    margin-bottom: 12px;
+  }
+  .nudge-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .nudge-text {
+    font-size: 0.75rem;
+    color: #555;
+    line-height: 1.4;
+  }
+  .nudge-text strong {
+    color: var(--accent);
+  }
+
+  /* ---- Idea 4: Starting from ---- */
+  .starting-from {
+    margin-bottom: 12px;
+  }
+  .starting-from-label {
+    font-size: 0.68rem;
+    color: #888;
+    font-weight: 500;
+    margin-bottom: 1px;
+  }
+  .starting-from-price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .starting-from-unit {
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 400;
+  }
+
+  /* ---- Add to cart button (shared) ---- */
+  .add-btn {
+    width: 100%;
+    padding: 10px 20px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .vs-divider {
+    text-align: center;
+    color: #ccc;
+    font-size: 0.75rem;
+    margin: 4px 0;
+  }
+
+  /* Interactive demo for Idea 2 */
+  .demo-qty-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .demo-qty-label {
+    font-size: 0.7rem;
+    color: #888;
+  }
+  .demo-qty-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+  }
+  .demo-qty-btn:hover { border-color: var(--primary); }
+  .demo-qty-val {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    min-width: 20px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<h1>Pricing Section Ideas</h1>
+<p class="subtitle">Compare current design vs proposed improvements</p>
+
+<div class="mockup-grid">
+
+  <!-- CURRENT -->
+  <div class="mockup-card current">
+    <div class="card-label old">Current (Remove this)</div>
+    <div class="pricing-tiers-label">Quantity Pricing | <span style="font-family:sans-serif;">تسعير الكمية</span></div>
+    <div class="tier-table">
+      <div class="tier-item active">
+        <div class="tier-row-top"><span class="tier-qty">1 pc</span><span class="tier-price">AED 15</span></div>
+        <div class="tier-row-bottom">each</div>
+      </div>
+      <div class="tier-item">
+        <div class="tier-row-top"><span class="tier-qty">3+ pcs</span><span class="tier-price">AED 12.5</span></div>
+        <div class="tier-row-bottom">each · <span class="tier-save">Save 17%</span></div>
+      </div>
+      <div class="tier-item best-deal">
+        <div class="tier-row-top"><span class="tier-qty">5+ pcs</span><span class="tier-price">AED 11.5</span></div>
+        <div class="tier-row-bottom">each · <span class="tier-save">Save 23%</span></div>
+      </div>
+    </div>
+    <div class="static-price">AED 15</div>
+    <div class="vs-divider">↑ Redundant — already shown in tier table above</div>
+    <button class="add-btn" style="margin-top:10px;">Add to Cart | أضف إلى السلة</button>
+  </div>
+
+  <!-- IDEA 1: Just remove it -->
+  <div class="mockup-card">
+    <div class="card-label idea">Idea 1 — Clean & Simple</div>
+    <div class="pricing-tiers-label">Quantity Pricing | <span style="font-family:sans-serif;">تسعير الكمية</span></div>
+    <div class="tier-table">
+      <div class="tier-item active">
+        <div class="tier-row-top"><span class="tier-qty">1 pc</span><span class="tier-price">AED 15</span></div>
+        <div class="tier-row-bottom">each</div>
+      </div>
+      <div class="tier-item">
+        <div class="tier-row-top"><span class="tier-qty">3+ pcs</span><span class="tier-price">AED 12.5</span></div>
+        <div class="tier-row-bottom">each · <span class="tier-save">Save 17%</span></div>
+      </div>
+      <div class="tier-item best-deal">
+        <div class="tier-row-top"><span class="tier-qty">5+ pcs</span><span class="tier-price">AED 11.5</span></div>
+        <div class="tier-row-bottom">each · <span class="tier-save">Save 23%</span></div>
+      </div>
+    </div>
+    <!-- No standalone price — tier table says it all -->
+    <button class="add-btn">Add to Cart | أضف إلى السلة</button>
+  </div>
+
+  <!-- IDEA 2: Dynamic your-price (RECOMMENDED) -->
+  <div class="mockup-card recommended">
+    <div class="card-label best">Idea 2 — Dynamic Price (Recommended)</div>
+    <div class="pricing-tiers-label">Quantity Pricing | <span style="font-family:sans-serif;">تسعير الكمية</span></div>
+    <div class="tier-table" id="idea2Tiers">
+      <div class="tier-item active" data-min="1" data-price="15" onclick="selectTier(this)">
+        <div class="tier-row-top"><span class="tier-qty">1 pc</span><span class="tier-price">AED 15</span></div>
+        <div class="tier-row-bottom">each</div>
+      </div>
+      <div class="tier-item" data-min="3" data-price="12.5" data-save="17" onclick="selectTier(this)">
+        <div class="tier-row-top"><span class="tier-qty">3+ pcs</span><span class="tier-price">AED 12.5</span></div>
+        <div class="tier-row-bottom">each · <span class="tier-save">Save 17%</span></div>
+      </div>
+      <div class="tier-item best-deal" data-min="5" data-price="11.5" data-save="23" onclick="selectTier(this)">
+        <div class="tier-row-top"><span class="tier-qty">5+ pcs</span><span class="tier-price">AED 11.5</span></div>
+        <div class="tier-row-bottom">each · <span class="tier-save">Save 23%</span></div>
+      </div>
+    </div>
+    <div class="your-price-bar" id="yourPriceBar">
+      <div class="your-price-left">
+        <span class="your-price-label">Your price</span>
+        <span class="your-price-value" id="yourPriceValue">AED 15.00 <span style="font-size:0.72rem;font-weight:500;color:#888;">each</span></span>
+      </div>
+      <span class="your-price-badge" id="yourPriceBadge" style="display:none;">Save 0%</span>
+    </div>
+    <p style="font-size:0.65rem;color:#aaa;margin-bottom:10px;text-align:center;">↑ Click the tiers above to see this update live</p>
+    <button class="add-btn">Add to Cart | أضف إلى السلة</button>
+  </div>
+
+  <!-- IDEA 3: Best deal nudge -->
+  <div class="mockup-card">
+    <div class="card-label idea">Idea 3 — Best Deal Nudge</div>
+    <div class="pricing-tiers-label">Quantity Pricing | <span style="font-family:sans-serif;">تسعير الكمية</span></div>
+    <div class="tier-table">
+      <div class="tier-item active">
+        <div class="tier-row-top"><span class="tier-qty">1 pc</span><span class="tier-price">AED 15</span></div>
+        <div class="tier-row-bottom">each</div>
+      </div>
+      <div class="tier-item">
+        <div class="tier-row-top"><span class="tier-qty">3+ pcs</span><span class="tier-price">AED 12.5</span></div>
+        <div class="tier-row-bottom">each · <span class="tier-save">Save 17%</span></div>
+      </div>
+      <div class="tier-item best-deal">
+        <div class="tier-row-top"><span class="tier-qty">5+ pcs</span><span class="tier-price">AED 11.5</span></div>
+        <div class="tier-row-bottom">each · <span class="tier-save">Save 23%</span></div>
+      </div>
+    </div>
+    <div class="best-deal-nudge">
+      <span class="nudge-icon">💡</span>
+      <span class="nudge-text">Buy 5+ and save <strong>23%</strong> — just <strong>AED 11.5</strong> each</span>
+    </div>
+    <button class="add-btn">Add to Cart | أضف إلى السلة</button>
+  </div>
+
+  <!-- IDEA 4: Starting from -->
+  <div class="mockup-card">
+    <div class="card-label idea">Idea 4 — Starting From</div>
+    <div class="pricing-tiers-label">Quantity Pricing | <span style="font-family:sans-serif;">تسعير الكمية</span></div>
+    <div class="tier-table">
+      <div class="tier-item active">
+        <div class="tier-row-top"><span class="tier-qty">1 pc</span><span class="tier-price">AED 15</span></div>
+        <div class="tier-row-bottom">each</div>
+      </div>
+      <div class="tier-item">
+        <div class="tier-row-top"><span class="tier-qty">3+ pcs</span><span class="tier-price">AED 12.5</span></div>
+        <div class="tier-row-bottom">each · <span class="tier-save">Save 17%</span></div>
+      </div>
+      <div class="tier-item best-deal">
+        <div class="tier-row-top"><span class="tier-qty">5+ pcs</span><span class="tier-price">AED 11.5</span></div>
+        <div class="tier-row-bottom">each · <span class="tier-save">Save 23%</span></div>
+      </div>
+    </div>
+    <div class="starting-from">
+      <div class="starting-from-label">From</div>
+      <span class="starting-from-price">AED 11.5</span>
+      <span class="starting-from-unit">per piece</span>
+    </div>
+    <button class="add-btn">Add to Cart | أضف إلى السلة</button>
+  </div>
+
+</div>
+
+<script>
+function selectTier(el) {
+  // Remove active from all siblings
+  el.parentElement.querySelectorAll('.tier-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+
+  const price = el.dataset.price;
+  const save = el.dataset.save || '0';
+  const priceBar = document.getElementById('yourPriceBar');
+  const priceVal = document.getElementById('yourPriceValue');
+  const badge = document.getElementById('yourPriceBadge');
+
+  priceVal.innerHTML = `AED ${parseFloat(price).toFixed(2)} <span style="font-size:0.72rem;font-weight:500;color:#888;">each</span>`;
+
+  if (parseInt(save) > 0) {
+    badge.style.display = 'inline-block';
+    badge.textContent = `Save ${save}%`;
+    priceBar.style.background = 'linear-gradient(135deg, #eef7f0, #e8f5e9)';
+    priceBar.style.borderColor = '#a5d6a7';
+  } else {
+    badge.style.display = 'none';
+    priceBar.style.background = 'linear-gradient(135deg, #f0f5f8, #eef7f0)';
+    priceBar.style.borderColor = '#d4e6d9';
+  }
+}
+</script>
+
+</body>
+</html>
