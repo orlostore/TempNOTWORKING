@@ -3121,7 +3121,7 @@ footer p {
   border-bottom: 2px solid #f0f0f0;
 }
 .variant-label {
-  font-size: 0.82rem;
+  font-size: 0.92rem;
   font-weight: 600;
   color: var(--primary);
   margin-bottom: 8px;
@@ -3132,7 +3132,7 @@ footer p {
 .variant-selected-name {
   font-weight: 400;
   color: var(--accent);
-  font-size: 0.78rem;
+  font-size: 0.88rem;
 }
 .variant-grid {
   display: grid;
@@ -3175,7 +3175,7 @@ footer p {
   transform: rotate(-15deg);
 }
 .variant-tile-name {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--text);
   margin-top: 4px;
@@ -3185,7 +3185,7 @@ footer p {
   text-overflow: ellipsis;
 }
 .variant-tile-stock {
-  font-size: 0.55rem;
+  font-size: 0.65rem;
   color: #999;
   margin-top: 1px;
 }
@@ -3201,7 +3201,7 @@ footer p {
   margin-bottom: 1rem;
 }
 .pricing-tiers-label {
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--primary);
   margin-bottom: 6px;
@@ -3231,21 +3231,21 @@ footer p {
   background: #fff8f5;
 }
 .tier-qty {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--primary);
 }
 .tier-price {
-  font-size: 0.82rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--accent);
 }
 .tier-each {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   color: #888;
 }
 .tier-save {
-  font-size: 0.55rem;
+  font-size: 0.65rem;
   color: #28a745;
   font-weight: 600;
   margin-top: 2px;
