@@ -3282,17 +3282,17 @@ footer p {
   gap: 3px;
 }
 .tier-qty {
-  font-size: 0.62rem;
+  font-size: 0.72rem;
   font-weight: 600;
   color: var(--primary);
 }
 .tier-price {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--accent);
 }
 .tier-row-bottom {
-  font-size: 0.55rem;
+  font-size: 0.65rem;
   color: #888;
   line-height: 1.2;
 }
