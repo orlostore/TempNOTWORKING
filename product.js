@@ -805,6 +805,7 @@ function setupGalleryOverlay(product) {
         translateY = 0;
         img.style.transition = 'transform 0.3s';
         applyTransform();
+        overlay.style.overflowY = 'auto';
         if (currentResetBtn) currentResetBtn.classList.remove('visible');
         setTimeout(function() { img.style.transition = ''; }, 300);
       }
@@ -838,6 +839,7 @@ function setupGalleryOverlay(product) {
         if (e.touches.length === 2) {
           e.preventDefault();
           isPinching = true;
+          overlay.style.overflowY = 'hidden';
           startDist = getDistance(e.touches[0], e.touches[1]);
           startScale = scale;
         } else if (e.touches.length === 1 && scale > 1) {
@@ -873,6 +875,7 @@ function setupGalleryOverlay(product) {
           translateY = 0;
           img.style.transition = 'transform 0.3s';
           applyTransform();
+          overlay.style.overflowY = 'auto';
           if (currentResetBtn) currentResetBtn.classList.remove('visible');
           setTimeout(function() { img.style.transition = ''; }, 300);
         }

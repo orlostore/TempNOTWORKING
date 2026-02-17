@@ -2769,6 +2769,7 @@ footer p {
   height: auto;
   display: block;
   border-radius: 4px;
+  touch-action: pan-y;
 }
 
 /* Back link styling for product page */
