@@ -1611,12 +1611,13 @@ footer p {
   background: white;
   border-radius: 14px;
   border: 1px solid #eee;
+  width: 172.5px;
+  height: 172.5px;
 }
 
 .main-product-image {
-  width: 100%;
-  max-width: 550px;
-  max-height: 420px;
+  width: 172.5px;
+  height: 172.5px;
   display: block;
   margin: 0 auto;
   object-fit: contain;
