@@ -328,7 +328,13 @@ async function initProductPage() {
   descriptionHTML += buildExtraSpecsHTML(product);
 
   document.getElementById("productDescription").innerHTML = descriptionHTML;
-  document.getElementById("productPrice").innerText = "AED " + product.price;
+  // Hide standalone price when pricing tiers are present (dynamic bar replaces it)
+  const productPriceEl = document.getElementById("productPrice");
+  if (hasTiers) {
+    productPriceEl.style.display = 'none';
+  } else {
+    productPriceEl.innerText = "AED " + product.price;
+  }
 
   // === EARLY PRICE (variant products only) ===
   const earlyPriceDesktop = document.getElementById("earlyPriceDesktop");
@@ -415,7 +421,13 @@ async function initProductPage() {
   document.getElementById("mobileProductTitle").innerText = product.name;
   document.getElementById("mobileProductTitleAr").innerText = product.nameAr || '';
   document.getElementById("mobileProductCategory").innerText = product.category;
-  document.getElementById("mobileProductPrice").innerText = "AED " + product.price;
+  // Hide standalone price when pricing tiers are present (dynamic bar replaces it)
+  const mobilePriceEl = document.getElementById("mobileProductPrice");
+  if (hasTiers) {
+    mobilePriceEl.parentElement.style.display = 'none';
+  } else {
+    mobilePriceEl.innerText = "AED " + product.price;
+  }
 
   // === VARIANT SELECTOR (Mobile) ===
   if (hasVariants) {
@@ -999,18 +1011,30 @@ function renderPricingTiers(containerId, product) {
     `;
   }).join('');
 
+  const activePrice = tiers[activeTierIndex].pricePerUnit;
+  const activeSave = basePrice > 0 ? Math.round((1 - activePrice / basePrice) * 100) : 0;
+
   container.innerHTML = `
     <div class="pricing-tiers" data-product-id="${product.id}" style="margin-bottom:1rem; ${containerId.includes('Mobile') ? 'padding: 0 16px;' : ''}">
       <div class="pricing-tiers-label">Quantity Pricing | <span class="arabic-text">تسعير الكمية</span></div>
       <div class="tier-table">${tiersHTML}</div>
+      <div class="your-price-bar${activeSave > 0 ? ' has-savings' : ''}" style="margin-top:8px;">
+        <div class="your-price-left">
+          <span class="your-price-label">Your price <span class="your-price-label-ar arabic-text">سعرك</span></span>
+          <span class="your-price-value">AED ${activePrice} <span class="your-price-each">each</span></span>
+        </div>
+        ${activeSave > 0 ? `<span class="your-price-badge">Save ${activeSave}%</span>` : ''}
+      </div>
     </div>
   `;
 }
 
-// Update tier highlight based on current cart quantity
+// Update tier highlight and dynamic price bar based on current cart quantity
 function updateTierHighlight(productId) {
   const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
   const totalQty = localCart.filter(i => i.id === productId).reduce((s, i) => s + i.quantity, 0);
+  const product = products.find(p => p.id === productId);
+  const basePrice = product ? product.price : 0;
 
   document.querySelectorAll(`.pricing-tiers[data-product-id="${productId}"]`).forEach(container => {
     const tierItems = container.querySelectorAll('.tier-item');
@@ -1022,6 +1046,30 @@ function updateTierHighlight(productId) {
     tierItems.forEach((item, i) => {
       item.classList.toggle('active', i === activeTierIndex);
     });
+
+    // Update "Your price" bar
+    if (product && product.pricingTiers && product.pricingTiers.length > 0) {
+      const activePrice = product.pricingTiers[activeTierIndex].pricePerUnit;
+      const savePct = basePrice > 0 ? Math.round((1 - activePrice / basePrice) * 100) : 0;
+      const bar = container.querySelector('.your-price-bar');
+      if (bar) {
+        bar.classList.toggle('has-savings', savePct > 0);
+        bar.querySelector('.your-price-value').innerHTML = `AED ${activePrice} <span class="your-price-each">each</span>`;
+        const existingBadge = bar.querySelector('.your-price-badge');
+        if (savePct > 0) {
+          if (existingBadge) {
+            existingBadge.textContent = `Save ${savePct}%`;
+          } else {
+            const badge = document.createElement('span');
+            badge.className = 'your-price-badge';
+            badge.textContent = `Save ${savePct}%`;
+            bar.appendChild(badge);
+          }
+        } else if (existingBadge) {
+          existingBadge.remove();
+        }
+      }
+    }
   });
 }
 
