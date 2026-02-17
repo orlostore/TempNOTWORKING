@@ -381,7 +381,7 @@ async function initProductPage() {
       const thumbnailsHTML = product.images.length > 1 ? `
         <div class="thumbnail-strip">
           ${product.images.map((img, index) => `
-            <img src="${img}" alt="${product.name} ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', ${index})" style="object-fit:contain;">
+            <img src="${img}" alt="${product.name} ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}" onclick="changeMainImage('${img}', ${index})" style="object-fit:contain;">
           `).join('')}
         </div>
       ` : '';
@@ -623,7 +623,12 @@ async function initProductPage() {
   const mainImg = document.getElementById('mainImage');
   if (mainImg) {
     mainImg.style.cursor = 'zoom-in';
-    mainImg.onclick = () => openEnhancedLightbox(product, 0);
+    mainImg.onclick = () => {
+      // Find the currently active thumbnail index instead of always opening image 0
+      const activeThumbnail = document.querySelector('.thumbnail.active');
+      const activeIndex = activeThumbnail ? parseInt(activeThumbnail.getAttribute('data-index') || '0') : 0;
+      openEnhancedLightbox(product, activeIndex);
+    };
   }
 }
 
@@ -787,6 +792,11 @@ function setupGalleryOverlay(product) {
 
     overlay.classList.add('active');
     if (bottomNav) bottomNav.style.display = 'none';
+    // Lock body scroll properly (prevents iOS body scroll bleed behind overlay)
+    var scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + scrollY + 'px';
+    document.body.style.width = '100%';
     document.body.style.overflow = 'hidden';
 
     // Pinch-to-zoom on each image
@@ -894,21 +904,25 @@ function setupGalleryOverlay(product) {
     });
   });
 
-  closeBtn.addEventListener('click', () => {
+  function closeGalleryOverlay() {
     overlay.classList.remove('active');
     const rb = overlay.querySelector('.gallery-reset-btn');
     if (rb) rb.classList.remove('visible');
     if (bottomNav) bottomNav.style.display = '';
+    // Restore body scroll position properly
+    var scrollY = parseInt(document.body.style.top || '0') * -1;
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
     document.body.style.overflow = '';
-  });
+    window.scrollTo(0, scrollY);
+  }
+
+  closeBtn.addEventListener('click', closeGalleryOverlay);
 
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
-      overlay.classList.remove('active');
-      const rb = overlay.querySelector('.gallery-reset-btn');
-      if (rb) rb.classList.remove('visible');
-      if (bottomNav) bottomNav.style.display = '';
-      document.body.style.overflow = '';
+      closeGalleryOverlay();
     }
   });
 }
