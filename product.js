@@ -1018,11 +1018,9 @@ function renderPricingTiers(containerId, product) {
     <div class="pricing-tiers" data-product-id="${product.id}" style="margin-bottom:1rem; ${containerId.includes('Mobile') ? 'padding: 0 16px;' : ''}">
       <div class="pricing-tiers-label">Quantity Pricing | <span class="arabic-text">تسعير الكمية</span></div>
       <div class="tier-table">${tiersHTML}</div>
-      <div class="your-price-bar${activeSave > 0 ? ' has-savings' : ''}" style="margin-top:8px;">
-        <div class="your-price-left">
-          <span class="your-price-label">Your price <span class="your-price-label-ar arabic-text">سعرك</span></span>
-          <span class="your-price-value">AED ${activePrice} <span class="your-price-each">each</span></span>
-        </div>
+      <div class="your-price-bar${activeSave > 0 ? ' has-savings' : ''}" style="margin-top:6px;">
+        <span class="your-price-label">Your price</span><span class="your-price-label-ar arabic-text">سعرك</span>
+        <span class="your-price-value">AED ${activePrice}</span><span class="your-price-each">each</span>
         ${activeSave > 0 ? `<span class="your-price-badge">Save ${activeSave}%</span>` : ''}
       </div>
     </div>
