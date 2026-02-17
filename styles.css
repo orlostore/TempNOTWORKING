@@ -3307,6 +3307,55 @@ footer p {
   font-weight: 600;
 }
 
+/* Dynamic "Your price" bar */
+.your-price-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #f0f5f8, #eef7f0);
+  border: 1px solid #d4e6d9;
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+}
+.your-price-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.your-price-label {
+  font-size: 0.65rem;
+  color: #666;
+  font-weight: 500;
+}
+.your-price-label-ar {
+  font-size: 0.62rem;
+  color: #888;
+}
+.your-price-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+.your-price-each {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #888;
+}
+.your-price-badge {
+  background: #28a745;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.your-price-bar.has-savings {
+  background: linear-gradient(135deg, #eef7f0, #e8f5e9);
+  border-color: #a5d6a7;
+}
+
 @media (max-width: 768px) {
   .variant-grid {
     grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
