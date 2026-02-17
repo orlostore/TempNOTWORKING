@@ -538,7 +538,7 @@
                         sessionStorage.setItem('orlo_customer', JSON.stringify(data.customer));
                     }
                     const urlParams = new URLSearchParams(window.location.search);
-                    const redirect = urlParams.get('redirect') || 'account.html';
+                    const redirect = urlParams.get('redirect') || localStorage.getItem('lastProduct') || 'account.html';
                     setTimeout(() => { window.location.href = redirect; }, 1000);
                 } else {
                     showAlert(data.error || 'Invalid email or password', 'error');
