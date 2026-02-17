@@ -1472,19 +1472,18 @@ footer p {
   justify-content: space-between;
   align-items: baseline;
   font-size: 0.68rem;
-  color: var(--accent);
+  color: #5a7d9a;
   margin-top: 3px;
   cursor: pointer;
   text-decoration: none;
-  opacity: 0.85;
-  transition: opacity 0.2s;
+  transition: color 0.2s;
 }
 .early-price-hint .arabic-text {
   direction: rtl;
   text-align: right;
 }
 .early-price-hint:hover {
-  opacity: 1;
+  color: #3a6080;
   text-decoration: underline;
 }
 
