@@ -1464,6 +1464,10 @@ footer p {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--accent);
+}
+
+.desktop-product .early-price-en,
+.desktop-product .early-price-ar {
   padding: 0 1rem;
 }
 
