@@ -1482,9 +1482,10 @@ footer p {
 
 .early-price-en,
 .early-price-ar {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  color: var(--accent);
+  color: var(--primary);
+  letter-spacing: -0.02em;
 }
 
 .desktop-product .early-price-inline .early-price-en,
@@ -1500,9 +1501,10 @@ footer p {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-size: 0.68rem;
-  color: #5a7d9a;
-  margin-top: 3px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #6b8599;
+  margin-top: 4px;
   cursor: pointer;
   text-decoration: none;
   transition: color 0.2s;
@@ -1521,6 +1523,11 @@ footer p {
   align-items: center;
   justify-content: center;
   gap: 14px;
+  background: #fdf0eb;
+  border: 1px solid #f0cdbf;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-top: 8px;
 }
 
 .inline-add-to-cart {
@@ -1566,10 +1573,11 @@ footer p {
   align-items: center;
   gap: 10px;
   padding: 8px 14px;
-  background: #ffffff;
-  border: 1px solid #e2eaf0;
+  background: #e8eef4;
+  border: 1px solid #c8d6e0;
   border-radius: 10px;
   font-size: 0.78rem;
+  color: #3a5568;
 }
 
 .product-details p {
