@@ -186,33 +186,20 @@
     .concept-a .cta-btn {
       width: 200px;
       height: 38px;
+      padding: 0 1.2rem;
+      background: #1a3a52;
+      color: white;
       border: none;
       border-radius: 12px;
-      background: linear-gradient(135deg, #2c4a5c 0%, #1a3a52 50%, #1e4460 100%);
-      color: white;
-      font-size: 0.95rem;
-      font-weight: 700;
+      font-size: 0.75rem;
+      font-weight: 600;
       cursor: pointer;
       letter-spacing: 0.3px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(44,74,92,0.3);
+      transition: all 0.2s;
     }
     .concept-a .cta-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(44,74,92,0.4);
-    }
-    .concept-a .cta-btn::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-      transition: left 0.5s ease;
-    }
-    .concept-a .cta-btn:hover::after {
-      left: 100%;
+      background: #15303f;
+      transform: translateY(-1px);
     }
     .concept-a .delivery-badge {
       display: flex;
@@ -493,14 +480,19 @@
     .concept-a-mobile .cta-btn {
       width: 60%;
       height: 40px;
+      padding: 0 14px;
+      background: #2c4a5c;
+      color: white;
       border: none;
       border-radius: 12px;
-      background: linear-gradient(135deg, #2c4a5c 0%, #1a3a52 100%);
-      color: white;
-      font-size: 0.9rem;
-      font-weight: 700;
+      font-size: 0.85rem;
+      font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 4px 16px rgba(44,74,92,0.3);
+      display: block;
+      margin: 0 auto;
+    }
+    .concept-a-mobile .cta-btn:hover {
+      background: #1e3545;
     }
     .concept-a-mobile .delivery-badge {
       display: flex;
