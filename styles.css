@@ -1426,8 +1426,6 @@ footer p {
 .product-gallery {
   position: sticky;
   top: 90px;
-  max-height: 500px;
-  overflow: visible;
 }
 
 .product-gallery .image-gallery {
