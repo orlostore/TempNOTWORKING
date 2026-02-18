@@ -1557,8 +1557,9 @@ footer p {
 /* Delivery info injected into early-price for non-variant */
 .early-delivery-info {
   display: flex;
-  justify-content: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid #e8eef2;
