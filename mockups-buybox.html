@@ -131,24 +131,42 @@
     .current-delivery svg { width: 18px; height: 18px; stroke: #888; fill: none; stroke-width: 1.8; }
 
     /* ==========================================
-       CONCEPT A - Bold Container with Gradient CTA
+       CONCEPT A - Orangish Glassy Container + Orange CTA
        ========================================== */
     .concept-a {
       padding: 24px 28px;
     }
     .concept-a .buybox-card {
-      background: linear-gradient(135deg, #f7f9fb 0%, #eef2f6 100%);
-      border: 1.5px solid #e2e8ef;
+      background: linear-gradient(145deg,
+        rgba(255, 237, 225, 0.7) 0%,
+        rgba(255, 224, 204, 0.5) 40%,
+        rgba(255, 245, 238, 0.6) 100%);
+      border: 1.5px solid rgba(224, 120, 86, 0.2);
       border-radius: 16px;
       padding: 24px;
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow:
+        0 2px 16px rgba(224, 120, 86, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
     }
     .concept-a .buybox-card::before {
       content: '';
       position: absolute;
-      top: -40px;
-      right: -40px;
+      top: -60px;
+      right: -60px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(224,120,86,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .concept-a .buybox-card::after {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      left: -30px;
       width: 120px;
       height: 120px;
       background: radial-gradient(circle, rgba(224,120,86,0.08) 0%, transparent 70%);
@@ -159,6 +177,8 @@
       align-items: baseline;
       justify-content: space-between;
       margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
     }
     .concept-a .price-main {
       font-size: 1.75rem;
@@ -169,14 +189,14 @@
     .concept-a .price-main .currency {
       font-size: 1rem;
       font-weight: 600;
-      color: #7a96a8;
+      color: #9a7060;
       margin-right: 2px;
     }
     .concept-a .price-ar {
       font-family: 'Almarai', sans-serif;
       font-size: 1.1rem;
       font-weight: 700;
-      color: var(--accent);
+      color: #c0613f;
       direction: rtl;
     }
     .concept-a .price-ar .currency-ar {
@@ -188,7 +208,7 @@
       height: 48px;
       border: none;
       border-radius: 14px;
-      background: linear-gradient(135deg, #2c4a5c 0%, #1a3a52 50%, #1e4460 100%);
+      background: linear-gradient(135deg, #e07856 0%, #d06a48 50%, #c55e3c 100%);
       color: white;
       font-size: 0.95rem;
       font-weight: 700;
@@ -197,18 +217,20 @@
       position: relative;
       overflow: hidden;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(44,74,92,0.3);
+      box-shadow: 0 4px 16px rgba(224, 120, 86, 0.35);
+      z-index: 1;
     }
     .concept-a .cta-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(44,74,92,0.4);
+      box-shadow: 0 6px 24px rgba(224, 120, 86, 0.45);
+      background: linear-gradient(135deg, #d06a48 0%, #c55e3c 50%, #b8533a 100%);
     }
     .concept-a .cta-btn::after {
       content: '';
       position: absolute;
       top: 0; left: -100%;
       width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
       transition: left 0.5s ease;
     }
     .concept-a .cta-btn:hover::after {
@@ -221,10 +243,12 @@
       gap: 6px;
       margin-top: 14px;
       padding: 8px 12px;
-      background: rgba(44,74,92,0.05);
+      background: rgba(224, 120, 86, 0.08);
       border-radius: 10px;
       font-size: 0.78rem;
-      color: #5a7a8c;
+      color: #8a6050;
+      position: relative;
+      z-index: 1;
     }
     .concept-a .delivery-badge svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 2; }
 
@@ -462,16 +486,38 @@
       padding: 16px;
     }
     .concept-a-mobile .buybox-card {
-      background: linear-gradient(135deg, #f7f9fb 0%, #eef2f6 100%);
-      border: 1.5px solid #e2e8ef;
+      background: linear-gradient(145deg,
+        rgba(255, 237, 225, 0.7) 0%,
+        rgba(255, 224, 204, 0.5) 40%,
+        rgba(255, 245, 238, 0.6) 100%);
+      border: 1.5px solid rgba(224, 120, 86, 0.2);
       border-radius: 14px;
       padding: 18px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow:
+        0 2px 12px rgba(224, 120, 86, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+    .concept-a-mobile .buybox-card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(224,120,86,0.12) 0%, transparent 70%);
+      border-radius: 50%;
     }
     .concept-a-mobile .price-row {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
     }
     .concept-a-mobile .price-main {
       font-size: 1.5rem;
@@ -481,13 +527,13 @@
     .concept-a-mobile .price-main .currency {
       font-size: 0.85rem;
       font-weight: 600;
-      color: #7a96a8;
+      color: #9a7060;
     }
     .concept-a-mobile .price-ar {
       font-family: 'Almarai', sans-serif;
       font-size: 1rem;
       font-weight: 700;
-      color: var(--accent);
+      color: #c0613f;
       direction: rtl;
     }
     .concept-a-mobile .cta-btn {
@@ -495,12 +541,14 @@
       height: 46px;
       border: none;
       border-radius: 14px;
-      background: linear-gradient(135deg, #2c4a5c 0%, #1a3a52 100%);
+      background: linear-gradient(135deg, #e07856 0%, #d06a48 50%, #c55e3c 100%);
       color: white;
       font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 16px rgba(44,74,92,0.3);
+      box-shadow: 0 4px 16px rgba(224, 120, 86, 0.35);
+      position: relative;
+      z-index: 1;
     }
     .concept-a-mobile .delivery-badge {
       display: flex;
@@ -509,10 +557,12 @@
       gap: 6px;
       margin-top: 10px;
       padding: 6px;
-      background: rgba(44,74,92,0.05);
+      background: rgba(224, 120, 86, 0.08);
       border-radius: 8px;
       font-size: 0.72rem;
-      color: #5a7a8c;
+      color: #8a6050;
+      position: relative;
+      z-index: 1;
     }
     .concept-a-mobile .delivery-badge svg { width: 14px; height: 14px; stroke: var(--accent); fill: none; stroke-width: 2; }
 
@@ -708,8 +758,8 @@
      ============================ -->
 <div class="mockup-section">
   <div class="mockup-label">Concept A</div>
-  <div class="mockup-title">Bold Container + Premium CTA</div>
-  <div class="mockup-desc">Price inside a subtle card container with a larger, bold price and full-width gradient button with a shine effect on hover. Feels premium and decisive.</div>
+  <div class="mockup-title">Orangish Glassy Container + Orange CTA</div>
+  <div class="mockup-desc">Warm, glassy orange-tinted container draws the eye. Bold price, orange gradient button with shine on hover. Feels like Amazon/Noon &mdash; familiar, warm, and pushes you to buy.</div>
   <div class="mockup-frame">
     <div class="concept-a">
       <div class="buybox-card">
