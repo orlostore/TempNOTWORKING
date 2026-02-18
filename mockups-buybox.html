@@ -154,34 +154,17 @@
       background: radial-gradient(circle, rgba(224,120,86,0.08) 0%, transparent 70%);
       border-radius: 50%;
     }
-    .concept-a .price-row {
+    .concept-a .buybox-row {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
+      gap: 8px;
       margin-bottom: 10px;
     }
     .concept-a .price-main {
-      font-size: 1.75rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: var(--primary);
-      letter-spacing: -0.5px;
-    }
-    .concept-a .price-main .currency {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #7a96a8;
-      margin-right: 2px;
-    }
-    .concept-a .price-ar {
-      font-family: 'Almarai', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--primary);
-      direction: rtl;
-    }
-    .concept-a .price-ar .currency-ar {
-      font-size: 0.8rem;
-      font-weight: 400;
     }
     .concept-a .cta-btn {
       width: 200px;
@@ -196,10 +179,18 @@
       cursor: pointer;
       letter-spacing: 0.3px;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
     .concept-a .cta-btn:hover {
       background: #15303f;
       transform: translateY(-1px);
+    }
+    .concept-a .price-ar {
+      font-family: 'Almarai', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      direction: rtl;
     }
     .concept-a .delivery-badge {
       display: flex;
@@ -454,28 +445,17 @@
       border-radius: 14px;
       padding: 18px;
     }
-    .concept-a-mobile .price-row {
+    .concept-a-mobile .buybox-row {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
+      gap: 6px;
       margin-bottom: 8px;
     }
     .concept-a-mobile .price-main {
-      font-size: 1.5rem;
+      font-size: 1rem;
       font-weight: 800;
       color: var(--primary);
-    }
-    .concept-a-mobile .price-main .currency {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #7a96a8;
-    }
-    .concept-a-mobile .price-ar {
-      font-family: 'Almarai', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--primary);
-      direction: rtl;
     }
     .concept-a-mobile .cta-btn {
       width: 60%;
@@ -488,11 +468,17 @@
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
-      display: block;
-      margin: 0 auto;
+      flex-shrink: 0;
     }
     .concept-a-mobile .cta-btn:hover {
       background: #1e3545;
+    }
+    .concept-a-mobile .price-ar {
+      font-family: 'Almarai', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--primary);
+      direction: rtl;
     }
     .concept-a-mobile .delivery-badge {
       display: flex;
@@ -705,11 +691,11 @@
   <div class="mockup-frame">
     <div class="concept-a">
       <div class="buybox-card">
-        <div class="price-row">
-          <div class="price-main"><span class="currency">AED</span> 29</div>
-          <div class="price-ar">٢٩ <span class="currency-ar">درهم</span></div>
+        <div class="buybox-row">
+          <div class="price-main">AED 29</div>
+          <button class="cta-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+          <div class="price-ar">٢٩ درهم</div>
         </div>
-        <button class="cta-btn">Add to Cart &nbsp;|&nbsp; <span class="arabic-text">أضف إلى السلة</span></button>
         <div class="delivery-badge">
           <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
           Free delivery over AED 75 &nbsp;|&nbsp; <span class="arabic-text" style="font-size: 0.72rem;">توصيل مجاني فوق ٧٥ درهم</span>
@@ -721,11 +707,11 @@
       <div class="mobile-inner">
         <div class="concept-a-mobile">
           <div class="buybox-card">
-            <div class="price-row">
-              <div class="price-main"><span class="currency">AED</span> 29</div>
-              <div class="price-ar">٢٩ <span class="currency-ar">درهم</span></div>
+            <div class="buybox-row">
+              <div class="price-main">AED 29</div>
+              <button class="cta-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+              <div class="price-ar">٢٩ درهم</div>
             </div>
-            <button class="cta-btn">Add to Cart &nbsp;|&nbsp; <span class="arabic-text">أضف إلى السلة</span></button>
             <div class="delivery-badge">
               <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
               Free delivery over AED 75
