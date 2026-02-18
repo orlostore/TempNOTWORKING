@@ -1506,6 +1506,43 @@ footer p {
   text-decoration: underline;
 }
 
+/* Non-variant inline: price | button | Arabic price */
+.early-price-inline {
+  align-items: center;
+  gap: 10px;
+}
+
+.inline-add-to-cart {
+  height: 36px;
+  padding: 0 0.67rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  transition: background 0.3s;
+  font-family: 'Inter', 'Almarai', sans-serif;
+  flex-shrink: 0;
+}
+
+.inline-add-to-cart:hover {
+  background: #1e3545;
+}
+
+/* Qty control when inline (non-variant) */
+.early-price-inline .product-btn-transformed {
+  flex-shrink: 0;
+  width: auto;
+}
+
+.early-price-inline .grid-qty-control {
+  width: auto;
+  min-width: 120px;
+}
+
 .product-details p {
   line-height: 1.7;
   color: #444;
@@ -3409,7 +3446,8 @@ footer p {
    PRODUCT PAGE - LIMIT TOOLTIP (Glassmorphism)
    ============================================ */
 .product-buybox,
-.mobile-cart-section {
+.mobile-cart-section,
+.early-price-inline {
   position: relative;
 }
 
