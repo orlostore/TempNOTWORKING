@@ -384,9 +384,42 @@
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             border-left: 4px solid var(--primary);
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            user-select: none;
         }
         .stat-card:hover { transform: translateY(-2px); }
+        .stat-card.selected {
+            box-shadow: 0 0 0 3px var(--accent), 0 2px 10px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        /* Active filter banner */
+        .filter-banner {
+            display: none;
+            background: var(--accent);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .filter-banner.active { display: flex; }
+        .filter-banner-close {
+            background: rgba(255,255,255,0.25);
+            border: none;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .filter-banner-close:hover { background: rgba(255,255,255,0.4); }
         .stat-card h3 {
             color: var(--text-light);
             font-size: 0.85rem;
@@ -795,6 +828,9 @@
             .stat-card h3 { font-size: 0.7rem; margin-bottom: 4px; }
             .stat-card .value { font-size: 1.5rem; }
 
+            /* Filter banner */
+            .filter-banner { font-size: 0.8rem; padding: 8px 12px; }
+
             /* Products table - card layout on mobile */
             .products-table { border-radius: 10px; }
             .table-header {
@@ -943,22 +979,27 @@
         <!-- Products Tab -->
         <div class="tab-content active" id="productsTab">
             <div class="stats" id="stats">
-                <div class="stat-card">
+                <div class="stat-card" onclick="filterByStock('all')">
                     <h3>Total Products</h3>
                     <div class="value" id="statTotal">-</div>
                 </div>
-                <div class="stat-card success">
+                <div class="stat-card success" onclick="filterByStock('instock')">
                     <h3>In Stock</h3>
                     <div class="value" id="statInStock">-</div>
                 </div>
-                <div class="stat-card warning">
+                <div class="stat-card warning" onclick="filterByStock('low')">
                     <h3>Low Stock (&lt;10)</h3>
                     <div class="value" id="statLowStock">-</div>
                 </div>
-                <div class="stat-card danger">
+                <div class="stat-card danger" onclick="filterByStock('out')">
                     <h3>Out of Stock</h3>
                     <div class="value" id="statOutOfStock">-</div>
                 </div>
+            </div>
+
+            <div class="filter-banner" id="stockFilterBanner">
+                <span id="stockFilterLabel"></span>
+                <button class="filter-banner-close" onclick="clearStockFilter()">Clear</button>
             </div>
 
             <div class="products-table">
@@ -1479,11 +1520,71 @@
             document.getElementById('statOutOfStock').textContent = products.filter(p => getStock(p) === 0).length;
         }
 
+        let activeStockFilter = null;
+
+        function filterByStock(type) {
+            const getStock = p => p.totalStock !== undefined ? p.totalStock : p.quantity;
+
+            // Toggle off if same filter clicked again
+            if (activeStockFilter === type) {
+                clearStockFilter();
+                return;
+            }
+
+            activeStockFilter = type;
+            let filtered;
+            let label;
+
+            if (type === 'all') {
+                filtered = products;
+                label = `Showing all ${filtered.length} products`;
+            } else if (type === 'instock') {
+                filtered = products.filter(p => getStock(p) > 0);
+                label = `${filtered.length} products in stock`;
+            } else if (type === 'low') {
+                filtered = products.filter(p => getStock(p) > 0 && getStock(p) < 10);
+                label = `${filtered.length} products with low stock (< 10)`;
+            } else if (type === 'out') {
+                filtered = products.filter(p => getStock(p) === 0);
+                label = `${filtered.length} products out of stock`;
+            }
+
+            // Highlight selected card
+            document.querySelectorAll('#stats .stat-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+
+            // Show filter banner
+            const banner = document.getElementById('stockFilterBanner');
+            document.getElementById('stockFilterLabel').textContent = label;
+            banner.classList.add('active');
+
+            // Clear search box and render filtered
+            document.getElementById('searchBox').value = '';
+            renderProducts(filtered);
+
+            // Scroll to table
+            document.querySelector('.products-table').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function clearStockFilter() {
+            activeStockFilter = null;
+            document.querySelectorAll('#stats .stat-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('stockFilterBanner').classList.remove('active');
+            document.getElementById('searchBox').value = '';
+            renderProducts();
+        }
+
         function filterProducts() {
+            // Clear stock filter when searching
+            if (activeStockFilter) {
+                activeStockFilter = null;
+                document.querySelectorAll('#stats .stat-card').forEach(c => c.classList.remove('selected'));
+                document.getElementById('stockFilterBanner').classList.remove('active');
+            }
             const term = document.getElementById('searchBox').value.toLowerCase();
             if (!term) { renderProducts(); return; }
-            const filtered = products.filter(p => 
-                p.name.toLowerCase().includes(term) || 
+            const filtered = products.filter(p =>
+                p.name.toLowerCase().includes(term) ||
                 (p.nameAr && p.nameAr.includes(term)) ||
                 (p.category && p.category.toLowerCase().includes(term)) ||
                 (p.slug && p.slug.toLowerCase().includes(term))
