@@ -44,15 +44,16 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
       <span class="tooltip-text-ar">${messageAr}</span>
     `;
     
-    // Find the correct container (the transformed button itself)
-    // On mobile, desktop section is hidden so we must look within the mobile section
+    // Find the correct container (the transformed button or its parent)
     const isMobile = window.innerWidth <= 768;
     let container;
     if (isMobile) {
-      container = document.querySelector(`.mobile-cart-section [id="transformedBtn-${productId}"]`)
+      container = document.querySelector(`.mobile-product-page [id="transformedBtn-${productId}"]`)
+        || document.querySelector('.mobile-product-page .early-price-inline')
         || document.querySelector('.mobile-cart-section');
     } else {
       container = document.getElementById(`transformedBtn-${productId}`)
+        || document.querySelector('.early-price-inline')
         || document.querySelector('.product-buybox');
     }
     
@@ -162,48 +163,53 @@ function productQtyChange(productId, change) {
 
 // Reset transformed button back to Add to Cart
 function resetToAddButton(productId) {
+  const product = products.find(p => p.id === productId);
+  const hasVariants = product && product.variants && product.variants.length > 0;
+
   // Reset ALL transformed buttons for this product (both desktop and mobile)
   document.querySelectorAll(`[id="transformedBtn-${productId}"]`).forEach(transformed => {
     const isMobile = transformed.closest('.mobile-product-page') !== null;
-    const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
-    const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
-    
-    transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+    const isInline = transformed.closest('.early-price-inline') !== null;
+
+    if (isInline) {
+      // Non-variant inline button inside early-price row
+      const btnId = isMobile ? 'earlyCartMobile' : 'earlyCartDesktop';
+      transformed.outerHTML = `<button class="inline-add-to-cart" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+    } else {
+      const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
+      const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
+      transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+    }
   });
-  
-  // Re-attach click handlers
-  const product = products.find(p => p.id === productId);
+
   if (!product) return;
-  
-  const desktopBtn = document.getElementById('addToCartBtn');
-  const mobileBtn = document.getElementById('mobileAddToCartBtn');
-  
+
   const handler = function() {
     if (product.quantity === 0) return false;
-    
+
     let localCart = JSON.parse(localStorage.getItem("cart")) || [];
     const item = localCart.find(i => i.id === product.id);
     const currentInCart = item ? item.quantity : 0;
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
-    
+
     if (currentInCart >= maxAllowed) {
       showProductPageMaxLimitMessage(product.id, maxAllowed);
       return false;
     }
-    
+
     if (item) {
       item.quantity++;
     } else {
       localCart.push({ ...product, quantity: 1 });
     }
-    
+
     localStorage.setItem("cart", JSON.stringify(localCart));
-    
+
     if (typeof cart !== 'undefined') {
       cart.length = 0;
       localCart.forEach(i => cart.push(i));
     }
-    
+
     const totalItems = localCart.reduce((s, i) => s + i.quantity, 0);
     const cartCount = document.getElementById("cartCount");
     const bottomCartCount = document.getElementById("bottomCartCount");
@@ -211,17 +217,27 @@ function resetToAddButton(productId) {
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems;
     if (mobileCartCount) mobileCartCount.textContent = totalItems;
-    
+
     if (typeof updateCart === 'function') updateCart();
-    
+
     if (typeof pulseBadge === 'function') pulseBadge();
-    
+
     transformToQtyButton(this, product);
     return true;
   };
-  
-  if (desktopBtn) desktopBtn.onclick = handler;
-  if (mobileBtn) mobileBtn.onclick = handler;
+
+  // Re-attach click handlers — find buttons by their actual IDs
+  if (!hasVariants) {
+    const desktopBtn = document.getElementById('earlyCartDesktop');
+    const mobileBtn = document.getElementById('earlyCartMobile');
+    if (desktopBtn) desktopBtn.onclick = handler;
+    if (mobileBtn) mobileBtn.onclick = handler;
+  } else {
+    const desktopBtn = document.getElementById('addToCartBtn');
+    const mobileBtn = document.getElementById('mobileAddToCartBtn');
+    if (desktopBtn) desktopBtn.onclick = handler;
+    if (mobileBtn) mobileBtn.onclick = handler;
+  }
 }
 
 // Wait for products to load, then display
@@ -357,10 +373,10 @@ async function initProductPage() {
       };
     }
   } else if (product.price) {
-    // Non-variant products: show price at the top too
-    const earlyHTML = `<div class="early-price-row"><span class="early-price-en">AED ${product.price}</span><span class="early-price-ar arabic-text">${product.price} درهم</span></div>`;
-    if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTML;
-    if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTML;
+    // Non-variant products: show price + Add to Cart inline
+    const earlyHTML = `<div class="early-price-row early-price-inline"><span class="early-price-en">AED ${product.price}</span><button class="inline-add-to-cart" id="__BTN_ID__">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button><span class="early-price-ar arabic-text">${product.price} درهم</span></div>`;
+    if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTML.replace('__BTN_ID__', 'earlyCartDesktop');
+    if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTML.replace('__BTN_ID__', 'earlyCartMobile');
   } else {
     if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
     if (earlyPriceMobile) earlyPriceMobile.style.display = 'none';
@@ -409,17 +425,34 @@ async function initProductPage() {
     }
   }
 
-  const desktopAddBtn = document.getElementById("addToCartBtn");
-  if (isOutOfStock && desktopAddBtn) {
-    desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
-    desktopAddBtn.disabled = true;
-    desktopAddBtn.style.background = "#999";
-    desktopAddBtn.style.cursor = "not-allowed";
-  } else if (hasVariants && desktopAddBtn && !isOutOfStock) {
-    desktopAddBtn.innerHTML = 'Select a design | <span class="arabic-text">اختر تصميم</span>';
-    desktopAddBtn.disabled = true;
-    desktopAddBtn.style.background = "#999";
-    desktopAddBtn.style.cursor = "not-allowed";
+  // Desktop button: use inline early-price button for non-variant, buybox button for variant
+  let desktopAddBtn;
+  if (!hasVariants) {
+    desktopAddBtn = document.getElementById("earlyCartDesktop");
+    // Hide buybox price and original button for non-variant (keep delivery info)
+    const buyboxOrigBtn = document.getElementById("addToCartBtn");
+    const buyboxPrice = document.getElementById("productPrice");
+    if (buyboxOrigBtn) buyboxOrigBtn.style.display = 'none';
+    if (buyboxPrice) buyboxPrice.style.display = 'none';
+    if (isOutOfStock && desktopAddBtn) {
+      desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      desktopAddBtn.disabled = true;
+      desktopAddBtn.style.background = "#999";
+      desktopAddBtn.style.cursor = "not-allowed";
+    }
+  } else {
+    desktopAddBtn = document.getElementById("addToCartBtn");
+    if (isOutOfStock && desktopAddBtn) {
+      desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      desktopAddBtn.disabled = true;
+      desktopAddBtn.style.background = "#999";
+      desktopAddBtn.style.cursor = "not-allowed";
+    } else if (desktopAddBtn && !isOutOfStock) {
+      desktopAddBtn.innerHTML = 'Select a design | <span class="arabic-text">اختر تصميم</span>';
+      desktopAddBtn.disabled = true;
+      desktopAddBtn.style.background = "#999";
+      desktopAddBtn.style.cursor = "not-allowed";
+    }
   }
 
   // MOBILE VERSION
@@ -469,17 +502,32 @@ async function initProductPage() {
     }
   }
 
-  const mobileAddBtn = document.getElementById("mobileAddToCartBtn");
-  if (isOutOfStock && mobileAddBtn) {
-    mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
-    mobileAddBtn.disabled = true;
-    mobileAddBtn.style.background = "#999";
-    mobileAddBtn.style.cursor = "not-allowed";
-  } else if (hasVariants && mobileAddBtn && !isOutOfStock) {
-    mobileAddBtn.innerHTML = 'Select a design | <span class="arabic-text">اختر تصميم</span>';
-    mobileAddBtn.disabled = true;
-    mobileAddBtn.style.background = "#999";
-    mobileAddBtn.style.cursor = "not-allowed";
+  // Mobile button: use inline early-price button for non-variant, buybox button for variant
+  let mobileAddBtn;
+  if (!hasVariants) {
+    mobileAddBtn = document.getElementById("earlyCartMobile");
+    // Hide entire mobile buybox compact for non-variant (price+btn now inline at top)
+    const mobileBuyboxCompact = document.querySelector('.mobile-buybox-compact');
+    if (mobileBuyboxCompact) mobileBuyboxCompact.style.display = 'none';
+    if (isOutOfStock && mobileAddBtn) {
+      mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      mobileAddBtn.disabled = true;
+      mobileAddBtn.style.background = "#999";
+      mobileAddBtn.style.cursor = "not-allowed";
+    }
+  } else {
+    mobileAddBtn = document.getElementById("mobileAddToCartBtn");
+    if (isOutOfStock && mobileAddBtn) {
+      mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      mobileAddBtn.disabled = true;
+      mobileAddBtn.style.background = "#999";
+      mobileAddBtn.style.cursor = "not-allowed";
+    } else if (mobileAddBtn && !isOutOfStock) {
+      mobileAddBtn.innerHTML = 'Select a design | <span class="arabic-text">اختر تصميم</span>';
+      mobileAddBtn.disabled = true;
+      mobileAddBtn.style.background = "#999";
+      mobileAddBtn.style.cursor = "not-allowed";
+    }
   }
 
   // MOBILE DETAILS SECTION
