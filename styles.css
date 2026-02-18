@@ -1534,14 +1534,14 @@ footer p {
 }
 
 .product-desc-label {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--primary);
   margin-bottom: 0.25rem;
 }
 
 .product-desc-value {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   color: #555;
   line-height: 1.5;
 }
