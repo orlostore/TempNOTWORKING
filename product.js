@@ -336,7 +336,7 @@ async function initProductPage() {
     productPriceEl.innerText = "AED " + product.price;
   }
 
-  // === EARLY PRICE (variant products only) ===
+  // === EARLY PRICE ===
   const earlyPriceDesktop = document.getElementById("earlyPriceDesktop");
   const earlyPriceMobile = document.getElementById("earlyPriceMobile");
   if (hasVariants && product.price) {
@@ -356,6 +356,11 @@ async function initProductPage() {
         if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
       };
     }
+  } else if (product.price) {
+    // Non-variant products: show price at the top too
+    const earlyHTML = `<div class="early-price-row"><span class="early-price-en">AED ${product.price}</span><span class="early-price-ar arabic-text">${product.price} درهم</span></div>`;
+    if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTML;
+    if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTML;
   } else {
     if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
     if (earlyPriceMobile) earlyPriceMobile.style.display = 'none';

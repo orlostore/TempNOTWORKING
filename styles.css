@@ -2518,10 +2518,23 @@ footer p {
 }
 
 /* Mobile Price Section */
-.mobile-price-section {
+/* Mobile Buybox - compact single block */
+.mobile-buybox-compact {
   background: white;
-  padding: 15px;
+  padding: 12px 15px;
   margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-buybox-compact .mobile-price-section {
+  background: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .mobile-price {
@@ -2531,9 +2544,11 @@ footer p {
 }
 
 /* Mobile Add to Cart */
-.mobile-cart-section {
-  background: white;
-  padding: 0 15px 15px;
+.mobile-buybox-compact .mobile-cart-section {
+  background: none;
+  padding: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .mobile-add-to-cart {
@@ -2555,10 +2570,11 @@ footer p {
 }
 
 /* Mobile Delivery Info */
-.mobile-delivery-info {
-  background: white;
-  padding: 15px;
-  margin-top: 8px;
+.mobile-buybox-compact .mobile-delivery-info {
+  background: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
 }
 
 .mobile-delivery-item {
