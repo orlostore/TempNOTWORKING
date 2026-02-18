@@ -1409,7 +1409,7 @@ footer p {
 /* Left side: Gallery */
 .product-gallery {
   position: sticky;
-  top: 0;
+  top: 58px;
   align-self: start;
 }
 
