@@ -1466,8 +1466,8 @@ footer p {
   color: var(--accent);
 }
 
-.desktop-product .early-price-en,
-.desktop-product .early-price-ar {
+.desktop-product .early-price-inline .early-price-en,
+.desktop-product .early-price-inline .early-price-ar {
   padding: 0 1rem;
 }
 
