@@ -435,9 +435,9 @@ async function initProductPage() {
   let desktopAddBtn;
   if (!hasVariants) {
     desktopAddBtn = document.getElementById("earlyCartDesktop");
-    // Inject delivery info into early-price container, then hide buybox entirely
+    // Inject delivery info below early-price container, then hide buybox entirely
     const deliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
-    if (earlyPriceDesktop) earlyPriceDesktop.insertAdjacentHTML('beforeend', deliveryHTML);
+    if (earlyPriceDesktop) earlyPriceDesktop.insertAdjacentHTML('afterend', deliveryHTML);
     // Hide entire buybox
     const buybox = document.querySelector('.product-buybox');
     if (buybox) buybox.style.display = 'none';
@@ -513,12 +513,12 @@ async function initProductPage() {
   let mobileAddBtn;
   if (!hasVariants) {
     mobileAddBtn = document.getElementById("earlyCartMobile");
-    // Move mobile delivery info up into early-price container, hide buybox
+    // Place mobile delivery info below early-price container, hide buybox
     const mobileBuyboxCompact = document.querySelector('.mobile-buybox-compact');
     if (earlyPriceMobile) {
-      // Build delivery HTML inline for mobile (the HTML element is empty by default)
+      // Build delivery HTML below early-price container for mobile
       const mobileDeliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
-      earlyPriceMobile.insertAdjacentHTML('beforeend', mobileDeliveryHTML);
+      earlyPriceMobile.insertAdjacentHTML('afterend', mobileDeliveryHTML);
     }
     if (mobileBuyboxCompact) mobileBuyboxCompact.style.display = 'none';
     if (isOutOfStock && mobileAddBtn) {
