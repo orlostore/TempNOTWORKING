@@ -368,8 +368,14 @@ async function initProductPage() {
     if (earlyPriceMobile) {
       earlyPriceMobile.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintMobile');
       document.getElementById('earlyHintMobile').onclick = function() {
-        const target = document.querySelector('#variantSelectorMobile .variant-section') || document.getElementById('variantSelectorMobile');
-        if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+        const btn = document.getElementById('mobileAddToCartBtn');
+        const bottomNav = document.getElementById('mobileBottomNav');
+        if (btn) {
+          const btnRect = btn.getBoundingClientRect();
+          const navHeight = bottomNav ? bottomNav.offsetHeight : 0;
+          const targetY = window.scrollY + btnRect.bottom - (window.innerHeight - navHeight);
+          window.scrollTo({top: targetY, behavior: 'smooth'});
+        }
       };
     }
   } else if (product.price) {
