@@ -429,11 +429,16 @@ async function initProductPage() {
   let desktopAddBtn;
   if (!hasVariants) {
     desktopAddBtn = document.getElementById("earlyCartDesktop");
-    // Hide buybox price and original button for non-variant (keep delivery info)
+    // Move delivery info up into early-price container, then hide the rest of buybox
     const buyboxOrigBtn = document.getElementById("addToCartBtn");
     const buyboxPrice = document.getElementById("productPrice");
-    if (buyboxOrigBtn) buyboxOrigBtn.style.display = 'none';
-    if (buyboxPrice) buyboxPrice.style.display = 'none';
+    const deliveryInfo = document.querySelector('.product-buybox .delivery-info');
+    if (deliveryInfo && earlyPriceDesktop) {
+      earlyPriceDesktop.appendChild(deliveryInfo);
+    }
+    // Hide entire buybox (now empty)
+    const buybox = document.querySelector('.product-buybox');
+    if (buybox) buybox.style.display = 'none';
     if (isOutOfStock && desktopAddBtn) {
       desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
       desktopAddBtn.disabled = true;
@@ -506,8 +511,13 @@ async function initProductPage() {
   let mobileAddBtn;
   if (!hasVariants) {
     mobileAddBtn = document.getElementById("earlyCartMobile");
-    // Hide entire mobile buybox compact for non-variant (price+btn now inline at top)
+    // Move mobile delivery info up into early-price container, hide buybox
     const mobileBuyboxCompact = document.querySelector('.mobile-buybox-compact');
+    if (earlyPriceMobile) {
+      // Build delivery HTML inline for mobile (the HTML element is empty by default)
+      const mobileDeliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED <span class="threshold-value">${threshold}</span></div><div class="delivery-ar arabic-text">توصيل مجاني فوق <span class="threshold-value-ar">${toArabicNumerals(threshold)}</span> درهم</div></div></div>`;
+      earlyPriceMobile.insertAdjacentHTML('beforeend', mobileDeliveryHTML);
+    }
     if (mobileBuyboxCompact) mobileBuyboxCompact.style.display = 'none';
     if (isOutOfStock && mobileAddBtn) {
       mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
