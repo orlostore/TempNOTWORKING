@@ -1564,22 +1564,18 @@ footer p {
 /* Delivery info injected into early-price for non-variant */
 .early-delivery-info {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   gap: 6px;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #e8eef2;
+  margin-top: 8px;
 }
 
 .early-delivery-info .delivery-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 5px 14px;
-  background: #e8eef4;
-  border: 1px solid #c8d6e0;
-  border-radius: 10px;
+  gap: 8px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
   font-size: 0.78rem;
   color: #3a5568;
 }
@@ -2560,6 +2556,16 @@ footer p {
   color: #888;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.mobile-product-header .early-delivery-info {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mobile-product-header .early-delivery-info .delivery-item {
+  flex-wrap: wrap;
+  gap: 4px 8px;
 }
 
 /* Mobile Carousel */
