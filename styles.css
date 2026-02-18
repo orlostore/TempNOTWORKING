@@ -1468,8 +1468,8 @@ footer p {
 
 .early-price {
   margin-bottom: 0.5rem;
-  background: #f8fafb;
-  border: 1px solid #e8eef2;
+  background: #fdf0eb;
+  border: 1px solid #f0cdbf;
   border-radius: 14px;
   padding: 14px 16px;
 }
@@ -1523,11 +1523,6 @@ footer p {
   align-items: center;
   justify-content: center;
   gap: 14px;
-  background: #fdf0eb;
-  border: 1px solid #f0cdbf;
-  border-radius: 12px;
-  padding: 10px 14px;
-  margin-top: 8px;
 }
 
 .inline-add-to-cart {
