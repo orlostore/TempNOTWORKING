@@ -1541,17 +1541,20 @@ footer p {
   min-width: 180px;
 }
 
-/* Delivery info moved into early-price for non-variant */
-.early-price .delivery-info,
-.early-price .early-delivery-info {
+/* Delivery info injected into early-price for non-variant */
+.early-delivery-info {
+  display: flex;
+  gap: 12px;
   margin-top: 0.5rem;
-  padding-bottom: 0;
-  margin-bottom: 0;
-  border-bottom: none;
 }
 
-.early-price .delivery-item {
+.early-delivery-info .delivery-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 8px 12px;
+  background: #f8fafb;
+  border-radius: 12px;
   font-size: 0.78rem;
 }
 
