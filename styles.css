@@ -2560,9 +2560,15 @@ footer p {
   letter-spacing: 0.5px;
 }
 
+.mobile-product-header .early-delivery-info {
+  gap: 1px;
+  margin-top: 4px;
+}
+
 .mobile-product-header .early-delivery-info .delivery-item {
   flex-wrap: wrap;
   justify-content: center;
+  gap: 1px 8px;
 }
 
 
