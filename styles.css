@@ -1488,6 +1488,13 @@ footer p {
   letter-spacing: -0.02em;
 }
 
+@media (max-width: 768px) {
+  .early-price-en,
+  .early-price-ar {
+    font-size: 1rem;
+  }
+}
+
 .desktop-product .early-price-inline .early-price-en,
 .desktop-product .early-price-inline .early-price-ar {
   padding: 0;
