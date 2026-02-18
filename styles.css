@@ -1528,8 +1528,8 @@ footer p {
 /* Product Description Two-Column Layout */
 .product-desc-block {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
   margin-bottom: 0.6rem;
   padding-left: 16px;
   border-left: 3px solid #e76f51;
