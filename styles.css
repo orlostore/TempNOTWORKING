@@ -1541,6 +1541,20 @@ footer p {
   min-width: 180px;
 }
 
+/* Delivery info moved into early-price for non-variant */
+.early-price .delivery-info,
+.early-price .early-delivery-info {
+  margin-top: 0.5rem;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.early-price .delivery-item {
+  padding: 8px 12px;
+  font-size: 0.78rem;
+}
+
 .product-details p {
   line-height: 1.7;
   color: #444;
