@@ -1398,6 +1398,7 @@ footer p {
   margin: 0.5rem auto;
   margin-top: 1.5rem;
   padding: 0 1.34rem;
+  overflow-x: visible;
 }
 
 .back-link {
