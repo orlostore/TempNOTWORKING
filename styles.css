@@ -1592,7 +1592,7 @@ footer p {
 .product-desc-label {
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 0.3rem;
