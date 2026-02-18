@@ -1407,13 +1407,7 @@ footer p {
 }
 
 /* Left side: Gallery */
-.product-gallery {
-  align-self: stretch;
-}
-
 .product-gallery .image-gallery {
-  position: sticky;
-  top: 90px;
   margin-top: 0;
 }
 
@@ -1704,7 +1698,7 @@ footer p {
     gap: 1.5rem;
   }
   
-  .product-gallery .image-gallery {
+  .product-gallery {
     position: static;
   }
 }
