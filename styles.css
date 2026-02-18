@@ -1579,7 +1579,7 @@ footer p {
   border: none;
   border-radius: 0;
   font-size: 0.78rem;
-  color: #3a5568;
+  color: var(--primary);
 }
 
 .product-details p {
@@ -2562,6 +2562,7 @@ footer p {
 
 .mobile-product-header .early-delivery-info .delivery-item {
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 
