@@ -1426,8 +1426,10 @@ footer p {
 /* Left side: Gallery */
 .product-gallery {
   position: sticky;
-  top: 0;
+  top: 65px;
   align-self: start;
+  max-height: calc(100vh - 75px);
+  overflow-y: auto;
 }
 
 .product-gallery .image-gallery {
