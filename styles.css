@@ -2560,6 +2560,10 @@ footer p {
   letter-spacing: 0.5px;
 }
 
+.mobile-product-header .early-delivery-info .delivery-item {
+  flex-wrap: wrap;
+}
+
 
 /* Mobile Carousel */
 .mobile-carousel-container {
@@ -2676,9 +2680,15 @@ footer p {
 /* Mobile Delivery Info */
 .mobile-buybox-compact .mobile-delivery-info {
   background: none;
-  padding: 0;
+  padding: 8px 0 0;
   margin: 0;
   width: 100%;
+  text-align: center;
+}
+
+.mobile-buybox-compact .mobile-delivery-info .delivery-item {
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .mobile-delivery-item {
