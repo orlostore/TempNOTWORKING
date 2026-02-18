@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy Box Mockups - ORLO Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2c4a5c;
+      --accent: #e07856;
+      --text: #333;
+      --bg: #f8f9fa;
+      --white: #ffffff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #eef1f4;
+      color: var(--text);
+      padding: 40px 20px;
+    }
+    .arabic-text {
+      font-family: 'Almarai', sans-serif;
+      direction: rtl;
+      display: inline;
+    }
+    h1.page-title {
+      text-align: center;
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    p.page-sub {
+      text-align: center;
+      color: #888;
+      margin-bottom: 50px;
+      font-size: 0.95rem;
+    }
+    .mockup-section {
+      max-width: 720px;
+      margin: 0 auto 60px;
+    }
+    .mockup-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .mockup-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .mockup-desc {
+      font-size: 0.88rem;
+      color: #777;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .mockup-frame {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    /* Divider between desktop and mobile previews */
+    .preview-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 28px;
+      margin: 0;
+    }
+    .preview-divider span {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #bbb;
+      white-space: nowrap;
+    }
+    .preview-divider::before,
+    .preview-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #eee;
+    }
+
+    /* ==========================================
+       CURRENT (boring) version
+       ========================================== */
+    .current-buybox {
+      background: transparent;
+      padding: 20px 28px;
+      border-top: 2px solid #f0f0f0;
+    }
+    .current-buybox .price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .current-buybox .add-btn {
+      height: 38px;
+      width: 200px;
+      padding: 0 1.2rem;
+      background: #1a3a52;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+    }
+    .current-delivery {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: #888;
+    }
+    .current-delivery svg { width: 18px; height: 18px; stroke: #888; fill: none; stroke-width: 1.8; }
+
+    /* ==========================================
+       CONCEPT A - Bold Container with Gradient CTA
+       ========================================== */
+    .concept-a {
+      padding: 24px 28px;
+    }
+    .concept-a .buybox-card {
+      background: linear-gradient(135deg, #f7f9fb 0%, #eef2f6 100%);
+      border: 1.5px solid #e2e8ef;
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .concept-a .buybox-card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(224,120,86,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .concept-a .price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .concept-a .price-main {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+    }
+    .concept-a .price-main .currency {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #7a96a8;
+      margin-right: 2px;
+    }
+    .concept-a .price-ar {
+      font-family: 'Almarai', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      direction: rtl;
+    }
+    .concept-a .price-ar .currency-ar {
+      font-size: 0.8rem;
+      font-weight: 400;
+    }
+    .concept-a .cta-btn {
+      width: 100%;
+      height: 48px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2c4a5c 0%, #1a3a52 50%, #1e4460 100%);
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(44,74,92,0.3);
+    }
+    .concept-a .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(44,74,92,0.4);
+    }
+    .concept-a .cta-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s ease;
+    }
+    .concept-a .cta-btn:hover::after {
+      left: 100%;
+    }
+    .concept-a .delivery-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 14px;
+      padding: 8px 12px;
+      background: rgba(44,74,92,0.05);
+      border-radius: 10px;
+      font-size: 0.78rem;
+      color: #5a7a8c;
+    }
+    .concept-a .delivery-badge svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 2; }
+
+    /* ==========================================
+       CONCEPT B - Floating Action Bar (sticky feel)
+       ========================================== */
+    .concept-b {
+      padding: 24px 28px;
+    }
+    .concept-b .floating-bar {
+      background: var(--white);
+      border: 1px solid #e8ecef;
+      border-radius: 20px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .concept-b .price-block {
+      flex: 0 0 auto;
+    }
+    .concept-b .price-main {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+    .concept-b .price-main .currency {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #8aa0ae;
+    }
+    .concept-b .price-sub {
+      font-family: 'Almarai', sans-serif;
+      font-size: 0.78rem;
+      color: var(--accent);
+      direction: rtl;
+      margin-top: 2px;
+    }
+    .concept-b .cta-area {
+      flex: 1;
+    }
+    .concept-b .cta-btn {
+      width: 100%;
+      height: 50px;
+      border: none;
+      border-radius: 14px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 16px rgba(224,120,86,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .concept-b .cta-btn:hover {
+      background: #d06a48;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(224,120,86,0.45);
+    }
+    .concept-b .cta-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .concept-b .delivery-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: #9ab;
+    }
+    .concept-b .delivery-strip .dot {
+      width: 4px; height: 4px;
+      background: #ccc;
+      border-radius: 50%;
+    }
+
+    /* ==========================================
+       CONCEPT C - Swipe / Slide to Add to Cart
+       ========================================== */
+    .concept-c {
+      padding: 24px 28px;
+    }
+    .concept-c .price-section {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .concept-c .price-main {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -1px;
+    }
+    .concept-c .price-main .currency {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #8aa0ae;
+    }
+    .concept-c .price-ar {
+      font-family: 'Almarai', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      direction: rtl;
+    }
+    .concept-c .swipe-track {
+      position: relative;
+      width: 100%;
+      height: 56px;
+      background: linear-gradient(135deg, #1a3a52 0%, #2c4a5c 100%);
+      border-radius: 28px;
+      overflow: hidden;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .concept-c .swipe-track-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .concept-c .swipe-track-text .arrow-hint {
+      display: inline-block;
+      animation: slideArrow 1.5s ease-in-out infinite;
+      margin-right: 4px;
+    }
+    @keyframes slideArrow {
+      0%, 100% { transform: translateX(0); opacity: 0.5; }
+      50% { transform: translateX(6px); opacity: 1; }
+    }
+    .concept-c .swipe-thumb {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 48px;
+      height: 48px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: left 0.15s ease;
+      z-index: 2;
+    }
+    .concept-c .swipe-thumb svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--primary);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .concept-c .swipe-fill {
+      position: absolute;
+      top: 0; left: 0;
+      width: 52px;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(224,120,86,0.4), rgba(224,120,86,0));
+      border-radius: 28px;
+      transition: width 0.15s ease;
+      pointer-events: none;
+    }
+    .concept-c .swipe-success-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .concept-c .delivery-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: #8a9caa;
+    }
+    .concept-c .delivery-row svg { width: 16px; height: 16px; stroke: #8a9caa; fill: none; stroke-width: 1.8; }
+    .concept-c .delivery-row .free-tag {
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-weight: 700;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    /* ==========================================
+       Mobile Preview Wrappers
+       ========================================== */
+    .mobile-preview {
+      max-width: 375px;
+      margin: 20px auto;
+      border: 2px solid #e8ecef;
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--white);
+    }
+    .mobile-preview .mobile-inner {
+      padding: 0;
+    }
+
+    /* Concept A mobile */
+    .concept-a-mobile {
+      padding: 16px;
+    }
+    .concept-a-mobile .buybox-card {
+      background: linear-gradient(135deg, #f7f9fb 0%, #eef2f6 100%);
+      border: 1.5px solid #e2e8ef;
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .concept-a-mobile .price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .concept-a-mobile .price-main {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .concept-a-mobile .price-main .currency {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #7a96a8;
+    }
+    .concept-a-mobile .price-ar {
+      font-family: 'Almarai', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      direction: rtl;
+    }
+    .concept-a-mobile .cta-btn {
+      width: 100%;
+      height: 46px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2c4a5c 0%, #1a3a52 100%);
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(44,74,92,0.3);
+    }
+    .concept-a-mobile .delivery-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 6px;
+      background: rgba(44,74,92,0.05);
+      border-radius: 8px;
+      font-size: 0.72rem;
+      color: #5a7a8c;
+    }
+    .concept-a-mobile .delivery-badge svg { width: 14px; height: 14px; stroke: var(--accent); fill: none; stroke-width: 2; }
+
+    /* Concept B mobile */
+    .concept-b-mobile {
+      padding: 12px 16px;
+    }
+    .concept-b-mobile .floating-bar {
+      background: var(--white);
+      border: 1px solid #e8ecef;
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+    .concept-b-mobile .price-block { flex: 0 0 auto; }
+    .concept-b-mobile .price-main {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+    .concept-b-mobile .price-main .currency { font-size: 0.7rem; font-weight: 600; color: #8aa0ae; }
+    .concept-b-mobile .price-sub {
+      font-family: 'Almarai', sans-serif;
+      font-size: 0.7rem;
+      color: var(--accent);
+      direction: rtl;
+    }
+    .concept-b-mobile .cta-area { flex: 1; }
+    .concept-b-mobile .cta-btn {
+      width: 100%;
+      height: 44px;
+      border: none;
+      border-radius: 12px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(224,120,86,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .concept-b-mobile .cta-btn svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; }
+
+    /* Concept C mobile */
+    .concept-c-mobile {
+      padding: 16px;
+    }
+    .concept-c-mobile .price-section {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .concept-c-mobile .price-main {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .concept-c-mobile .price-main .currency { font-size: 0.8rem; font-weight: 600; color: #8aa0ae; }
+    .concept-c-mobile .price-ar {
+      font-family: 'Almarai', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      direction: rtl;
+    }
+    .concept-c-mobile .swipe-track {
+      position: relative;
+      width: 100%;
+      height: 52px;
+      background: linear-gradient(135deg, #1a3a52 0%, #2c4a5c 100%);
+      border-radius: 26px;
+      overflow: hidden;
+      cursor: pointer;
+      user-select: none;
+    }
+    .concept-c-mobile .swipe-track-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .concept-c-mobile .swipe-track-text .arrow-hint {
+      display: inline-block;
+      animation: slideArrow 1.5s ease-in-out infinite;
+      margin-right: 4px;
+    }
+    .concept-c-mobile .swipe-thumb {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 44px;
+      height: 44px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      z-index: 2;
+    }
+    .concept-c-mobile .swipe-thumb svg { width: 18px; height: 18px; stroke: var(--primary); fill: none; stroke-width: 2; }
+    .concept-c-mobile .swipe-fill {
+      position: absolute;
+      top: 0; left: 0;
+      width: 48px;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(224,120,86,0.4), rgba(224,120,86,0));
+      border-radius: 26px;
+      pointer-events: none;
+    }
+    .concept-c-mobile .delivery-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 0.72rem;
+      color: #8a9caa;
+    }
+    .concept-c-mobile .delivery-row svg { width: 14px; height: 14px; stroke: #8a9caa; fill: none; stroke-width: 1.8; }
+    .concept-c-mobile .delivery-row .free-tag {
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-weight: 700;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 5px;
+    }
+
+    /* ==========================================
+       Interactive Swipe Logic Styles
+       ========================================== */
+    .swipe-track.success {
+      background: linear-gradient(135deg, #2e7d32, #43a047) !important;
+    }
+    .swipe-track.success .swipe-track-text { opacity: 0; }
+    .swipe-track.success .swipe-success-text { opacity: 1; }
+    .swipe-track.success .swipe-thumb { background: #fff; }
+    .swipe-track.success .swipe-thumb svg { stroke: #2e7d32; }
+    .swipe-track.success .swipe-fill { display: none; }
+
+    /* Footer note */
+    .footer-note {
+      text-align: center;
+      color: #bbb;
+      font-size: 0.75rem;
+      margin-top: 20px;
+      padding-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<h1 class="page-title">Buy Box Redesign Mockups</h1>
+<p class="page-sub">3 concepts to make the pricing & "Add to Cart" area more engaging</p>
+
+<!-- ============================
+     CURRENT (for reference)
+     ============================ -->
+<div class="mockup-section">
+  <div class="mockup-label">Current Design</div>
+  <div class="mockup-title">What it looks like now</div>
+  <div class="mockup-desc">Flat, no container, low-contrast price, small button. Feels uninspiring.</div>
+  <div class="mockup-frame">
+    <div class="current-buybox">
+      <div class="price" style="color: var(--accent); display: flex; align-items: baseline; gap: 4px;">
+        <span>AED 29</span>
+      </div>
+      <button class="add-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+      <div class="current-delivery">
+        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Free delivery over AED 75 &nbsp;|&nbsp; <span class="arabic-text" style="font-size: 0.78rem;">توصيل مجاني فوق ٧٥ درهم</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     CONCEPT A - Bold Card + Gradient CTA
+     ============================ -->
+<div class="mockup-section">
+  <div class="mockup-label">Concept A</div>
+  <div class="mockup-title">Bold Container + Premium CTA</div>
+  <div class="mockup-desc">Price inside a subtle card container with a larger, bold price and full-width gradient button with a shine effect on hover. Feels premium and decisive.</div>
+  <div class="mockup-frame">
+    <div class="concept-a">
+      <div class="buybox-card">
+        <div class="price-row">
+          <div class="price-main"><span class="currency">AED</span> 29</div>
+          <div class="price-ar">٢٩ <span class="currency-ar">درهم</span></div>
+        </div>
+        <button class="cta-btn">Add to Cart &nbsp;|&nbsp; <span class="arabic-text">أضف إلى السلة</span></button>
+        <div class="delivery-badge">
+          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Free delivery over AED 75 &nbsp;|&nbsp; <span class="arabic-text" style="font-size: 0.72rem;">توصيل مجاني فوق ٧٥ درهم</span>
+        </div>
+      </div>
+    </div>
+    <div class="preview-divider"><span>Mobile Preview</span></div>
+    <div class="mobile-preview">
+      <div class="mobile-inner">
+        <div class="concept-a-mobile">
+          <div class="buybox-card">
+            <div class="price-row">
+              <div class="price-main"><span class="currency">AED</span> 29</div>
+              <div class="price-ar">٢٩ <span class="currency-ar">درهم</span></div>
+            </div>
+            <button class="cta-btn">Add to Cart &nbsp;|&nbsp; <span class="arabic-text">أضف إلى السلة</span></button>
+            <div class="delivery-badge">
+              <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Free delivery over AED 75
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     CONCEPT B - Floating Action Bar + Accent CTA
+     ============================ -->
+<div class="mockup-section">
+  <div class="mockup-label">Concept B</div>
+  <div class="mockup-title">Floating Action Bar + Accent Button</div>
+  <div class="mockup-desc">Price and CTA side-by-side in a pill-shaped floating bar. The button uses the warm accent color with a cart icon. Feels modern and action-oriented.</div>
+  <div class="mockup-frame">
+    <div class="concept-b">
+      <div class="floating-bar">
+        <div class="price-block">
+          <div class="price-main"><span class="currency">AED</span> 29</div>
+          <div class="price-sub">٢٩ درهم</div>
+        </div>
+        <div class="cta-area">
+          <button class="cta-btn">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+            Add to Cart &nbsp;|&nbsp; <span class="arabic-text">أضف إلى السلة</span>
+          </button>
+        </div>
+      </div>
+      <div class="delivery-strip">
+        <span>Free delivery over AED 75</span>
+        <span class="dot"></span>
+        <span class="arabic-text" style="font-size: 0.72rem;">توصيل مجاني فوق ٧٥ درهم</span>
+      </div>
+    </div>
+    <div class="preview-divider"><span>Mobile Preview</span></div>
+    <div class="mobile-preview">
+      <div class="mobile-inner">
+        <div class="concept-b-mobile">
+          <div class="floating-bar">
+            <div class="price-block">
+              <div class="price-main"><span class="currency">AED</span> 29</div>
+              <div class="price-sub">٢٩ درهم</div>
+            </div>
+            <div class="cta-area">
+              <button class="cta-btn">
+                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     CONCEPT C - Swipe to Add to Cart
+     ============================ -->
+<div class="mockup-section">
+  <div class="mockup-label">Concept C</div>
+  <div class="mockup-title">Swipe to Add to Cart</div>
+  <div class="mockup-desc">A bold price with a slide-to-add interaction. Drag the circle to the right to add. Feels fun, interactive, and intentional &mdash; prevents accidental taps. <strong>Try it! Drag the circle.</strong></div>
+  <div class="mockup-frame">
+    <div class="concept-c">
+      <div class="price-section">
+        <div class="price-main"><span class="currency">AED</span> 29</div>
+        <div class="price-ar">٢٩ <span style="font-size: 0.8rem; font-weight: 400;">درهم</span></div>
+      </div>
+      <div class="swipe-track" id="swipeDesktop">
+        <div class="swipe-fill" id="swipeFillDesktop"></div>
+        <div class="swipe-thumb" id="swipeThumbDesktop">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+        </div>
+        <div class="swipe-track-text" id="swipeTextDesktop"><span class="arrow-hint">&rsaquo;&rsaquo;</span> Slide to add to cart</div>
+        <div class="swipe-success-text">Added to Cart!</div>
+      </div>
+      <div class="delivery-row">
+        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span>Delivery over AED 75 is</span>
+        <span class="free-tag">FREE</span>
+        <span>&nbsp;|&nbsp;</span>
+        <span class="arabic-text" style="font-size: 0.78rem;">توصيل مجاني فوق ٧٥ درهم</span>
+      </div>
+    </div>
+    <div class="preview-divider"><span>Mobile Preview</span></div>
+    <div class="mobile-preview">
+      <div class="mobile-inner">
+        <div class="concept-c-mobile">
+          <div class="price-section">
+            <div class="price-main"><span class="currency">AED</span> 29</div>
+            <div class="price-ar">٢٩ <span style="font-size: 0.75rem; font-weight: 400;">درهم</span></div>
+          </div>
+          <div class="swipe-track" id="swipeMobile">
+            <div class="swipe-fill" id="swipeFillMobile"></div>
+            <div class="swipe-thumb" id="swipeThumbMobile">
+              <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+            </div>
+            <div class="swipe-track-text" id="swipeTextMobile"><span class="arrow-hint">&rsaquo;&rsaquo;</span> Slide to add</div>
+            <div class="swipe-success-text">Added!</div>
+          </div>
+          <div class="delivery-row">
+            <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Over AED 75 =</span>
+            <span class="free-tag">FREE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">ORLO Store &mdash; Buy Box Mockups &mdash; Pick a concept to implement</div>
+
+<!-- ============================
+     SWIPE INTERACTION SCRIPT
+     ============================ -->
+<script>
+(function() {
+  function initSwipe(trackId, thumbId, fillId, textId) {
+    const track = document.getElementById(trackId);
+    const thumb = document.getElementById(thumbId);
+    const fill = document.getElementById(fillId);
+    const text = document.getElementById(textId);
+    if (!track || !thumb) return;
+
+    let dragging = false;
+    let startX = 0;
+    let thumbX = 0;
+    const thumbSize = thumb.offsetWidth;
+    const padding = 4;
+
+    function getMaxX() {
+      return track.offsetWidth - thumbSize - padding * 2;
+    }
+
+    function onStart(e) {
+      if (track.classList.contains('success')) return;
+      dragging = true;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      startX = clientX - thumbX;
+      e.preventDefault();
+    }
+
+    function onMove(e) {
+      if (!dragging) return;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      let newX = clientX - startX;
+      const maxX = getMaxX();
+      newX = Math.max(0, Math.min(newX, maxX));
+      thumbX = newX;
+      thumb.style.left = (padding + newX) + 'px';
+      thumb.style.transition = 'none';
+      if (fill) {
+        fill.style.width = (thumbSize + newX) + 'px';
+        fill.style.transition = 'none';
+      }
+      // Fade text
+      const progress = newX / maxX;
+      if (text) text.style.opacity = 1 - progress * 2;
+    }
+
+    function onEnd() {
+      if (!dragging) return;
+      dragging = false;
+      const maxX = getMaxX();
+      if (thumbX > maxX * 0.75) {
+        // Success!
+        thumb.style.transition = 'left 0.3s ease';
+        thumb.style.left = (padding + maxX) + 'px';
+        if (fill) {
+          fill.style.transition = 'width 0.3s ease';
+          fill.style.width = '100%';
+        }
+        track.classList.add('success');
+        thumbX = maxX;
+        // Reset after 2s
+        setTimeout(function() {
+          track.classList.remove('success');
+          thumb.style.transition = 'left 0.4s ease';
+          thumb.style.left = padding + 'px';
+          if (fill) {
+            fill.style.transition = 'width 0.4s ease';
+            fill.style.width = thumbSize + 'px';
+          }
+          if (text) text.style.opacity = 1;
+          thumbX = 0;
+        }, 2000);
+      } else {
+        // Snap back
+        thumb.style.transition = 'left 0.3s ease';
+        thumb.style.left = padding + 'px';
+        if (fill) {
+          fill.style.transition = 'width 0.3s ease';
+          fill.style.width = thumbSize + 'px';
+        }
+        if (text) text.style.opacity = 1;
+        thumbX = 0;
+      }
+    }
+
+    thumb.addEventListener('mousedown', onStart);
+    thumb.addEventListener('touchstart', onStart, { passive: false });
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('mouseup', onEnd);
+    document.addEventListener('touchend', onEnd);
+  }
+
+  initSwipe('swipeDesktop', 'swipeThumbDesktop', 'swipeFillDesktop', 'swipeTextDesktop');
+  initSwipe('swipeMobile', 'swipeThumbMobile', 'swipeFillMobile', 'swipeTextMobile');
+})();
+</script>
+</body>
+</html>
