@@ -1498,6 +1498,7 @@ footer p {
 
 .inline-add-to-cart {
   height: 36px;
+  min-width: 180px;
   padding: 0 0.67rem;
   background: var(--primary);
   color: white;
@@ -1516,15 +1517,12 @@ footer p {
   background: #1e3545;
 }
 
-/* Qty control when inline (non-variant) */
-.early-price-inline .product-btn-transformed {
+/* Qty control when inline (non-variant) — same width as the Add to Cart button */
+.early-price-inline .product-btn-transformed,
+.early-price-inline .grid-qty-control {
   flex-shrink: 0;
   width: auto;
-}
-
-.early-price-inline .grid-qty-control {
-  width: auto;
-  min-width: 120px;
+  min-width: 180px;
 }
 
 .product-details p {
@@ -1549,11 +1547,13 @@ footer p {
 /* Product Description Two-Column Layout */
 .product-desc-block {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.35rem;
-  margin-bottom: 0.6rem;
-  padding-left: 16px;
-  border-left: 3px solid #e76f51;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafb;
+  border-radius: 10px;
+  border: 1px solid #e8eef2;
 }
 
 .product-desc-block:last-child {
@@ -1568,23 +1568,32 @@ footer p {
   text-align: right;
   direction: rtl;
   font-family: 'Almarai', sans-serif;
+  border-left: 1px solid #e0e8ed;
+  padding-left: 1rem;
 }
 
 .product-desc-label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--primary);
-  margin-bottom: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.3rem;
 }
 
 .product-desc-value {
-  font-size: 0.85rem;
-  color: #555;
-  line-height: 1.5;
+  font-size: 0.82rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+.product-desc-ar .product-desc-label {
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .product-desc-ar .product-desc-value {
-  color: #666;
+  color: #555;
 }
 
 /* Buybox - open layout */
