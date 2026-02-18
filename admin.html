@@ -335,6 +335,9 @@
             .shipping-cards { grid-template-columns: 1fr; }
             .view-toggle { flex-wrap: wrap; }
         }
+        @media (max-width: 768px) {
+            .shipping-value { font-size: 1.5rem; }
+        }
         
         /* Buttons */
         .btn {
@@ -740,16 +743,165 @@
             margin-bottom: 20px;
         }
         
-        /* Responsive */
+        /* ============ MOBILE RESPONSIVE ============ */
         @media (max-width: 768px) {
+            /* Container */
+            .container { padding: 10px; }
+
+            /* Header - stack vertically */
+            header {
+                flex-direction: column;
+                gap: 12px;
+                padding: 15px;
+                border-radius: 10px;
+                margin-bottom: 15px;
+                text-align: center;
+            }
+            .header-brand { justify-content: center; gap: 10px; }
+            .header-brand img { width: 36px; height: 36px; }
             .header-brand h1 { font-size: 1.1rem; }
             .header-brand span { display: none; }
-            .form-row { grid-template-columns: 1fr; }
-            .table-header { flex-direction: column; align-items: stretch; }
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            .header-actions .btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: 0.8rem; }
+
+            /* Tabs - horizontal scroll */
+            .tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                gap: 0;
+                padding: 4px;
+                margin-bottom: 15px;
+            }
+            .tab {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            /* Stats - 2 columns */
+            .stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            .stat-card {
+                padding: 15px;
+                border-radius: 10px;
+            }
+            .stat-card h3 { font-size: 0.7rem; margin-bottom: 4px; }
+            .stat-card .value { font-size: 1.5rem; }
+
+            /* Products table - card layout on mobile */
+            .products-table { border-radius: 10px; }
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 15px;
+                gap: 10px;
+            }
+            .table-header h2 { font-size: 1rem; }
             .search-box { width: 100%; }
-            table { font-size: 0.85rem; }
-            th, td { padding: 10px 12px; }
-            .actions { flex-direction: column; }
+
+            table, thead, tbody, th, td, tr { display: block; }
+            thead { display: none; }
+            tr {
+                margin-bottom: 12px;
+                border-bottom: 2px solid var(--border);
+                padding-bottom: 12px;
+                position: relative;
+            }
+            tr:last-child { border-bottom: none; margin-bottom: 0; }
+            td {
+                padding: 4px 15px;
+                text-align: left;
+                border-bottom: none;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            td:first-child { padding-top: 10px; }
+            .product-img { width: 45px; height: 45px; }
+
+            .actions {
+                flex-direction: row;
+                justify-content: flex-start;
+                gap: 8px;
+                padding-top: 8px;
+            }
+
+            /* Form */
+            .form-row { grid-template-columns: 1fr; }
+
+            /* Orders tab */
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 12px 15px;
+                gap: 8px;
+            }
+            .order-body { padding: 15px; }
+            .order-customer {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .order-items { padding: 12px; }
+            .order-item {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .order-item-name { flex-basis: 100%; }
+            .order-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .order-actions .btn { width: 100%; justify-content: center; }
+
+            /* View toggle */
+            .view-toggle { flex-wrap: wrap; }
+            .view-btn { flex: 1; text-align: center; min-width: 0; padding: 8px 10px; font-size: 0.8rem; }
+
+            /* Modal - full screen on mobile */
+            .modal-overlay { padding: 0; align-items: stretch; }
+            .modal {
+                border-radius: 0;
+                max-height: 100vh;
+                height: 100vh;
+                max-width: 100%;
+            }
+            .modal-header { padding: 15px; }
+            .modal-header h2 { font-size: 1.1rem; }
+            .modal-body { padding: 15px; }
+            .modal-footer { padding: 15px; }
+
+            /* Quick stock modal stays compact */
+            #stockModal .modal {
+                height: auto;
+                max-height: 90vh;
+                border-radius: 16px;
+                margin: 20px;
+            }
+
+            /* Variant / tier rows */
+            .variant-row {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 6px !important;
+            }
+            .variant-row input:nth-child(3) { grid-column: 1 / -1; }
+            .tier-row {
+                grid-template-columns: 1fr 1fr 40px !important;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 400px) {
+            .stats { grid-template-columns: 1fr; }
+            .stat-card .value { font-size: 1.8rem; }
+            .header-actions { flex-direction: column; }
+            .header-actions .btn { width: 100%; }
         }
     </style>
 </head>
