@@ -1480,6 +1480,7 @@ footer p {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--accent);
+  padding: 0 1rem;
 }
 
 .early-price-ar {
