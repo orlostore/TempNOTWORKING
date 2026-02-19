@@ -339,6 +339,18 @@ sessionStorage.removeItem('orlo_checkout_pending');
     </div>
 
     <script>
+        // GA4: track purchase conversion
+        if (typeof gtag === 'function') {
+            const urlP = new URLSearchParams(window.location.search);
+            const sid = urlP.get('session_id');
+            if (sid) {
+                gtag('event', 'purchase', {
+                    transaction_id: sid,
+                    currency: 'AED'
+                });
+            }
+        }
+
         localStorage.removeItem('cart');
 
         const existingToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
