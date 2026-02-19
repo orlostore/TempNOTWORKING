@@ -3827,61 +3827,31 @@ footer p {
 }
 
 /* ============================================
-   MARKETING: Product Share Buttons
+   MARKETING: Product Share Button
    ============================================ */
-.product-share-buttons {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-left: 1rem;
-    vertical-align: middle;
-}
-
-.share-label {
-    font-size: 0.75rem;
-    color: #999;
-    font-weight: 500;
-}
-
-.share-label .arabic-text {
-    font-size: 0.65rem;
-}
-
-.share-btn {
+.product-share-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #f0f0f0;
+    width: 28px;
+    height: 28px;
     border: none;
+    background: none;
     cursor: pointer;
-    color: #555;
-    transition: all 0.2s;
-    text-decoration: none;
+    color: #888;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    border-radius: 50%;
+    transition: color 0.2s, background 0.15s;
 }
 
-.share-btn:hover {
-    background: #e0e0e0;
-    transform: scale(1.1);
+.product-share-btn:hover {
+    color: #333;
+    background: #f0f0f0;
 }
 
-.share-whatsapp {
-    background: #25d366;
-    color: white;
-}
-
-.share-whatsapp:hover {
-    background: #1da851;
-}
-
-@media (max-width: 768px) {
-    .product-share-buttons {
-        display: flex;
-        margin-left: 0;
-        margin-top: 0.5rem;
-    }
+.product-share-btn.copied {
+    color: #28a745;
 }
 
 /* ============================================
