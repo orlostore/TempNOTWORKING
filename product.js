@@ -476,7 +476,7 @@ async function initProductPage() {
       const thumbnailsHTML = product.images.length > 1 ? `
         <div class="thumbnail-strip">
           ${product.images.map((img, index) => `
-            <img src="${img}" alt="${product.name} ${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}" onclick="changeMainImage('${img}', ${index})" style="object-fit:contain;">
+            <img src="${img}" alt="${product.name} ${index + 1}" loading="lazy" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}" onclick="changeMainImage('${img}', ${index})" style="object-fit:contain;">
           `).join('')}
         </div>
       ` : '';
@@ -558,7 +558,7 @@ async function initProductPage() {
     } else {
       mobileCarousel.innerHTML = product.images.map((img, index) => `
         <div class="mobile-carousel-slide" data-index="${index}">
-          <img src="${img}" alt="${product.name} ${index + 1}">
+          <img src="${img}" alt="${product.name} ${index + 1}" loading="lazy">
         </div>
       `).join('');
       
@@ -1087,7 +1087,7 @@ function renderVariantSelector(containerId, product, isMobile) {
     if (isLow) classes += ' low-stock';
 
     const imgHTML = v.image
-      ? `<img src="${v.image}" alt="${v.name}" style="width:100%;aspect-ratio:1;object-fit:contain;border-radius:6px;background:#f8f8f8;">`
+      ? `<img src="${v.image}" alt="${v.name}" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;border-radius:6px;background:#f8f8f8;">`
       : `<div style="width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#f8f8f8;border-radius:6px;font-size:1.5rem;">📦</div>`;
 
     return `

@@ -295,7 +295,7 @@ function renderProducts(list, arabicMode) {
     grid.innerHTML = list.map(p => {
         const isUrl = p.image && p.image.startsWith('http');
         const imageHTML = isUrl
-            ? `<img src="${p.image}" alt="${p.name}" style="max-width:100%; max-height:100%; object-fit:contain;">`
+            ? `<img src="${p.image}" alt="${p.name}" loading="lazy" style="max-width:100%; max-height:100%; object-fit:contain;">`
             : p.image;
 
         // Check if out of stock (use totalStock for variant products)
