@@ -41,11 +41,15 @@ export async function onRequestPost(context) {
         const authHeader = request.headers.get('Authorization');
         if (authHeader && authHeader.startsWith('Bearer ') && DB) {
             const token = authHeader.replace('Bearer ', '');
-            const customer = await DB.prepare('SELECT id, email, name FROM customers WHERE token = ?')
+            const customer = await DB.prepare('SELECT id, email, name, token_created_at FROM customers WHERE token = ?')
                 .bind(token)
                 .first();
 
-            if (customer) {
+            // Check token expiry (30 days)
+            const tokenValid = customer && (!customer.token_created_at ||
+                (Date.now() - new Date(customer.token_created_at).getTime() < 30 * 24 * 60 * 60 * 1000));
+
+            if (customer && tokenValid) {
                 customerEmail = customer.email;
 
                 const address = await DB.prepare(`
