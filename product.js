@@ -270,6 +270,68 @@ async function initProductPage() {
   document.querySelectorAll('.threshold-value').forEach(el => el.textContent = threshold);
   document.querySelectorAll('.threshold-value-ar').forEach(el => el.textContent = toArabicNumerals(threshold));
 
+  // === SEO: Update page title, meta tags, and inject JSON-LD ===
+  document.title = product.name + ' - ORLO Store';
+  const metaDesc = (product.description || '').replace(/<[^>]*>/g, '').slice(0, 155);
+  const productUrl = 'https://orlostore.com/product.html?product=' + encodeURIComponent(product.slug);
+  const productImage = (product.images && product.images.length > 0 && product.images[0].startsWith('http')) ? product.images[0] : 'https://orlostore.com/logo.png';
+
+  const metaUpdates = {
+    'meta[name="description"]': metaDesc || ('Shop ' + product.name + ' at ORLO Store. Delivered across the UAE.'),
+    'meta[property="og:title"]': product.name + ' - ORLO Store',
+    'meta[property="og:description"]': metaDesc || ('Shop ' + product.name + ' at ORLO Store.'),
+    'meta[property="og:url"]': productUrl,
+    'meta[property="og:image"]': productImage,
+    'meta[name="twitter:title"]': product.name + ' - ORLO Store',
+    'meta[name="twitter:description"]': metaDesc || ('Shop ' + product.name + ' at ORLO Store.'),
+    'meta[name="twitter:image"]': productImage
+  };
+  Object.entries(metaUpdates).forEach(function(entry) {
+    var sel = entry[0], val = entry[1];
+    var el = document.querySelector(sel);
+    if (el) el.setAttribute(el.hasAttribute('property') ? 'content' : 'content', val);
+  });
+  var canon = document.querySelector('link[rel="canonical"]');
+  if (canon) canon.setAttribute('href', productUrl);
+
+  // Inject Product JSON-LD
+  var jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    'name': product.name,
+    'description': metaDesc,
+    'image': productImage,
+    'url': productUrl,
+    'brand': { '@type': 'Brand', 'name': 'ORLO' },
+    'offers': {
+      '@type': 'Offer',
+      'price': product.price,
+      'priceCurrency': 'AED',
+      'availability': isOutOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+      'url': productUrl
+    }
+  };
+  if (product.category) jsonLd.category = product.category;
+  var ldScript = document.createElement('script');
+  ldScript.type = 'application/ld+json';
+  ldScript.textContent = JSON.stringify(jsonLd);
+  document.head.appendChild(ldScript);
+
+  // Inject BreadcrumbList JSON-LD
+  var breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://orlostore.com/' },
+      { '@type': 'ListItem', 'position': 2, 'name': product.category || 'Products', 'item': 'https://orlostore.com/?category=' + encodeURIComponent(product.category || '') },
+      { '@type': 'ListItem', 'position': 3, 'name': product.name, 'item': productUrl }
+    ]
+  };
+  var bcScript = document.createElement('script');
+  bcScript.type = 'application/ld+json';
+  bcScript.textContent = JSON.stringify(breadcrumbLd);
+  document.head.appendChild(bcScript);
+
   // DESKTOP VERSION
   document.getElementById("productTitle").innerText = product.name;
   const titleArEl = document.getElementById("productTitleAr");
