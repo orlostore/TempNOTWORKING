@@ -541,13 +541,22 @@ function addToCart(id, event) {
         return;
     }
     
-    if (item) { 
-        item.quantity++; 
-    } else { 
-        cart.push({ ...product, quantity: 1 }); 
-    } 
+    if (item) {
+        item.quantity++;
+    } else {
+        cart.push({ ...product, quantity: 1 });
+    }
     saveCart();
-    
+
+    // GA4: track add_to_cart event
+    if (typeof gtag === 'function') {
+        gtag('event', 'add_to_cart', {
+            currency: 'AED',
+            value: product.price,
+            items: [{ item_id: product.id, item_name: product.name, price: product.price, quantity: 1 }]
+        });
+    }
+
     // Transform button to qty stepper
     const btn = event ? event.target.closest('.add-to-cart') : null;
     if (btn) {
@@ -1292,6 +1301,17 @@ async function checkout() {
         if (btn) {
             btn.disabled = true;
             btn.innerHTML = "Checking stock...";
+        }
+
+        // GA4: track begin_checkout event
+        if (typeof gtag === 'function') {
+            const cartWithPricing = calculateTierPricing(cart);
+            const checkoutValue = cartWithPricing.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
+            gtag('event', 'begin_checkout', {
+                currency: 'AED',
+                value: checkoutValue,
+                items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i._tierPrice || i.price, quantity: i.quantity }))
+            });
         }
 
         // Use relative URL (same domain)
