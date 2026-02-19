@@ -112,18 +112,26 @@ export async function onRequestDelete(context) {
     }
 }
 
-// Helper function to verify token
+// Helper function to verify token (with 30-day expiry)
 async function verifyToken(request, DB) {
     const authHeader = request.headers.get('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return null;
     }
-    
+
     const token = authHeader.replace('Bearer ', '');
-    
-    const customer = await DB.prepare('SELECT id, email FROM customers WHERE token = ?')
+
+    const customer = await DB.prepare('SELECT id, email, token_created_at FROM customers WHERE token = ?')
         .bind(token)
         .first();
-    
+
+    if (!customer) return null;
+
+    // Check token expiry (30 days)
+    if (customer.token_created_at) {
+        const tokenAge = Date.now() - new Date(customer.token_created_at).getTime();
+        if (tokenAge > 30 * 24 * 60 * 60 * 1000) return null;
+    }
+
     return customer;
 }

@@ -18,7 +18,7 @@ export async function onRequestPost(context) {
             error: 'Stripe is not configured.'
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'https://orlostore.com' }
         });
     }
 
@@ -29,7 +29,7 @@ export async function onRequestPost(context) {
         if (!cart || !Array.isArray(cart) || cart.length === 0) {
             return new Response(JSON.stringify({ error: 'Cart is empty' }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'https://orlostore.com' }
             });
         }
 
@@ -140,7 +140,7 @@ export async function onRequestPost(context) {
                 items: outOfStock
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'https://orlostore.com' }
             });
         }
 
@@ -151,21 +151,34 @@ export async function onRequestPost(context) {
                 items: insufficientStock
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'https://orlostore.com' }
             });
         }
 
-        // === CALCULATE TOTALS (with tier pricing) ===
+        // === CALCULATE TOTALS (server-side prices from DB, never trust client) ===
         let subtotal = 0;
         const lineItems = [];
 
+        // Build a map of DB products by slug for price lookup
+        const productSlugs = [...new Set(cart.map(item => item.slug))];
+        const dbProducts = {};
+        for (const slug of productSlugs) {
+            const p = await DB.prepare('SELECT id, slug, name, price FROM products WHERE slug = ?')
+                .bind(slug).first();
+            if (p) dbProducts[slug] = p;
+        }
+
         for (const item of cart) {
-            let unitPrice = item.price;
-            const tiers = tiersMap[item.id];
+            const dbProduct = dbProducts[item.slug];
+            if (!dbProduct) continue;
+
+            // Use DB price, never client price
+            let unitPrice = dbProduct.price;
+            const tiers = tiersMap[dbProduct.id];
 
             // Apply tier pricing if applicable
             if (tiers && tiers.length > 0) {
-                const totalQtyForProduct = qtyByProduct[item.id] || item.quantity;
+                const totalQtyForProduct = qtyByProduct[dbProduct.id] || item.quantity;
                 let bestTier = null;
                 for (const tier of tiers) {
                     if (totalQtyForProduct >= tier.minQty) {
@@ -182,15 +195,14 @@ export async function onRequestPost(context) {
             subtotal += unitPrice * item.quantity;
 
             const displayName = item.variantName
-                ? `${item.name} — ${item.variantName}`
-                : item.name;
+                ? `${dbProduct.name} — ${item.variantName}`
+                : dbProduct.name;
 
             lineItems.push({
                 price_data: {
                     currency: 'aed',
                     product_data: {
                         name: displayName,
-                        description: item.description || undefined,
                     },
                     unit_amount: Math.round(unitPrice * 100),
                 },
@@ -286,23 +298,22 @@ export async function onRequestPost(context) {
                 message: session.error.message
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'https://orlostore.com' }
             });
         }
 
         return new Response(JSON.stringify({ url: session.url }), {
             status: 200,
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'https://orlostore.com' }
         });
 
     } catch (error) {
         console.error('Checkout Error:', error);
         return new Response(JSON.stringify({
-            error: 'Payment processing failed',
-            message: error.message
+            error: 'Payment processing failed'
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'https://orlostore.com' }
         });
     }
 }
@@ -311,7 +322,7 @@ export async function onRequestOptions() {
     return new Response(null, {
         status: 204,
         headers: {
-            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Origin': 'https://orlostore.com',
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         }

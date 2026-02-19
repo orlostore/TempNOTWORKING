@@ -2,6 +2,25 @@
 const params = new URLSearchParams(window.location.search);
 const slug = params.get("product");
 
+// === XSS SANITIZER: strip dangerous tags/attributes from HTML ===
+function sanitizeHTML(html) {
+  if (!html) return '';
+  var div = document.createElement('div');
+  div.innerHTML = html;
+  // Remove script, iframe, object, embed, form, input tags
+  var dangerous = div.querySelectorAll('script,iframe,object,embed,form,input,textarea,link,style');
+  dangerous.forEach(function(el) { el.remove(); });
+  // Remove event handler attributes from all elements
+  div.querySelectorAll('*').forEach(function(el) {
+    Array.from(el.attributes).forEach(function(attr) {
+      if (attr.name.startsWith('on') || attr.name === 'srcdoc' || (attr.name === 'href' && attr.value.trim().toLowerCase().startsWith('javascript:'))) {
+        el.removeAttribute(attr.name);
+      }
+    });
+  });
+  return div.innerHTML;
+}
+
 // === MAX QUANTITY PER PRODUCT ===
 var MAX_QTY_PER_PRODUCT = 10;
 
@@ -340,8 +359,8 @@ async function initProductPage() {
 
   let descriptionHTML = '';
   
-  const descEn = product.detailedDescription || product.description || '';
-  const descAr = product.detailedDescriptionAr || product.descriptionAr || '';
+  const descEn = sanitizeHTML(product.detailedDescription || product.description || '');
+  const descAr = sanitizeHTML(product.detailedDescriptionAr || product.descriptionAr || '');
   if (descEn || descAr) {
     descriptionHTML += `
       <div class="product-desc-block">
@@ -613,8 +632,8 @@ async function initProductPage() {
   const detailsContainer = document.getElementById("mobileDetailsSection");
   let detailsHTML = '';
 
-  const mobileDescEn = product.detailedDescription || product.description || '';
-  const mobileDescAr = product.detailedDescriptionAr || product.descriptionAr || '';
+  const mobileDescEn = sanitizeHTML(product.detailedDescription || product.description || '');
+  const mobileDescAr = sanitizeHTML(product.detailedDescriptionAr || product.descriptionAr || '');
   
   if (mobileDescEn || mobileDescAr) {
     detailsHTML += `
@@ -788,8 +807,8 @@ function openEnhancedLightbox(product, startIndex) {
     <div class="lightbox-divider"></div>
   `;
   
-  const lbDescEn = product.detailedDescription || product.description;
-  const lbDescAr = product.detailedDescriptionAr || product.descriptionAr;
+  const lbDescEn = sanitizeHTML(product.detailedDescription || product.description);
+  const lbDescAr = sanitizeHTML(product.detailedDescriptionAr || product.descriptionAr);
   if (lbDescEn || lbDescAr) {
     infoHTML += `<div class="lightbox-detail-block"><div class="lightbox-detail-en"><div class="lightbox-detail-label">Description</div><div class="lightbox-detail-value">${lbDescEn || ''}</div></div><div class="lightbox-detail-ar"><div class="lightbox-detail-label">معلومات المنتج</div><div class="lightbox-detail-value">${lbDescAr || ''}</div></div></div>`;
   }

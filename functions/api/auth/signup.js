@@ -24,17 +24,17 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'Email already registered' }, { status: 400 });
         }
         
-        // Hash password
-        const passwordHash = await hashPassword(password);
-        
+        // Hash password with PBKDF2
+        const passwordHash = await hashPasswordPBKDF2(password);
+
         // Generate auth token and verification token
         const token = generateToken();
         const verificationToken = generateToken();
-        
-        // Insert customer with email_verified = 0
+
+        // Insert customer with email_verified = 0, hash_version = 2 (PBKDF2)
         const result = await DB.prepare(`
-            INSERT INTO customers (email, password_hash, name, phone, token, email_verified, verification_token, created_at)
-            VALUES (?, ?, ?, ?, ?, 0, ?, datetime('now'))
+            INSERT INTO customers (email, password_hash, name, phone, token, email_verified, verification_token, created_at, hash_version, token_created_at)
+            VALUES (?, ?, ?, ?, ?, 0, ?, datetime('now'), 2, datetime('now'))
         `).bind(
             email.toLowerCase(),
             passwordHash,
@@ -118,13 +118,18 @@ export async function onRequestPost(context) {
     }
 }
 
-// Simple password hashing (use Web Crypto API)
-async function hashPassword(password) {
+// PBKDF2 password hashing (strong, Cloudflare Workers compatible)
+async function hashPasswordPBKDF2(password) {
     const encoder = new TextEncoder();
-    const data = encoder.encode(password + 'ORLO_SALT_2024');
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const keyMaterial = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits']);
+    const hash = await crypto.subtle.deriveBits(
+        { name: 'PBKDF2', salt: salt, iterations: 100000, hash: 'SHA-256' },
+        keyMaterial, 256
+    );
+    const saltHex = Array.from(salt, b => b.toString(16).padStart(2, '0')).join('');
+    const hashHex = Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2, '0')).join('');
+    return `pbkdf2:100000:${saltHex}:${hashHex}`;
 }
 
 // Generate random token
