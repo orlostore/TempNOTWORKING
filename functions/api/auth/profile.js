@@ -15,12 +15,15 @@ export async function onRequestPut(context) {
         const token = authHeader.replace('Bearer ', '');
         
         // Find customer by token
-        const customer = await DB.prepare('SELECT id FROM customers WHERE token = ?')
+        const customer = await DB.prepare('SELECT id, token_created_at FROM customers WHERE token = ?')
             .bind(token)
             .first();
-        
+
         if (!customer) {
             return Response.json({ error: 'Invalid token' }, { status: 401 });
+        }
+        if (customer.token_created_at && (Date.now() - new Date(customer.token_created_at).getTime() > 30*24*60*60*1000)) {
+            return Response.json({ error: 'Session expired. Please log in again.' }, { status: 401 });
         }
         
         const { name, phone } = await request.json();
@@ -56,13 +59,16 @@ export async function onRequestGet(context) {
         
         // Find customer by token
         const customer = await DB.prepare(`
-            SELECT id, email, name, phone, email_verified, created_at
-            FROM customers 
+            SELECT id, email, name, phone, email_verified, created_at, token_created_at
+            FROM customers
             WHERE token = ?
         `).bind(token).first();
-        
+
         if (!customer) {
             return Response.json({ error: 'Invalid token' }, { status: 401 });
+        }
+        if (customer.token_created_at && (Date.now() - new Date(customer.token_created_at).getTime() > 30*24*60*60*1000)) {
+            return Response.json({ error: 'Session expired. Please log in again.' }, { status: 401 });
         }
         
         return Response.json({ 

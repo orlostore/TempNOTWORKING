@@ -15,12 +15,15 @@ export async function onRequestGet(context) {
         const token = authHeader.replace('Bearer ', '');
         
         // Find customer by token
-        const customer = await DB.prepare('SELECT id, email FROM customers WHERE token = ?')
+        const customer = await DB.prepare('SELECT id, email, token_created_at FROM customers WHERE token = ?')
             .bind(token)
             .first();
-        
+
         if (!customer) {
             return Response.json({ error: 'Invalid token' }, { status: 401 });
+        }
+        if (customer.token_created_at && (Date.now() - new Date(customer.token_created_at).getTime() > 30*24*60*60*1000)) {
+            return Response.json({ error: 'Session expired. Please log in again.' }, { status: 401 });
         }
         
         // Fetch orders from Stripe by customer email

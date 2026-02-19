@@ -44,18 +44,18 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'Email already registered' }, { status: 400 });
         }
 
-        // 3. Generate temp password
+        // 3. Generate temp password (cryptographically secure)
         const tempPassword = generateTempPassword();
-        const passwordHash = await hashPassword(tempPassword);
+        const passwordHash = await hashPasswordPBKDF2(tempPassword);
 
         // 4. Generate tokens
         const token = generateToken();
         const verificationToken = generateToken();
 
-        // 5. Insert customer
+        // 5. Insert customer with hash_version = 2 (PBKDF2)
         const result = await DB.prepare(`
-            INSERT INTO customers (email, password_hash, name, phone, token, email_verified, verification_token, created_at)
-            VALUES (?, ?, ?, ?, ?, 0, ?, datetime('now'))
+            INSERT INTO customers (email, password_hash, name, phone, token, email_verified, verification_token, created_at, hash_version, token_created_at)
+            VALUES (?, ?, ?, ?, ?, 0, ?, datetime('now'), 2, datetime('now'))
         `).bind(email, passwordHash, name, phone, token, verificationToken).run();
 
         const customerId = result.meta.last_row_id;
@@ -157,12 +157,18 @@ export async function onRequestPost(context) {
     }
 }
 
-async function hashPassword(password) {
+// PBKDF2 password hashing
+async function hashPasswordPBKDF2(password) {
     const encoder = new TextEncoder();
-    const data = encoder.encode(password + 'ORLO_SALT_2024');
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const keyMaterial = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits']);
+    const hash = await crypto.subtle.deriveBits(
+        { name: 'PBKDF2', salt: salt, iterations: 100000, hash: 'SHA-256' },
+        keyMaterial, 256
+    );
+    const saltHex = Array.from(salt, b => b.toString(16).padStart(2, '0')).join('');
+    const hashHex = Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2, '0')).join('');
+    return `pbkdf2:100000:${saltHex}:${hashHex}`;
 }
 
 function generateToken() {
@@ -171,11 +177,13 @@ function generateToken() {
     return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
 }
 
+// Cryptographically secure temp password (replaces Math.random)
 function generateTempPassword() {
     const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    const randomBytes = crypto.getRandomValues(new Uint8Array(12));
     let password = '';
     for (let i = 0; i < 12; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
+        password += chars.charAt(randomBytes[i] % chars.length);
     }
     return password;
 }

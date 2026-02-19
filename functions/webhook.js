@@ -16,12 +16,17 @@ export async function onRequestPost(context) {
         const payload = await request.text();
         const signature = request.headers.get('stripe-signature');
         
-        // Verify webhook signature (if secret is set)
-        if (STRIPE_WEBHOOK_SECRET && signature) {
-            const verified = await verifyStripeSignature(payload, signature, STRIPE_WEBHOOK_SECRET);
-            if (!verified) {
-                return new Response('Invalid signature', { status: 400 });
-            }
+        // Verify webhook signature (mandatory)
+        if (!STRIPE_WEBHOOK_SECRET) {
+            console.error('STRIPE_WEBHOOK_SECRET is not configured');
+            return new Response('Webhook secret not configured', { status: 500 });
+        }
+        if (!signature) {
+            return new Response('Missing stripe-signature header', { status: 400 });
+        }
+        const verified = await verifyStripeSignature(payload, signature, STRIPE_WEBHOOK_SECRET);
+        if (!verified) {
+            return new Response('Invalid signature', { status: 400 });
         }
         
         const event = JSON.parse(payload);
@@ -30,6 +35,29 @@ export async function onRequestPost(context) {
         if (event.type === 'checkout.session.completed') {
             const session = event.data.object;
             
+            // === IDEMPOTENCY: skip if already processed ===
+            try {
+                // Create table if it doesn't exist (first run)
+                await DB.prepare(`CREATE TABLE IF NOT EXISTS processed_webhooks (
+                    event_id TEXT PRIMARY KEY,
+                    processed_at TEXT DEFAULT (datetime('now'))
+                )`).run();
+
+                const existing = await DB.prepare('SELECT event_id FROM processed_webhooks WHERE event_id = ?')
+                    .bind(event.id).first();
+                if (existing) {
+                    console.log(`Webhook ${event.id} already processed, skipping`);
+                    return new Response(JSON.stringify({ received: true, duplicate: true }), {
+                        status: 200,
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                }
+
+                await DB.prepare('INSERT INTO processed_webhooks (event_id) VALUES (?)').bind(event.id).run();
+            } catch (e) {
+                console.error('Idempotency check error:', e);
+            }
+
             // === DEDUCT INVENTORY ===
             if (session.metadata && session.metadata.cart_items) {
                 try {
@@ -37,16 +65,14 @@ export async function onRequestPost(context) {
 
                     for (const item of cartItems) {
                         if (item.variantId) {
-                            // Deduct from variant stock
                             await DB.prepare(
-                                'UPDATE product_variants SET quantity = MAX(0, quantity - ?) WHERE id = ?'
-                            ).bind(item.quantity, item.variantId).run();
+                                'UPDATE product_variants SET quantity = MAX(0, quantity - ?) WHERE id = ? AND quantity >= ?'
+                            ).bind(item.quantity, item.variantId, item.quantity).run();
                             console.log(`Deducted ${item.quantity} from variant ${item.variantId} (${item.slug})`);
                         } else {
-                            // Deduct from product stock (no variant)
                             await DB.prepare(
-                                'UPDATE products SET quantity = MAX(0, quantity - ?) WHERE slug = ?'
-                            ).bind(item.quantity, item.slug).run();
+                                'UPDATE products SET quantity = MAX(0, quantity - ?) WHERE slug = ? AND quantity >= ?'
+                            ).bind(item.quantity, item.slug, item.quantity).run();
                             console.log(`Deducted ${item.quantity} from ${item.slug}`);
                         }
                     }
@@ -92,7 +118,7 @@ export async function onRequestPost(context) {
         
     } catch (error) {
         console.error('Webhook Error:', error);
-        return new Response(JSON.stringify({ error: error.message }), {
+        return new Response(JSON.stringify({ error: 'Webhook processing failed' }), {
             status: 400,
             headers: { 'Content-Type': 'application/json' }
         });
