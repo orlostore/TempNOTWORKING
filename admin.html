@@ -12,7 +12,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ORLO Admin</title>
+    <meta name="robots" content="noindex, nofollow">
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1422,28 +1425,37 @@
     </div>
 
     <script>
-        const ADMIN_KEY = 'Sy$tem88';
         let products = [];
         let authKey = '';
 
         function checkAuth() {
             const params = new URLSearchParams(window.location.search);
             const urlKey = params.get('key');
-            if (urlKey === ADMIN_KEY) {
-                authKey = urlKey;
-                showAdmin();
+            if (urlKey) {
+                verifyKey(urlKey);
+            }
+        }
+
+        async function verifyKey(key) {
+            try {
+                const response = await fetch('/api/admin/orders?key=' + encodeURIComponent(key) + '&t=' + Date.now());
+                if (response.ok) {
+                    authKey = key;
+                    showAdmin();
+                } else {
+                    document.getElementById('authError').style.display = 'block';
+                    document.getElementById('authKey').style.borderColor = '#dc3545';
+                }
+            } catch (e) {
+                document.getElementById('authError').style.display = 'block';
+                document.getElementById('authKey').style.borderColor = '#dc3545';
             }
         }
 
         function authenticate() {
             const input = document.getElementById('authKey').value;
-            if (input === ADMIN_KEY) {
-                authKey = input;
-                showAdmin();
-            } else {
-                document.getElementById('authError').style.display = 'block';
-                document.getElementById('authKey').style.borderColor = '#dc3545';
-            }
+            if (!input) return;
+            verifyKey(input);
         }
 
         function showAdmin() {

@@ -8,7 +8,7 @@ export async function onRequestPost(context) {
         const url = new URL(request.url);
         const key = url.searchParams.get('key');
 
-        if (key !== env.ADMIN_KEY && key !== 'Sy$tem88') {
+        if (key !== env.ADMIN_KEY) {
             return Response.json({ error: 'Unauthorized' }, { status: 401 });
         }
 

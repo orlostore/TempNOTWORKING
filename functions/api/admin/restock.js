@@ -3,8 +3,6 @@
 // Or:    /api/admin/restock?key=SECRET&slug=product-slug&set=100
 // Variant: /api/admin/restock?key=SECRET&slug=product-slug&variant_id=5&set=50
 
-const ADMIN_KEY = 'Sy$tem88';
-
 export async function onRequestGet(context) {
     const { request, env } = context;
     const DB = env.DB;
@@ -17,7 +15,7 @@ export async function onRequestGet(context) {
     const setQty = url.searchParams.get('set');
 
     // Verify admin key
-    if (key !== ADMIN_KEY) {
+    if (key !== env.ADMIN_KEY) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401,
             headers: { 'Content-Type': 'application/json' }
