@@ -993,6 +993,17 @@ function setupGalleryOverlay(product) {
       overlay.appendChild(resetBtn);
     }
 
+    // Add pinch-to-zoom hint (shown once, fades on first pinch)
+    var existingHint = overlay.querySelector('.pinch-zoom-hint');
+    if (existingHint) existingHint.remove();
+    var zoomHint = document.createElement('div');
+    zoomHint.className = 'pinch-zoom-hint';
+    zoomHint.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Pinch to zoom';
+    overlay.appendChild(zoomHint);
+    setTimeout(function() { zoomHint.classList.add('visible'); }, 100);
+    // Auto-fade after 3s if user hasn't pinched
+    var hintTimer = setTimeout(function() { zoomHint.classList.remove('visible'); }, 3000);
+
     overlay.classList.add('active');
     if (bottomNav) bottomNav.style.display = 'none';
     // Lock body scroll properly (prevents iOS body scroll bleed behind overlay)
@@ -1010,6 +1021,7 @@ function setupGalleryOverlay(product) {
       var translateX = 0, translateY = 0;
       var startX = 0, startY = 0;
       var isPinching = false;
+      var panDamping = 0.45; // dampen pan speed (0-1, lower = slower/smoother)
       var currentResetBtn = overlay.querySelector('.gallery-reset-btn');
 
       function resetZoom() {
@@ -1055,9 +1067,12 @@ function setupGalleryOverlay(product) {
           overlay.style.overflowY = 'hidden';
           startDist = getDistance(e.touches[0], e.touches[1]);
           startScale = scale;
+          // Dismiss zoom hint on first pinch
+          var hint = overlay.querySelector('.pinch-zoom-hint');
+          if (hint) { clearTimeout(hintTimer); hint.classList.remove('visible'); }
         } else if (e.touches.length === 1 && scale > 1) {
-          startX = e.touches[0].clientX - translateX;
-          startY = e.touches[0].clientY - translateY;
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
         }
       }, { passive: false });
 
@@ -1073,8 +1088,12 @@ function setupGalleryOverlay(product) {
         } else if (e.touches.length === 1 && scale > 1) {
           e.preventDefault();
           e.stopPropagation();
-          translateX = e.touches[0].clientX - startX;
-          translateY = e.touches[0].clientY - startY;
+          var dx = (e.touches[0].clientX - startX) * panDamping;
+          var dy = (e.touches[0].clientY - startY) * panDamping;
+          translateX += dx;
+          translateY += dy;
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
           clampTranslate();
           applyTransform();
         }
