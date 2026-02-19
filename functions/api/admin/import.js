@@ -2,18 +2,17 @@
 // Usage: /api/admin/import?key=SECRET
 // This imports ALL products from Google Sheets into D1 (one-time setup)
 
-const ADMIN_KEY = 'Sy$tem88';
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPRs_Wd4lFMv_WF6qfxHffAauQ8DoWvrPAIgs0vmz4m1lwBvIwqe0pLcsQc2PcA4xo96IsP5J0v50L/pub?output=csv';
 
 export async function onRequestGet(context) {
     const { request, env } = context;
     const DB = env.DB;
-    
+
     const url = new URL(request.url);
     const key = url.searchParams.get('key');
-    
+
     // Verify admin key
-    if (key !== ADMIN_KEY) {
+    if (key !== env.ADMIN_KEY) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401,
             headers: { 'Content-Type': 'application/json' }
