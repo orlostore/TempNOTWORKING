@@ -1034,7 +1034,7 @@ function toggleMobileMenu() {
                     <div class="menu-text"><span class="menu-en">Shop</span><span class="menu-ar">تسوق</span></div>
                     ${chevron}
                 </a>
-                <a href="${base}#about" onclick="closeMobileMenu()">
+                <a href="${isIndex ? 'javascript:void(0)' : 'index.html?showAbout=true'}" onclick="${isIndex ? 'closeMobileMenu();toggleAbout();return false;' : 'closeMobileMenu()'}">
                     <div class="menu-icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
                     <div class="menu-text"><span class="menu-en">About</span><span class="menu-ar">من نحن</span></div>
                     ${chevron}
