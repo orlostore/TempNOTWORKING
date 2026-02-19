@@ -549,8 +549,8 @@ function addToCart(id, event) {
     saveCart();
     
     // Transform button to qty stepper
-    const btn = event ? event.target : null;
-    if (btn && btn.classList.contains('add-to-cart')) {
+    const btn = event ? event.target.closest('.add-to-cart') : null;
+    if (btn) {
         const qty = cart.find(i => i.id === id)?.quantity || 1;
         btn.outerHTML = `
             <div class="grid-qty-control" id="gridQty-${id}">
