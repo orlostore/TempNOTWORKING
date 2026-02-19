@@ -381,22 +381,11 @@ async function initProductPage() {
     });
   };
 
-  // === STOCK URGENCY INDICATOR ===
-  let stockBadgeHTML = '';
-  if (!isOutOfStock) {
-    const stockQty = hasVariants ? product.variants.reduce((s, v) => s + v.quantity, 0) : product.quantity;
-    if (stockQty > 0 && stockQty <= 5) {
-      stockBadgeHTML = `<div class="stock-urgency"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Only ${stockQty} left in stock | <span class="arabic-text">متبقي ${toArabicNumerals(stockQty)} فقط</span></div>`;
-    } else if (stockQty > 5 && stockQty <= 15) {
-      stockBadgeHTML = `<div class="stock-urgency low"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> Popular item - selling fast | <span class="arabic-text">منتج رائج - يُباع بسرعة</span></div>`;
-    }
-  }
-
   // DESKTOP VERSION
   document.getElementById("productTitle").innerText = product.name;
   const titleArEl = document.getElementById("productTitleAr");
   if (titleArEl) titleArEl.innerText = product.nameAr || '';
-  document.getElementById("productCategory").innerHTML = product.category + shareHTML + stockBadgeHTML;
+  document.getElementById("productCategory").innerHTML = product.category + shareHTML;
 
   let descriptionHTML = '';
   
@@ -587,7 +576,7 @@ async function initProductPage() {
   // MOBILE VERSION
   document.getElementById("mobileProductTitle").innerText = product.name;
   document.getElementById("mobileProductTitleAr").innerText = product.nameAr || '';
-  document.getElementById("mobileProductCategory").innerHTML = product.category + shareHTML + stockBadgeHTML;
+  document.getElementById("mobileProductCategory").innerHTML = product.category + shareHTML;
   // Hide standalone price when pricing tiers are present (dynamic bar replaces it)
   const mobilePriceEl = document.getElementById("mobileProductPrice");
   if (hasTiers) {
