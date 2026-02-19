@@ -3883,3 +3883,49 @@ footer p {
         margin-top: 0.5rem;
     }
 }
+
+/* ============================================
+   MOBILE TRUST BADGES (shown only on mobile)
+   ============================================ */
+.mobile-trust-section {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-trust-section {
+        display: block;
+        padding: 1.5rem 1rem;
+        background: #f8f9fa;
+        border-top: 1px solid #eee;
+    }
+    .mobile-trust-section .trust-badges-row {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    .mobile-trust-section .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.7rem;
+        color: #666;
+        text-align: left;
+        line-height: 1.3;
+        flex: 0 0 calc(50% - 0.5rem);
+    }
+    .mobile-trust-section .trust-icon {
+        width: 22px;
+        height: 22px;
+        stroke: var(--primary);
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+    }
+    .mobile-trust-section .trust-item .arabic-text {
+        font-size: 0.65rem;
+        color: #999;
+    }
+}
