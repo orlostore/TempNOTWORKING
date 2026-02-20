@@ -833,6 +833,32 @@ async function initProductPage() {
       openEnhancedLightbox(product, activeIndex);
     };
   }
+
+  // Keyboard arrow navigation for desktop thumbnails (no visible UI, just keyboard support)
+  if (product.images && product.images.length > 1 && product.images[0].startsWith('http')) {
+    document.addEventListener('keydown', function(e) {
+      // Don't interfere with typing in inputs, textareas, or when lightbox is open
+      const tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (document.querySelector('.lightbox')) return;
+
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        const thumbs = document.querySelectorAll('.thumbnail');
+        if (thumbs.length < 2) return;
+
+        const activeTh = document.querySelector('.thumbnail.active');
+        let currentIdx = activeTh ? parseInt(activeTh.getAttribute('data-index') || '0') : 0;
+
+        if (e.key === 'ArrowRight') {
+          currentIdx = currentIdx >= product.images.length - 1 ? 0 : currentIdx + 1;
+        } else {
+          currentIdx = currentIdx <= 0 ? product.images.length - 1 : currentIdx - 1;
+        }
+
+        changeMainImage(product.images[currentIdx], currentIdx);
+      }
+    });
+  }
 }
 
 function openEnhancedLightbox(product, startIndex) {
