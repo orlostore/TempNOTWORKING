@@ -26,6 +26,13 @@ export async function onRequestPost(context) {
             });
         }
 
+        // Ensure sort_order column exists
+        try {
+            await DB.prepare('SELECT sort_order FROM products LIMIT 1').first();
+        } catch (e) {
+            await DB.prepare('ALTER TABLE products ADD COLUMN sort_order INTEGER DEFAULT 0').run();
+        }
+
         // Get all products in current display order
         const { results } = await DB.prepare(
             'SELECT id, sort_order FROM products ORDER BY featured DESC, sort_order ASC, id DESC'
@@ -47,12 +54,11 @@ export async function onRequestPost(context) {
         results[idx1] = results[idx2];
         results[idx2] = temp;
 
-        // Re-assign sequential sort_order to all products
-        for (let i = 0; i < results.length; i++) {
-            await DB.prepare('UPDATE products SET sort_order = ? WHERE id = ?')
-                .bind(i, results[i].id)
-                .run();
-        }
+        // Re-assign sequential sort_order using batch
+        const stmts = results.map((p, i) =>
+            DB.prepare('UPDATE products SET sort_order = ? WHERE id = ?').bind(i, p.id)
+        );
+        await DB.batch(stmts);
 
         return new Response(JSON.stringify({ success: true }), {
             headers: { 'Content-Type': 'application/json' }
