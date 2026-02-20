@@ -540,6 +540,25 @@
         .qty-out { background: #f8d7da; color: #721c24; }
         
         .actions { display: flex; gap: 8px; }
+
+        .reorder-arrows {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .reorder-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            color: var(--text-light);
+            transition: all 0.2s;
+            line-height: 1;
+        }
+        .reorder-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .reorder-btn:disabled { opacity: 0.2; cursor: default; background: none; color: var(--text-light); border-color: var(--border); }
         
         .price-tag {
             font-weight: 600;
@@ -864,6 +883,8 @@
                 gap: 10px;
             }
             td:first-child { padding-top: 10px; }
+            .reorder-arrows { flex-direction: row; gap: 6px; }
+            .reorder-btn { padding: 4px 10px; font-size: 0.75rem; }
             .product-img { width: 45px; height: 45px; }
 
             .actions {
@@ -1014,6 +1035,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th style="width:50px;">#</th>
                             <th>Image</th>
                             <th>Product</th>
                             <th>Category</th>
@@ -1023,7 +1045,7 @@
                         </tr>
                     </thead>
                     <tbody id="productsBody">
-                        <tr><td colspan="6" class="loading">
+                        <tr><td colspan="7" class="loading">
                             <div class="loading-spinner"></div>
                             <div>Loading products...</div>
                         </td></tr>
@@ -1474,7 +1496,7 @@
                 updateStats();
             } catch (error) {
                 document.getElementById('productsBody').innerHTML = 
-                    '<tr><td colspan="6" class="loading">Error loading products. Please refresh.</td></tr>';
+                    '<tr><td colspan="7" class="loading">Error loading products. Please refresh.</td></tr>';
             }
         }
 
@@ -1484,7 +1506,7 @@
             
             if (list.length === 0) {
                 tbody.innerHTML = `
-                    <tr><td colspan="6">
+                    <tr><td colspan="7">
                         <div class="empty-state">
                             <div class="empty-state-icon">📭</div>
                             <h3>No products found</h3>
@@ -1495,19 +1517,30 @@
                 `;
                 return;
             }
-            
-            tbody.innerHTML = list.map(p => {
-                const img = p.image && p.image.startsWith('http') 
-                    ? `<img src="${p.image}" class="product-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22><rect fill=%22%23f5f5f5%22 width=%22100%25%22 height=%22100%25%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2220%22>📦</text></svg>'">` 
+
+            const isFiltered = filtered !== null;
+
+            tbody.innerHTML = list.map((p, idx) => {
+                const img = p.image && p.image.startsWith('http')
+                    ? `<img src="${p.image}" class="product-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22><rect fill=%22%23f5f5f5%22 width=%22100%25%22 height=%22100%25%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2220%22>📦</text></svg>'">`
                     : `<div class="product-img" style="display:flex;align-items:center;justify-content:center;font-size:28px;">${p.image || '📦'}</div>`;
-                
+
                 const stock = p.totalStock !== undefined ? p.totalStock : p.quantity;
                 let qtyClass = 'qty-ok';
                 if (stock === 0) qtyClass = 'qty-out';
                 else if (stock < 10) qtyClass = 'qty-low';
 
+                const isFirst = idx === 0;
+                const isLast = idx === list.length - 1;
+
                 return `
                     <tr>
+                        <td>
+                            ${isFiltered ? '' : `<div class="reorder-arrows">
+                                <button class="reorder-btn" onclick="moveProduct(${p.id}, 'up')" ${isFirst ? 'disabled' : ''} title="Move up">&#9650;</button>
+                                <button class="reorder-btn" onclick="moveProduct(${p.id}, 'down')" ${isLast ? 'disabled' : ''} title="Move down">&#9660;</button>
+                            </div>`}
+                        </td>
                         <td>${img}</td>
                         <td>
                             <div class="product-name">${p.name}</div>
@@ -1611,9 +1644,45 @@
         }
 
         function refreshProducts() {
-            document.getElementById('productsBody').innerHTML = 
-                '<tr><td colspan="6" class="loading"><div class="loading-spinner"></div><div>Loading...</div></td></tr>';
+            document.getElementById('productsBody').innerHTML =
+                '<tr><td colspan="7" class="loading"><div class="loading-spinner"></div><div>Loading...</div></td></tr>';
             loadProducts();
+        }
+
+        async function moveProduct(id, direction) {
+            // Find current index in the products array
+            const idx = products.findIndex(p => p.id === id);
+            if (idx === -1) return;
+
+            const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+            if (swapIdx < 0 || swapIdx >= products.length) return;
+
+            const neighborId = products[swapIdx].id;
+
+            // Disable all reorder buttons during request
+            document.querySelectorAll('.reorder-btn').forEach(b => b.disabled = true);
+
+            try {
+                const res = await fetch(`/api/admin/reorder?key=${authKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id1: id, id2: neighborId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    // Swap locally for instant feedback
+                    const temp = products[idx];
+                    products[idx] = products[swapIdx];
+                    products[swapIdx] = temp;
+                    renderProducts();
+                } else {
+                    alert('Reorder failed: ' + (data.error || 'Unknown error'));
+                    renderProducts();
+                }
+            } catch (e) {
+                alert('Reorder failed: ' + e.message);
+                renderProducts();
+            }
         }
 
         document.getElementById('formName').addEventListener('input', function() {
