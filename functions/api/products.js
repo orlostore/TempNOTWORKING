@@ -12,9 +12,9 @@ export async function onRequestGet(context) {
                    image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                    specifications, specificationsAr, featured,
                    wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
-                   material, materialAr
+                   material, materialAr, sort_order
             FROM products
-            ORDER BY featured DESC, id DESC
+            ORDER BY featured DESC, sort_order ASC, id DESC
         `).all();
 
         // Fetch all variants grouped by product

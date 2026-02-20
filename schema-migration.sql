@@ -31,3 +31,6 @@ ALTER TABLE products ADD COLUMN baseType TEXT DEFAULT '';
 ALTER TABLE products ADD COLUMN baseTypeAr TEXT DEFAULT '';
 ALTER TABLE products ADD COLUMN material TEXT DEFAULT '';
 ALTER TABLE products ADD COLUMN materialAr TEXT DEFAULT '';
+
+-- Product sort order (for manual reordering in admin)
+ALTER TABLE products ADD COLUMN sort_order INTEGER DEFAULT 0;
