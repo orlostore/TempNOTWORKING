@@ -2266,11 +2266,17 @@ footer p {
     padding-right: 1.34rem;
   }
 
-  /* Show mobile promo banner */
+  /* Show mobile promo banner - sticky below header */
   .mobile-promo-banner {
     display: block;
-    margin: 0 1.01rem;
-    border-radius: 8px;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    border-radius: 0;
+    z-index: 999;
+    box-shadow: 0 1px 3px rgba(0,0,0,.1);
   }
 
   /* Category filters - scrollable row on mobile */
@@ -2293,9 +2299,9 @@ footer p {
     justify-content: space-around;
   }
   
-  /* Add padding to body for bottom nav */
+  /* Add padding to body for bottom nav + sticky promo banner */
   body {
-    padding-top: 60px;
+    padding-top: 95px;
     padding-bottom: 70px;
   }
   
