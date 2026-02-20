@@ -16,7 +16,7 @@ export async function onRequestGet(context) {
                        wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
                        material, materialAr, sort_order
                 FROM products
-                ORDER BY featured DESC, sort_order ASC, id DESC
+                ORDER BY sort_order ASC, id DESC
             `).all());
         } catch (e) {
             // sort_order column may not exist yet - fallback
@@ -28,7 +28,7 @@ export async function onRequestGet(context) {
                        wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
                        material, materialAr, 0 as sort_order
                 FROM products
-                ORDER BY featured DESC, id DESC
+                ORDER BY id DESC
             `).all());
         }
 
