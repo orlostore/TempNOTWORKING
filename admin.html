@@ -1675,6 +1675,8 @@
                     products[idx] = products[swapIdx];
                     products[swapIdx] = temp;
                     renderProducts();
+                    // Sync from server to confirm persistence
+                    loadProducts();
                 } else {
                     alert('Reorder failed: ' + (data.error || 'Unknown error'));
                     renderProducts();
