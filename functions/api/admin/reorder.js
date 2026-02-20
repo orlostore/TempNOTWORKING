@@ -35,7 +35,7 @@ export async function onRequestPost(context) {
 
         // Get all products in current display order
         const { results } = await DB.prepare(
-            'SELECT id, sort_order FROM products ORDER BY featured DESC, sort_order ASC, id DESC'
+            'SELECT id, sort_order FROM products ORDER BY sort_order ASC, id DESC'
         ).all();
 
         // Find positions of both products
