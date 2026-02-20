@@ -6,16 +6,31 @@ export async function onRequestGet(context) {
     const DB = env.DB;
 
     try {
-        const { results } = await DB.prepare(`
-            SELECT id, slug, name, nameAr, category, categoryAr, price, cost, quantity,
-                   description, descriptionAr, mainImage, image2, image3, image4, image5,
-                   image6, image7, image8, colors, colorsAr, packaging, packagingAr,
-                   specifications, specificationsAr, featured,
-                   wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
-                   material, materialAr, sort_order
-            FROM products
-            ORDER BY featured DESC, sort_order ASC, id DESC
-        `).all();
+        let results;
+        try {
+            ({ results } = await DB.prepare(`
+                SELECT id, slug, name, nameAr, category, categoryAr, price, cost, quantity,
+                       description, descriptionAr, mainImage, image2, image3, image4, image5,
+                       image6, image7, image8, colors, colorsAr, packaging, packagingAr,
+                       specifications, specificationsAr, featured,
+                       wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
+                       material, materialAr, sort_order
+                FROM products
+                ORDER BY featured DESC, sort_order ASC, id DESC
+            `).all());
+        } catch (e) {
+            // sort_order column may not exist yet - fallback
+            ({ results } = await DB.prepare(`
+                SELECT id, slug, name, nameAr, category, categoryAr, price, cost, quantity,
+                       description, descriptionAr, mainImage, image2, image3, image4, image5,
+                       image6, image7, image8, colors, colorsAr, packaging, packagingAr,
+                       specifications, specificationsAr, featured,
+                       wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
+                       material, materialAr, 0 as sort_order
+                FROM products
+                ORDER BY featured DESC, id DESC
+            `).all());
+        }
 
         // Fetch all variants grouped by product
         let variantsMap = {};

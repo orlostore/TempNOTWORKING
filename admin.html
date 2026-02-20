@@ -1462,7 +1462,7 @@
 
         async function verifyKey(key) {
             try {
-                const response = await fetch('/api/admin/orders?key=' + encodeURIComponent(key) + '&t=' + Date.now());
+                const response = await fetch('/api/admin/verify?key=' + encodeURIComponent(key) + '&t=' + Date.now());
                 if (response.ok) {
                     authKey = key;
                     showAdmin();
