@@ -468,8 +468,12 @@ async function initProductPage() {
   const earlyPriceDesktop = document.getElementById("earlyPriceDesktop");
   const earlyPriceMobile = document.getElementById("earlyPriceMobile");
   if (hasVariants && product.price) {
-    const earlyHTML = `<div class="early-price-row"><span class="early-price-en">AED ${product.price} or less</span><span class="early-price-ar arabic-text">${product.price} درهم أو أقل</span></div>`;
-    const hintHTML = `<a class="early-price-hint" id="__HINT_ID__"><span>Click to choose design & quantity for exact price ▼</span><span class="arabic-text">اضغط لاختيار التصميم والكمية للسعر الدقيق ▼</span></a>`;
+    const priceEn = hasTiers ? `AED ${product.price} or less` : `AED ${product.price}`;
+    const priceAr = hasTiers ? `${product.price} درهم أو أقل` : `${product.price} درهم`;
+    const earlyHTML = `<div class="early-price-row"><span class="early-price-en">${priceEn}</span><span class="early-price-ar arabic-text">${priceAr}</span></div>`;
+    const hintEn = hasTiers ? 'Click to choose design & quantity for exact price ▼' : 'Click to choose a design ▼';
+    const hintAr = hasTiers ? 'اضغط لاختيار التصميم والكمية للسعر الدقيق ▼' : 'اضغط لاختيار التصميم ▼';
+    const hintHTML = `<a class="early-price-hint" id="__HINT_ID__"><span>${hintEn}</span><span class="arabic-text">${hintAr}</span></a>`;
     if (earlyPriceDesktop) {
       earlyPriceDesktop.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintDesktop');
       document.getElementById('earlyHintDesktop').onclick = function() {
@@ -578,9 +582,9 @@ async function initProductPage() {
   document.getElementById("mobileProductTitle").innerText = product.name;
   document.getElementById("mobileProductTitleAr").innerText = product.nameAr || '';
   document.getElementById("mobileProductCategory").innerHTML = product.category + shareHTML;
-  // Hide standalone price when pricing tiers are present (dynamic bar replaces it)
+  // Hide standalone price when tiers or variants are present (early-price section already shows it)
   const mobilePriceEl = document.getElementById("mobileProductPrice");
-  if (hasTiers) {
+  if (hasTiers || hasVariants) {
     mobilePriceEl.parentElement.style.display = 'none';
   } else {
     mobilePriceEl.innerText = "AED " + product.price;
