@@ -3322,18 +3322,16 @@ footer p {
 .product-buybox .product-btn-transformed .grid-qty-btn {
   height: 38px;
 }
-/* Mobile product page - compact centered Add to Cart button (match non-variant sizing) */
+/* Mobile product page - narrower and centered Add to Cart button */
 .mobile-cart-section .mobile-add-to-cart {
-  width: auto;
-  min-width: 180px;
+  width: 60%;
   margin-left: auto;
   margin-right: auto;
   display: block;
 }
 
 .mobile-cart-section .product-btn-transformed {
-  width: auto;
-  min-width: 180px;
+  width: 60%;
   margin-left: auto;
   margin-right: auto;
   height: 40px;
