@@ -3582,7 +3582,6 @@ footer p {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
   gap: 10px;
 }
 .product-buybox.has-price-pill .price {
@@ -3590,9 +3589,8 @@ footer p {
 }
 .product-buybox.has-price-pill .add-to-cart-btn,
 .product-buybox.has-price-pill .product-btn-transformed {
-  width: auto;
-  margin-left: 0;
-  margin-right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 .product-buybox.has-price-pill .delivery-info {
   width: 100%;
