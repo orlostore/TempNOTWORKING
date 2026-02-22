@@ -3587,13 +3587,6 @@ footer p {
 .product-buybox.has-price-pill .price {
   margin-bottom: 0;
 }
-.product-buybox.has-price-pill .add-to-cart-btn,
-.product-buybox.has-price-pill .product-btn-transformed {
-  width: auto;
-  min-width: 180px;
-  flex: 1;
-  margin: 0;
-}
 .product-buybox.has-price-pill .delivery-info {
   width: 100%;
 }
