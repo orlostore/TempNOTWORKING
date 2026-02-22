@@ -587,9 +587,14 @@ async function initProductPage() {
     // Inject delivery info into early-price container, then hide buybox entirely
     const deliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
     if (earlyPriceDesktop) earlyPriceDesktop.insertAdjacentHTML('beforeend', deliveryHTML);
-    // Hide entire buybox
+    // Hide buybox price and button, keep delivery-info visible
     const buybox = document.querySelector('.product-buybox');
-    if (buybox) buybox.style.display = 'none';
+    if (buybox) {
+      const buyboxPrice = buybox.querySelector('.price');
+      const buyboxBtn = buybox.querySelector('.add-to-cart-btn');
+      if (buyboxPrice) buyboxPrice.style.display = 'none';
+      if (buyboxBtn) buyboxBtn.style.display = 'none';
+    }
     if (isOutOfStock && desktopAddBtn) {
       desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
       desktopAddBtn.disabled = true;
@@ -674,7 +679,16 @@ async function initProductPage() {
       const mobileDeliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
       earlyPriceMobile.insertAdjacentHTML('beforeend', mobileDeliveryHTML);
     }
-    if (mobileBuyboxCompact) mobileBuyboxCompact.style.display = 'none';
+    if (mobileBuyboxCompact) {
+      const mobilePrice = mobileBuyboxCompact.querySelector('.mobile-price-section');
+      const mobileCart = mobileBuyboxCompact.querySelector('.mobile-cart-section');
+      if (mobilePrice) mobilePrice.style.display = 'none';
+      if (mobileCart) mobileCart.style.display = 'none';
+      const mobileDeliveryEl = mobileBuyboxCompact.querySelector('.mobile-delivery-info');
+      if (mobileDeliveryEl) {
+        mobileDeliveryEl.innerHTML = `<div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div>`;
+      }
+    }
     if (isOutOfStock && mobileAddBtn) {
       mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
       mobileAddBtn.disabled = true;
