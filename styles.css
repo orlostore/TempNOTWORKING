@@ -2674,14 +2674,14 @@ footer p {
 }
 
 .mobile-add-to-cart {
-  height: 40px;
+  height: 36px;
   width: 100%;
-  padding: 0 14px;
+  padding: 0 0.67rem;
   background: #2c4a5c;
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s;
@@ -3338,11 +3338,11 @@ footer p {
   min-width: 180px;
   margin-left: auto;
   margin-right: auto;
-  height: 40px;
+  height: 36px;
 }
 
 .mobile-cart-section .product-btn-transformed .grid-qty-btn {
-  height: 40px;
+  height: 36px;
 }
 
 /* ============================================
