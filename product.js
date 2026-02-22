@@ -1447,6 +1447,20 @@ function selectVariant(variantId, productId, prefix) {
     updateTierHighlight(product.id);
   }
 
+  // Update early price display with selected variant's price
+  const variantPrice = variant.price > 0 ? variant.price : product.price;
+  const showOrLess = hasTiers;
+  const priceEn = showOrLess ? `AED ${variantPrice} or less` : `AED ${variantPrice}`;
+  const priceAr = showOrLess ? `${variantPrice} درهم أو أقل` : `${variantPrice} درهم`;
+  ['earlyPriceDesktop', 'earlyPriceMobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const priceRow = el.querySelector('.early-price-en');
+    const priceRowAr = el.querySelector('.early-price-ar');
+    if (priceRow) priceRow.textContent = priceEn;
+    if (priceRowAr) priceRowAr.textContent = priceAr;
+  });
+
   // Enable Add to Cart buttons
   const desktopBtn = document.getElementById('addToCartBtn');
   const mobileBtn = document.getElementById('mobileAddToCartBtn');

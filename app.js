@@ -619,7 +619,7 @@ function updateCart() {
     
     const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
     const cartWithPricing = calculateTierPricing(cart);
-    const subtotal = cartWithPricing.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
+    const subtotal = cartWithPricing.reduce((s, i) => s + (i._tierPrice || ((i.variantId && i.variantPrice > 0) ? i.variantPrice : i.price)) * i.quantity, 0);
     const deliveryFee = calculateDeliveryFee(subtotal);
     const total = subtotal + deliveryFee;
     const amountNeeded = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
@@ -681,10 +681,11 @@ function updateCart() {
     cartItems.innerHTML = cartWithTierPricing.map(i => {
         const cartItemId = i.variantId ? `${i.id}-v${i.variantId}` : `${i.id}`;
         const variantLine = i.variantName ? `<div style="color:#e07856; font-size:0.7rem; font-weight:500;">${i.variantName}</div>` : '';
-        const effectivePrice = i._tierPrice || i.price;
-        const showOrigPrice = i._tierPrice && i._tierPrice < i.price;
+        const variantBase = (i.variantId && i.variantPrice > 0) ? i.variantPrice : i.price;
+        const effectivePrice = i._tierPrice || variantBase;
+        const showOrigPrice = i._tierPrice && i._tierPrice < variantBase;
         const priceDisplay = showOrigPrice
-            ? `<span style="text-decoration:line-through;color:#bbb;font-size:0.65rem;">AED ${i.price}</span> AED ${effectivePrice} × ${i.quantity}`
+            ? `<span style="text-decoration:line-through;color:#bbb;font-size:0.65rem;">AED ${variantBase}</span> AED ${effectivePrice} × ${i.quantity}`
             : `AED ${effectivePrice} × ${i.quantity}`;
         const updateArgs = i.variantId ? `${i.id}, -1, ${i.variantId}` : `${i.id}, -1`;
         const updateArgsPlus = i.variantId ? `${i.id}, 1, ${i.variantId}` : `${i.id}, 1`;
