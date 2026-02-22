@@ -514,12 +514,12 @@ async function initProductPage() {
     if (earlyPriceMobile) {
       earlyPriceMobile.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintMobile');
       document.getElementById('earlyHintMobile').onclick = function() {
-        const btn = document.getElementById('mobileAddToCartBtn');
+        const delivery = document.querySelector('.mobile-delivery-info');
         const bottomNav = document.getElementById('mobileBottomNav');
-        if (btn) {
-          const btnRect = btn.getBoundingClientRect();
+        if (delivery) {
+          const rect = delivery.getBoundingClientRect();
           const navHeight = bottomNav ? bottomNav.offsetHeight : 0;
-          const targetY = window.scrollY + btnRect.bottom - (window.innerHeight - navHeight);
+          const targetY = window.scrollY + rect.bottom - (window.innerHeight - navHeight);
           window.scrollTo({top: targetY, behavior: 'smooth'});
         }
       };
