@@ -507,8 +507,8 @@ async function initProductPage() {
     if (earlyPriceDesktop) {
       earlyPriceDesktop.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintDesktop');
       document.getElementById('earlyHintDesktop').onclick = function() {
-        const btn = document.getElementById('addToCartBtn');
-        if (btn) btn.scrollIntoView({behavior:'smooth', block:'end'});
+        const delivery = document.querySelector('.product-buybox .delivery-info');
+        if (delivery) delivery.scrollIntoView({behavior:'smooth', block:'end'});
       };
     }
     if (earlyPriceMobile) {
