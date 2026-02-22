@@ -619,6 +619,8 @@ async function initProductPage() {
   } else if (hasVariants) {
     // Price pill for no-tier variant products
     mobilePriceEl.innerHTML = `<div class="price-pill"><div class="pill-price">AED ${product.price}</div><div class="pill-unit">per piece</div><div class="pill-unit-ar arabic-text">للقطعة</div></div>`;
+    const mobileBuybox = document.querySelector('.mobile-buybox-compact');
+    if (mobileBuybox) mobileBuybox.classList.add('has-price-pill');
   } else {
     mobilePriceEl.innerText = "AED " + product.price;
   }
