@@ -1967,7 +1967,7 @@
             rows.forEach(row => {
                 const minQty = parseInt(row.querySelector('.t-minQty').value);
                 const discount = parseFloat(row.querySelector('.t-discount').value);
-                if (!minQty || !discount) return;
+                if (!minQty || isNaN(discount)) return;
                 tiers.push({ minQty: minQty, discountPercent: discount });
             });
             return tiers;

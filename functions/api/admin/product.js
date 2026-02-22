@@ -194,7 +194,7 @@ async function savePricingTiers(DB, productId, tiers) {
 
     // Insert new tiers
     for (const t of tiers) {
-        if (!t.minQty || !t.discountPercent) continue; // Skip empty rows
+        if (!t.minQty || t.discountPercent == null || isNaN(t.discountPercent)) continue; // Skip empty rows
         await DB.prepare(`
             INSERT INTO product_pricing_tiers (product_id, min_qty, discount_percent)
             VALUES (?, ?, ?)
