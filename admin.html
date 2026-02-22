@@ -1020,6 +1020,10 @@
                     <h3>Out of Stock</h3>
                     <div class="value" id="statOutOfStock">-</div>
                 </div>
+                <div class="stat-card" style="border-top:3px solid var(--primary);">
+                    <h3>Stock Value</h3>
+                    <div class="value" id="statStockValue">-</div>
+                </div>
             </div>
 
             <div class="filter-banner" id="stockFilterBanner">
@@ -1569,6 +1573,8 @@
             document.getElementById('statInStock').textContent = products.filter(p => getStock(p) > 0).length;
             document.getElementById('statLowStock').textContent = products.filter(p => getStock(p) > 0 && getStock(p) < 10).length;
             document.getElementById('statOutOfStock').textContent = products.filter(p => getStock(p) === 0).length;
+            const totalStockValue = products.reduce((sum, p) => sum + (p.cost || 0) * getStock(p), 0);
+            document.getElementById('statStockValue').textContent = 'AED ' + totalStockValue.toFixed(0);
         }
 
         let activeStockFilter = null;
