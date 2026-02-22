@@ -460,6 +460,11 @@ async function initProductPage() {
   const productPriceEl = document.getElementById("productPrice");
   if (hasTiers) {
     productPriceEl.style.display = 'none';
+  } else if (hasVariants) {
+    // Price pill for no-tier variant products
+    productPriceEl.innerHTML = `<div class="price-pill"><div class="pill-price">AED ${product.price}</div><div class="pill-unit">per piece</div><div class="pill-unit-ar arabic-text">للقطعة</div></div>`;
+    const buybox = document.querySelector('.product-buybox');
+    if (buybox) buybox.classList.add('has-price-pill');
   } else {
     productPriceEl.innerText = "AED " + product.price;
   }
@@ -607,10 +612,13 @@ async function initProductPage() {
   document.getElementById("mobileProductTitle").innerText = product.name;
   document.getElementById("mobileProductTitleAr").innerText = product.nameAr || '';
   document.getElementById("mobileProductCategory").innerHTML = product.category + shareHTML;
-  // Hide standalone price when tiers or variants are present (early-price section already shows it)
+  // Hide standalone price when tiers are present (dynamic bar replaces it)
   const mobilePriceEl = document.getElementById("mobileProductPrice");
-  if (hasTiers || hasVariants) {
+  if (hasTiers) {
     mobilePriceEl.parentElement.style.display = 'none';
+  } else if (hasVariants) {
+    // Price pill for no-tier variant products
+    mobilePriceEl.innerHTML = `<div class="price-pill"><div class="pill-price">AED ${product.price}</div><div class="pill-unit">per piece</div><div class="pill-unit-ar arabic-text">للقطعة</div></div>`;
   } else {
     mobilePriceEl.innerText = "AED " + product.price;
   }
@@ -1447,8 +1455,13 @@ function selectVariant(variantId, productId, prefix) {
     updateTierHighlight(product.id);
   }
 
-  // Update early price display with selected variant's price
+  // Update price pill for no-tier variant products
   const variantPrice = variant.price > 0 ? variant.price : product.price;
+  document.querySelectorAll('.price-pill .pill-price').forEach(el => {
+    el.textContent = `AED ${variantPrice}`;
+  });
+
+  // Update early price display with selected variant's price
   const showOrLess = hasTiers;
   const priceEn = showOrLess ? `AED ${variantPrice} or less` : `AED ${variantPrice}`;
   const priceAr = showOrLess ? `${variantPrice} درهم أو أقل` : `${variantPrice} درهم`;
