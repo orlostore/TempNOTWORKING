@@ -3385,6 +3385,11 @@ footer p {
   transition: all 0.2s;
   background: white;
   position: relative;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.variant-tile > * {
+  pointer-events: none;
 }
 .variant-tile:hover {
   border-color: #aaa;
