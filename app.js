@@ -174,6 +174,8 @@ window.addEventListener('pageshow', function(event) {
 
 // Calculate tier pricing for cart items
 // Groups items by product ID, sums quantities across variants, finds applicable tier
+// Uses discount_percent model: final price = basePrice * (1 - discountPercent/100)
+// basePrice = variant price (if variant with price > 0) or product.price
 function calculateTierPricing(cartItems) {
     // Group quantities by product id
     const qtyByProduct = {};
@@ -194,8 +196,10 @@ function calculateTierPricing(cartItems) {
                     }
                 }
             }
-            if (bestTier) {
-                copy._tierPrice = bestTier.pricePerUnit;
+            if (bestTier && bestTier.discountPercent > 0) {
+                // Use variant price if available, otherwise product base price
+                const basePrice = (i.variantId && i.variantPrice && i.variantPrice > 0) ? i.variantPrice : i.price;
+                copy._tierPrice = Math.round(basePrice * (1 - bestTier.discountPercent / 100) * 100) / 100;
             }
         }
         return copy;

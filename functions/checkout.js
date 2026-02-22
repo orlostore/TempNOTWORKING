@@ -71,20 +71,33 @@ export async function onRequestPost(context) {
         const outOfStock = [];
         const insufficientStock = [];
 
-        // Load pricing tiers for tier calculation
+        // Load pricing tiers for tier calculation (discount_percent model)
         let tiersMap = {};
         try {
             const { results: tierRows } = await DB.prepare(`
-                SELECT product_id, min_qty, price_per_unit
+                SELECT product_id, min_qty, discount_percent
                 FROM product_pricing_tiers
                 ORDER BY min_qty ASC
             `).all();
             for (const t of tierRows) {
                 if (!tiersMap[t.product_id]) tiersMap[t.product_id] = [];
-                tiersMap[t.product_id].push({ minQty: t.min_qty, pricePerUnit: t.price_per_unit });
+                tiersMap[t.product_id].push({ minQty: t.min_qty, discountPercent: t.discount_percent });
             }
         } catch (e) {
             // Table may not exist yet
+        }
+
+        // Load variant prices for per-variant pricing
+        let variantPriceMap = {};
+        try {
+            const { results: variantRows } = await DB.prepare(`
+                SELECT id, price FROM product_variants WHERE price > 0
+            `).all();
+            for (const v of variantRows) {
+                variantPriceMap[v.id] = v.price;
+            }
+        } catch (e) {
+            // Column may not exist yet
         }
 
         // Group cart quantities by product ID for tier calculation
@@ -177,10 +190,15 @@ export async function onRequestPost(context) {
             if (!dbProduct) continue;
 
             // Use DB price, never client price
-            let unitPrice = dbProduct.price;
+            // If variant has its own price, use that as the base
+            let basePrice = dbProduct.price;
+            if (item.variantId && variantPriceMap[item.variantId]) {
+                basePrice = variantPriceMap[item.variantId];
+            }
+            let unitPrice = basePrice;
             const tiers = tiersMap[dbProduct.id];
 
-            // Apply tier pricing if applicable
+            // Apply tier pricing if applicable (discount_percent model)
             if (tiers && tiers.length > 0) {
                 const totalQtyForProduct = qtyByProduct[dbProduct.id] || item.quantity;
                 let bestTier = null;
@@ -191,8 +209,8 @@ export async function onRequestPost(context) {
                         }
                     }
                 }
-                if (bestTier) {
-                    unitPrice = bestTier.pricePerUnit;
+                if (bestTier && bestTier.discountPercent > 0) {
+                    unitPrice = Math.round(basePrice * (1 - bestTier.discountPercent / 100) * 100) / 100;
                 }
             }
 
