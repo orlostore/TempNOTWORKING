@@ -467,12 +467,37 @@ async function initProductPage() {
   // === EARLY PRICE ===
   const earlyPriceDesktop = document.getElementById("earlyPriceDesktop");
   const earlyPriceMobile = document.getElementById("earlyPriceMobile");
-  if (hasVariants && product.price) {
-    const priceEn = hasTiers ? `AED ${product.price} or less` : `AED ${product.price}`;
-    const priceAr = hasTiers ? `${product.price} درهم أو أقل` : `${product.price} درهم`;
+  // For variant products, compute display price from variant prices (highest in-stock variant)
+  let variantDisplayPrice = 0;
+  let hasMultipleVariantPrices = false;
+  if (hasVariants) {
+    const effectivePrices = product.variants
+      .filter(v => v.quantity > 0)
+      .map(v => v.price > 0 ? v.price : product.price)
+      .filter(p => p > 0);
+    if (effectivePrices.length > 0) {
+      variantDisplayPrice = Math.max(...effectivePrices);
+      hasMultipleVariantPrices = new Set(effectivePrices).size > 1;
+    }
+  }
+
+  if (hasVariants && (product.price || variantDisplayPrice)) {
+    const displayPrice = variantDisplayPrice || product.price;
+    const showOrLess = hasTiers || hasMultipleVariantPrices;
+    const priceEn = showOrLess ? `AED ${displayPrice} or less` : `AED ${displayPrice}`;
+    const priceAr = showOrLess ? `${displayPrice} درهم أو أقل` : `${displayPrice} درهم`;
     const earlyHTML = `<div class="early-price-row"><span class="early-price-en">${priceEn}</span><span class="early-price-ar arabic-text">${priceAr}</span></div>`;
-    const hintEn = hasTiers ? 'Click to choose design & quantity for exact price ▼' : 'Click to choose a design ▼';
-    const hintAr = hasTiers ? 'اضغط لاختيار التصميم والكمية للسعر الدقيق ▼' : 'اضغط لاختيار التصميم ▼';
+    let hintEn, hintAr;
+    if (hasTiers) {
+      hintEn = 'Click to choose design & quantity for exact price ▼';
+      hintAr = 'اضغط لاختيار التصميم والكمية للسعر الدقيق ▼';
+    } else if (hasMultipleVariantPrices) {
+      hintEn = 'Click to choose a design for exact price ▼';
+      hintAr = 'اضغط لاختيار التصميم للسعر الدقيق ▼';
+    } else {
+      hintEn = 'Click to choose a design ▼';
+      hintAr = 'اضغط لاختيار التصميم ▼';
+    }
     const hintHTML = `<a class="early-price-hint" id="__HINT_ID__"><span>${hintEn}</span><span class="arabic-text">${hintAr}</span></a>`;
     if (earlyPriceDesktop) {
       earlyPriceDesktop.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintDesktop');
