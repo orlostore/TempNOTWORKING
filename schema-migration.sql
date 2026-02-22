@@ -13,14 +13,17 @@ CREATE TABLE IF NOT EXISTS product_variants (
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
--- Pricing Tiers table
+-- Pricing Tiers table (discount_percent model)
 CREATE TABLE IF NOT EXISTS product_pricing_tiers (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   product_id INTEGER NOT NULL,
   min_qty INTEGER NOT NULL,
-  price_per_unit REAL NOT NULL,
+  discount_percent REAL NOT NULL,
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
+
+-- Variant-level pricing
+ALTER TABLE product_variants ADD COLUMN price REAL DEFAULT 0;
 
 -- Extra product spec columns
 ALTER TABLE products ADD COLUMN wattage TEXT DEFAULT '';

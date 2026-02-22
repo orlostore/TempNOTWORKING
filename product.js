@@ -758,6 +758,7 @@ async function initProductPage() {
         cartItem.variantName = sv.name;
         cartItem.variantNameAr = sv.nameAr || '';
         cartItem.variantImage = sv.image || '';
+        if (sv.price > 0) cartItem.variantPrice = sv.price;
       }
       localCart.push(cartItem);
     }
@@ -1220,12 +1221,20 @@ function renderVariantSelector(containerId, product, isMobile) {
 }
 
 // === PRICING TIERS RENDERING ===
+// Helper: get the base price to use for discount calculation
+// Uses variant price if a variant is selected and has a price, otherwise product.price
+function _getTierBasePrice(product) {
+  const sv = window._selectedVariant;
+  if (sv && sv.price > 0) return sv.price;
+  return product.price;
+}
+
 function renderPricingTiers(containerId, product) {
   const container = document.getElementById(containerId);
   if (!container || !product.pricingTiers || product.pricingTiers.length === 0) return;
 
   const tiers = product.pricingTiers;
-  const basePrice = product.price;
+  const basePrice = _getTierBasePrice(product);
 
   // Get current total qty in cart for this product (all variants combined)
   const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -1240,29 +1249,30 @@ function renderPricingTiers(containerId, product) {
   let tiersHTML = tiers.map((t, i) => {
     const isActive = i === activeTierIndex;
     const isLast = i === tiers.length - 1;
-    const savePercent = basePrice > 0 ? Math.round((1 - t.pricePerUnit / basePrice) * 100) : 0;
+    const discountPct = t.discountPercent;
+    const tierPrice = Math.round(basePrice * (1 - discountPct / 100) * 100) / 100;
     const qtyLabel = t.minQty === 1 ? '1 pc' : `${t.minQty}+ pcs`;
 
     return `
-      <div class="tier-item ${isActive ? 'active' : ''} ${isLast && tiers.length > 1 ? 'best-deal' : ''}" data-min-qty="${t.minQty}">
-        <div class="tier-row-top"><span class="tier-qty">${qtyLabel}</span><span class="tier-price">AED ${t.pricePerUnit}</span></div>
-        <div class="tier-row-bottom">each${savePercent > 0 ? ` · <span class="tier-save">Save ${savePercent}%</span>` : ''}</div>
+      <div class="tier-item ${isActive ? 'active' : ''} ${isLast && tiers.length > 1 ? 'best-deal' : ''}" data-min-qty="${t.minQty}" data-discount="${discountPct}">
+        <div class="tier-row-top"><span class="tier-qty">${qtyLabel}</span><span class="tier-price">AED ${tierPrice.toFixed(2)}</span></div>
+        <div class="tier-row-bottom">each${discountPct > 0 ? ` · <span class="tier-save">Save ${Math.round(discountPct)}%</span>` : ''}</div>
       </div>
     `;
   }).join('');
 
-  const activePrice = tiers[activeTierIndex].pricePerUnit;
-  const activeSave = basePrice > 0 ? Math.round((1 - activePrice / basePrice) * 100) : 0;
+  const activeDiscount = tiers[activeTierIndex].discountPercent;
+  const activePrice = Math.round(basePrice * (1 - activeDiscount / 100) * 100) / 100;
 
   container.innerHTML = `
     <div class="pricing-tiers" data-product-id="${product.id}" style="margin-bottom:1rem; ${containerId.includes('Mobile') ? 'padding: 0 16px;' : ''}">
       <div class="pricing-tiers-label">Quantity Pricing | <span class="arabic-text">تسعير الكمية</span></div>
       <div class="tier-table">${tiersHTML}</div>
-      <div class="your-price-bar${activeSave > 0 ? ' has-savings' : ''}" style="margin-top:6px;">
+      <div class="your-price-bar${activeDiscount > 0 ? ' has-savings' : ''}" style="margin-top:6px;">
         <span class="your-price-label">Your price per piece</span>
-        <span class="your-price-value">AED ${activePrice}</span>
+        <span class="your-price-value">AED ${activePrice.toFixed(2)}</span>
         <span class="your-price-label-ar arabic-text">سعرك لكل قطعة</span>
-        ${activeSave > 0 ? `<span class="your-price-badge">Save ${activeSave}%</span>` : ''}
+        ${activeDiscount > 0 ? `<span class="your-price-badge">Save ${Math.round(activeDiscount)}%</span>` : ''}
       </div>
     </div>
   `;
@@ -1273,7 +1283,8 @@ function updateTierHighlight(productId) {
   const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
   const totalQty = localCart.filter(i => i.id === productId).reduce((s, i) => s + i.quantity, 0);
   const product = products.find(p => p.id === productId);
-  const basePrice = product ? product.price : 0;
+  if (!product) return;
+  const basePrice = _getTierBasePrice(product);
 
   document.querySelectorAll(`.pricing-tiers[data-product-id="${productId}"]`).forEach(container => {
     const tierItems = container.querySelectorAll('.tier-item');
@@ -1286,22 +1297,30 @@ function updateTierHighlight(productId) {
       item.classList.toggle('active', i === activeTierIndex);
     });
 
+    // Update displayed prices (they depend on base price which may change with variant)
+    tierItems.forEach(item => {
+      const discount = parseFloat(item.dataset.discount) || 0;
+      const tierPrice = Math.round(basePrice * (1 - discount / 100) * 100) / 100;
+      const priceEl = item.querySelector('.tier-price');
+      if (priceEl) priceEl.textContent = `AED ${tierPrice.toFixed(2)}`;
+    });
+
     // Update "Your price" bar
-    if (product && product.pricingTiers && product.pricingTiers.length > 0) {
-      const activePrice = product.pricingTiers[activeTierIndex].pricePerUnit;
-      const savePct = basePrice > 0 ? Math.round((1 - activePrice / basePrice) * 100) : 0;
+    if (product.pricingTiers && product.pricingTiers.length > 0) {
+      const activeDiscount = product.pricingTiers[activeTierIndex].discountPercent;
+      const activePrice = Math.round(basePrice * (1 - activeDiscount / 100) * 100) / 100;
       const bar = container.querySelector('.your-price-bar');
       if (bar) {
-        bar.classList.toggle('has-savings', savePct > 0);
-        bar.querySelector('.your-price-value').textContent = `AED ${activePrice}`;
+        bar.classList.toggle('has-savings', activeDiscount > 0);
+        bar.querySelector('.your-price-value').textContent = `AED ${activePrice.toFixed(2)}`;
         const existingBadge = bar.querySelector('.your-price-badge');
-        if (savePct > 0) {
+        if (activeDiscount > 0) {
           if (existingBadge) {
-            existingBadge.textContent = `Save ${savePct}%`;
+            existingBadge.textContent = `Save ${Math.round(activeDiscount)}%`;
           } else {
             const badge = document.createElement('span');
             badge.className = 'your-price-badge';
-            badge.textContent = `Save ${savePct}%`;
+            badge.textContent = `Save ${Math.round(activeDiscount)}%`;
             bar.appendChild(badge);
           }
         } else if (existingBadge) {
@@ -1393,6 +1412,14 @@ function selectVariant(variantId, productId, prefix) {
       if (firstSlideImg) firstSlideImg.src = variant.image;
       mobileCarousel.scrollTo({ left: 0, behavior: 'smooth' });
     }
+  }
+
+  // Re-render pricing tiers with variant-specific base price
+  const hasTiers = product.pricingTiers && product.pricingTiers.length > 0;
+  if (hasTiers) {
+    renderPricingTiers('pricingTiersDesktop', product);
+    renderPricingTiers('pricingTiersMobile', product);
+    updateTierHighlight(product.id);
   }
 
   // Enable Add to Cart buttons

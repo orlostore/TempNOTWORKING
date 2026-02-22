@@ -36,7 +36,7 @@ export async function onRequestGet(context) {
         let variantsMap = {};
         try {
             const { results: variantRows } = await DB.prepare(`
-                SELECT id, product_id, name, nameAr, image, quantity, sort_order
+                SELECT id, product_id, name, nameAr, image, quantity, price, sort_order
                 FROM product_variants
                 ORDER BY sort_order ASC, id ASC
             `).all();
@@ -48,6 +48,7 @@ export async function onRequestGet(context) {
                     nameAr: v.nameAr || '',
                     image: v.image || '',
                     quantity: v.quantity,
+                    price: v.price || 0,
                     sortOrder: v.sort_order
                 });
             }
@@ -60,7 +61,7 @@ export async function onRequestGet(context) {
         let tiersMap = {};
         try {
             const { results: tierRows } = await DB.prepare(`
-                SELECT id, product_id, min_qty, price_per_unit
+                SELECT id, product_id, min_qty, discount_percent
                 FROM product_pricing_tiers
                 ORDER BY min_qty ASC
             `).all();
@@ -69,7 +70,7 @@ export async function onRequestGet(context) {
                 tiersMap[t.product_id].push({
                     id: t.id,
                     minQty: t.min_qty,
-                    pricePerUnit: t.price_per_unit
+                    discountPercent: t.discount_percent
                 });
             }
         } catch (e) {

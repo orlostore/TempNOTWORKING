@@ -174,14 +174,15 @@ async function saveVariants(DB, productId, variants) {
         const v = variants[i];
         if (!v.name) continue; // Skip empty rows
         await DB.prepare(`
-            INSERT INTO product_variants (product_id, name, nameAr, image, quantity, sort_order)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO product_variants (product_id, name, nameAr, image, quantity, price, sort_order)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `).bind(
             productId,
             v.name,
             v.nameAr || '',
             v.image || '',
             v.quantity || 0,
+            v.price || 0,
             i
         ).run();
     }
@@ -193,14 +194,14 @@ async function savePricingTiers(DB, productId, tiers) {
 
     // Insert new tiers
     for (const t of tiers) {
-        if (!t.minQty || !t.pricePerUnit) continue; // Skip empty rows
+        if (!t.minQty || !t.discountPercent) continue; // Skip empty rows
         await DB.prepare(`
-            INSERT INTO product_pricing_tiers (product_id, min_qty, price_per_unit)
+            INSERT INTO product_pricing_tiers (product_id, min_qty, discount_percent)
             VALUES (?, ?, ?)
         `).bind(
             productId,
             t.minQty,
-            t.pricePerUnit
+            t.discountPercent
         ).run();
     }
 }
