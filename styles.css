@@ -3582,12 +3582,15 @@ footer p {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 .product-buybox.has-price-pill .price {
   margin-bottom: 0;
 }
-.product-buybox.has-price-pill .add-to-cart-btn {
+.product-buybox.has-price-pill .add-to-cart-btn,
+.product-buybox.has-price-pill .product-btn-transformed {
+  margin-left: 0;
   margin-right: 0;
 }
 .product-buybox.has-price-pill .delivery-info {
