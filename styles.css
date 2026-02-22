@@ -2670,6 +2670,7 @@ footer p {
   padding: 0;
   flex: 1;
   min-width: 0;
+  text-align: center;
 }
 
 .mobile-add-to-cart {
@@ -3332,6 +3333,7 @@ footer p {
 }
 
 .mobile-cart-section .product-btn-transformed {
+  display: inline-flex;
   width: auto;
   min-width: 180px;
   margin-left: auto;
