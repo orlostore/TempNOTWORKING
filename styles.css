@@ -3602,6 +3602,19 @@ footer p {
 .mobile-buybox-compact .price-pill .pill-price {
   font-size: 1rem;
 }
+/* Mobile: button beside price pill */
+.mobile-buybox-compact.has-price-pill .mobile-price-section {
+  flex: none;
+}
+.mobile-buybox-compact.has-price-pill .mobile-cart-section {
+  flex: none;
+  text-align: left;
+}
+.mobile-buybox-compact.has-price-pill .mobile-cart-section .mobile-add-to-cart {
+  width: auto;
+  min-width: 0;
+  margin: 0;
+}
 
 /* ============================================
    PRODUCT PAGE - LIMIT TOOLTIP (Glassmorphism)
