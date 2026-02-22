@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing Design Preview - No Tier Variants</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2c4a5c;
+    --accent: #e07856;
+    --bg: #fafafa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f0f0f0;
+    color: #333;
+    padding: 20px;
+  }
+  .arabic-text {
+    font-family: 'Almarai', sans-serif;
+    direction: rtl;
+  }
+  h1 {
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+  }
+  .subtitle {
+    text-align: center;
+    color: #888;
+    margin-bottom: 30px;
+    font-size: 0.85rem;
+  }
+
+  /* === Phone frame === */
+  .phone-frame {
+    width: 375px;
+    margin: 0 auto 40px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    overflow: hidden;
+    border: 2px solid #ddd;
+  }
+  .option-label {
+    background: var(--primary);
+    color: white;
+    text-align: center;
+    padding: 10px 16px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+  }
+  .option-desc {
+    background: #f8f8f8;
+    padding: 8px 16px;
+    font-size: 0.75rem;
+    color: #666;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+  }
+
+  /* === Simulated variant selector (context) === */
+  .sim-variant-area {
+    padding: 12px 16px 8px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .sim-variant-label {
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 6px;
+  }
+  .sim-variant-selected {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+  .sim-tiles {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .sim-tile {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.55rem;
+    color: #999;
+    background: #fafafa;
+  }
+  .sim-tile.selected {
+    border-color: var(--primary);
+    background: #f0f5f8;
+    color: var(--primary);
+    font-weight: 600;
+    position: relative;
+  }
+  .sim-tile.selected::after {
+    content: '✓';
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--primary);
+    color: white;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    font-size: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* === Shared buybox elements === */
+  .buybox-area {
+    padding: 12px 16px 14px;
+  }
+  .add-to-cart-btn {
+    width: 100%;
+    background: #1a3a52;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .add-to-cart-btn .arabic-text {
+    font-weight: 400;
+    opacity: 0.9;
+  }
+  .delivery-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .delivery-icon-svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: #888;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+  .delivery-en {
+    font-size: 0.72rem;
+    color: #888;
+  }
+  .delivery-ar {
+    font-size: 0.72rem;
+    color: #aaa;
+  }
+  .divider {
+    height: 1px;
+    background: #f0f0f0;
+    margin: 0 16px;
+  }
+
+  /* =========================================
+     OPTION A - Price Confirmation Bar
+     ========================================= */
+  .price-bar-a {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    background: #f5f7f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-bottom: 12px;
+  }
+  .price-bar-a .pb-label {
+    font-size: 0.65rem;
+    color: #888;
+  }
+  .price-bar-a .pb-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .price-bar-a .pb-label-ar {
+    font-size: 0.7rem;
+    color: #999;
+    margin-left: auto;
+  }
+
+  /* =========================================
+     OPTION B - Selected Variant Price Card
+     ========================================= */
+  .variant-price-card-b {
+    border: 1px solid #e0e0e0;
+    border-left: 3px solid var(--primary);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    background: #fcfcfc;
+  }
+  .vpc-top {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 3px;
+  }
+  .vpc-check {
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .vpc-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+  .vpc-bottom {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .vpc-price {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .vpc-unit {
+    font-size: 0.65rem;
+    color: #999;
+  }
+  .vpc-unit-ar {
+    font-size: 0.68rem;
+    color: #bbb;
+    margin-left: auto;
+  }
+
+  /* =========================================
+     OPTION C - Inline Price Pill
+     ========================================= */
+  .c-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .price-pill-c {
+    background: #faf5f2;
+    border: 1px solid #f0e0d6;
+    border-radius: 10px;
+    padding: 6px 14px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .pill-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+  .pill-unit {
+    font-size: 0.58rem;
+    color: #999;
+    line-height: 1.1;
+  }
+  .pill-unit-ar {
+    font-size: 0.6rem;
+    color: #bbb;
+    line-height: 1.1;
+  }
+  .c-row .add-to-cart-btn {
+    flex: 1;
+  }
+
+  /* =========================================
+     OPTION D - Value Summary Strip
+     ========================================= */
+  .value-strip-d {
+    display: flex;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background: white;
+  }
+  .vs-cell {
+    flex: 1;
+    text-align: center;
+    padding: 8px 6px;
+    border-right: 1px solid #efefef;
+  }
+  .vs-cell:last-child {
+    border-right: none;
+  }
+  .vs-cell-icon {
+    font-size: 0.85rem;
+    margin-bottom: 2px;
+  }
+  .vs-cell-main {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.2;
+  }
+  .vs-cell-main.accent {
+    color: var(--accent);
+  }
+  .vs-cell-sub {
+    font-size: 0.55rem;
+    color: #999;
+    line-height: 1.2;
+    margin-top: 1px;
+  }
+  .vs-cell-sub-ar {
+    font-size: 0.55rem;
+    color: #bbb;
+    line-height: 1.2;
+  }
+  .vs-cell.highlight {
+    background: #f0f7f0;
+  }
+
+  /* =========================================
+     CURRENT (for comparison)
+     ========================================= */
+  .current-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .current-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .current-row .add-to-cart-btn {
+    flex: 1;
+  }
+
+  /* Responsive: side by side on wide screens */
+  .grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  @media (max-width: 800px) {
+    .grid-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>Pricing Display Designs — No-Tier Variant</h1>
+<p class="subtitle">Compare all options side by side. Each phone shows the buybox area after selecting a variant.</p>
+
+<div class="grid-container">
+
+<!-- ============== CURRENT DESIGN ============== -->
+<div class="phone-frame">
+  <div class="option-label" style="background:#888;">CURRENT DESIGN</div>
+  <div class="option-desc">What customers see right now (bare price + button)</div>
+  <div class="sim-variant-area">
+    <div class="sim-variant-label">Choose Design:</div>
+    <div class="sim-variant-selected">✓ White Fast Charger</div>
+    <div class="sim-tiles">
+      <div class="sim-tile selected">White</div>
+      <div class="sim-tile">Black</div>
+      <div class="sim-tile">Silver</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="buybox-area">
+    <div class="current-row">
+      <div class="current-price">AED 45</div>
+      <button class="add-to-cart-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+    </div>
+    <div class="delivery-row">
+      <svg class="delivery-icon-svg" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <span class="delivery-en">Free delivery over AED 100</span>
+      <span class="delivery-ar arabic-text">توصيل مجاني فوق ١٠٠ درهم</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============== OPTION A ============== -->
+<div class="phone-frame">
+  <div class="option-label">OPTION A — Price Confirmation Bar</div>
+  <div class="option-desc">Mirrors the tier "your-price-bar" style for consistency</div>
+  <div class="sim-variant-area">
+    <div class="sim-variant-label">Choose Design:</div>
+    <div class="sim-variant-selected">✓ White Fast Charger</div>
+    <div class="sim-tiles">
+      <div class="sim-tile selected">White</div>
+      <div class="sim-tile">Black</div>
+      <div class="sim-tile">Silver</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="buybox-area">
+    <div class="price-bar-a">
+      <span class="pb-label">Your price per piece</span>
+      <span class="pb-value">AED 45.00</span>
+      <span class="pb-label-ar arabic-text">سعرك لكل قطعة</span>
+    </div>
+    <button class="add-to-cart-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+    <div class="delivery-row">
+      <svg class="delivery-icon-svg" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <span class="delivery-en">Free delivery over AED 100</span>
+      <span class="delivery-ar arabic-text">توصيل مجاني فوق ١٠٠ درهم</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============== OPTION B ============== -->
+<div class="phone-frame">
+  <div class="option-label">OPTION B — Variant Price Card</div>
+  <div class="option-desc">Confirms variant selection + price in one card</div>
+  <div class="sim-variant-area">
+    <div class="sim-variant-label">Choose Design:</div>
+    <div class="sim-variant-selected">✓ White Fast Charger</div>
+    <div class="sim-tiles">
+      <div class="sim-tile selected">White</div>
+      <div class="sim-tile">Black</div>
+      <div class="sim-tile">Silver</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="buybox-area">
+    <div class="variant-price-card-b">
+      <div class="vpc-top">
+        <span class="vpc-check">✓</span>
+        <span class="vpc-name">White Fast Charger</span>
+      </div>
+      <div class="vpc-bottom">
+        <span class="vpc-price">AED 45.00</span>
+        <span class="vpc-unit">per piece</span>
+        <span class="vpc-unit-ar arabic-text">للقطعة</span>
+      </div>
+    </div>
+    <button class="add-to-cart-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+    <div class="delivery-row">
+      <svg class="delivery-icon-svg" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <span class="delivery-en">Free delivery over AED 100</span>
+      <span class="delivery-ar arabic-text">توصيل مجاني فوق ١٠٠ درهم</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============== OPTION C ============== -->
+<div class="phone-frame">
+  <div class="option-label">OPTION C — Inline Price Pill</div>
+  <div class="option-desc">Compact pill with price + unit, sits beside the button</div>
+  <div class="sim-variant-area">
+    <div class="sim-variant-label">Choose Design:</div>
+    <div class="sim-variant-selected">✓ White Fast Charger</div>
+    <div class="sim-tiles">
+      <div class="sim-tile selected">White</div>
+      <div class="sim-tile">Black</div>
+      <div class="sim-tile">Silver</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="buybox-area">
+    <div class="c-row">
+      <div class="price-pill-c">
+        <div class="pill-price">AED 45</div>
+        <div class="pill-unit">per piece</div>
+        <div class="pill-unit-ar arabic-text">للقطعة</div>
+      </div>
+      <button class="add-to-cart-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+    </div>
+    <div class="delivery-row">
+      <svg class="delivery-icon-svg" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <span class="delivery-en">Free delivery over AED 100</span>
+      <span class="delivery-ar arabic-text">توصيل مجاني فوق ١٠٠ درهم</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============== OPTION D ============== -->
+<div class="phone-frame">
+  <div class="option-label">OPTION D — Value Summary Strip</div>
+  <div class="option-desc">Three-column strip: price + quantity + delivery status</div>
+  <div class="sim-variant-area">
+    <div class="sim-variant-label">Choose Design:</div>
+    <div class="sim-variant-selected">✓ White Fast Charger</div>
+    <div class="sim-tiles">
+      <div class="sim-tile selected">White</div>
+      <div class="sim-tile">Black</div>
+      <div class="sim-tile">Silver</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="buybox-area">
+    <div class="value-strip-d">
+      <div class="vs-cell">
+        <div class="vs-cell-icon">💰</div>
+        <div class="vs-cell-main accent">AED 45</div>
+        <div class="vs-cell-sub">per piece</div>
+        <div class="vs-cell-sub-ar arabic-text">للقطعة</div>
+      </div>
+      <div class="vs-cell">
+        <div class="vs-cell-icon">📦</div>
+        <div class="vs-cell-main">1 piece</div>
+        <div class="vs-cell-sub">in cart</div>
+        <div class="vs-cell-sub-ar arabic-text">في السلة</div>
+      </div>
+      <div class="vs-cell highlight">
+        <div class="vs-cell-icon">🚛</div>
+        <div class="vs-cell-main" style="font-size:0.68rem;">Add AED 55</div>
+        <div class="vs-cell-sub">for free delivery</div>
+        <div class="vs-cell-sub-ar arabic-text">للتوصيل المجاني</div>
+      </div>
+    </div>
+    <button class="add-to-cart-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+  </div>
+</div>
+
+</div><!-- end grid-container -->
+
+</body>
+</html>
