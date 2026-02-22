@@ -1251,7 +1251,7 @@ function renderPricingTiers(containerId, product) {
     const isLast = i === tiers.length - 1;
     const discountPct = t.discountPercent;
     const tierPrice = Math.round(basePrice * (1 - discountPct / 100) * 100) / 100;
-    const qtyLabel = t.minQty === 1 ? '1 pc' : `${t.minQty}+ pcs`;
+    const qtyLabel = `${t.minQty}+ pcs`;
 
     return `
       <div class="tier-item ${isActive ? 'active' : ''} ${isLast && tiers.length > 1 ? 'best-deal' : ''}" data-min-qty="${t.minQty}" data-discount="${discountPct}">
