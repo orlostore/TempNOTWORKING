@@ -4116,7 +4116,7 @@ footer p {
     right: 4px;
 }
 
-/* ---- Popular Right Now: horizontal scroll ---- */
+/* ---- Popular Now: horizontal scroll ---- */
 .popular-scroll {
     display: flex;
     gap: 14px;
@@ -4128,7 +4128,7 @@ footer p {
 .popular-scroll::-webkit-scrollbar { display: none; }
 
 .popular-card {
-    flex: 0 0 170px;
+    flex: 0 0 calc((100% - 5 * 14px) / 6);
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -4265,7 +4265,7 @@ footer p {
 .new-arrivals-grid::-webkit-scrollbar { display: none; }
 
 .arrival-card {
-    flex: 0 0 190px;
+    flex: 0 0 calc((100% - 3 * 14px) / 4);
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
