@@ -541,6 +541,22 @@
         
         .actions { display: flex; gap: 8px; }
 
+        /* Best Seller star toggle */
+        .bestseller-toggle {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            line-height: 1;
+            filter: grayscale(100%) opacity(0.35);
+        }
+        .bestseller-toggle:hover { transform: scale(1.15); filter: grayscale(0%) opacity(1); }
+        .bestseller-toggle.active { filter: grayscale(0%) opacity(1); }
+        .bestseller-toggle.saving { opacity: 0.4; pointer-events: none; }
+
         .reorder-arrows {
             display: flex;
             flex-direction: column;
@@ -1024,6 +1040,10 @@
                     <h3>Stock Value</h3>
                     <div class="value" id="statStockValue">-</div>
                 </div>
+                <div class="stat-card" style="border-left-color: #f5a623;" onclick="filterByStock('bestseller')">
+                    <h3>Best Sellers</h3>
+                    <div class="value" style="color:#f5a623;" id="statBestSellers">-</div>
+                </div>
             </div>
 
             <div class="filter-banner" id="stockFilterBanner">
@@ -1042,6 +1062,7 @@
                             <th style="width:50px;">#</th>
                             <th>Image</th>
                             <th>Product</th>
+                            <th style="width:40px;text-align:center;" title="Best Seller">&#11088;</th>
                             <th>Category</th>
                             <th>Price</th>
                             <th>Stock</th>
@@ -1049,7 +1070,7 @@
                         </tr>
                     </thead>
                     <tbody id="productsBody">
-                        <tr><td colspan="7" class="loading">
+                        <tr><td colspan="8" class="loading">
                             <div class="loading-spinner"></div>
                             <div>Loading products...</div>
                         </td></tr>
@@ -1500,7 +1521,7 @@
                 updateStats();
             } catch (error) {
                 document.getElementById('productsBody').innerHTML = 
-                    '<tr><td colspan="7" class="loading">Error loading products. Please refresh.</td></tr>';
+                    '<tr><td colspan="8" class="loading">Error loading products. Please refresh.</td></tr>';
             }
         }
 
@@ -1510,7 +1531,7 @@
             
             if (list.length === 0) {
                 tbody.innerHTML = `
-                    <tr><td colspan="7">
+                    <tr><td colspan="8">
                         <div class="empty-state">
                             <div class="empty-state-icon">📭</div>
                             <h3>No products found</h3>
@@ -1551,6 +1572,9 @@
                             ${p.nameAr ? `<div class="product-name-ar">${p.nameAr}</div>` : ''}
                             <div class="product-slug">${p.slug}</div>
                         </td>
+                        <td style="text-align:center;">
+                            <button class="bestseller-toggle ${p.featured ? 'active' : ''}" onclick="toggleFeatured(${p.id}, this)" title="${p.featured ? 'Remove from Best Sellers' : 'Mark as Best Seller'}">&#11088;</button>
+                        </td>
                         <td>${p.category ? `<span class="category-tag">${p.category}</span>` : '-'}</td>
                         <td><span class="price-tag">AED ${p.price}</span></td>
                         <td>
@@ -1575,6 +1599,7 @@
             document.getElementById('statOutOfStock').textContent = products.filter(p => getStock(p) === 0).length;
             const totalStockValue = products.reduce((sum, p) => sum + (p.cost || 0) * getStock(p), 0);
             document.getElementById('statStockValue').textContent = 'AED ' + totalStockValue.toFixed(0);
+            document.getElementById('statBestSellers').textContent = products.filter(p => p.featured).length;
         }
 
         let activeStockFilter = null;
@@ -1604,6 +1629,9 @@
             } else if (type === 'out') {
                 filtered = products.filter(p => getStock(p) === 0);
                 label = `${filtered.length} products out of stock`;
+            } else if (type === 'bestseller') {
+                filtered = products.filter(p => p.featured);
+                label = `${filtered.length} best seller products`;
             }
 
             // Highlight selected card
@@ -1649,9 +1677,31 @@
             renderProducts(filtered);
         }
 
+        async function toggleFeatured(productId, btn) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            const newVal = product.featured ? 0 : 1;
+            btn.classList.add('saving');
+            try {
+                const resp = await fetch(`/api/admin/product?key=${adminKey}&action=toggle-featured&id=${productId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ featured: newVal })
+                });
+                if (!resp.ok) throw new Error('Failed');
+                product.featured = newVal === 1;
+                btn.classList.toggle('active', product.featured);
+                btn.title = product.featured ? 'Remove from Best Sellers' : 'Mark as Best Seller';
+                updateStats();
+            } catch (e) {
+                alert('Could not update. Please try again.');
+            }
+            btn.classList.remove('saving');
+        }
+
         function refreshProducts() {
             document.getElementById('productsBody').innerHTML =
-                '<tr><td colspan="7" class="loading"><div class="loading-spinner"></div><div>Loading...</div></td></tr>';
+                '<tr><td colspan="8" class="loading"><div class="loading-spinner"></div><div>Loading...</div></td></tr>';
             loadProducts();
         }
 

@@ -87,6 +87,14 @@ export async function onRequestPost(context) {
             });
         }
 
+        if (action === 'toggle-featured' && id) {
+            await DB.prepare('UPDATE products SET featured = ? WHERE id = ?')
+                .bind(data.featured ? 1 : 0, id).run();
+            return new Response(JSON.stringify({ success: true }), {
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
         if (action === 'update' && id) {
             // Update existing product
             await DB.prepare(`
