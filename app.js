@@ -1204,6 +1204,45 @@ function populateHomepageSections() {
     populatePopularNow();
     populateCategories();
     populateNewArrivals();
+    initScrollArrows();
+}
+
+function initScrollArrows() {
+    document.querySelectorAll('.scroll-wrapper').forEach(wrapper => {
+        const scrollEl = wrapper.querySelector('.popular-scroll, .new-arrivals-grid');
+        if (!scrollEl) return;
+
+        const leftBtn = wrapper.querySelector('.scroll-arrow-left');
+        const rightBtn = wrapper.querySelector('.scroll-arrow-right');
+
+        function updateArrows() {
+            const maxScroll = scrollEl.scrollWidth - scrollEl.clientWidth;
+            if (maxScroll <= 2) {
+                // Everything fits — hide both arrows
+                leftBtn.classList.remove('visible');
+                rightBtn.classList.remove('visible');
+                return;
+            }
+            leftBtn.classList.toggle('visible', scrollEl.scrollLeft > 2);
+            rightBtn.classList.toggle('visible', scrollEl.scrollLeft < maxScroll - 2);
+        }
+
+        // Scroll by roughly one card width on click
+        function scrollBy(dir) {
+            const card = scrollEl.querySelector('.popular-card, .arrival-card');
+            const distance = card ? card.offsetWidth + 14 : 180;
+            scrollEl.scrollBy({ left: dir * distance, behavior: 'smooth' });
+        }
+
+        leftBtn.addEventListener('click', () => scrollBy(-1));
+        rightBtn.addEventListener('click', () => scrollBy(1));
+
+        scrollEl.addEventListener('scroll', updateArrows, { passive: true });
+        window.addEventListener('resize', updateArrows);
+
+        // Initial check (after cards render)
+        updateArrows();
+    });
 }
 
 window.onload = () => {
