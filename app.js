@@ -1095,6 +1095,8 @@ const CATEGORY_EMOJI = {
     'Kids': '🧸',
     'Pets': '🐾',
     'Workspace': '💼',
+    'Home Office': '💼',
+    'Work Space': '💼',
     'Fitness': '💪',
     'Beauty': '💄',
     'Electronics': '🔌',
@@ -1106,7 +1108,9 @@ const CATEGORY_EMOJI = {
 
 function getCategoryEmoji(categoryName) {
     if (CATEGORY_EMOJI[categoryName]) return CATEGORY_EMOJI[categoryName];
-    for (const key of Object.keys(CATEGORY_EMOJI)) {
+    // Try longest key first so "Workspace" beats "Home" for "Home & Workspace"
+    const sorted = Object.keys(CATEGORY_EMOJI).sort((a, b) => b.length - a.length);
+    for (const key of sorted) {
         if (categoryName.toLowerCase().includes(key.toLowerCase())) return CATEGORY_EMOJI[key];
     }
     return '🛒';
