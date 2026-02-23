@@ -1093,7 +1093,15 @@ const CATEGORY_EMOJI = {
     'Dining': '🍽️',
     'Travel': '🧳',
     'Kids': '🧸',
-    'Pets': '🐾'
+    'Pets': '🐾',
+    'Workspace': '💼',
+    'Fitness': '💪',
+    'Beauty': '💄',
+    'Electronics': '🔌',
+    'Tools': '🔧',
+    'Baby': '🍼',
+    'Car': '🚗',
+    'Outdoor': '⛺'
 };
 
 function getCategoryEmoji(categoryName) {
