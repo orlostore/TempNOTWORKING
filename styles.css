@@ -4351,11 +4351,7 @@ footer p {
         padding-left: 0;
         margin-bottom: 0.3rem;
     }
-    /* Scroll containers bleed to screen edge */
-    .popular-scroll,
-    .new-arrivals-grid {
-        padding: 0 16px;
-    }
+    /* Scroll containers inherit padding from .homepage-section-inner */
 
     /* Popular: slightly smaller cards on mobile */
     .popular-card {
