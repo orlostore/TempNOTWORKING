@@ -4080,25 +4080,41 @@ footer p {
     margin-bottom: 0.5rem;
 }
 
-/* ---- Section header with "All →" link ---- */
-.section-header {
+/* ---- Scroll wrapper with arrow overlays ---- */
+.scroll-wrapper {
+    position: relative;
+}
+.scroll-arrow {
+    display: none;               /* hidden by default, JS shows when needed */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.92);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    color: var(--primary);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s, background 0.2s;
+    padding: 0;
+}
+.scroll-arrow:hover {
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+}
+.scroll-arrow.visible {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 0.8rem;
 }
-.section-header .homepage-section-title {
-    margin-bottom: 0;
+.scroll-arrow-left {
+    left: 4px;
 }
-.see-all-link {
-    font-size: 0.78rem;
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
-    white-space: nowrap;
-}
-.see-all-link:hover {
-    text-decoration: underline;
+.scroll-arrow-right {
+    right: 4px;
 }
 
 /* ---- Popular Right Now: horizontal scroll ---- */
@@ -4341,11 +4357,10 @@ footer p {
         font-size: 0.85rem;
         margin-left: 0.5rem;
     }
-    .see-all-link {
-        font-size: 11px;
-    }
-    .section-header {
-        margin-bottom: 10px;
+    /* Scroll arrows: slightly smaller on mobile */
+    .scroll-arrow {
+        width: 30px;
+        height: 30px;
     }
     .all-products-title {
         padding-left: 0;
