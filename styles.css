@@ -3950,39 +3950,39 @@ footer p {
 @media (max-width: 768px) {
     .mobile-trust-section {
         display: block;
-        padding: 1.5rem 1rem;
-        background: #f8f9fa;
-        border-top: 1px solid #eee;
+        padding: 10px 12px;
+        margin: 0 12px 8px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
     .mobile-trust-section .trust-badges-row {
         display: flex;
-        justify-content: center;
-        gap: 1rem;
-        flex-wrap: wrap;
+        justify-content: space-around;
     }
     .mobile-trust-section .trust-item {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 0.5rem;
-        font-size: 0.7rem;
-        color: #666;
-        text-align: left;
+        text-align: center;
+        font-size: 9px;
+        font-weight: 500;
+        color: var(--primary);
         line-height: 1.3;
-        flex: 0 0 calc(50% - 0.5rem);
     }
     .mobile-trust-section .trust-icon {
-        width: 22px;
-        height: 22px;
+        width: 16px;
+        height: 16px;
         stroke: var(--primary);
         fill: none;
         stroke-width: 1.8;
         stroke-linecap: round;
         stroke-linejoin: round;
-        flex-shrink: 0;
+        margin-bottom: 2px;
     }
     .mobile-trust-section .trust-item .arabic-text {
-        font-size: 0.65rem;
-        color: #999;
+        font-size: 8px;
+        color: #888;
     }
 }
 
@@ -3998,8 +3998,9 @@ footer p {
         display: block;
         background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
         color: #fff;
-        padding: 20px 20px 18px;
-        margin: 0;
+        padding: 18px 16px;
+        margin: 8px 12px;
+        border-radius: 10px;
         text-align: center;
     }
     .mobile-hero-inner {
@@ -4045,9 +4046,6 @@ footer p {
     /* Trust badges at top position */
     .mobile-trust-top {
         display: block;
-        padding: 12px 1rem;
-        background: #fff;
-        border-bottom: 1px solid #eee;
     }
 }
 
@@ -4082,38 +4080,25 @@ footer p {
     margin-bottom: 0.5rem;
 }
 
-/* ---- Horizontal scroll wrapper with fade hint ---- */
-.scroll-wrap {
-    position: relative;
-}
-.scroll-fade {
-    position: absolute;
-    top: 0;
-    width: 40px;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
-    transition: opacity 0.3s;
+/* ---- Section header with "All →" link ---- */
+.section-header {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
 }
-.scroll-fade-right {
-    right: 0;
-    background: linear-gradient(to right, transparent, #f8f8f8 85%);
+.section-header .homepage-section-title {
+    margin-bottom: 0;
 }
-.scroll-fade-left {
-    left: 0;
-    background: linear-gradient(to left, transparent, #f8f8f8 85%);
-    opacity: 0;
+.see-all-link {
+    font-size: 0.78rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
 }
-.scroll-arrow {
-    color: #999;
-    animation: scrollNudge 1.8s ease-in-out infinite;
-}
-@keyframes scrollNudge {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(4px); }
+.see-all-link:hover {
+    text-decoration: underline;
 }
 
 /* ---- Popular Right Now: horizontal scroll ---- */
@@ -4344,7 +4329,10 @@ footer p {
 /* ---- Mobile responsive for new sections ---- */
 @media (max-width: 768px) {
     .homepage-section {
-        padding: 1rem 1.34rem 0.3rem;
+        padding: 1rem 0 0.3rem;
+    }
+    .homepage-section-inner {
+        padding: 0 16px;
     }
     .homepage-section-title {
         font-size: 1rem;
@@ -4353,9 +4341,20 @@ footer p {
         font-size: 0.85rem;
         margin-left: 0.5rem;
     }
+    .see-all-link {
+        font-size: 11px;
+    }
+    .section-header {
+        margin-bottom: 10px;
+    }
     .all-products-title {
         padding-left: 0;
         margin-bottom: 0.3rem;
+    }
+    /* Scroll containers bleed to screen edge */
+    .popular-scroll,
+    .new-arrivals-grid {
+        padding: 0 16px;
     }
 
     /* Popular: slightly smaller cards on mobile */

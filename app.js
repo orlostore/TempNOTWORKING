@@ -1200,34 +1200,10 @@ function populateNewArrivals() {
     }).join('');
 }
 
-function setupScrollFades() {
-    document.querySelectorAll('.scroll-wrap').forEach(function(wrap) {
-        var scroller = wrap.querySelector('.popular-scroll, .new-arrivals-grid');
-        var fadeRight = wrap.querySelector('.scroll-fade-right');
-        if (!scroller || !fadeRight) return;
-        // Add left fade (starts hidden)
-        var fadeLeft = wrap.querySelector('.scroll-fade-left');
-        if (!fadeLeft) {
-            fadeLeft = document.createElement('div');
-            fadeLeft.className = 'scroll-fade scroll-fade-left';
-            wrap.insertBefore(fadeLeft, scroller);
-        }
-        function update() {
-            var atStart = scroller.scrollLeft <= 5;
-            var atEnd = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 5;
-            fadeLeft.style.opacity = atStart ? '0' : '1';
-            fadeRight.style.opacity = atEnd ? '0' : '1';
-        }
-        scroller.addEventListener('scroll', update);
-        update();
-    });
-}
-
 function populateHomepageSections() {
     populatePopularNow();
     populateCategories();
     populateNewArrivals();
-    setupScrollFades();
 }
 
 window.onload = () => {
