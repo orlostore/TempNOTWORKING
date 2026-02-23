@@ -240,33 +240,15 @@
 <!-- All Products -->
 <div class="container" id="products">
     <h2 class="homepage-section-title all-products-title">All Products <span class="arabic-inline">جميع المنتجات</span></h2>
-    <div class="category-scroll-wrap" id="categoryScrollWrap">
-        <div class="cat-fade cat-fade-left" id="catFadeLeft">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </div>
-        <div class="cat-fade cat-fade-right" id="catFadeRight">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </div>
-        <div class="category-filters" id="categoryFilters"></div>
-    </div>
-    <div class="shop-toolbar" id="shopToolbar">
-        <div class="price-filter">
-            <label>Price: </label>
-            <input type="number" id="priceMin" class="price-input" placeholder="Min" min="0">
-            <span class="price-dash">–</span>
-            <input type="number" id="priceMax" class="price-input" placeholder="Max" min="0">
-            <button class="price-filter-btn" id="priceFilterBtn">Go</button>
-            <button class="price-filter-clear" id="priceFilterClear" style="display:none;">Clear</button>
-        </div>
-        <div class="sort-control">
-            <label>Sort: </label>
-            <select id="sortSelect" class="sort-select">
-                <option value="default">Featured</option>
-                <option value="price-asc">Price: Low → High</option>
-                <option value="price-desc">Price: High → Low</option>
-                <!-- <option value="rating-desc">Rating: High → Low</option> -->
-            </select>
-        </div>
+    <div class="price-sort-arrows" id="priceSortArrows">
+        <button class="sort-arrow-btn" id="sortPriceAsc" title="Price: Low to High">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            <span>Price</span>
+        </button>
+        <button class="sort-arrow-btn" id="sortPriceDesc" title="Price: High to Low">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            <span>Price</span>
+        </button>
     </div>
     <div class="products-grid" id="productsGrid"></div>
 </div>
