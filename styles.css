@@ -4082,14 +4082,42 @@ footer p {
     margin-bottom: 0.5rem;
 }
 
-/* ---- Popular Right Now: responsive grid ---- */
-.popular-scroll {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 14px;
+/* ---- Horizontal scroll wrapper with fade hint ---- */
+.scroll-wrap {
+    position: relative;
+}
+.scroll-fade {
+    position: absolute;
+    top: 0;
+    width: 40px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+.scroll-fade-right {
+    right: 0;
+    background: linear-gradient(to right, transparent, #f8f8f8 85%);
+}
+.scroll-fade-left {
+    left: 0;
+    background: linear-gradient(to left, transparent, #f8f8f8 85%);
+    opacity: 0;
 }
 
+/* ---- Popular Right Now: horizontal scroll ---- */
+.popular-scroll {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+}
+.popular-scroll::-webkit-scrollbar { display: none; }
+
 .popular-card {
+    flex: 0 0 170px;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -4214,14 +4242,19 @@ footer p {
     margin-top: 4px;
 }
 
-/* ---- New Arrivals: responsive grid ---- */
+/* ---- New Arrivals: horizontal scroll ---- */
 .new-arrivals-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    display: flex;
     gap: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
 }
+.new-arrivals-grid::-webkit-scrollbar { display: none; }
 
 .arrival-card {
+    flex: 0 0 190px;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -4314,9 +4347,9 @@ footer p {
         margin-bottom: 0.3rem;
     }
 
-    /* Popular: 2-column grid on mobile */
-    .popular-scroll {
-        grid-template-columns: repeat(2, 1fr);
+    /* Popular: slightly smaller cards on mobile */
+    .popular-card {
+        flex: 0 0 150px;
     }
 
     /* Categories: 2 columns on mobile */
@@ -4331,8 +4364,8 @@ footer p {
         font-size: 1.7rem;
     }
 
-    /* New Arrivals: 2-column grid on mobile */
-    .new-arrivals-grid {
-        grid-template-columns: repeat(2, 1fr);
+    /* New Arrivals: slightly smaller cards on mobile */
+    .arrival-card {
+        flex: 0 0 165px;
     }
 }
