@@ -1246,8 +1246,8 @@ function initScrollArrows() {
         scrollEl.addEventListener('scroll', updateArrows, { passive: true });
         window.addEventListener('resize', updateArrows);
 
-        // Initial check (after cards render)
-        updateArrows();
+        // Initial check — wait for layout to settle so scrollWidth is accurate
+        requestAnimationFrame(() => { requestAnimationFrame(updateArrows); });
     });
 }
 
