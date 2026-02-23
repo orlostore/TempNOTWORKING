@@ -4077,7 +4077,7 @@ footer p {
 .homepage-section {
     max-width: calc(1180px - 2 * 1.34rem);
     margin: 0 auto;
-    padding: 1.2rem 1.34rem 0.5rem;
+    padding: 1.2rem 0 0.5rem;
 }
 
 .homepage-section-inner {
@@ -4317,7 +4317,7 @@ footer p {
 /* ---- Mobile responsive for new sections ---- */
 @media (max-width: 768px) {
     .homepage-section {
-        padding: 1rem 1rem 0.3rem;
+        padding: 1rem 1.34rem 0.3rem;
     }
     .homepage-section-title {
         font-size: 1rem;
