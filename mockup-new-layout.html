@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORLO – Proposed Layout Mockup (Desktop + Mobile)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2c4a5c;
+    --accent: #e07856;
+    --text: #333;
+    --bg: #f8f9fa;
+    --white: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #e0e0e0; color: var(--text); line-height: 1.6; }
+  .arabic-text { font-family: 'Almarai', sans-serif; direction: rtl; }
+
+  /* ========== PAGE CONTROLS ========== */
+  .mockup-controls {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    background: #1a1a2e; color: #fff; padding: 12px 24px;
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    font-size: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.3);
+  }
+  .mockup-controls strong { color: var(--accent); font-size: 16px; }
+  .view-toggle { display: flex; gap: 0; }
+  .view-toggle button {
+    padding: 6px 18px; border: 1.5px solid #555; background: transparent;
+    color: #aaa; font-size: 13px; cursor: pointer; font-family: inherit;
+  }
+  .view-toggle button:first-child { border-radius: 6px 0 0 6px; }
+  .view-toggle button:last-child { border-radius: 0 6px 6px 0; }
+  .view-toggle button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .mockup-label {
+    position: fixed; top: 52px; left: 50%; transform: translateX(-50%);
+    background: #1a1a2e; color: #ccc; padding: 4px 16px; border-radius: 0 0 8px 8px;
+    font-size: 11px; z-index: 9998; letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  /* ========== FRAME CONTAINERS ========== */
+  .frame-wrap {
+    display: flex; justify-content: center; padding-top: 90px; padding-bottom: 40px;
+  }
+  .desktop-frame {
+    width: 1280px; background: var(--bg); border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0,0,0,.15); overflow: hidden;
+  }
+  .mobile-frame {
+    width: 390px; background: var(--bg); border-radius: 24px;
+    box-shadow: 0 4px 30px rgba(0,0,0,.15); overflow: hidden;
+    border: 8px solid #222;
+  }
+  .hidden { display: none !important; }
+
+  /* ========== SHARED COMPONENT STYLES ========== */
+  .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
+
+  /* --- HEADER --- */
+  .site-header {
+    background: var(--white); box-shadow: 0 2px 5px rgba(0,0,0,.06);
+    padding: 6px 20px; display: flex; align-items: center; gap: 16px;
+  }
+  .logo-box { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+  .logo-box span { color: var(--accent); }
+  .search-box {
+    flex: 1; max-width: 500px; display: flex;
+  }
+  .search-box input {
+    flex: 1; padding: 8px 14px; border: 2px solid #ddd; border-radius: 20px 0 0 20px;
+    font-size: 13px; font-family: 'Inter','Almarai',sans-serif; outline: none;
+  }
+  .search-box button {
+    padding: 8px 16px; border-radius: 0 20px 20px 0; border: none;
+    background: var(--accent); color: #fff; font-size: 14px; cursor: pointer;
+  }
+  .nav-items { display: flex; gap: 20px; align-items: center; font-size: 11px; font-weight: 500; color: var(--text); }
+  .nav-items a { text-decoration: none; color: inherit; text-align: center; line-height: 1.4; }
+  .nav-items .ar { font-family: 'Almarai',sans-serif; font-size: 9px; color: #888; display: block; }
+
+  /* --- MOBILE HEADER --- */
+  .m-header {
+    background: var(--white); padding: 10px 16px; display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .m-hamburger { width: 20px; display: flex; flex-direction: column; gap: 3px; }
+  .m-hamburger span { height: 2px; background: var(--primary); border-radius: 2px; }
+  .m-search {
+    flex: 1; display: flex;
+  }
+  .m-search input {
+    flex: 1; padding: 7px 12px; border: 1.5px solid #ddd; border-radius: 18px 0 0 18px;
+    font-size: 12px; font-family: 'Inter','Almarai',sans-serif; outline: none;
+  }
+  .m-search button {
+    padding: 7px 12px; border-radius: 0 18px 18px 0; border: none;
+    background: var(--accent); color: #fff; font-size: 12px;
+  }
+  .m-cart { font-size: 18px; color: var(--primary); position: relative; }
+  .m-cart-badge {
+    position: absolute; top: -4px; right: -6px; background: var(--accent); color: #fff;
+    width: 14px; height: 14px; border-radius: 50%; font-size: 9px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* --- PROMO BANNER --- */
+  .promo-banner {
+    background: var(--primary); color: #fff; text-align: center; padding: 6px;
+    font-size: 12px; font-weight: 500;
+  }
+  .promo-banner .ar { font-family: 'Almarai',sans-serif; font-size: 11px; }
+
+  /* --- HERO --- */
+  .hero-section {
+    background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
+    color: #fff; padding: 14px 20px; margin: 10px 20px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  }
+  .hero-left { flex: 1; }
+  .hero-left h1 { font-size: 17px; font-weight: 700; line-height: 1.3; margin-bottom: 3px; }
+  .hero-left .ar { font-family: 'Almarai',sans-serif; font-size: 14px; opacity: 0.9; display: block; margin-bottom: 10px; }
+  .hero-badges { display: flex; gap: 16px; margin-bottom: 10px; }
+  .hero-badge { text-align: center; font-size: 10px; opacity: 0.95; }
+  .hero-badge .icon { font-size: 16px; margin-bottom: 2px; }
+  .hero-badge .ar { font-family: 'Almarai',sans-serif; font-size: 8px; opacity: 0.7; display: block; }
+  .hero-cta {
+    display: inline-block; background: var(--accent); color: #fff; padding: 10px 22px;
+    border-radius: 6px; font-weight: 600; font-size: 13px; text-decoration: none;
+    text-align: center; box-shadow: 0 3px 10px rgba(224,120,86,.3);
+  }
+  .hero-cta .ar { font-family: 'Almarai',sans-serif; font-size: 10px; opacity: 0.9; display: block; }
+  .hero-delivery {
+    background: rgba(255,255,255,.08); border-radius: 8px; padding: 10px 16px;
+    text-align: center; min-width: 120px;
+  }
+  .hero-delivery .title { font-size: 12px; font-weight: 600; }
+  .hero-delivery .highlight { color: #4ade80; font-weight: 700; font-size: 14px; }
+  .hero-delivery .ar { font-family: 'Almarai',sans-serif; font-size: 10px; display: block; margin-top: 2px; }
+
+  /* --- MOBILE HERO --- */
+  .m-hero {
+    background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
+    color: #fff; margin: 8px 12px; border-radius: 10px; padding: 16px;
+  }
+  .m-hero h1 { font-size: 16px; font-weight: 700; line-height: 1.3; margin-bottom: 3px; }
+  .m-hero .ar-title { font-family: 'Almarai',sans-serif; font-size: 13px; opacity: 0.9; margin-bottom: 10px; }
+  .m-hero-cta {
+    display: inline-block; background: var(--accent); color: #fff; padding: 8px 18px;
+    border-radius: 6px; font-weight: 600; font-size: 12px; text-decoration: none; text-align: center;
+  }
+  .m-hero-cta .ar { font-family: 'Almarai',sans-serif; font-size: 9px; display: block; }
+
+  /* --- MOBILE TRUST BADGES --- */
+  .m-trust-row {
+    display: flex; justify-content: space-around; padding: 10px 12px;
+    background: var(--white); margin: 0 12px 8px; border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .m-trust-item { text-align: center; font-size: 9px; color: var(--primary); font-weight: 500; }
+  .m-trust-item .icon { font-size: 16px; display: block; margin-bottom: 2px; }
+  .m-trust-item .ar { font-family: 'Almarai',sans-serif; font-size: 8px; color: #888; display: block; }
+
+  /* =============================================
+     NEW SECTIONS
+     ============================================= */
+
+  /* --- SECTION HEADER --- */
+  .section-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 0 20px; margin-bottom: 12px;
+  }
+  .section-header h2 { font-size: 16px; color: var(--primary); font-weight: 700; }
+  .section-header .ar { font-family: 'Almarai',sans-serif; font-size: 14px; color: #888; margin-left: 8px; }
+  .section-header .see-all {
+    font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 600;
+  }
+  .section-header .see-all:hover { text-decoration: underline; }
+
+  /* Mobile section header */
+  .m-section-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 0 16px; margin-bottom: 10px;
+  }
+  .m-section-header h2 { font-size: 15px; color: var(--primary); font-weight: 700; }
+  .m-section-header .ar { font-family: 'Almarai',sans-serif; font-size: 12px; color: #888; margin-left: 6px; }
+  .m-section-header .see-all { font-size: 11px; color: var(--accent); text-decoration: none; font-weight: 600; }
+
+  /* ===== 1. POPULAR PRODUCTS (Horizontal Scroll) ===== */
+  .popular-section { padding: 16px 0 20px; }
+  .popular-scroll {
+    display: flex; gap: 14px; padding: 0 20px; overflow-x: auto;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .popular-scroll::-webkit-scrollbar { display: none; }
+  .popular-card {
+    flex: 0 0 180px; background: var(--white); border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08); overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
+  }
+  .popular-card:hover { transform: translateY(-3px); box-shadow: 0 4px 14px rgba(0,0,0,.14); }
+  .popular-card .img {
+    width: 100%; aspect-ratio: 1/1; background: #f0f0f0;
+    display: flex; align-items: center; justify-content: center; font-size: 48px;
+    position: relative;
+  }
+  .popular-card .best-badge {
+    position: absolute; top: 8px; right: 8px; background: var(--accent); color: #fff;
+    padding: 3px 8px; border-radius: 12px; font-size: 9px; font-weight: 700; text-transform: uppercase;
+  }
+  .popular-card .info { padding: 10px; }
+  .popular-card .info h4 { font-size: 11px; font-weight: 600; color: var(--primary); margin-bottom: 2px; line-height: 1.3; }
+  .popular-card .info .name-ar { font-family: 'Almarai',sans-serif; font-size: 10px; color: #999; margin-bottom: 4px; }
+  .popular-card .info .price { color: var(--accent); font-weight: 700; font-size: 13px; }
+  .popular-card .info .price .from { font-size: 10px; font-weight: 400; color: #888; }
+
+  /* Mobile popular */
+  .m-popular-scroll {
+    display: flex; gap: 10px; padding: 0 16px; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .m-popular-scroll::-webkit-scrollbar { display: none; }
+  .m-popular-card {
+    flex: 0 0 145px; background: var(--white); border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.08); overflow: hidden;
+  }
+  .m-popular-card .img {
+    width: 100%; aspect-ratio: 1/1; background: #f0f0f0;
+    display: flex; align-items: center; justify-content: center; font-size: 36px;
+    position: relative;
+  }
+  .m-popular-card .best-badge {
+    position: absolute; top: 6px; right: 6px; background: var(--accent); color: #fff;
+    padding: 2px 6px; border-radius: 10px; font-size: 8px; font-weight: 700;
+  }
+  .m-popular-card .info { padding: 8px; }
+  .m-popular-card .info h4 { font-size: 10px; font-weight: 600; color: var(--primary); line-height: 1.3; margin-bottom: 2px; }
+  .m-popular-card .info .name-ar { font-family: 'Almarai',sans-serif; font-size: 9px; color: #999; margin-bottom: 3px; }
+  .m-popular-card .info .price { color: var(--accent); font-weight: 700; font-size: 12px; }
+
+  /* ===== 2. SHOP BY CATEGORY (Visual Cards) ===== */
+  .categories-section { padding: 16px 0 20px; }
+  .categories-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    padding: 0 20px;
+  }
+  .cat-card {
+    background: var(--white); border-radius: 10px; padding: 20px 14px;
+    text-align: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06); border: 2px solid transparent;
+  }
+  .cat-card:hover { transform: translateY(-3px); box-shadow: 0 4px 14px rgba(0,0,0,.12); border-color: var(--accent); }
+  .cat-card .cat-icon { font-size: 36px; margin-bottom: 8px; display: block; }
+  .cat-card .cat-name { font-size: 13px; font-weight: 600; color: var(--primary); }
+  .cat-card .cat-name-ar { font-family: 'Almarai',sans-serif; font-size: 11px; color: #888; margin-top: 2px; }
+  .cat-card .cat-count { font-size: 10px; color: #aaa; margin-top: 4px; }
+
+  /* Mobile categories - 2x2 grid */
+  .m-categories-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    padding: 0 16px;
+  }
+  .m-cat-card {
+    background: var(--white); border-radius: 10px; padding: 16px 10px;
+    text-align: center; box-shadow: 0 1px 6px rgba(0,0,0,.06);
+  }
+  .m-cat-card .cat-icon { font-size: 28px; margin-bottom: 6px; display: block; }
+  .m-cat-card .cat-name { font-size: 12px; font-weight: 600; color: var(--primary); }
+  .m-cat-card .cat-name-ar { font-family: 'Almarai',sans-serif; font-size: 10px; color: #888; margin-top: 2px; }
+  .m-cat-card .cat-count { font-size: 9px; color: #aaa; margin-top: 3px; }
+
+  /* ===== 3. NEW ARRIVALS / CURATED ===== */
+  .curated-section { padding: 16px 0 20px; }
+  .curated-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 0 20px;
+  }
+  .curated-card {
+    background: var(--white); border-radius: 10px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08); cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .curated-card:hover { transform: translateY(-3px); box-shadow: 0 4px 14px rgba(0,0,0,.14); }
+  .curated-card .img {
+    width: 100%; aspect-ratio: 4/3; background: #f0f0f0;
+    display: flex; align-items: center; justify-content: center; font-size: 52px;
+    position: relative;
+  }
+  .curated-card .new-badge {
+    position: absolute; top: 8px; left: 8px; background: #10b981; color: #fff;
+    padding: 3px 10px; border-radius: 12px; font-size: 9px; font-weight: 700; text-transform: uppercase;
+  }
+  .curated-card .info { padding: 12px; }
+  .curated-card .info h4 { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 2px; }
+  .curated-card .info .name-ar { font-family: 'Almarai',sans-serif; font-size: 11px; color: #999; margin-bottom: 6px; }
+  .curated-card .info .price { color: var(--accent); font-weight: 700; font-size: 14px; }
+  .curated-card .info .price .from { font-size: 10px; font-weight: 400; color: #888; }
+
+  /* Mobile curated - horizontal scroll */
+  .m-curated-scroll {
+    display: flex; gap: 10px; padding: 0 16px; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .m-curated-scroll::-webkit-scrollbar { display: none; }
+  .m-curated-card {
+    flex: 0 0 200px; background: var(--white); border-radius: 10px;
+    overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.08);
+  }
+  .m-curated-card .img {
+    width: 100%; aspect-ratio: 4/3; background: #f0f0f0;
+    display: flex; align-items: center; justify-content: center; font-size: 40px;
+    position: relative;
+  }
+  .m-curated-card .new-badge {
+    position: absolute; top: 6px; left: 6px; background: #10b981; color: #fff;
+    padding: 2px 8px; border-radius: 10px; font-size: 8px; font-weight: 700;
+  }
+  .m-curated-card .info { padding: 10px; }
+  .m-curated-card .info h4 { font-size: 11px; font-weight: 600; color: var(--primary); margin-bottom: 2px; }
+  .m-curated-card .info .name-ar { font-family: 'Almarai',sans-serif; font-size: 9px; color: #999; margin-bottom: 4px; }
+  .m-curated-card .info .price { color: var(--accent); font-weight: 700; font-size: 12px; }
+
+  /* ===== 4. ALL PRODUCTS (Existing Grid) ===== */
+  .all-products-section { padding: 16px 0 20px; }
+
+  /* Category tab bar */
+  .cat-tabs {
+    display: flex; gap: 0; border-bottom: 1.5px solid #e0e0e0;
+    padding: 0 20px; margin-bottom: 12px; overflow-x: auto; scrollbar-width: none;
+  }
+  .cat-tabs::-webkit-scrollbar { display: none; }
+  .cat-tab {
+    padding: 8px 16px; border: none; background: none; cursor: pointer;
+    font-size: 11px; font-weight: 500; color: #999; white-space: nowrap; position: relative;
+    font-family: inherit;
+  }
+  .cat-tab.active { color: var(--primary); font-weight: 700; }
+  .cat-tab.active::after {
+    content: ''; position: absolute; bottom: -1.5px; left: 50%; transform: translateX(-50%);
+    width: 80%; height: 2.5px; background: var(--accent); border-radius: 2px;
+  }
+  .cat-tab .tab-ar { font-family: 'Almarai',sans-serif; font-size: 8px; display: block; opacity: 0.6; margin-top: 1px; }
+
+  /* Toolbar */
+  .shop-toolbar {
+    display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+    margin-bottom: 12px; font-size: 11px;
+  }
+  .shop-toolbar label { font-weight: 600; color: var(--primary); }
+  .shop-toolbar select, .shop-toolbar input {
+    padding: 5px 8px; border: 1.5px solid #ddd; border-radius: 6px; font-size: 11px;
+    font-family: inherit;
+  }
+  .toolbar-btn {
+    padding: 5px 10px; background: var(--primary); color: #fff; border: none;
+    border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer;
+  }
+
+  /* Product grid */
+  .products-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px;
+    padding: 0 20px;
+  }
+  .product-card {
+    background: var(--white); border-radius: 8px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08); transition: transform 0.2s;
+  }
+  .product-card:hover { transform: translateY(-3px); }
+  .product-card .img {
+    width: 100%; aspect-ratio: 1/1; background: #f0f0f0;
+    display: flex; align-items: center; justify-content: center; font-size: 44px;
+    position: relative;
+  }
+  .product-card .badge-best {
+    position: absolute; top: 8px; right: 8px; background: var(--accent); color: #fff;
+    padding: 3px 8px; border-radius: 12px; font-size: 9px; font-weight: 700;
+  }
+  .product-card .pinfo { padding: 12px; }
+  .product-card .pinfo small { color: #888; font-size: 9px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+  .product-card .pinfo h4 { font-size: 12px; font-weight: 600; color: var(--primary); margin: 6px 0 3px; line-height: 1.3; }
+  .product-card .pinfo .name-ar { font-family: 'Almarai',sans-serif; font-size: 10px; color: #999; margin-bottom: 4px; }
+  .product-card .pinfo .desc { font-size: 10px; color: #666; line-height: 1.4; margin-bottom: 6px; }
+  .product-card .pinfo .price { color: var(--accent); font-weight: 700; font-size: 13px; margin-bottom: 8px; }
+  .product-card .add-btn {
+    width: 100%; padding: 8px; background: var(--primary); color: #fff; border: none;
+    border-radius: 10px; font-size: 10px; font-weight: 600; cursor: pointer;
+  }
+
+  /* Mobile product grid - 2 columns */
+  .m-products-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    padding: 0 16px;
+  }
+  .m-product-card {
+    background: var(--white); border-radius: 8px; overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0,0,0,.08);
+  }
+  .m-product-card .img {
+    width: 100%; aspect-ratio: 1/1; background: #f0f0f0;
+    display: flex; align-items: center; justify-content: center; font-size: 32px;
+    position: relative;
+  }
+  .m-product-card .badge-best {
+    position: absolute; top: 6px; right: 6px; background: var(--accent); color: #fff;
+    padding: 2px 6px; border-radius: 10px; font-size: 8px; font-weight: 700;
+  }
+  .m-product-card .pinfo { padding: 8px; }
+  .m-product-card .pinfo small { font-size: 8px; color: #888; text-transform: uppercase; font-weight: 600; }
+  .m-product-card .pinfo h4 { font-size: 10px; font-weight: 600; color: var(--primary); margin: 4px 0 2px; line-height: 1.3; }
+  .m-product-card .pinfo .name-ar { font-family: 'Almarai',sans-serif; font-size: 9px; color: #999; margin-bottom: 3px; }
+  .m-product-card .pinfo .price { color: var(--accent); font-weight: 700; font-size: 11px; margin-bottom: 6px; }
+  .m-product-card .add-btn {
+    width: 100%; padding: 6px; background: var(--primary); color: #fff; border: none;
+    border-radius: 8px; font-size: 9px; font-weight: 600; cursor: pointer;
+  }
+
+  /* Mobile cat tabs */
+  .m-cat-tabs {
+    display: flex; gap: 0; border-bottom: 1.5px solid #e0e0e0;
+    padding: 0 16px; margin-bottom: 10px; overflow-x: auto; scrollbar-width: none;
+  }
+  .m-cat-tabs::-webkit-scrollbar { display: none; }
+  .m-cat-tab {
+    padding: 7px 12px; border: none; background: none; font-size: 10px;
+    font-weight: 500; color: #999; white-space: nowrap; position: relative; font-family: inherit;
+  }
+  .m-cat-tab.active { color: var(--primary); font-weight: 700; }
+  .m-cat-tab.active::after {
+    content: ''; position: absolute; bottom: -1.5px; left: 50%; transform: translateX(-50%);
+    width: 80%; height: 2px; background: var(--accent); border-radius: 2px;
+  }
+  .m-cat-tab .tab-ar { font-family: 'Almarai',sans-serif; font-size: 7px; display: block; opacity: 0.6; }
+
+  /* Mobile toolbar */
+  .m-toolbar {
+    display: flex; justify-content: space-between; padding: 0 16px; margin-bottom: 10px;
+    font-size: 10px; gap: 8px;
+  }
+  .m-toolbar label { font-weight: 600; color: var(--primary); }
+  .m-toolbar select, .m-toolbar input {
+    padding: 4px 6px; border: 1.5px solid #ddd; border-radius: 6px; font-size: 10px; font-family: inherit;
+  }
+  .m-toolbar-btn {
+    padding: 4px 8px; background: var(--primary); color: #fff; border: none;
+    border-radius: 6px; font-size: 9px; font-weight: 600;
+  }
+
+  /* ===== ABOUT / CONTACT / TERMS ===== */
+  .about-section, .contact-section, .terms-section { padding: 16px 20px; }
+  .section-title-block { text-align: center; margin-bottom: 14px; }
+  .section-title-block h2 { font-size: 18px; color: var(--primary); font-weight: 700; }
+  .section-title-block .ar { font-family: 'Almarai',sans-serif; font-size: 16px; color: #888; margin-left: 8px; }
+  .about-box, .contact-details-box {
+    background: var(--white); padding: 20px; border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06); max-width: 700px; margin: 0 auto;
+  }
+  .about-box p { font-size: 12px; color: #555; line-height: 1.7; text-align: center; margin-bottom: 8px; }
+  .about-box p.ar { font-family: 'Almarai',sans-serif; direction: rtl; font-size: 11px; color: #666; }
+  .contact-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; text-align: center; font-size: 11px; }
+  .contact-row strong { display: block; color: var(--primary); margin-bottom: 4px; font-size: 12px; }
+  .contact-row .ar { font-family: 'Almarai',sans-serif; font-size: 10px; color: #888; }
+  .contact-row a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  .terms-grid-block { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+  .term-card {
+    background: var(--white); padding: 14px; border-radius: 8px; text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,.06); cursor: pointer; transition: transform 0.2s;
+  }
+  .term-card:hover { transform: translateY(-2px); }
+  .term-card h3 { font-size: 12px; color: var(--primary); font-weight: 600; }
+  .term-card .ar { font-family: 'Almarai',sans-serif; font-size: 10px; color: #888; display: block; margin-top: 2px; }
+
+  /* Mobile about/contact/terms */
+  .m-about-section, .m-contact-section, .m-terms-section { padding: 14px 16px; }
+  .m-section-title { text-align: center; margin-bottom: 10px; }
+  .m-section-title h2 { font-size: 15px; color: var(--primary); }
+  .m-section-title .ar { font-family: 'Almarai',sans-serif; font-size: 13px; color: #888; margin-left: 6px; }
+  .m-about-box {
+    background: var(--white); padding: 14px; border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .m-about-box p { font-size: 11px; color: #555; line-height: 1.6; text-align: center; margin-bottom: 6px; }
+  .m-about-box p.ar { font-family: 'Almarai',sans-serif; direction: rtl; font-size: 10px; color: #666; }
+  .m-contact-box {
+    background: var(--white); padding: 14px; border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .m-contact-row { display: flex; flex-direction: column; gap: 10px; text-align: center; font-size: 10px; }
+  .m-contact-row strong { color: var(--primary); display: block; margin-bottom: 2px; }
+  .m-contact-row a { color: var(--accent); text-decoration: none; }
+  .m-terms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .m-term-card {
+    background: var(--white); padding: 12px; border-radius: 8px; text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .m-term-card h3 { font-size: 11px; color: var(--primary); }
+  .m-term-card .ar { font-family: 'Almarai',sans-serif; font-size: 9px; color: #888; display: block; margin-top: 2px; }
+
+  /* Footer */
+  .site-footer {
+    background: var(--primary); color: #fff; text-align: center; padding: 14px; font-size: 10px;
+  }
+
+  /* Mobile bottom nav */
+  .m-bottom-nav {
+    display: flex; justify-content: space-around; background: var(--white);
+    padding: 8px 0 12px; border-top: 1px solid #eee;
+    position: sticky; bottom: 0;
+  }
+  .m-bottom-nav .bnav { text-align: center; font-size: 8px; color: #888; }
+  .m-bottom-nav .bnav.active { color: var(--accent); }
+  .m-bottom-nav .bnav .icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+  /* ===== CHANGE ANNOTATIONS ===== */
+  .change-marker {
+    position: relative;
+  }
+  .change-marker::before {
+    content: attr(data-change);
+    position: absolute; top: -8px; right: -4px; z-index: 100;
+    background: #ef4444; color: #fff; font-size: 9px; font-weight: 700;
+    padding: 2px 8px; border-radius: 10px; white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(239,68,68,.3);
+  }
+  .new-section-highlight {
+    border: 2px dashed #ef4444; border-radius: 12px; position: relative;
+    margin-left: -4px; margin-right: -4px; padding: 4px;
+  }
+  .existing-section {
+    opacity: 0.65;
+  }
+  .existing-label {
+    text-align: center; font-size: 10px; color: #999; padding: 4px;
+    font-style: italic; letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="mockup-controls">
+  <strong>ORLO</strong> Proposed Layout Mockup — index.html
+  <div class="view-toggle">
+    <button class="active" onclick="showDesktop()">Desktop</button>
+    <button onclick="showMobile()">Mobile</button>
+  </div>
+  <span style="font-size:11px;color:#888;">Red dashed = NEW sections | Dimmed = unchanged</span>
+</div>
+
+<!-- ============================================================
+     DESKTOP VIEW
+     ============================================================ -->
+<div class="frame-wrap" id="desktopView">
+<div class="desktop-frame">
+
+  <!-- HEADER (unchanged) -->
+  <div class="existing-section">
+    <div class="site-header">
+      <div class="logo-box">OR<span>LO</span></div>
+      <div class="search-box">
+        <input placeholder="Search products... | البحث عن منتجات...">
+        <button>&#128269;</button>
+      </div>
+      <div class="nav-items">
+        <a>Shop<span class="ar">تسوق</span></a>
+        <a>About<span class="ar">من نحن</span></a>
+        <a>Contact<span class="ar">اتصل بنا</span></a>
+        <a>Terms<span class="ar">الشروط</span></a>
+        <a>Login<span class="ar">دخول</span></a>
+        <a style="font-size:18px;">&#128722;</a>
+      </div>
+    </div>
+    <div class="existing-label">&#9650; Header — NO CHANGES</div>
+  </div>
+
+  <!-- HERO (unchanged) -->
+  <div class="existing-section">
+    <div class="hero-section">
+      <div class="hero-left">
+        <h1>Simplify Your Space with Everyday Essentials That Matter</h1>
+        <span class="ar">بسّط مساحتك. ارتقِ بيومك مع أساسيات تصنع الفرق</span>
+        <div class="hero-badges">
+          <div class="hero-badge"><div class="icon">&#128274;</div>SSL Secure<span class="ar">دفع آمن</span></div>
+          <div class="hero-badge"><div class="icon">&#128179;</div>Visa & MC<span class="ar">فيزا وماستركارد</span></div>
+          <div class="hero-badge"><div class="icon">&#128666;</div>UAE-Wide<span class="ar">توصيل لكل الإمارات</span></div>
+          <div class="hero-badge"><div class="icon">&#128172;</div>WhatsApp<span class="ar">دعم واتساب</span></div>
+        </div>
+        <a class="hero-cta">Shop Best Sellers<span class="ar">تسوق الأكثر مبيعاً</span></a>
+      </div>
+      <div class="hero-delivery">
+        <div>&#128666;</div>
+        <div class="title">Free Delivery</div>
+        <div class="highlight">over 75 AED</div>
+        <span class="ar">توصيل مجاني فوق ٧٥ درهم</span>
+      </div>
+    </div>
+    <div class="existing-label">&#9650; Hero — NO CHANGES</div>
+  </div>
+
+  <!-- ==============================
+       NEW SECTION 1: POPULAR PRODUCTS
+       ============================== -->
+  <div class="new-section-highlight">
+    <div class="popular-section">
+      <div class="section-header">
+        <h2>Popular Right Now <span class="ar">الأكثر رواجاً</span></h2>
+        <a class="see-all" href="#">See All &rarr;</a>
+      </div>
+      <div class="popular-scroll">
+        <div class="popular-card">
+          <div class="img"><span class="best-badge">Best Seller</span>&#128161;</div>
+          <div class="info"><h4>LED Bulb 9W Cool White</h4><div class="name-ar arabic-text">لمبة LED ٩ واط أبيض بارد</div><div class="price"><span class="from">From</span> 5 AED</div></div>
+        </div>
+        <div class="popular-card">
+          <div class="img"><span class="best-badge">Best Seller</span>&#127869;</div>
+          <div class="info"><h4>Silicone Spatula Set</h4><div class="name-ar arabic-text">طقم ملاعق سيليكون</div><div class="price">25 AED</div></div>
+        </div>
+        <div class="popular-card">
+          <div class="img"><span class="best-badge">Best Seller</span>&#128208;</div>
+          <div class="info"><h4>Wall Hooks – Adhesive</h4><div class="name-ar arabic-text">خطافات جدارية لاصقة</div><div class="price">12 AED</div></div>
+        </div>
+        <div class="popular-card">
+          <div class="img">&#129519;</div>
+          <div class="info"><h4>Microfiber Cloth 3-Pack</h4><div class="name-ar arabic-text">قماش مايكروفايبر ٣ قطع</div><div class="price">15 AED</div></div>
+        </div>
+        <div class="popular-card">
+          <div class="img">&#128161;</div>
+          <div class="info"><h4>LED Bulb 12W Warm White</h4><div class="name-ar arabic-text">لمبة LED ١٢ واط أبيض دافئ</div><div class="price"><span class="from">From</span> 7 AED</div></div>
+        </div>
+        <div class="popular-card">
+          <div class="img">&#128230;</div>
+          <div class="info"><h4>Storage Box Medium</h4><div class="name-ar arabic-text">صندوق تخزين متوسط</div><div class="price">18 AED</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:10px;color:#ef4444;font-weight:700;padding:4px;">&#9733; NEW — Section 1: Popular Products (horizontal scroll, auto-populated from featured=true)</div>
+  </div>
+
+  <!-- ==============================
+       NEW SECTION 2: SHOP BY CATEGORY
+       ============================== -->
+  <div class="new-section-highlight">
+    <div class="categories-section">
+      <div class="section-header">
+        <h2>Shop by Category <span class="ar">تسوق حسب الفئة</span></h2>
+      </div>
+      <div class="categories-grid">
+        <div class="cat-card">
+          <span class="cat-icon">&#128161;</span>
+          <div class="cat-name">Lighting</div>
+          <div class="cat-name-ar arabic-text">إضاءة</div>
+          <div class="cat-count">8 products</div>
+        </div>
+        <div class="cat-card">
+          <span class="cat-icon">&#127869;</span>
+          <div class="cat-name">Kitchen</div>
+          <div class="cat-name-ar arabic-text">مطبخ</div>
+          <div class="cat-count">5 products</div>
+        </div>
+        <div class="cat-card">
+          <span class="cat-icon">&#127968;</span>
+          <div class="cat-name">Home</div>
+          <div class="cat-name-ar arabic-text">المنزل</div>
+          <div class="cat-count">6 products</div>
+        </div>
+        <div class="cat-card">
+          <span class="cat-icon">&#129519;</span>
+          <div class="cat-name">Cleaning</div>
+          <div class="cat-name-ar arabic-text">تنظيف</div>
+          <div class="cat-count">4 products</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:10px;color:#ef4444;font-weight:700;padding:4px;">&#9733; NEW — Section 2: Shop by Category (visual cards, auto-generated from product categories)</div>
+  </div>
+
+  <!-- ==============================
+       NEW SECTION 3: NEW ARRIVALS
+       ============================== -->
+  <div class="new-section-highlight">
+    <div class="curated-section">
+      <div class="section-header">
+        <h2>New Arrivals <span class="ar">وصل حديثاً</span></h2>
+        <a class="see-all" href="#">View All &rarr;</a>
+      </div>
+      <div class="curated-grid">
+        <div class="curated-card">
+          <div class="img"><span class="new-badge">NEW</span>&#128230;</div>
+          <div class="info"><h4>Foldable Storage Basket</h4><div class="name-ar arabic-text">سلة تخزين قابلة للطي</div><div class="price">22 AED</div></div>
+        </div>
+        <div class="curated-card">
+          <div class="img"><span class="new-badge">NEW</span>&#128161;</div>
+          <div class="info"><h4>Smart LED Bulb RGB</h4><div class="name-ar arabic-text">لمبة LED ذكية ملونة</div><div class="price">35 AED</div></div>
+        </div>
+        <div class="curated-card">
+          <div class="img"><span class="new-badge">NEW</span>&#127869;</div>
+          <div class="info"><h4>Bamboo Utensil Set</h4><div class="name-ar arabic-text">طقم أدوات بامبو</div><div class="price">28 AED</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:10px;color:#ef4444;font-weight:700;padding:4px;">&#9733; NEW — Section 3: New Arrivals (auto: latest 3-6 products added, or manually curated)</div>
+  </div>
+
+  <!-- ALL PRODUCTS (existing - with tab bar, toolbar, grid) -->
+  <div class="existing-section" style="opacity:0.75;">
+    <div class="all-products-section">
+      <div class="section-header">
+        <h2>All Products <span class="ar">جميع المنتجات</span></h2>
+      </div>
+      <div class="cat-tabs">
+        <button class="cat-tab active">All Products<span class="tab-ar">جميع المنتجات</span></button>
+        <button class="cat-tab">Lighting<span class="tab-ar">إضاءة</span></button>
+        <button class="cat-tab">Kitchen<span class="tab-ar">مطبخ</span></button>
+        <button class="cat-tab">Home<span class="tab-ar">المنزل</span></button>
+        <button class="cat-tab">Cleaning<span class="tab-ar">تنظيف</span></button>
+      </div>
+      <div class="shop-toolbar">
+        <div>
+          <label>Price: </label>
+          <input style="width:55px;" placeholder="Min">
+          <span style="color:#999;">–</span>
+          <input style="width:55px;" placeholder="Max">
+          <button class="toolbar-btn">Go</button>
+        </div>
+        <div>
+          <label>Sort: </label>
+          <select><option>Featured</option><option>Price: Low → High</option><option>Price: High → Low</option></select>
+        </div>
+      </div>
+      <div class="products-grid">
+        <div class="product-card">
+          <div class="img"><span class="badge-best">Best Seller</span>&#128161;</div>
+          <div class="pinfo"><small>Lighting</small><h4>LED Bulb 9W Cool White</h4><div class="name-ar arabic-text">لمبة LED ٩ واط أبيض بارد</div><p class="desc">Energy efficient A+ rated LED bulb</p><div class="price"><span style="font-size:10px;color:#888;">From</span> 5 AED</div><button class="add-btn">Add to Cart | أضف إلى السلة</button></div>
+        </div>
+        <div class="product-card">
+          <div class="img">&#127869;</div>
+          <div class="pinfo"><small>Kitchen</small><h4>Silicone Spatula Set</h4><div class="name-ar arabic-text">طقم ملاعق سيليكون</div><p class="desc">Heat resistant, non-stick safe</p><div class="price">25 AED</div><button class="add-btn">Add to Cart | أضف إلى السلة</button></div>
+        </div>
+        <div class="product-card">
+          <div class="img">&#128208;</div>
+          <div class="pinfo"><small>Home</small><h4>Wall Hooks Adhesive</h4><div class="name-ar arabic-text">خطافات جدارية لاصقة</div><p class="desc">Strong adhesive, no drilling needed</p><div class="price">12 AED</div><button class="add-btn">Add to Cart | أضف إلى السلة</button></div>
+        </div>
+        <div class="product-card">
+          <div class="img">&#129519;</div>
+          <div class="pinfo"><small>Cleaning</small><h4>Microfiber Cloth 3-Pack</h4><div class="name-ar arabic-text">قماش مايكروفايبر ٣ قطع</div><p class="desc">Ultra soft, lint-free cleaning</p><div class="price">15 AED</div><button class="add-btn">Add to Cart | أضف إلى السلة</button></div>
+        </div>
+        <div class="product-card">
+          <div class="img">&#128161;</div>
+          <div class="pinfo"><small>Lighting</small><h4>LED Bulb 12W Warm White</h4><div class="name-ar arabic-text">لمبة LED ١٢ واط دافئ</div><p class="desc">Warm tone for bedrooms & living rooms</p><div class="price"><span style="font-size:10px;color:#888;">From</span> 7 AED</div><button class="add-btn">Add to Cart | أضف إلى السلة</button></div>
+        </div>
+        <div class="product-card">
+          <div class="img">&#128230;</div>
+          <div class="pinfo"><small>Home</small><h4>Storage Box Medium</h4><div class="name-ar arabic-text">صندوق تخزين متوسط</div><p class="desc">Stackable, clear lid organizer</p><div class="price">18 AED</div><button class="add-btn">Add to Cart | أضف إلى السلة</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="existing-label">&#9650; All Products grid — EXISTING (gets a section heading added above it, everything else stays the same)</div>
+  </div>
+
+  <!-- ABOUT (unchanged) -->
+  <div class="existing-section">
+    <div class="about-section">
+      <div class="section-title-block"><h2>Our Story <span class="ar">قصتنا</span></h2></div>
+      <div class="about-box">
+        <p>ORLO is a family-owned Dubai brand built around practical essentials we genuinely use every day...</p>
+        <p class="ar">اورلو علامة تجارية عائلية من دبي، نختار فيها أدوات أساسية نستخدمها فعلاً...</p>
+      </div>
+    </div>
+    <div class="existing-label">&#9650; About — NO CHANGES</div>
+  </div>
+
+  <!-- CONTACT (unchanged) -->
+  <div class="existing-section">
+    <div class="contact-section">
+      <div class="section-title-block"><h2>Contact Us <span class="ar">اتصل بنا</span></h2></div>
+      <div class="contact-details-box">
+        <div class="contact-row">
+          <div><strong>Location <span class="ar">الموقع</span></strong>Dubai, UAE<br><span class="ar">دبي، الإمارات</span></div>
+          <div><strong>Email <span class="ar">البريد</span></strong><a>info@orlostore.com</a></div>
+          <div><strong>WhatsApp <span class="ar">واتساب</span></strong><a>+971 55 547 7206</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="existing-label">&#9650; Contact — NO CHANGES</div>
+  </div>
+
+  <!-- TERMS (unchanged) -->
+  <div class="existing-section">
+    <div class="terms-section">
+      <div class="section-title-block"><h2>Terms & Conditions <span class="ar">الشروط والأحكام</span></h2></div>
+      <div class="terms-grid-block">
+        <div class="term-card"><h3>Shipping<span class="ar">الشحن</span></h3></div>
+        <div class="term-card"><h3>Returns<span class="ar">الإرجاع</span></h3></div>
+        <div class="term-card"><h3>Privacy<span class="ar">الخصوصية</span></h3></div>
+        <div class="term-card"><h3>Terms<span class="ar">الشروط</span></h3></div>
+      </div>
+    </div>
+    <div class="existing-label">&#9650; Terms — NO CHANGES</div>
+  </div>
+
+  <!-- FOOTER (unchanged) -->
+  <div class="existing-section">
+    <div class="site-footer">&copy; 2026 ORLO – Dubai, UAE / دبي، الإمارات العربية المتحدة</div>
+    <div class="existing-label">&#9650; Footer — NO CHANGES</div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================================================
+     MOBILE VIEW
+     ============================================================ -->
+<div class="frame-wrap hidden" id="mobileView">
+<div class="mobile-frame">
+
+  <!-- MOBILE HEADER (unchanged) -->
+  <div class="existing-section">
+    <div class="m-header">
+      <div class="logo-box" style="font-size:18px;">OR<span>LO</span></div>
+      <div class="m-hamburger"><span></span><span></span><span></span></div>
+      <div class="m-cart">&#128722;<span class="m-cart-badge">2</span></div>
+    </div>
+    <div class="m-search" style="padding:6px 12px;">
+      <input placeholder="Search... | البحث...">
+      <button>&#128269;</button>
+    </div>
+  </div>
+
+  <!-- MOBILE PROMO BANNER (unchanged) -->
+  <div class="existing-section">
+    <div class="promo-banner">&#128666; Free delivery over 75 AED | <span class="ar" style="display:inline;">توصيل مجاني فوق ٧٥ درهم</span></div>
+  </div>
+
+  <!-- MOBILE HERO (unchanged) -->
+  <div class="existing-section">
+    <div class="m-hero">
+      <h1>Simplify Your Space</h1>
+      <div class="ar-title">بسّط مساحتك مع أساسيات تصنع الفرق</div>
+      <a class="m-hero-cta">Shop Best Sellers<span class="ar">تسوق الأكثر مبيعاً</span></a>
+    </div>
+  </div>
+
+  <!-- MOBILE TRUST BADGES (unchanged) -->
+  <div class="existing-section">
+    <div class="m-trust-row">
+      <div class="m-trust-item"><span class="icon">&#128274;</span>SSL<span class="ar">آمن</span></div>
+      <div class="m-trust-item"><span class="icon">&#128179;</span>Visa/MC<span class="ar">بطاقات</span></div>
+      <div class="m-trust-item"><span class="icon">&#128666;</span>UAE<span class="ar">توصيل</span></div>
+      <div class="m-trust-item"><span class="icon">&#128172;</span>Support<span class="ar">واتساب</span></div>
+    </div>
+    <div class="existing-label" style="font-size:8px;">&#9650; Header + Hero + Trust — NO CHANGES</div>
+  </div>
+
+  <!-- ==============================
+       MOBILE NEW SECTION 1: POPULAR
+       ============================== -->
+  <div class="new-section-highlight">
+    <div style="padding:14px 0;">
+      <div class="m-section-header">
+        <h2>Popular Now <span class="ar">الأكثر رواجاً</span></h2>
+        <a class="see-all" href="#">All &rarr;</a>
+      </div>
+      <div class="m-popular-scroll">
+        <div class="m-popular-card">
+          <div class="img"><span class="best-badge">Best Seller</span>&#128161;</div>
+          <div class="info"><h4>LED Bulb 9W</h4><div class="name-ar arabic-text">لمبة LED ٩ واط</div><div class="price">5 AED</div></div>
+        </div>
+        <div class="m-popular-card">
+          <div class="img"><span class="best-badge">Best Seller</span>&#127869;</div>
+          <div class="info"><h4>Spatula Set</h4><div class="name-ar arabic-text">طقم ملاعق</div><div class="price">25 AED</div></div>
+        </div>
+        <div class="m-popular-card">
+          <div class="img">&#128208;</div>
+          <div class="info"><h4>Wall Hooks</h4><div class="name-ar arabic-text">خطافات جدارية</div><div class="price">12 AED</div></div>
+        </div>
+        <div class="m-popular-card">
+          <div class="img">&#129519;</div>
+          <div class="info"><h4>Microfiber 3pk</h4><div class="name-ar arabic-text">مايكروفايبر</div><div class="price">15 AED</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:8px;color:#ef4444;font-weight:700;padding:2px;">&#9733; NEW — Popular Products</div>
+  </div>
+
+  <!-- ==============================
+       MOBILE NEW SECTION 2: CATEGORIES
+       ============================== -->
+  <div class="new-section-highlight">
+    <div style="padding:14px 0;">
+      <div class="m-section-header">
+        <h2>Categories <span class="ar">الفئات</span></h2>
+      </div>
+      <div class="m-categories-grid">
+        <div class="m-cat-card"><span class="cat-icon">&#128161;</span><div class="cat-name">Lighting</div><div class="cat-name-ar arabic-text">إضاءة</div><div class="cat-count">8 items</div></div>
+        <div class="m-cat-card"><span class="cat-icon">&#127869;</span><div class="cat-name">Kitchen</div><div class="cat-name-ar arabic-text">مطبخ</div><div class="cat-count">5 items</div></div>
+        <div class="m-cat-card"><span class="cat-icon">&#127968;</span><div class="cat-name">Home</div><div class="cat-name-ar arabic-text">المنزل</div><div class="cat-count">6 items</div></div>
+        <div class="m-cat-card"><span class="cat-icon">&#129519;</span><div class="cat-name">Cleaning</div><div class="cat-name-ar arabic-text">تنظيف</div><div class="cat-count">4 items</div></div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:8px;color:#ef4444;font-weight:700;padding:2px;">&#9733; NEW — Shop by Category</div>
+  </div>
+
+  <!-- ==============================
+       MOBILE NEW SECTION 3: NEW ARRIVALS
+       ============================== -->
+  <div class="new-section-highlight">
+    <div style="padding:14px 0;">
+      <div class="m-section-header">
+        <h2>New Arrivals <span class="ar">وصل حديثاً</span></h2>
+        <a class="see-all" href="#">All &rarr;</a>
+      </div>
+      <div class="m-curated-scroll">
+        <div class="m-curated-card">
+          <div class="img"><span class="new-badge">NEW</span>&#128230;</div>
+          <div class="info"><h4>Foldable Storage Basket</h4><div class="name-ar arabic-text">سلة تخزين قابلة للطي</div><div class="price">22 AED</div></div>
+        </div>
+        <div class="m-curated-card">
+          <div class="img"><span class="new-badge">NEW</span>&#128161;</div>
+          <div class="info"><h4>Smart LED Bulb RGB</h4><div class="name-ar arabic-text">لمبة ذكية ملونة</div><div class="price">35 AED</div></div>
+        </div>
+        <div class="m-curated-card">
+          <div class="img"><span class="new-badge">NEW</span>&#127869;</div>
+          <div class="info"><h4>Bamboo Utensil Set</h4><div class="name-ar arabic-text">طقم أدوات بامبو</div><div class="price">28 AED</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:8px;color:#ef4444;font-weight:700;padding:2px;">&#9733; NEW — New Arrivals</div>
+  </div>
+
+  <!-- MOBILE ALL PRODUCTS (existing) -->
+  <div class="existing-section" style="opacity:0.75;">
+    <div style="padding:14px 0;">
+      <div class="m-section-header">
+        <h2>All Products <span class="ar">جميع المنتجات</span></h2>
+      </div>
+      <div class="m-cat-tabs">
+        <button class="m-cat-tab active">All<span class="tab-ar">الكل</span></button>
+        <button class="m-cat-tab">Lighting<span class="tab-ar">إضاءة</span></button>
+        <button class="m-cat-tab">Kitchen<span class="tab-ar">مطبخ</span></button>
+        <button class="m-cat-tab">Home<span class="tab-ar">المنزل</span></button>
+        <button class="m-cat-tab">Cleaning<span class="tab-ar">تنظيف</span></button>
+      </div>
+      <div class="m-toolbar">
+        <div><label>Price: </label><input style="width:42px;" placeholder="Min"><span> – </span><input style="width:42px;" placeholder="Max"><button class="m-toolbar-btn">Go</button></div>
+        <div><label>Sort: </label><select style="font-size:9px;"><option>Featured</option></select></div>
+      </div>
+      <div class="m-products-grid">
+        <div class="m-product-card">
+          <div class="img"><span class="badge-best">Best Seller</span>&#128161;</div>
+          <div class="pinfo"><small>Lighting</small><h4>LED Bulb 9W</h4><div class="name-ar arabic-text">لمبة LED ٩ واط</div><div class="price">5 AED</div><button class="add-btn">Add | أضف</button></div>
+        </div>
+        <div class="m-product-card">
+          <div class="img">&#127869;</div>
+          <div class="pinfo"><small>Kitchen</small><h4>Spatula Set</h4><div class="name-ar arabic-text">طقم ملاعق</div><div class="price">25 AED</div><button class="add-btn">Add | أضف</button></div>
+        </div>
+        <div class="m-product-card">
+          <div class="img">&#128208;</div>
+          <div class="pinfo"><small>Home</small><h4>Wall Hooks</h4><div class="name-ar arabic-text">خطافات جدارية</div><div class="price">12 AED</div><button class="add-btn">Add | أضف</button></div>
+        </div>
+        <div class="m-product-card">
+          <div class="img">&#129519;</div>
+          <div class="pinfo"><small>Cleaning</small><h4>Microfiber 3pk</h4><div class="name-ar arabic-text">مايكروفايبر</div><div class="price">15 AED</div><button class="add-btn">Add | أضف</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="existing-label" style="font-size:8px;">&#9650; All Products grid — EXISTING (heading added, rest stays same)</div>
+  </div>
+
+  <!-- MOBILE ABOUT (unchanged) -->
+  <div class="existing-section">
+    <div class="m-about-section">
+      <div class="m-section-title"><h2>Our Story <span class="ar">قصتنا</span></h2></div>
+      <div class="m-about-box">
+        <p>ORLO is a family-owned Dubai brand...</p>
+        <p class="ar">اورلو علامة تجارية عائلية من دبي...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE CONTACT (unchanged) -->
+  <div class="existing-section">
+    <div class="m-contact-section">
+      <div class="m-section-title"><h2>Contact <span class="ar">اتصل بنا</span></h2></div>
+      <div class="m-contact-box">
+        <div class="m-contact-row">
+          <div><strong>Location</strong>Dubai, UAE</div>
+          <div><strong>Email</strong><a>info@orlostore.com</a></div>
+          <div><strong>WhatsApp</strong><a>+971 55 547 7206</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE TERMS (unchanged) -->
+  <div class="existing-section">
+    <div class="m-terms-section">
+      <div class="m-section-title"><h2>Terms <span class="ar">الشروط</span></h2></div>
+      <div class="m-terms-grid">
+        <div class="m-term-card"><h3>Shipping<span class="ar">الشحن</span></h3></div>
+        <div class="m-term-card"><h3>Returns<span class="ar">الإرجاع</span></h3></div>
+        <div class="m-term-card"><h3>Privacy<span class="ar">الخصوصية</span></h3></div>
+        <div class="m-term-card"><h3>Terms<span class="ar">الشروط</span></h3></div>
+      </div>
+    </div>
+    <div class="existing-label" style="font-size:8px;">&#9650; About + Contact + Terms + Footer — NO CHANGES</div>
+  </div>
+
+  <!-- MOBILE FOOTER -->
+  <div class="existing-section">
+    <div class="site-footer" style="font-size:9px;">&copy; 2026 ORLO – Dubai, UAE</div>
+  </div>
+
+  <!-- MOBILE BOTTOM NAV (unchanged) -->
+  <div class="existing-section">
+    <div class="m-bottom-nav">
+      <div class="bnav active"><span class="icon">&#127968;</span>Home</div>
+      <div class="bnav"><span class="icon">&#128100;</span>Login</div>
+      <div class="bnav"><span class="icon">&#128722;</span>Cart</div>
+      <div class="bnav"><span class="icon">&#9776;</span>Menu</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+function showDesktop() {
+  document.getElementById('desktopView').classList.remove('hidden');
+  document.getElementById('mobileView').classList.add('hidden');
+  document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view-toggle button')[0].classList.add('active');
+}
+function showMobile() {
+  document.getElementById('desktopView').classList.add('hidden');
+  document.getElementById('mobileView').classList.remove('hidden');
+  document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view-toggle button')[1].classList.add('active');
+}
+</script>
+
+</body>
+</html>
