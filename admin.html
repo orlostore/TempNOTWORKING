@@ -1683,7 +1683,7 @@
             const newVal = product.featured ? 0 : 1;
             btn.classList.add('saving');
             try {
-                const resp = await fetch(`/api/admin/product?key=${adminKey}&action=toggle-featured&id=${productId}`, {
+                const resp = await fetch(`/api/admin/product?key=${authKey}&action=toggle-featured&id=${productId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ featured: newVal })
