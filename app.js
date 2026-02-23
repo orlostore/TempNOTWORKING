@@ -1153,7 +1153,7 @@ function populatePopularNow() {
         <a href="product.html?product=${p.slug}" class="popular-card">
             <div class="popular-card-img">${imgHTML}</div>
             <div class="popular-card-info">
-                <div class="popular-card-badge">Best Seller</div>
+                ${p.featured ? '<div class="popular-card-badge">Best Seller</div>' : ''}
                 <div class="popular-card-name">${p.name}</div>
                 ${p.nameAr ? `<div class="popular-card-name-ar">${p.nameAr}</div>` : ''}
                 <div class="popular-card-price">AED ${p.price}</div>
