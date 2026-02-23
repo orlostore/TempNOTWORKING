@@ -4122,6 +4122,8 @@ footer p {
     text-decoration: none;
     color: inherit;
     transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 .popular-card:hover {
     transform: translateY(-3px);
@@ -4144,6 +4146,9 @@ footer p {
 
 .popular-card-info {
     padding: 8px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 .popular-card-name {
     font-size: 0.75rem;
@@ -4171,6 +4176,7 @@ footer p {
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--accent);
+    margin-top: auto;
 }
 .popular-card-badge {
     display: inline-block;
@@ -4252,6 +4258,8 @@ footer p {
     text-decoration: none;
     color: inherit;
     transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 .arrival-card:hover {
     transform: translateY(-3px);
@@ -4274,6 +4282,9 @@ footer p {
 
 .arrival-card-info {
     padding: 10px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 .arrival-card-badge {
     display: inline-block;
@@ -4312,6 +4323,7 @@ footer p {
     font-size: 0.88rem;
     font-weight: 700;
     color: var(--accent);
+    margin-top: auto;
 }
 
 /* ---- Mobile responsive for new sections ---- */
