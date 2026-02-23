@@ -4213,15 +4213,11 @@ footer p {
     box-shadow: 0 4px 14px rgba(0,0,0,0.12);
 }
 
-.category-card-icon {
-    width: 36px;
-    height: 36px;
-    margin: 0 auto 8px;
-    stroke: var(--primary);
-    fill: none;
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+.category-card-emoji {
+    display: block;
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 8px;
 }
 
 .category-card-name {
@@ -4356,9 +4352,8 @@ footer p {
     .category-card {
         padding: 14px 10px;
     }
-    .category-card-icon {
-        width: 30px;
-        height: 30px;
+    .category-card-emoji {
+        font-size: 1.7rem;
     }
 
     /* New Arrivals: horizontal scroll on mobile */
