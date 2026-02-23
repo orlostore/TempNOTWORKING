@@ -1134,9 +1134,15 @@ function getCategoryEmoji(categoryName) {
 function populatePopularNow() {
     const container = document.getElementById('popularScroll');
     if (!container || !products.length) return;
-    const popular = products.filter(p => p.featured);
-    // Fallback: if no featured products, take first 6
-    const list = popular.length ? popular : products.slice(0, 6);
+    // New Arrivals = last 4 by ID — avoid overlap
+    const arrivalIds = new Set([...products].sort((a, b) => b.id - a.id).slice(0, 4).map(p => p.id));
+    const featured = products.filter(p => p.featured && !arrivalIds.has(p.id));
+    // Auto-fill to at least 6 from non-arrival products
+    let list = [...featured];
+    if (list.length < 6) {
+        const remaining = products.filter(p => !p.featured && !arrivalIds.has(p.id));
+        list = list.concat(remaining.slice(0, 6 - list.length));
+    }
 
     container.innerHTML = list.map(p => {
         const imgSrc = p.image && p.image.startsWith('http') ? p.image : '';
