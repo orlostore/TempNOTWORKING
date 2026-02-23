@@ -1077,26 +1077,31 @@ function closeMobileMenu() {
 
 // === HOMEPAGE SECTIONS: Popular, Categories, New Arrivals ===
 
-// SVG icons for category cards (inline, matching project style)
-const CATEGORY_ICONS = {
-    default: '<svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>',
-    'Kitchen': '<svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>',
-    'Home': '<svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>',
-    'Lifestyle': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
-    'Bathroom': '<svg viewBox="0 0 24 24"><path d="M4 12h16a1 1 0 011 1v3a4 4 0 01-4 4H7a4 4 0 01-4-4v-3a1 1 0 011-1z"/><path d="M6 12V5a2 2 0 012-2h1"/><line x1="7" y1="20" x2="6" y2="22"/><line x1="17" y1="20" x2="18" y2="22"/></svg>',
-    'Organization': '<svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="2" y1="9" x2="22" y2="9"/><line x1="2" y1="15" x2="22" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>',
-    'Storage': '<svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
-    'Cleaning': '<svg viewBox="0 0 24 24"><path d="M12 2v6"/><path d="M8 8h8l1 14H7L8 8z"/><path d="M10 8V5a2 2 0 014 0v3"/></svg>',
-    'Bedroom': '<svg viewBox="0 0 24 24"><path d="M2 16V8a4 4 0 014-4h12a4 4 0 014 4v8"/><path d="M2 12h20"/><path d="M2 16h20v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2z"/><line x1="4" y1="20" x2="4" y2="22"/><line x1="20" y1="20" x2="20" y2="22"/></svg>'
+// Emoji icons for category cards — colorful, zero-dependency
+const CATEGORY_EMOJI = {
+    'Kitchen': '🍳',
+    'Home': '🏠',
+    'Lifestyle': '✨',
+    'Bathroom': '🚿',
+    'Organization': '🗂️',
+    'Storage': '📦',
+    'Cleaning': '🧹',
+    'Bedroom': '🛏️',
+    'Garden': '🌿',
+    'Office': '🖥️',
+    'Laundry': '👕',
+    'Dining': '🍽️',
+    'Travel': '🧳',
+    'Kids': '🧸',
+    'Pets': '🐾'
 };
 
-function getCategoryIcon(categoryName) {
-    // Try exact match first, then partial match
-    if (CATEGORY_ICONS[categoryName]) return CATEGORY_ICONS[categoryName];
-    for (const key of Object.keys(CATEGORY_ICONS)) {
-        if (categoryName.toLowerCase().includes(key.toLowerCase())) return CATEGORY_ICONS[key];
+function getCategoryEmoji(categoryName) {
+    if (CATEGORY_EMOJI[categoryName]) return CATEGORY_EMOJI[categoryName];
+    for (const key of Object.keys(CATEGORY_EMOJI)) {
+        if (categoryName.toLowerCase().includes(key.toLowerCase())) return CATEGORY_EMOJI[key];
     }
-    return CATEGORY_ICONS.default;
+    return '🛒';
 }
 
 function populatePopularNow() {
@@ -1132,10 +1137,10 @@ function populateCategories() {
     container.innerHTML = cats.map(cat => {
         const count = products.filter(p => p.category === cat).length;
         const catAr = getCategoryArabic(cat);
-        const icon = getCategoryIcon(cat);
+        const emoji = getCategoryEmoji(cat);
         return `
         <div class="category-card" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'}); setTimeout(function(){ loadProducts('${cat.replace(/'/g, "\\'")}'); }, 300);">
-            <svg class="category-card-icon" viewBox="0 0 24 24">${icon.replace(/<\/?svg[^>]*>/g, '')}</svg>
+            <span class="category-card-emoji">${emoji}</span>
             <div class="category-card-name">${cat}</div>
             ${catAr ? `<div class="category-card-name-ar">${catAr}</div>` : ''}
             <div class="category-card-count">${count} product${count !== 1 ? 's' : ''}</div>

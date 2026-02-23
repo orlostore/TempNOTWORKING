@@ -4122,6 +4122,8 @@ footer p {
     text-decoration: none;
     color: inherit;
     transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 .popular-card:hover {
     transform: translateY(-3px);
@@ -4144,6 +4146,9 @@ footer p {
 
 .popular-card-info {
     padding: 8px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 .popular-card-name {
     font-size: 0.75rem;
@@ -4171,6 +4176,7 @@ footer p {
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--accent);
+    margin-top: auto;
 }
 .popular-card-badge {
     display: inline-block;
@@ -4207,15 +4213,11 @@ footer p {
     box-shadow: 0 4px 14px rgba(0,0,0,0.12);
 }
 
-.category-card-icon {
-    width: 36px;
-    height: 36px;
-    margin: 0 auto 8px;
-    stroke: var(--primary);
-    fill: none;
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+.category-card-emoji {
+    display: block;
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 8px;
 }
 
 .category-card-name {
@@ -4252,6 +4254,8 @@ footer p {
     text-decoration: none;
     color: inherit;
     transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 .arrival-card:hover {
     transform: translateY(-3px);
@@ -4274,6 +4278,9 @@ footer p {
 
 .arrival-card-info {
     padding: 10px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 .arrival-card-badge {
     display: inline-block;
@@ -4312,6 +4319,7 @@ footer p {
     font-size: 0.88rem;
     font-weight: 700;
     color: var(--accent);
+    margin-top: auto;
 }
 
 /* ---- Mobile responsive for new sections ---- */
@@ -4344,9 +4352,8 @@ footer p {
     .category-card {
         padding: 14px 10px;
     }
-    .category-card-icon {
-        width: 30px;
-        height: 30px;
+    .category-card-emoji {
+        font-size: 1.7rem;
     }
 
     /* New Arrivals: horizontal scroll on mobile */
