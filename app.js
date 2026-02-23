@@ -1309,9 +1309,20 @@ window.onload = () => {
         });
         
         navLinks.querySelectorAll("a").forEach(link => {
-            link.addEventListener("click", function() {
+            link.addEventListener("click", function(e) {
                 hamburger.classList.remove("active");
                 navLinks.classList.remove("active");
+                // Scroll after menu closes so the transition doesn't block it
+                const href = this.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        setTimeout(function() {
+                            target.scrollIntoView({ behavior: 'smooth' });
+                        }, 320);
+                    }
+                }
             });
         });
     }
