@@ -4005,3 +4005,361 @@ footer p {
         color: #999;
     }
 }
+
+/* ============================================
+   COMPACT MOBILE HERO (mobile only)
+   ============================================ */
+.mobile-hero {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-hero {
+        display: block;
+        background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
+        color: #fff;
+        padding: 20px 20px 18px;
+        margin: 0;
+        text-align: center;
+    }
+    .mobile-hero-inner {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    .mobile-hero-heading {
+        font-size: 1.25rem;
+        font-weight: 700;
+        line-height: 1.3;
+        margin: 0 0 4px;
+    }
+    .mobile-hero-ar {
+        font-size: 0.85rem;
+        opacity: 0.85;
+        margin-bottom: 12px;
+    }
+    .mobile-hero-cta {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        background: var(--accent);
+        color: #fff;
+        padding: 10px 28px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-decoration: none;
+        box-shadow: 0 3px 10px rgba(224,120,86,0.3);
+        transition: all 0.3s;
+    }
+    .mobile-hero-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(224,120,86,0.4);
+    }
+    .mobile-hero-cta .arabic-text {
+        font-size: 0.7rem;
+        opacity: 0.9;
+        display: inline;
+    }
+
+    /* Trust badges at top position */
+    .mobile-trust-top {
+        display: block;
+        padding: 12px 1rem;
+        background: #fff;
+        border-bottom: 1px solid #eee;
+    }
+}
+
+/* ============================================
+   HOMEPAGE SECTIONS (Popular, Categories, New Arrivals)
+   ============================================ */
+.homepage-section {
+    max-width: calc(1180px - 2 * 1.34rem);
+    margin: 0 auto;
+    padding: 1.2rem 1.34rem 0.5rem;
+}
+
+.homepage-section-inner {
+    max-width: 100%;
+}
+
+.homepage-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+}
+
+.homepage-section-title .arabic-inline {
+    font-size: 1rem;
+}
+
+/* All Products heading */
+.all-products-title {
+    padding-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ---- Popular Right Now: horizontal scroll ---- */
+.popular-scroll {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 8px;
+}
+.popular-scroll::-webkit-scrollbar { display: none; }
+
+.popular-card {
+    flex: 0 0 160px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.popular-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.13);
+}
+
+.popular-card-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+.popular-card-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.popular-card-info {
+    padding: 8px 10px 10px;
+}
+.popular-card-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary);
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 2px;
+}
+.popular-card-name-ar {
+    font-size: 0.65rem;
+    color: #999;
+    font-family: 'Almarai', sans-serif;
+    direction: rtl;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+.popular-card-price {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+.popular-card-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+/* ---- Shop by Category: card grid ---- */
+.category-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.category-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 16px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+.category-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+
+.category-card-icon {
+    width: 36px;
+    height: 36px;
+    margin: 0 auto 8px;
+    stroke: var(--primary);
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.category-card-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+    line-height: 1.3;
+}
+.category-card-name-ar {
+    font-size: 0.68rem;
+    color: #999;
+    font-family: 'Almarai', sans-serif;
+    direction: rtl;
+    margin-top: 2px;
+}
+.category-card-count {
+    font-size: 0.65rem;
+    color: #aaa;
+    margin-top: 4px;
+}
+
+/* ---- New Arrivals: grid ---- */
+.new-arrivals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+}
+
+.arrival-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.arrival-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.13);
+}
+
+.arrival-card-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+.arrival-card-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.arrival-card-info {
+    padding: 10px 12px 12px;
+}
+.arrival-card-badge {
+    display: inline-block;
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+.arrival-card-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--primary);
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 2px;
+}
+.arrival-card-name-ar {
+    font-size: 0.68rem;
+    color: #999;
+    font-family: 'Almarai', sans-serif;
+    direction: rtl;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+.arrival-card-price {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+/* ---- Mobile responsive for new sections ---- */
+@media (max-width: 768px) {
+    .homepage-section {
+        padding: 1rem 1rem 0.3rem;
+    }
+    .homepage-section-title {
+        font-size: 1rem;
+    }
+    .homepage-section-title .arabic-inline {
+        font-size: 0.85rem;
+        margin-left: 0.5rem;
+    }
+    .all-products-title {
+        padding-left: 0;
+        margin-bottom: 0.3rem;
+    }
+
+    /* Popular: smaller cards on mobile */
+    .popular-card {
+        flex: 0 0 140px;
+    }
+
+    /* Categories: 2 columns on mobile */
+    .category-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .category-card {
+        padding: 14px 10px;
+    }
+    .category-card-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* New Arrivals: horizontal scroll on mobile */
+    .new-arrivals-grid {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 8px;
+    }
+    .new-arrivals-grid::-webkit-scrollbar { display: none; }
+    .arrival-card {
+        flex: 0 0 160px;
+    }
+}

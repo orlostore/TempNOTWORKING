@@ -71,6 +71,9 @@ function updateUIIfNeeded(newProducts) {
         if (typeof loadProducts === 'function') {
             loadProducts();
         }
+        if (typeof populateHomepageSections === 'function') {
+            populateHomepageSections();
+        }
         console.log('🔄 Products updated!');
     }
 }
@@ -90,6 +93,9 @@ async function initProducts() {
         }
         if (typeof updateCart === 'function') {
             updateCart();
+        }
+        if (typeof populateHomepageSections === 'function') {
+            populateHomepageSections();
         }
     }
     
@@ -111,6 +117,9 @@ async function initProducts() {
             }
             if (typeof updateCart === 'function') {
                 updateCart();
+            }
+            if (typeof populateHomepageSections === 'function') {
+                populateHomepageSections();
             }
         }
         window.dispatchEvent(new Event('productsReady'));
