@@ -1134,14 +1134,14 @@ function getCategoryEmoji(categoryName) {
 function populatePopularNow() {
     const container = document.getElementById('popularScroll');
     if (!container || !products.length) return;
-    // New Arrivals = last 4 by ID — avoid overlap
-    const arrivalIds = new Set([...products].sort((a, b) => b.id - a.id).slice(0, 4).map(p => p.id));
-    const featured = products.filter(p => p.featured && !arrivalIds.has(p.id));
-    // Auto-fill to at least 6 from non-arrival products
+    // Show ALL featured (best seller) products — no exclusions
+    const featured = products.filter(p => p.featured);
     let list = [...featured];
+    // Auto-fill to at least 6 if not enough featured
     if (list.length < 6) {
-        const remaining = products.filter(p => !p.featured && !arrivalIds.has(p.id));
-        list = list.concat(remaining.slice(0, 6 - list.length));
+        const arrivalIds = new Set([...products].sort((a, b) => b.id - a.id).slice(0, 4).map(p => p.id));
+        const filler = products.filter(p => !p.featured && !arrivalIds.has(p.id));
+        list = list.concat(filler.slice(0, 6 - list.length));
     }
 
     container.innerHTML = list.map(p => {
@@ -1184,9 +1184,12 @@ function populateCategories() {
 function populateNewArrivals() {
     const container = document.getElementById('newArrivalsGrid');
     if (!container || !products.length) return;
-    // Take the last 4 products by ID (newest additions)
+    // Take the last 4 products by ID (newest additions), prefer non-featured
     const sorted = [...products].sort((a, b) => b.id - a.id);
-    const arrivals = sorted.slice(0, 4);
+    const nonFeatured = sorted.filter(p => !p.featured);
+    const arrivals = nonFeatured.length >= 4
+        ? nonFeatured.slice(0, 4)
+        : sorted.slice(0, 4);
 
     container.innerHTML = arrivals.map(p => {
         const imgSrc = p.image && p.image.startsWith('http') ? p.image : '';
