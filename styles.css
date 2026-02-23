@@ -4102,19 +4102,14 @@ footer p {
     margin-bottom: 0.5rem;
 }
 
-/* ---- Popular Right Now: horizontal scroll ---- */
+/* ---- Popular Right Now: responsive grid ---- */
 .popular-scroll {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 14px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 8px;
 }
-.popular-scroll::-webkit-scrollbar { display: none; }
 
 .popular-card {
-    flex: 0 0 160px;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -4239,10 +4234,10 @@ footer p {
     margin-top: 4px;
 }
 
-/* ---- New Arrivals: grid ---- */
+/* ---- New Arrivals: responsive grid ---- */
 .new-arrivals-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 14px;
 }
 
@@ -4339,9 +4334,9 @@ footer p {
         margin-bottom: 0.3rem;
     }
 
-    /* Popular: smaller cards on mobile */
-    .popular-card {
-        flex: 0 0 140px;
+    /* Popular: 2-column grid on mobile */
+    .popular-scroll {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     /* Categories: 2 columns on mobile */
@@ -4356,17 +4351,8 @@ footer p {
         font-size: 1.7rem;
     }
 
-    /* New Arrivals: horizontal scroll on mobile */
+    /* New Arrivals: 2-column grid on mobile */
     .new-arrivals-grid {
-        display: flex;
-        gap: 12px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        padding-bottom: 8px;
-    }
-    .new-arrivals-grid::-webkit-scrollbar { display: none; }
-    .arrival-card {
-        flex: 0 0 160px;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
