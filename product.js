@@ -1380,7 +1380,10 @@ function selectVariant(variantId, productId, prefix) {
       });
       const slideWidth = mobileCarousel.offsetWidth;
       mobileCarousel.scrollTo({ left: slideIndex * slideWidth, behavior: 'smooth' });
-      mobileCarousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Update dots
+      document.querySelectorAll('.mobile-dot').forEach(function(dot, i) {
+        dot.classList.toggle('active', i === slideIndex);
+      });
     }
   }
 
