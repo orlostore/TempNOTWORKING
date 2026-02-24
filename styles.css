@@ -746,7 +746,7 @@ nav {
   align-items: center;
   justify-content: center;
   padding: 0 0.67rem;
-  background: var(--primary);
+  background: #e07856;
   color: white;
   border: none;
   border-radius: 12px;
@@ -758,7 +758,7 @@ nav {
 }
 
 .add-to-cart:hover {
-  background: #1e3545;
+  background: #c9634a;
 }
 
 .view-options-btn {
@@ -1542,7 +1542,7 @@ footer p {
   height: 36px;
   min-width: 180px;
   padding: 0 0.67rem;
-  background: var(--primary);
+  background: #e07856;
   color: white;
   border: none;
   border-radius: 12px;
@@ -1556,7 +1556,7 @@ footer p {
 }
 
 .inline-add-to-cart:hover {
-  background: #1e3545;
+  background: #c9634a;
 }
 
 /* Qty control when inline (non-variant) — same width as the Add to Cart button */
@@ -3889,7 +3889,7 @@ footer p {
     justify-content: center;
     width: 100%;
     height: 36px;
-    background: #1a3a52;
+    background: #e07856;
     border-radius: 12px;
     overflow: hidden;
 }
