@@ -942,23 +942,61 @@ function openVariantImagePopup(imageSrc, variantName) {
   popup.innerHTML = `
     <div class="variant-img-popup-container">
       <button class="variant-img-popup-close">&times;</button>
-      <img src="${imageSrc}" alt="${variantName || 'Variant image'}">
+      <img src="${imageSrc}" alt="${variantName || 'Variant image'}" draggable="false">
     </div>
   `;
   document.body.appendChild(popup);
+
+  // Lock body scroll while popup is open
+  const scrollY = window.scrollY;
+  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
+  document.body.style.width = '100%';
 
   const container = popup.querySelector('.variant-img-popup-container');
   const img = popup.querySelector('img');
   const closeBtn = popup.querySelector('.variant-img-popup-close');
 
-  // Pinch-to-zoom state
+  // Zoom + pan state
   let scale = 1;
+  let translateX = 0, translateY = 0;
   let lastDist = 0;
-  let originX = 50, originY = 50;
+  let panStartX = 0, panStartY = 0;
+  let panBaseX = 0, panBaseY = 0;
+  let isPanning = false;
+
+  function applyTransform() {
+    img.style.transform = 'scale(' + scale + ') translate(' + translateX + 'px,' + translateY + 'px)';
+  }
+
+  function resetTransform() {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+    img.style.transform = 'scale(1)';
+    img.style.transformOrigin = 'center center';
+  }
+
+  // Clamp pan so image doesn't fly off screen
+  function clampPan() {
+    if (scale <= 1) { translateX = 0; translateY = 0; return; }
+    const rect = container.getBoundingClientRect();
+    const maxX = (rect.width * (scale - 1)) / (2 * scale);
+    const maxY = (rect.height * (scale - 1)) / (2 * scale);
+    translateX = Math.min(maxX, Math.max(-maxX, translateX));
+    translateY = Math.min(maxY, Math.max(-maxY, translateY));
+  }
+
+  // Block ALL touch scrolling on the popup overlay
+  popup.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+  }, { passive: false });
 
   container.addEventListener('touchstart', function(e) {
     if (e.touches.length === 2) {
       e.preventDefault();
+      isPanning = false;
       lastDist = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
         e.touches[0].clientY - e.touches[1].clientY
@@ -966,34 +1004,49 @@ function openVariantImagePopup(imageSrc, variantName) {
       const rect = container.getBoundingClientRect();
       const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
       const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-      originX = ((midX - rect.left) / rect.width) * 100;
-      originY = ((midY - rect.top) / rect.height) * 100;
-      img.style.transformOrigin = originX + '% ' + originY + '%';
+      img.style.transformOrigin = ((midX - rect.left) / rect.width * 100) + '% ' +
+                                  ((midY - rect.top) / rect.height * 100) + '%';
+    } else if (e.touches.length === 1 && scale > 1.05) {
+      // Start single-finger pan when zoomed in
+      isPanning = true;
+      panStartX = e.touches[0].clientX;
+      panStartY = e.touches[0].clientY;
+      panBaseX = translateX;
+      panBaseY = translateY;
     }
   }, { passive: false });
 
   container.addEventListener('touchmove', function(e) {
+    e.preventDefault();
     if (e.touches.length === 2) {
-      e.preventDefault();
+      // Pinch-to-zoom
       const dist = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
         e.touches[0].clientY - e.touches[1].clientY
       );
       if (lastDist > 0) {
         scale = Math.min(5, Math.max(1, scale * (dist / lastDist)));
-        img.style.transform = 'scale(' + scale + ')';
+        clampPan();
+        applyTransform();
       }
       lastDist = dist;
+    } else if (e.touches.length === 1 && isPanning) {
+      // Single-finger pan when zoomed
+      const dx = (e.touches[0].clientX - panStartX) / scale;
+      const dy = (e.touches[0].clientY - panStartY) / scale;
+      translateX = panBaseX + dx;
+      translateY = panBaseY + dy;
+      clampPan();
+      applyTransform();
     }
   }, { passive: false });
 
   container.addEventListener('touchend', function(e) {
     if (e.touches.length < 2) {
       lastDist = 0;
+      isPanning = false;
       if (scale <= 1.05) {
-        scale = 1;
-        img.style.transform = 'scale(1)';
-        img.style.transformOrigin = 'center center';
+        resetTransform();
       }
     }
   });
@@ -1005,23 +1058,29 @@ function openVariantImagePopup(imageSrc, variantName) {
     const now = Date.now();
     if (now - lastTap < 300) {
       if (scale > 1.05) {
-        scale = 1;
-        img.style.transform = 'scale(1)';
-        img.style.transformOrigin = 'center center';
+        resetTransform();
       } else {
         scale = 3;
+        translateX = 0;
+        translateY = 0;
         const rect = container.getBoundingClientRect();
-        originX = ((e.clientX - rect.left) / rect.width) * 100;
-        originY = ((e.clientY - rect.top) / rect.height) * 100;
-        img.style.transformOrigin = originX + '% ' + originY + '%';
-        img.style.transform = 'scale(3)';
+        img.style.transformOrigin = ((e.clientX - rect.left) / rect.width * 100) + '% ' +
+                                    ((e.clientY - rect.top) / rect.height * 100) + '%';
+        applyTransform();
       }
     }
     lastTap = now;
   });
 
-  // Close handlers
-  const closePopup = () => popup.remove();
+  // Close handlers — restore body scroll
+  const closePopup = () => {
+    popup.remove();
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollY);
+  };
   closeBtn.onclick = closePopup;
   popup.addEventListener('click', function(e) { if (e.target === popup) closePopup(); });
   document.addEventListener('keydown', function handler(e) {

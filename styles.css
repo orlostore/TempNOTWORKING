@@ -4427,6 +4427,8 @@ footer p {
   padding: 1.5rem;
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
+  touch-action: none;
+  overscroll-behavior: contain;
 }
 .variant-img-popup-container {
   position: relative;
@@ -4436,7 +4438,7 @@ footer p {
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0,0,0,0.12);
   background: #fff;
-  touch-action: pan-x pan-y pinch-zoom;
+  touch-action: none;
 }
 .variant-img-popup-container img {
   display: block;
