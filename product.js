@@ -1501,7 +1501,7 @@ function selectVariant(variantId, productId, prefix) {
     if (btn && !btn.classList.contains('product-btn-transformed') && btn.tagName === 'BUTTON') {
       btn.innerHTML = 'Add to Cart | <span class="arabic-text">أضف إلى السلة</span>';
       btn.disabled = false;
-      btn.style.background = '#1a3a52';
+      btn.style.background = '#e07856';
       btn.style.cursor = 'pointer';
     }
   });
