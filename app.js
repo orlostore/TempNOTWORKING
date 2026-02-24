@@ -1176,7 +1176,7 @@ function populateCategories() {
             <span class="category-card-emoji">${emoji}</span>
             <div class="category-card-name">${cat}</div>
             ${catAr ? `<div class="category-card-name-ar">${catAr}</div>` : ''}
-            <div class="category-card-count">${count} ${count !== 1 ? 'Products' : 'Product'} | <span dir="ltr">${count} ${count === 1 ? 'منتج' : count === 2 ? 'منتجين' : 'منتجات'}</span></div>
+            <div class="category-card-count">${count} ${count !== 1 ? 'Products' : 'Product'} | <span dir="ltr">${count === 1 ? 'منتج' : count === 2 ? 'منتجين' : 'منتجات'} ${count}</span></div>
         </div>`;
     }).join('');
 }
