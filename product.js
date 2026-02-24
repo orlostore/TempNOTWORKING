@@ -695,6 +695,11 @@ async function initProductPage() {
       mobileAddBtn.style.background = "#999";
       mobileAddBtn.style.cursor = "not-allowed";
     }
+    // Move early-price (buy box) below the carousel for non-variant products
+    if (earlyPriceMobile) {
+      const carouselContainer = document.querySelector('.mobile-carousel-container');
+      if (carouselContainer) carouselContainer.after(earlyPriceMobile);
+    }
   } else {
     mobileAddBtn = document.getElementById("mobileAddToCartBtn");
     if (isOutOfStock && mobileAddBtn) {
