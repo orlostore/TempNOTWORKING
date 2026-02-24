@@ -884,6 +884,19 @@ async function initProductPage() {
   if (mainImg) {
     mainImg.style.cursor = 'zoom-in';
     mainImg.onclick = () => {
+      // If a variant image is currently showing, find its index or prepend it
+      const sv = window._selectedVariant;
+      if (sv && sv.image && mainImg.src.includes(sv.image.split('/').pop())) {
+        const varIdx = product.images.indexOf(sv.image);
+        if (varIdx !== -1) {
+          openEnhancedLightbox(product, varIdx);
+        } else {
+          // Variant image not in product.images — prepend it for lightbox
+          const tempProduct = Object.assign({}, product, { images: [sv.image].concat(product.images) });
+          openEnhancedLightbox(tempProduct, 0);
+        }
+        return;
+      }
       // Find the currently active thumbnail index instead of always opening image 0
       const activeThumbnail = document.querySelector('.thumbnail.active');
       const activeIndex = activeThumbnail ? parseInt(activeThumbnail.getAttribute('data-index') || '0') : 0;
@@ -966,8 +979,9 @@ function openEnhancedLightbox(product, startIndex) {
   `;
   
   document.body.appendChild(lightbox);
+  const savedScrollY = window.scrollY;
   document.body.style.overflow = 'hidden';
-  
+
   const lightboxImg = document.getElementById('lightboxMainImg');
   const lightboxMainImageContainer = lightbox.querySelector('.lightbox-main-image');
   const counter = lightbox.querySelector('.lightbox-counter');
@@ -1027,6 +1041,8 @@ function openEnhancedLightbox(product, startIndex) {
     document.body.removeChild(lightbox);
     document.body.style.overflow = 'auto';
     document.removeEventListener('keydown', handleKeydown);
+    // Restore scroll position so sticky gallery stays visible
+    window.scrollTo(0, savedScrollY);
   };
   
   lightbox.querySelector('.lightbox-close').onclick = closeLightbox;
