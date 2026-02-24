@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup – Cart &amp; Price Color Swap</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f5f6; color: #333; }
+
+  /* Brand tokens */
+  :root {
+    --orlo-blue: #2c4a5c;
+    --orlo-orange: #e07856;
+    --nav-bg: #2c4a5c;
+    --nav-bg-dark: #1e3d4d;
+  }
+
+  /* ── Layout ── */
+  .mockup-wrap { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+  h1 { text-align: center; font-size: 1.5rem; margin-bottom: 0.25rem; color: var(--orlo-blue); }
+  .subtitle { text-align: center; color: #888; font-size: 0.85rem; margin-bottom: 2rem; }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 600px) { .compare { grid-template-columns: 1fr; } }
+
+  .panel { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+  .panel-label {
+    text-align: center; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.5rem; color: #fff;
+  }
+  .panel-label.before { background: #999; }
+  .panel-label.after  { background: var(--orlo-orange); }
+
+  /* ── Fake Nav Bar ── */
+  .nav-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(135deg, var(--nav-bg) 0%, var(--nav-bg-dark) 100%);
+    padding: 0.65rem 1rem; color: #fff; font-size: 0.8rem;
+  }
+  .nav-bar .logo { font-weight: 800; font-size: 1rem; letter-spacing: 0.04em; }
+  .nav-bar .nav-links { display: flex; gap: 0.8rem; align-items: center; font-size: 0.7rem; }
+  .nav-bar .nav-links span { opacity: 0.85; }
+  .cart-wrap { position: relative; cursor: pointer; }
+  .cart-wrap svg { width: 1.3rem; height: 1.3rem; }
+  .cart-badge {
+    position: absolute; top: -5px; right: -7px;
+    width: 14px; height: 14px; border-radius: 50%;
+    font-size: 0.55rem; font-weight: 700; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Before: cart is white, badge is orange */
+  .before-nav .cart-wrap svg { stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .before-nav .cart-badge { background: var(--orlo-orange); }
+
+  /* After: cart icon is orange, badge stays orange */
+  .after-nav .cart-wrap svg { stroke: var(--orlo-orange); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .after-nav .cart-badge { background: var(--orlo-orange); }
+
+  /* ── Product Cards ── */
+  .cards-row { display: flex; gap: 0.6rem; padding: 0.8rem; }
+  .pcard {
+    flex: 1; background: #f8f9fa; border-radius: 8px; overflow: hidden;
+    border: 1px solid #eee; text-align: center; font-size: 0.7rem;
+  }
+  .pcard-img {
+    height: 80px; display: flex; align-items: center; justify-content: center;
+    background: #e9ecef; color: #aaa; font-size: 0.65rem;
+  }
+  .pcard-body { padding: 0.5rem 0.4rem; }
+  .pcard-name { font-weight: 600; font-size: 0.7rem; margin-bottom: 0.2rem; color: #333; }
+  .pcard-price { font-weight: 700; font-size: 0.8rem; }
+  .pcard-badge {
+    display: inline-block; font-size: 0.5rem; font-weight: 700; padding: 0.1rem 0.35rem;
+    border-radius: 3px; margin-bottom: 0.2rem;
+    background: var(--orlo-orange); color: #fff;
+  }
+
+  /* Before: price is orange */
+  .before-cards .pcard-price { color: var(--orlo-orange); }
+
+  /* After: price is blue */
+  .after-cards .pcard-price { color: var(--orlo-blue); }
+
+  /* ── Popular Now Row ── */
+  .section-label { font-weight: 700; font-size: 0.75rem; padding: 0.6rem 0.8rem 0; color: var(--orlo-blue); }
+  .pop-row { display: flex; gap: 0.5rem; padding: 0.5rem 0.8rem 0.8rem; overflow-x: auto; }
+  .pop-card {
+    min-width: 90px; background: #f8f9fa; border-radius: 8px; overflow: hidden;
+    border: 1px solid #eee; text-align: center; font-size: 0.65rem;
+  }
+  .pop-img {
+    height: 60px; display: flex; align-items: center; justify-content: center;
+    background: #e9ecef; color: #bbb; font-size: 0.55rem;
+  }
+  .pop-body { padding: 0.35rem; }
+  .pop-name { font-weight: 600; font-size: 0.62rem; margin-bottom: 0.15rem; }
+  .pop-price { font-weight: 700; font-size: 0.7rem; }
+
+  .before-cards .pop-price { color: var(--orlo-orange); }
+  .after-cards  .pop-price { color: var(--orlo-blue); }
+
+  /* ── Swatch Legend ── */
+  .legend { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+  .swatch { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; }
+  .swatch-dot { width: 18px; height: 18px; border-radius: 4px; border: 1px solid #ddd; }
+
+  /* ── Annotation callouts ── */
+  .callout {
+    display: inline-block; font-size: 0.6rem; font-weight: 600;
+    background: #fffbe6; border: 1px solid #ffe082; border-radius: 4px;
+    padding: 0.15rem 0.4rem; margin: 0.3rem 0.8rem; color: #b28704;
+  }
+</style>
+</head>
+<body>
+
+<div class="mockup-wrap">
+  <h1>Cart & Price Color Swap — Index Page</h1>
+  <p class="subtitle">Orlo Orange <code>#e07856</code> on cart &nbsp;|&nbsp; Orlo Blue <code>#2c4a5c</code> on prices</p>
+
+  <!-- Swatches -->
+  <div class="legend">
+    <div class="swatch"><div class="swatch-dot" style="background:#e07856;"></div> Orlo Orange – accent</div>
+    <div class="swatch"><div class="swatch-dot" style="background:#2c4a5c;"></div> Orlo Blue – primary</div>
+  </div>
+
+  <!-- ========== NAVBAR COMPARISON ========== -->
+  <h2 style="font-size:0.95rem; margin-bottom:0.5rem; color:#555;">Navigation Bar – Cart Icon</h2>
+  <div class="compare">
+
+    <!-- BEFORE -->
+    <div class="panel">
+      <div class="panel-label before">Before (Current)</div>
+      <div class="nav-bar before-nav">
+        <div class="logo">ORLO</div>
+        <div class="nav-links">
+          <span>Shop</span><span>About</span><span>Contact</span>
+          <div class="cart-wrap">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+            <div class="cart-badge">2</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout">Cart icon: white (inherits nav text)</div>
+    </div>
+
+    <!-- AFTER -->
+    <div class="panel">
+      <div class="panel-label after">After (Proposed)</div>
+      <div class="nav-bar after-nav">
+        <div class="logo">ORLO</div>
+        <div class="nav-links">
+          <span>Shop</span><span>About</span><span>Contact</span>
+          <div class="cart-wrap">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+            <div class="cart-badge">2</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout">Cart icon: Orlo Orange #e07856 — pops against dark nav</div>
+    </div>
+  </div>
+
+  <!-- ========== ALL PRODUCTS CARD COMPARISON ========== -->
+  <h2 style="font-size:0.95rem; margin-bottom:0.5rem; color:#555;">All Products – Card Prices</h2>
+  <div class="compare">
+
+    <!-- BEFORE -->
+    <div class="panel before-cards">
+      <div class="panel-label before">Before (Current)</div>
+      <div class="cards-row">
+        <div class="pcard">
+          <div class="pcard-img">img</div>
+          <div class="pcard-body">
+            <div class="pcard-badge">Best Seller</div>
+            <div class="pcard-name">Body Splash</div>
+            <div class="pcard-price">AED 79</div>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-img">img</div>
+          <div class="pcard-body">
+            <div class="pcard-name">Oud Mist</div>
+            <div class="pcard-price">AED 65</div>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-img">img</div>
+          <div class="pcard-body">
+            <div class="pcard-name">Rose Toner</div>
+            <div class="pcard-price">AED 55</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout">Prices: Orlo Orange #e07856</div>
+    </div>
+
+    <!-- AFTER -->
+    <div class="panel after-cards">
+      <div class="panel-label after">After (Proposed)</div>
+      <div class="cards-row">
+        <div class="pcard">
+          <div class="pcard-img">img</div>
+          <div class="pcard-body">
+            <div class="pcard-badge">Best Seller</div>
+            <div class="pcard-name">Body Splash</div>
+            <div class="pcard-price">AED 79</div>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-img">img</div>
+          <div class="pcard-body">
+            <div class="pcard-name">Oud Mist</div>
+            <div class="pcard-price">AED 65</div>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-img">img</div>
+          <div class="pcard-body">
+            <div class="pcard-name">Rose Toner</div>
+            <div class="pcard-price">AED 55</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout">Prices: Orlo Blue #2c4a5c — feels premium, less "sale-y"</div>
+    </div>
+  </div>
+
+  <!-- ========== POPULAR NOW COMPARISON ========== -->
+  <h2 style="font-size:0.95rem; margin-bottom:0.5rem; color:#555;">Popular Now – Card Prices</h2>
+  <div class="compare">
+
+    <!-- BEFORE -->
+    <div class="panel before-cards">
+      <div class="panel-label before">Before (Current)</div>
+      <div class="section-label">Popular Now</div>
+      <div class="pop-row">
+        <div class="pop-card"><div class="pop-img">img</div><div class="pop-body"><div class="pop-name">Body Splash</div><div class="pop-price">AED 79</div></div></div>
+        <div class="pop-card"><div class="pop-img">img</div><div class="pop-body"><div class="pop-name">Oud Mist</div><div class="pop-price">AED 65</div></div></div>
+        <div class="pop-card"><div class="pop-img">img</div><div class="pop-body"><div class="pop-name">Rose Toner</div><div class="pop-price">AED 55</div></div></div>
+        <div class="pop-card"><div class="pop-img">img</div><div class="pop-body"><div class="pop-name">Amber Oil</div><div class="pop-price">AED 45</div></div></div>
+      </div>
+      <div class="callout">Prices: Orlo Orange #e07856</div>
+    </div>
+
+    <!-- AFTER -->
+    <div class="panel after-cards">
+      <div class="panel-label after">After (Proposed)</div>
+      <div class="section-label">Popular Now</div>
+      <div class="pop-row">
+        <div class="pop-card"><div class="pop-img">img</div><div class="pop-body"><div class="pop-name">Body Splash</div><div class="pop-price">AED 79</div></div></div>
+        <div class="pop-card"><div class="pop-img">img</div><div class="pop-body"><div class="pop-name">Oud Mist</div><div class="pop-price">AED 65</div></div></div>
+        <div class="pop-card"><div class="pop-img">img</div><div class="pop-body"><div class="pop-name">Rose Toner</div><div class="pop-price">AED 55</div></div></div>
+        <div class="pop-card"><div class="pop-img">img</div><div class="pop-body"><div class="pop-name">Amber Oil</div><div class="pop-price">AED 45</div></div></div>
+      </div>
+      <div class="callout">Prices: Orlo Blue #2c4a5c — calmer, cohesive with nav</div>
+    </div>
+  </div>
+
+  <!-- ========== NOTES ========== -->
+  <div style="background:#fff; border-radius:10px; padding:1.2rem; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-bottom:2rem;">
+    <h3 style="font-size:0.85rem; margin-bottom:0.5rem; color:var(--orlo-blue);">Design Notes</h3>
+    <ul style="font-size:0.78rem; color:#555; line-height:1.7; padding-left:1.2rem;">
+      <li><strong>Cart → Orange:</strong> Makes the cart icon pop on the dark blue nav bar. Draws the eye toward the shopping action — a subtle CTA.</li>
+      <li><strong>Prices → Blue:</strong> Shifts prices from "sale" energy (orange) to a premium, trustworthy feel. Blue prices read as confident &amp; established.</li>
+      <li><strong>Badge stays orange:</strong> The little cart-count dot is already orange — now the icon matches it for a unified look.</li>
+      <li><strong>Orange is reserved for CTAs:</strong> With prices in blue, orange becomes exclusively for action elements (buttons, badges, cart) — cleaner visual hierarchy.</li>
+      <li><strong>Scope:</strong> This only affects the index page. Product page buybox prices are a separate discussion.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
