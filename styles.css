@@ -732,7 +732,7 @@ nav {
 }
 
 .product-price {
-  color: var(--accent);
+  color: var(--primary);
   font-weight: bold;
   margin: 0.67rem 0;
   font-size: 1rem;
@@ -1688,7 +1688,7 @@ footer p {
   height: 38px;
   width: fit-content;
   padding: 0 1.2rem;
-  background: #1a3a52;
+  background: #e07856;
   color: white;
   border: none;
   border-radius: 12px;
@@ -1701,7 +1701,7 @@ footer p {
 }
 
 .add-to-cart-btn:hover {
-  background: #15303f;
+  background: #c9634a;
   transform: translateY(-1px);
 }
 
@@ -2660,7 +2660,7 @@ footer p {
 .mobile-price {
   font-size: 1rem;
   font-weight: 700;
-  color: #e07856;
+  color: #2c4a5c;
 }
 
 /* Mobile Add to Cart */
@@ -2676,7 +2676,7 @@ footer p {
   height: 36px;
   width: 100%;
   padding: 0 0.67rem;
-  background: #2c4a5c;
+  background: #e07856;
   color: white;
   border: none;
   border-radius: 12px;
@@ -2687,7 +2687,7 @@ footer p {
 }
 
 .mobile-add-to-cart:hover {
-  background: #1e3545;
+  background: #c9634a;
 }
 
 /* Mobile Delivery Info */
