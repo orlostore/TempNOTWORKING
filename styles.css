@@ -2127,14 +2127,18 @@ footer p {
 /* Mobile Promo Banner - Hidden on desktop */
 .mobile-promo-banner {
   display: none;
-  background: var(--primary);
-  color: white;
+  background: #ececec;
+  color: #1a3a52;
   text-align: center;
-  padding: 10px 15px;
+  padding: 8px 15px;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   max-width: 1180px;
   margin: 0 auto;
+}
+
+.mobile-promo-banner svg {
+  stroke: #e76f51;
 }
 
 .mobile-promo-banner .arabic-text {
@@ -2280,13 +2284,13 @@ footer p {
   .mobile-promo-banner {
     display: block;
     position: fixed;
-    top: 60px;
-    left: 0;
-    right: 0;
+    top: 64px;
+    left: 10px;
+    right: 10px;
     margin: 0;
-    border-radius: 0;
+    border-radius: 8px;
     z-index: 999;
-    box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
   }
 
   /* Price sort arrows mobile */
