@@ -1075,7 +1075,12 @@ function setupGalleryOverlay(product) {
   if (!overlay || !closeBtn) return;
 
   carousel.addEventListener('click', () => {
-    galleryScroll.innerHTML = product.images.map((img, index) => `
+    // Use variant image as first image when a variant is selected
+    const galleryImages = [...product.images];
+    if (window._selectedVariant && window._selectedVariant.image) {
+      galleryImages[0] = window._selectedVariant.image;
+    }
+    galleryScroll.innerHTML = galleryImages.map((img, index) => `
       <div class="gallery-image-wrapper" style="overflow:hidden;">
         <img src="${img}" alt="${product.name} ${index + 1}" style="transform-origin:center center;">
       </div>
