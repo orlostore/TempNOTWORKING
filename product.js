@@ -68,9 +68,11 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
     let container;
     if (isMobile) {
       container = document.querySelector(`.mobile-product-page [id="transformedBtn-${productId}"]`)
+        || document.querySelector('.mobile-product-page .early-price-inline')
         || document.querySelector('.mobile-cart-section');
     } else {
       container = document.getElementById(`transformedBtn-${productId}`)
+        || document.querySelector('.early-price-inline')
         || document.querySelector('.product-buybox');
     }
     
@@ -186,9 +188,17 @@ function resetToAddButton(productId) {
   // Reset ALL transformed buttons for this product (both desktop and mobile)
   document.querySelectorAll(`[id="transformedBtn-${productId}"]`).forEach(transformed => {
     const isMobile = transformed.closest('.mobile-product-page') !== null;
-    const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
-    const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
-    transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+    const isInline = transformed.closest('.early-price-inline') !== null;
+
+    if (isInline) {
+      // Non-variant inline button inside early-price row
+      const btnId = isMobile ? 'earlyCartMobile' : 'earlyCartDesktop';
+      transformed.outerHTML = `<button class="inline-add-to-cart" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+    } else {
+      const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
+      const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
+      transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+    }
   });
 
   if (!product) return;
@@ -235,39 +245,18 @@ function resetToAddButton(productId) {
     return true;
   };
 
-  // Re-attach click handlers — unified button IDs
-  const desktopBtn = document.getElementById('addToCartBtn');
-  const mobileBtn = document.getElementById('mobileAddToCartBtn');
-  if (desktopBtn) desktopBtn.onclick = handler;
-  if (mobileBtn) mobileBtn.onclick = handler;
-}
-
-// Build combined gallery images: product images + unique variant images
-function buildGalleryImages(product) {
-  const images = [];
-  const seen = new Set();
-
-  // Add product-level images first
-  if (product.images) {
-    product.images.forEach(function(img) {
-      if (!seen.has(img)) {
-        seen.add(img);
-        images.push({ src: img, variantId: null });
-      }
-    });
+  // Re-attach click handlers — find buttons by their actual IDs
+  if (!hasVariants) {
+    const desktopBtn = document.getElementById('earlyCartDesktop');
+    const mobileBtn = document.getElementById('earlyCartMobile');
+    if (desktopBtn) desktopBtn.onclick = handler;
+    if (mobileBtn) mobileBtn.onclick = handler;
+  } else {
+    const desktopBtn = document.getElementById('addToCartBtn');
+    const mobileBtn = document.getElementById('mobileAddToCartBtn');
+    if (desktopBtn) desktopBtn.onclick = handler;
+    if (mobileBtn) mobileBtn.onclick = handler;
   }
-
-  // Add variant images (only those not already in product images)
-  if (product.variants && product.variants.length > 0) {
-    product.variants.forEach(function(v) {
-      if (v.image && !seen.has(v.image)) {
-        seen.add(v.image);
-        images.push({ src: v.image, variantId: v.id });
-      }
-    });
-  }
-
-  return images;
 }
 
 // Wait for products to load, then display
@@ -480,8 +469,73 @@ async function initProductPage() {
     productPriceEl.innerText = "AED " + product.price;
   }
 
-  // === PRICE DISPLAY (unified in buybox for all product types) ===
-  // Price is shown in the buybox for all products - no separate early-price section
+  // === EARLY PRICE ===
+  const earlyPriceDesktop = document.getElementById("earlyPriceDesktop");
+  const earlyPriceMobile = document.getElementById("earlyPriceMobile");
+  // For variant products, compute display price from variant prices (highest in-stock variant)
+  let variantDisplayPrice = 0;
+  let hasMultipleVariantPrices = false;
+  if (hasVariants) {
+    const effectivePrices = product.variants
+      .filter(v => v.quantity > 0)
+      .map(v => v.price > 0 ? v.price : product.price)
+      .filter(p => p > 0);
+    if (effectivePrices.length > 0) {
+      variantDisplayPrice = Math.max(...effectivePrices);
+      hasMultipleVariantPrices = new Set(effectivePrices).size > 1;
+    }
+  }
+
+  if (hasVariants && (product.price || variantDisplayPrice)) {
+    const displayPrice = variantDisplayPrice || product.price;
+    const showOrLess = hasTiers || hasMultipleVariantPrices;
+    const priceEn = showOrLess ? `AED ${displayPrice} or less` : `AED ${displayPrice}`;
+    const priceAr = showOrLess ? `${displayPrice} درهم أو أقل` : `${displayPrice} درهم`;
+    const earlyHTML = `<div class="early-price-row"><span class="early-price-en">${priceEn}</span><span class="early-price-ar arabic-text">${priceAr}</span></div>`;
+    let hintEn, hintAr;
+    if (hasTiers) {
+      hintEn = 'Click to choose design & quantity for exact price ▼';
+      hintAr = 'اضغط لاختيار التصميم والكمية للسعر الدقيق ▼';
+    } else if (hasMultipleVariantPrices) {
+      hintEn = 'Click to choose a design for exact price ▼';
+      hintAr = 'اضغط لاختيار التصميم للسعر الدقيق ▼';
+    } else {
+      hintEn = 'Click to choose a design ▼';
+      hintAr = 'اضغط لاختيار التصميم ▼';
+    }
+    const hintHTML = `<a class="early-price-hint" id="__HINT_ID__"><span>${hintEn}</span><span class="arabic-text">${hintAr}</span></a>`;
+    const earlyDeliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
+    if (earlyPriceDesktop) {
+      earlyPriceDesktop.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintDesktop');
+      earlyPriceDesktop.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
+      document.getElementById('earlyHintDesktop').onclick = function() {
+        const delivery = document.querySelector('.product-buybox .delivery-info');
+        if (delivery) delivery.scrollIntoView({behavior:'smooth', block:'end'});
+      };
+    }
+    if (earlyPriceMobile) {
+      earlyPriceMobile.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintMobile');
+      earlyPriceMobile.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
+      document.getElementById('earlyHintMobile').onclick = function() {
+        const delivery = document.querySelector('.mobile-delivery-info');
+        const bottomNav = document.getElementById('mobileBottomNav');
+        if (delivery) {
+          const rect = delivery.getBoundingClientRect();
+          const navHeight = bottomNav ? bottomNav.offsetHeight : 0;
+          const targetY = window.scrollY + rect.bottom - (window.innerHeight - navHeight);
+          window.scrollTo({top: targetY, behavior: 'smooth'});
+        }
+      };
+    }
+  } else if (product.price) {
+    // Non-variant products: show price + Add to Cart inline
+    const earlyHTML = `<div class="early-price-row early-price-inline"><span class="early-price-en">AED ${product.price}</span><button class="inline-add-to-cart" id="__BTN_ID__">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button><span class="early-price-ar arabic-text">${product.price} درهم</span></div>`;
+    if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTML.replace('__BTN_ID__', 'earlyCartDesktop');
+    if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTML.replace('__BTN_ID__', 'earlyCartMobile');
+  } else {
+    if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
+    if (earlyPriceMobile) earlyPriceMobile.style.display = 'none';
+  }
 
   // === VARIANT SELECTOR (Desktop) ===
   if (hasVariants) {
@@ -493,36 +547,31 @@ async function initProductPage() {
     renderPricingTiers('pricingTiersDesktop', product);
   }
 
-  // Build combined gallery: product images + variant images
-  const galleryImages = buildGalleryImages(product);
-  // Store on window so lightbox and other functions can access it
-  window._galleryImages = galleryImages;
-
   const gallery = document.getElementById("gallery");
-  if (galleryImages.length > 0) {
-    const isEmoji = !galleryImages[0].src.startsWith('http');
-
+  if (product.images && product.images.length > 0) {
+    const isEmoji = !product.images[0].startsWith('http');
+    
     if (isEmoji) {
       gallery.innerHTML = `
         <div class="image-gallery">
           <div class="main-image-container" style="font-size: 100px; display: flex; align-items: center; justify-content: center; min-height: 350px;">
-            ${galleryImages[0].src}
+            ${product.images[0]}
           </div>
         </div>
       `;
     } else {
-      const thumbnailsHTML = galleryImages.length > 1 ? `
+      const thumbnailsHTML = product.images.length > 1 ? `
         <div class="thumbnail-strip">
-          ${galleryImages.map((img, index) => `
-            <img src="${img.src}" alt="${product.name} ${index + 1}" loading="lazy" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}" data-variant-id="${img.variantId || ''}" onclick="changeMainImage('${img.src}', ${index})" style="object-fit:contain;">
+          ${product.images.map((img, index) => `
+            <img src="${img}" alt="${product.name} ${index + 1}" loading="lazy" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}" onclick="changeMainImage('${img}', ${index})" style="object-fit:contain;">
           `).join('')}
         </div>
       ` : '';
-
+      
       gallery.innerHTML = `
         <div class="image-gallery">
           <div class="main-image-container">
-            <img id="mainImage" src="${galleryImages[0].src}" alt="${product.name}" class="main-product-image">
+            <img id="mainImage" src="${product.images[0]}" alt="${product.name}" class="main-product-image">
             <div class="zoom-hint">🔍 Click to zoom</div>
           </div>
           ${thumbnailsHTML}
@@ -531,18 +580,40 @@ async function initProductPage() {
     }
   }
 
-  // Desktop button: unified buybox button for all product types
-  let desktopAddBtn = document.getElementById("addToCartBtn");
-  if (isOutOfStock && desktopAddBtn) {
-    desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
-    desktopAddBtn.disabled = true;
-    desktopAddBtn.style.background = "#999";
-    desktopAddBtn.style.cursor = "not-allowed";
-  } else if (hasVariants && desktopAddBtn && !isOutOfStock) {
-    desktopAddBtn.innerHTML = 'Select a design | <span class="arabic-text">اختر تصميم</span>';
-    desktopAddBtn.disabled = true;
-    desktopAddBtn.style.background = "#999";
-    desktopAddBtn.style.cursor = "not-allowed";
+  // Desktop button: use inline early-price button for non-variant, buybox button for variant
+  let desktopAddBtn;
+  if (!hasVariants) {
+    desktopAddBtn = document.getElementById("earlyCartDesktop");
+    // Inject delivery info into early-price container, then hide buybox entirely
+    const deliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
+    if (earlyPriceDesktop) earlyPriceDesktop.insertAdjacentHTML('beforeend', deliveryHTML);
+    // Hide buybox price and button, keep delivery-info visible
+    const buybox = document.querySelector('.product-buybox');
+    if (buybox) {
+      const buyboxPrice = buybox.querySelector('.price');
+      const buyboxBtn = buybox.querySelector('.add-to-cart-btn');
+      if (buyboxPrice) buyboxPrice.style.display = 'none';
+      if (buyboxBtn) buyboxBtn.style.display = 'none';
+    }
+    if (isOutOfStock && desktopAddBtn) {
+      desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      desktopAddBtn.disabled = true;
+      desktopAddBtn.style.background = "#999";
+      desktopAddBtn.style.cursor = "not-allowed";
+    }
+  } else {
+    desktopAddBtn = document.getElementById("addToCartBtn");
+    if (isOutOfStock && desktopAddBtn) {
+      desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      desktopAddBtn.disabled = true;
+      desktopAddBtn.style.background = "#999";
+      desktopAddBtn.style.cursor = "not-allowed";
+    } else if (desktopAddBtn && !isOutOfStock) {
+      desktopAddBtn.innerHTML = 'Select a design | <span class="arabic-text">اختر تصميم</span>';
+      desktopAddBtn.disabled = true;
+      desktopAddBtn.style.background = "#999";
+      desktopAddBtn.style.cursor = "not-allowed";
+    }
   }
 
   // MOBILE VERSION
@@ -572,51 +643,76 @@ async function initProductPage() {
     renderPricingTiers('pricingTiersMobile', product);
   }
 
-  // Build combined mobile gallery images (same as desktop)
-  const mobileGalleryImages = buildGalleryImages(product);
-
   const mobileCarousel = document.getElementById("mobileCarousel");
   const mobileDots = document.getElementById("mobileDots");
-
-  if (mobileGalleryImages.length > 0) {
-    const isEmoji = !mobileGalleryImages[0].src.startsWith('http');
-
+  
+  if (product.images && product.images.length > 0) {
+    const isEmoji = !product.images[0].startsWith('http');
+    
     if (isEmoji) {
-      mobileCarousel.innerHTML = `<div class="mobile-carousel-slide"><div style="font-size: 80px;">${mobileGalleryImages[0].src}</div></div>`;
+      mobileCarousel.innerHTML = `<div class="mobile-carousel-slide"><div style="font-size: 80px;">${product.images[0]}</div></div>`;
       mobileDots.innerHTML = '<div class="mobile-dot active"></div>';
     } else {
-      mobileCarousel.innerHTML = mobileGalleryImages.map((img, index) => `
-        <div class="mobile-carousel-slide" data-index="${index}" data-variant-id="${img.variantId || ''}">
-          <img src="${img.src}" alt="${product.name} ${index + 1}" loading="lazy">
+      mobileCarousel.innerHTML = product.images.map((img, index) => `
+        <div class="mobile-carousel-slide" data-index="${index}">
+          <img src="${img}" alt="${product.name} ${index + 1}" loading="lazy">
         </div>
       `).join('');
-
-      mobileDots.innerHTML = mobileGalleryImages.map((_, index) => `
+      
+      mobileDots.innerHTML = product.images.map((_, index) => `
         <div class="mobile-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>
       `).join('');
-
+      
       setupMobileCarousel();
       setupGalleryOverlay(product);
     }
   }
 
-  // Mobile button: unified buybox button for all product types
-  let mobileAddBtn = document.getElementById("mobileAddToCartBtn");
-  if (isOutOfStock && mobileAddBtn) {
-    mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
-    mobileAddBtn.disabled = true;
-    mobileAddBtn.style.background = "#999";
-    mobileAddBtn.style.cursor = "not-allowed";
-  } else if (hasVariants && mobileAddBtn && !isOutOfStock) {
-    mobileAddBtn.innerHTML = 'Select a design | <span class="arabic-text">اختر تصميم</span>';
-    mobileAddBtn.disabled = true;
-    mobileAddBtn.style.background = "#999";
-    mobileAddBtn.style.cursor = "not-allowed";
-  }
-  // Populate mobile delivery info for all product types
-  const mobileDeliveryEl = document.querySelector('.mobile-delivery-info');
-  if (mobileDeliveryEl) {
-    mobileDeliveryEl.innerHTML = `<div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div>`;
+  // Mobile button: use inline early-price button for non-variant, buybox button for variant
+  let mobileAddBtn;
+  if (!hasVariants) {
+    mobileAddBtn = document.getElementById("earlyCartMobile");
+    // Inject mobile delivery info into early-price container, hide buybox
+    const mobileBuyboxCompact = document.querySelector('.mobile-buybox-compact');
+    if (earlyPriceMobile) {
+      // Build delivery HTML inline for mobile (the HTML element is empty by default)
+      const mobileDeliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
+      earlyPriceMobile.insertAdjacentHTML('beforeend', mobileDeliveryHTML);
+    }
+    if (mobileBuyboxCompact) {
+      const mobilePrice = mobileBuyboxCompact.querySelector('.mobile-price-section');
+      const mobileCart = mobileBuyboxCompact.querySelector('.mobile-cart-section');
+      if (mobilePrice) mobilePrice.style.display = 'none';
+      if (mobileCart) mobileCart.style.display = 'none';
+      const mobileDeliveryEl = mobileBuyboxCompact.querySelector('.mobile-delivery-info');
+      if (mobileDeliveryEl) {
+        mobileDeliveryEl.innerHTML = `<div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div>`;
+      }
+    }
+    if (isOutOfStock && mobileAddBtn) {
+      mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      mobileAddBtn.disabled = true;
+      mobileAddBtn.style.background = "#999";
+      mobileAddBtn.style.cursor = "not-allowed";
+    }
+  } else {
+    mobileAddBtn = document.getElementById("mobileAddToCartBtn");
+    if (isOutOfStock && mobileAddBtn) {
+      mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      mobileAddBtn.disabled = true;
+      mobileAddBtn.style.background = "#999";
+      mobileAddBtn.style.cursor = "not-allowed";
+    } else if (mobileAddBtn && !isOutOfStock) {
+      mobileAddBtn.innerHTML = 'Select a design | <span class="arabic-text">اختر تصميم</span>';
+      mobileAddBtn.disabled = true;
+      mobileAddBtn.style.background = "#999";
+      mobileAddBtn.style.cursor = "not-allowed";
+    }
+    // Populate mobile delivery info for variant products
+    const mobileDeliveryEl = document.querySelector('.mobile-delivery-info');
+    if (mobileDeliveryEl) {
+      mobileDeliveryEl.innerHTML = `<div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div>`;
+    }
   }
 
   // MOBILE DETAILS SECTION
@@ -788,17 +884,28 @@ async function initProductPage() {
   if (mainImg) {
     mainImg.style.cursor = 'zoom-in';
     mainImg.onclick = () => {
-      // Use the combined gallery images for lightbox
-      const galleryImgs = window._galleryImages || [];
-      const lightboxProduct = Object.assign({}, product, { images: galleryImgs.map(function(g) { return g.src; }) });
+      // If a variant image is currently showing, find its index or prepend it
+      const sv = window._selectedVariant;
+      if (sv && sv.image && mainImg.src.includes(sv.image.split('/').pop())) {
+        const varIdx = product.images.indexOf(sv.image);
+        if (varIdx !== -1) {
+          openEnhancedLightbox(product, varIdx);
+        } else {
+          // Variant image not in product.images — prepend it for lightbox
+          const tempProduct = Object.assign({}, product, { images: [sv.image].concat(product.images) });
+          openEnhancedLightbox(tempProduct, 0);
+        }
+        return;
+      }
+      // Find the currently active thumbnail index instead of always opening image 0
       const activeThumbnail = document.querySelector('.thumbnail.active');
       const activeIndex = activeThumbnail ? parseInt(activeThumbnail.getAttribute('data-index') || '0') : 0;
-      openEnhancedLightbox(lightboxProduct, activeIndex);
+      openEnhancedLightbox(product, activeIndex);
     };
   }
 
   // Keyboard arrow navigation for desktop thumbnails (no visible UI, just keyboard support)
-  if (galleryImages.length > 1 && galleryImages[0].src.startsWith('http')) {
+  if (product.images && product.images.length > 1 && product.images[0].startsWith('http')) {
     document.addEventListener('keydown', function(e) {
       // Don't interfere with typing in inputs, textareas, or when lightbox is open
       const tag = document.activeElement && document.activeElement.tagName;
@@ -813,12 +920,12 @@ async function initProductPage() {
         let currentIdx = activeTh ? parseInt(activeTh.getAttribute('data-index') || '0') : 0;
 
         if (e.key === 'ArrowRight') {
-          currentIdx = currentIdx >= galleryImages.length - 1 ? 0 : currentIdx + 1;
+          currentIdx = currentIdx >= product.images.length - 1 ? 0 : currentIdx + 1;
         } else {
-          currentIdx = currentIdx <= 0 ? galleryImages.length - 1 : currentIdx - 1;
+          currentIdx = currentIdx <= 0 ? product.images.length - 1 : currentIdx - 1;
         }
 
-        changeMainImage(galleryImages[currentIdx].src, currentIdx);
+        changeMainImage(product.images[currentIdx], currentIdx);
       }
     });
   }
@@ -968,11 +1075,14 @@ function setupGalleryOverlay(product) {
   if (!overlay || !closeBtn) return;
 
   carousel.addEventListener('click', () => {
-    // Use the combined gallery images (product + variant images already merged)
-    const combinedImages = buildGalleryImages(product);
-    galleryScroll.innerHTML = combinedImages.map((img, index) => `
+    // Use variant image as first image when a variant is selected
+    const galleryImages = [...product.images];
+    if (window._selectedVariant && window._selectedVariant.image) {
+      galleryImages[0] = window._selectedVariant.image;
+    }
+    galleryScroll.innerHTML = galleryImages.map((img, index) => `
       <div class="gallery-image-wrapper" style="overflow:hidden;">
-        <img src="${img.src}" alt="${product.name} ${index + 1}" style="transform-origin:center center;">
+        <img src="${img}" alt="${product.name} ${index + 1}" style="transform-origin:center center;">
       </div>
     `).join('');
 
@@ -1352,34 +1462,17 @@ function selectVariant(variantId, productId, prefix) {
     if (nameEl) nameEl.textContent = '✓ ' + variant.name;
   });
 
-  // Sync gallery: find thumbnail for this variant and activate it
+  // Swap main image to variant image
   if (variant.image) {
-    const thumbs = document.querySelectorAll('.thumbnail');
-    let found = false;
-    thumbs.forEach(function(thumb, i) {
-      if (thumb.getAttribute('data-variant-id') === String(variantId)) {
-        changeMainImage(variant.image, i);
-        found = true;
-      }
-    });
-    // Fallback: if variant image exists but isn't a separate thumbnail (shared with product image)
-    if (!found) {
-      const mainImg = document.getElementById('mainImage');
-      if (mainImg) mainImg.src = variant.image;
-    }
-
-    // Mobile carousel — scroll to variant image slide
+    const mainImg = document.getElementById('mainImage');
+    if (mainImg) mainImg.src = variant.image;
+    // Mobile carousel — swap first image and scroll page up to show it
     const mobileCarousel = document.getElementById('mobileCarousel');
     if (mobileCarousel) {
-      const slides = mobileCarousel.querySelectorAll('.mobile-carousel-slide');
-      let slideIndex = 0;
-      slides.forEach(function(slide, i) {
-        if (slide.getAttribute('data-variant-id') === String(variantId)) {
-          slideIndex = i;
-        }
-      });
-      const slideWidth = mobileCarousel.offsetWidth;
-      mobileCarousel.scrollTo({ left: slideIndex * slideWidth, behavior: 'smooth' });
+      const firstSlideImg = mobileCarousel.querySelector('.mobile-carousel-slide img');
+      if (firstSlideImg) firstSlideImg.src = variant.image;
+      mobileCarousel.scrollTo({ left: 0, behavior: 'smooth' });
+      // Scroll page up so user sees the image change
       mobileCarousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
@@ -1392,16 +1485,23 @@ function selectVariant(variantId, productId, prefix) {
     updateTierHighlight(product.id);
   }
 
-  // Update price display for selected variant
+  // Update price pill for no-tier variant products
   const variantPrice = variant.price > 0 ? variant.price : product.price;
   document.querySelectorAll('.price-pill .pill-price').forEach(el => {
     el.textContent = `AED ${variantPrice}`;
   });
-  // Update buybox price text
-  document.querySelectorAll('#productPrice, #mobileProductPrice').forEach(el => {
-    if (el && !el.querySelector('.price-pill')) {
-      el.textContent = `AED ${variantPrice}`;
-    }
+
+  // Update early price display with selected variant's price
+  const showOrLess = hasTiers;
+  const priceEn = showOrLess ? `AED ${variantPrice} or less` : `AED ${variantPrice}`;
+  const priceAr = showOrLess ? `${variantPrice} درهم أو أقل` : `${variantPrice} درهم`;
+  ['earlyPriceDesktop', 'earlyPriceMobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const priceRow = el.querySelector('.early-price-en');
+    const priceRowAr = el.querySelector('.early-price-ar');
+    if (priceRow) priceRow.textContent = priceEn;
+    if (priceRowAr) priceRowAr.textContent = priceAr;
   });
 
   // Enable Add to Cart buttons
@@ -1563,22 +1663,6 @@ window.changeMainImage = function(imgSrc, index) {
   const mainImg = document.getElementById('mainImage');
   if (mainImg) mainImg.src = imgSrc;
   document.querySelectorAll('.thumbnail').forEach((thumb, i) => thumb.classList.toggle('active', i === index));
-
-  // Two-way sync: if this thumbnail has a variant, select it
-  const activeThumbnail = document.querySelector('.thumbnail[data-index="' + index + '"]');
-  if (activeThumbnail) {
-    const variantId = activeThumbnail.getAttribute('data-variant-id');
-    if (variantId && variantId !== '') {
-      const product = products.find(function(p) { return p.slug === slug; });
-      if (product) {
-        // Only auto-select if not already selected
-        const currentVariant = window._selectedVariant;
-        if (!currentVariant || currentVariant.id !== parseInt(variantId)) {
-          selectVariant(parseInt(variantId), product.id, 'dsk');
-        }
-      }
-    }
-  }
 };
 
 function setupSearch() {
