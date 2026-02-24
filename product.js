@@ -931,6 +931,104 @@ async function initProductPage() {
   }
 }
 
+// === VARIANT IMAGE POPUP ===
+function openVariantImagePopup(imageSrc, variantName) {
+  // Remove any existing popup
+  const existing = document.querySelector('.variant-img-popup');
+  if (existing) existing.remove();
+
+  const popup = document.createElement('div');
+  popup.className = 'variant-img-popup';
+  popup.innerHTML = `
+    <div class="variant-img-popup-container">
+      <button class="variant-img-popup-close">&times;</button>
+      <img src="${imageSrc}" alt="${variantName || 'Variant image'}">
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  const container = popup.querySelector('.variant-img-popup-container');
+  const img = popup.querySelector('img');
+  const closeBtn = popup.querySelector('.variant-img-popup-close');
+
+  // Pinch-to-zoom state
+  let scale = 1;
+  let lastDist = 0;
+  let originX = 50, originY = 50;
+
+  container.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      lastDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const rect = container.getBoundingClientRect();
+      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      originX = ((midX - rect.left) / rect.width) * 100;
+      originY = ((midY - rect.top) / rect.height) * 100;
+      img.style.transformOrigin = originX + '% ' + originY + '%';
+    }
+  }, { passive: false });
+
+  container.addEventListener('touchmove', function(e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      if (lastDist > 0) {
+        scale = Math.min(5, Math.max(1, scale * (dist / lastDist)));
+        img.style.transform = 'scale(' + scale + ')';
+      }
+      lastDist = dist;
+    }
+  }, { passive: false });
+
+  container.addEventListener('touchend', function(e) {
+    if (e.touches.length < 2) {
+      lastDist = 0;
+      if (scale <= 1.05) {
+        scale = 1;
+        img.style.transform = 'scale(1)';
+        img.style.transformOrigin = 'center center';
+      }
+    }
+  });
+
+  // Double-tap to zoom toggle
+  let lastTap = 0;
+  container.addEventListener('click', function(e) {
+    if (e.target === closeBtn) return;
+    const now = Date.now();
+    if (now - lastTap < 300) {
+      if (scale > 1.05) {
+        scale = 1;
+        img.style.transform = 'scale(1)';
+        img.style.transformOrigin = 'center center';
+      } else {
+        scale = 3;
+        const rect = container.getBoundingClientRect();
+        originX = ((e.clientX - rect.left) / rect.width) * 100;
+        originY = ((e.clientY - rect.top) / rect.height) * 100;
+        img.style.transformOrigin = originX + '% ' + originY + '%';
+        img.style.transform = 'scale(3)';
+      }
+    }
+    lastTap = now;
+  });
+
+  // Close handlers
+  const closePopup = () => popup.remove();
+  closeBtn.onclick = closePopup;
+  popup.addEventListener('click', function(e) { if (e.target === popup) closePopup(); });
+  document.addEventListener('keydown', function handler(e) {
+    if (e.key === 'Escape') { closePopup(); document.removeEventListener('keydown', handler); }
+  });
+}
+
 function openEnhancedLightbox(product, startIndex) {
   let currentIndex = startIndex;
   const images = product.images;
@@ -1256,8 +1354,13 @@ function renderVariantSelector(containerId, product, isMobile) {
     if (isOOS) classes += ' out-of-stock';
     if (isLow) classes += ' low-stock';
 
+    const escapedName = (v.name || '').replace(/'/g, "\\'");
+    const zoomBtn = v.image
+      ? `<button class="variant-img-zoom-btn" onclick="event.stopPropagation();openVariantImagePopup('${v.image}','${escapedName}')">&#128269;</button>`
+      : '';
+
     const imgHTML = v.image
-      ? `<img src="${v.image}" alt="${v.name}" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;border-radius:6px;background:#f8f8f8;">`
+      ? `<div style="position:relative;">${zoomBtn}<img src="${v.image}" alt="${v.name}" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;border-radius:6px;background:#f8f8f8;"></div>`
       : `<div style="width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#f8f8f8;border-radius:6px;font-size:1.5rem;">📦</div>`;
 
     return `
