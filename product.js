@@ -1472,8 +1472,6 @@ function selectVariant(variantId, productId, prefix) {
       const firstSlideImg = mobileCarousel.querySelector('.mobile-carousel-slide img');
       if (firstSlideImg) firstSlideImg.src = variant.image;
       mobileCarousel.scrollTo({ left: 0, behavior: 'smooth' });
-      // Scroll page up so user sees the image change
-      mobileCarousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 
