@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Option B – Giant Symbol on White BG</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #eef1f4; padding: 40px 20px; }
+    .arabic-text { font-family: 'Almarai', sans-serif; direction: rtl; }
+    h1 { text-align: center; font-size: 1.5rem; color: #2c4a5c; margin-bottom: 6px; }
+    .sub { text-align: center; color: #999; font-size: 0.85rem; margin-bottom: 50px; }
+    .section { max-width: 700px; margin: 0 auto 50px; }
+    .label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #e07856; margin-bottom: 6px; }
+    .title { font-size: 1.15rem; font-weight: 700; color: #2c4a5c; margin-bottom: 4px; }
+    .desc { font-size: 0.8rem; color: #888; margin-bottom: 16px; }
+    .frame { background: #fff; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.07); overflow: hidden; padding: 24px; }
+
+    .buybox {
+      background: #ffffff;
+      border: 1.5px solid #e2e8ef;
+      border-radius: 16px;
+      padding: 22px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .buybox-content { position: relative; z-index: 1; }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .price { font-size: 1.15rem; font-weight: 800; color: #2c4a5c; }
+    .price-ar { font-family: 'Almarai', sans-serif; font-size: 1.15rem; font-weight: 800; color: #2c4a5c; direction: rtl; }
+    .cta { padding: 0 1.2rem; height: 38px; background: #1a3a52; color: #fff; border: none; border-radius: 12px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+    .del { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 12px; padding: 7px 12px; background: #f3f5f7; border-radius: 10px; font-size: 0.76rem; color: #5a7a8c; }
+    .del svg { width: 15px; height: 15px; stroke: #e07856; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .orb { position: absolute; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+<h1>Option B: Giant Symbol on White</h1>
+<p class="sub">No peach. White background. One large ORLO orb as watermark.</p>
+
+<!-- VAR 1: Right side -->
+<div class="section">
+  <div class="label">Variation 1</div>
+  <div class="title">Orb Right Side – 6%</div>
+  <div class="desc">Anchored right, cropped by the edge.</div>
+  <div class="frame">
+    <div class="buybox">
+      <svg class="orb" style="top:50%;right:-40px;transform:translateY(-50%);width:220px;height:220px;opacity:0.06;" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#e07856"/><line x1="20" y1="28" x2="58" y2="85" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><line x1="26" y1="20" x2="66" y2="82" stroke="#fff" stroke-width="4" stroke-linecap="round"/><line x1="34" y1="14" x2="74" y2="75" stroke="#fff" stroke-width="3.8" stroke-linecap="round"/><line x1="43" y1="10" x2="81" y2="62" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><line x1="53" y1="10" x2="85" y2="50" stroke="#fff" stroke-width="3" stroke-linecap="round"/><line x1="15" y1="38" x2="48" y2="88" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><line x1="14" y1="50" x2="38" y2="88" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/></svg>
+      <div class="buybox-content">
+        <div class="row">
+          <div class="price">AED 62</div>
+          <button class="cta">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+          <div class="price-ar">٦٢ درهم</div>
+        </div>
+        <div class="del">
+          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Free delivery over AED 75 &nbsp;|&nbsp; <span class="arabic-text" style="font-size:0.7rem;">توصيل مجاني فوق ٧٥ درهم</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VAR 2: Centered -->
+<div class="section">
+  <div class="label">Variation 2</div>
+  <div class="title">Orb Centered – 5%</div>
+  <div class="desc">Centered behind everything, larger than the card.</div>
+  <div class="frame">
+    <div class="buybox">
+      <svg class="orb" style="top:50%;left:50%;transform:translate(-50%,-50%);width:280px;height:280px;opacity:0.05;" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#e07856"/><line x1="20" y1="28" x2="58" y2="85" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><line x1="26" y1="20" x2="66" y2="82" stroke="#fff" stroke-width="4" stroke-linecap="round"/><line x1="34" y1="14" x2="74" y2="75" stroke="#fff" stroke-width="3.8" stroke-linecap="round"/><line x1="43" y1="10" x2="81" y2="62" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><line x1="53" y1="10" x2="85" y2="50" stroke="#fff" stroke-width="3" stroke-linecap="round"/><line x1="15" y1="38" x2="48" y2="88" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><line x1="14" y1="50" x2="38" y2="88" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/></svg>
+      <div class="buybox-content">
+        <div class="row">
+          <div class="price">AED 62</div>
+          <button class="cta">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+          <div class="price-ar">٦٢ درهم</div>
+        </div>
+        <div class="del">
+          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Free delivery over AED 75 &nbsp;|&nbsp; <span class="arabic-text" style="font-size:0.7rem;">توصيل مجاني فوق ٧٥ درهم</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VAR 3: Bottom-right corner -->
+<div class="section">
+  <div class="label">Variation 3</div>
+  <div class="title">Orb Bottom-Right – 8%</div>
+  <div class="desc">Peeking from the bottom-right corner. Bolder.</div>
+  <div class="frame">
+    <div class="buybox">
+      <svg class="orb" style="bottom:-50px;right:-40px;width:200px;height:200px;opacity:0.08;" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#e07856"/><line x1="20" y1="28" x2="58" y2="85" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><line x1="26" y1="20" x2="66" y2="82" stroke="#fff" stroke-width="4" stroke-linecap="round"/><line x1="34" y1="14" x2="74" y2="75" stroke="#fff" stroke-width="3.8" stroke-linecap="round"/><line x1="43" y1="10" x2="81" y2="62" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><line x1="53" y1="10" x2="85" y2="50" stroke="#fff" stroke-width="3" stroke-linecap="round"/><line x1="15" y1="38" x2="48" y2="88" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><line x1="14" y1="50" x2="38" y2="88" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/></svg>
+      <div class="buybox-content">
+        <div class="row">
+          <div class="price">AED 62</div>
+          <button class="cta">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+          <div class="price-ar">٦٢ درهم</div>
+        </div>
+        <div class="del">
+          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Free delivery over AED 75 &nbsp;|&nbsp; <span class="arabic-text" style="font-size:0.7rem;">توصيل مجاني فوق ٧٥ درهم</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VAR 4: Using actual PNG -->
+<div class="section">
+  <div class="label">Variation 4 (with your PNG)</div>
+  <div class="title">Your Actual logo.png as Watermark – 7%</div>
+  <div class="desc">Uses the real hand-drawn PNG. This is what production would look like.</div>
+  <div class="frame">
+    <div class="buybox">
+      <div class="orb" style="top:50%;right:-30px;transform:translateY(-50%);width:200px;height:200px;opacity:0.07;background:url('logo.png') center/contain no-repeat;"></div>
+      <div class="buybox-content">
+        <div class="row">
+          <div class="price">AED 62</div>
+          <button class="cta">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+          <div class="price-ar">٦٢ درهم</div>
+        </div>
+        <div class="del">
+          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Free delivery over AED 75 &nbsp;|&nbsp; <span class="arabic-text" style="font-size:0.7rem;">توصيل مجاني فوق ٧٥ درهم</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
