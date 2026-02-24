@@ -1103,12 +1103,8 @@ function setupGalleryOverlay(product) {
 
     overlay.classList.add('active');
     if (bottomNav) bottomNav.style.display = 'none';
-    // Lock body scroll properly (prevents iOS body scroll bleed behind overlay)
-    var scrollY = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.top = '-' + scrollY + 'px';
-    document.body.style.width = '100%';
-    document.body.style.overflow = 'hidden';
+    // Lock scroll on <html> to preserve scroll position and sticky context
+    document.documentElement.style.overflow = 'hidden';
 
     // Pinch-to-zoom on each image
     galleryScroll.querySelectorAll('.gallery-image-wrapper img').forEach(img => {
@@ -1228,13 +1224,7 @@ function setupGalleryOverlay(product) {
     const rb = overlay.querySelector('.gallery-reset-btn');
     if (rb) rb.classList.remove('visible');
     if (bottomNav) bottomNav.style.display = '';
-    // Restore body scroll position properly
-    var scrollY = parseInt(document.body.style.top || '0') * -1;
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    document.body.style.overflow = '';
-    window.scrollTo(0, scrollY);
+    document.documentElement.style.overflow = '';
   }
 
   closeBtn.addEventListener('click', closeGalleryOverlay);
@@ -1471,12 +1461,14 @@ function selectVariant(variantId, productId, prefix) {
   if (variant.image) {
     const mainImg = document.getElementById('mainImage');
     if (mainImg) mainImg.src = variant.image;
-    // Mobile carousel — scroll to first or swap first image
+    // Mobile carousel — swap first image and scroll page up to show it
     const mobileCarousel = document.getElementById('mobileCarousel');
     if (mobileCarousel) {
       const firstSlideImg = mobileCarousel.querySelector('.mobile-carousel-slide img');
       if (firstSlideImg) firstSlideImg.src = variant.image;
       mobileCarousel.scrollTo({ left: 0, behavior: 'smooth' });
+      // Scroll page up so user sees the image change
+      mobileCarousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 
