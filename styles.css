@@ -1645,18 +1645,13 @@ footer p {
 
 /* Buybox - open layout */
 .product-buybox {
-  background: #ffffff;
-  border: 1.5px solid #e2e8ef;
-  border-radius: 16px;
-  padding: 22px 24px;
+  background: transparent;
+  border-radius: 0;
+  padding-top: 1rem;
   margin-top: 1rem;
   margin-bottom: 1.5rem;
-  overflow: hidden;
-}
-
-.buybox-content {
-  position: relative;
-  z-index: 1;
+  border: none;
+  border-top: 2px solid #f0f0f0;
 }
 
 .product-buybox .price {
@@ -1693,37 +1688,36 @@ footer p {
 .delivery-info {
   display: flex;
   gap: 12px;
-  padding-bottom: 0;
-  margin-bottom: 0;
-  border-bottom: none;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .delivery-item {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 12px;
-  background: #f3f5f7;
-  border-radius: 10px;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #f8fafb;
+  border-radius: 12px;
 }
 
 .delivery-icon {
   font-size: 1.3rem;
   flex-shrink: 0;
-  color: #e07856;
 }
 
 .delivery-en {
   font-size: 0.8rem;
-  color: #5a7a8c;
+  color: #333;
   font-weight: 500;
   text-align: left;
 }
 
 .delivery-ar {
   font-size: 0.8rem;
-  color: #5a7a8c;
+  color: #666;
   text-align: left;
   direction: rtl;
 }
@@ -3563,7 +3557,7 @@ footer p {
 }
 
 /* Desktop buybox with price pill: side-by-side layout */
-.product-buybox.has-price-pill .buybox-content {
+.product-buybox.has-price-pill {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
