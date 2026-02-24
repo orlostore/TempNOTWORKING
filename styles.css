@@ -2138,7 +2138,7 @@ footer p {
 }
 
 .mobile-promo-banner svg {
-  stroke: #e76f51;
+  stroke: #e07856 !important;
 }
 
 .mobile-promo-banner .arabic-text {
@@ -2284,11 +2284,11 @@ footer p {
   .mobile-promo-banner {
     display: block;
     position: fixed;
-    top: 64px;
+    top: 60px;
     left: 10px;
     right: 10px;
     margin: 0;
-    border-radius: 8px;
+    border-radius: 0 0 8px 8px;
     z-index: 999;
     box-shadow: 0 1px 4px rgba(0,0,0,.08);
   }
