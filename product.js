@@ -979,12 +979,8 @@ function openEnhancedLightbox(product, startIndex) {
   `;
   
   document.body.appendChild(lightbox);
-  // Lock body scroll without losing scroll position (preserves sticky gallery)
-  const savedScrollY = window.scrollY;
-  document.body.style.position = 'fixed';
-  document.body.style.top = `-${savedScrollY}px`;
-  document.body.style.width = '100%';
-  document.body.style.overflow = 'hidden';
+  // Lock scroll on <html> to preserve body scroll position and sticky context
+  document.documentElement.style.overflow = 'hidden';
 
   const lightboxImg = document.getElementById('lightboxMainImg');
   const lightboxMainImageContainer = lightbox.querySelector('.lightbox-main-image');
@@ -1043,12 +1039,7 @@ function openEnhancedLightbox(product, startIndex) {
   
   const closeLightbox = () => {
     document.body.removeChild(lightbox);
-    // Restore body scroll and position (preserves sticky gallery)
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    document.body.style.overflow = '';
-    window.scrollTo(0, savedScrollY);
+    document.documentElement.style.overflow = '';
     document.removeEventListener('keydown', handleKeydown);
   };
   
