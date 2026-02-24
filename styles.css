@@ -3174,7 +3174,7 @@ footer p {
 }
 
 .popup-product-price {
-    color: #e07856;
+    color: #2c4a5c;
     font-weight: 700;
     font-size: 0.8rem;
 }
@@ -4210,7 +4210,7 @@ footer p {
 .popular-card-price {
     font-size: 0.8rem;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--primary);
     margin-top: auto;
 }
 .popular-card-badge {
@@ -4358,7 +4358,7 @@ footer p {
 .arrival-card-price {
     font-size: 0.88rem;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--primary);
     margin-top: auto;
 }
 
