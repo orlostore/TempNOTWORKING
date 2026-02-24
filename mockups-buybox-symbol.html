@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy Box – ORLO Symbol Background Concepts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2c4a5c;
+      --accent: #e07856;
+      --text: #333;
+      --bg: #f8f9fa;
+      --white: #ffffff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #eef1f4;
+      color: var(--text);
+      padding: 40px 20px;
+    }
+    .arabic-text {
+      font-family: 'Almarai', sans-serif;
+      direction: rtl;
+      display: inline;
+    }
+    h1.page-title {
+      text-align: center;
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    p.page-sub {
+      text-align: center;
+      color: #888;
+      margin-bottom: 50px;
+      font-size: 0.9rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+    .mockup-section {
+      max-width: 720px;
+      margin: 0 auto 60px;
+    }
+    .mockup-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .mockup-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .mockup-desc {
+      font-size: 0.85rem;
+      color: #777;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .mockup-frame {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .preview-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 28px;
+      margin: 0;
+    }
+    .preview-divider span {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #bbb;
+      white-space: nowrap;
+    }
+    .preview-divider::before,
+    .preview-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #eee;
+    }
+    .mobile-preview {
+      max-width: 375px;
+      margin: 20px auto;
+      border: 2px solid #e8ecef;
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--white);
+    }
+
+    /* ==========================================
+       ORLO ORB SVG DEFINITIONS
+       We define the symbol once and reference it
+       ========================================== */
+
+    /* ==========================================
+       CONCEPT 1 – Repeating Small Orbs Pattern
+       ========================================== */
+    .concept-1 { padding: 24px 28px; }
+    .concept-1 .buybox-card {
+      background: #fdf8f5;
+      border: 1.5px solid #ede0d8;
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .concept-1 .buybox-card .orb-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      background-repeat: repeat;
+      background-size: 48px 48px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23e07856' stroke='%23c96843' stroke-width='2'/%3E%3Cline x1='22' y1='25' x2='60' y2='82' stroke='%23b85a38' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='28' y1='18' x2='70' y2='80' stroke='%23b85a38' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='38' y1='13' x2='78' y2='72' stroke='%23b85a38' stroke-width='3.5' stroke-linecap='round'/%3E%3Cline x1='48' y1='12' x2='83' y2='60' stroke='%23b85a38' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='58' y1='14' x2='82' y2='48' stroke='%23b85a38' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='18' y1='36' x2='52' y2='86' stroke='%23b85a38' stroke-width='3.5' stroke-linecap='round'/%3E%3Cline x1='18' y1='48' x2='42' y2='86' stroke='%23b85a38' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .concept-1 .buybox-card .orb-pattern-offset {
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-repeat: repeat;
+      background-size: 48px 48px;
+      background-position: 24px 24px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23e07856' stroke='%23c96843' stroke-width='2'/%3E%3Cline x1='22' y1='25' x2='60' y2='82' stroke='%23b85a38' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='28' y1='18' x2='70' y2='80' stroke='%23b85a38' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='38' y1='13' x2='78' y2='72' stroke='%23b85a38' stroke-width='3.5' stroke-linecap='round'/%3E%3Cline x1='48' y1='12' x2='83' y2='60' stroke='%23b85a38' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='58' y1='14' x2='82' y2='48' stroke='%23b85a38' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='18' y1='36' x2='52' y2='86' stroke='%23b85a38' stroke-width='3.5' stroke-linecap='round'/%3E%3Cline x1='18' y1='48' x2='42' y2='86' stroke='%23b85a38' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    /* ==========================================
+       CONCEPT 2 – Single Large Watermark Orb
+       ========================================== */
+    .concept-2 { padding: 24px 28px; }
+    .concept-2 .buybox-card {
+      background: linear-gradient(135deg, #fdf8f5 0%, #faf0ea 100%);
+      border: 1.5px solid #ede0d8;
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .concept-2 .buybox-card .orb-watermark {
+      position: absolute;
+      top: 50%;
+      right: -20px;
+      transform: translateY(-50%);
+      width: 180px;
+      height: 180px;
+      opacity: 0.07;
+      pointer-events: none;
+    }
+
+    /* ==========================================
+       CONCEPT 3 – Scattered Organic Orbs (different sizes)
+       ========================================== */
+    .concept-3 { padding: 24px 28px; }
+    .concept-3 .buybox-card {
+      background: #fdf8f5;
+      border: 1.5px solid #ede0d8;
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .concept-3 .buybox-card .orb-scatter {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .concept-3 .buybox-card .orb-scatter .orb {
+      position: absolute;
+      opacity: 0.055;
+    }
+    .concept-3 .buybox-card .orb-scatter .orb-1 {
+      top: -15px; left: -10px; width: 80px; height: 80px;
+      transform: rotate(-15deg);
+    }
+    .concept-3 .buybox-card .orb-scatter .orb-2 {
+      top: 50%; right: -20px; width: 110px; height: 110px;
+      transform: translateY(-50%) rotate(10deg);
+      opacity: 0.05;
+    }
+    .concept-3 .buybox-card .orb-scatter .orb-3 {
+      bottom: -20px; left: 35%; width: 65px; height: 65px;
+      transform: rotate(25deg);
+      opacity: 0.04;
+    }
+    .concept-3 .buybox-card .orb-scatter .orb-4 {
+      top: 5px; left: 55%; width: 40px; height: 40px;
+      transform: rotate(-8deg);
+      opacity: 0.045;
+    }
+    .concept-3 .buybox-card .orb-scatter .orb-5 {
+      bottom: 5px; left: 10%; width: 35px; height: 35px;
+      transform: rotate(20deg);
+      opacity: 0.035;
+    }
+
+    /* ==========================================
+       Shared Buy Box Content Styles
+       ========================================== */
+    .buybox-content {
+      position: relative;
+      z-index: 1;
+    }
+    .buybox-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .price-main {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .price-ar {
+      font-family: 'Almarai', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      direction: rtl;
+    }
+    .cta-btn {
+      width: 200px;
+      height: 38px;
+      padding: 0 1.2rem;
+      background: #1a3a52;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .cta-btn:hover {
+      background: #15303f;
+      transform: translateY(-1px);
+    }
+    .delivery-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 14px;
+      padding: 8px 12px;
+      background: rgba(237, 241, 245, 0.85);
+      border-radius: 10px;
+      font-size: 0.78rem;
+      color: #5a7a8c;
+      backdrop-filter: blur(4px);
+    }
+    .delivery-badge svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ==========================================
+       Mobile Concept Styles
+       ========================================== */
+    .concept-mobile { padding: 16px; }
+    .concept-mobile .buybox-card {
+      border: 1.5px solid #ede0d8;
+      border-radius: 14px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .concept-mobile .buybox-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .concept-mobile .price-main {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .concept-mobile .price-ar {
+      font-size: 1rem;
+    }
+    .concept-mobile .cta-btn {
+      width: 60%;
+      height: 40px;
+      padding: 0 14px;
+      background: #2c4a5c;
+      font-size: 0.85rem;
+    }
+    .concept-mobile .cta-btn:hover { background: #1e3545; }
+    .concept-mobile .delivery-badge {
+      margin-top: 10px;
+      padding: 6px;
+      font-size: 0.72rem;
+    }
+    .concept-mobile .delivery-badge svg { width: 14px; height: 14px; }
+
+    /* Mobile bg variants */
+    .mobile-bg-1 .buybox-card { background: #fdf8f5; }
+    .mobile-bg-2 .buybox-card { background: linear-gradient(135deg, #fdf8f5 0%, #faf0ea 100%); }
+    .mobile-bg-3 .buybox-card { background: #fdf8f5; }
+
+    .footer-note {
+      text-align: center;
+      color: #bbb;
+      font-size: 0.75rem;
+      margin-top: 20px;
+      padding-bottom: 40px;
+    }
+
+    /* Comparison side-by-side */
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .compare-item {
+      text-align: center;
+    }
+    .compare-item .compare-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+    .compare-item .compare-frame {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border: 2px solid #e8ecef;
+    }
+    /* Current flat peach for comparison */
+    .flat-peach-card {
+      background: linear-gradient(135deg, #fff5f0 0%, #ffeee6 100%);
+      border: 1.5px solid #e2e8ef;
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .flat-peach-card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(224,120,86,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hidden SVG definitions for the ORLO orb symbol -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <defs>
+    <!-- ORLO orb symbol: hand-drawn circle with diagonal hatching -->
+    <symbol id="orlo-orb" viewBox="0 0 100 100">
+      <!-- Filled circle -->
+      <circle cx="50" cy="50" r="44" fill="#e07856"/>
+      <!-- Hand-drawn diagonal hatching lines (top-left to bottom-right) -->
+      <line x1="22" y1="25" x2="58" y2="82" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+      <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="36" y1="13" x2="76" y2="73" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+      <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="56" y1="13" x2="84" y2="48" stroke="#c2583a" stroke-width="3" stroke-linecap="round"/>
+      <line x1="18" y1="36" x2="50" y2="86" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="16" y1="48" x2="40" y2="86" stroke="#c2583a" stroke-width="3" stroke-linecap="round"/>
+      <line x1="64" y1="16" x2="86" y2="38" stroke="#c2583a" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<h1 class="page-title">ORLO Symbol in Buy Box</h1>
+<p class="page-sub">Replacing the flat peach background with the ORLO orb symbol &mdash; 3 creative approaches to make the buy box feel branded and unique</p>
+
+<!-- ============================
+     BEFORE / AFTER COMPARISON
+     ============================ -->
+<div class="mockup-section">
+  <div class="mockup-label">Before &amp; After</div>
+  <div class="mockup-title">Flat Peach vs. Symbol Pattern</div>
+  <div class="mockup-desc">Left: the current Concept A flat peach gradient. Right: with the ORLO orb as a repeating texture.</div>
+  <div class="compare-row">
+    <div class="compare-item">
+      <div class="compare-label">Current (flat peach)</div>
+      <div class="compare-frame">
+        <div style="padding: 20px;">
+          <div class="flat-peach-card">
+            <div class="buybox-content">
+              <div class="buybox-row">
+                <div class="price-main">AED 29</div>
+                <div class="price-ar">٢٩ درهم</div>
+              </div>
+              <button class="cta-btn" style="width:100%">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+              <div class="delivery-badge" style="background:#edf1f5">
+                <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                Free delivery over AED 75
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="compare-item">
+      <div class="compare-label">With ORLO symbol</div>
+      <div class="compare-frame">
+        <div style="padding: 20px;">
+          <div style="background:#fdf8f5; border:1.5px solid #ede0d8; border-radius:16px; padding:24px; position:relative; overflow:hidden;">
+            <div class="orb-pattern" style="position:absolute;inset:0;opacity:0.06;background-repeat:repeat;background-size:48px 48px;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23e07856'/%3E%3Cline x1='22' y1='25' x2='58' y2='82' stroke='%23c2583a' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='28' y1='18' x2='68' y2='80' stroke='%23c2583a' stroke-width='4.5' stroke-linecap='round'/%3E%3Cline x1='36' y1='13' x2='76' y2='73' stroke='%23c2583a' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='46' y1='11' x2='82' y2='60' stroke='%23c2583a' stroke-width='3.5' stroke-linecap='round'/%3E%3Cline x1='56' y1='13' x2='84' y2='48' stroke='%23c2583a' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='18' y1='36' x2='50' y2='86' stroke='%23c2583a' stroke-width='3.5' stroke-linecap='round'/%3E%3Cline x1='16' y1='48' x2='40' y2='86' stroke='%23c2583a' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E&quot;);pointer-events:none;"></div>
+            <div class="buybox-content">
+              <div class="buybox-row">
+                <div class="price-main">AED 29</div>
+                <div class="price-ar">٢٩ درهم</div>
+              </div>
+              <button class="cta-btn" style="width:100%">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+              <div class="delivery-badge">
+                <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                Free delivery over AED 75
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     CONCEPT 1 – Repeating Tiled Orbs
+     ============================ -->
+<div class="mockup-section">
+  <div class="mockup-label">Concept 1</div>
+  <div class="mockup-title">Repeating Tiled Orbs</div>
+  <div class="mockup-desc">Many small ORLO orbs repeated in a grid pattern at very low opacity. Creates a branded texture like luxury packaging paper. A second offset layer adds depth.</div>
+  <div class="mockup-frame">
+    <div class="concept-1">
+      <div class="buybox-card">
+        <!-- Two layers of repeating orbs, offset for density -->
+        <div class="orb-pattern"></div>
+        <div class="orb-pattern-offset"></div>
+        <div class="buybox-content">
+          <div class="buybox-row">
+            <div class="price-main">AED 29</div>
+            <button class="cta-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+            <div class="price-ar">٢٩ درهم</div>
+          </div>
+          <div class="delivery-badge">
+            <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Free delivery over AED 75 &nbsp;|&nbsp; <span class="arabic-text" style="font-size: 0.72rem;">توصيل مجاني فوق ٧٥ درهم</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="preview-divider"><span>Mobile Preview</span></div>
+    <div class="mobile-preview">
+      <div class="concept-mobile mobile-bg-1">
+        <div class="buybox-card">
+          <div class="orb-pattern" style="position:absolute;inset:0;opacity:0.06;background-repeat:repeat;background-size:36px 36px;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23e07856'/%3E%3Cline x1='22' y1='25' x2='58' y2='82' stroke='%23c2583a' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='28' y1='18' x2='68' y2='80' stroke='%23c2583a' stroke-width='4.5' stroke-linecap='round'/%3E%3Cline x1='36' y1='13' x2='76' y2='73' stroke='%23c2583a' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='46' y1='11' x2='82' y2='60' stroke='%23c2583a' stroke-width='3.5' stroke-linecap='round'/%3E%3Cline x1='56' y1='13' x2='84' y2='48' stroke='%23c2583a' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='18' y1='36' x2='50' y2='86' stroke='%23c2583a' stroke-width='3.5' stroke-linecap='round'/%3E%3Cline x1='16' y1='48' x2='40' y2='86' stroke='%23c2583a' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E&quot;);pointer-events:none;"></div>
+          <div class="buybox-content">
+            <div class="buybox-row">
+              <div class="price-main">AED 29</div>
+              <button class="cta-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+              <div class="price-ar">٢٩ درهم</div>
+            </div>
+            <div class="delivery-badge">
+              <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Free delivery over AED 75
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     CONCEPT 2 – Single Large Watermark Orb
+     ============================ -->
+<div class="mockup-section">
+  <div class="mockup-label">Concept 2</div>
+  <div class="mockup-title">Single Large Watermark Orb</div>
+  <div class="mockup-desc">One oversized ORLO orb positioned to the right, partially cropped at the edge. Acts as a subtle watermark &mdash; unmistakably branded without being distracting. Think luxury brand tissue paper with the logo embossed once.</div>
+  <div class="mockup-frame">
+    <div class="concept-2">
+      <div class="buybox-card">
+        <!-- Single large orb as watermark -->
+        <svg class="orb-watermark" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="44" fill="#e07856"/>
+          <line x1="22" y1="25" x2="58" y2="82" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+          <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="4.5" stroke-linecap="round"/>
+          <line x1="36" y1="13" x2="76" y2="73" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+          <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="56" y1="13" x2="84" y2="48" stroke="#c2583a" stroke-width="3" stroke-linecap="round"/>
+          <line x1="18" y1="36" x2="50" y2="86" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="16" y1="48" x2="40" y2="86" stroke="#c2583a" stroke-width="3" stroke-linecap="round"/>
+          <line x1="64" y1="16" x2="86" y2="38" stroke="#c2583a" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <div class="buybox-content">
+          <div class="buybox-row">
+            <div class="price-main">AED 29</div>
+            <button class="cta-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+            <div class="price-ar">٢٩ درهم</div>
+          </div>
+          <div class="delivery-badge">
+            <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Free delivery over AED 75 &nbsp;|&nbsp; <span class="arabic-text" style="font-size: 0.72rem;">توصيل مجاني فوق ٧٥ درهم</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="preview-divider"><span>Mobile Preview</span></div>
+    <div class="mobile-preview">
+      <div class="concept-mobile mobile-bg-2">
+        <div class="buybox-card">
+          <svg style="position:absolute;top:50%;right:-15px;transform:translateY(-50%);width:130px;height:130px;opacity:0.07;pointer-events:none;" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" fill="#e07856"/>
+            <line x1="22" y1="25" x2="58" y2="82" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+            <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="36" y1="13" x2="76" y2="73" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+            <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="56" y1="13" x2="84" y2="48" stroke="#c2583a" stroke-width="3" stroke-linecap="round"/>
+            <line x1="18" y1="36" x2="50" y2="86" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="16" y1="48" x2="40" y2="86" stroke="#c2583a" stroke-width="3" stroke-linecap="round"/>
+            <line x1="64" y1="16" x2="86" y2="38" stroke="#c2583a" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <div class="buybox-content">
+            <div class="buybox-row">
+              <div class="price-main">AED 29</div>
+              <button class="cta-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+              <div class="price-ar">٢٩ درهم</div>
+            </div>
+            <div class="delivery-badge">
+              <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Free delivery over AED 75
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     CONCEPT 3 – Scattered Organic Orbs
+     ============================ -->
+<div class="mockup-section">
+  <div class="mockup-label">Concept 3</div>
+  <div class="mockup-title">Scattered Organic Orbs</div>
+  <div class="mockup-desc">Multiple orbs at different sizes and rotations, scattered organically around the card edges. Each one peeks in from corners and sides at varying opacity. Feels playful and artisanal &mdash; like hand-stamped packaging.</div>
+  <div class="mockup-frame">
+    <div class="concept-3">
+      <div class="buybox-card">
+        <div class="orb-scatter">
+          <!-- Top-left large orb -->
+          <svg class="orb orb-1" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" fill="#e07856"/>
+            <line x1="22" y1="25" x2="58" y2="82" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+            <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="36" y1="13" x2="76" y2="73" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+            <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="56" y1="13" x2="84" y2="48" stroke="#c2583a" stroke-width="3" stroke-linecap="round"/>
+            <line x1="18" y1="36" x2="50" y2="86" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="16" y1="48" x2="40" y2="86" stroke="#c2583a" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <!-- Right-center large orb -->
+          <svg class="orb orb-2" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" fill="#e07856"/>
+            <line x1="22" y1="25" x2="58" y2="82" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+            <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="36" y1="13" x2="76" y2="73" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+            <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="56" y1="13" x2="84" y2="48" stroke="#c2583a" stroke-width="3" stroke-linecap="round"/>
+            <line x1="18" y1="36" x2="50" y2="86" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="16" y1="48" x2="40" y2="86" stroke="#c2583a" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <!-- Bottom-center small orb -->
+          <svg class="orb orb-3" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" fill="#e07856"/>
+            <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="36" y1="13" x2="76" y2="73" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+            <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="18" y1="36" x2="50" y2="86" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+          <!-- Top-right small orb -->
+          <svg class="orb orb-4" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" fill="#e07856"/>
+            <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="36" y1="13" x2="76" y2="73" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+            <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="18" y1="36" x2="50" y2="86" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+          <!-- Bottom-left tiny orb -->
+          <svg class="orb orb-5" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="44" fill="#e07856"/>
+            <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="5" stroke-linecap="round"/>
+            <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="buybox-content">
+          <div class="buybox-row">
+            <div class="price-main">AED 29</div>
+            <button class="cta-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+            <div class="price-ar">٢٩ درهم</div>
+          </div>
+          <div class="delivery-badge">
+            <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Free delivery over AED 75 &nbsp;|&nbsp; <span class="arabic-text" style="font-size: 0.72rem;">توصيل مجاني فوق ٧٥ درهم</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="preview-divider"><span>Mobile Preview</span></div>
+    <div class="mobile-preview">
+      <div class="concept-mobile mobile-bg-3">
+        <div class="buybox-card">
+          <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;">
+            <svg style="position:absolute;top:-10px;left:-8px;width:60px;height:60px;opacity:0.055;transform:rotate(-15deg);" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="44" fill="#e07856"/>
+              <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="4.5" stroke-linecap="round"/>
+              <line x1="36" y1="13" x2="76" y2="73" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+              <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+            <svg style="position:absolute;top:45%;right:-15px;width:85px;height:85px;opacity:0.05;transform:translateY(-50%) rotate(10deg);" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="44" fill="#e07856"/>
+              <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="4.5" stroke-linecap="round"/>
+              <line x1="36" y1="13" x2="76" y2="73" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+              <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+              <line x1="18" y1="36" x2="50" y2="86" stroke="#c2583a" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+            <svg style="position:absolute;bottom:-12px;left:30%;width:50px;height:50px;opacity:0.04;transform:rotate(25deg);" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="44" fill="#e07856"/>
+              <line x1="28" y1="18" x2="68" y2="80" stroke="#c2583a" stroke-width="5" stroke-linecap="round"/>
+              <line x1="46" y1="11" x2="82" y2="60" stroke="#c2583a" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="buybox-content">
+            <div class="buybox-row">
+              <div class="price-main">AED 29</div>
+              <button class="cta-btn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+              <div class="price-ar">٢٩ درهم</div>
+            </div>
+            <div class="delivery-badge">
+              <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Free delivery over AED 75
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     BONUS – Opacity Comparison Strip
+     ============================ -->
+<div class="mockup-section">
+  <div class="mockup-label">Opacity Reference</div>
+  <div class="mockup-title">Finding the right subtlety</div>
+  <div class="mockup-desc">The same repeating pattern at different opacity levels. Too visible = distracting. Too faint = pointless. The sweet spot is around 5-7%.</div>
+  <div class="mockup-frame" style="padding: 24px 28px;">
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+      <!-- 3% -->
+      <div>
+        <div style="font-size:0.65rem;font-weight:700;color:#aaa;text-align:center;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">3% opacity</div>
+        <div style="background:#fdf8f5;border:1px solid #ede0d8;border-radius:12px;height:80px;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;opacity:0.03;background-repeat:repeat;background-size:32px 32px;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23e07856'/%3E%3Cline x1='28' y1='18' x2='68' y2='80' stroke='%23c2583a' stroke-width='4.5' stroke-linecap='round'/%3E%3Cline x1='36' y1='13' x2='76' y2='73' stroke='%23c2583a' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='46' y1='11' x2='82' y2='60' stroke='%23c2583a' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E&quot;);"></div>
+        </div>
+      </div>
+      <!-- 6% -->
+      <div>
+        <div style="font-size:0.65rem;font-weight:700;color:var(--accent);text-align:center;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">6% (sweet spot)</div>
+        <div style="background:#fdf8f5;border:1.5px solid var(--accent);border-radius:12px;height:80px;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;opacity:0.06;background-repeat:repeat;background-size:32px 32px;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23e07856'/%3E%3Cline x1='28' y1='18' x2='68' y2='80' stroke='%23c2583a' stroke-width='4.5' stroke-linecap='round'/%3E%3Cline x1='36' y1='13' x2='76' y2='73' stroke='%23c2583a' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='46' y1='11' x2='82' y2='60' stroke='%23c2583a' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E&quot;);"></div>
+        </div>
+      </div>
+      <!-- 10% -->
+      <div>
+        <div style="font-size:0.65rem;font-weight:700;color:#aaa;text-align:center;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">10% opacity</div>
+        <div style="background:#fdf8f5;border:1px solid #ede0d8;border-radius:12px;height:80px;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;opacity:0.10;background-repeat:repeat;background-size:32px 32px;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23e07856'/%3E%3Cline x1='28' y1='18' x2='68' y2='80' stroke='%23c2583a' stroke-width='4.5' stroke-linecap='round'/%3E%3Cline x1='36' y1='13' x2='76' y2='73' stroke='%23c2583a' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='46' y1='11' x2='82' y2='60' stroke='%23c2583a' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E&quot;);"></div>
+        </div>
+      </div>
+      <!-- 15% -->
+      <div>
+        <div style="font-size:0.65rem;font-weight:700;color:#aaa;text-align:center;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">15% opacity</div>
+        <div style="background:#fdf8f5;border:1px solid #ede0d8;border-radius:12px;height:80px;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;opacity:0.15;background-repeat:repeat;background-size:32px 32px;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='%23e07856'/%3E%3Cline x1='28' y1='18' x2='68' y2='80' stroke='%23c2583a' stroke-width='4.5' stroke-linecap='round'/%3E%3Cline x1='36' y1='13' x2='76' y2='73' stroke='%23c2583a' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='46' y1='11' x2='82' y2='60' stroke='%23c2583a' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E&quot;);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">ORLO Store &mdash; Symbol Background Concepts &mdash; Pick your favourite and we'll implement it</div>
+
+</body>
+</html>
