@@ -4475,20 +4475,21 @@ footer p {
   position: absolute;
   top: 4px;
   left: 4px;
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: none;
-  background: rgba(255,255,255,0.8);
-  color: #555;
-  font-size: 0.7rem;
+  background: rgba(0,0,0,0.45);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   z-index: 2;
   pointer-events: auto;
-  line-height: 1;
   padding: 0;
+  transition: background 0.2s;
+}
+.variant-img-zoom-btn:hover {
+  background: rgba(0,0,0,0.65);
 }
