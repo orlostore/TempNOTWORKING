@@ -944,13 +944,15 @@ async function initProductPage() {
         const inCart = stickyCart.find(i => i.id === product.id && !i.variantId);
         if (inCart) {
           stickyBar.innerHTML =
-            '<span class="sticky-cart-price">AED ' + product.price + '</span>' +
-            '<div class="grid-qty-control">' +
-              '<button class="grid-qty-btn" id="stickyMinus">\u2212</button>' +
-              '<span class="grid-qty-display" id="stickyQty">' + inCart.quantity + '</span>' +
-              '<button class="grid-qty-btn" id="stickyPlus">+</button>' +
-            '</div>' +
-            '<span class="sticky-cart-price arabic-text">' + product.price + ' \u062F\u0631\u0647\u0645</span>';
+            '<div class="early-price-row early-price-inline">' +
+              '<span class="early-price-en">AED ' + product.price + '</span>' +
+              '<div class="grid-qty-control">' +
+                '<button class="grid-qty-btn" id="stickyMinus">\u2212</button>' +
+                '<span class="grid-qty-display" id="stickyQty">' + inCart.quantity + '</span>' +
+                '<button class="grid-qty-btn" id="stickyPlus">+</button>' +
+              '</div>' +
+              '<span class="early-price-ar arabic-text">' + product.price + ' \u062F\u0631\u0647\u0645</span>' +
+            '</div>';
           document.getElementById('stickyMinus').onclick = function() {
             productQtyChange(product.id, -1);
             buildStickyContent();
@@ -961,9 +963,11 @@ async function initProductPage() {
           };
         } else {
           stickyBar.innerHTML =
-            '<span class="sticky-cart-price">AED ' + product.price + '</span>' +
-            '<button class="inline-add-to-cart" id="stickyCartBtn">Add to Cart | <span class="arabic-text">\u0623\u0636\u0641 \u0625\u0644\u0649 \u0627\u0644\u0633\u0644\u0629</span></button>' +
-            '<span class="sticky-cart-price arabic-text">' + product.price + ' \u062F\u0631\u0647\u0645</span>';
+            '<div class="early-price-row early-price-inline">' +
+              '<span class="early-price-en">AED ' + product.price + '</span>' +
+              '<button class="inline-add-to-cart" id="stickyCartBtn">Add to Cart | <span class="arabic-text">\u0623\u0636\u0641 \u0625\u0644\u0649 \u0627\u0644\u0633\u0644\u0629</span></button>' +
+              '<span class="early-price-ar arabic-text">' + product.price + ' \u062F\u0631\u0647\u0645</span>' +
+            '</div>';
           document.getElementById('stickyCartBtn').onclick = function() {
             if (addToCartHandler()) {
               var origD = document.getElementById('earlyCartDesktop');
