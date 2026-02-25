@@ -1036,8 +1036,8 @@
                     <h3>Out of Stock</h3>
                     <div class="value" id="statOutOfStock">-</div>
                 </div>
-                <div class="stat-card" style="border-top:3px solid var(--primary);">
-                    <h3>Stock Value</h3>
+                <div class="stat-card" style="border-top:3px solid var(--primary); cursor:pointer;" onclick="toggleStockValueMode()">
+                    <h3 id="statStockValueLabel">Stock Value (Cost)</h3>
                     <div class="value" id="statStockValue">-</div>
                 </div>
                 <div class="stat-card" style="border-left-color: #f5a623;" onclick="filterByStock('bestseller')">
@@ -1594,14 +1594,35 @@
             }).join('');
         }
 
+        let stockValueMode = 'cost'; // 'cost' or 'sale'
+
+        function toggleStockValueMode() {
+            stockValueMode = stockValueMode === 'cost' ? 'sale' : 'cost';
+            updateStockValueDisplay();
+        }
+
+        function updateStockValueDisplay() {
+            const getStock = p => p.totalStock !== undefined ? p.totalStock : p.quantity;
+            const label = document.getElementById('statStockValueLabel');
+            const valueEl = document.getElementById('statStockValue');
+            if (stockValueMode === 'sale') {
+                const total = products.reduce((sum, p) => sum + (p.price || 0) * getStock(p), 0);
+                label.textContent = 'Stock Value (Sale)';
+                valueEl.textContent = 'AED ' + total.toFixed(0);
+            } else {
+                const total = products.reduce((sum, p) => sum + (p.cost || 0) * getStock(p), 0);
+                label.textContent = 'Stock Value (Cost)';
+                valueEl.textContent = 'AED ' + total.toFixed(0);
+            }
+        }
+
         function updateStats() {
             document.getElementById('statTotal').textContent = products.length;
             const getStock = p => p.totalStock !== undefined ? p.totalStock : p.quantity;
             document.getElementById('statInStock').textContent = products.filter(p => getStock(p) > 0).length;
             document.getElementById('statLowStock').textContent = products.filter(p => getStock(p) > 0 && getStock(p) < 10).length;
             document.getElementById('statOutOfStock').textContent = products.filter(p => getStock(p) === 0).length;
-            const totalStockValue = products.reduce((sum, p) => sum + (p.cost || 0) * getStock(p), 0);
-            document.getElementById('statStockValue').textContent = 'AED ' + totalStockValue.toFixed(0);
+            updateStockValueDisplay();
             document.getElementById('statBestSellers').textContent = products.filter(p => p.featured).length;
         }
 
