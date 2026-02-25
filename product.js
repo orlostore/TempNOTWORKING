@@ -1077,6 +1077,56 @@ function openVariantImagePopup(imageSrc, variantName) {
     lastTap = now;
   });
 
+  // Desktop: mouse drag to pan when zoomed
+  let mouseDown = false;
+  let mouseStartX = 0, mouseStartY = 0;
+  let mouseBaseX = 0, mouseBaseY = 0;
+
+  container.addEventListener('mousedown', function(e) {
+    if (e.target === closeBtn || scale <= 1.05) return;
+    e.preventDefault();
+    mouseDown = true;
+    mouseStartX = e.clientX;
+    mouseStartY = e.clientY;
+    mouseBaseX = translateX;
+    mouseBaseY = translateY;
+    container.style.cursor = 'grabbing';
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!mouseDown) return;
+    const dx = (e.clientX - mouseStartX) / scale;
+    const dy = (e.clientY - mouseStartY) / scale;
+    translateX = mouseBaseX + dx;
+    translateY = mouseBaseY + dy;
+    clampPan();
+    applyTransform();
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (mouseDown) {
+      mouseDown = false;
+      container.style.cursor = scale > 1.05 ? 'grab' : '';
+    }
+  });
+
+  // Desktop: mouse wheel to zoom
+  container.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    const rect = container.getBoundingClientRect();
+    img.style.transformOrigin = ((e.clientX - rect.left) / rect.width * 100) + '% ' +
+                                ((e.clientY - rect.top) / rect.height * 100) + '%';
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    scale = Math.min(5, Math.max(1, scale * delta));
+    if (scale <= 1.05) {
+      resetTransform();
+    } else {
+      clampPan();
+      applyTransform();
+      container.style.cursor = 'grab';
+    }
+  }, { passive: false });
+
   // Close handlers — restore body scroll
   const closePopup = () => {
     popup.remove();
