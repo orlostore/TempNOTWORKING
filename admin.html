@@ -14,6 +14,7 @@
     <title>ORLO Admin</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
@@ -980,6 +981,147 @@
             .header-actions { flex-direction: column; }
             .header-actions .btn { width: 100%; }
         }
+
+        /* ── Analytics Tab ── */
+        .analytics-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .analytics-section h2 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        .analytics-chart-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+        }
+        .analytics-chart-box h3 {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .analytics-chart-box canvas {
+            width: 100% !important;
+            max-height: 320px;
+        }
+        .analytics-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .analytics-table th {
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-light);
+            border-bottom: 2px solid var(--border);
+            background: transparent;
+            letter-spacing: 0.5px;
+        }
+        .analytics-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .analytics-table tr:last-child td { border-bottom: none; }
+        .analytics-table .rank { color: var(--text-light); font-weight: 600; width: 30px; }
+        .analytics-table .product-name-cell { font-weight: 600; color: var(--primary); }
+        .analytics-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+        .pareto-line-label {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .analytics-kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .analytics-kpi {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+        }
+        .analytics-kpi .kpi-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .analytics-kpi .kpi-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .turnover-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .turnover-bar-fill {
+            height: 8px;
+            border-radius: 4px;
+            background: var(--accent);
+            min-width: 4px;
+        }
+        .turnover-bar-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+        .analytics-loading {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-light);
+        }
+        .analytics-date-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .analytics-date-filter label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+        .analytics-date-filter select {
+            padding: 8px 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .analytics-date-filter select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        @media (max-width: 768px) {
+            .analytics-grid { grid-template-columns: 1fr; }
+            .analytics-kpi-row { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 400px) {
+            .analytics-kpi-row { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -1015,6 +1157,7 @@
         <div class="tabs">
             <button class="tab active" onclick="switchTab('products')">📦 Products</button>
             <button class="tab" onclick="switchTab('orders')">📋 Orders <span class="tab-badge" id="pendingOrdersBadge">0</span></button>
+            <button class="tab" onclick="switchTab('analytics')">📊 Analytics</button>
         </div>
 
         <!-- Products Tab -->
@@ -1220,6 +1363,111 @@
                                 <tr><td colspan="5" class="loading">Loading...</td></tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div class="tab-content" id="analyticsTab">
+            <div class="analytics-date-filter">
+                <label>📅 Period</label>
+                <select id="analyticsDateFilter" onchange="renderAnalytics()">
+                    <option value="month">This Month</option>
+                    <option value="week">This Week</option>
+                    <option value="year">This Year</option>
+                    <option value="all" selected>All Time</option>
+                </select>
+                <button class="btn btn-primary btn-small" onclick="loadAnalytics()">🔄 Refresh</button>
+            </div>
+
+            <!-- KPI row -->
+            <div class="analytics-kpi-row" id="analyticsKpis">
+                <div class="analytics-kpi"><div class="kpi-label">Total Revenue</div><div class="kpi-value" id="kpiRevenue">-</div></div>
+                <div class="analytics-kpi"><div class="kpi-label">Total Profit</div><div class="kpi-value" id="kpiProfit" style="color:var(--success);">-</div></div>
+                <div class="analytics-kpi"><div class="kpi-label">Orders</div><div class="kpi-value" id="kpiOrders">-</div></div>
+                <div class="analytics-kpi"><div class="kpi-label">Avg Order Value</div><div class="kpi-value" id="kpiAOV">-</div></div>
+                <div class="analytics-kpi"><div class="kpi-label">Unique SKUs Sold</div><div class="kpi-value" id="kpiSKUs">-</div></div>
+            </div>
+
+            <!-- Best Sellers -->
+            <div class="analytics-section">
+                <h2>🏆 Best Sellers</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-chart-box">
+                        <h3>By Quantity Sold</h3>
+                        <canvas id="chartBestQty"></canvas>
+                    </div>
+                    <div class="analytics-chart-box">
+                        <h3>By Revenue</h3>
+                        <canvas id="chartBestRevenue"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pareto -->
+            <div class="analytics-section">
+                <h2>📐 Pareto Analysis (80 / 20)</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-chart-box">
+                        <h3>Revenue — Top SKUs</h3>
+                        <canvas id="chartParetoRevenue"></canvas>
+                    </div>
+                    <div class="analytics-chart-box">
+                        <h3>Profit — Top SKUs</h3>
+                        <canvas id="chartParetoProfit"></canvas>
+                    </div>
+                </div>
+                <div id="paretoInsight" style="margin-top:15px;padding:15px;background:#f8f9fa;border-radius:10px;font-size:0.9rem;color:var(--text);"></div>
+            </div>
+
+            <!-- Profit Margin Ranking -->
+            <div class="analytics-section">
+                <h2>💰 Profit Margin Ranking</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-chart-box">
+                        <h3>Margin % by Product</h3>
+                        <canvas id="chartMargin"></canvas>
+                    </div>
+                    <div class="analytics-chart-box" style="overflow-y:auto;max-height:380px;">
+                        <h3>Detail</h3>
+                        <table class="analytics-table" id="marginTable">
+                            <thead><tr><th>#</th><th>Product</th><th class="num">Revenue</th><th class="num">Cost</th><th class="num">Profit</th><th class="num">Margin</th></tr></thead>
+                            <tbody id="marginTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Turnover -->
+            <div class="analytics-section">
+                <h2>📦 Stock Turnover</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-chart-box">
+                        <h3>Units Sold vs Current Stock</h3>
+                        <canvas id="chartTurnover"></canvas>
+                    </div>
+                    <div class="analytics-chart-box" style="overflow-y:auto;max-height:380px;">
+                        <h3>Turnover Detail</h3>
+                        <table class="analytics-table" id="turnoverTable">
+                            <thead><tr><th>#</th><th>Product</th><th class="num">Sold</th><th class="num">In Stock</th><th class="num">Turnover</th><th>Status</th></tr></thead>
+                            <tbody id="turnoverTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue & AOV Trends -->
+            <div class="analytics-section">
+                <h2>📈 Revenue & AOV Trends</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-chart-box">
+                        <h3>Revenue Over Time</h3>
+                        <canvas id="chartRevenueTrend"></canvas>
+                    </div>
+                    <div class="analytics-chart-box">
+                        <h3>Average Order Value Over Time</h3>
+                        <canvas id="chartAOVTrend"></canvas>
                     </div>
                 </div>
             </div>
@@ -2162,14 +2410,19 @@
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
+
+            const tabs = document.querySelectorAll('.tab');
             if (tab === 'products') {
-                document.querySelector('.tab:first-child').classList.add('active');
+                tabs[0].classList.add('active');
                 document.getElementById('productsTab').classList.add('active');
-            } else {
-                document.querySelector('.tab:last-child').classList.add('active');
+            } else if (tab === 'orders') {
+                tabs[1].classList.add('active');
                 document.getElementById('ordersTab').classList.add('active');
                 loadOrders();
+            } else if (tab === 'analytics') {
+                tabs[2].classList.add('active');
+                document.getElementById('analyticsTab').classList.add('active');
+                loadAnalytics();
             }
         }
         
@@ -2671,6 +2924,434 @@
     }
 }
         
+        // ─── Analytics ─────────────────────────────────────────
+        let analyticsOrders = [];
+        let analyticsLoaded = false;
+        const analyticsCharts = {};
+
+        async function loadAnalytics() {
+            if (analyticsLoaded && analyticsOrders.length) {
+                renderAnalytics();
+                return;
+            }
+            document.getElementById('analyticsKpis').style.opacity = '0.4';
+            try {
+                const response = await fetch('/api/admin/orders?key=' + authKey + '&t=' + Date.now());
+                const data = await response.json();
+                if (data.error) { alert('Analytics load error: ' + data.error); return; }
+                analyticsOrders = (data.orders || []).map(o => ({
+                    ...o,
+                    status: shippedOrders.includes(o.id) ? 'shipped' : o.status
+                }));
+                analyticsLoaded = true;
+                renderAnalytics();
+            } catch (e) {
+                alert('Failed to load analytics: ' + e.message);
+            } finally {
+                document.getElementById('analyticsKpis').style.opacity = '1';
+            }
+        }
+
+        function getAnalyticsFiltered() {
+            const df = document.getElementById('analyticsDateFilter').value;
+            const now = new Date();
+            let start = new Date(0);
+            if (df === 'week') start = new Date(now.getTime() - 7*24*60*60*1000);
+            else if (df === 'month') start = new Date(now.getFullYear(), now.getMonth(), 1);
+            else if (df === 'year') start = new Date(now.getFullYear(), 0, 1);
+            return analyticsOrders.filter(o => new Date(o.created * 1000) >= start);
+        }
+
+        function aggregateSales(filtered) {
+            const map = {};
+            filtered.forEach(order => {
+                order.items.forEach(item => {
+                    if (item.name.toLowerCase().includes('delivery') || item.name.toLowerCase().includes('shipping')) return;
+                    const key = item.name;
+                    if (!map[key]) map[key] = { name: key, units: 0, revenue: 0, cost: 0 };
+                    map[key].units += item.quantity;
+                    map[key].revenue += item.amount / 100;
+                    map[key].cost += getProductCost(item.name) * item.quantity;
+                });
+            });
+            return Object.values(map);
+        }
+
+        function destroyChart(id) {
+            if (analyticsCharts[id]) { analyticsCharts[id].destroy(); delete analyticsCharts[id]; }
+        }
+
+        function renderAnalytics() {
+            const filtered = getAnalyticsFiltered();
+            const sales = aggregateSales(filtered);
+
+            // KPIs
+            const totalRev = sales.reduce((s, p) => s + p.revenue, 0);
+            const totalCost = sales.reduce((s, p) => s + p.cost, 0);
+            const totalProfit = totalRev - totalCost;
+            const orderCount = filtered.length;
+            const aov = orderCount > 0 ? totalRev / orderCount : 0;
+            document.getElementById('kpiRevenue').textContent = 'AED ' + totalRev.toFixed(0);
+            document.getElementById('kpiProfit').textContent = 'AED ' + totalProfit.toFixed(0);
+            document.getElementById('kpiOrders').textContent = orderCount;
+            document.getElementById('kpiAOV').textContent = 'AED ' + aov.toFixed(0);
+            document.getElementById('kpiSKUs').textContent = sales.length;
+
+            renderBestSellers(sales);
+            renderPareto(sales);
+            renderMarginRanking(sales);
+            renderStockTurnover(sales);
+            renderTrends(filtered);
+        }
+
+        // ── Best Sellers ──
+        function renderBestSellers(sales) {
+            // By quantity
+            const byQty = [...sales].sort((a, b) => b.units - a.units).slice(0, 10);
+            destroyChart('bestQty');
+            analyticsCharts.bestQty = new Chart(document.getElementById('chartBestQty'), {
+                type: 'bar',
+                data: {
+                    labels: byQty.map(p => truncLabel(p.name)),
+                    datasets: [{
+                        label: 'Units Sold',
+                        data: byQty.map(p => p.units),
+                        backgroundColor: '#2c4a5c',
+                        borderRadius: 4
+                    }]
+                },
+                options: bestBarOpts('units')
+            });
+
+            // By revenue
+            const byRev = [...sales].sort((a, b) => b.revenue - a.revenue).slice(0, 10);
+            destroyChart('bestRevenue');
+            analyticsCharts.bestRevenue = new Chart(document.getElementById('chartBestRevenue'), {
+                type: 'bar',
+                data: {
+                    labels: byRev.map(p => truncLabel(p.name)),
+                    datasets: [{
+                        label: 'Revenue (AED)',
+                        data: byRev.map(p => p.revenue),
+                        backgroundColor: '#e07856',
+                        borderRadius: 4
+                    }]
+                },
+                options: bestBarOpts('AED')
+            });
+        }
+
+        function truncLabel(name) {
+            return name.length > 22 ? name.substring(0, 20) + '…' : name;
+        }
+
+        function bestBarOpts(unit) {
+            return {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { callback: v => unit === 'AED' ? v.toLocaleString() : v } },
+                    y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+                }
+            };
+        }
+
+        // ── Pareto ──
+        function renderPareto(sales) {
+            renderParetoChart('chartParetoRevenue', sales, 'revenue', 'Revenue');
+            renderParetoChart('chartParetoProfit', sales, 'profit', 'Profit');
+
+            // Insight text
+            const byRev = [...sales].sort((a, b) => b.revenue - a.revenue);
+            const totalRev = byRev.reduce((s, p) => s + p.revenue, 0);
+            if (byRev.length === 0) {
+                document.getElementById('paretoInsight').innerHTML = 'No sales data for this period.';
+                return;
+            }
+            let cumul = 0, count80 = 0;
+            for (const p of byRev) {
+                cumul += p.revenue;
+                count80++;
+                if (cumul >= totalRev * 0.8) break;
+            }
+            const pct = ((count80 / byRev.length) * 100).toFixed(0);
+            document.getElementById('paretoInsight').innerHTML =
+                '<strong>' + count80 + ' out of ' + byRev.length + ' products (' + pct + '%)</strong> generate 80% of your revenue (AED ' + cumul.toFixed(0) + ' of AED ' + totalRev.toFixed(0) + ').';
+        }
+
+        function renderParetoChart(canvasId, sales, metric, label) {
+            const sorted = [...sales].sort((a, b) => {
+                const va = metric === 'profit' ? (a.revenue - a.cost) : a.revenue;
+                const vb = metric === 'profit' ? (b.revenue - b.cost) : b.revenue;
+                return vb - va;
+            });
+            const values = sorted.map(p => metric === 'profit' ? (p.revenue - p.cost) : p.revenue);
+            const total = values.reduce((s, v) => s + v, 0);
+            const labels = sorted.map(p => truncLabel(p.name));
+
+            // Cumulative %
+            let cumul = 0;
+            const cumulPct = values.map(v => { cumul += v; return total > 0 ? (cumul / total) * 100 : 0; });
+
+            // Find 80% line crossing
+            const lineAt80 = cumulPct.findIndex(v => v >= 80);
+
+            // Color bars: highlight those contributing to 80%
+            const barColors = values.map((_, i) => i <= lineAt80 ? '#e07856' : '#c8d6df');
+
+            destroyChart(canvasId);
+            analyticsCharts[canvasId] = new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: label + ' (AED)',
+                            data: values,
+                            backgroundColor: barColors,
+                            borderRadius: 3,
+                            yAxisID: 'y',
+                            order: 2
+                        },
+                        {
+                            type: 'line',
+                            label: 'Cumulative %',
+                            data: cumulPct,
+                            borderColor: '#2c4a5c',
+                            backgroundColor: 'transparent',
+                            pointRadius: 2,
+                            pointBackgroundColor: '#2c4a5c',
+                            borderWidth: 2,
+                            yAxisID: 'y1',
+                            order: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        annotation: undefined
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 45 } },
+                        y: { grid: { color: '#f0f0f0' }, ticks: { callback: v => v.toLocaleString() }, title: { display: true, text: label + ' (AED)', font: { size: 11 } } },
+                        y1: { position: 'right', min: 0, max: 100, grid: { display: false }, ticks: { callback: v => v + '%', font: { size: 10 } }, title: { display: true, text: 'Cumul. %', font: { size: 11 } } }
+                    }
+                },
+                plugins: [{
+                    id: 'pareto80line',
+                    afterDraw(chart) {
+                        const yScale = chart.scales.y1;
+                        const y80 = yScale.getPixelForValue(80);
+                        const ctx = chart.ctx;
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.setLineDash([6, 4]);
+                        ctx.strokeStyle = '#dc3545';
+                        ctx.lineWidth = 1.5;
+                        ctx.moveTo(chart.chartArea.left, y80);
+                        ctx.lineTo(chart.chartArea.right, y80);
+                        ctx.stroke();
+                        ctx.fillStyle = '#dc3545';
+                        ctx.font = '11px Inter, sans-serif';
+                        ctx.fillText('80%', chart.chartArea.right + 4, y80 + 4);
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        // ── Profit Margin Ranking ──
+        function renderMarginRanking(sales) {
+            const data = sales.map(p => ({
+                name: p.name,
+                revenue: p.revenue,
+                cost: p.cost,
+                profit: p.revenue - p.cost,
+                margin: p.revenue > 0 ? ((p.revenue - p.cost) / p.revenue) * 100 : 0
+            })).sort((a, b) => b.margin - a.margin);
+
+            // Chart
+            const top = data.slice(0, 15);
+            destroyChart('chartMargin');
+            analyticsCharts.chartMargin = new Chart(document.getElementById('chartMargin'), {
+                type: 'bar',
+                data: {
+                    labels: top.map(p => truncLabel(p.name)),
+                    datasets: [{
+                        label: 'Margin %',
+                        data: top.map(p => p.margin),
+                        backgroundColor: top.map(p => p.margin >= 30 ? '#28a745' : p.margin >= 15 ? '#ffc107' : '#dc3545'),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { callback: v => v + '%' }, min: 0 },
+                        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+                    }
+                }
+            });
+
+            // Table
+            document.getElementById('marginTableBody').innerHTML = data.map((p, i) =>
+                '<tr>' +
+                '<td class="rank">' + (i + 1) + '</td>' +
+                '<td class="product-name-cell">' + p.name + '</td>' +
+                '<td class="num">AED ' + p.revenue.toFixed(0) + '</td>' +
+                '<td class="num">AED ' + p.cost.toFixed(0) + '</td>' +
+                '<td class="num" style="color:' + (p.profit >= 0 ? 'var(--success)' : 'var(--danger)') + ';font-weight:600;">AED ' + p.profit.toFixed(0) + '</td>' +
+                '<td class="num" style="font-weight:600;color:' + (p.margin >= 30 ? 'var(--success)' : p.margin >= 15 ? '#b38600' : 'var(--danger)') + ';">' + p.margin.toFixed(1) + '%</td>' +
+                '</tr>'
+            ).join('');
+        }
+
+        // ── Stock Turnover ──
+        function renderStockTurnover(sales) {
+            const turnoverData = sales.map(p => {
+                const product = products.find(pr =>
+                    p.name.toLowerCase().includes(pr.name.toLowerCase()) ||
+                    pr.name.toLowerCase().includes(p.name.toLowerCase())
+                );
+                const currentStock = product ? (product.totalStock || product.quantity || 0) : 0;
+                const ratio = currentStock > 0 ? (p.units / currentStock) : (p.units > 0 ? 999 : 0);
+                return { name: p.name, sold: p.units, stock: currentStock, ratio: ratio };
+            }).sort((a, b) => b.ratio - a.ratio);
+
+            // Chart — grouped bar
+            const top = turnoverData.slice(0, 12);
+            destroyChart('chartTurnover');
+            analyticsCharts.chartTurnover = new Chart(document.getElementById('chartTurnover'), {
+                type: 'bar',
+                data: {
+                    labels: top.map(p => truncLabel(p.name)),
+                    datasets: [
+                        { label: 'Sold', data: top.map(p => p.sold), backgroundColor: '#e07856', borderRadius: 3 },
+                        { label: 'In Stock', data: top.map(p => p.stock), backgroundColor: '#2c4a5c', borderRadius: 3 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 45 } },
+                        y: { grid: { color: '#f0f0f0' } }
+                    }
+                }
+            });
+
+            // Table
+            document.getElementById('turnoverTableBody').innerHTML = turnoverData.map((p, i) => {
+                let status, statusColor;
+                if (p.stock === 0 && p.sold > 0) { status = 'Sold Out'; statusColor = 'var(--danger)'; }
+                else if (p.ratio >= 2) { status = 'Fast Mover'; statusColor = 'var(--success)'; }
+                else if (p.ratio >= 0.5) { status = 'Healthy'; statusColor = 'var(--primary)'; }
+                else if (p.ratio > 0) { status = 'Slow'; statusColor = '#b38600'; }
+                else { status = 'Dead Stock'; statusColor = 'var(--danger)'; }
+                return '<tr>' +
+                    '<td class="rank">' + (i + 1) + '</td>' +
+                    '<td class="product-name-cell">' + p.name + '</td>' +
+                    '<td class="num">' + p.sold + '</td>' +
+                    '<td class="num">' + p.stock + '</td>' +
+                    '<td class="num">' + (p.ratio === 999 ? '∞' : p.ratio.toFixed(1) + 'x') + '</td>' +
+                    '<td style="font-weight:600;color:' + statusColor + ';">' + status + '</td>' +
+                    '</tr>';
+            }).join('');
+        }
+
+        // ── Revenue & AOV Trends ──
+        function renderTrends(filtered) {
+            if (filtered.length === 0) {
+                destroyChart('chartRevenueTrend');
+                destroyChart('chartAOVTrend');
+                return;
+            }
+
+            // Group by date
+            const byDate = {};
+            filtered.forEach(order => {
+                const d = new Date(order.created * 1000);
+                const key = d.toISOString().split('T')[0];
+                if (!byDate[key]) byDate[key] = { revenue: 0, orders: 0 };
+                const shipping = (order.shipping_amount || 0) / 100;
+                const total = order.amount_total / 100;
+                byDate[key].revenue += (total - shipping);
+                byDate[key].orders += 1;
+            });
+
+            const dates = Object.keys(byDate).sort();
+            const revenues = dates.map(d => byDate[d].revenue);
+            const aovs = dates.map(d => byDate[d].orders > 0 ? byDate[d].revenue / byDate[d].orders : 0);
+            const dateLabels = dates.map(d => {
+                const dt = new Date(d + 'T00:00:00');
+                return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+            });
+
+            // Revenue trend
+            destroyChart('chartRevenueTrend');
+            analyticsCharts.chartRevenueTrend = new Chart(document.getElementById('chartRevenueTrend'), {
+                type: 'line',
+                data: {
+                    labels: dateLabels,
+                    datasets: [{
+                        label: 'Revenue (AED)',
+                        data: revenues,
+                        borderColor: '#e07856',
+                        backgroundColor: 'rgba(224,120,86,0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#e07856',
+                        borderWidth: 2
+                    }]
+                },
+                options: trendOpts('AED')
+            });
+
+            // AOV trend
+            destroyChart('chartAOVTrend');
+            analyticsCharts.chartAOVTrend = new Chart(document.getElementById('chartAOVTrend'), {
+                type: 'line',
+                data: {
+                    labels: dateLabels,
+                    datasets: [{
+                        label: 'AOV (AED)',
+                        data: aovs,
+                        borderColor: '#2c4a5c',
+                        backgroundColor: 'rgba(44,74,92,0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#2c4a5c',
+                        borderWidth: 2
+                    }]
+                },
+                options: trendOpts('AED')
+            });
+        }
+
+        function trendOpts(unit) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 45 } },
+                    y: { grid: { color: '#f0f0f0' }, ticks: { callback: v => unit === 'AED' ? v.toLocaleString() : v } }
+                }
+            };
+        }
+
         checkAuth();
     </script>
 </body>
