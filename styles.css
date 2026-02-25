@@ -4492,3 +4492,37 @@ footer p {
   line-height: 1;
   padding: 0;
 }
+
+/* ============================================
+   STICKY ADD-TO-CART BAR (non-variant products)
+   ============================================ */
+.sticky-cart-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 8px 1.34rem;
+  background: var(--white);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.sticky-cart-bar.visible {
+  display: flex;
+}
+
+.sticky-cart-price {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 768px) {
+  .sticky-cart-price {
+    font-size: 0.85rem;
+  }
+}
