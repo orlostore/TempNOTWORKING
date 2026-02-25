@@ -285,6 +285,18 @@ function getCategoryArabic(category) {
     return product && product.categoryAr ? product.categoryAr : '';
 }
 
+function formatProductPrice(p, arabicMode) {
+    const hasTiers = p.pricingTiers && p.pricingTiers.length > 0;
+    let hasMultipleVariantPrices = false;
+    if (p.variants && p.variants.length > 0) {
+        const prices = p.variants.filter(v => v.quantity > 0).map(v => v.price > 0 ? v.price : p.price).filter(x => x > 0);
+        hasMultipleVariantPrices = new Set(prices).size > 1;
+    }
+    const showOrLess = hasTiers || hasMultipleVariantPrices;
+    if (arabicMode) return showOrLess ? `${p.price} د.إ أو أقل` : `${p.price} د.إ`;
+    return showOrLess ? `AED ${p.price} or less` : `AED ${p.price}`;
+}
+
 function renderProducts(list, arabicMode) {
     const grid = document.getElementById("productsGrid");
     if (!grid) return;
@@ -349,17 +361,7 @@ function renderProducts(list, arabicMode) {
                 <a href="product.html?product=${p.slug}" style="text-decoration:none; color:inherit;">
                     ${titleHTML}
                 </a>
-                <div class="product-price">${(() => {
-                    const hasTiers = p.pricingTiers && p.pricingTiers.length > 0;
-                    let hasMultipleVariantPrices = false;
-                    if (p.variants && p.variants.length > 0) {
-                        const prices = p.variants.filter(v => v.quantity > 0).map(v => v.price > 0 ? v.price : p.price).filter(x => x > 0);
-                        hasMultipleVariantPrices = new Set(prices).size > 1;
-                    }
-                    const showOrLess = hasTiers || hasMultipleVariantPrices;
-                    if (arabicMode) return showOrLess ? `${p.price} د.إ أو أقل` : `${p.price} د.إ`;
-                    return showOrLess ? `AED ${p.price} or less` : `AED ${p.price}`;
-                })()}</div>
+                <div class="product-price">${formatProductPrice(p, arabicMode)}</div>
                 ${buttonHTML}
             </div>
         </div>
@@ -513,7 +515,7 @@ function showAutocomplete(term) {
             ${imgHTML}
             <div class="autocomplete-item-info">
                 <div class="autocomplete-item-name">${arMode ? `<span class="arabic-text">${p.nameAr || p.name}</span>` : p.name}</div>
-                <div class="autocomplete-item-price">${arMode ? `${p.price} د.إ` : `AED ${p.price}`}</div>
+                <div class="autocomplete-item-price">${formatProductPrice(p, arMode)}</div>
             </div>
         </div>`;
     }).join('');
@@ -759,7 +761,7 @@ function updateCart() {
                         ${upsellProducts.map(p => `
                             <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
                                 <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
-                                <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">AED ${p.price}</div>
+                                <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${formatProductPrice(p, false)}</div>
                                 <button onclick="addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
                             </div>
                         `).join('')}
@@ -779,7 +781,7 @@ function updateCart() {
                                 ${upsellProducts.map(p => `
                                     <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
                                         <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
-                                        <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">AED ${p.price}</div>
+                                        <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${formatProductPrice(p, false)}</div>
                                         <button onclick="event.stopPropagation(); addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
                                     </div>
                                 `).join('')}
@@ -1165,7 +1167,7 @@ function populatePopularNow() {
             <div class="popular-card-info">
                 <div class="popular-card-name">${p.name}</div>
                 ${p.nameAr ? `<div class="popular-card-name-ar">${p.nameAr}</div>` : ''}
-                <div class="popular-card-price">AED ${p.price}</div>
+                <div class="popular-card-price">${formatProductPrice(p, false)}</div>
             </div>
         </a>`;
     }).join('');
@@ -1212,7 +1214,7 @@ function populateNewArrivals() {
                 <div class="arrival-card-badge">New</div>
                 <div class="arrival-card-name">${p.name}</div>
                 ${p.nameAr ? `<div class="arrival-card-name-ar">${p.nameAr}</div>` : ''}
-                <div class="arrival-card-price">AED ${p.price}</div>
+                <div class="arrival-card-price">${formatProductPrice(p, false)}</div>
             </div>
         </a>`;
     }).join('');
