@@ -30,7 +30,24 @@ export async function onRequestPost(context) {
             }
         }
 
-        // 2. Send shipping email via Resend
+        // 2. Best-effort: update Stripe checkout session metadata
+        if (env.STRIPE_SECRET_KEY) {
+            try {
+                await fetch(`https://api.stripe.com/v1/checkout/sessions/${order_id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}`,
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'metadata[shipped]=true&metadata[shipped_date]=' + encodeURIComponent(new Date().toISOString())
+                });
+            } catch (stripeError) {
+                // Stripe doesn't allow updating completed sessions — this is expected to fail
+                console.error('Stripe metadata update failed (non-blocking):', stripeError);
+            }
+        }
+
+        // 3. Send shipping email via Resend
         let emailSent = false;
         let emailError = null;
 
