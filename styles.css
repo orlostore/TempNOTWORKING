@@ -4493,20 +4493,3 @@ footer p {
   padding: 0;
 }
 
-/* ============================================
-   STICKY ADD-TO-CART BAR (non-variant products)
-   ============================================ */
-.sticky-cart-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  display: none;
-  background: var(--white);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  padding: 8px 1.34rem;
-}
-
-.sticky-cart-bar.visible {
-  display: block;
-}
