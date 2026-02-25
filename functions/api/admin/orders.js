@@ -24,29 +24,44 @@ export async function onRequestGet(context) {
     }
     
     try {
-        // Fetch checkout sessions from Stripe (last 100)
-        const response = await fetch('https://api.stripe.com/v1/checkout/sessions?limit=100&expand[]=data.customer_details&expand[]=data.line_items', {
+        // Fetch shipped order IDs from D1 (source of truth)
+        let shippedOrderIds = new Set();
+        if (env.DB) {
+            try {
+                const { results } = await env.DB.prepare(
+                    'SELECT order_id FROM shipped_orders'
+                ).all();
+                for (const row of results) {
+                    shippedOrderIds.add(row.order_id);
+                }
+            } catch (dbError) {
+                console.error('D1 shipped_orders query failed (non-blocking):', dbError);
+            }
+        }
+
+        // Fetch checkout sessions from Stripe (last 100), expand payment_intent for shipped metadata
+        const response = await fetch('https://api.stripe.com/v1/checkout/sessions?limit=100&expand[]=data.customer_details&expand[]=data.line_items&expand[]=data.payment_intent', {
             headers: {
                 'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
             }
         });
-        
+
         const data = await response.json();
-        
+
         if (data.error) {
             return new Response(JSON.stringify({ error: data.error.message }), {
                 status: 400,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
-        
+
         // Format orders
         const orders = await Promise.all(data.data
             .filter(session => session.payment_status === 'paid')
             .map(async session => {
                 // Fetch line items separately if not expanded
                 let lineItems = session.line_items?.data || [];
-                
+
                 if (!lineItems.length) {
                     const itemsResponse = await fetch(`https://api.stripe.com/v1/checkout/sessions/${session.id}/line_items`, {
                         headers: {
@@ -56,7 +71,12 @@ export async function onRequestGet(context) {
                     const itemsData = await itemsResponse.json();
                     lineItems = itemsData.data || [];
                 }
-                
+
+                // Check D1 first, then PaymentIntent metadata, then session metadata
+                const isShipped = shippedOrderIds.has(session.id)
+                    || session.payment_intent?.metadata?.shipped === 'true'
+                    || session.metadata?.shipped === 'true';
+
                 return {
                     id: session.id,
                     created: session.created,
@@ -73,13 +93,13 @@ export async function onRequestGet(context) {
                         amount: item.amount_total
                     })),
                     metadata: session.metadata || {},
-                    status: session.metadata?.shipped === 'true' ? 'shipped' : 'pending'
+                    status: isShipped ? 'shipped' : 'pending'
                 };
             }));
-        
+
         return new Response(JSON.stringify({ orders }), {
             status: 200,
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': 'https://orlostore.com'
             }
