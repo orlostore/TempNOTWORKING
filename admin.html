@@ -2518,9 +2518,9 @@
 
             const itemsRows = productItems.map(item => `
                 <tr>
-                    <td style="padding:8px 0;border-bottom:1px solid #eee;">${item.name}</td>
-                    <td style="padding:8px 0;border-bottom:1px solid #eee;text-align:center;">${item.quantity}</td>
-                    <td style="padding:8px 0;border-bottom:1px solid #eee;text-align:right;">AED ${(item.amount / 100).toFixed(2)}</td>
+                    <td style="padding:4px 0;border-bottom:1px solid #eee;">${item.name}</td>
+                    <td style="padding:4px 0;border-bottom:1px solid #eee;text-align:center;">${item.quantity}</td>
+                    <td style="padding:4px 0;border-bottom:1px solid #eee;text-align:right;">AED ${(item.amount / 100).toFixed(2)}</td>
                 </tr>
             `).join('');
 
@@ -2530,26 +2530,26 @@
 <head>
 <title>Packing Slip - ${order.id.slice(-8).toUpperCase()}</title>
 <style>
-    @page { size: A5; margin: 12mm; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; color: #333; margin: 0; padding: 20px; max-width: 500px; margin: 0 auto; }
-    .header { text-align: center; border-bottom: 2px solid #2c4a5c; padding-bottom: 15px; margin-bottom: 20px; }
-    .header img { width: 60px; height: 60px; }
-    .header h2 { margin: 5px 0 0; color: #2c4a5c; font-size: 16px; letter-spacing: 2px; }
-    .meta { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 13px; }
-    .section-title { font-size: 11px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-bottom: 5px; }
-    .customer-name { font-weight: 600; font-size: 15px; }
-    .customer-details { font-size: 13px; color: #555; line-height: 1.6; }
-    table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
-    th { text-align: left; padding: 8px 0; border-bottom: 2px solid #2c4a5c; font-size: 11px; text-transform: uppercase; color: #999; letter-spacing: 1px; }
+    @page { size: A5; margin: 8mm; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #333; margin: 0; padding: 10px; max-width: 100%; }
+    .header { text-align: center; border-bottom: 2px solid #2c4a5c; padding-bottom: 8px; margin-bottom: 10px; }
+    .header img { width: 40px; height: 40px; }
+    .header h2 { margin: 3px 0 0; color: #2c4a5c; font-size: 13px; letter-spacing: 2px; }
+    .meta { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 11px; }
+    .section-title { font-size: 9px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-bottom: 3px; }
+    .customer-name { font-weight: 600; font-size: 12px; }
+    .customer-details { font-size: 11px; color: #555; line-height: 1.4; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 11px; }
+    th { text-align: left; padding: 5px 0; border-bottom: 2px solid #2c4a5c; font-size: 9px; text-transform: uppercase; color: #999; letter-spacing: 1px; }
     th:last-child { text-align: right; }
     th:nth-child(2) { text-align: center; }
-    .totals td { border-bottom: none; padding: 5px 0; font-size: 13px; }
-    .totals .total-row { font-weight: 700; font-size: 15px; border-top: 2px solid #2c4a5c; padding-top: 8px; }
-    .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-    .footer .thanks { font-size: 13px; color: #2c4a5c; line-height: 1.7; }
-    .footer .thanks-ar { font-size: 12px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; margin-top: 8px; line-height: 1.7; }
+    .totals td { border-bottom: none; padding: 3px 0; font-size: 11px; }
+    .totals .total-row { font-weight: 700; font-size: 13px; border-top: 2px solid #2c4a5c; padding-top: 5px; }
+    .footer { text-align: center; margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; }
+    .footer .thanks { font-size: 11px; color: #2c4a5c; line-height: 1.5; }
+    .footer .thanks-ar { font-size: 10px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; margin-top: 5px; line-height: 1.5; }
     .footer .heart-icon { vertical-align: middle; margin: 0 1px; }
-    .footer .site { font-size: 11px; color: #aaa; margin-top: 12px; }
+    .footer .site { font-size: 9px; color: #aaa; margin-top: 6px; }
     @media print { body { padding: 0; } }
 </style>
 </head>
@@ -2570,7 +2570,7 @@
         </div>
     </div>
 
-    <div style="margin-bottom:20px;">
+    <div style="margin-bottom:10px;">
         <div class="section-title">Ship To</div>
         <div class="customer-name">${order.customer_name}</div>
         <div class="customer-details">
@@ -2594,8 +2594,8 @@
     </table>
 
     <div class="footer">
-        <div class="thanks">Thank you for your order! <svg class="heart-icon" viewBox="0 0 24 24" width="14" height="14"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#e07856"/></svg><br>ORLO is a family-owned Dubai brand — every order you place supports a local business built on trust, simplicity, and fair pricing.</div>
-        <div class="thanks-ar">شكراً لطلبك! <svg class="heart-icon" viewBox="0 0 24 24" width="14" height="14"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#e07856"/></svg><br>اورلو علامة عائلية من دبي — كل طلب منك يدعم مشروعاً محلياً مبنياً على الثقة والبساطة</div>
+        <div class="thanks">Thank you for your order! <svg class="heart-icon" viewBox="0 0 24 24" width="11" height="11"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#e07856"/></svg><br>ORLO is a family-owned Dubai brand — every order you place supports a local business built on trust, simplicity, and fair pricing.</div>
+        <div class="thanks-ar">شكراً لطلبك! <svg class="heart-icon" viewBox="0 0 24 24" width="11" height="11"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#e07856"/></svg><br>اورلو علامة عائلية من دبي — كل طلب منك يدعم مشروعاً محلياً مبنياً على الثقة والبساطة</div>
         <div class="site">orlostore.com</div>
     </div>
 </body>
