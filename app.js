@@ -349,7 +349,17 @@ function renderProducts(list, arabicMode) {
                 <a href="product.html?product=${p.slug}" style="text-decoration:none; color:inherit;">
                     ${titleHTML}
                 </a>
-                <div class="product-price">${arabicMode ? `${p.price} د.إ` : `AED ${p.price}`}</div>
+                <div class="product-price">${(() => {
+                    const hasTiers = p.pricingTiers && p.pricingTiers.length > 0;
+                    let hasMultipleVariantPrices = false;
+                    if (p.variants && p.variants.length > 0) {
+                        const prices = p.variants.filter(v => v.quantity > 0).map(v => v.price > 0 ? v.price : p.price).filter(x => x > 0);
+                        hasMultipleVariantPrices = new Set(prices).size > 1;
+                    }
+                    const showOrLess = hasTiers || hasMultipleVariantPrices;
+                    if (arabicMode) return showOrLess ? `${p.price} د.إ أو أقل` : `${p.price} د.إ`;
+                    return showOrLess ? `AED ${p.price} or less` : `AED ${p.price}`;
+                })()}</div>
                 ${buttonHTML}
             </div>
         </div>
