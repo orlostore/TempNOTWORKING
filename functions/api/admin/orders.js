@@ -39,8 +39,8 @@ export async function onRequestGet(context) {
             }
         }
 
-        // Fetch checkout sessions from Stripe (last 100)
-        const response = await fetch('https://api.stripe.com/v1/checkout/sessions?limit=100&expand[]=data.customer_details&expand[]=data.line_items', {
+        // Fetch checkout sessions from Stripe (last 100), expand payment_intent for shipped metadata
+        const response = await fetch('https://api.stripe.com/v1/checkout/sessions?limit=100&expand[]=data.customer_details&expand[]=data.line_items&expand[]=data.payment_intent', {
             headers: {
                 'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
             }
@@ -72,8 +72,10 @@ export async function onRequestGet(context) {
                     lineItems = itemsData.data || [];
                 }
 
-                // Check D1 first (source of truth), then fall back to Stripe metadata
-                const isShipped = shippedOrderIds.has(session.id) || session.metadata?.shipped === 'true';
+                // Check D1 first, then PaymentIntent metadata, then session metadata
+                const isShipped = shippedOrderIds.has(session.id)
+                    || session.payment_intent?.metadata?.shipped === 'true'
+                    || session.metadata?.shipped === 'true';
 
                 return {
                     id: session.id,

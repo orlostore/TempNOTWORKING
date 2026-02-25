@@ -30,20 +30,28 @@ export async function onRequestPost(context) {
             }
         }
 
-        // 2. Best-effort: update Stripe checkout session metadata
+        // 2. Update Stripe PaymentIntent metadata (sessions can't be updated, but PaymentIntents can)
         if (env.STRIPE_SECRET_KEY) {
             try {
-                await fetch(`https://api.stripe.com/v1/checkout/sessions/${order_id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}`,
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'metadata[shipped]=true&metadata[shipped_date]=' + encodeURIComponent(new Date().toISOString())
+                // First, get the payment_intent ID from the checkout session
+                const sessionRes = await fetch(`https://api.stripe.com/v1/checkout/sessions/${order_id}`, {
+                    headers: { 'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}` }
                 });
+                const sessionData = await sessionRes.json();
+                const paymentIntentId = sessionData.payment_intent;
+
+                if (paymentIntentId) {
+                    await fetch(`https://api.stripe.com/v1/payment_intents/${paymentIntentId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}`,
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'metadata[shipped]=true&metadata[shipped_date]=' + encodeURIComponent(new Date().toISOString())
+                    });
+                }
             } catch (stripeError) {
-                // Stripe doesn't allow updating completed sessions — this is expected to fail
-                console.error('Stripe metadata update failed (non-blocking):', stripeError);
+                console.error('Stripe PaymentIntent metadata update failed (non-blocking):', stripeError);
             }
         }
 
