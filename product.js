@@ -773,6 +773,12 @@ async function initProductPage() {
 
   if (detailsContainer) detailsContainer.innerHTML = detailsHTML;
 
+  // Move details section below buybox for variant non-tiered mobile
+  if (hasVariants && !hasTiers && detailsContainer) {
+    const buybox = document.querySelector('.mobile-buybox-compact');
+    if (buybox) buybox.after(detailsContainer);
+  }
+
   // Check if product already in cart - show transformed button
   // For variant products, don't auto-transform (variant must be selected first)
   if (!hasVariants) {
