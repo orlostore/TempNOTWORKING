@@ -28,13 +28,13 @@ export async function onRequestGet(context) {
                 }
             }
         );
-        
+
         const session = await stripeResponse.json();
-        
+
         if (session.error) {
             return Response.json({ error: 'Session not found' }, { status: 404 });
         }
-        
+
         // Return only customer details (don't expose sensitive data)
         return Response.json({
             success: true,

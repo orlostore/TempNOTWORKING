@@ -339,14 +339,22 @@ sessionStorage.removeItem('orlo_checkout_pending');
     </div>
 
     <script>
-        // GA4: track purchase conversion
+        // GA4: track purchase conversion with full e-commerce data (from local cart)
         if (typeof gtag === 'function') {
             const urlP = new URLSearchParams(window.location.search);
             const sid = urlP.get('session_id');
             if (sid) {
+                var cartData = [];
+                try { cartData = JSON.parse(localStorage.getItem('cart') || '[]'); } catch(e) {}
+                var gaItems = cartData.map(function(item) {
+                    return { item_id: String(item.id), item_name: item.name, price: item.price, quantity: item.quantity || 1 };
+                });
+                var total = cartData.reduce(function(sum, item) { return sum + (item.price * (item.quantity || 1)); }, 0);
                 gtag('event', 'purchase', {
                     transaction_id: sid,
-                    currency: 'AED'
+                    value: total,
+                    currency: 'AED',
+                    items: gaItems
                 });
             }
         }
