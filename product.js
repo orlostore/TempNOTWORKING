@@ -512,6 +512,12 @@ async function initProductPage() {
     if (earlyPriceMobile) {
       earlyPriceMobile.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintMobile');
       earlyPriceMobile.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
+      if (!hasTiers) {
+        const earlyRow = earlyPriceMobile.querySelector('.early-price-row');
+        const arSpan = earlyRow && earlyRow.querySelector('.early-price-ar');
+        const mobileCartBtn = document.getElementById('mobileAddToCartBtn');
+        if (earlyRow && arSpan && mobileCartBtn) earlyRow.insertBefore(mobileCartBtn, arSpan);
+      }
       if (hasTiers) {
         document.getElementById('earlyHintMobile').onclick = function() {
           const delivery = document.querySelector('.mobile-delivery-info');
