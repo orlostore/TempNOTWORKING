@@ -35,15 +35,15 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
     // Remove any existing tooltip
     const existing = document.getElementById('limitTooltip');
     if (existing) existing.remove();
-    
+
     // Clear any existing timer
     if (window.limitTooltipTimer) {
       clearTimeout(window.limitTooltipTimer);
     }
-    
+
     // Determine message type
     const isStockLimit = maxAllowed < MAX_QTY_PER_PRODUCT;
-    
+
     let messageEn, messageAr;
     if (isStockLimit) {
       messageEn = `Only <span class="highlight">${maxAllowed}</span> left in stock`;
@@ -52,7 +52,7 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
       messageEn = `Limit of <span class="highlight">${MAX_QTY_PER_PRODUCT}</span> per order`;
       messageAr = `الحد الأقصى <span class="highlight">${toArabicNumerals(MAX_QTY_PER_PRODUCT)}</span> لكل طلب`;
     }
-    
+
     // Create tooltip
     const tooltip = document.createElement('div');
     tooltip.id = 'limitTooltip';
@@ -62,24 +62,37 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
       ${messageEn}
       <span class="tooltip-text-ar">${messageAr}</span>
     `;
-    
-    // Find the correct container (the transformed button or its parent)
+
+    // Find the anchor element (the qty button or its container)
     const isMobile = window.innerWidth <= 768;
-    let container;
+    let anchor;
     if (isMobile) {
-      container = document.querySelector(`.mobile-product-page [id="transformedBtn-${productId}"]`)
-        || document.querySelector('.mobile-product-page .early-price')
+      anchor = document.querySelector(`.mobile-product-page [id="transformedBtn-${productId}"]`)
+        || document.querySelector('#earlyCartMobile')
+        || document.querySelector('#mobileAddToCartBtn')
         || document.querySelector('.mobile-cart-section');
     } else {
-      container = document.getElementById(`transformedBtn-${productId}`)
-        || document.querySelector('.early-price-inline')
+      anchor = document.getElementById(`transformedBtn-${productId}`)
+        || document.querySelector('#earlyCartDesktop')
+        || document.querySelector('#addToCartBtn')
         || document.querySelector('.product-buybox');
     }
-    
-    if (container) {
-      container.appendChild(tooltip);
-    }
-    
+
+    if (!anchor) return;
+
+    // Append to body to avoid overflow:hidden clipping from .early-price
+    document.body.appendChild(tooltip);
+
+    // Position above the anchor using fixed coordinates
+    const rect = anchor.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const left = Math.max(8, Math.min(
+      rect.left + rect.width / 2 - tooltipRect.width / 2,
+      window.innerWidth - tooltipRect.width - 8
+    ));
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = (rect.top - tooltipRect.height - 10) + 'px';
+
     // Auto-dismiss after 3 seconds
     window.limitTooltipTimer = setTimeout(() => {
       const tip = document.getElementById('limitTooltip');

@@ -3659,17 +3659,13 @@ footer p {
    ============================================ */
 .product-buybox,
 .mobile-cart-section,
-.early-price-inline,
-.early-price {
+.early-price-inline {
   position: relative;
 }
 
 
 .limit-tooltip {
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -3682,7 +3678,7 @@ footer p {
   border: 1px solid rgba(255,255,255,0.8);
   white-space: nowrap;
   text-align: center;
-  z-index: 100;
+  z-index: 10000;
   animation: tooltipFadeIn 0.3s ease forwards;
 }
 
@@ -3737,22 +3733,22 @@ footer p {
 @keyframes tooltipFadeIn {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(5px);
+    transform: translateY(5px);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
 }
 
 @keyframes tooltipFadeOut {
   from {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
   to {
     opacity: 0;
-    transform: translateX(-50%) translateY(5px);
+    transform: translateY(5px);
   }
 }
 
