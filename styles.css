@@ -3546,8 +3546,18 @@ footer p {
 }
 
 @media (max-width: 768px) {
-  .variant-grid {
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  .variant-grid.variant-grid-scroll {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 10px;
+    padding-bottom: 4px;
+  }
+  .variant-grid.variant-grid-scroll::-webkit-scrollbar { display: none; }
+  .variant-grid.variant-grid-scroll .variant-tile {
+    flex: 0 0 calc((100% - 20px) / 3);
+    min-width: 0;
   }
   .tier-table {
     flex-wrap: wrap;
