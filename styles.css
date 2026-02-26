@@ -1567,6 +1567,22 @@ footer p {
   min-width: 180px;
 }
 
+/* Non-variant mobile: cart button + qty control inside early-price */
+.early-price .mobile-add-to-cart {
+  margin-top: 8px;
+}
+.early-price .product-btn-transformed,
+.early-price .grid-qty-control {
+  display: inline-flex;
+  width: auto;
+  min-width: 180px;
+  margin-top: 8px;
+  height: 36px;
+}
+.early-price .product-btn-transformed .grid-qty-btn {
+  height: 36px;
+}
+
 /* Delivery info injected into early-price for non-variant */
 .early-delivery-info {
   display: flex;

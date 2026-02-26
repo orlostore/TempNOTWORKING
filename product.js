@@ -531,10 +531,12 @@ async function initProductPage() {
       }
     }
   } else if (product.price) {
-    // Non-variant products: show price + Add to Cart inline
-    const earlyHTML = `<div class="early-price-row early-price-inline"><span class="early-price-en">AED ${product.price}</span><button class="inline-add-to-cart" id="__BTN_ID__">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button><span class="early-price-ar arabic-text">${product.price} درهم</span></div>`;
-    if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTML.replace('__BTN_ID__', 'earlyCartDesktop');
-    if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTML.replace('__BTN_ID__', 'earlyCartMobile');
+    // Non-variant products: desktop keeps inline layout
+    const earlyHTMLDesktop = `<div class="early-price-row early-price-inline"><span class="early-price-en">AED ${product.price}</span><button class="inline-add-to-cart" id="earlyCartDesktop">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button><span class="early-price-ar arabic-text">${product.price} درهم</span></div>`;
+    if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTMLDesktop;
+    // Non-variant products: mobile gets stacked layout matching variant style
+    const earlyHTMLMobile = `<div class="early-price-row"><span class="early-price-en">AED ${product.price}</span><span class="early-price-ar arabic-text">${product.price} درهم</span></div><button class="mobile-add-to-cart" id="earlyCartMobile">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+    if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTMLMobile;
   } else {
     if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
     if (earlyPriceMobile) earlyPriceMobile.style.display = 'none';
