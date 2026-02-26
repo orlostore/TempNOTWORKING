@@ -530,24 +530,12 @@ async function initProductPage() {
       }
     }
     if (earlyPriceMobile) {
-      earlyPriceMobile.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintMobile');
+      earlyPriceMobile.innerHTML = earlyHTML;
       earlyPriceMobile.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
       if (!hasTiers) {
         const earlyRow = earlyPriceMobile.querySelector('.early-price-row');
         const mobileCartBtn = document.getElementById('mobileAddToCartBtn');
         if (earlyRow && mobileCartBtn) earlyRow.after(mobileCartBtn);
-      }
-      if (hasTiers) {
-        document.getElementById('earlyHintMobile').onclick = function() {
-          const tiersEl = document.getElementById('pricingTiersMobile');
-          const bottomNav = document.getElementById('mobileBottomNav');
-          if (tiersEl) {
-            const rect = tiersEl.getBoundingClientRect();
-            const navHeight = bottomNav ? bottomNav.offsetHeight : 0;
-            const targetY = window.scrollY + rect.bottom - (window.innerHeight - navHeight);
-            window.scrollTo({top: targetY, behavior: 'smooth'});
-          }
-        };
       }
     }
   } else if (product.price) {
