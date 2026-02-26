@@ -1664,7 +1664,7 @@ function renderPricingTiers(containerId, product) {
 
   const isMobile = containerId.includes('Mobile');
   container.innerHTML = `
-    <div class="pricing-tiers" data-product-id="${product.id}" style="margin-bottom:1rem; ${isMobile ? 'padding: 0 15px;' : ''}">
+    <div class="pricing-tiers" data-product-id="${product.id}" style="margin-bottom:1rem; ${isMobile ? 'padding: 0 16px;' : ''}">
       ${isMobile ? '' : '<div class="pricing-tiers-label">Quantity Pricing | <span class="arabic-text">تسعير الكمية</span></div>'}
       <div class="tier-table">${tiersHTML}</div>
       ${isMobile ? '' : `<div class="your-price-bar${activeDiscount > 0 ? ' has-savings' : ''}" style="margin-top:6px;">
