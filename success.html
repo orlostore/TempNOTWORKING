@@ -339,31 +339,25 @@ sessionStorage.removeItem('orlo_checkout_pending');
     </div>
 
     <script>
-        // GA4: track purchase conversion with full e-commerce data
-        (async function() {
+        // GA4: track purchase conversion with full e-commerce data (from local cart)
+        if (typeof gtag === 'function') {
             const urlP = new URLSearchParams(window.location.search);
             const sid = urlP.get('session_id');
-            if (sid && typeof gtag === 'function') {
-                try {
-                    const res = await fetch('/api/checkout/session?session_id=' + encodeURIComponent(sid));
-                    const data = await res.json();
-                    if (data.success && data.order) {
-                        gtag('event', 'purchase', {
-                            transaction_id: sid,
-                            value: data.order.amount_total,
-                            currency: data.order.currency,
-                            items: data.order.items
-                        });
-                    } else {
-                        // Fallback: fire event without value/items
-                        gtag('event', 'purchase', { transaction_id: sid, currency: 'AED' });
-                    }
-                } catch (e) {
-                    // Fallback if API call fails
-                    gtag('event', 'purchase', { transaction_id: sid, currency: 'AED' });
-                }
+            if (sid) {
+                var cartData = [];
+                try { cartData = JSON.parse(localStorage.getItem('cart') || '[]'); } catch(e) {}
+                var gaItems = cartData.map(function(item) {
+                    return { item_id: String(item.id), item_name: item.name, price: item.price, quantity: item.quantity || 1 };
+                });
+                var total = cartData.reduce(function(sum, item) { return sum + (item.price * (item.quantity || 1)); }, 0);
+                gtag('event', 'purchase', {
+                    transaction_id: sid,
+                    value: total,
+                    currency: 'AED',
+                    items: gaItems
+                });
             }
-        })();
+        }
 
         localStorage.removeItem('cart');
 
