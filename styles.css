@@ -3659,7 +3659,8 @@ footer p {
    ============================================ */
 .product-buybox,
 .mobile-cart-section,
-.early-price-inline {
+.early-price-inline,
+.early-price {
   position: relative;
 }
 
