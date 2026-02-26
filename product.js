@@ -514,9 +514,8 @@ async function initProductPage() {
       earlyPriceMobile.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
       if (!hasTiers) {
         const earlyRow = earlyPriceMobile.querySelector('.early-price-row');
-        const arSpan = earlyRow && earlyRow.querySelector('.early-price-ar');
         const mobileCartBtn = document.getElementById('mobileAddToCartBtn');
-        if (earlyRow && arSpan && mobileCartBtn) earlyRow.insertBefore(mobileCartBtn, arSpan);
+        if (earlyRow && mobileCartBtn) earlyRow.after(mobileCartBtn);
       }
       if (hasTiers) {
         document.getElementById('earlyHintMobile').onclick = function() {
