@@ -492,40 +492,38 @@ async function initProductPage() {
     const priceEn = showOrLess ? `AED ${displayPrice} or less` : `AED ${displayPrice}`;
     const priceAr = showOrLess ? `${displayPrice} درهم أو أقل` : `${displayPrice} درهم`;
     const earlyHTML = `<div class="early-price-row"><span class="early-price-en">${priceEn}</span><span class="early-price-ar arabic-text">${priceAr}</span></div>`;
-    let hintEn, hintAr;
+    let hintHTML = '';
     if (hasTiers) {
-      hintEn = 'Click to choose design & quantity for exact price ▼';
-      hintAr = 'اضغط لاختيار التصميم والكمية للسعر الدقيق ▼';
-    } else if (hasMultipleVariantPrices) {
-      hintEn = 'Click to choose a design for exact price ▼';
-      hintAr = 'اضغط لاختيار التصميم للسعر الدقيق ▼';
-    } else {
-      hintEn = 'Click to choose a design ▼';
-      hintAr = 'اضغط لاختيار التصميم ▼';
+      const hintEn = 'Click to choose design & quantity for exact price ▼';
+      const hintAr = 'اضغط لاختيار التصميم والكمية للسعر الدقيق ▼';
+      hintHTML = `<a class="early-price-hint" id="__HINT_ID__"><span>${hintEn}</span><span class="arabic-text">${hintAr}</span></a>`;
     }
-    const hintHTML = `<a class="early-price-hint" id="__HINT_ID__"><span>${hintEn}</span><span class="arabic-text">${hintAr}</span></a>`;
     const earlyDeliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
     if (earlyPriceDesktop) {
       earlyPriceDesktop.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintDesktop');
       earlyPriceDesktop.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
-      document.getElementById('earlyHintDesktop').onclick = function() {
-        const delivery = document.querySelector('.product-buybox .delivery-info');
-        if (delivery) delivery.scrollIntoView({behavior:'smooth', block:'end'});
-      };
+      if (hasTiers) {
+        document.getElementById('earlyHintDesktop').onclick = function() {
+          const delivery = document.querySelector('.product-buybox .delivery-info');
+          if (delivery) delivery.scrollIntoView({behavior:'smooth', block:'end'});
+        };
+      }
     }
     if (earlyPriceMobile) {
       earlyPriceMobile.innerHTML = earlyHTML + hintHTML.replace('__HINT_ID__', 'earlyHintMobile');
       earlyPriceMobile.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
-      document.getElementById('earlyHintMobile').onclick = function() {
-        const delivery = document.querySelector('.mobile-delivery-info');
-        const bottomNav = document.getElementById('mobileBottomNav');
-        if (delivery) {
-          const rect = delivery.getBoundingClientRect();
-          const navHeight = bottomNav ? bottomNav.offsetHeight : 0;
-          const targetY = window.scrollY + rect.bottom - (window.innerHeight - navHeight);
-          window.scrollTo({top: targetY, behavior: 'smooth'});
-        }
-      };
+      if (hasTiers) {
+        document.getElementById('earlyHintMobile').onclick = function() {
+          const delivery = document.querySelector('.mobile-delivery-info');
+          const bottomNav = document.getElementById('mobileBottomNav');
+          if (delivery) {
+            const rect = delivery.getBoundingClientRect();
+            const navHeight = bottomNav ? bottomNav.offsetHeight : 0;
+            const targetY = window.scrollY + rect.bottom - (window.innerHeight - navHeight);
+            window.scrollTo({top: targetY, behavior: 'smooth'});
+          }
+        };
+      }
     }
   } else if (product.price) {
     // Non-variant products: show price + Add to Cart inline
