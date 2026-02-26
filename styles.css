@@ -1567,19 +1567,25 @@ footer p {
   min-width: 180px;
 }
 
-/* Non-variant mobile: cart button + qty control inside early-price */
+/* Non-variant mobile: stacked layout inside early-price */
+.mobile-product-header .early-price {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
 .early-price .mobile-add-to-cart {
+  display: block;
+  width: 100%;
   margin-top: 8px;
 }
-.early-price .product-btn-transformed,
-.early-price .grid-qty-control {
-  display: inline-flex;
-  width: auto;
-  min-width: 180px;
+.mobile-product-header .early-price .product-btn-transformed,
+.mobile-product-header .early-price .grid-qty-control {
+  display: flex;
+  width: 100%;
   margin-top: 8px;
   height: 36px;
 }
-.early-price .product-btn-transformed .grid-qty-btn {
+.mobile-product-header .early-price .product-btn-transformed .grid-qty-btn {
   height: 36px;
 }
 
@@ -3359,9 +3365,8 @@ footer p {
 }
 
 .mobile-cart-section .product-btn-transformed {
-  display: inline-flex;
-  width: auto;
-  min-width: 180px;
+  display: flex;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   height: 36px;

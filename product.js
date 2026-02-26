@@ -188,12 +188,17 @@ function resetToAddButton(productId) {
   // Reset ALL transformed buttons for this product (both desktop and mobile)
   document.querySelectorAll(`[id="transformedBtn-${productId}"]`).forEach(transformed => {
     const isMobile = transformed.closest('.mobile-product-page') !== null;
-    const isInline = transformed.closest('.early-price-inline') !== null;
+    const isEarlyPrice = transformed.closest('.early-price') !== null;
 
-    if (isInline) {
-      // Non-variant inline button inside early-price row
-      const btnId = isMobile ? 'earlyCartMobile' : 'earlyCartDesktop';
-      transformed.outerHTML = `<button class="inline-add-to-cart" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+    if (isEarlyPrice) {
+      // Non-variant button inside early-price container
+      if (isMobile) {
+        // Mobile: stacked layout — full-width mobile-add-to-cart
+        transformed.outerHTML = `<button class="mobile-add-to-cart" id="earlyCartMobile">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+      } else {
+        // Desktop: inline layout inside early-price-row
+        transformed.outerHTML = `<button class="inline-add-to-cart" id="earlyCartDesktop">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+      }
     } else {
       const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
       const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
@@ -207,7 +212,9 @@ function resetToAddButton(productId) {
     if (product.quantity === 0) return false;
 
     let localCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const item = localCart.find(i => i.id === product.id);
+    const item = hasVariants
+      ? localCart.find(i => i.id === product.id)
+      : localCart.find(i => i.id === product.id && !i.variantId);
     const currentInCart = item ? item.quantity : 0;
     const maxAllowed = Math.min(MAX_QTY_PER_PRODUCT, product.quantity);
 
