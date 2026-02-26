@@ -727,7 +727,17 @@ async function initProductPage() {
     // Move early-price below variant selector for variant non-tiered products
     if (!hasTiers && earlyPriceMobile) {
       const variantSelector = document.getElementById('variantSelectorMobile');
-      if (variantSelector) variantSelector.after(earlyPriceMobile);
+      if (variantSelector) {
+        variantSelector.after(earlyPriceMobile);
+        // Wrap variant selector + early price in a sticky container
+        const stickyWrap = document.createElement('div');
+        stickyWrap.className = 'mobile-sticky-buybar';
+        const headerH = document.querySelector('header') ? document.querySelector('header').offsetHeight : 56;
+        stickyWrap.style.top = headerH + 'px';
+        variantSelector.before(stickyWrap);
+        stickyWrap.appendChild(variantSelector);
+        stickyWrap.appendChild(earlyPriceMobile);
+      }
     }
   }
 
