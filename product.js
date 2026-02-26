@@ -83,7 +83,7 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
     // Append to body to avoid overflow:hidden clipping from .early-price
     document.body.appendChild(tooltip);
 
-    // Position above the anchor using fixed coordinates
+    // Position above the anchor using page coordinates (scrolls with content)
     const rect = anchor.getBoundingClientRect();
     const tooltipRect = tooltip.getBoundingClientRect();
     const left = Math.max(8, Math.min(
@@ -91,7 +91,7 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
       window.innerWidth - tooltipRect.width - 8
     ));
     tooltip.style.left = left + 'px';
-    tooltip.style.top = (rect.top - tooltipRect.height - 10) + 'px';
+    tooltip.style.top = (window.scrollY + rect.top - tooltipRect.height - 10) + 'px';
 
     // Auto-dismiss after 3 seconds
     window.limitTooltipTimer = setTimeout(() => {
