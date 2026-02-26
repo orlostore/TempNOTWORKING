@@ -821,11 +821,13 @@ async function initProductPage() {
     if (buybox) buybox.after(detailsContainer);
   }
 
-  // Move variant selector above early price for variant tiered mobile
+  // Move variant selector above early price, carousel above variant selector for variant tiered mobile
   if (hasVariants && hasTiers) {
     const variantSelector = document.getElementById('variantSelectorMobile');
     if (variantSelector && earlyPriceMobile) {
       earlyPriceMobile.before(variantSelector);
+      const carouselContainer = document.querySelector('.mobile-carousel-container');
+      if (carouselContainer) variantSelector.before(carouselContainer);
     }
   }
 
