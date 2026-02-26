@@ -827,7 +827,10 @@ async function initProductPage() {
     if (variantSelector && earlyPriceMobile) {
       earlyPriceMobile.before(variantSelector);
       const carouselContainer = document.querySelector('.mobile-carousel-container');
-      if (carouselContainer) variantSelector.before(carouselContainer);
+      if (carouselContainer) {
+        variantSelector.before(carouselContainer);
+        carouselContainer.style.marginBottom = '8px';
+      }
     }
   }
 
