@@ -1533,15 +1533,65 @@ function renderVariantSelector(containerId, product, isMobile) {
     `;
   }).join('');
 
-  container.innerHTML = `
-    <div class="variant-section" style="${isMobile ? 'padding: 0 16px;' : ''}">
-      <div class="variant-label">
-        <span>Choose Design | <span class="arabic-text">اختر التصميم</span></span>
-        <span class="variant-selected-name" id="${prefix}-selectedName"></span>
+  if (isMobile) {
+    container.innerHTML = `
+      <div class="variant-section" style="padding: 0 16px;">
+        <div class="variant-label">
+          <span>Choose Design | <span class="arabic-text">اختر التصميم</span></span>
+          <span class="variant-selected-name" id="${prefix}-selectedName"></span>
+        </div>
+        <div class="scroll-wrapper">
+          <button class="scroll-arrow scroll-arrow-left" data-dir="-1" aria-label="Scroll left">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="variant-grid variant-grid-scroll">${tilesHTML}</div>
+          <button class="scroll-arrow scroll-arrow-right" data-dir="1" aria-label="Scroll right">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
+        </div>
       </div>
-      <div class="variant-grid">${tilesHTML}</div>
-    </div>
-  `;
+    `;
+    // Init scroll arrows for the variant grid
+    const wrapper = container.querySelector('.scroll-wrapper');
+    if (wrapper) {
+      const scrollEl = wrapper.querySelector('.variant-grid-scroll');
+      const leftBtn = wrapper.querySelector('.scroll-arrow-left');
+      const rightBtn = wrapper.querySelector('.scroll-arrow-right');
+
+      function updateArrows() {
+        const maxScroll = scrollEl.scrollWidth - scrollEl.clientWidth;
+        if (maxScroll <= 2) {
+          leftBtn.classList.remove('visible');
+          rightBtn.classList.remove('visible');
+          return;
+        }
+        leftBtn.classList.toggle('visible', scrollEl.scrollLeft > 2);
+        rightBtn.classList.toggle('visible', scrollEl.scrollLeft < maxScroll - 2);
+      }
+
+      function scrollByCard(dir) {
+        const card = scrollEl.querySelector('.variant-tile');
+        const distance = card ? card.offsetWidth + 10 : 120;
+        scrollEl.scrollBy({ left: dir * distance, behavior: 'smooth' });
+      }
+
+      leftBtn.addEventListener('click', () => scrollByCard(-1));
+      rightBtn.addEventListener('click', () => scrollByCard(1));
+      scrollEl.addEventListener('scroll', updateArrows, { passive: true });
+      window.addEventListener('resize', updateArrows);
+      requestAnimationFrame(() => { requestAnimationFrame(updateArrows); });
+    }
+  } else {
+    container.innerHTML = `
+      <div class="variant-section">
+        <div class="variant-label">
+          <span>Choose Design | <span class="arabic-text">اختر التصميم</span></span>
+          <span class="variant-selected-name" id="${prefix}-selectedName"></span>
+        </div>
+        <div class="variant-grid">${tilesHTML}</div>
+      </div>
+    `;
+  }
 }
 
 // === PRICING TIERS RENDERING ===
