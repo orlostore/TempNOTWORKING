@@ -1,0 +1,2651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORLO Digital Marketing Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #2c4a5c;
+            --accent: #e07856;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --bg: #f4f6f9;
+            --card: #ffffff;
+            --text: #333;
+            --text-light: #666;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .header-stat {
+            text-align: center;
+        }
+        
+        .header-stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .header-stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 5px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border-radius: 8px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover { background: #f0f0f0; }
+        .tab.active { background: var(--primary); color: white; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Grid layouts */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        
+        @media (max-width: 1024px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (max-width: 768px) {
+            .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+            .header { flex-direction: column; text-align: center; }
+            .header-stats { flex-wrap: wrap; justify-content: center; }
+        }
+        
+        /* Budget Cards */
+        .budget-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .budget-card:hover { border-color: var(--accent); }
+        .budget-card.selected { border-color: var(--primary); background: #e8f4f8; }
+        
+        .budget-card h3 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .budget-card .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 10px 0;
+        }
+        
+        .budget-card .price span {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+        
+        .budget-card ul {
+            text-align: left;
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .budget-card ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.85rem;
+        }
+        
+        .budget-card ul li:last-child { border-bottom: none; }
+        
+        .budget-card ul li::before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        /* Channel Cards */
+        .channel-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .channel-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .channel-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .channel-icon.tiktok { background: #000; }
+        .channel-icon.facebook { background: #1877f2; }
+        .channel-icon.google { background: #4285f4; }
+        .channel-icon.whatsapp { background: #25d366; }
+        .channel-icon.email { background: var(--primary); }
+        .channel-icon.seo { background: #34a853; }
+        .channel-icon.influencer { background: #e91e63; }
+        
+        .channel-info h4 {
+            color: var(--primary);
+            margin-bottom: 3px;
+        }
+        
+        .channel-info p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .channel-cost {
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .channel-cost .amount {
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .channel-cost .period {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+        
+        /* Calendar */
+        .calendar-week {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-day {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px 10px;
+            text-align: center;
+            min-height: 120px;
+        }
+        
+        .calendar-day-header {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+        
+        .calendar-task {
+            background: var(--primary);
+            color: white;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        
+        .calendar-task.instagram { background: #e1306c; }
+        .calendar-task.tiktok { background: #000; }
+        .calendar-task.facebook { background: #1877f2; }
+        .calendar-task.whatsapp { background: #25d366; }
+        
+        @media (max-width: 768px) {
+            .calendar-week { grid-template-columns: 1fr; }
+        }
+        
+        /* Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .checklist-item:hover { background: #f0f0f0; }
+        
+        .checklist-item.done { opacity: 0.6; }
+        .checklist-item.done .checklist-text { text-decoration: line-through; }
+        
+        .checklist-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--primary);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .checklist-item.done .checklist-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+        }
+        
+        .checklist-text { flex: 1; }
+        
+        .checklist-priority {
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .priority-high { background: #ffe0e0; color: var(--danger); }
+        .priority-medium { background: #fff3cd; color: #856404; }
+        .priority-low { background: #d4edda; color: var(--success); }
+        
+        /* KPI Cards */
+        .kpi-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .kpi-label {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+        
+        .kpi-target {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--success);
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        /* Content Ideas */
+        .content-idea {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .content-idea h4 {
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        
+        .content-idea p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        .content-idea .tags {
+            margin-top: 10px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+        
+        /* Budget Breakdown */
+        .budget-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .budget-row:last-child { border-bottom: none; }
+        
+        .budget-row-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .budget-row-amount {
+            font-weight: 600;
+        }
+        
+        .budget-row-amount.free { color: var(--success); }
+        .budget-row-amount.paid { color: var(--accent); }
+        
+        .budget-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 700;
+        }
+        
+        /* Tips */
+        .tip-box {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid var(--warning);
+            margin-bottom: 15px;
+        }
+        
+        .tip-box h4 {
+            color: #856404;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tip-box p {
+            font-size: 0.9rem;
+            color: #856404;
+        }
+        
+        /* Hashtags */
+        .hashtag-group {
+            margin-bottom: 15px;
+        }
+        
+        .hashtag-group h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .hashtag {
+            display: inline-block;
+            background: #e8f4f8;
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .hashtag:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #ddd;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 25px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+        
+        .timeline-item.completed::before { background: var(--success); }
+        .timeline-item.current::before { background: var(--accent); box-shadow: 0 0 0 4px rgba(224,120,86,0.3); }
+        
+        .timeline-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .timeline-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        /* Button */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #c96644;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Competitor */
+        .competitor-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .competitor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .competitor-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .competitor-price {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .competitor-note {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>📊 ORLO Digital Marketing Dashboard</h1>
+                <p style="opacity:0.9; margin-top:5px;">Cable Management & Workspace Organization</p>
+            </div>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <div class="header-stat-value">1,000</div>
+                    <div class="header-stat-label">Monthly Budget (AED)</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-value">30</div>
+                    <div class="header-stat-label">Target Sales</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-value">~33</div>
+                    <div class="header-stat-label">Cost per Sale (AED)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('overview')">📈 Overview</button>
+            <button class="tab" onclick="switchTab('budget')">💰 Budget Plans</button>
+            <button class="tab" onclick="switchTab('channels')">📱 Channels</button>
+            <button class="tab" onclick="switchTab('content')">📝 Content Plan</button>
+            <button class="tab" onclick="switchTab('calendar')">📅 Calendar</button>
+            <button class="tab" onclick="switchTab('checklist')">✅ Checklist</button>
+            <button class="tab" onclick="switchTab('kpis')">🎯 KPIs</button>
+            <button class="tab" onclick="switchTab('tools')">🛠️ Tools</button>
+            <button class="tab" onclick="switchTab('swot')">📊 SWOT</button>
+        </div>
+        
+        <!-- Overview Tab -->
+        <div id="overviewTab" class="tab-content active">
+            <!-- Mission & Differentiation -->
+            <div class="card" style="border-left: 4px solid var(--accent);">
+                <div class="card-header">
+                    <div class="card-title">🎯 Mission & Differentiation</div>
+                </div>
+                <div class="grid-2">
+                    <div>
+                        <h4 style="color:var(--primary); margin-bottom:10px;">Our Mission</h4>
+                        <p style="font-size:1.1rem; line-height:1.7; color:var(--text);">
+                            ORLO brings quality lifestyle products to UAE customers with bilingual support and a personal shopping experience.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color:var(--primary); margin-bottom:10px;">How We're Different</h4>
+                        <ul style="list-style:none;">
+                            <li style="padding:8px 0; border-bottom:1px solid #eee;">✨ <strong>Quality Products</strong> — Curated, not cheap junk</li>
+                            <li style="padding:8px 0; border-bottom:1px solid #eee;">🌍 <strong>Bilingual (EN/AR)</strong> — Full experience in both languages</li>
+                            <li style="padding:8px 0; border-bottom:1px solid #eee;">💬 <strong>Personal Service</strong> — Direct WhatsApp, real support</li>
+                            <li style="padding:8px 0;">🇦🇪 <strong>UAE Focused</strong> — Local delivery, local needs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unique Value Proposition -->
+            <div class="card" style="background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%); color: white;">
+                <div class="card-header" style="border-bottom-color: rgba(255,255,255,0.2);">
+                    <div class="card-title" style="color: white;">💎 Unique Selling Proposition (USP)</div>
+                </div>
+                <div style="text-align:center; padding: 20px 0;">
+                    <p style="font-size:1.5rem; font-weight:600; margin-bottom:15px;">
+                        "Quality products. Bilingual service. Personal touch."
+                    </p>
+                    <div style="display:flex; justify-content:center; gap:30px; margin-top:20px; flex-wrap:wrap;">
+                        <div style="text-align:center;">
+                            <div style="font-size:2rem; font-weight:700;">✨</div>
+                            <div style="font-size:0.85rem; opacity:0.9;">Quality Products</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="font-size:2rem; font-weight:700;">🌍</div>
+                            <div style="font-size:0.85rem; opacity:0.9;">EN / عربي</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="font-size:2rem; font-weight:700;">💬</div>
+                            <div style="font-size:0.85rem; opacity:0.9;">Personal Service</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="font-size:2rem; font-weight:700;">🇦🇪</div>
+                            <div style="font-size:0.85rem; opacity:0.9;">UAE Focused</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background:rgba(255,255,255,0.1); padding:15px; border-radius:10px; margin-top:10px;">
+                    <strong>Why Buy From ORLO Instead of Amazon?</strong>
+                    <p style="margin-top:8px; opacity:0.95;">Amazon sellers are faceless, generic, and often ship low-quality products. ORLO is a local brand with personality — you get curated quality products, bilingual support (English & Arabic), direct WhatsApp contact, and a company that cares about your experience.</p>
+                </div>
+            </div>
+
+            <!-- SMART Goals -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📊 SMART Goals</div>
+                </div>
+                <div class="tip-box" style="margin-bottom:20px;">
+                    <h4>💡 What are SMART Goals?</h4>
+                    <p><strong>S</strong>pecific · <strong>M</strong>easurable · <strong>A</strong>ttainable · <strong>R</strong>elevant · <strong>T</strong>ime-bound</p>
+                </div>
+                
+                <div style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse; min-width:700px;">
+                        <thead>
+                            <tr style="background:var(--primary); color:white;">
+                                <th style="padding:12px; text-align:left;">Goal</th>
+                                <th style="padding:12px; text-align:center;">Specific</th>
+                                <th style="padding:12px; text-align:center;">Measurable</th>
+                                <th style="padding:12px; text-align:center;">Attainable</th>
+                                <th style="padding:12px; text-align:center;">Relevant</th>
+                                <th style="padding:12px; text-align:center;">Time-bound</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:#f8f9fa;">
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">🛒 First Sales</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Get 10 paying customers</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">10 orders in Stripe</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">✅ Yes (friends, family, organic)</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">✅ Validates product</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">30 days</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">📸 Instagram Growth</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Reach 500 followers</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Follower count</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">✅ Yes (consistent posting)</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">✅ Builds brand awareness</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">60 days</td>
+                            </tr>
+                            <tr style="background:#f8f9fa;">
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">🎬 Content Consistency</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Post 4x per week</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">16 posts/month</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">✅ Yes (batch create)</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">✅ Algorithm loves consistency</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Ongoing</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">💰 Revenue Target</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Earn 2,000 AED revenue</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Stripe dashboard</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">✅ Yes (~30 orders)</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">✅ Covers costs + profit</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">90 days</td>
+                            </tr>
+                            <tr style="background:#f8f9fa;">
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">⭐ Social Proof</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Get 5 customer reviews</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Screenshots/testimonials</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">✅ Yes (ask customers)</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">✅ Builds trust</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">60 days</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px; font-weight:600;">📈 Paid Ads ROI</td>
+                                <td style="padding:12px; text-align:center;">Cost per sale under 15 AED</td>
+                                <td style="padding:12px; text-align:center;">Ad spend ÷ sales</td>
+                                <td style="padding:12px; text-align:center;">⚠️ Challenging (needs optimization)</td>
+                                <td style="padding:12px; text-align:center;">✅ Ensures profitability</td>
+                                <td style="padding:12px; text-align:center;">Month 3+</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">💡 Marketing Strategy Summary</div>
+                    </div>
+                    <div class="tip-box">
+                        <h4>💡 ORLO Strategy</h4>
+                        <p>Focus on organic content first (Instagram/TikTok reels), build social proof, then scale with paid ads. Target UAE professionals who work from home.</p>
+                    </div>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item current">
+                            <div class="timeline-date">Month 1-2</div>
+                            <div class="timeline-title">🌱 Foundation Phase</div>
+                            <div class="timeline-desc">Organic content, build following, first 10-20 sales. Budget: 0 AED</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Month 3-4</div>
+                            <div class="timeline-title">🚀 Growth Phase</div>
+                            <div class="timeline-desc">Start paid ads (500 AED), influencer collaborations, 25-40 sales</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Month 5-6</div>
+                            <div class="timeline-title">📈 Scale Phase</div>
+                            <div class="timeline-desc">Increase ad budget (1,000 AED), retargeting, 50-80 sales</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🎯 Target Audience</div>
+                    </div>
+                    <div style="margin-bottom:15px;">
+                        <h4 style="color:var(--primary); margin-bottom:10px;">Primary Audience</h4>
+                        <ul style="list-style:none;">
+                            <li style="padding:8px 0; border-bottom:1px solid #eee;">👨‍💻 Remote workers / Work from home</li>
+                            <li style="padding:8px 0; border-bottom:1px solid #eee;">🎮 Gamers with desk setups</li>
+                            <li style="padding:8px 0; border-bottom:1px solid #eee;">🏢 Small office owners</li>
+                            <li style="padding:8px 0; border-bottom:1px solid #eee;">📱 Tech enthusiasts</li>
+                            <li style="padding:8px 0;">🏠 Home organization lovers</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color:var(--primary); margin-bottom:10px;">Demographics</h4>
+                        <ul style="list-style:none;">
+                            <li style="padding:8px 0; border-bottom:1px solid #eee;">📍 UAE (Dubai, Abu Dhabi, Sharjah)</li>
+                            <li style="padding:8px 0; border-bottom:1px solid #eee;">👤 Age: 25-45</li>
+                            <li style="padding:8px 0; border-bottom:1px solid #eee;">💰 Middle to upper income</li>
+                            <li style="padding:8px 0;">🌐 English & Arabic speakers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">⚔️ Competitor Analysis</div>
+                </div>
+                <div class="grid-3">
+                    <div class="competitor-card">
+                        <div class="competitor-header">
+                            <span class="competitor-name">Amazon.ae</span>
+                            <span class="competitor-price">AED 37-40</span>
+                        </div>
+                        <div class="competitor-note">Mass market, generic branding, fast delivery. Competing on price.</div>
+                    </div>
+                    <div class="competitor-card">
+                        <div class="competitor-header">
+                            <span class="competitor-name">Noon</span>
+                            <span class="competitor-price">AED 35-45</span>
+                        </div>
+                        <div class="competitor-note">Similar to Amazon, local focus, competitive pricing.</div>
+                    </div>
+                    <div class="competitor-card" style="border: 2px solid var(--accent);">
+                        <div class="competitor-header">
+                            <span class="competitor-name">ORLO (You)</span>
+                            <span class="competitor-price">AED 60-100</span>
+                        </div>
+                        <div class="competitor-note"><strong>Premium positioning</strong>, branded experience, bilingual, quality focus, personal support.</div>
+                    </div>
+                </div>
+                <div class="tip-box" style="margin-top:15px;">
+                    <h4>💡 Your Advantage</h4>
+                    <p>Don't compete on price. Compete on <strong>experience, branding, and convenience</strong>. Target customers who don't use Amazon or want a local, premium option. Your margin is higher — use it for better service.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Budget Plans Tab -->
+        <div id="budgetTab" class="tab-content">
+            <div class="grid-3">
+                <div class="budget-card">
+                    <h3>🌱 Starter</h3>
+                    <p style="color:var(--text-light);">Organic Focus</p>
+                    <div class="price">0 <span>AED/mo</span></div>
+                    <ul>
+                        <li>Instagram organic posts</li>
+                        <li>TikTok reels</li>
+                        <li>WhatsApp marketing</li>
+                        <li>Facebook groups</li>
+                        <li>Friends & family network</li>
+                    </ul>
+                    <p style="margin-top:15px; font-size:0.85rem; color:var(--text-light);">Expected sales: 5-15/month</p>
+                </div>
+                
+                <div class="budget-card selected">
+                    <h3>🚀 Growth</h3>
+                    <p style="color:var(--text-light);">Your Budget</p>
+                    <div class="price">1,000 <span>AED/mo</span></div>
+                    <ul>
+                        <li>Everything in Starter</li>
+                        <li>Instagram/FB Ads (700 AED)</li>
+                        <li>Micro-influencer (200 AED)</li>
+                        <li>Content tools (100 AED)</li>
+                        <li>Boosted posts</li>
+                    </ul>
+                    <p style="margin-top:15px; font-size:0.85rem; color:var(--text-light);">Expected sales: 25-40/month</p>
+                </div>
+                
+                <div class="budget-card">
+                    <h3>⚡ Scale</h3>
+                    <p style="color:var(--text-light);">Full Marketing</p>
+                    <div class="price">3,000 <span>AED/mo</span></div>
+                    <ul>
+                        <li>Everything in Growth</li>
+                        <li>Google Ads (1,000 AED)</li>
+                        <li>Bigger influencers (500 AED)</li>
+                        <li>Email marketing tool</li>
+                        <li>Professional content</li>
+                        <li>Retargeting campaigns</li>
+                    </ul>
+                    <p style="margin-top:15px; font-size:0.85rem; color:var(--text-light);">Expected sales: 60-100/month</p>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top:20px;">
+                <div class="card-header">
+                    <div class="card-title">💰 1,000 AED Budget Breakdown</div>
+                </div>
+                
+                <div class="budget-row">
+                    <div class="budget-row-label">
+                        <span style="font-size:1.2rem;">📸</span>
+                        <span>Instagram/Facebook Ads</span>
+                    </div>
+                    <div class="budget-row-amount paid">700 AED</div>
+                </div>
+                
+                <div class="budget-row">
+                    <div class="budget-row-label">
+                        <span style="font-size:1.2rem;">👤</span>
+                        <span>Micro-Influencer (1-2 posts)</span>
+                    </div>
+                    <div class="budget-row-amount paid">200 AED</div>
+                </div>
+                
+                <div class="budget-row">
+                    <div class="budget-row-label">
+                        <span style="font-size:1.2rem;">🎨</span>
+                        <span>Canva Pro / Tools</span>
+                    </div>
+                    <div class="budget-row-amount paid">50 AED</div>
+                </div>
+                
+                <div class="budget-row">
+                    <div class="budget-row-label">
+                        <span style="font-size:1.2rem;">📊</span>
+                        <span>Buffer / Scheduling Tool</span>
+                    </div>
+                    <div class="budget-row-amount paid">50 AED</div>
+                </div>
+                
+                <div class="budget-row">
+                    <div class="budget-row-label">
+                        <span style="font-size:1.2rem;">📱</span>
+                        <span>TikTok Organic</span>
+                    </div>
+                    <div class="budget-row-amount free">FREE</div>
+                </div>
+                
+                <div class="budget-row">
+                    <div class="budget-row-label">
+                        <span style="font-size:1.2rem;">💬</span>
+                        <span>WhatsApp Marketing</span>
+                    </div>
+                    <div class="budget-row-amount free">FREE</div>
+                </div>
+                
+                <div class="budget-total">
+                    <span>Total Monthly Budget</span>
+                    <span>1,000 AED</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Channels Tab -->
+        <div id="channelsTab" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📱 Primary Channels</div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon instagram">📸</div>
+                        <div class="channel-info">
+                            <h4>Instagram</h4>
+                            <p>Reels, Stories, Posts. Best for visual products.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">500-700 AED</div>
+                            <div class="period">ads/month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon tiktok" style="color:white;">🎵</div>
+                        <div class="channel-info">
+                            <h4>TikTok</h4>
+                            <p>Short videos, viral potential. Before/after content.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">FREE</div>
+                            <div class="period">organic</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon whatsapp" style="color:white;">💬</div>
+                        <div class="channel-info">
+                            <h4>WhatsApp</h4>
+                            <p>Status updates, groups, direct sales.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">FREE</div>
+                            <div class="period">organic</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card">
+                        <div class="channel-icon facebook" style="color:white;">📘</div>
+                        <div class="channel-info">
+                            <h4>Facebook</h4>
+                            <p>Groups, Marketplace, Ads (shared with IG).</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">Included</div>
+                            <div class="period">with IG ads</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🔮 Future Channels</div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon google" style="color:white;">🔍</div>
+                        <div class="channel-info">
+                            <h4>Google Ads</h4>
+                            <p>Search ads for "cable management UAE".</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">500-1000 AED</div>
+                            <div class="period">when scaling</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon seo" style="color:white;">📈</div>
+                        <div class="channel-info">
+                            <h4>SEO</h4>
+                            <p>Organic Google ranking. Long-term strategy.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">FREE</div>
+                            <div class="period">your time</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon email" style="color:white;">✉️</div>
+                        <div class="channel-info">
+                            <h4>Email Marketing</h4>
+                            <p>Newsletter, abandoned cart, promotions.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">0-100 AED</div>
+                            <div class="period">tool cost</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card">
+                        <div class="channel-icon influencer" style="color:white;">⭐</div>
+                        <div class="channel-info">
+                            <h4>Influencers</h4>
+                            <p>Tech/lifestyle micro-influencers in UAE.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">200-500 AED</div>
+                            <div class="period">per post</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">#️⃣ Hashtag Strategy</div>
+                </div>
+                
+                <div class="hashtag-group">
+                    <h4>🇦🇪 UAE Location Tags</h4>
+                    <span class="hashtag">#dubai</span>
+                    <span class="hashtag">#uae</span>
+                    <span class="hashtag">#abudhabi</span>
+                    <span class="hashtag">#sharjah</span>
+                    <span class="hashtag">#dubailife</span>
+                    <span class="hashtag">#mydubai</span>
+                </div>
+                
+                <div class="hashtag-group">
+                    <h4>💼 Workspace Tags</h4>
+                    <span class="hashtag">#desksetup</span>
+                    <span class="hashtag">#workfromhome</span>
+                    <span class="hashtag">#homeoffice</span>
+                    <span class="hashtag">#remotework</span>
+                    <span class="hashtag">#workstation</span>
+                    <span class="hashtag">#officedesign</span>
+                </div>
+                
+                <div class="hashtag-group">
+                    <h4>🎮 Tech/Gaming Tags</h4>
+                    <span class="hashtag">#gamingsetup</span>
+                    <span class="hashtag">#pcsetup</span>
+                    <span class="hashtag">#techlife</span>
+                    <span class="hashtag">#cleansetup</span>
+                    <span class="hashtag">#cablemanagement</span>
+                </div>
+                
+                <div class="hashtag-group">
+                    <h4>🏠 Organization Tags</h4>
+                    <span class="hashtag">#homeorganization</span>
+                    <span class="hashtag">#organized</span>
+                    <span class="hashtag">#declutter</span>
+                    <span class="hashtag">#tidyhome</span>
+                    <span class="hashtag">#minimalist</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Plan Tab -->
+        <div id="contentTab" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🎬 Content Ideas - Reels/TikTok</div>
+                    </div>
+                    
+                    <div class="content-idea">
+                        <h4>Before/After Transformation</h4>
+                        <p>Show messy cables → clean setup in 15-30 seconds. Satisfying content.</p>
+                        <div class="tags">
+                            <span class="tag">High Engagement</span>
+                            <span class="tag">Viral Potential</span>
+                        </div>
+                    </div>
+                    
+                    <div class="content-idea">
+                        <h4>Unboxing ORLO Kit</h4>
+                        <p>Show all 300 pieces, quality close-ups, value demonstration.</p>
+                        <div class="tags">
+                            <span class="tag">Product Focus</span>
+                        </div>
+                    </div>
+                    
+                    <div class="content-idea">
+                        <h4>"POV: You finally organize your cables"</h4>
+                        <p>Relatable content, trending audio, quick satisfaction.</p>
+                        <div class="tags">
+                            <span class="tag">Trending</span>
+                            <span class="tag">Relatable</span>
+                        </div>
+                    </div>
+                    
+                    <div class="content-idea">
+                        <h4>Gaming Setup Tour</h4>
+                        <p>Show a clean gaming setup featuring ORLO cable management.</p>
+                        <div class="tags">
+                            <span class="tag">Niche Appeal</span>
+                        </div>
+                    </div>
+                    
+                    <div class="content-idea">
+                        <h4>Home Office Tips</h4>
+                        <p>Quick tips for WFH productivity, featuring your products.</p>
+                        <div class="tags">
+                            <span class="tag">Educational</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📸 Content Ideas - Posts/Stories</div>
+                    </div>
+                    
+                    <div class="content-idea">
+                        <h4>Product Flat Lay</h4>
+                        <p>All products laid out aesthetically. Clean background.</p>
+                        <div class="tags">
+                            <span class="tag">Instagram</span>
+                        </div>
+                    </div>
+                    
+                    <div class="content-idea">
+                        <h4>Customer Setup Feature</h4>
+                        <p>Repost customer photos (ask permission). Social proof.</p>
+                        <div class="tags">
+                            <span class="tag">UGC</span>
+                            <span class="tag">Social Proof</span>
+                        </div>
+                    </div>
+                    
+                    <div class="content-idea">
+                        <h4>Poll: "Rate this setup"</h4>
+                        <p>Show before/after, let followers vote. Engagement booster.</p>
+                        <div class="tags">
+                            <span class="tag">Stories</span>
+                            <span class="tag">Engagement</span>
+                        </div>
+                    </div>
+                    
+                    <div class="content-idea">
+                        <h4>Quote Graphics</h4>
+                        <p>"A clean desk = a clear mind" - Motivational with product subtle.</p>
+                        <div class="tags">
+                            <span class="tag">Shareable</span>
+                        </div>
+                    </div>
+                    
+                    <div class="content-idea">
+                        <h4>Behind the Scenes</h4>
+                        <p>Packing orders, stickers, personal touch. Build connection.</p>
+                        <div class="tags">
+                            <span class="tag">Authentic</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📝 Content Formula</div>
+                </div>
+                <div class="grid-4">
+                    <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:10px;">
+                        <div style="font-size:2rem; margin-bottom:10px;">40%</div>
+                        <div style="font-weight:600; color:var(--primary);">Educational</div>
+                        <div style="font-size:0.8rem; color:var(--text-light);">Tips, how-to, hacks</div>
+                    </div>
+                    <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:10px;">
+                        <div style="font-size:2rem; margin-bottom:10px;">30%</div>
+                        <div style="font-weight:600; color:var(--primary);">Entertaining</div>
+                        <div style="font-size:0.8rem; color:var(--text-light);">Trends, relatable, fun</div>
+                    </div>
+                    <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:10px;">
+                        <div style="font-size:2rem; margin-bottom:10px;">20%</div>
+                        <div style="font-weight:600; color:var(--primary);">Promotional</div>
+                        <div style="font-size:0.8rem; color:var(--text-light);">Products, offers</div>
+                    </div>
+                    <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:10px;">
+                        <div style="font-size:2rem; margin-bottom:10px;">10%</div>
+                        <div style="font-weight:600; color:var(--primary);">Personal</div>
+                        <div style="font-size:0.8rem; color:var(--text-light);">Behind scenes, story</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Calendar Tab -->
+        <div id="calendarTab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📅 Weekly Content Calendar</div>
+                </div>
+                
+                <div class="calendar-week">
+                    <div class="calendar-day">
+                        <div class="calendar-day-header">Sunday</div>
+                        <div class="calendar-task instagram">IG Reel: Before/After</div>
+                        <div class="calendar-task whatsapp">WhatsApp Status</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-header">Monday</div>
+                        <div class="calendar-task tiktok">TikTok: Quick tip</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-header">Tuesday</div>
+                        <div class="calendar-task instagram">IG Story: Poll</div>
+                        <div class="calendar-task facebook">FB Group post</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-header">Wednesday</div>
+                        <div class="calendar-task tiktok">TikTok: Trending</div>
+                        <div class="calendar-task whatsapp">WhatsApp Status</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-header">Thursday</div>
+                        <div class="calendar-task instagram">IG Post: Product</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-header">Friday</div>
+                        <div class="calendar-task instagram">IG Reel: Satisfying</div>
+                        <div class="calendar-task tiktok">TikTok: Same reel</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-header">Saturday</div>
+                        <div class="calendar-task instagram">IG Story: BTS</div>
+                        <div class="calendar-task whatsapp">WhatsApp Status</div>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>💡 Posting Tips</h4>
+                    <p><strong>Best times for UAE:</strong> 7-9 PM (after work), 12-2 PM (lunch break), Friday afternoons. Post reels on TikTok and Instagram simultaneously.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📆 Monthly Themes</div>
+                </div>
+                <div class="grid-4">
+                    <div style="padding:15px; background:#f8f9fa; border-radius:10px; text-align:center;">
+                        <div style="font-weight:600; color:var(--primary);">Week 1</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Home Office Focus</div>
+                    </div>
+                    <div style="padding:15px; background:#f8f9fa; border-radius:10px; text-align:center;">
+                        <div style="font-weight:600; color:var(--primary);">Week 2</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Gaming Setups</div>
+                    </div>
+                    <div style="padding:15px; background:#f8f9fa; border-radius:10px; text-align:center;">
+                        <div style="font-weight:600; color:var(--primary);">Week 3</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Customer Features</div>
+                    </div>
+                    <div style="padding:15px; background:#f8f9fa; border-radius:10px; text-align:center;">
+                        <div style="font-weight:600; color:var(--primary);">Week 4</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Tips & Hacks</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UAE Seasonality Tracking -->
+            <div class="card" style="border:2px solid var(--accent);">
+                <div class="card-header">
+                    <div class="card-title">🗓️ UAE Seasonality & Special Events</div>
+                </div>
+                <div class="tip-box" style="margin-bottom:20px;">
+                    <h4>💡 Why Seasonality Matters</h4>
+                    <p>Shopping behavior in UAE changes dramatically during key periods. Plan your ad spend, inventory, and content around these high-traffic times for maximum ROI.</p>
+                </div>
+
+                <!-- Annual Calendar -->
+                <div style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse; min-width:800px;">
+                        <thead>
+                            <tr style="background:var(--primary); color:white;">
+                                <th style="padding:12px; text-align:left;">Month</th>
+                                <th style="padding:12px; text-align:center;">🎉 Event</th>
+                                <th style="padding:12px; text-align:center;">📊 Traffic</th>
+                                <th style="padding:12px; text-align:center;">💰 Ad Spend</th>
+                                <th style="padding:12px; text-align:left;">📝 Action Items</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:#f8f9fa;">
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">January</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">New Year Sales</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🟡 Medium</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Normal</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">New year organization resolutions content</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">February</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">-</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🟢 Low</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Reduce</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">Build content, prep for Ramadan</td>
+                            </tr>
+                            <tr style="background:#fff3cd;">
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">March*</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🌙 <strong>Ramadan Start</strong></td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🔴 <strong>HIGH</strong></td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd; color:var(--success); font-weight:600;">+50-100%</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">Ramadan deals, home prep content, gifting</td>
+                            </tr>
+                            <tr style="background:#fff3cd;">
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">April*</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🎁 <strong>Eid Al-Fitr</strong></td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🔴 <strong>HIGH</strong></td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd; color:var(--success); font-weight:600;">+50-100%</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">Eid gifts, last-minute deals, free shipping</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">May</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">-</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🟢 Low</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Reduce</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">Summer prep, focus on organic</td>
+                            </tr>
+                            <tr style="background:#f8f9fa;">
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">June*</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🐑 Eid Al-Adha</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🟡 Medium</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">+25%</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">Eid promotions, family gifting</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">July</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">☀️ Summer Sales</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🟢 Low</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Reduce</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">Summer clearance, build email list</td>
+                            </tr>
+                            <tr style="background:#d4edda;">
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">August</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🎒 <strong>Back to School</strong></td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🔴 <strong>HIGH</strong></td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd; color:var(--success); font-weight:600;">+50-75%</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">Desk organization, study setup content</td>
+                            </tr>
+                            <tr style="background:#d4edda;">
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">September</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🏫 <strong>School Starts</strong></td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🟡 Medium-High</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">+25%</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">Home office for parents, student deals</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">October</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">-</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🟡 Medium</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">Normal</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">Prep White Friday, build hype</td>
+                            </tr>
+                            <tr style="background:#ffe6e6;">
+                                <td style="padding:12px; font-weight:600; border-bottom:1px solid #ddd;">November</td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🛍️ <strong>WHITE FRIDAY</strong></td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd;">🔴 <strong>PEAK</strong></td>
+                                <td style="padding:12px; text-align:center; border-bottom:1px solid #ddd; color:var(--danger); font-weight:600;">+100-150%</td>
+                                <td style="padding:12px; border-bottom:1px solid #ddd; font-size:0.85rem;">Biggest discounts, aggressive ads, stock up</td>
+                            </tr>
+                            <tr style="background:#f8f9fa;">
+                                <td style="padding:12px; font-weight:600;">December</td>
+                                <td style="padding:12px; text-align:center;">🎄 Year-End Sales</td>
+                                <td style="padding:12px; text-align:center;">🟡 Medium-High</td>
+                                <td style="padding:12px; text-align:center;">+25-50%</td>
+                                <td style="padding:12px; font-size:0.85rem;">Holiday gifts, year-end clearance</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="font-size:0.75rem; color:var(--text-light); margin-top:10px;">* Islamic holiday dates shift yearly. Check exact dates for current year.</p>
+
+                <!-- Key Events Breakdown -->
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-top:25px;">
+                    <div style="background:linear-gradient(135deg, #6b4c9a 0%, #4a3470 100%); color:white; padding:20px; border-radius:12px;">
+                        <h4 style="margin-bottom:15px;">🌙 Ramadan (30 days)</h4>
+                        <ul style="font-size:0.85rem; padding-left:20px;">
+                            <li style="margin-bottom:8px;">Shopping peaks after Iftar (8-11 PM)</li>
+                            <li style="margin-bottom:8px;">Home organization for gatherings</li>
+                            <li style="margin-bottom:8px;">Gifting culture - bundle deals work</li>
+                            <li style="margin-bottom:8px;">Last 10 days = Eid prep rush</li>
+                            <li><strong>Action:</strong> Start ads 2 weeks before</li>
+                        </ul>
+                    </div>
+
+                    <div style="background:linear-gradient(135deg, #28a745 0%, #1e7e34 100%); color:white; padding:20px; border-radius:12px;">
+                        <h4 style="margin-bottom:15px;">🎒 Back to School (Aug-Sep)</h4>
+                        <ul style="font-size:0.85rem; padding-left:20px;">
+                            <li style="margin-bottom:8px;">Parents buying desk organization</li>
+                            <li style="margin-bottom:8px;">Student study setup content</li>
+                            <li style="margin-bottom:8px;">Target: Dubai, Abu Dhabi schools</li>
+                            <li style="margin-bottom:8px;">Peak: Last 2 weeks of August</li>
+                            <li><strong>Action:</strong> Start content mid-July</li>
+                        </ul>
+                    </div>
+
+                    <div style="background:linear-gradient(135deg, #dc3545 0%, #b02a37 100%); color:white; padding:20px; border-radius:12px;">
+                        <h4 style="margin-bottom:15px;">🛍️ White Friday (Nov 20-30)</h4>
+                        <ul style="font-size:0.85rem; padding-left:20px;">
+                            <li style="margin-bottom:8px;">UAE's Black Friday equivalent</li>
+                            <li style="margin-bottom:8px;">Biggest shopping week of the year</li>
+                            <li style="margin-bottom:8px;">Customers expect 20-50% off</li>
+                            <li style="margin-bottom:8px;">Ad costs spike - book early</li>
+                            <li><strong>Action:</strong> Stock up October, ads Nov 1</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Seasonality Action Checklist -->
+                <div style="margin-top:25px; padding:20px; background:#f8f9fa; border-radius:12px;">
+                    <h4 style="margin-bottom:15px; color:var(--primary);">✅ Seasonal Prep Checklist</h4>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:10px;">
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Mark key dates in Google Calendar</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Set ad budget reminders (2 weeks before)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Stock up inventory before peak seasons</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Prepare seasonal content/graphics</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Plan discount codes for each event</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Review competitor pricing before sales</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Checklist Tab -->
+        <div id="checklistTab" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🚀 Launch Checklist</div>
+                    </div>
+                    
+                    <div class="checklist-item done" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox">✓</div>
+                        <div class="checklist-text">Website live</div>
+                        <span class="checklist-priority priority-high">Done</span>
+                    </div>
+                    
+                    <div class="checklist-item done" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox">✓</div>
+                        <div class="checklist-text">Stripe payments working</div>
+                        <span class="checklist-priority priority-high">Done</span>
+                    </div>
+                    
+                    <div class="checklist-item done" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox">✓</div>
+                        <div class="checklist-text">Instagram account created</div>
+                        <span class="checklist-priority priority-high">Done</span>
+                    </div>
+                    
+                    <div class="checklist-item done" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox">✓</div>
+                        <div class="checklist-text">TikTok account created</div>
+                        <span class="checklist-priority priority-high">Done</span>
+                    </div>
+                    
+                    <div class="checklist-item done" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox">✓</div>
+                        <div class="checklist-text">Branded stickers ready</div>
+                        <span class="checklist-priority priority-medium">Done</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">First 5 Instagram posts</div>
+                        <span class="checklist-priority priority-high">High</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">First TikTok reel</div>
+                        <span class="checklist-priority priority-high">High</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">WhatsApp Business setup</div>
+                        <span class="checklist-priority priority-medium">Medium</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Bio link with website</div>
+                        <span class="checklist-priority priority-high">High</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">First sale 🎉</div>
+                        <span class="checklist-priority priority-high">Goal</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📈 Growth Checklist</div>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">100 Instagram followers</div>
+                        <span class="checklist-priority priority-medium">Medium</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">First viral reel (1000+ views)</div>
+                        <span class="checklist-priority priority-medium">Medium</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">10 orders completed</div>
+                        <span class="checklist-priority priority-high">High</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">First customer review</div>
+                        <span class="checklist-priority priority-high">High</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Join 5 UAE Facebook groups</div>
+                        <span class="checklist-priority priority-low">Low</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">500 Instagram followers</div>
+                        <span class="checklist-priority priority-medium">Medium</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">First influencer collaboration</div>
+                        <span class="checklist-priority priority-low">Low</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Set up Meta Ads account</div>
+                        <span class="checklist-priority priority-medium">Medium</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">First paid ad campaign</div>
+                        <span class="checklist-priority priority-medium">Medium</span>
+                    </div>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">30 orders in one month</div>
+                        <span class="checklist-priority priority-high">Goal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- KPIs Tab -->
+        <div id="kpisTab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🎯 Key Performance Indicators</div>
+                </div>
+                <div class="grid-4">
+                    <div class="kpi-card">
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-label">Monthly Sales</div>
+                        <div class="kpi-target">Target: 30</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:0%;"></div></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-label">Instagram Followers</div>
+                        <div class="kpi-target">Target: 500</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:0%;"></div></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-label">TikTok Followers</div>
+                        <div class="kpi-target">Target: 1000</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:0%;"></div></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-label">Website Visitors</div>
+                        <div class="kpi-target">Target: 500/mo</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:0%;"></div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">💰 Revenue Goals</div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="kpi-card">
+                            <div class="kpi-value">0</div>
+                            <div class="kpi-label">Monthly Revenue (AED)</div>
+                            <div class="kpi-target">Target: 2,000</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">0</div>
+                            <div class="kpi-label">Monthly Profit (AED)</div>
+                            <div class="kpi-target">Target: 1,000</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📊 Marketing Metrics</div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="kpi-card">
+                            <div class="kpi-value">-</div>
+                            <div class="kpi-label">Cost per Sale (AED)</div>
+                            <div class="kpi-target">Target: < 25</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">-</div>
+                            <div class="kpi-label">Conversion Rate</div>
+                            <div class="kpi-target">Target: 2%+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📈 Monthly Targets</div>
+                </div>
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="background:#f8f9fa;">
+                            <th style="padding:12px; text-align:left; border-bottom:2px solid #ddd;">Month</th>
+                            <th style="padding:12px; text-align:center; border-bottom:2px solid #ddd;">Sales</th>
+                            <th style="padding:12px; text-align:center; border-bottom:2px solid #ddd;">Revenue</th>
+                            <th style="padding:12px; text-align:center; border-bottom:2px solid #ddd;">Marketing Spend</th>
+                            <th style="padding:12px; text-align:center; border-bottom:2px solid #ddd;">IG Followers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding:12px; border-bottom:1px solid #eee;">Month 1</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">10-15</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">600-900</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">0 (organic)</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">100-200</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:12px; border-bottom:1px solid #eee;">Month 2</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">15-25</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">900-1,500</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">500</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">300-500</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:12px; border-bottom:1px solid #eee;">Month 3</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">25-40</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">1,500-2,400</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">1,000</td>
+                            <td style="padding:12px; text-align:center; border-bottom:1px solid #eee;">500-800</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:12px;">Month 6</td>
+                            <td style="padding:12px; text-align:center;">50-80</td>
+                            <td style="padding:12px; text-align:center;">3,000-4,800</td>
+                            <td style="padding:12px; text-align:center;">1,500</td>
+                            <td style="padding:12px; text-align:center;">1,000+</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Tools Tab -->
+        <div id="toolsTab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🛠️ Essential Marketing Tools</div>
+                </div>
+                <div class="tip-box">
+                    <h4>💡 Why Tools Matter</h4>
+                    <p>The right tools help you monitor your online presence, improve search visibility, automate tasks, and make data-driven decisions. Most have free tiers perfect for startups.</p>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- SEO Tools -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🔍 SEO (Search Engine Optimisation)</div>
+                    </div>
+                    <p style="color:var(--text-light); margin-bottom:15px;">Increase visibility of your website in Google search results to attract more organic traffic.</p>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#4285f4; color:white;">G</div>
+                        <div class="channel-info">
+                            <h4>Google Search Console</h4>
+                            <p>Monitor your site's presence in Google search. See what keywords bring traffic.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#4285f4; color:white;">G</div>
+                        <div class="channel-info">
+                            <h4>Google Analytics</h4>
+                            <p>Track website visitors, behavior, conversions. Essential for any website.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#ff6b35; color:white;">U</div>
+                        <div class="channel-info">
+                            <h4>Ubersuggest</h4>
+                            <p>Keyword research, competitor analysis, content ideas.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">FREE / 100 AED</div>
+                            <div class="period">/month</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card">
+                        <div class="channel-icon" style="background:#472aff; color:white;">S</div>
+                        <div class="channel-info">
+                            <h4>Semrush / Ahrefs</h4>
+                            <p>Advanced SEO tools. Competitor spy, backlinks, full audits.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">400+ AED</div>
+                            <div class="period">/month</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monitoring Tools -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">👁️ Monitoring & Alerts</div>
+                    </div>
+                    <p style="color:var(--text-light); margin-bottom:15px;">Track mentions of your brand, competitors, and industry trends in real-time.</p>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#4285f4; color:white;">G</div>
+                        <div class="channel-info">
+                            <h4>Google Alerts</h4>
+                            <p>Get email notifications when your brand or keywords are mentioned online.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#1da1f2; color:white;">📊</div>
+                        <div class="channel-info">
+                            <h4>Social Mention</h4>
+                            <p>Real-time social media search and analysis.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card">
+                        <div class="channel-icon" style="background:#00bf7d; color:white;">M</div>
+                        <div class="channel-info">
+                            <h4>Mention / Brand24</h4>
+                            <p>Advanced brand monitoring across web and social media.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">100-400 AED</div>
+                            <div class="period">/month</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- AI Tools -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🤖 AI & Generative AI</div>
+                    </div>
+                    <p style="color:var(--text-light); margin-bottom:15px;">Use artificial intelligence to create content, analyze data, and automate marketing tasks.</p>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:linear-gradient(135deg, #8b5cf6, #d946ef); color:white;">✨</div>
+                        <div class="channel-info">
+                            <h4>Claude (Anthropic)</h4>
+                            <p>AI assistant for content writing, strategy, analysis. You're using it now!</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">FREE / 75 AED</div>
+                            <div class="period">/month Pro</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#10a37f; color:white;">G</div>
+                        <div class="channel-info">
+                            <h4>ChatGPT</h4>
+                            <p>Content generation, brainstorming, customer service scripts.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">FREE / 75 AED</div>
+                            <div class="period">/month Plus</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#4285f4; color:white;">G</div>
+                        <div class="channel-info">
+                            <h4>Google Gemini</h4>
+                            <p>Google's AI for content, research, and integration with Google tools.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card">
+                        <div class="channel-icon" style="background:#000; color:white;">🎨</div>
+                        <div class="channel-info">
+                            <h4>Canva AI / Adobe Firefly</h4>
+                            <p>AI-powered design tools for social media graphics.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">FREE / 50 AED</div>
+                            <div class="period">/month</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CRM & Email -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📧 CRM & Email Marketing</div>
+                    </div>
+                    <p style="color:var(--text-light); margin-bottom:15px;">Customer Relationship Management - track customers, send emails, nurture leads.</p>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#ff6b00; color:white;">H</div>
+                        <div class="channel-info">
+                            <h4>HubSpot CRM</h4>
+                            <p>Free CRM with contact management, email tracking, forms.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#ffe01b; color:#000;">📬</div>
+                        <div class="channel-info">
+                            <h4>Mailchimp</h4>
+                            <p>Email marketing, newsletters, automation. Free up to 500 contacts.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                            <div class="period">up to 500</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#5469d4; color:white;">📩</div>
+                        <div class="channel-info">
+                            <h4>Brevo (Sendinblue)</h4>
+                            <p>Email + SMS marketing. 300 emails/day free.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card">
+                        <div class="channel-icon" style="background:#7c3aed; color:white;">📊</div>
+                        <div class="channel-info">
+                            <h4>Klaviyo</h4>
+                            <p>E-commerce focused email/SMS. Powerful but pricey.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount">FREE / 150 AED</div>
+                            <div class="period">/month</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- Social Media Tools -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📱 Social Media Management</div>
+                    </div>
+                    <p style="color:var(--text-light); margin-bottom:15px;">Schedule posts, analyze performance, manage multiple accounts.</p>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#2d3748; color:white;">B</div>
+                        <div class="channel-info">
+                            <h4>Buffer</h4>
+                            <p>Schedule posts across Instagram, TikTok, Facebook. Simple UI.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                            <div class="period">3 channels</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#ff4500; color:white;">L</div>
+                        <div class="channel-info">
+                            <h4>Later</h4>
+                            <p>Visual planner for Instagram. Drag & drop calendar.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                            <div class="period">limited</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#262626; color:white;">📊</div>
+                        <div class="channel-info">
+                            <h4>Meta Business Suite</h4>
+                            <p>Official tool for Facebook/Instagram. Scheduling, insights, inbox.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card">
+                        <div class="channel-icon" style="background:#ff0050; color:white;">🎵</div>
+                        <div class="channel-info">
+                            <h4>TikTok Business Center</h4>
+                            <p>Manage TikTok content, analytics, and ads.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design & Content -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🎨 Design & Content Creation</div>
+                    </div>
+                    <p style="color:var(--text-light); margin-bottom:15px;">Create professional graphics, videos, and content without design skills.</p>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#00c4cc; color:white;">C</div>
+                        <div class="channel-info">
+                            <h4>Canva</h4>
+                            <p>Design anything - posts, stories, logos, videos. Easy to use.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                            <div class="period">Pro: 50 AED/mo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#00adef; color:white;">C</div>
+                        <div class="channel-info">
+                            <h4>CapCut</h4>
+                            <p>Free video editor. Perfect for TikTok/Reels. Mobile & desktop.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card" style="margin-bottom:10px;">
+                        <div class="channel-icon" style="background:#ff5722; color:white;">R</div>
+                        <div class="channel-info">
+                            <h4>Remove.bg</h4>
+                            <p>Remove backgrounds from product photos instantly.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                            <div class="period">limited</div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-card">
+                        <div class="channel-icon" style="background:#6c5ce7; color:white;">📸</div>
+                        <div class="channel-info">
+                            <h4>Unsplash / Pexels</h4>
+                            <p>Free stock photos for your content.</p>
+                        </div>
+                        <div class="channel-cost">
+                            <div class="amount" style="color:var(--success);">FREE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommended Stack -->
+            <div class="card" style="border: 2px solid var(--accent);">
+                <div class="card-header">
+                    <div class="card-title">⭐ Recommended Tool Stack for ORLO (FREE)</div>
+                </div>
+                <div class="grid-4">
+                    <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:10px;">
+                        <div style="font-size:2rem; margin-bottom:10px;">🔍</div>
+                        <div style="font-weight:600; color:var(--primary);">SEO</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Google Search Console</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Google Analytics</div>
+                    </div>
+                    <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:10px;">
+                        <div style="font-size:2rem; margin-bottom:10px;">📱</div>
+                        <div style="font-weight:600; color:var(--primary);">Social</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Meta Business Suite</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Buffer (free)</div>
+                    </div>
+                    <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:10px;">
+                        <div style="font-size:2rem; margin-bottom:10px;">🎨</div>
+                        <div style="font-weight:600; color:var(--primary);">Design</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Canva (free)</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">CapCut</div>
+                    </div>
+                    <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:10px;">
+                        <div style="font-size:2rem; margin-bottom:10px;">🤖</div>
+                        <div style="font-weight:600; color:var(--primary);">AI</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Claude / ChatGPT</div>
+                        <div style="font-size:0.85rem; color:var(--text-light);">Google Gemini</div>
+                    </div>
+                </div>
+                <div class="budget-total" style="margin-top:20px;">
+                    <span>Total Monthly Cost</span>
+                    <span style="color:#00ff88;">0 AED (All Free Tiers)</span>
+                </div>
+            </div>
+
+            <!-- Offline Marketing -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🏪 Offline & Local Marketing</div>
+                </div>
+                <p style="color:var(--text-light); margin-bottom:15px;">Don't forget real-world marketing! Leave your brand in places your customers visit.</p>
+                
+                <div class="grid-2">
+                    <div>
+                        <h4 style="color:var(--primary); margin-bottom:15px;">📇 Business Cards & Flyers</h4>
+                        
+                        <div class="channel-card" style="margin-bottom:10px;">
+                            <div class="channel-icon" style="background:var(--primary); color:white;">🏢</div>
+                            <div class="channel-info">
+                                <h4>Co-working Spaces</h4>
+                                <p>WeWork, Letswork, Nasab — full of remote workers with messy desks!</p>
+                            </div>
+                        </div>
+                        
+                        <div class="channel-card" style="margin-bottom:10px;">
+                            <div class="channel-icon" style="background:var(--primary); color:white;">☕</div>
+                            <div class="channel-info">
+                                <h4>Cafes & Coffee Shops</h4>
+                                <p>People working on laptops. Ask to leave cards near counter.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="channel-card" style="margin-bottom:10px;">
+                            <div class="channel-icon" style="background:var(--primary); color:white;">🖥️</div>
+                            <div class="channel-info">
+                                <h4>Computer & Electronics Shops</h4>
+                                <p>Dragon Mart, Computer Plaza, local tech stores.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="channel-card" style="margin-bottom:10px;">
+                            <div class="channel-icon" style="background:var(--primary); color:white;">🎮</div>
+                            <div class="channel-info">
+                                <h4>Gaming Cafes & Lounges</h4>
+                                <p>Gamers love clean setups. Perfect audience.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="channel-card">
+                            <div class="channel-icon" style="background:var(--primary); color:white;">🏠</div>
+                            <div class="channel-info">
+                                <h4>Home & Office Stores</h4>
+                                <p>IKEA area, Home Centre, office furniture shops.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color:var(--primary); margin-bottom:15px;">💡 Offline Ideas</h4>
+                        
+                        <div class="content-idea">
+                            <h4>QR Code Cards</h4>
+                            <p>Business card with QR code linking directly to orlostore.com. Instant access.</p>
+                            <div class="tags">
+                                <span class="tag">Low Cost</span>
+                                <span class="tag">Trackable</span>
+                            </div>
+                        </div>
+                        
+                        <div class="content-idea">
+                            <h4>Before/After Flyer</h4>
+                            <p>Show messy desk → clean desk. "Scan to organize yours" with QR.</p>
+                            <div class="tags">
+                                <span class="tag">Visual Impact</span>
+                            </div>
+                        </div>
+                        
+                        <div class="content-idea">
+                            <h4>Partner with Shops</h4>
+                            <p>Leave products on display at computer shops. Commission per sale.</p>
+                            <div class="tags">
+                                <span class="tag">No Upfront Cost</span>
+                            </div>
+                        </div>
+                        
+                        <div class="content-idea">
+                            <h4>Community Notice Boards</h4>
+                            <p>Apartment buildings, gyms, community centers often have boards.</p>
+                            <div class="tags">
+                                <span class="tag">Free</span>
+                            </div>
+                        </div>
+                        
+                        <div class="content-idea">
+                            <h4>Car Sticker / Magnet</h4>
+                            <p>Your car = moving billboard. "orlostore.com" with logo.</p>
+                            <div class="tags">
+                                <span class="tag">Always Visible</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top:20px; padding:15px; background:#f8f9fa; border-radius:10px;">
+                    <h4 style="color:var(--primary); margin-bottom:10px;">💰 Estimated Costs</h4>
+                    <div class="grid-4">
+                        <div style="text-align:center;">
+                            <div style="font-weight:600;">Business Cards</div>
+                            <div style="color:var(--accent);">50-100 AED</div>
+                            <div style="font-size:0.8rem; color:var(--text-light);">500 cards</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="font-weight:600;">Flyers</div>
+                            <div style="color:var(--accent);">100-200 AED</div>
+                            <div style="font-size:0.8rem; color:var(--text-light);">500 flyers</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="font-weight:600;">QR Stickers</div>
+                            <div style="color:var(--accent);">50-80 AED</div>
+                            <div style="font-size:0.8rem; color:var(--text-light);">100 stickers</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="font-weight:600;">Car Magnet</div>
+                            <div style="color:var(--accent);">80-150 AED</div>
+                            <div style="font-size:0.8rem; color:var(--text-light);">1 piece</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tip-box" style="margin-top:15px;">
+                    <h4>💡 Pro Tip</h4>
+                    <p>Always ask permission before leaving cards. Be polite: "I have a small business, would you mind if I leave a few cards for your customers?" Most shop owners are supportive of startups.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SWOT Analysis Tab -->
+        <div id="swotTab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📊 SWOT Analysis</div>
+                </div>
+                <div class="tip-box">
+                    <h4>💡 What is SWOT?</h4>
+                    <p><strong>S</strong>trengths (internal advantages) · <strong>W</strong>eaknesses (internal challenges) · <strong>O</strong>pportunities (external chances) · <strong>T</strong>hreats (external risks). Review monthly and create action items.</p>
+                </div>
+            </div>
+
+            <!-- SWOT Grid -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+                <!-- Strengths -->
+                <div class="card" style="border-top:4px solid var(--success);">
+                    <div class="card-header">
+                        <div class="card-title" style="color:var(--success);">💪 Strengths (Internal +)</div>
+                    </div>
+                    <p style="color:var(--text-light); margin-bottom:15px; font-size:0.85rem;">What you do well. Leverage these!</p>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox checked">✓</div>
+                        <div class="checklist-text">Bilingual website (EN/AR) - rare in UAE e-commerce</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox checked">✓</div>
+                        <div class="checklist-text">Quality curated products (not cheap junk)</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox checked">✓</div>
+                        <div class="checklist-text">Personal service (WhatsApp, direct contact)</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox checked">✓</div>
+                        <div class="checklist-text">Branded experience (stickers, packaging)</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox checked">✓</div>
+                        <div class="checklist-text">Low overhead (no physical store)</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox checked">✓</div>
+                        <div class="checklist-text">Flexible pricing (healthy margins)</div>
+                    </div>
+                    
+                    <div style="margin-top:15px; padding:10px; background:#d4edda; border-radius:8px;">
+                        <strong style="font-size:0.8rem; color:#155724;">➕ Add your own:</strong>
+                        <textarea style="width:100%; margin-top:8px; padding:8px; border:1px solid #c3e6cb; border-radius:6px; min-height:60px; font-size:0.85rem;" placeholder="What else are you good at?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Weaknesses -->
+                <div class="card" style="border-top:4px solid var(--danger);">
+                    <div class="card-header">
+                        <div class="card-title" style="color:var(--danger);">⚠️ Weaknesses (Internal -)</div>
+                    </div>
+                    <p style="color:var(--text-light); margin-bottom:15px; font-size:0.85rem;">What needs improvement. Work on these!</p>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">New brand - no recognition yet</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">No customer reviews/testimonials</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Limited marketing budget</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Small product range (5 products)</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Higher prices than Amazon/Noon</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">No same-day delivery option</div>
+                    </div>
+                    
+                    <div style="margin-top:15px; padding:10px; background:#f8d7da; border-radius:8px;">
+                        <strong style="font-size:0.8rem; color:#721c24;">➕ Add your own:</strong>
+                        <textarea style="width:100%; margin-top:8px; padding:8px; border:1px solid #f5c6cb; border-radius:6px; min-height:60px; font-size:0.85rem;" placeholder="What challenges do you face?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Opportunities -->
+                <div class="card" style="border-top:4px solid #17a2b8;">
+                    <div class="card-header">
+                        <div class="card-title" style="color:#17a2b8;">🚀 Opportunities (External +)</div>
+                    </div>
+                    <p style="color:var(--text-light); margin-bottom:15px; font-size:0.85rem;">External factors you can capitalize on!</p>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Remote work trend = desk organization demand</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Gaming community growing in UAE</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">TikTok/Reels viral potential (before/after content)</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Ramadan/Eid gifting seasons</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Corporate/office bulk orders</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Expand to lights, home organization</div>
+                    </div>
+                    
+                    <div style="margin-top:15px; padding:10px; background:#d1ecf1; border-radius:8px;">
+                        <strong style="font-size:0.8rem; color:#0c5460;">➕ Add your own:</strong>
+                        <textarea style="width:100%; margin-top:8px; padding:8px; border:1px solid #bee5eb; border-radius:6px; min-height:60px; font-size:0.85rem;" placeholder="What opportunities do you see?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Threats -->
+                <div class="card" style="border-top:4px solid var(--warning);">
+                    <div class="card-header">
+                        <div class="card-title" style="color:#856404;">⛔ Threats (External -)</div>
+                    </div>
+                    <p style="color:var(--text-light); margin-bottom:15px; font-size:0.85rem;">External risks to watch out for!</p>
+                    
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Amazon/Noon lower prices & fast delivery</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Customers price-sensitive in economy downturn</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Shipping costs increasing</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Supplier delays or quality issues</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">New competitors entering niche</div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <div class="checklist-checkbox"></div>
+                        <div class="checklist-text">Social media algorithm changes</div>
+                    </div>
+                    
+                    <div style="margin-top:15px; padding:10px; background:#fff3cd; border-radius:8px;">
+                        <strong style="font-size:0.8rem; color:#856404;">➕ Add your own:</strong>
+                        <textarea style="width:100%; margin-top:8px; padding:8px; border:1px solid #ffeeba; border-radius:6px; min-height:60px; font-size:0.85rem;" placeholder="What external risks worry you?"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Plan -->
+            <div class="card" style="border:2px solid var(--accent);">
+                <div class="card-header">
+                    <div class="card-title">🎯 SWOT Action Plan</div>
+                </div>
+                <p style="color:var(--text-light); margin-bottom:20px;">Turn your SWOT into actions. Review monthly!</p>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                    <!-- Leverage Strengths -->
+                    <div style="background:#d4edda; padding:20px; border-radius:12px;">
+                        <h4 style="color:#155724; margin-bottom:15px;">💪 Leverage Strengths</h4>
+                        <p style="font-size:0.85rem; color:#155724; margin-bottom:10px;"><strong>Strategy:</strong> Use what you're good at to win</p>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Highlight bilingual in all marketing</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Show branded unboxing on social media</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Promote WhatsApp support as advantage</div>
+                        </div>
+                        <textarea style="width:100%; margin-top:10px; padding:8px; border:1px solid #c3e6cb; border-radius:6px; min-height:50px; font-size:0.85rem;" placeholder="Your actions..."></textarea>
+                    </div>
+
+                    <!-- Fix Weaknesses -->
+                    <div style="background:#f8d7da; padding:20px; border-radius:12px;">
+                        <h4 style="color:#721c24; margin-bottom:15px;">🔧 Fix Weaknesses</h4>
+                        <p style="font-size:0.85rem; color:#721c24; margin-bottom:10px;"><strong>Strategy:</strong> Improve or work around limitations</p>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Get 5 reviews from first customers (offer discount)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Add 3 new products this quarter</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Focus on value, not price (premium positioning)</div>
+                        </div>
+                        <textarea style="width:100%; margin-top:10px; padding:8px; border:1px solid #f5c6cb; border-radius:6px; min-height:50px; font-size:0.85rem;" placeholder="Your actions..."></textarea>
+                    </div>
+
+                    <!-- Seize Opportunities -->
+                    <div style="background:#d1ecf1; padding:20px; border-radius:12px;">
+                        <h4 style="color:#0c5460; margin-bottom:15px;">🚀 Seize Opportunities</h4>
+                        <p style="font-size:0.85rem; color:#0c5460; margin-bottom:10px;"><strong>Strategy:</strong> Act fast on external chances</p>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Create before/after reels (viral potential)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Plan Ramadan campaign (2 weeks before)</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Reach out to 3 corporate offices for bulk deals</div>
+                        </div>
+                        <textarea style="width:100%; margin-top:10px; padding:8px; border:1px solid #bee5eb; border-radius:6px; min-height:50px; font-size:0.85rem;" placeholder="Your actions..."></textarea>
+                    </div>
+
+                    <!-- Defend Against Threats -->
+                    <div style="background:#fff3cd; padding:20px; border-radius:12px;">
+                        <h4 style="color:#856404; margin-bottom:15px;">🛡️ Defend Against Threats</h4>
+                        <p style="font-size:0.85rem; color:#856404; margin-bottom:10px;"><strong>Strategy:</strong> Prepare for or avoid risks</p>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Don't compete on price - compete on experience</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Have backup supplier ready</div>
+                        </div>
+                        <div class="checklist-item" onclick="toggleCheck(this)" style="background:white;">
+                            <div class="checklist-checkbox"></div>
+                            <div class="checklist-text">Build email list (own your audience)</div>
+                        </div>
+                        <textarea style="width:100%; margin-top:10px; padding:8px; border:1px solid #ffeeba; border-radius:6px; min-height:50px; font-size:0.85rem;" placeholder="Your actions..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SWOT Automation Instructions -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🔄 How to Automate SWOT Review</div>
+                </div>
+                
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+                    <div style="background:#f8f9fa; padding:20px; border-radius:12px; border-left:4px solid var(--primary);">
+                        <h4 style="margin-bottom:10px; color:var(--primary);">📅 Schedule Monthly Review</h4>
+                        <ol style="font-size:0.85rem; color:var(--text-light); padding-left:20px;">
+                            <li style="margin-bottom:8px;">Set calendar reminder: 1st of each month</li>
+                            <li style="margin-bottom:8px;">Review each quadrant (15 mins)</li>
+                            <li style="margin-bottom:8px;">Update checkboxes based on progress</li>
+                            <li style="margin-bottom:8px;">Add new items discovered</li>
+                            <li>Create 3 action items for the month</li>
+                        </ol>
+                    </div>
+
+                    <div style="background:#f8f9fa; padding:20px; border-radius:12px; border-left:4px solid var(--accent);">
+                        <h4 style="margin-bottom:10px; color:var(--accent);">📊 Data Sources for SWOT</h4>
+                        <ul style="font-size:0.85rem; color:var(--text-light); padding-left:20px;">
+                            <li style="margin-bottom:8px;"><strong>Strengths:</strong> Customer feedback, sales data</li>
+                            <li style="margin-bottom:8px;"><strong>Weaknesses:</strong> Returns, complaints, cart abandonment</li>
+                            <li style="margin-bottom:8px;"><strong>Opportunities:</strong> Google Alerts, trends, competitors</li>
+                            <li><strong>Threats:</strong> News, competitor prices, market changes</li>
+                        </ul>
+                    </div>
+
+                    <div style="background:#f8f9fa; padding:20px; border-radius:12px; border-left:4px solid var(--success);">
+                        <h4 style="margin-bottom:10px; color:var(--success);">✅ Action Item Rules</h4>
+                        <ul style="font-size:0.85rem; color:var(--text-light); padding-left:20px;">
+                            <li style="margin-bottom:8px;">Max 3 actions per category per month</li>
+                            <li style="margin-bottom:8px;">Each action must be specific & measurable</li>
+                            <li style="margin-bottom:8px;">Set deadline for each action</li>
+                            <li style="margin-bottom:8px;">Mark complete or carry forward</li>
+                            <li>Celebrate wins! 🎉</li>
+                        </ul>
+                    </div>
+
+                    <div style="background:#f8f9fa; padding:20px; border-radius:12px; border-left:4px solid var(--warning);">
+                        <h4 style="margin-bottom:10px; color:#856404;">🔔 Set These Alerts</h4>
+                        <ul style="font-size:0.85rem; color:var(--text-light); padding-left:20px;">
+                            <li style="margin-bottom:8px;">Google Alert: Your brand name ✅</li>
+                            <li style="margin-bottom:8px;">Google Alert: Competitor names</li>
+                            <li style="margin-bottom:8px;">Google Alert: Product keywords</li>
+                            <li style="margin-bottom:8px;">Follow competitors on social media</li>
+                            <li>Check Amazon prices weekly</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top:20px; padding:20px; background:var(--primary); color:white; border-radius:12px; text-align:center;">
+                    <h4 style="margin-bottom:10px;">📅 Next SWOT Review Date</h4>
+                    <input type="date" style="padding:10px 20px; border-radius:8px; border:none; font-size:1rem;">
+                    <p style="margin-top:10px; opacity:0.9; font-size:0.85rem;">Set a recurring calendar event for the 1st of each month</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function toggleCheck(element) {
+            element.classList.toggle('done');
+            const checkbox = element.querySelector('.checklist-checkbox');
+            if (element.classList.contains('done')) {
+                checkbox.innerHTML = '✓';
+            } else {
+                checkbox.innerHTML = '';
+            }
+            saveChecklist();
+        }
+        
+        function saveChecklist() {
+            const items = document.querySelectorAll('.checklist-item');
+            const state = [];
+            items.forEach((item, index) => {
+                state.push(item.classList.contains('done'));
+            });
+            localStorage.setItem('orlo_marketing_checklist', JSON.stringify(state));
+        }
+        
+        function loadChecklist() {
+            const saved = localStorage.getItem('orlo_marketing_checklist');
+            if (saved) {
+                const state = JSON.parse(saved);
+                const items = document.querySelectorAll('.checklist-item');
+                items.forEach((item, index) => {
+                    if (state[index]) {
+                        item.classList.add('done');
+                        item.querySelector('.checklist-checkbox').innerHTML = '✓';
+                    }
+                });
+            }
+        }
+        
+        // Load saved checklist on page load
+        loadChecklist();
+    </script>
+</body>
+</html>
