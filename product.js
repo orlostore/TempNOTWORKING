@@ -1662,16 +1662,17 @@ function renderPricingTiers(containerId, product) {
   const activeDiscount = tiers[activeTierIndex].discountPercent;
   const activePrice = Math.round(basePrice * (1 - activeDiscount / 100) * 100) / 100;
 
+  const isMobile = containerId.includes('Mobile');
   container.innerHTML = `
-    <div class="pricing-tiers" data-product-id="${product.id}" style="margin-bottom:1rem; ${containerId.includes('Mobile') ? 'padding: 0 16px;' : ''}">
-      <div class="pricing-tiers-label">Quantity Pricing | <span class="arabic-text">تسعير الكمية</span></div>
+    <div class="pricing-tiers" data-product-id="${product.id}" style="margin-bottom:1rem; ${isMobile ? 'padding: 0 15px;' : ''}">
+      ${isMobile ? '' : '<div class="pricing-tiers-label">Quantity Pricing | <span class="arabic-text">تسعير الكمية</span></div>'}
       <div class="tier-table">${tiersHTML}</div>
-      <div class="your-price-bar${activeDiscount > 0 ? ' has-savings' : ''}" style="margin-top:6px;">
+      ${isMobile ? '' : `<div class="your-price-bar${activeDiscount > 0 ? ' has-savings' : ''}" style="margin-top:6px;">
         <span class="your-price-label">Your price per piece</span>
         <span class="your-price-value">AED ${activePrice.toFixed(2)}</span>
         <span class="your-price-label-ar arabic-text">سعرك لكل قطعة</span>
         ${activeDiscount > 0 ? `<span class="your-price-badge">Save ${Math.round(activeDiscount)}%</span>` : ''}
-      </div>
+      </div>`}
     </div>
   `;
 }
