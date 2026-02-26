@@ -539,10 +539,10 @@ async function initProductPage() {
       }
       if (hasTiers) {
         document.getElementById('earlyHintMobile').onclick = function() {
-          const delivery = document.querySelector('.mobile-delivery-info');
+          const tiersEl = document.getElementById('pricingTiersMobile');
           const bottomNav = document.getElementById('mobileBottomNav');
-          if (delivery) {
-            const rect = delivery.getBoundingClientRect();
+          if (tiersEl) {
+            const rect = tiersEl.getBoundingClientRect();
             const navHeight = bottomNav ? bottomNav.offsetHeight : 0;
             const targetY = window.scrollY + rect.bottom - (window.innerHeight - navHeight);
             window.scrollTo({top: targetY, behavior: 'smooth'});
@@ -743,7 +743,8 @@ async function initProductPage() {
         // Non-tiered: delivery info already shown in early price box, remove duplicate
         mobileDeliveryEl.remove();
       } else {
-        mobileDeliveryEl.innerHTML = `<div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div>`;
+        // Tiered: delivery already in early price box, remove from buybox
+        mobileDeliveryEl.remove();
       }
     }
     // Move variant selector right after carousel for non-tiered variant products
@@ -814,10 +815,18 @@ async function initProductPage() {
 
   if (detailsContainer) detailsContainer.innerHTML = detailsHTML;
 
-  // Move details section below buybox for variant non-tiered mobile
-  if (hasVariants && !hasTiers && detailsContainer) {
+  // Move details section below buybox for variant mobile (both tiered and non-tiered)
+  if (hasVariants && detailsContainer) {
     const buybox = document.querySelector('.mobile-buybox-compact');
     if (buybox) buybox.after(detailsContainer);
+  }
+
+  // Move variant selector above early price for variant tiered mobile
+  if (hasVariants && hasTiers) {
+    const variantSelector = document.getElementById('variantSelectorMobile');
+    if (variantSelector && earlyPriceMobile) {
+      earlyPriceMobile.before(variantSelector);
+    }
   }
 
   // Check if product already in cart - show transformed button
