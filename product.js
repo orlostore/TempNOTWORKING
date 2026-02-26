@@ -68,7 +68,7 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
     let container;
     if (isMobile) {
       container = document.querySelector(`.mobile-product-page [id="transformedBtn-${productId}"]`)
-        || document.querySelector('.mobile-product-page .early-price-inline')
+        || document.querySelector('.mobile-product-page .early-price')
         || document.querySelector('.mobile-cart-section');
     } else {
       container = document.getElementById(`transformedBtn-${productId}`)
