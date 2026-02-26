@@ -532,11 +532,9 @@ async function initProductPage() {
     if (earlyPriceMobile) {
       earlyPriceMobile.innerHTML = earlyHTML;
       earlyPriceMobile.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
-      if (!hasTiers) {
-        const earlyRow = earlyPriceMobile.querySelector('.early-price-row');
-        const mobileCartBtn = document.getElementById('mobileAddToCartBtn');
-        if (earlyRow && mobileCartBtn) earlyRow.after(mobileCartBtn);
-      }
+      const earlyRow = earlyPriceMobile.querySelector('.early-price-row');
+      const mobileCartBtn = document.getElementById('mobileAddToCartBtn');
+      if (earlyRow && mobileCartBtn) earlyRow.after(mobileCartBtn);
     }
   } else if (product.price) {
     // Non-variant products: desktop keeps inline layout
@@ -724,16 +722,18 @@ async function initProductPage() {
       mobileAddBtn.style.background = "#999";
       mobileAddBtn.style.cursor = "not-allowed";
     }
-    // Populate mobile delivery info for variant products
+    // Hide buybox price/cart sections — button already pulled into early-price
+    const variantBuybox = document.querySelector('.mobile-buybox-compact');
+    if (variantBuybox) {
+      const bp = variantBuybox.querySelector('.mobile-price-section');
+      const bc = variantBuybox.querySelector('.mobile-cart-section');
+      if (bp) bp.style.display = 'none';
+      if (bc) bc.style.display = 'none';
+    }
+    // Delivery already in early price box, remove buybox duplicate
     const mobileDeliveryEl = document.querySelector('.mobile-delivery-info');
     if (mobileDeliveryEl) {
-      if (!hasTiers) {
-        // Non-tiered: delivery info already shown in early price box, remove duplicate
-        mobileDeliveryEl.remove();
-      } else {
-        // Tiered: delivery already in early price box, remove from buybox
-        mobileDeliveryEl.remove();
-      }
+      mobileDeliveryEl.remove();
     }
     // Move variant selector right after carousel for non-tiered variant products
     if (!hasTiers) {
