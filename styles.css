@@ -1567,21 +1567,23 @@ footer p {
   min-width: 180px;
 }
 
-/* Mobile: stacked layout inside early-price */
-@media (max-width: 768px) {
-  .mobile-product-page .early-price {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
+/* Non-variant mobile: stacked layout inside early-price */
+.mobile-product-header .early-price {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 .early-price .mobile-add-to-cart {
-  display: flex;
-  justify-content: center;
+  display: block;
   width: 100%;
   margin-top: 8px;
 }
-.early-price .early-delivery-info {
+/* Variant tiered: centered cart button and full-width delivery */
+.mobile-product-header .early-price .mobile-add-to-cart {
+  display: flex;
+  justify-content: center;
+}
+.mobile-product-header .early-price .early-delivery-info {
   display: flex;
   width: 100%;
 }
