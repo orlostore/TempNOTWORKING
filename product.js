@@ -739,25 +739,25 @@ async function initProductPage() {
     if (!hasTiers) {
       const variantSelector = document.getElementById('variantSelectorMobile');
       const carouselContainer = document.querySelector('.mobile-carousel-container');
-      if (variantSelector && carouselContainer) carouselContainer.after(variantSelector);
-      // Then place early-price right after the variant selector
-      if (earlyPriceMobile && variantSelector) variantSelector.after(earlyPriceMobile);
-      // Wrap variant selector + early price in a sticky container
-      if (variantSelector) {
+      if (variantSelector && carouselContainer) {
+        // Helper: insert an 8px grey separator
+        function addSep(afterEl) {
+          const s = document.createElement('div');
+          s.style.height = '8px';
+          s.style.background = '#f8f9fa';
+          afterEl.after(s);
+          return s;
+        }
+        // Order: carousel → grey → variant selector (sticky) → grey → early-price
+        const sep1 = addSep(carouselContainer);
         const stickyWrap = document.createElement('div');
         stickyWrap.className = 'mobile-sticky-buybar';
         const headerH = document.querySelector('header') ? document.querySelector('header').offsetHeight : 56;
         stickyWrap.style.top = headerH + 'px';
-        variantSelector.before(stickyWrap);
+        sep1.after(stickyWrap);
         stickyWrap.appendChild(variantSelector);
-        // Grey separator between variant selector and early-price box
-        if (earlyPriceMobile) {
-          const sep = document.createElement('div');
-          sep.style.height = '8px';
-          sep.style.background = '#f8f9fa';
-          stickyWrap.appendChild(sep);
-          stickyWrap.appendChild(earlyPriceMobile);
-        }
+        const sep2 = addSep(stickyWrap);
+        if (earlyPriceMobile) sep2.after(earlyPriceMobile);
       }
     }
   }
