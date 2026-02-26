@@ -19,29 +19,42 @@ export async function onRequestGet(context) {
             return Response.json({ error: 'Stripe not configured' }, { status: 500 });
         }
         
-        // Fetch session from Stripe
+        // Fetch session from Stripe (expand line_items for GA4 tracking)
         const stripeResponse = await fetch(
-            `https://api.stripe.com/v1/checkout/sessions/${sessionId}`,
+            `https://api.stripe.com/v1/checkout/sessions/${sessionId}?expand[]=line_items`,
             {
                 headers: {
                     'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
                 }
             }
         );
-        
+
         const session = await stripeResponse.json();
-        
+
         if (session.error) {
             return Response.json({ error: 'Session not found' }, { status: 404 });
         }
-        
-        // Return only customer details (don't expose sensitive data)
+
+        // Build line items for GA4 e-commerce tracking
+        const items = (session.line_items?.data || []).map((item, index) => ({
+            item_id: item.price?.product || `item_${index}`,
+            item_name: item.description || '',
+            price: (item.amount_total || 0) / 100 / (item.quantity || 1),
+            quantity: item.quantity || 1
+        }));
+
+        // Return customer details + order data for GA4 (don't expose sensitive data)
         return Response.json({
             success: true,
             customer: {
                 name: session.customer_details?.name || '',
                 email: session.customer_details?.email || '',
                 phone: session.customer_details?.phone || ''
+            },
+            order: {
+                amount_total: (session.amount_total || 0) / 100,
+                currency: session.currency?.toUpperCase() || 'AED',
+                items: items
             }
         });
         
