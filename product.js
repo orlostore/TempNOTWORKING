@@ -819,13 +819,21 @@ async function initProductPage() {
   // Move variant selector above early price, carousel above variant selector for variant tiered mobile
   if (hasVariants && hasTiers) {
     const variantSelector = document.getElementById('variantSelectorMobile');
-    if (variantSelector && earlyPriceMobile) {
-      earlyPriceMobile.before(variantSelector);
-      const carouselContainer = document.querySelector('.mobile-carousel-container');
-      if (carouselContainer) {
-        variantSelector.before(carouselContainer);
-        carouselContainer.style.marginBottom = '8px';
+    const carouselContainer = document.querySelector('.mobile-carousel-container');
+    if (variantSelector && carouselContainer) {
+      // Helper: insert an 8px grey separator
+      function addTieredSep(afterEl) {
+        const s = document.createElement('div');
+        s.style.height = '8px';
+        s.style.background = '#f8f9fa';
+        afterEl.after(s);
+        return s;
       }
+      // Place everything AFTER carousel (outside .mobile-product-header so grey bg shows)
+      const sep1 = addTieredSep(carouselContainer);
+      sep1.after(variantSelector);
+      const sep2 = addTieredSep(variantSelector);
+      if (earlyPriceMobile) sep2.after(earlyPriceMobile);
     }
   }
 
