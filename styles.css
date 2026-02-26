@@ -2611,6 +2611,15 @@ footer p {
   background: white;
 }
 
+/* When early-price is moved outside .mobile-product-header, match its 15px side padding */
+@media (max-width: 768px) {
+  .mobile-product-page > .early-price,
+  .mobile-sticky-buybar > .early-price {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+}
+
 /* Mobile Carousel */
 .mobile-carousel-container {
   background: white;
