@@ -748,14 +748,16 @@ async function initProductPage() {
         stickyWrap.className = 'mobile-sticky-buybar';
         const headerH = document.querySelector('header') ? document.querySelector('header').offsetHeight : 56;
         stickyWrap.style.top = headerH + 'px';
-        // Grey separator between carousel and variant selector (matches non-variant section gap)
-        const sep = document.createElement('div');
-        sep.style.height = '8px';
-        sep.style.background = 'var(--bg, #f8f9fa)';
-        variantSelector.before(sep);
-        sep.after(stickyWrap);
+        variantSelector.before(stickyWrap);
         stickyWrap.appendChild(variantSelector);
-        if (earlyPriceMobile) stickyWrap.appendChild(earlyPriceMobile);
+        // Grey separator between variant selector and early-price box
+        if (earlyPriceMobile) {
+          const sep = document.createElement('div');
+          sep.style.height = '8px';
+          sep.style.background = '#f8f9fa';
+          stickyWrap.appendChild(sep);
+          stickyWrap.appendChild(earlyPriceMobile);
+        }
       }
     }
   }
