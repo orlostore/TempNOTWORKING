@@ -1580,8 +1580,8 @@ footer p {
 }
 /* Variant tiered: centered cart button and full-width delivery */
 .mobile-product-header .early-price .mobile-add-to-cart {
-  display: flex;
-  justify-content: center;
+  display: block;
+  text-align: center;
 }
 .mobile-product-header .early-price .early-delivery-info {
   display: flex;
