@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+    <!-- End Google Tag Manager -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B5JQFPTZT7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-B5JQFPTZT7');
+      gtag('config', 'AW-XXXXXXXXXX');
+    </script>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'XXXXXXXXXXXXXXXXX');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.net/tr?id=XXXXXXXXXXXXXXXXX&ev=PageView&noscript=1"/></noscript>
+    <!-- End Meta Pixel Code -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Dashboard | ORLO</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #2c4a5c;
+            --accent: #e07856;
+            --accent-hover: #c96644;
+            --success: #28a745;
+            --warning: #f0ad4e;
+            --danger: #dc3545;
+            --bg: #f8f9fa;
+            --white: #ffffff;
+            --text: #333;
+            --text-light: #666;
+            --border: #e0e0e0;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        /* Header */
+        .dash-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e3545 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .dash-header h1 { font-size: 1.5rem; font-weight: 700; }
+        .dash-header p { opacity: 0.8; font-size: 0.9rem; margin-top: 4px; }
+        .dash-header a {
+            color: white;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .dash-header a:hover { background: rgba(255,255,255,0.25); }
+
+        /* Tool Cards */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .tool-card {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        .tool-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .tool-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .tool-info { display: flex; align-items: center; gap: 14px; }
+        .tool-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        .tool-icon.ga4 { background: #fff3e0; color: #e37400; }
+        .tool-icon.gtm { background: #e3f2fd; color: #1565c0; }
+        .tool-icon.meta { background: #e8eaf6; color: #3b5998; }
+        .tool-icon.gads { background: #e8f5e9; color: #2e7d32; }
+        .tool-name { font-weight: 600; font-size: 1rem; }
+        .tool-desc { color: var(--text-light); font-size: 0.82rem; margin-top: 2px; }
+
+        /* Status badges */
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .status.active { background: #e8f5e9; color: #2e7d32; }
+        .status.placeholder { background: #fff3e0; color: #e65100; }
+        .status.not-set { background: #fce4ec; color: #c62828; }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .status.active .status-dot { background: #2e7d32; }
+        .status.placeholder .status-dot { background: #e65100; }
+        .status.not-set .status-dot { background: #c62828; }
+
+        /* Details row */
+        .tool-details {
+            border-top: 1px solid var(--border);
+            padding: 16px 24px;
+            background: #fafbfc;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .detail-item label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .detail-item span {
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+        .detail-item span.placeholder-id {
+            color: var(--warning);
+            background: #fff8e1;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .detail-item span.real-id {
+            color: var(--success);
+        }
+
+        /* Events section */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        .event-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 20px;
+        }
+        .event-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+        .event-trigger {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        .event-pages {
+            margin-top: 6px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* Setup checklist */
+        .checklist {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .check-item:last-child { border-bottom: none; }
+        .check-box {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .check-box.done { background: #e8f5e9; color: #2e7d32; }
+        .check-box.todo { background: #fff3e0; color: #e65100; }
+        .check-text { font-size: 0.88rem; line-height: 1.5; }
+        .check-text strong { font-weight: 600; }
+        .check-text code {
+            background: #f0f0f0;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+
+        /* Pages list */
+        .pages-list {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .pages-list-header {
+            padding: 16px 24px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: #fafbfc;
+            border-bottom: 1px solid var(--border);
+        }
+        .page-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 0.85rem;
+        }
+        .page-row:last-child { border-bottom: none; }
+        .page-name { font-weight: 500; }
+        .page-tags { display: flex; gap: 6px; }
+        .tag {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .tag.ga4 { background: #fff3e0; color: #e37400; }
+        .tag.gtm { background: #e3f2fd; color: #1565c0; }
+        .tag.meta { background: #e8eaf6; color: #3b5998; }
+        .tag.gads { background: #e8f5e9; color: #2e7d32; }
+
+        @media (max-width: 600px) {
+            .container { padding: 12px; }
+            .dash-header { padding: 20px; }
+            .dash-header h1 { font-size: 1.2rem; }
+            .tool-top { padding: 16px; }
+            .tool-details { grid-template-columns: 1fr; padding: 12px 16px; }
+            .events-grid { grid-template-columns: 1fr; }
+            .page-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="dash-header">
+        <div>
+            <h1>ORLO Marketing Dashboard</h1>
+            <p>Tracking tools &amp; analytics overview</p>
+        </div>
+        <a href="admin.html">Back to Admin</a>
+    </div>
+
+    <!-- Tool Cards -->
+    <h2 class="section-title">Tracking Tools</h2>
+    <div class="tools-grid">
+
+        <!-- GA4 -->
+        <div class="tool-card">
+            <div class="tool-top">
+                <div class="tool-info">
+                    <div class="tool-icon ga4">GA</div>
+                    <div>
+                        <div class="tool-name">Google Analytics 4</div>
+                        <div class="tool-desc">Page views, user behaviour, e-commerce events</div>
+                    </div>
+                </div>
+                <div class="status active"><span class="status-dot"></span> Active</div>
+            </div>
+            <div class="tool-details">
+                <div class="detail-item">
+                    <label>Measurement ID</label>
+                    <span class="real-id">G-B5JQFPTZT7</span>
+                </div>
+                <div class="detail-item">
+                    <label>Installed On</label>
+                    <span>All 10 pages</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- GTM -->
+        <div class="tool-card">
+            <div class="tool-top">
+                <div class="tool-info">
+                    <div class="tool-icon gtm">TM</div>
+                    <div>
+                        <div class="tool-name">Google Tag Manager</div>
+                        <div class="tool-desc">Manage all tags from one dashboard &mdash; no code changes needed</div>
+                    </div>
+                </div>
+                <div class="status placeholder"><span class="status-dot"></span> Needs ID</div>
+            </div>
+            <div class="tool-details">
+                <div class="detail-item">
+                    <label>Container ID</label>
+                    <span class="placeholder-id">GTM-XXXXXXX</span>
+                </div>
+                <div class="detail-item">
+                    <label>Installed On</label>
+                    <span>All 11 pages (head + body noscript)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meta Pixel -->
+        <div class="tool-card">
+            <div class="tool-top">
+                <div class="tool-info">
+                    <div class="tool-icon meta">f</div>
+                    <div>
+                        <div class="tool-name">Meta Pixel (Facebook/Instagram)</div>
+                        <div class="tool-desc">Track ad conversions, build retargeting audiences</div>
+                    </div>
+                </div>
+                <div class="status placeholder"><span class="status-dot"></span> Needs ID</div>
+            </div>
+            <div class="tool-details">
+                <div class="detail-item">
+                    <label>Pixel ID</label>
+                    <span class="placeholder-id">XXXXXXXXXXXXXXXXX</span>
+                </div>
+                <div class="detail-item">
+                    <label>Installed On</label>
+                    <span>All 11 pages (PageView tracking)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Ads -->
+        <div class="tool-card">
+            <div class="tool-top">
+                <div class="tool-info">
+                    <div class="tool-icon gads">Ad</div>
+                    <div>
+                        <div class="tool-name">Google Ads Conversion Tag</div>
+                        <div class="tool-desc">Track Google Search/Shopping/Display ad conversions</div>
+                    </div>
+                </div>
+                <div class="status placeholder"><span class="status-dot"></span> Needs ID</div>
+            </div>
+            <div class="tool-details">
+                <div class="detail-item">
+                    <label>Conversion ID</label>
+                    <span class="placeholder-id">AW-XXXXXXXXXX</span>
+                </div>
+                <div class="detail-item">
+                    <label>Installed On</label>
+                    <span>All 11 pages (via gtag.js)</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- GA4 Events -->
+    <h2 class="section-title">GA4 E-commerce Events</h2>
+    <div class="events-grid">
+        <div class="event-card">
+            <div class="event-name">view_item</div>
+            <div class="event-trigger">Fires when a product page loads</div>
+            <div class="event-pages">product.js</div>
+        </div>
+        <div class="event-card">
+            <div class="event-name">add_to_cart</div>
+            <div class="event-trigger">Fires when user adds a product to cart</div>
+            <div class="event-pages">app.js, product.js</div>
+        </div>
+        <div class="event-card">
+            <div class="event-name">begin_checkout</div>
+            <div class="event-trigger">Fires when checkout process starts</div>
+            <div class="event-pages">app.js</div>
+        </div>
+        <div class="event-card">
+            <div class="event-name" style="opacity:0.5">purchase</div>
+            <div class="event-trigger" style="opacity:0.5">Not yet implemented</div>
+            <div class="event-pages" style="color:var(--danger)">Recommended for success.html</div>
+        </div>
+    </div>
+
+    <!-- Setup Checklist -->
+    <h2 class="section-title">Setup Checklist</h2>
+    <div class="checklist">
+        <div class="check-item">
+            <div class="check-box done">&#10003;</div>
+            <div class="check-text"><strong>Google Analytics 4</strong> &mdash; Active with ID <code>G-B5JQFPTZT7</code>. Tracking page views and e-commerce events.</div>
+        </div>
+        <div class="check-item">
+            <div class="check-box todo">!</div>
+            <div class="check-text"><strong>Google Tag Manager</strong> &mdash; Code installed, replace <code>GTM-XXXXXXX</code> with your real Container ID. Get it from <strong>tagmanager.google.com</strong> &rarr; Admin &rarr; Container Settings.</div>
+        </div>
+        <div class="check-item">
+            <div class="check-box todo">!</div>
+            <div class="check-text"><strong>Meta Pixel</strong> &mdash; Code installed, replace <code>XXXXXXXXXXXXXXXXX</code> with your real Pixel ID. Get it from <strong>business.facebook.com</strong> &rarr; Events Manager. Or from Instagram &rarr; Settings &rarr; Business &rarr; Meta Business Suite.</div>
+        </div>
+        <div class="check-item">
+            <div class="check-box todo">!</div>
+            <div class="check-text"><strong>Google Ads Tag</strong> &mdash; Code installed, replace <code>AW-XXXXXXXXXX</code> with your real Conversion ID. Get it from <strong>ads.google.com</strong> &rarr; Tools &rarr; Conversions &rarr; Set up &rarr; Website.</div>
+        </div>
+        <div class="check-item">
+            <div class="check-box todo">!</div>
+            <div class="check-text"><strong>Purchase event</strong> &mdash; Add a GA4 <code>purchase</code> event to <code>success.html</code> to track completed orders.</div>
+        </div>
+    </div>
+
+    <!-- Pages with tracking -->
+    <h2 class="section-title">Pages with Tracking Installed</h2>
+    <div class="pages-list">
+        <div class="pages-list-header">All production pages (11 total)</div>
+        <div class="page-row"><span class="page-name">index.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+        <div class="page-row"><span class="page-name">product.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+        <div class="page-row"><span class="page-name">success.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+        <div class="page-row"><span class="page-name">cancel.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+        <div class="page-row"><span class="page-name">login.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+        <div class="page-row"><span class="page-name">signup.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+        <div class="page-row"><span class="page-name">account.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+        <div class="page-row"><span class="page-name">admin.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+        <div class="page-row"><span class="page-name">forgot-password.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+        <div class="page-row"><span class="page-name">verify-email.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+        <div class="page-row"><span class="page-name">orlo-marketing-dashboard.html</span><div class="page-tags"><span class="tag ga4">GA4</span><span class="tag gtm">GTM</span><span class="tag meta">Meta</span><span class="tag gads">GAds</span></div></div>
+    </div>
+
+</div>
+
+</body>
+</html>
