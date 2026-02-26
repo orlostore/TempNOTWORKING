@@ -2581,6 +2581,13 @@ footer p {
 }
 
 
+/* Sticky buy bar for non-tiered variant mobile */
+.mobile-sticky-buybar {
+  position: sticky;
+  z-index: 99;
+  background: white;
+}
+
 /* Mobile Carousel */
 .mobile-carousel-container {
   background: white;

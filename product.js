@@ -731,6 +731,16 @@ async function initProductPage() {
       if (variantSelector && carouselContainer) carouselContainer.after(variantSelector);
       // Then place early-price right after the variant selector
       if (earlyPriceMobile && variantSelector) variantSelector.after(earlyPriceMobile);
+      // Wrap variant selector + early price in a sticky container
+      if (variantSelector) {
+        const stickyWrap = document.createElement('div');
+        stickyWrap.className = 'mobile-sticky-buybar';
+        const headerH = document.querySelector('header') ? document.querySelector('header').offsetHeight : 56;
+        stickyWrap.style.top = headerH + 'px';
+        variantSelector.before(stickyWrap);
+        stickyWrap.appendChild(variantSelector);
+        if (earlyPriceMobile) stickyWrap.appendChild(earlyPriceMobile);
+      }
     }
   }
 
