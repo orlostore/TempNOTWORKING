@@ -750,12 +750,12 @@ async function initProductPage() {
         // Helper: insert an 8px grey separator
         function addSep(afterEl) {
           const s = document.createElement('div');
-          s.style.height = '0px';
+          s.style.height = '8px';
           s.style.background = '#f8f9fa';
           afterEl.after(s);
           return s;
         }
-        // Order: carousel → grey → variant selector (sticky) → early-price
+        // Order: carousel → grey → variant selector (sticky) → grey → early-price
         const sep1 = addSep(carouselContainer);
         const stickyWrap = document.createElement('div');
         stickyWrap.className = 'mobile-sticky-buybar';
@@ -763,7 +763,8 @@ async function initProductPage() {
         stickyWrap.style.top = headerH + 'px';
         sep1.after(stickyWrap);
         stickyWrap.appendChild(variantSelector);
-        if (earlyPriceMobile) stickyWrap.after(earlyPriceMobile);
+        const sep2 = addSep(stickyWrap);
+        if (earlyPriceMobile) sep2.after(earlyPriceMobile);
       }
     }
   }
@@ -838,8 +839,7 @@ async function initProductPage() {
       // Place everything AFTER carousel (outside .mobile-product-header so grey bg shows)
       const sep1 = addTieredSep(carouselContainer);
       sep1.after(variantSelector);
-      const sep2 = addTieredSep(variantSelector);
-      if (earlyPriceMobile) sep2.after(earlyPriceMobile);
+      if (earlyPriceMobile) variantSelector.after(earlyPriceMobile);
     }
   }
 
