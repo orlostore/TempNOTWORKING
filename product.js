@@ -1579,8 +1579,8 @@ function renderVariantSelector(containerId, product, isMobile) {
       : '';
 
     const imgHTML = v.image
-      ? `<div style="position:relative;">${zoomBtn}<img src="${v.image}" alt="${v.name}" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;border-radius:6px;background:#f8f8f8;"></div>`
-      : `<div style="width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#f8f8f8;border-radius:6px;font-size:1.5rem;">📦</div>`;
+      ? `<div style="position:relative;">${zoomBtn}<img src="${v.image}" alt="${v.name}" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;border-radius:5px;background:#f8f8f8;"></div>`
+      : `<div style="width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#f8f8f8;border-radius:5px;font-size:1.5rem;">📦</div>`;
 
     return `
       <div class="${classes}" data-variant-id="${v.id}" id="${prefix}-vtile-${v.id}"
