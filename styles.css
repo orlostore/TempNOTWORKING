@@ -2637,7 +2637,9 @@ footer p {
 .mobile-carousel-container {
   background: white;
   position: relative;
-  margin-top: 8px;
+  margin: 8px 15px 0;
+  border: 1.5px solid #e2e8ef;
+  border-radius: 16px;
 }
 
 .mobile-carousel {
@@ -2647,6 +2649,7 @@ footer p {
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
+  border-radius: 16px 16px 0 0;
 }
 
 .mobile-carousel::-webkit-scrollbar {
