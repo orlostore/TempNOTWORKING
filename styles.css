@@ -2661,8 +2661,10 @@ footer p {
   align-items: center;
   justify-content: center;
   padding: 0;
-  background: white;
+  background: #f8f9fa;
   cursor: pointer;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 .mobile-carousel-slide img {
