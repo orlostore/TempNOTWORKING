@@ -770,6 +770,7 @@ async function initProductPage() {
           stickyWrap.appendChild(sep2);
           stickyWrap.appendChild(earlyPriceMobile);
         }
+        initCollapsedStickyBar(stickyWrap);
       }
     }
   }
@@ -854,6 +855,7 @@ async function initProductPage() {
         stickyWrap.appendChild(sep2);
         stickyWrap.appendChild(earlyPriceMobile);
       }
+      initCollapsedStickyBar(stickyWrap);
     }
   }
 
@@ -1558,6 +1560,42 @@ function setupGalleryOverlay(product) {
   });
 }
 
+// === COLLAPSED STICKY BAR (mobile variant products only) ===
+function initCollapsedStickyBar(stickyWrap) {
+  if (!stickyWrap || stickyWrap.querySelector('.sticky-collapsed-bar')) return;
+  const bar = document.createElement('div');
+  bar.className = 'sticky-collapsed-bar';
+  bar.innerHTML = `
+    <img class="collapsed-thumb" src="" alt="">
+    <div class="collapsed-info">
+      <div class="collapsed-name"></div>
+      <div class="collapsed-price"></div>
+    </div>
+    <svg class="collapsed-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  `;
+  bar.addEventListener('click', function() {
+    stickyWrap.classList.remove('is-collapsed');
+  });
+  stickyWrap.prepend(bar);
+}
+
+function collapseStickyBar(variant, price) {
+  const stickyWrap = document.querySelector('.mobile-sticky-buybar');
+  if (!stickyWrap) return;
+  const bar = stickyWrap.querySelector('.sticky-collapsed-bar');
+  if (!bar) return;
+  const thumb = bar.querySelector('.collapsed-thumb');
+  const nameEl = bar.querySelector('.collapsed-name');
+  const priceEl = bar.querySelector('.collapsed-price');
+  if (thumb) {
+    if (variant.image) { thumb.src = variant.image; thumb.style.display = ''; }
+    else { thumb.style.display = 'none'; }
+  }
+  if (nameEl) nameEl.textContent = variant.name;
+  if (priceEl) priceEl.textContent = 'AED ' + (price || '');
+  stickyWrap.classList.add('is-collapsed');
+}
+
 // === VARIANT SELECTOR RENDERING ===
 function renderVariantSelector(containerId, product, isMobile) {
   const container = document.getElementById(containerId);
@@ -1940,6 +1978,12 @@ function selectVariant(variantId, productId, prefix) {
         };
       }
     }
+  }
+
+  // Auto-collapse sticky bar on mobile after variant selection
+  if (prefix === 'mob') {
+    const variantPrice = variant.price > 0 ? variant.price : product.price;
+    collapseStickyBar(variant, variantPrice);
   }
 }
 
