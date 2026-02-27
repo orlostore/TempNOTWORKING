@@ -2630,6 +2630,7 @@ footer p {
   .variant-section {
     margin-top: 0;
     margin-bottom: 8px;
+    padding-top: 8px;
   }
 }
 
