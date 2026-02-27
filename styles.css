@@ -2569,7 +2569,7 @@ footer p {
   .mobile-product-page {
     display: block;
     padding-bottom: 80px;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 }
 
