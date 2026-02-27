@@ -735,6 +735,7 @@ async function initProductPage() {
       const bc = variantBuybox.querySelector('.mobile-cart-section');
       if (bp) bp.style.display = 'none';
       if (bc) bc.style.display = 'none';
+      variantBuybox.style.display = 'none';
     }
     // Delivery already in early price box, remove buybox duplicate
     const mobileDeliveryEl = document.querySelector('.mobile-delivery-info');
