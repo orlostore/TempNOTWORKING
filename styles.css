@@ -2645,6 +2645,9 @@ footer p {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  border: 1.5px solid #e2e8ef;
+  border-radius: 16px;
+  overflow: hidden;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
 }
