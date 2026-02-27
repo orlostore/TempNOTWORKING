@@ -755,7 +755,7 @@ async function initProductPage() {
           afterEl.after(s);
           return s;
         }
-        // Order: carousel → grey → variant selector (sticky) → grey → early-price
+        // Order: carousel → grey → variant selector (sticky) → early-price
         const sep1 = addSep(carouselContainer);
         const stickyWrap = document.createElement('div');
         stickyWrap.className = 'mobile-sticky-buybar';
@@ -763,8 +763,7 @@ async function initProductPage() {
         stickyWrap.style.top = headerH + 'px';
         sep1.after(stickyWrap);
         stickyWrap.appendChild(variantSelector);
-        const sep2 = addSep(stickyWrap);
-        if (earlyPriceMobile) sep2.after(earlyPriceMobile);
+        if (earlyPriceMobile) stickyWrap.after(earlyPriceMobile);
       }
     }
   }
