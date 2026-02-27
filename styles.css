@@ -1615,12 +1615,21 @@ footer p {
   background: #f3f5f7;
   border: none;
   border-radius: 10px;
-  font-size: 0.76rem;
+  font-size: 0.71rem;
   color: #5a7a8c;
+}
+
+.early-delivery-info .delivery-en {
+  font-size: 0.75rem;
+}
+
+.early-delivery-info .delivery-ar {
+  font-size: 0.75rem;
 }
 
 .early-delivery-info .delivery-icon {
   color: #e07856;
+  font-size: 1.25rem;
 }
 
 .product-details p {
