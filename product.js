@@ -838,7 +838,8 @@ async function initProductPage() {
       // Place everything AFTER carousel (outside .mobile-product-header so grey bg shows)
       const sep1 = addTieredSep(carouselContainer);
       sep1.after(variantSelector);
-      if (earlyPriceMobile) variantSelector.after(earlyPriceMobile);
+      const sep2 = addTieredSep(variantSelector);
+      if (earlyPriceMobile) sep2.after(earlyPriceMobile);
     }
   }
 
