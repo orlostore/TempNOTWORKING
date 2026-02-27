@@ -2844,7 +2844,7 @@ footer p {
 
 /* Mobile Details Section (unified for Colors, Packaging, Specs, Description) */
 .mobile-details-section {
-  margin: 8px 10px 0;
+  margin: 8px 15px 0;
   background: white;
   border-radius: 12px;
   overflow: hidden;
