@@ -2641,6 +2641,12 @@ footer p {
   padding: 0 15px;
 }
 
+.mobile-carousel-box {
+  border: 1.5px solid #e2e8ef;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
 .mobile-carousel {
   display: flex;
   overflow-x: auto;
@@ -2648,8 +2654,6 @@ footer p {
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
-  border: 1.5px solid #e2e8ef;
-  border-radius: 16px;
 }
 
 .mobile-carousel::-webkit-scrollbar {
