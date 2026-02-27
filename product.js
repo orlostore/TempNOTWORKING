@@ -1753,6 +1753,18 @@ function updateTierHighlight(productId) {
           existingBadge.remove();
         }
       }
+
+      // Update early buy box price to reflect active tier price
+      const earlyPriceEn = activeDiscount > 0 ? `AED ${activePrice.toFixed(2)}` : `AED ${basePrice} or less`;
+      const earlyPriceAr = activeDiscount > 0 ? `${activePrice.toFixed(2)} درهم` : `${basePrice} درهم أو أقل`;
+      ['earlyPriceDesktop', 'earlyPriceMobile'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const priceRow = el.querySelector('.early-price-en');
+        const priceRowAr = el.querySelector('.early-price-ar');
+        if (priceRow) priceRow.textContent = earlyPriceEn;
+        if (priceRowAr) priceRowAr.textContent = earlyPriceAr;
+      });
     }
   });
 }
