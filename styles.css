@@ -2637,6 +2637,7 @@ footer p {
 .mobile-carousel-container {
   background: white;
   position: relative;
+  margin-top: 8px;
 }
 
 .mobile-carousel {
