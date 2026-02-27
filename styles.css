@@ -2637,7 +2637,11 @@ footer p {
 .mobile-carousel-container {
   background: #f8f9fa;
   position: relative;
-  padding: 0 15px;
+  padding: 8px 15px 0;
+  border: 1.5px solid #e2e8ef;
+  border-radius: 16px;
+  margin: 0 15px;
+  overflow: hidden;
 }
 
 .mobile-carousel {
@@ -2645,9 +2649,6 @@ footer p {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  border: 1.5px solid #e2e8ef;
-  border-radius: 16px;
-  overflow: hidden;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -2666,8 +2667,6 @@ footer p {
   padding: 0;
   background: #f8f9fa;
   cursor: pointer;
-  border-radius: 16px;
-  overflow: hidden;
 }
 
 .mobile-carousel-slide img {
