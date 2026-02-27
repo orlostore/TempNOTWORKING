@@ -2617,7 +2617,7 @@ footer p {
 .mobile-sticky-buybar {
   position: sticky;
   z-index: 99;
-  background: white;
+  background: #f8f9fa;
 }
 
 /* When early-price is moved outside .mobile-product-header, match its 15px side padding */
@@ -2626,6 +2626,10 @@ footer p {
   .mobile-sticky-buybar > .early-price {
     margin-left: 15px;
     margin-right: 15px;
+  }
+  .variant-section {
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 
