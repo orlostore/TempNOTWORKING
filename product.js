@@ -750,7 +750,7 @@ async function initProductPage() {
         // Helper: insert an 8px grey separator
         function addSep(afterEl) {
           const s = document.createElement('div');
-          s.style.height = '8px';
+          s.style.height = '0px';
           s.style.background = '#f8f9fa';
           afterEl.after(s);
           return s;
