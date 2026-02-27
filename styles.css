@@ -2637,8 +2637,8 @@ footer p {
 .mobile-carousel-container {
   background: #f8f9fa;
   position: relative;
-  margin-top: 8px;
-  padding: 0 15px;
+  margin-top: 0;
+  padding: 16px 15px 0;
 }
 
 .mobile-carousel-box {
