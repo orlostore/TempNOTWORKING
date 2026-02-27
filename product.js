@@ -707,7 +707,13 @@ async function initProductPage() {
     // Move early-price (buy box) below the carousel for non-variant products
     if (earlyPriceMobile) {
       const carouselContainer = document.querySelector('.mobile-carousel-container');
-      if (carouselContainer) carouselContainer.after(earlyPriceMobile);
+      if (carouselContainer) {
+        const sep = document.createElement('div');
+        sep.style.height = '8px';
+        sep.style.background = '#f8f9fa';
+        carouselContainer.after(sep);
+        sep.after(earlyPriceMobile);
+      }
     }
   } else {
     mobileAddBtn = document.getElementById("mobileAddToCartBtn");
