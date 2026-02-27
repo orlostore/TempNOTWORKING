@@ -755,7 +755,7 @@ async function initProductPage() {
           afterEl.after(s);
           return s;
         }
-        // Order: carousel → grey → variant selector (sticky) → early-price
+        // Order: carousel → grey → variant selector (sticky) → early-price (hidden until selection)
         const sep1 = addSep(carouselContainer);
         const stickyWrap = document.createElement('div');
         stickyWrap.className = 'mobile-sticky-buybar';
@@ -769,6 +769,9 @@ async function initProductPage() {
           sep2.style.background = '#f8f9fa';
           stickyWrap.appendChild(sep2);
           stickyWrap.appendChild(earlyPriceMobile);
+          // Hide early-price until a variant is selected
+          earlyPriceMobile.style.display = 'none';
+          earlyPriceMobile.classList.add('sticky-price-hidden');
         }
         initCollapsedStickyBar(stickyWrap);
       }
@@ -1566,14 +1569,21 @@ function initCollapsedStickyBar(stickyWrap) {
   const bar = document.createElement('div');
   bar.className = 'sticky-collapsed-bar';
   bar.innerHTML = `
-    <img class="collapsed-thumb" src="" alt="">
-    <div class="collapsed-info">
-      <div class="collapsed-name"></div>
-      <div class="collapsed-price"></div>
+    <div class="collapsed-left">
+      <img class="collapsed-thumb" src="" alt="">
+      <div class="collapsed-info">
+        <div class="collapsed-name"></div>
+        <div class="collapsed-price"></div>
+      </div>
     </div>
+    <button class="collapsed-cart-btn" id="collapsedAddToCart">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
     <svg class="collapsed-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
   `;
-  bar.addEventListener('click', function() {
+  // Clicking the left side (thumb + info) or chevron expands back to variant grid
+  bar.querySelector('.collapsed-left').addEventListener('click', function() {
+    stickyWrap.classList.remove('is-collapsed');
+  });
+  bar.querySelector('.collapsed-chevron').addEventListener('click', function() {
     stickyWrap.classList.remove('is-collapsed');
   });
   stickyWrap.prepend(bar);
@@ -1594,6 +1604,42 @@ function collapseStickyBar(variant, price) {
   if (nameEl) nameEl.textContent = variant.name;
   if (priceEl) priceEl.textContent = 'AED ' + (price || '');
   stickyWrap.classList.add('is-collapsed');
+
+  // Show early-price section now that a variant is selected
+  const earlyPrice = stickyWrap.querySelector('.early-price, #earlyPriceMobile');
+  if (earlyPrice && earlyPrice.classList.contains('sticky-price-hidden')) {
+    earlyPrice.style.display = '';
+    earlyPrice.classList.remove('sticky-price-hidden');
+  }
+
+  // Wire up the collapsed Add to Cart button to mirror the main mobile button
+  const collapsedBtn = bar.querySelector('.collapsed-cart-btn');
+  const mobileBtn = document.getElementById('mobileAddToCartBtn');
+  if (collapsedBtn) {
+    // Check if variant already in cart → show quantity instead
+    const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingItem = localCart.find(i => i.variantId === variant.id);
+    if (existingItem) {
+      collapsedBtn.textContent = 'In Cart (' + existingItem.quantity + ')';
+      collapsedBtn.style.background = '#4a7c6f';
+    } else {
+      collapsedBtn.innerHTML = 'Add to Cart | <span class="arabic-text">أضف إلى السلة</span>';
+      collapsedBtn.style.background = '#e07856';
+      collapsedBtn.disabled = false;
+    }
+    collapsedBtn.onclick = function() {
+      if (mobileBtn) mobileBtn.click();
+      // Update button after adding
+      setTimeout(() => {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const item = cart.find(i => i.variantId === variant.id);
+        if (item) {
+          collapsedBtn.textContent = 'In Cart (' + item.quantity + ')';
+          collapsedBtn.style.background = '#4a7c6f';
+        }
+      }, 200);
+    };
+  }
 }
 
 // === VARIANT SELECTOR RENDERING ===
