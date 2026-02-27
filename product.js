@@ -763,7 +763,9 @@ async function initProductPage() {
         stickyWrap.style.top = headerH + 'px';
         sep1.after(stickyWrap);
         stickyWrap.appendChild(variantSelector);
-        if (earlyPriceMobile) stickyWrap.after(earlyPriceMobile);
+        const sep2 = addSep(stickyWrap);
+        sep2.style.height = '8px';
+        if (earlyPriceMobile) sep2.after(earlyPriceMobile);
       }
     }
   }
