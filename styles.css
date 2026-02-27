@@ -2844,17 +2844,21 @@ footer p {
 
 /* Mobile Details Section (unified for Colors, Packaging, Specs, Description) */
 .mobile-details-section {
-  margin-top: 8px;
+  margin: 8px 10px 0;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border: 1px solid #e8eef2;
 }
 
 .mobile-detail-block {
-  background: white;
   padding: 15px;
-  margin-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .mobile-detail-block:last-child {
-  margin-bottom: 0;
+  border-bottom: none;
 }
 
 .mobile-detail-title {
