@@ -3596,7 +3596,7 @@ footer p {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     gap: 10px;
-    padding-bottom: 4px;
+    padding-bottom: 0;
   }
   .variant-grid.variant-grid-scroll::-webkit-scrollbar { display: none; }
   .variant-grid.variant-grid-scroll .variant-tile {
