@@ -763,9 +763,13 @@ async function initProductPage() {
         stickyWrap.style.top = headerH + 'px';
         sep1.after(stickyWrap);
         stickyWrap.appendChild(variantSelector);
-        const sep2 = addSep(stickyWrap);
-        sep2.style.height = '8px';
-        if (earlyPriceMobile) sep2.after(earlyPriceMobile);
+        if (earlyPriceMobile) {
+          const sep2 = document.createElement('div');
+          sep2.style.height = '8px';
+          sep2.style.background = '#f8f9fa';
+          stickyWrap.appendChild(sep2);
+          stickyWrap.appendChild(earlyPriceMobile);
+        }
       }
     }
   }
