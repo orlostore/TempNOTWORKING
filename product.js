@@ -482,11 +482,11 @@ async function initProductPage() {
     productPriceEl.style.display = 'none';
   } else if (hasVariants) {
     // Price pill for no-tier variant products
-    productPriceEl.innerHTML = `<div class="price-pill"><div class="pill-price">AED ${product.price}</div><div class="pill-unit">per piece</div><div class="pill-unit-ar arabic-text">للقطعة</div></div>`;
+    productPriceEl.innerHTML = `<div class="price-pill"><div class="pill-price">AED ${Number(product.price).toFixed(2)}</div><div class="pill-unit">per piece</div><div class="pill-unit-ar arabic-text">للقطعة</div></div>`;
     const buybox = document.querySelector('.product-buybox');
     if (buybox) buybox.classList.add('has-price-pill');
   } else {
-    productPriceEl.innerText = "AED " + product.price;
+    productPriceEl.innerText = "AED " + Number(product.price).toFixed(2);
   }
 
   // === EARLY PRICE ===
@@ -506,8 +506,8 @@ async function initProductPage() {
 
   if (hasVariants && (product.price || variantDisplayPrice)) {
     const displayPrice = variantDisplayPrice || product.price;
-    const priceEn = `AED ${displayPrice}`;
-    const priceAr = `${displayPrice} درهم`;
+    const priceEn = `AED ${Number(displayPrice).toFixed(2)}`;
+    const priceAr = `${Number(displayPrice).toFixed(2)} درهم`;
     const earlyHTML = `<div class="early-price-row"><span class="early-price-en">${priceEn}</span><span class="early-price-ar arabic-text">${priceAr}</span></div>`;
     let hintHTML = '';
     if (hasTiers) {
@@ -552,10 +552,10 @@ async function initProductPage() {
     }
   } else if (product.price) {
     // Non-variant products: desktop keeps inline layout
-    const earlyHTMLDesktop = `<div class="early-price-row early-price-inline"><span class="early-price-en">AED ${product.price}</span><button class="inline-add-to-cart" id="earlyCartDesktop">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button><span class="early-price-ar arabic-text">${product.price} درهم</span></div>`;
+    const earlyHTMLDesktop = `<div class="early-price-row early-price-inline"><span class="early-price-en">AED ${Number(product.price).toFixed(2)}</span><button class="inline-add-to-cart" id="earlyCartDesktop">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button><span class="early-price-ar arabic-text">${Number(product.price).toFixed(2)} درهم</span></div>`;
     if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTMLDesktop;
     // Non-variant products: mobile gets stacked layout matching variant style
-    const earlyHTMLMobile = `<div class="early-price-row"><span class="early-price-en">AED ${product.price}</span><span class="early-price-ar arabic-text">${product.price} درهم</span></div><button class="mobile-add-to-cart" id="earlyCartMobile">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+    const earlyHTMLMobile = `<div class="early-price-row"><span class="early-price-en">AED ${Number(product.price).toFixed(2)}</span><span class="early-price-ar arabic-text">${Number(product.price).toFixed(2)} درهم</span></div><button class="mobile-add-to-cart" id="earlyCartMobile">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
     if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTMLMobile;
   } else {
     if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
@@ -1762,8 +1762,8 @@ function updateTierHighlight(productId) {
       }
 
       // Update early buy box price to reflect active tier price
-      const earlyPriceEn = activeDiscount > 0 ? `AED ${activePrice.toFixed(2)}` : `AED ${basePrice}`;
-      const earlyPriceAr = activeDiscount > 0 ? `${activePrice.toFixed(2)} درهم` : `${basePrice} درهم`;
+      const earlyPriceEn = activeDiscount > 0 ? `AED ${activePrice.toFixed(2)}` : `AED ${Number(basePrice).toFixed(2)}`;
+      const earlyPriceAr = activeDiscount > 0 ? `${activePrice.toFixed(2)} درهم` : `${Number(basePrice).toFixed(2)} درهم`;
       ['earlyPriceDesktop', 'earlyPriceMobile'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
@@ -1869,13 +1869,14 @@ function selectVariant(variantId, productId, prefix) {
 
   // Update price pill for no-tier variant products
   const variantPrice = variant.price > 0 ? variant.price : product.price;
+  const formattedPrice = Number(variantPrice).toFixed(2);
   document.querySelectorAll('.price-pill .pill-price').forEach(el => {
-    el.textContent = `AED ${variantPrice}`;
+    el.textContent = `AED ${formattedPrice}`;
   });
 
   // Update early price display with selected variant's price
-  const priceEn = `AED ${variantPrice}`;
-  const priceAr = `${variantPrice} درهم`;
+  const priceEn = `AED ${formattedPrice}`;
+  const priceAr = `${formattedPrice} درهم`;
   ['earlyPriceDesktop', 'earlyPriceMobile'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
