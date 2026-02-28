@@ -2650,13 +2650,13 @@ footer p {
   align-items: center;
   justify-content: center;
   height: 38px;
-  flex: 0 0 110px;
+  flex: 0 0 120px;
   border-radius: 12px;
   font-weight: 700;
   line-height: 1.15;
   gap: 0;
   padding: 0 10px;
-  width: 110px;
+  width: 120px;
   margin-top: 0;
 }
 .early-price-bottom .mobile-add-to-cart .btn-en {
@@ -2671,9 +2671,9 @@ footer p {
 /* Qty stepper in bottom bar — specificity 0,4,0 to beat .mobile-product-header .early-price rules */
 .mobile-product-header .early-price.early-price-bottom .product-btn-transformed,
 .mobile-product-header .early-price.early-price-bottom .grid-qty-control {
-  flex: 0 0 110px;
+  flex: 0 0 120px;
   height: 38px;
-  width: 110px;
+  width: 120px;
   margin-top: 0;
 }
 .mobile-product-header .early-price.early-price-bottom .grid-qty-btn {
