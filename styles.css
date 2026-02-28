@@ -2657,8 +2657,9 @@ footer p {
   font-weight: 700;
   color: #8a9aa6;
 }
-/* Cart button: stacked bilingual text, flex center column */
-.early-price-bottom .mobile-add-to-cart {
+/* Cart button: stacked bilingual text, flex center column
+   Specificity 0,3,0 to override .mobile-product-header .early-price .mobile-add-to-cart */
+.early-price.early-price-bottom .mobile-add-to-cart {
   display: flex;
   flex-direction: column;
   align-items: center;
