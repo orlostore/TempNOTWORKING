@@ -2613,57 +2613,22 @@ footer p {
 }
 
 
-/* === Sticky bottom buy box (mobile variant products) === */
-.mobile-bottom-buybox {
-  display: none;
+/* === Early price box fixed at bottom (mobile variant products) === */
+.early-price-bottom {
   position: fixed;
   bottom: 70px;
   left: 0;
   right: 0;
-  background: #fff;
-  border-top: 1.5px solid #e2e8ef;
-  padding: 8px 16px;
   z-index: 5999;
+  margin: 0;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
   transition: bottom 0.3s ease;
 }
-.mobile-bottom-buybox.nav-hidden {
+.early-price-bottom.nav-hidden {
   bottom: 0;
-}
-.bottom-buybox-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-.bottom-buybox-price {
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: var(--primary);
-  white-space: nowrap;
-}
-.bottom-buybox-row .mobile-add-to-cart {
-  flex: 1;
-}
-.bottom-buybox-row .product-btn-transformed,
-.bottom-buybox-row .grid-qty-control {
-  flex: 1;
-  height: 36px;
-}
-.bottom-buybox-row .grid-qty-btn {
-  height: 36px;
-}
-.bottom-buybox-delivery {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.68rem;
-  color: #5a7a8c;
-}
-.bottom-buybox-delivery .delivery-icon {
-  color: #e07856;
-}
-.bottom-buybox-delivery .arabic-text {
-  margin-left: auto;
 }
 
 /* Bottom nav hide/show on scroll */
@@ -2676,12 +2641,9 @@ footer p {
 
 /* When early-price is moved outside .mobile-product-header, match its 15px side padding */
 @media (max-width: 768px) {
-  .mobile-product-page > .early-price {
+  .mobile-product-page > .early-price:not(.early-price-bottom) {
     margin-left: 15px;
     margin-right: 15px;
-  }
-  .mobile-bottom-buybox {
-    display: block;
   }
   .variant-section {
     margin-top: 0;

@@ -530,8 +530,11 @@ async function initProductPage() {
       }
     }
     if (earlyPriceMobile) {
-      // Mobile variant: earlyPriceMobile hidden — price goes to sticky bottom buy box
-      earlyPriceMobile.style.display = 'none';
+      earlyPriceMobile.innerHTML = earlyHTML;
+      earlyPriceMobile.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
+      const earlyRow = earlyPriceMobile.querySelector('.early-price-row');
+      const mobileCartBtn = document.getElementById('mobileAddToCartBtn');
+      if (earlyRow && mobileCartBtn) earlyRow.after(mobileCartBtn);
     }
   } else if (product.price) {
     // Non-variant products: desktop keeps inline layout
@@ -713,10 +716,8 @@ async function initProductPage() {
       }
     }
   } else {
-    // VARIANT PRODUCTS (mobile) — sticky bottom buy box + inline variant tiles
-    // Remove original button (will be recreated in bottom buy box)
-    const origMobileBtn = document.getElementById("mobileAddToCartBtn");
-    if (origMobileBtn) origMobileBtn.remove();
+    // VARIANT PRODUCTS (mobile) — earlyPriceMobile sticks at bottom + inline variant tiles
+    mobileAddBtn = document.getElementById("mobileAddToCartBtn");
 
     // Hide the original buybox compact
     const variantBuybox = document.querySelector('.mobile-buybox-compact');
@@ -733,26 +734,10 @@ async function initProductPage() {
       carouselContainer.after(variantSelector);
     }
 
-    // Create sticky bottom buy box
-    const displayPrice = variantDisplayPrice || product.price;
-    const bottomBuyBox = document.createElement('div');
-    bottomBuyBox.className = 'mobile-bottom-buybox';
-    bottomBuyBox.id = 'mobileBottomBuyBox';
-    bottomBuyBox.innerHTML = `
-      <div class="bottom-buybox-row">
-        <span class="bottom-buybox-price" id="bottomBuyBoxPriceEn">AED ${displayPrice}</span>
-        <button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
-        <span class="bottom-buybox-price arabic-text" id="bottomBuyBoxPriceAr">${displayPrice} درهم</span>
-      </div>
-      <div class="bottom-buybox-delivery">
-        <span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
-        <span>Free delivery over AED ${threshold}</span>
-        <span class="arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</span>
-      </div>
-    `;
-    const mobilePage = document.querySelector('.mobile-product-page');
-    if (mobilePage) mobilePage.appendChild(bottomBuyBox);
-    mobileAddBtn = document.getElementById('mobileAddToCartBtn');
+    // Position earlyPriceMobile as sticky bottom buy box (keeps its existing design)
+    if (earlyPriceMobile) {
+      earlyPriceMobile.classList.add('early-price-bottom');
+    }
 
     if (isOutOfStock && mobileAddBtn) {
       mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
@@ -1532,7 +1517,7 @@ function setupGalleryOverlay(product) {
 function initBottomNavScrollBehavior() {
   const bottomNav = document.getElementById('mobileBottomNav');
   if (!bottomNav) return;
-  const buyBox = document.getElementById('mobileBottomBuyBox');
+  const buyBox = document.querySelector('.early-price-bottom');
 
   let lastScrollY = window.scrollY;
   let ticking = false;
@@ -1944,11 +1929,6 @@ function selectVariant(variantId, productId, prefix) {
     }
   }
 
-  // Update sticky bottom buy box price (mobile variant)
-  const bottomPriceEn = document.getElementById('bottomBuyBoxPriceEn');
-  const bottomPriceAr = document.getElementById('bottomBuyBoxPriceAr');
-  if (bottomPriceEn) bottomPriceEn.textContent = `AED ${variantPrice}`;
-  if (bottomPriceAr) bottomPriceAr.textContent = `${variantPrice} درهم`;
 }
 
 // Replace an existing stepper div with a different variant's stepper
