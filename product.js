@@ -1533,6 +1533,12 @@ function initBottomNavScrollBehavior() {
   if (!bottomNav) return;
   const buyBox = document.querySelector('.early-price-bottom');
 
+  // Position buy box flush above the bottom nav
+  if (buyBox) {
+    const navH = bottomNav.offsetHeight;
+    if (navH > 0) buyBox.style.bottom = navH + 'px';
+  }
+
   let lastScrollY = window.scrollY;
   let ticking = false;
 
@@ -1956,14 +1962,25 @@ function replaceStepperForVariant(stepperDiv, product, variant) {
   const localCart = JSON.parse(localStorage.getItem("cart")) || [];
   const item = localCart.find(i => i.id === product.id && i.variantId === variant.id);
   const qty = item ? item.quantity : 1;
+  const isBottomBar = stepperDiv.closest && stepperDiv.closest('.early-price-bottom') !== null;
 
-  stepperDiv.outerHTML = `
-    <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}">
-      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, -1)">−</button>
-      <span class="grid-qty-display" id="qtyDisplay-${product.id}-${variant.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
-      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
-    </div>
-  `;
+  if (isBottomBar) {
+    stepperDiv.outerHTML = `
+      <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}" style="flex:1;height:38px;width:auto;margin-top:0;">
+        <button class="grid-qty-btn" style="width:38px;height:38px;" onclick="productVariantQtyChange(${product.id}, ${variant.id}, -1)">−</button>
+        <span class="grid-qty-display" id="qtyDisplay-${product.id}-${variant.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
+        <button class="grid-qty-btn" style="width:38px;height:38px;" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
+      </div>
+    `;
+  } else {
+    stepperDiv.outerHTML = `
+      <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}">
+        <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, -1)">−</button>
+        <span class="grid-qty-display" id="qtyDisplay-${product.id}-${variant.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
+        <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
+      </div>
+    `;
+  }
 }
 
 // Transform button to qty control for variant items
@@ -1971,14 +1988,25 @@ function transformToQtyButtonVariant(btn, product, variant) {
   const localCart = JSON.parse(localStorage.getItem("cart")) || [];
   const item = localCart.find(i => i.id === product.id && i.variantId === variant.id);
   const qty = item ? item.quantity : 1;
+  const isBottomBar = btn.closest && btn.closest('.early-price-bottom') !== null;
 
-  btn.outerHTML = `
-    <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}">
-      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, -1)">−</button>
-      <span class="grid-qty-display" id="qtyDisplay-${product.id}-${variant.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
-      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
-    </div>
-  `;
+  if (isBottomBar) {
+    btn.outerHTML = `
+      <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}" style="flex:1;height:38px;width:auto;margin-top:0;">
+        <button class="grid-qty-btn" style="width:38px;height:38px;" onclick="productVariantQtyChange(${product.id}, ${variant.id}, -1)">−</button>
+        <span class="grid-qty-display" id="qtyDisplay-${product.id}-${variant.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
+        <button class="grid-qty-btn" style="width:38px;height:38px;" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
+      </div>
+    `;
+  } else {
+    btn.outerHTML = `
+      <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}">
+        <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, -1)">−</button>
+        <span class="grid-qty-display" id="qtyDisplay-${product.id}-${variant.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
+        <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
+      </div>
+    `;
+  }
   updateTierHighlight(product.id);
 }
 
