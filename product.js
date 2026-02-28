@@ -1895,7 +1895,10 @@ function selectVariant(variantId, productId, prefix) {
 
   [desktopBtn, mobileBtn].forEach(btn => {
     if (btn && !btn.classList.contains('product-btn-transformed') && btn.tagName === 'BUTTON') {
-      btn.innerHTML = 'Add to Cart | <span class="arabic-text">أضف إلى السلة</span>';
+      const isBottomBar = btn.closest('.early-price-bottom') !== null;
+      btn.innerHTML = isBottomBar
+        ? '<span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span>'
+        : 'Add to Cart | <span class="arabic-text">أضف إلى السلة</span>';
       btn.disabled = false;
       btn.style.background = '#e07856';
       btn.style.cursor = 'pointer';
