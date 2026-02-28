@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bottom Buy Bar — 4 Design Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2c4a5c;
+    --accent: #e07856;
+    --text: #333;
+    --bg: #f8f9fa;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #e8ecef;
+    color: var(--text);
+    padding: 20px 16px 40px;
+  }
+
+  .arabic-text {
+    font-family: 'Almarai', sans-serif;
+    direction: rtl;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.4rem;
+    color: var(--primary);
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #7a8a96;
+    margin-bottom: 30px;
+  }
+
+  /* Phone frame */
+  .option-section {
+    margin-bottom: 40px;
+  }
+  .option-label {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+    padding-left: 4px;
+  }
+  .option-desc {
+    font-size: 0.78rem;
+    color: #7a8a96;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  .phone-frame {
+    width: 375px;
+    max-width: 100%;
+    margin: 0 auto;
+    background: #f0f2f4;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.06);
+    position: relative;
+  }
+  .phone-screen {
+    position: relative;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  /* Fake product area */
+  .fake-product {
+    padding: 20px 16px 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .fake-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #dce3e8 0%, #c4cfd8 100%);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    color: #a0b0bc;
+  }
+  .fake-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .fake-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--primary);
+    line-height: 1.3;
+  }
+  .fake-variant {
+    font-size: 0.68rem;
+    color: #8a9aa6;
+    margin-top: 2px;
+  }
+
+  /* Bottom nav placeholder */
+  .fake-bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 8px 16px;
+    background: white;
+    border-top: 1px solid #eee;
+  }
+  .nav-dot {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #e0e6ea;
+  }
+
+  /* ===========================
+     OPTION A: Gradient Glass Bar
+     =========================== */
+  .bar-a {
+    background: linear-gradient(135deg, #2c4a5c 0%, #3a6278 100%);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .bar-a .price-block {
+    flex: 1;
+    min-width: 0;
+  }
+  .bar-a .price-en {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .bar-a .price-ar {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.2;
+  }
+  .bar-a .delivery-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    white-space: nowrap;
+  }
+  .bar-a .delivery-chip svg {
+    width: 13px; height: 13px;
+    stroke: #7fd8a0;
+    fill: none;
+    stroke-width: 2;
+  }
+  .bar-a .cart-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(224,120,86,0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .bar-a .cart-btn:active { transform: scale(0.96); }
+  .bar-a .cart-btn svg {
+    width: 16px; height: 16px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ===========================
+     OPTION B: Split Card
+     =========================== */
+  .bar-b {
+    background: #fff;
+    padding: 8px 12px 10px;
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    border-top: 2px solid var(--accent);
+  }
+  .bar-b .left-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+  }
+  .bar-b .prices-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .bar-b .price-en {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+  }
+  .bar-b .price-ar {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #8a9aa6;
+  }
+  .bar-b .delivery-line {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.65rem;
+    color: #5a7a8c;
+    font-weight: 500;
+  }
+  .bar-b .delivery-line svg {
+    width: 12px; height: 12px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2;
+  }
+  .bar-b .cart-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 0 22px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    white-space: nowrap;
+    min-height: 48px;
+    box-shadow: 0 2px 12px rgba(224,120,86,0.25);
+    transition: transform 0.15s;
+  }
+  .bar-b .cart-btn:active { transform: scale(0.96); }
+  .bar-b .cart-btn .btn-ar {
+    font-size: 0.65rem;
+    opacity: 0.85;
+  }
+
+  /* ===========================
+     OPTION C: Pill Float
+     =========================== */
+  .bar-c-wrap {
+    padding: 6px 12px 8px;
+    background: transparent;
+  }
+  .bar-c {
+    background: var(--primary);
+    border-radius: 18px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 24px rgba(44,74,92,0.25);
+  }
+  .bar-c .price-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 0;
+    padding-left: 4px;
+  }
+  .bar-c .price-en {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .bar-c .price-ar {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.2;
+  }
+  .bar-c .divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+  .bar-c .delivery-badge {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    white-space: nowrap;
+  }
+  .bar-c .delivery-badge svg {
+    width: 12px; height: 12px;
+    stroke: #7fd8a0;
+    fill: none;
+    stroke-width: 2;
+  }
+  .bar-c .spacer { flex: 1; }
+  .bar-c .cart-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 10px 16px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(224,120,86,0.3);
+    transition: transform 0.15s;
+  }
+  .bar-c .cart-btn:active { transform: scale(0.96); }
+  .bar-c .cart-btn svg {
+    width: 15px; height: 15px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ===========================
+     OPTION D: Two-Row Stacked
+     =========================== */
+  .bar-d {
+    background: #fff;
+    padding: 0;
+    border-top: 1px solid #e8ecef;
+  }
+  .bar-d .top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 14px 0;
+  }
+  .bar-d .prices-side {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .bar-d .price-en {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+  }
+  .bar-d .price-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #c0c8ce;
+  }
+  .bar-d .price-ar {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #8a9aa6;
+  }
+  .bar-d .delivery-tag {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: #eaf7ee;
+    border-radius: 8px;
+    padding: 3px 8px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: #2a8c4a;
+  }
+  .bar-d .delivery-tag svg {
+    width: 11px; height: 11px;
+    stroke: #2a8c4a;
+    fill: none;
+    stroke-width: 2.5;
+  }
+  .bar-d .bottom-row {
+    padding: 6px 14px 10px;
+    display: flex;
+    gap: 8px;
+  }
+  .bar-d .btn-cart {
+    flex: 1;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 11px 0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 2px 12px rgba(224,120,86,0.2);
+    transition: transform 0.15s;
+  }
+  .bar-d .btn-cart:active { transform: scale(0.97); }
+  .bar-d .btn-cart svg {
+    width: 16px; height: 16px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .bar-d .btn-buy {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 11px 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.15s;
+  }
+  .bar-d .btn-buy:active { transform: scale(0.97); }
+
+  /* SVG icons */
+  .icon-cart { display: inline-flex; }
+  .icon-truck { display: inline-flex; }
+
+  /* Responsive: center frames */
+  @media (min-width: 500px) {
+    .phone-frame { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Bottom Buy Bar — Design Options</h1>
+<p class="subtitle">4 mobile bottom bar concepts for the product page. Scroll each to compare.</p>
+
+<!-- ========== OPTION A ========== -->
+<div class="option-section">
+  <div class="option-label">Option A — Dark Gradient Bar</div>
+  <div class="option-desc">Dark primary gradient background. Price stacked (EN large / AR small below). Delivery chip. Full accent button with cart icon. Inspired by Noon/premium apps.</div>
+  <div class="phone-frame">
+    <div class="phone-screen">
+      <div class="fake-product">
+        <div class="fake-thumb">&#9649;</div>
+        <div class="fake-info">
+          <div class="fake-title">Personalised Wooden Plaque — Custom Name</div>
+          <div class="fake-variant">Variant: Gold Foil &middot; Qty: 2</div>
+        </div>
+      </div>
+
+      <!-- THE BAR -->
+      <div class="bar-a">
+        <div class="price-block">
+          <div class="price-en">AED 89.00</div>
+          <div class="price-ar arabic-text">٨٩ درهم</div>
+        </div>
+        <div class="delivery-chip">
+          <svg viewBox="0 0 24 24"><path d="M5 18h1a2 2 0 004 0h4a2 2 0 004 0h1M3 12h2l1-5h12l1 5h2M6 12v5m12-5v5"/><circle cx="8" cy="18" r="2"/><circle cx="16" cy="18" r="2"/></svg>
+          Tomorrow
+        </div>
+        <button class="cart-btn">
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          Add to Cart
+        </button>
+      </div>
+
+      <div class="fake-bottom-nav">
+        <div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== OPTION B ========== -->
+<div class="option-section">
+  <div class="option-label">Option B — Clean White Split</div>
+  <div class="option-desc">White background with accent top border. EN + AR prices side by side on one line. Delivery text below. Tall rounded accent button with bilingual text. Inspired by Amazon/clean SaaS.</div>
+  <div class="phone-frame">
+    <div class="phone-screen">
+      <div class="fake-product">
+        <div class="fake-thumb">&#9649;</div>
+        <div class="fake-info">
+          <div class="fake-title">Personalised Wooden Plaque — Custom Name</div>
+          <div class="fake-variant">Variant: Gold Foil &middot; Qty: 2</div>
+        </div>
+      </div>
+
+      <!-- THE BAR -->
+      <div class="bar-b">
+        <div class="left-col">
+          <div class="prices-row">
+            <span class="price-en">AED 89.00</span>
+            <span class="price-ar arabic-text">٨٩ درهم</span>
+          </div>
+          <div class="delivery-line">
+            <svg viewBox="0 0 24 24"><path d="M5 18h1a2 2 0 004 0h4a2 2 0 004 0h1M3 12h2l1-5h12l1 5h2M6 12v5m12-5v5"/><circle cx="8" cy="18" r="2"/><circle cx="16" cy="18" r="2"/></svg>
+            Delivery tomorrow &middot; <span class="arabic-text">التوصيل غداً</span>
+          </div>
+        </div>
+        <button class="cart-btn">
+          <span>Add to Cart</span>
+          <span class="btn-ar arabic-text">أضف للسلة</span>
+        </button>
+      </div>
+
+      <div class="fake-bottom-nav">
+        <div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== OPTION C ========== -->
+<div class="option-section">
+  <div class="option-label">Option C — Floating Pill</div>
+  <div class="option-desc">Floating rounded pill shape over the bottom nav area. Dark background, price stacked left, thin divider, delivery badge, accent cart button. Feels modern/app-like.</div>
+  <div class="phone-frame">
+    <div class="phone-screen">
+      <div class="fake-product">
+        <div class="fake-thumb">&#9649;</div>
+        <div class="fake-info">
+          <div class="fake-title">Personalised Wooden Plaque — Custom Name</div>
+          <div class="fake-variant">Variant: Gold Foil &middot; Qty: 2</div>
+        </div>
+      </div>
+
+      <!-- THE BAR -->
+      <div class="bar-c-wrap">
+        <div class="bar-c">
+          <div class="price-stack">
+            <div class="price-en">AED 89</div>
+            <div class="price-ar arabic-text">٨٩ درهم</div>
+          </div>
+          <div class="divider"></div>
+          <div class="delivery-badge">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Tomorrow
+          </div>
+          <div class="spacer"></div>
+          <button class="cart-btn">
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            Add <span class="arabic-text" style="font-size:0.68rem; opacity:0.85;">| أضف</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="fake-bottom-nav">
+        <div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== OPTION D ========== -->
+<div class="option-section">
+  <div class="option-label">Option D — Two-Row Stacked</div>
+  <div class="option-desc">Two rows: top row has EN price &middot; AR price with a green delivery tag on the right. Bottom row has full-width "Add to Cart" + a secondary "Buy Now" button. Like Namshi/Shopify premium stores.</div>
+  <div class="phone-frame">
+    <div class="phone-screen">
+      <div class="fake-product">
+        <div class="fake-thumb">&#9649;</div>
+        <div class="fake-info">
+          <div class="fake-title">Personalised Wooden Plaque — Custom Name</div>
+          <div class="fake-variant">Variant: Gold Foil &middot; Qty: 2</div>
+        </div>
+      </div>
+
+      <!-- THE BAR -->
+      <div class="bar-d">
+        <div class="top-row">
+          <div class="prices-side">
+            <span class="price-en">AED 89.00</span>
+            <span class="price-dot"></span>
+            <span class="price-ar arabic-text">٨٩ درهم</span>
+          </div>
+          <div class="delivery-tag">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Tomorrow &middot; <span class="arabic-text">غداً</span>
+          </div>
+        </div>
+        <div class="bottom-row">
+          <button class="btn-cart">
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            Add to Cart <span class="arabic-text" style="font-size:0.72rem; opacity:0.8;">| أضف للسلة</span>
+          </button>
+          <button class="btn-buy">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="fake-bottom-nav">
+        <div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
