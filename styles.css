@@ -2631,6 +2631,52 @@ footer p {
   min-height: 50px;
   -webkit-tap-highlight-color: transparent;
 }
+/* Two-state layout: no-variant vs has-variant */
+.sticky-collapsed-bar .collapsed-no-variant {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+.sticky-collapsed-bar .collapsed-has-variant {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.sticky-collapsed-bar.has-variant .collapsed-no-variant { display: none; }
+.sticky-collapsed-bar.has-variant .collapsed-has-variant { display: flex; }
+/* Product thumb in no-variant state */
+.sticky-collapsed-bar .collapsed-product-thumb {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1.5px solid #e8e8e8;
+  background: #f8f8f8;
+  flex-shrink: 0;
+}
+/* "Choose a Design" button — matches mobile-add-to-cart */
+.sticky-collapsed-bar .collapsed-choose-btn {
+  flex: 1;
+  height: 36px;
+  padding: 0 0.67rem;
+  background: #e07856;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', 'Almarai', sans-serif;
+  transition: background 0.3s;
+}
+.sticky-collapsed-bar .collapsed-choose-btn:active { opacity: 0.85; }
+.sticky-collapsed-bar .collapsed-choose-btn .arabic-text { font-size: 0.65rem; }
+/* Has-variant left side (thumb + info) */
 .sticky-collapsed-bar .collapsed-left {
   display: flex;
   align-items: center;
@@ -2639,7 +2685,7 @@ footer p {
   min-width: 0;
   cursor: pointer;
 }
-.sticky-collapsed-bar img {
+.sticky-collapsed-bar .collapsed-left img {
   width: 38px;
   height: 38px;
   object-fit: contain;
@@ -2666,25 +2712,25 @@ footer p {
   color: var(--accent);
   font-weight: 600;
 }
+/* Collapsed cart button — matches mobile-add-to-cart exactly (no green) */
 .sticky-collapsed-bar .collapsed-cart-btn {
   flex-shrink: 0;
-  padding: 8px 14px;
+  height: 36px;
+  padding: 0 14px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #e07856;
   color: #fff;
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s;
+  font-family: 'Inter', 'Almarai', sans-serif;
+  transition: background 0.3s;
 }
-.sticky-collapsed-bar .collapsed-cart-btn:active {
-  opacity: 0.85;
-}
-.sticky-collapsed-bar .collapsed-cart-btn .arabic-text {
-  font-size: 0.7rem;
-}
+.sticky-collapsed-bar .collapsed-cart-btn:active { opacity: 0.85; }
+.sticky-collapsed-bar .collapsed-cart-btn .arabic-text { font-size: 0.65rem; }
+/* Chevron (expand arrow) */
 .sticky-collapsed-bar .collapsed-chevron {
   flex-shrink: 0;
   width: 18px;
@@ -2693,6 +2739,7 @@ footer p {
   cursor: pointer;
   transition: transform 0.2s;
 }
+/* Show/hide states */
 .mobile-sticky-buybar.is-collapsed .sticky-collapsed-bar {
   display: flex;
 }
@@ -2703,6 +2750,20 @@ footer p {
 }
 .mobile-sticky-buybar.is-collapsed {
   background: #fff;
+}
+/* Chevron-up collapse toggle in variant section (only visible when sticky + expanded) */
+.variant-collapse-toggle {
+  display: none;
+  width: 22px;
+  height: 22px;
+  color: #999;
+  cursor: pointer;
+  margin-left: auto;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.mobile-sticky-buybar[data-is-sticky]:not(.is-collapsed) .variant-collapse-toggle {
+  display: block;
 }
 
 /* When early-price is moved outside .mobile-product-header, match its 15px side padding */

@@ -1566,27 +1566,59 @@ function setupGalleryOverlay(product) {
 // === COLLAPSED STICKY BAR (mobile variant products only) ===
 function initCollapsedStickyBar(stickyWrap) {
   if (!stickyWrap || stickyWrap.querySelector('.sticky-collapsed-bar')) return;
+
+  // Get product image from carousel for the no-variant state
+  const carouselImg = document.querySelector('#mobileCarousel .mobile-carousel-slide img');
+  const productImgSrc = carouselImg ? carouselImg.src : '';
+
   const bar = document.createElement('div');
   bar.className = 'sticky-collapsed-bar';
   bar.innerHTML = `
-    <div class="collapsed-left">
-      <img class="collapsed-thumb" src="" alt="">
-      <div class="collapsed-info">
-        <div class="collapsed-name"></div>
-        <div class="collapsed-price"></div>
-      </div>
+    <div class="collapsed-no-variant">
+      <img class="collapsed-product-thumb" src="${productImgSrc}" alt="">
+      <button class="collapsed-choose-btn">Choose a Design | <span class="arabic-text">اختر التصميم</span></button>
     </div>
-    <button class="collapsed-cart-btn" id="collapsedAddToCart">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+    <div class="collapsed-has-variant">
+      <div class="collapsed-left">
+        <img class="collapsed-thumb" src="" alt="">
+        <div class="collapsed-info">
+          <div class="collapsed-name"></div>
+          <div class="collapsed-price"></div>
+        </div>
+      </div>
+      <button class="collapsed-cart-btn" id="collapsedAddToCart">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+    </div>
     <svg class="collapsed-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
   `;
-  // Clicking the left side (thumb + info) or chevron expands back to variant grid
-  bar.querySelector('.collapsed-left').addEventListener('click', function() {
-    stickyWrap.classList.remove('is-collapsed');
-  });
-  bar.querySelector('.collapsed-chevron').addEventListener('click', function() {
-    stickyWrap.classList.remove('is-collapsed');
-  });
+
+  // All click targets expand the bar
+  function expandBar() { stickyWrap.classList.remove('is-collapsed'); }
+  bar.querySelector('.collapsed-no-variant').addEventListener('click', expandBar);
+  bar.querySelector('.collapsed-left').addEventListener('click', expandBar);
+  bar.querySelector('.collapsed-chevron').addEventListener('click', expandBar);
+
   stickyWrap.prepend(bar);
+
+  // Scroll-based collapse: IntersectionObserver on a sentinel above the sticky wrap
+  const sentinel = document.createElement('div');
+  sentinel.className = 'sticky-sentinel';
+  sentinel.style.height = '1px';
+  sentinel.style.marginBottom = '-1px';
+  stickyWrap.before(sentinel);
+
+  const headerH = parseInt(stickyWrap.style.top) || 56;
+  const observer = new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting) {
+      // Bar is stuck to header → collapse
+      stickyWrap.dataset.isSticky = 'true';
+      stickyWrap.classList.add('is-collapsed');
+    } else {
+      // Back in natural position → expand
+      delete stickyWrap.dataset.isSticky;
+      stickyWrap.classList.remove('is-collapsed');
+    }
+  }, { rootMargin: `-${headerH}px 0px 0px 0px` });
+  observer.observe(sentinel);
 }
 
 function collapseStickyBar(variant, price) {
@@ -1594,6 +1626,10 @@ function collapseStickyBar(variant, price) {
   if (!stickyWrap) return;
   const bar = stickyWrap.querySelector('.sticky-collapsed-bar');
   if (!bar) return;
+
+  // Switch to has-variant state
+  bar.classList.add('has-variant');
+
   const thumb = bar.querySelector('.collapsed-thumb');
   const nameEl = bar.querySelector('.collapsed-name');
   const priceEl = bar.querySelector('.collapsed-price');
@@ -1603,7 +1639,11 @@ function collapseStickyBar(variant, price) {
   }
   if (nameEl) nameEl.textContent = variant.name;
   if (priceEl) priceEl.textContent = 'AED ' + (price || '');
-  stickyWrap.classList.add('is-collapsed');
+
+  // Auto-collapse if currently sticky (scroll-based)
+  if (stickyWrap.dataset.isSticky) {
+    stickyWrap.classList.add('is-collapsed');
+  }
 
   // Show early-price section now that a variant is selected
   const earlyPrice = stickyWrap.querySelector('.early-price, #earlyPriceMobile');
@@ -1616,26 +1656,23 @@ function collapseStickyBar(variant, price) {
   const collapsedBtn = bar.querySelector('.collapsed-cart-btn');
   const mobileBtn = document.getElementById('mobileAddToCartBtn');
   if (collapsedBtn) {
-    // Check if variant already in cart → show quantity instead
+    // Check if variant already in cart → show quantity text (keep same style, no green)
     const localCart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingItem = localCart.find(i => i.variantId === variant.id);
     if (existingItem) {
       collapsedBtn.textContent = 'In Cart (' + existingItem.quantity + ')';
-      collapsedBtn.style.background = '#4a7c6f';
     } else {
       collapsedBtn.innerHTML = 'Add to Cart | <span class="arabic-text">أضف إلى السلة</span>';
-      collapsedBtn.style.background = '#e07856';
       collapsedBtn.disabled = false;
     }
     collapsedBtn.onclick = function() {
       if (mobileBtn) mobileBtn.click();
-      // Update button after adding
+      // Update button text after adding
       setTimeout(() => {
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
         const item = cart.find(i => i.variantId === variant.id);
         if (item) {
           collapsedBtn.textContent = 'In Cart (' + item.quantity + ')';
-          collapsedBtn.style.background = '#4a7c6f';
         }
       }, 200);
     };
@@ -1682,6 +1719,7 @@ function renderVariantSelector(containerId, product, isMobile) {
         <div class="variant-label">
           <span>Choose Design | <span class="arabic-text">اختر التصميم</span></span>
           <span class="variant-selected-name" id="${prefix}-selectedName"></span>
+          <svg class="variant-collapse-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 15 12 9 18 15"/></svg>
         </div>
         <div class="scroll-wrapper">
           <button class="scroll-arrow scroll-arrow-left" data-dir="-1" aria-label="Scroll left">
@@ -1723,6 +1761,16 @@ function renderVariantSelector(containerId, product, isMobile) {
       scrollEl.addEventListener('scroll', updateArrows, { passive: true });
       window.addEventListener('resize', updateArrows);
       requestAnimationFrame(() => { requestAnimationFrame(updateArrows); });
+    }
+    // Wire up chevron-up collapse toggle (collapses sticky bar when tapped)
+    const collapseToggle = container.querySelector('.variant-collapse-toggle');
+    if (collapseToggle) {
+      collapseToggle.addEventListener('click', function() {
+        const sw = this.closest('.mobile-sticky-buybar');
+        if (sw && sw.dataset.isSticky) {
+          sw.classList.add('is-collapsed');
+        }
+      });
     }
   } else {
     container.innerHTML = `
