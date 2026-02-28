@@ -542,12 +542,12 @@ async function initProductPage() {
             </div>
           </div>
         </div>`;
-      // Move cart button into the row (between price and delivery columns)
-      const priceCol = earlyPriceMobile.querySelector('.price-col');
+      // Move cart button into the row (after delivery, on the right)
+      const bottomBarRow = earlyPriceMobile.querySelector('.bottom-bar-row');
       const mobileCartBtn = document.getElementById('mobileAddToCartBtn');
-      if (priceCol && mobileCartBtn) {
+      if (bottomBarRow && mobileCartBtn) {
         mobileCartBtn.innerHTML = `<span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span>`;
-        priceCol.after(mobileCartBtn);
+        bottomBarRow.appendChild(mobileCartBtn);
       }
     }
   } else if (product.price) {
