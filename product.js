@@ -537,8 +537,8 @@ async function initProductPage() {
           <div class="del-col">
             <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
             <div class="del-text">
-              <span class="del-en">Free over ${threshold} AED</span>
-              <span class="del-ar arabic-text">مجاني فوق ${toArabicNumerals(threshold)} درهم</span>
+              <span class="del-en">Free delivery over ${threshold} AED</span>
+              <span class="del-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</span>
             </div>
           </div>
         </div>`;
