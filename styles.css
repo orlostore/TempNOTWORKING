@@ -3409,6 +3409,9 @@ footer p {
 .product-buybox .product-btn-transformed .grid-qty-btn {
   height: 38px;
 }
+.product-buybox .product-btn-transformed .grid-qty-control {
+  height: 38px;
+}
 /* Mobile product page - compact centered Add to Cart button (match non-variant sizing) */
 .mobile-cart-section .mobile-add-to-cart {
   width: 100%;
