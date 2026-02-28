@@ -2616,7 +2616,7 @@ footer p {
 /* === Early price box fixed at bottom (mobile variant products) === */
 .early-price-bottom {
   position: fixed;
-  bottom: 64px;
+  bottom: 70px;
   left: 0;
   right: 0;
   z-index: 5999;
