@@ -205,9 +205,12 @@ function resetToAddButton(productId) {
 
     if (isEarlyPrice) {
       // Non-variant button inside early-price container
+      const isBottomBar = transformed.closest('.early-price-bottom') !== null;
       if (isMobile) {
-        // Mobile: stacked layout — full-width mobile-add-to-cart
-        transformed.outerHTML = `<button class="mobile-add-to-cart" id="earlyCartMobile">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+        // Mobile: bottom bar uses stacked bilingual (same as variant)
+        transformed.outerHTML = isBottomBar
+          ? `<button class="mobile-add-to-cart" id="earlyCartMobile"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`
+          : `<button class="mobile-add-to-cart" id="earlyCartMobile">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
       } else {
         // Desktop: inline layout inside early-price-row
         transformed.outerHTML = `<button class="inline-add-to-cart" id="earlyCartDesktop">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
@@ -554,9 +557,26 @@ async function initProductPage() {
     // Non-variant products: desktop keeps inline layout
     const earlyHTMLDesktop = `<div class="early-price-row early-price-inline"><span class="early-price-en">AED ${Number(product.price).toFixed(2)}</span><button class="inline-add-to-cart" id="earlyCartDesktop">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button><span class="early-price-ar arabic-text">${Number(product.price).toFixed(2)} درهم</span></div>`;
     if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTMLDesktop;
-    // Non-variant products: mobile gets stacked layout matching variant style
-    const earlyHTMLMobile = `<div class="early-price-row"><span class="early-price-en">AED ${Number(product.price).toFixed(2)}</span><span class="early-price-ar arabic-text">${Number(product.price).toFixed(2)} درهم</span></div><button class="mobile-add-to-cart" id="earlyCartMobile">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
-    if (earlyPriceMobile) earlyPriceMobile.innerHTML = earlyHTMLMobile;
+    // Non-variant products: mobile gets the same three-column bottom bar as variant
+    if (earlyPriceMobile) {
+      const nvPriceEn = `AED ${Number(product.price).toFixed(2)}`;
+      const nvPriceAr = `${Number(product.price).toFixed(2)} درهم`;
+      earlyPriceMobile.innerHTML = `
+        <div class="early-price-row bottom-bar-row">
+          <div class="del-col">
+            <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <div class="del-text">
+              <span class="del-en">Free delivery over ${threshold} AED</span>
+              <span class="del-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</span>
+            </div>
+          </div>
+          <div class="price-col">
+            <span class="early-price-en">${nvPriceEn}</span>
+            <span class="early-price-ar arabic-text">${nvPriceAr}</span>
+          </div>
+          <button class="mobile-add-to-cart" id="earlyCartMobile"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
+        </div>`;
+    }
   } else {
     if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
     if (earlyPriceMobile) earlyPriceMobile.style.display = 'none';
@@ -612,13 +632,15 @@ async function initProductPage() {
     // Inject delivery info into early-price container, then hide buybox entirely
     const deliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
     if (earlyPriceDesktop) earlyPriceDesktop.insertAdjacentHTML('beforeend', deliveryHTML);
-    // Hide buybox price and button, keep delivery-info visible
+    // Hide buybox price, button, and delivery-info (delivery is already in early-price)
     const buybox = document.querySelector('.product-buybox');
     if (buybox) {
       const buyboxPrice = buybox.querySelector('.price');
       const buyboxBtn = buybox.querySelector('.add-to-cart-btn');
+      const buyboxDelivery = buybox.querySelector('.delivery-info');
       if (buyboxPrice) buyboxPrice.style.display = 'none';
       if (buyboxBtn) buyboxBtn.style.display = 'none';
+      if (buyboxDelivery) buyboxDelivery.style.display = 'none';
     }
     if (isOutOfStock && desktopAddBtn) {
       desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
@@ -695,39 +717,25 @@ async function initProductPage() {
   let mobileAddBtn;
   if (!hasVariants) {
     mobileAddBtn = document.getElementById("earlyCartMobile");
-    // Inject mobile delivery info into early-price container, hide buybox
+
+    // Hide the original buybox compact (same as variant)
     const mobileBuyboxCompact = document.querySelector('.mobile-buybox-compact');
+    if (mobileBuyboxCompact) mobileBuyboxCompact.style.display = 'none';
+
+    // Remove buybox duplicate delivery
+    const mobileDeliveryEl = document.querySelector('.mobile-delivery-info');
+    if (mobileDeliveryEl) mobileDeliveryEl.remove();
+
+    // Position earlyPriceMobile as sticky bottom buy box (same as variant)
     if (earlyPriceMobile) {
-      // Build delivery HTML inline for mobile (the HTML element is empty by default)
-      const mobileDeliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
-      earlyPriceMobile.insertAdjacentHTML('beforeend', mobileDeliveryHTML);
+      earlyPriceMobile.classList.add('early-price-bottom');
     }
-    if (mobileBuyboxCompact) {
-      const mobilePrice = mobileBuyboxCompact.querySelector('.mobile-price-section');
-      const mobileCart = mobileBuyboxCompact.querySelector('.mobile-cart-section');
-      if (mobilePrice) mobilePrice.style.display = 'none';
-      if (mobileCart) mobileCart.style.display = 'none';
-      const mobileDeliveryEl = mobileBuyboxCompact.querySelector('.mobile-delivery-info');
-      if (mobileDeliveryEl) {
-        mobileDeliveryEl.innerHTML = `<div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div>`;
-      }
-    }
+
     if (isOutOfStock && mobileAddBtn) {
-      mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      mobileAddBtn.innerHTML = '<span class="btn-en">Out of Stock</span><span class="btn-ar arabic-text">نفد المخزون</span>';
       mobileAddBtn.disabled = true;
-      mobileAddBtn.style.background = "#999";
-      mobileAddBtn.style.cursor = "not-allowed";
-    }
-    // Move early-price (buy box) below the carousel for non-variant products
-    if (earlyPriceMobile) {
-      const carouselContainer = document.querySelector('.mobile-carousel-container');
-      if (carouselContainer) {
-        const sep = document.createElement('div');
-        sep.style.height = '8px';
-        sep.style.background = '#f8f9fa';
-        carouselContainer.after(sep);
-        sep.after(earlyPriceMobile);
-      }
+      mobileAddBtn.style.background = '#999';
+      mobileAddBtn.style.cursor = 'not-allowed';
     }
   } else {
     // VARIANT PRODUCTS (mobile) — earlyPriceMobile sticks at bottom + inline variant tiles
