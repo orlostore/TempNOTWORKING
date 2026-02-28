@@ -2610,10 +2610,11 @@ footer p {
   border-left: none;
   border-right: none;
   border-bottom: none;
-  transition: bottom 0.3s ease;
+  transition: bottom 0.3s ease, transform 0.3s ease;
 }
 .early-price-bottom.nav-hidden {
   bottom: 0;
+  transform: translateY(100%);
 }
 
 /* --- Bottom bar: three-column layout (Price | Cart | Delivery) --- */

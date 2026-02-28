@@ -577,14 +577,9 @@ async function initProductPage() {
           <button class="mobile-add-to-cart" id="earlyCartMobile"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
         </div>`;
       earlyPriceMobile.classList.add('early-price-bottom');
-      // Force fixed positioning via inline styles to guarantee bottom placement
+      // Force fixed positioning (inline overrides any leftover sticky)
       earlyPriceMobile.style.position = 'fixed';
-      earlyPriceMobile.style.bottom = '68px';
-      earlyPriceMobile.style.left = '0';
-      earlyPriceMobile.style.right = '0';
       earlyPriceMobile.style.zIndex = '5999';
-      earlyPriceMobile.style.margin = '0';
-      earlyPriceMobile.style.borderRadius = '0';
     }
   } else {
     if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
