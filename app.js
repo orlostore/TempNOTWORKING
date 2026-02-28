@@ -880,6 +880,8 @@ function updateQuantity(id, change, variantId) {
                 const gridQtyNum = document.getElementById(`gridQtyNum-${id}`);
                 if (gridQtyNum) gridQtyNum.textContent = newQty;
             }
+            // Sync sticky price bar with new tier pricing
+            if (typeof updateTierHighlight === 'function') updateTierHighlight(id);
         }
     }
 }
@@ -994,6 +996,8 @@ function removeFromCart(id, variantId) {
             resetToAddButton(id);
         }
     }
+    // Sync sticky price bar with new tier pricing
+    if (typeof updateTierHighlight === 'function') updateTierHighlight(id);
 }
 
 function toggleCart() { 
