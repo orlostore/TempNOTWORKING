@@ -494,7 +494,6 @@ async function initProductPage() {
   const earlyPriceMobile = document.getElementById("earlyPriceMobile");
   // For variant products, compute display price from variant prices (highest in-stock variant)
   let variantDisplayPrice = 0;
-  let hasMultipleVariantPrices = false;
   if (hasVariants) {
     const effectivePrices = product.variants
       .filter(v => v.quantity > 0)
@@ -502,15 +501,13 @@ async function initProductPage() {
       .filter(p => p > 0);
     if (effectivePrices.length > 0) {
       variantDisplayPrice = Math.max(...effectivePrices);
-      hasMultipleVariantPrices = new Set(effectivePrices).size > 1;
     }
   }
 
   if (hasVariants && (product.price || variantDisplayPrice)) {
     const displayPrice = variantDisplayPrice || product.price;
-    const showOrLess = hasTiers || hasMultipleVariantPrices;
-    const priceEn = showOrLess ? `AED ${displayPrice} or less` : `AED ${displayPrice}`;
-    const priceAr = showOrLess ? `${displayPrice} درهم أو أقل` : `${displayPrice} درهم`;
+    const priceEn = `AED ${displayPrice}`;
+    const priceAr = `${displayPrice} درهم`;
     const earlyHTML = `<div class="early-price-row"><span class="early-price-en">${priceEn}</span><span class="early-price-ar arabic-text">${priceAr}</span></div>`;
     let hintHTML = '';
     if (hasTiers) {
@@ -1765,8 +1762,8 @@ function updateTierHighlight(productId) {
       }
 
       // Update early buy box price to reflect active tier price
-      const earlyPriceEn = activeDiscount > 0 ? `AED ${activePrice.toFixed(2)}` : `AED ${basePrice} or less`;
-      const earlyPriceAr = activeDiscount > 0 ? `${activePrice.toFixed(2)} درهم` : `${basePrice} درهم أو أقل`;
+      const earlyPriceEn = activeDiscount > 0 ? `AED ${activePrice.toFixed(2)}` : `AED ${basePrice}`;
+      const earlyPriceAr = activeDiscount > 0 ? `${activePrice.toFixed(2)} درهم` : `${basePrice} درهم`;
       ['earlyPriceDesktop', 'earlyPriceMobile'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
@@ -1877,9 +1874,8 @@ function selectVariant(variantId, productId, prefix) {
   });
 
   // Update early price display with selected variant's price
-  const showOrLess = hasTiers;
-  const priceEn = showOrLess ? `AED ${variantPrice} or less` : `AED ${variantPrice}`;
-  const priceAr = showOrLess ? `${variantPrice} درهم أو أقل` : `${variantPrice} درهم`;
+  const priceEn = `AED ${variantPrice}`;
+  const priceAr = `${variantPrice} درهم`;
   ['earlyPriceDesktop', 'earlyPriceMobile'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;

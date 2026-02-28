@@ -2683,19 +2683,15 @@ footer p {
   font-weight: 700;
   opacity: 0.85;
 }
-/* Qty stepper in bottom bar — specificity 0,3,0 to beat .mobile-product-header .early-price rules */
-.early-price.early-price-bottom .product-btn-transformed {
+/* Qty stepper in bottom bar — specificity 0,4,0 to beat .mobile-product-header .early-price rules */
+.mobile-product-header .early-price.early-price-bottom .product-btn-transformed,
+.mobile-product-header .early-price.early-price-bottom .grid-qty-control {
   flex: 1;
   height: 38px;
   width: auto;
   margin-top: 0;
 }
-.early-price.early-price-bottom .grid-qty-control {
-  height: 38px;
-  width: auto;
-  margin-top: 0;
-}
-.early-price.early-price-bottom .grid-qty-btn {
+.mobile-product-header .early-price.early-price-bottom .grid-qty-btn {
   width: 38px;
   height: 38px;
 }
