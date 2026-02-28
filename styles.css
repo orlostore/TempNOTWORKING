@@ -2650,13 +2650,13 @@ footer p {
   align-items: center;
   justify-content: center;
   height: 38px;
-  flex: 1;
+  flex: 0 0 110px;
   border-radius: 12px;
   font-weight: 700;
   line-height: 1.15;
   gap: 0;
   padding: 0 10px;
-  width: auto;
+  width: 110px;
   margin-top: 0;
 }
 .early-price-bottom .mobile-add-to-cart .btn-en {
@@ -2671,21 +2671,23 @@ footer p {
 /* Qty stepper in bottom bar — specificity 0,4,0 to beat .mobile-product-header .early-price rules */
 .mobile-product-header .early-price.early-price-bottom .product-btn-transformed,
 .mobile-product-header .early-price.early-price-bottom .grid-qty-control {
-  flex: 1;
+  flex: 0 0 110px;
   height: 38px;
-  width: auto;
+  width: 110px;
   margin-top: 0;
 }
 .mobile-product-header .early-price.early-price-bottom .grid-qty-btn {
   width: 38px;
   height: 38px;
 }
-/* Delivery column */
+/* Delivery column — flexible to absorb price-width changes */
 .early-price-bottom .del-col {
   display: flex;
   align-items: center;
   gap: 4px;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 .early-price-bottom .del-col .truck-icon {
   width: 14px;
@@ -2707,6 +2709,8 @@ footer p {
   font-weight: 600;
   color: #5a7a8c;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .early-price-bottom .del-col .del-ar {
   font-size: 0.56rem;
