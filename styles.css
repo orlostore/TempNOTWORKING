@@ -2665,7 +2665,7 @@ footer p {
   align-items: center;
   justify-content: center;
   height: 38px;
-  flex-shrink: 0;
+  flex: 1;
   border-radius: 12px;
   font-weight: 700;
   line-height: 1.15;
@@ -2700,7 +2700,7 @@ footer p {
   display: flex;
   align-items: center;
   gap: 4px;
-  flex: 1;
+  flex-shrink: 0;
 }
 .early-price-bottom .del-col .truck-icon {
   width: 14px;
