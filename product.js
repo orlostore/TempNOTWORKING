@@ -576,6 +576,7 @@ async function initProductPage() {
           </div>
           <button class="mobile-add-to-cart" id="earlyCartMobile"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
         </div>`;
+      earlyPriceMobile.classList.add('early-price-bottom');
     }
   } else {
     if (earlyPriceDesktop) earlyPriceDesktop.style.display = 'none';
@@ -725,11 +726,6 @@ async function initProductPage() {
     // Remove buybox duplicate delivery
     const mobileDeliveryEl = document.querySelector('.mobile-delivery-info');
     if (mobileDeliveryEl) mobileDeliveryEl.remove();
-
-    // Position earlyPriceMobile as sticky bottom buy box (same as variant)
-    if (earlyPriceMobile) {
-      earlyPriceMobile.classList.add('early-price-bottom');
-    }
 
     if (isOutOfStock && mobileAddBtn) {
       mobileAddBtn.innerHTML = '<span class="btn-en">Out of Stock</span><span class="btn-ar arabic-text">نفد المخزون</span>';
