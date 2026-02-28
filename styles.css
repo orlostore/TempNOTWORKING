@@ -2670,12 +2670,12 @@ footer p {
   font-weight: 700;
   line-height: 1.15;
   gap: 0;
-  padding: 0 14px;
+  padding: 0 10px;
   width: auto;
   margin-top: 0;
 }
 .early-price-bottom .mobile-add-to-cart .btn-en {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
 }
 .early-price-bottom .mobile-add-to-cart .btn-ar {
