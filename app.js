@@ -277,6 +277,36 @@ function gridQtyChange(productId, change, event) {
 }
 function calculateDeliveryFee(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.fee; }
 function getAmountUntilFreeDelivery(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.freeThreshold - subtotal; }
+
+// Update the sticky product-page delivery bar based on live cart total
+function updateStickyDeliveryBar(subtotal) {
+    const delEn = document.getElementById('stickyDelEn');
+    const delAr = document.getElementById('stickyDelAr');
+    const delCol = document.getElementById('stickyDelCol');
+    if (!delEn || !delAr) return;
+
+    const threshold = FREE_DELIVERY_THRESHOLD;
+    const amountNeeded = Math.max(0, threshold - subtotal);
+
+    if (subtotal <= 0) {
+        // Empty cart — show static info
+        delEn.textContent = 'Free over ' + threshold + ' AED';
+        delAr.textContent = 'توصيل مجاني فوق ' + toArabicNumerals(threshold) + ' درهم';
+        if (delCol) delCol.classList.remove('del-free', 'del-upsell');
+    } else if (amountNeeded > 0) {
+        // Below threshold — nudge the customer
+        var displayAmt = Math.ceil(amountNeeded);
+        delEn.textContent = '+' + displayAmt + ' AED = free delivery';
+        delAr.textContent = '+' + toArabicNumerals(displayAmt) + ' درهم = توصيل مجاني';
+        if (delCol) { delCol.classList.add('del-upsell'); delCol.classList.remove('del-free'); }
+    } else {
+        // Threshold met — celebrate
+        delEn.textContent = '\u2713 Free delivery!';
+        delAr.textContent = '\u2713 توصيل مجاني!';
+        if (delCol) { delCol.classList.add('del-free'); delCol.classList.remove('del-upsell'); }
+    }
+}
+
 function generateOrderNumber() { const date = new Date(); const year = date.getFullYear().toString().slice(-2); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const random = (crypto.getRandomValues(new Uint16Array(1))[0] % 9000) + 1000; return `ORLO-${year}${month}${day}-${random}`; }
 
 function getCategoryArabic(category) {
@@ -641,7 +671,8 @@ function updateCart() {
         if (bottomCartCount) bottomCartCount.textContent = 0;
         cartFooter.innerHTML = `<div style="display: flex; justify-content: space-between; padding: 0.75rem 0 0.5rem; font-size: 1.1rem; font-weight: 700; color: #2c4a5c;"><span>Total | <span class="arabic-text">الإجمالي</span>:</span><span>AED 0.00</span></div>`;
         if (cartCheckoutFixed) cartCheckoutFixed.innerHTML = '';
-        return; 
+        updateStickyDeliveryBar(0);
+        return;
     } 
     
     const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
@@ -650,7 +681,8 @@ function updateCart() {
     const deliveryFee = calculateDeliveryFee(subtotal);
     const total = subtotal + deliveryFee;
     const amountNeeded = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
-    
+    updateStickyDeliveryBar(subtotal);
+
     if (cartCount) cartCount.textContent = totalItems;
     if (bottomCartCount) bottomCartCount.textContent = totalItems; 
     
