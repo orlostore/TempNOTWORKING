@@ -530,11 +530,28 @@ async function initProductPage() {
       }
     }
     if (earlyPriceMobile) {
-      earlyPriceMobile.innerHTML = earlyHTML;
-      earlyPriceMobile.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
-      const earlyRow = earlyPriceMobile.querySelector('.early-price-row');
+      // Three-column bottom bar: Price | Cart button | Delivery
+      earlyPriceMobile.innerHTML = `
+        <div class="early-price-row bottom-bar-row">
+          <div class="price-col">
+            <span class="early-price-en">${priceEn}</span>
+            <span class="early-price-ar arabic-text">${priceAr}</span>
+          </div>
+          <div class="del-col">
+            <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <div class="del-text">
+              <span class="del-en">Free over ${threshold} AED</span>
+              <span class="del-ar arabic-text">مجاني فوق ${toArabicNumerals(threshold)} درهم</span>
+            </div>
+          </div>
+        </div>`;
+      // Move cart button into the row (between price and delivery columns)
+      const priceCol = earlyPriceMobile.querySelector('.price-col');
       const mobileCartBtn = document.getElementById('mobileAddToCartBtn');
-      if (earlyRow && mobileCartBtn) earlyRow.after(mobileCartBtn);
+      if (priceCol && mobileCartBtn) {
+        mobileCartBtn.innerHTML = `<span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span>`;
+        priceCol.after(mobileCartBtn);
+      }
     }
   } else if (product.price) {
     // Non-variant products: desktop keeps inline layout
@@ -740,7 +757,7 @@ async function initProductPage() {
     }
 
     if (isOutOfStock && mobileAddBtn) {
-      mobileAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      mobileAddBtn.innerHTML = '<span class="btn-en">Out of Stock</span><span class="btn-ar arabic-text">نفد المخزون</span>';
       mobileAddBtn.disabled = true;
       mobileAddBtn.style.background = '#999';
       mobileAddBtn.style.cursor = 'not-allowed';
@@ -1917,7 +1934,11 @@ function selectVariant(variantId, productId, prefix) {
     }
     const mobileTransformed = document.querySelector('.mobile-product-page .product-btn-transformed');
     if (mobileTransformed) {
-      mobileTransformed.outerHTML = `<button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+      const isBottomBar = mobileTransformed.closest('.early-price-bottom') !== null;
+      const btnHTML = isBottomBar
+        ? `<button class="mobile-add-to-cart" id="mobileAddToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`
+        : `<button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+      mobileTransformed.outerHTML = btnHTML;
       const newBtn = document.getElementById('mobileAddToCartBtn');
       if (newBtn) {
         newBtn.onclick = function() {
@@ -1987,9 +2008,14 @@ function productVariantQtyChange(productId, variantId, change) {
     // Reset buttons back to "Add to Cart"
     document.querySelectorAll(`[id="transformedBtn-${productId}"]`).forEach(el => {
       const isMobile = el.closest('.mobile-product-page') !== null;
+      const isBottomBar = el.closest('.early-price-bottom') !== null;
       const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
       const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
-      el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+      if (isBottomBar) {
+        el.outerHTML = `<button class="${btnClass}" id="${btnId}"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
+      } else {
+        el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+      }
     });
     // Re-attach handlers
     const newDesktopBtn = document.getElementById('addToCartBtn');
