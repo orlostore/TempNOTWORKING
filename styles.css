@@ -2623,6 +2623,7 @@ footer p {
 .early-price-bottom .bottom-bar-row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
 }
 .early-price-bottom .price-col {
@@ -2680,12 +2681,12 @@ footer p {
   width: 38px;
   height: 38px;
 }
-/* Delivery column — flexible to absorb price-width changes */
+/* Delivery column — can shrink on tight screens but doesn't grow */
 .early-price-bottom .del-col {
   display: flex;
   align-items: center;
   gap: 4px;
-  flex: 1;
+  flex-shrink: 1;
   min-width: 0;
   overflow: hidden;
 }
