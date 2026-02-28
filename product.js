@@ -755,7 +755,7 @@ async function initProductPage() {
           afterEl.after(s);
           return s;
         }
-        // Order: carousel → grey → variant selector (sticky) → early-price (hidden until selection)
+        // Order: carousel → grey → variant selector (sticky) → early-price
         const sep1 = addSep(carouselContainer);
         const stickyWrap = document.createElement('div');
         stickyWrap.className = 'mobile-sticky-buybar';
@@ -769,9 +769,6 @@ async function initProductPage() {
           sep2.style.background = '#f8f9fa';
           stickyWrap.appendChild(sep2);
           stickyWrap.appendChild(earlyPriceMobile);
-          // Hide early-price until a variant is selected
-          earlyPriceMobile.style.display = 'none';
-          earlyPriceMobile.classList.add('sticky-price-hidden');
         }
         initCollapsedStickyBar(stickyWrap);
       }
@@ -975,6 +972,8 @@ async function initProductPage() {
         } else {
           transformToQtyButton(this, product);
         }
+        // Sync collapsed bar after adding to cart
+        if (typeof syncCollapsedBarFromCart === 'function') syncCollapsedBarFromCart();
       }
     };
   }
@@ -1574,28 +1573,34 @@ function initCollapsedStickyBar(stickyWrap) {
   const bar = document.createElement('div');
   bar.className = 'sticky-collapsed-bar';
   bar.innerHTML = `
-    <div class="collapsed-no-variant">
-      <img class="collapsed-product-thumb" src="${productImgSrc}" alt="">
-      <button class="collapsed-choose-btn">Choose a Design | <span class="arabic-text">اختر التصميم</span></button>
-    </div>
-    <div class="collapsed-has-variant">
-      <div class="collapsed-left">
+    <div class="collapsed-left-area">
+      <div class="collapsed-no-variant">
+        <img class="collapsed-product-thumb" src="${productImgSrc}" alt="">
+      </div>
+      <div class="collapsed-has-variant" style="display:none;">
         <img class="collapsed-thumb" src="" alt="">
         <div class="collapsed-info">
           <div class="collapsed-name"></div>
           <div class="collapsed-price"></div>
         </div>
       </div>
-      <button class="collapsed-cart-btn" id="collapsedAddToCart">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>
+      <svg class="collapsed-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
-    <svg class="collapsed-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    <div class="collapsed-right-area">
+      <button class="collapsed-choose-btn">Select a Design</button>
+      <button class="collapsed-cart-btn" id="collapsedAddToCart" style="display:none;">Add to Cart</button>
+      <div class="collapsed-qty-stepper" style="display:none;">
+        <button class="collapsed-qty-btn collapsed-qty-minus">−</button>
+        <span class="collapsed-qty-display">1</span>
+        <button class="collapsed-qty-btn collapsed-qty-plus">+</button>
+      </div>
+    </div>
   `;
 
-  // All click targets expand the bar
+  // Left area, chevron, and "Select a Design" expand the bar
   function expandBar() { stickyWrap.classList.remove('is-collapsed'); }
-  bar.querySelector('.collapsed-no-variant').addEventListener('click', expandBar);
-  bar.querySelector('.collapsed-left').addEventListener('click', expandBar);
-  bar.querySelector('.collapsed-chevron').addEventListener('click', expandBar);
+  bar.querySelector('.collapsed-left-area').addEventListener('click', expandBar);
+  bar.querySelector('.collapsed-choose-btn').addEventListener('click', expandBar);
 
   stickyWrap.prepend(bar);
 
@@ -1621,7 +1626,7 @@ function initCollapsedStickyBar(stickyWrap) {
   observer.observe(sentinel);
 }
 
-function collapseStickyBar(variant, price) {
+function collapseStickyBar(variant, price, product) {
   const stickyWrap = document.querySelector('.mobile-sticky-buybar');
   if (!stickyWrap) return;
   const bar = stickyWrap.querySelector('.sticky-collapsed-bar');
@@ -1629,6 +1634,12 @@ function collapseStickyBar(variant, price) {
 
   // Switch to has-variant state
   bar.classList.add('has-variant');
+
+  // Update left-area: show variant info, hide no-variant thumb
+  const noVariantDiv = bar.querySelector('.collapsed-no-variant');
+  const hasVariantDiv = bar.querySelector('.collapsed-has-variant');
+  if (noVariantDiv) noVariantDiv.style.display = 'none';
+  if (hasVariantDiv) hasVariantDiv.style.display = 'flex';
 
   const thumb = bar.querySelector('.collapsed-thumb');
   const nameEl = bar.querySelector('.collapsed-name');
@@ -1645,37 +1656,102 @@ function collapseStickyBar(variant, price) {
     stickyWrap.classList.add('is-collapsed');
   }
 
-  // Show early-price section now that a variant is selected
-  const earlyPrice = stickyWrap.querySelector('.early-price, #earlyPriceMobile');
-  if (earlyPrice && earlyPrice.classList.contains('sticky-price-hidden')) {
-    earlyPrice.style.display = '';
-    earlyPrice.classList.remove('sticky-price-hidden');
+  // Right-area state: check if variant already in cart
+  const chooseBtn = bar.querySelector('.collapsed-choose-btn');
+  const cartBtn = bar.querySelector('.collapsed-cart-btn');
+  const stepper = bar.querySelector('.collapsed-qty-stepper');
+  const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existingItem = localCart.find(i => i.variantId === variant.id);
+
+  // Store current variant on the bar for stepper handlers
+  bar.dataset.variantId = variant.id;
+  bar.dataset.productId = product ? product.id : '';
+
+  if (chooseBtn) chooseBtn.style.display = 'none';
+
+  if (existingItem) {
+    // Already in cart → show stepper
+    if (cartBtn) cartBtn.style.display = 'none';
+    if (stepper) {
+      stepper.style.display = 'flex';
+      stepper.querySelector('.collapsed-qty-display').textContent = existingItem.quantity;
+    }
+  } else {
+    // Not in cart → show Add to Cart
+    if (cartBtn) { cartBtn.style.display = ''; cartBtn.textContent = 'Add to Cart'; }
+    if (stepper) stepper.style.display = 'none';
   }
 
-  // Wire up the collapsed Add to Cart button to mirror the main mobile button
-  const collapsedBtn = bar.querySelector('.collapsed-cart-btn');
-  const mobileBtn = document.getElementById('mobileAddToCartBtn');
-  if (collapsedBtn) {
-    // Check if variant already in cart → show quantity text (keep same style, no green)
-    const localCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingItem = localCart.find(i => i.variantId === variant.id);
-    if (existingItem) {
-      collapsedBtn.textContent = 'In Cart (' + existingItem.quantity + ')';
-    } else {
-      collapsedBtn.innerHTML = 'Add to Cart | <span class="arabic-text">أضف إلى السلة</span>';
-      collapsedBtn.disabled = false;
-    }
-    collapsedBtn.onclick = function() {
+  // Wire collapsed Add to Cart button
+  if (cartBtn) {
+    cartBtn.onclick = function() {
+      const mobileBtn = document.getElementById('mobileAddToCartBtn');
       if (mobileBtn) mobileBtn.click();
-      // Update button text after adding
-      setTimeout(() => {
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        const item = cart.find(i => i.variantId === variant.id);
-        if (item) {
-          collapsedBtn.textContent = 'In Cart (' + item.quantity + ')';
-        }
-      }, 200);
+      // After adding, sync collapsed bar to stepper
+      setTimeout(() => { syncCollapsedBarFromCart(); }, 200);
     };
+  }
+
+  // Wire stepper buttons
+  wireCollapsedStepper(bar);
+}
+
+// Wire up the collapsed bar stepper +/- buttons
+function wireCollapsedStepper(bar) {
+  const minusBtn = bar.querySelector('.collapsed-qty-minus');
+  const plusBtn = bar.querySelector('.collapsed-qty-plus');
+
+  if (minusBtn) {
+    minusBtn.onclick = function(e) {
+      e.stopPropagation();
+      const variantId = parseInt(bar.dataset.variantId);
+      const productId = parseInt(bar.dataset.productId);
+      if (variantId && productId) {
+        productVariantQtyChange(productId, variantId, -1);
+        syncCollapsedBarFromCart();
+      }
+    };
+  }
+  if (plusBtn) {
+    plusBtn.onclick = function(e) {
+      e.stopPropagation();
+      const variantId = parseInt(bar.dataset.variantId);
+      const productId = parseInt(bar.dataset.productId);
+      if (variantId && productId) {
+        productVariantQtyChange(productId, variantId, 1);
+        syncCollapsedBarFromCart();
+      }
+    };
+  }
+}
+
+// Sync collapsed bar state from localStorage cart
+function syncCollapsedBarFromCart() {
+  const bar = document.querySelector('.sticky-collapsed-bar');
+  if (!bar) return;
+  const variantId = parseInt(bar.dataset.variantId);
+  if (!variantId) return;
+
+  const localCart = JSON.parse(localStorage.getItem("cart")) || [];
+  const item = localCart.find(i => i.variantId === variantId);
+
+  const chooseBtn = bar.querySelector('.collapsed-choose-btn');
+  const cartBtn = bar.querySelector('.collapsed-cart-btn');
+  const stepper = bar.querySelector('.collapsed-qty-stepper');
+
+  if (item && item.quantity > 0) {
+    // Show stepper with current qty
+    if (chooseBtn) chooseBtn.style.display = 'none';
+    if (cartBtn) cartBtn.style.display = 'none';
+    if (stepper) {
+      stepper.style.display = 'flex';
+      stepper.querySelector('.collapsed-qty-display').textContent = item.quantity;
+    }
+  } else {
+    // Removed from cart → revert to Add to Cart
+    if (chooseBtn) chooseBtn.style.display = 'none';
+    if (cartBtn) { cartBtn.style.display = ''; cartBtn.textContent = 'Add to Cart'; }
+    if (stepper) stepper.style.display = 'none';
   }
 }
 
@@ -2068,7 +2144,10 @@ function selectVariant(variantId, productId, prefix) {
       const newBtn = document.getElementById('mobileAddToCartBtn');
       if (newBtn) {
         newBtn.onclick = function() {
-          if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, window._selectedVariant);
+          if (addToCartHandlerRef()) {
+            transformToQtyButtonVariant(this, product, window._selectedVariant);
+            if (typeof syncCollapsedBarFromCart === 'function') syncCollapsedBarFromCart();
+          }
         };
       }
     }
@@ -2077,7 +2156,7 @@ function selectVariant(variantId, productId, prefix) {
   // Auto-collapse sticky bar on mobile after variant selection
   if (prefix === 'mob') {
     const variantPrice = variant.price > 0 ? variant.price : product.price;
-    collapseStickyBar(variant, variantPrice);
+    collapseStickyBar(variant, variantPrice, product);
   }
 }
 
@@ -2148,7 +2227,10 @@ function productVariantQtyChange(productId, variantId, change) {
       if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, window._selectedVariant);
     };
     if (newMobileBtn) newMobileBtn.onclick = function() {
-      if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, window._selectedVariant);
+      if (addToCartHandlerRef()) {
+        transformToQtyButtonVariant(this, product, window._selectedVariant);
+        if (typeof syncCollapsedBarFromCart === 'function') syncCollapsedBarFromCart();
+      }
     };
   } else {
     item.quantity = newQty;
@@ -2175,6 +2257,9 @@ function productVariantQtyChange(productId, variantId, change) {
   if (typeof updateCart === 'function') updateCart();
   updateTierHighlight(productId);
   if (change > 0 && typeof pulseBadge === 'function') pulseBadge();
+
+  // Sync collapsed bar with cart state
+  if (typeof syncCollapsedBarFromCart === 'function') syncCollapsedBarFromCart();
 }
 
 // Reference to addToCartHandler (set inside initProductPage, used by selectVariant)

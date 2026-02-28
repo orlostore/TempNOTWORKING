@@ -2631,8 +2631,8 @@ footer p {
   min-height: 50px;
   -webkit-tap-highlight-color: transparent;
 }
-/* Two-state layout: no-variant vs has-variant */
-.sticky-collapsed-bar .collapsed-no-variant {
+/* Left area: product thumb / variant info + chevron */
+.sticky-collapsed-bar .collapsed-left-area {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2640,6 +2640,14 @@ footer p {
   min-width: 0;
   cursor: pointer;
 }
+/* No-variant state (just product thumb) */
+.sticky-collapsed-bar .collapsed-no-variant {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+/* Has-variant state (variant thumb + info) */
 .sticky-collapsed-bar .collapsed-has-variant {
   display: none;
   align-items: center;
@@ -2647,8 +2655,6 @@ footer p {
   flex: 1;
   min-width: 0;
 }
-.sticky-collapsed-bar.has-variant .collapsed-no-variant { display: none; }
-.sticky-collapsed-bar.has-variant .collapsed-has-variant { display: flex; }
 /* Product thumb in no-variant state */
 .sticky-collapsed-bar .collapsed-product-thumb {
   width: 38px;
@@ -2659,33 +2665,8 @@ footer p {
   background: #f8f8f8;
   flex-shrink: 0;
 }
-/* "Choose a Design" button — matches mobile-add-to-cart */
-.sticky-collapsed-bar .collapsed-choose-btn {
-  flex: 1;
-  height: 36px;
-  padding: 0 0.67rem;
-  background: #e07856;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'Inter', 'Almarai', sans-serif;
-  transition: background 0.3s;
-}
-.sticky-collapsed-bar .collapsed-choose-btn:active { opacity: 0.85; }
-.sticky-collapsed-bar .collapsed-choose-btn .arabic-text { font-size: 0.65rem; }
-/* Has-variant left side (thumb + info) */
-.sticky-collapsed-bar .collapsed-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
-  cursor: pointer;
-}
-.sticky-collapsed-bar .collapsed-left img {
+/* Variant thumb */
+.sticky-collapsed-bar .collapsed-has-variant img {
   width: 38px;
   height: 38px;
   object-fit: contain;
@@ -2712,24 +2693,6 @@ footer p {
   color: var(--accent);
   font-weight: 600;
 }
-/* Collapsed cart button — matches mobile-add-to-cart exactly (no green) */
-.sticky-collapsed-bar .collapsed-cart-btn {
-  flex-shrink: 0;
-  height: 36px;
-  padding: 0 14px;
-  border: none;
-  border-radius: 12px;
-  background: #e07856;
-  color: #fff;
-  font-size: 0.7rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  font-family: 'Inter', 'Almarai', sans-serif;
-  transition: background 0.3s;
-}
-.sticky-collapsed-bar .collapsed-cart-btn:active { opacity: 0.85; }
-.sticky-collapsed-bar .collapsed-cart-btn .arabic-text { font-size: 0.65rem; }
 /* Chevron (expand arrow) */
 .sticky-collapsed-bar .collapsed-chevron {
   flex-shrink: 0;
@@ -2738,6 +2701,93 @@ footer p {
   color: #999;
   cursor: pointer;
   transition: transform 0.2s;
+}
+/* Right area: fixed width for all 3 states (choose / add to cart / stepper) */
+.sticky-collapsed-bar .collapsed-right-area {
+  flex-shrink: 0;
+  width: 130px;
+  height: 36px;
+}
+/* "Select a Design" button — grey neutral background */
+.sticky-collapsed-bar .collapsed-choose-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 36px;
+  padding: 0 8px;
+  background: #999;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.3s;
+  white-space: nowrap;
+}
+.sticky-collapsed-bar .collapsed-choose-btn:active { opacity: 0.85; }
+/* "Add to Cart" button — orange */
+.sticky-collapsed-bar .collapsed-cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 36px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 12px;
+  background: #e07856;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.3s;
+}
+.sticky-collapsed-bar .collapsed-cart-btn:active { opacity: 0.85; }
+/* Quantity stepper — orange, same design as grid-qty-control */
+.sticky-collapsed-bar .collapsed-qty-stepper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 36px;
+  background: #e07856;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.sticky-collapsed-bar .collapsed-qty-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: rgba(0,0,0,0.15);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.sticky-collapsed-bar .collapsed-qty-btn:first-child {
+  border-radius: 12px 0 0 12px;
+}
+.sticky-collapsed-bar .collapsed-qty-btn:last-child {
+  border-radius: 0 12px 12px 0;
+}
+.sticky-collapsed-bar .collapsed-qty-btn:hover {
+  background: rgba(0,0,0,0.25);
+}
+.sticky-collapsed-bar .collapsed-qty-btn:active {
+  background: rgba(0,0,0,0.35);
+}
+.sticky-collapsed-bar .collapsed-qty-display {
+  flex: 1;
+  text-align: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 /* Show/hide states */
 .mobile-sticky-buybar.is-collapsed .sticky-collapsed-bar {
