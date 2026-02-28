@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bottom Buy Bar — Option A Refined</title>
+<title>Bottom Buy Bar — A1 Final with Transformed Cart</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -57,6 +57,28 @@
     line-height: 1.5;
   }
 
+  /* State label */
+  .state-tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-left: 8px;
+    position: relative;
+    top: -2px;
+  }
+  .state-tag.default {
+    background: #e8f4fd;
+    color: #2a6fa8;
+  }
+  .state-tag.transformed {
+    background: #fef3ee;
+    color: var(--accent);
+  }
+
   .phone-frame {
     width: 375px;
     max-width: 100%;
@@ -96,7 +118,7 @@
   .nav-dot { width: 22px; height: 22px; border-radius: 50%; background: #e0e6ea; }
 
   /* ===================================
-     The .early-price box (exact match)
+     The .early-price box
      =================================== */
   .early-price-box {
     background: #ffffff;
@@ -119,27 +141,14 @@
     background-repeat: no-repeat;
   }
 
-  /* Shared button */
-  .cart-btn {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
+  /* ===================================
+     Three-column layout (shared)
+     =================================== */
+  .layout-row {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    box-shadow: 0 3px 12px rgba(224,120,86,0.25);
-    transition: transform 0.15s;
-    line-height: 1.25;
-    gap: 1px;
-    flex-shrink: 0;
+    gap: 8px;
   }
-  .cart-btn:active { transform: scale(0.96); }
-  .cart-btn .btn-en { font-size: 0.78rem; font-weight: 700; }
-  .cart-btn .btn-ar { font-size: 0.66rem; font-weight: 700; opacity: 0.85; }
 
   /* Price stacked */
   .price-col {
@@ -156,144 +165,121 @@
     font-size: 0.7rem; font-weight: 700; color: #8a9aa6;
   }
 
-  /* Truck SVG */
-  .truck-icon {
-    width: 13px; height: 13px;
+  /* ===================================
+     Add to Cart button (default state)
+     =================================== */
+  .cart-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 3px 12px rgba(224,120,86,0.25);
+    transition: transform 0.15s;
+    line-height: 1.25;
+    gap: 1px;
+    padding: 9px 14px;
+    flex: 1;
+  }
+  .cart-btn:active { transform: scale(0.96); }
+  .cart-btn .btn-en { font-size: 0.78rem; font-weight: 700; }
+  .cart-btn .btn-ar { font-size: 0.66rem; font-weight: 700; opacity: 0.85; }
+
+  /* ===================================
+     Quantity stepper (transformed state)
+     Matches existing .grid-qty-control exactly
+     =================================== */
+  .qty-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    background: var(--accent);
+    border-radius: 12px;
+    overflow: hidden;
+    flex: 1;
+    box-shadow: 0 3px 12px rgba(224,120,86,0.25);
+  }
+  .qty-stepper .qty-btn {
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: rgba(0,0,0,0.15);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .qty-stepper .qty-btn:first-child { border-radius: 12px 0 0 12px; }
+  .qty-stepper .qty-btn:last-child { border-radius: 0 12px 12px 0; }
+  .qty-stepper .qty-btn:active { background: rgba(0,0,0,0.35); }
+  .qty-stepper .qty-num {
+    flex: 1;
+    text-align: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  /* ===================================
+     Delivery column — truck at centerline
+     [truck icon] [EN text]
+                  [AR text]
+     truck vertically centered between both lines
+     =================================== */
+  .del-col {
+    display: flex;
+    align-items: center;  /* truck centers against the text block */
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .del-col .truck-icon {
+    width: 14px; height: 14px;
     stroke: var(--accent); fill: none;
     stroke-width: 2; flex-shrink: 0;
   }
-  .check-icon {
-    width: 11px; height: 11px;
-    stroke: #2a8c4a; fill: none;
-    stroke-width: 2.5; flex-shrink: 0;
-  }
-
-  /* ===========================
-     A1: Smart abbreviation
-     "Free over 75 AED" / "مجاني فوق ٧٥"
-     =========================== */
-  .layout-a1 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .layout-a1 .cart-btn { padding: 9px 14px; flex: 1; }
-  .layout-a1 .del-col {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    text-align: right;
-    flex-shrink: 0;
-  }
-  .layout-a1 .del-col .del-en {
-    font-size: 0.62rem; font-weight: 600; color: #5a7a8c;
-    display: flex; align-items: center; gap: 3px;
-    justify-content: flex-end;
-  }
-  .layout-a1 .del-col .del-ar {
-    font-size: 0.58rem; font-weight: 600; color: #8a9aa6;
-    text-align: right;
-  }
-
-  /* ===========================
-     A2: Full message, 4-line stack on the right
-     "Free delivery" / "over AED 75" / "توصيل مجاني" / "فوق ٧٥ درهم"
-     =========================== */
-  .layout-a2 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .layout-a2 .cart-btn { padding: 9px 14px; flex: 1; }
-  .layout-a2 .del-col {
+  .del-col .del-text {
     display: flex;
     flex-direction: column;
     text-align: right;
-    flex-shrink: 0;
-    line-height: 1.2;
+    line-height: 1.25;
+    gap: 0px;
   }
-  .layout-a2 .del-col .del-line {
-    font-size: 0.6rem; font-weight: 600; color: #5a7a8c;
-    display: flex; align-items: center; gap: 3px;
-    justify-content: flex-end;
-  }
-  .layout-a2 .del-col .del-sub {
-    font-size: 0.58rem; font-weight: 700; color: var(--accent);
-    text-align: right;
-  }
-  .layout-a2 .del-col .del-ar-line {
-    font-size: 0.56rem; font-weight: 600; color: #8a9aa6;
-    text-align: right;
-    margin-top: 1px;
-    border-top: 1px solid #f0f2f4;
-    padding-top: 2px;
-  }
-
-  /* ===========================
-     A3: Three cols + delivery strip below
-     =========================== */
-  .layout-a3 .main-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .layout-a3 .cart-btn { padding: 9px 14px; flex: 1; }
-  .layout-a3 .del-mini {
-    flex-shrink: 0;
-    display: flex; align-items: center; gap: 3px;
-    font-size: 0.6rem; font-weight: 600; color: #5a7a8c;
-  }
-  .layout-a3 .del-strip {
-    margin-top: 7px;
-    background: #f5f7f9;
-    border-radius: 8px;
-    padding: 5px 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+  .del-col .del-en {
     font-size: 0.6rem;
     font-weight: 600;
+    color: #5a7a8c;
+    white-space: nowrap;
   }
-  .layout-a3 .del-strip .strip-en { color: #5a7a8c; display: flex; align-items: center; gap: 4px; }
-  .layout-a3 .del-strip .strip-sep { color: #d0d5da; }
-  .layout-a3 .del-strip .strip-ar { color: #8a9aa6; }
-
-  /* ===========================
-     A4: Price + Cart with delivery baked into button
-     =========================== */
-  .layout-a4 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .layout-a4 .right-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .layout-a4 .cart-btn {
-    padding: 9px 14px;
-    width: 100%;
-  }
-  .layout-a4 .del-badge {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    background: #eaf7ee;
-    border-radius: 8px;
-    padding: 4px 8px;
-  }
-  .layout-a4 .del-badge .del-text {
-    font-size: 0.58rem;
+  .del-col .del-ar {
+    font-size: 0.56rem;
     font-weight: 600;
-    color: #2a8c4a;
+    color: #8a9aa6;
   }
-  .layout-a4 .del-badge .del-sep {
-    color: #9ed0ae;
-    font-size: 0.5rem;
+
+  /* Arrow between the two mockups */
+  .arrow-between {
+    text-align: center;
+    padding: 14px 0 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #8a9aa6;
+    letter-spacing: 0.04em;
+  }
+  .arrow-between span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    padding: 5px 14px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
 
   @media (min-width: 500px) {
@@ -303,13 +289,13 @@
 </head>
 <body>
 
-<h1>Option A Refined — Full Delivery Message</h1>
-<p class="subtitle">You liked the three-column layout. Here are 4 ways to fit the full<br>"Free delivery over AED 75 | توصيل مجاني فوق ٧٥ درهم" message.</p>
+<h1>A1 — Smart Short (Final)</h1>
+<p class="subtitle">Truck icon at centerline between EN/AR. Full threshold included.<br>Showing default state + transformed cart with [&minus; 1 +] stepper.</p>
 
-<!-- ========== A1 ========== -->
+<!-- ========== DEFAULT STATE ========== -->
 <div class="option-section">
-  <div class="option-label">A1 — Smart Short</div>
-  <div class="option-desc">Keeps the same three-column row. Delivery shortened to "Free over 75 AED" / "مجاني فوق ٧٥ درهم" — still has the threshold, just tighter wording.</div>
+  <div class="option-label">Default State <span class="state-tag default">Before Add</span></div>
+  <div class="option-desc">Three columns: Price (EN/AR) | Add to Cart bilingual button | Truck centered + "Free over 75 AED" / "مجاني فوق ٧٥ درهم"</div>
   <div class="phone-frame">
     <div class="phone-screen">
       <div class="fake-product">
@@ -319,25 +305,32 @@
           <div class="fake-variant">Variant: Gold Foil &middot; Qty: 2</div>
         </div>
       </div>
+
       <div class="early-price-box">
-        <div class="layout-a1">
+        <div class="layout-row">
+          <!-- COL 1: Price -->
           <div class="price-col">
             <span class="p-en">AED 89.00</span>
             <span class="p-ar arabic-text">٨٩ درهم</span>
           </div>
+
+          <!-- COL 2: Add to Cart button -->
           <button class="cart-btn">
             <span class="btn-en">Add to Cart</span>
             <span class="btn-ar arabic-text">أضف إلى السلة</span>
           </button>
+
+          <!-- COL 3: Delivery — truck vertically centered -->
           <div class="del-col">
-            <span class="del-en">
-              <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-              Free over 75 AED
-            </span>
-            <span class="del-ar arabic-text">مجاني فوق ٧٥ درهم</span>
+            <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <div class="del-text">
+              <span class="del-en">Free over 75 AED</span>
+              <span class="del-ar arabic-text">مجاني فوق ٧٥ درهم</span>
+            </div>
           </div>
         </div>
       </div>
+
       <div class="fake-bottom-nav">
         <div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div>
       </div>
@@ -345,10 +338,12 @@
   </div>
 </div>
 
-<!-- ========== A2 ========== -->
+<div class="arrow-between"><span>&#9660; User taps Add to Cart &#9660;</span></div>
+
+<!-- ========== TRANSFORMED STATE ========== -->
 <div class="option-section">
-  <div class="option-label">A2 — Full Stacked Right</div>
-  <div class="option-desc">Three columns. Delivery on the right stacks: "Free delivery" + "over AED 75" (highlighted) + Arabic below a thin line. Everything visible, nothing cut.</div>
+  <div class="option-label">Transformed State <span class="state-tag transformed">In Cart</span></div>
+  <div class="option-desc">Same three columns. The button transforms into the [&minus; 1 +] quantity stepper (matching existing .grid-qty-control). Price + delivery stay untouched.</div>
   <div class="phone-frame">
     <div class="phone-screen">
       <div class="fake-product">
@@ -358,112 +353,33 @@
           <div class="fake-variant">Variant: Gold Foil &middot; Qty: 2</div>
         </div>
       </div>
+
       <div class="early-price-box">
-        <div class="layout-a2">
+        <div class="layout-row">
+          <!-- COL 1: Price (unchanged) -->
           <div class="price-col">
             <span class="p-en">AED 89.00</span>
             <span class="p-ar arabic-text">٨٩ درهم</span>
           </div>
-          <button class="cart-btn">
-            <span class="btn-en">Add to Cart</span>
-            <span class="btn-ar arabic-text">أضف إلى السلة</span>
-          </button>
+
+          <!-- COL 2: Quantity stepper (replaces Add to Cart) -->
+          <div class="qty-stepper">
+            <button class="qty-btn">&minus;</button>
+            <span class="qty-num">1</span>
+            <button class="qty-btn">+</button>
+          </div>
+
+          <!-- COL 3: Delivery (unchanged) — truck vertically centered -->
           <div class="del-col">
-            <span class="del-line">
-              <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-              Free delivery
-            </span>
-            <span class="del-sub">over AED 75</span>
-            <span class="del-ar-line arabic-text">توصيل مجاني فوق ٧٥ درهم</span>
+            <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <div class="del-text">
+              <span class="del-en">Free over 75 AED</span>
+              <span class="del-ar arabic-text">مجاني فوق ٧٥ درهم</span>
+            </div>
           </div>
         </div>
       </div>
-      <div class="fake-bottom-nav">
-        <div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- ========== A3 ========== -->
-<div class="option-section">
-  <div class="option-label">A3 — Delivery Strip Below</div>
-  <div class="option-desc">Three-column row on top (price + cart + small truck icon). Full bilingual delivery message in a grey strip below — nothing is lost, and the main row stays clean.</div>
-  <div class="phone-frame">
-    <div class="phone-screen">
-      <div class="fake-product">
-        <div class="fake-thumb">&#9649;</div>
-        <div class="fake-info">
-          <div class="fake-title">Personalised Wooden Plaque — Custom Name</div>
-          <div class="fake-variant">Variant: Gold Foil &middot; Qty: 2</div>
-        </div>
-      </div>
-      <div class="early-price-box">
-        <div class="layout-a3">
-          <div class="main-row">
-            <div class="price-col">
-              <span class="p-en">AED 89.00</span>
-              <span class="p-ar arabic-text">٨٩ درهم</span>
-            </div>
-            <button class="cart-btn">
-              <span class="btn-en">Add to Cart</span>
-              <span class="btn-ar arabic-text">أضف إلى السلة</span>
-            </button>
-            <div class="del-mini">
-              <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-              FREE
-            </div>
-          </div>
-          <div class="del-strip">
-            <span class="strip-en">
-              <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-              Free delivery over AED 75
-            </span>
-            <span class="strip-sep">|</span>
-            <span class="strip-ar arabic-text">توصيل مجاني فوق ٧٥ درهم</span>
-          </div>
-        </div>
-      </div>
-      <div class="fake-bottom-nav">
-        <div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ========== A4 ========== -->
-<div class="option-section">
-  <div class="option-label">A4 — Green Delivery Badge</div>
-  <div class="option-desc">Price on the left. Right side: two-line Cart button on top + green success badge below with full bilingual delivery text. The badge makes it feel like a perk/reward.</div>
-  <div class="phone-frame">
-    <div class="phone-screen">
-      <div class="fake-product">
-        <div class="fake-thumb">&#9649;</div>
-        <div class="fake-info">
-          <div class="fake-title">Personalised Wooden Plaque — Custom Name</div>
-          <div class="fake-variant">Variant: Gold Foil &middot; Qty: 2</div>
-        </div>
-      </div>
-      <div class="early-price-box">
-        <div class="layout-a4">
-          <div class="price-col">
-            <span class="p-en">AED 89.00</span>
-            <span class="p-ar arabic-text">٨٩ درهم</span>
-          </div>
-          <div class="right-group">
-            <button class="cart-btn">
-              <span class="btn-en">Add to Cart</span>
-              <span class="btn-ar arabic-text">أضف إلى السلة</span>
-            </button>
-            <div class="del-badge">
-              <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-              <span class="del-text">Free delivery over AED 75</span>
-              <span class="del-sep">|</span>
-              <span class="del-text arabic-text">توصيل مجاني فوق ٧٥ درهم</span>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="fake-bottom-nav">
         <div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div><div class="nav-dot"></div>
       </div>
