@@ -2561,7 +2561,7 @@ footer p {
   
   .mobile-product-page {
     display: block;
-    padding-bottom: 80px;
+    padding-bottom: 40px;
     overflow-x: clip;
   }
 }
@@ -2976,8 +2976,8 @@ footer p {
   padding: 0.6rem 1rem;
   letter-spacing: 0.3px;
   line-height: 1.8;
-  margin-top: -80px;
-  padding-bottom: 80px;
+  margin-top: -40px;
+  padding-bottom: 40px;
 }
 
 /* Mobile Details Section (unified for Colors, Packaging, Specs, Description) */
