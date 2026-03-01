@@ -82,6 +82,12 @@ body {
   font-size: 7.18px;
 }
 
+@media (min-width: 769px) {
+  body {
+    font-size: 16px;
+  }
+}
+
 header {
   background: var(--white);
   box-shadow: 0 2px 5.36px rgba(0,0,0,.06);
