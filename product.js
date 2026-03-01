@@ -522,8 +522,8 @@ async function initProductPage() {
       earlyPriceDesktop.insertAdjacentHTML('beforeend', earlyDeliveryHTML);
       if (hasTiers) {
         document.getElementById('earlyHintDesktop').onclick = function() {
-          const delivery = document.querySelector('.product-buybox .delivery-info');
-          if (delivery) delivery.scrollIntoView({behavior:'smooth', block:'end'});
+          const variantSection = document.getElementById('variantSelectorDesktop');
+          if (variantSection) variantSection.scrollIntoView({behavior:'smooth', block:'start'});
         };
       }
     }
