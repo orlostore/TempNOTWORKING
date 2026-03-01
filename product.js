@@ -569,6 +569,11 @@ async function initProductPage() {
     const nvPriceArD = `${Number(product.price).toFixed(2)} درهم`;
     const earlyHTMLDesktop = `
       <div class="early-price-row early-price-desktop-bar">
+        <button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
+        <div class="price-col">
+          <span class="early-price-en">${nvPriceEnD}</span>
+          <span class="early-price-ar arabic-text">${nvPriceArD}</span>
+        </div>
         <div class="del-col">
           <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
           <div class="del-text">
@@ -576,11 +581,6 @@ async function initProductPage() {
             <span class="del-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</span>
           </div>
         </div>
-        <div class="price-col">
-          <span class="early-price-en">${nvPriceEnD}</span>
-          <span class="early-price-ar arabic-text">${nvPriceArD}</span>
-        </div>
-        <button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
       </div>`;
     if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTMLDesktop;
     // Non-variant products: mobile gets the same three-column bottom bar as variant
