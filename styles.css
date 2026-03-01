@@ -2153,7 +2153,7 @@ footer p {
 .mobile-promo-banner {
   display: none;
   background: var(--bg);
-  color: #1a3a52;
+  color: var(--primary);
   text-align: center;
   padding: 8px 15px;
   font-size: 0.75rem;
