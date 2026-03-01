@@ -1657,7 +1657,7 @@ footer p {
 }
 
 .product-desc-label {
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--primary);
   text-transform: uppercase;
@@ -2079,7 +2079,7 @@ footer p {
 }
 
 .lightbox-detail-label {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: #2c4a5c;
   margin-bottom: 0.4rem;
@@ -2974,6 +2974,9 @@ footer p {
 }
 
 .mobile-detail-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   padding: 15px 0;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -2982,41 +2985,36 @@ footer p {
   border-bottom: none;
 }
 
-.mobile-detail-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #2c4a5c;
-  margin-bottom: 12px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.mobile-detail-content {
-  font-size: 0.85rem;
-  color: #555;
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.mobile-detail-content p {
-  margin-bottom: 0;
-}
-
-.mobile-detail-content p:first-child {
+.mobile-detail-en {
   text-align: left;
 }
 
-.mobile-detail-content p.arabic-text {
+.mobile-detail-ar {
   text-align: right;
   direction: rtl;
-  color: #666;
+  font-family: 'Almarai', sans-serif;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.mobile-detail-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.3rem;
+}
+
+.mobile-detail-value {
+  font-size: 0.85rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+.mobile-detail-ar .mobile-detail-value {
+  color: #555;
   font-size: 0.88rem;
   line-height: 1.8;
-  border-top: 1px solid #f0f0f0;
-  padding-top: 0.5rem;
-  margin-top: 0.5rem;
 }
 
 .mobile-description-content {
