@@ -2751,6 +2751,7 @@ footer p {
 /* --- Bottom bar: three-column layout (Price | Cart | Delivery) --- */
 .early-price-bottom {
   overflow: visible;
+  padding: 8px 12px;
 }
 .early-price-bottom .bottom-bar-row {
   display: flex;
@@ -2765,13 +2766,13 @@ footer p {
   flex-shrink: 0;
 }
 .early-price-bottom .price-col .early-price-en {
-  font-size: 0.88rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: #2c4a5c;
   letter-spacing: -0.02em;
 }
 .early-price-bottom .price-col .early-price-ar {
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: #8a9aa6;
 }
@@ -2782,7 +2783,7 @@ footer p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 38px;
+  height: 48px;
   flex: 0 0 120px;
   border-radius: 12px;
   font-weight: 700;
@@ -2793,11 +2794,11 @@ footer p {
   margin-top: 0;
 }
 .early-price-bottom .mobile-add-to-cart .btn-en {
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   font-weight: 700;
 }
 .early-price-bottom .mobile-add-to-cart .btn-ar {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   font-weight: 700;
   opacity: 0.85;
 }
@@ -2805,13 +2806,13 @@ footer p {
 .mobile-product-header .early-price.early-price-bottom .product-btn-transformed,
 .mobile-product-header .early-price.early-price-bottom .grid-qty-control {
   flex: 0 0 120px;
-  height: 38px;
+  height: 48px;
   width: 120px;
   margin-top: 0;
 }
 .mobile-product-header .early-price.early-price-bottom .grid-qty-btn {
-  width: 38px;
-  height: 38px;
+  width: 48px;
+  height: 48px;
 }
 /* Delivery column — can shrink on tight screens but doesn't grow */
 .early-price-bottom .del-col {
@@ -2823,8 +2824,8 @@ footer p {
   overflow: hidden;
 }
 .early-price-bottom .del-col .truck-icon {
-  width: 14px;
-  height: 14px;
+  width: 17px;
+  height: 17px;
   stroke: #e07856;
   fill: none;
   stroke-width: 2;
@@ -2838,7 +2839,7 @@ footer p {
   gap: 0;
 }
 .early-price-bottom .del-col .del-en {
-  font-size: 0.63rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: #5a7a8c;
   white-space: nowrap;
@@ -2846,7 +2847,7 @@ footer p {
   text-overflow: ellipsis;
 }
 .early-price-bottom .del-col .del-ar {
-  font-size: 0.59rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: #8a9aa6;
 }
