@@ -1407,7 +1407,7 @@ footer p {
 /* Desktop Product Page - Layout D Clean Minimal */
 .product-page {
   display: grid;
-  grid-template-columns: 500px 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-bottom: 2.4rem;
   align-items: start;
@@ -1790,13 +1790,13 @@ footer p {
   background: white;
   border-radius: 14px;
   border: 1px solid #eee;
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  aspect-ratio: 1;
 }
 
 .main-product-image {
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  height: 100%;
   display: block;
   margin: 0 auto;
   object-fit: contain;
