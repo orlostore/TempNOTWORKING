@@ -1792,6 +1792,7 @@ footer p {
   border: 1px solid #eee;
   width: 100%;
   aspect-ratio: 1;
+  max-height: calc(100vh - 170px);
 }
 
 .main-product-image {
