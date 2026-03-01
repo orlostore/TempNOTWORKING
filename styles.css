@@ -2561,7 +2561,7 @@ footer p {
   
   .mobile-product-page {
     display: block;
-    padding-bottom: 160px;
+    padding-bottom: 0;
     overflow-x: clip;
   }
 }
@@ -2967,14 +2967,15 @@ footer p {
   margin-bottom: 0;
 }
 
-/* Product Content Floor – thin branded bar at end of content */
+/* Product Content Floor – branded bar at end of content */
 .product-content-floor {
   background: var(--primary);
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.7);
   text-align: center;
   font-size: 0.6rem;
-  padding: 0.5rem 1rem;
+  padding: 1.2rem 1rem 180px;
   letter-spacing: 0.3px;
+  line-height: 1.8;
 }
 
 /* Mobile Details Section (unified for Colors, Packaging, Specs, Description) */
