@@ -775,8 +775,14 @@ async function initProductPage() {
   if (mobileDescEn || mobileDescAr) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Description</span><span class="arabic-text">معلومات المنتج</span></div>
-        <div class="mobile-detail-content"><p>${mobileDescEn}</p><p class="arabic-text">${mobileDescAr}</p></div>
+        <div class="mobile-detail-en">
+          <div class="mobile-detail-label">Description</div>
+          <div class="mobile-detail-value">${mobileDescEn}</div>
+        </div>
+        <div class="mobile-detail-ar">
+          <div class="mobile-detail-label">معلومات المنتج</div>
+          <div class="mobile-detail-value">${mobileDescAr}</div>
+        </div>
       </div>
     `;
   }
@@ -784,8 +790,14 @@ async function initProductPage() {
   if (product.colors) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Available Colors</span><span class="arabic-text">الألوان المتاحة</span></div>
-        <div class="mobile-detail-content"><p>${product.colors}</p><p class="arabic-text">${product.colorsAr || ''}</p></div>
+        <div class="mobile-detail-en">
+          <div class="mobile-detail-label">Available Colors</div>
+          <div class="mobile-detail-value">${product.colors}</div>
+        </div>
+        <div class="mobile-detail-ar">
+          <div class="mobile-detail-label">الألوان المتاحة</div>
+          <div class="mobile-detail-value">${product.colorsAr || ''}</div>
+        </div>
       </div>
     `;
   }
@@ -793,8 +805,14 @@ async function initProductPage() {
   if (product.packaging) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Packaging</span><span class="arabic-text">التعبئة والتغليف</span></div>
-        <div class="mobile-detail-content"><p>${product.packaging}</p><p class="arabic-text">${product.packagingAr || ''}</p></div>
+        <div class="mobile-detail-en">
+          <div class="mobile-detail-label">Packaging</div>
+          <div class="mobile-detail-value">${product.packaging}</div>
+        </div>
+        <div class="mobile-detail-ar">
+          <div class="mobile-detail-label">التعبئة والتغليف</div>
+          <div class="mobile-detail-value">${product.packagingAr || ''}</div>
+        </div>
       </div>
     `;
   }
@@ -802,8 +820,14 @@ async function initProductPage() {
   if (product.specifications && product.specifications.length > 0) {
     detailsHTML += `
       <div class="mobile-detail-block">
-        <div class="mobile-detail-title"><span>Specifications</span><span class="arabic-text">المواصفات</span></div>
-        <div class="mobile-detail-content"><p>${product.specifications.join('<br>')}</p><p class="arabic-text">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</p></div>
+        <div class="mobile-detail-en">
+          <div class="mobile-detail-label">Specifications</div>
+          <div class="mobile-detail-value">${product.specifications.join('<br>')}</div>
+        </div>
+        <div class="mobile-detail-ar">
+          <div class="mobile-detail-label">المواصفات</div>
+          <div class="mobile-detail-value">${product.specificationsAr ? product.specificationsAr.join('<br>') : ''}</div>
+        </div>
       </div>
     `;
   }
@@ -1819,8 +1843,14 @@ function buildMobileExtraSpecsHTML(product) {
     if (s.val) {
       html += `
         <div class="mobile-detail-block">
-          <div class="mobile-detail-title"><span>${s.en}</span><span class="arabic-text">${s.ar}</span></div>
-          <div class="mobile-detail-content"><p>${s.val}</p><p class="arabic-text">${s.valAr || ''}</p></div>
+          <div class="mobile-detail-en">
+            <div class="mobile-detail-label">${s.en}</div>
+            <div class="mobile-detail-value">${s.val}</div>
+          </div>
+          <div class="mobile-detail-ar">
+            <div class="mobile-detail-label">${s.ar}</div>
+            <div class="mobile-detail-value">${s.valAr || ''}</div>
+          </div>
         </div>
       `;
     }
