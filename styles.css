@@ -3096,6 +3096,13 @@ footer p {
   padding-bottom: 60px;
 }
 
+@media (min-width: 805px) {
+  .product-content-floor {
+    margin-top: 0;
+    padding-bottom: 1rem;
+  }
+}
+
 /* Mobile Details Section (unified for Colors, Packaging, Specs, Description) */
 .mobile-details-section {
   margin: 8px 15px 0;
