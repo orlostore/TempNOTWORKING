@@ -1224,6 +1224,7 @@ footer {
   background: var(--primary);
   color: white;
   text-align: center;
+  font-size: 0.6rem;
   padding: 1.34rem 1.34rem;
 }
 
