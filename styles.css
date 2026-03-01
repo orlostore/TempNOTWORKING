@@ -3443,7 +3443,7 @@ footer p {
 .variant-tile {
   border: 2px solid #e0e0e0;
   border-radius: 8px;
-  padding: 4px;
+  padding: 4px 4px 3px;
   cursor: pointer;
   text-align: center;
   transition: all 0.2s;
@@ -3481,17 +3481,17 @@ footer p {
   transform: rotate(-15deg);
 }
 .variant-tile-name {
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 500;
   color: var(--text);
-  margin-top: 2px;
-  line-height: 1.15;
+  margin-top: 1px;
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .variant-tile-stock {
-  font-size: 0.6rem;
+  font-size: 0.68rem;
   color: #999;
   margin-top: 0;
 }
