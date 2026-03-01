@@ -1627,11 +1627,11 @@ footer p {
   font-size: 0.95rem;
 }
 
-/* Product Description Two-Column Layout */
+/* Product Description Stacked Layout (EN above, AR below) */
 .product-desc-block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   margin-bottom: 0.5rem;
   padding: 0.75rem 1rem;
   background: #f8fafb;
@@ -1651,8 +1651,9 @@ footer p {
   text-align: right;
   direction: rtl;
   font-family: 'Almarai', sans-serif;
-  border-left: 1px solid #e0e8ed;
-  padding-left: 1rem;
+  border-top: 1px solid #e0e8ed;
+  padding-top: 0.6rem;
+  margin-top: 0.6rem;
 }
 
 .product-desc-label {
@@ -1677,6 +1678,8 @@ footer p {
 
 .product-desc-ar .product-desc-value {
   color: #555;
+  font-size: 0.85rem;
+  line-height: 1.8;
 }
 
 /* Buybox - open layout */
@@ -2050,9 +2053,9 @@ footer p {
 }
 
 .lightbox-detail-block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   margin-bottom: 1.25rem;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid #f0f0f0;
@@ -2070,6 +2073,9 @@ footer p {
   text-align: right;
   direction: rtl;
   font-family: 'Almarai', sans-serif;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0.6rem;
+  margin-top: 0.6rem;
 }
 
 .lightbox-detail-label {
@@ -2091,6 +2097,8 @@ footer p {
 
 .lightbox-detail-ar .lightbox-detail-value {
   color: #666;
+  font-size: 0.83rem;
+  line-height: 1.8;
 }
 
 /* Lightbox Close Button */
@@ -2987,9 +2995,9 @@ footer p {
   font-size: 0.85rem;
   color: #555;
   line-height: 1.6;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .mobile-detail-content p {
@@ -3004,6 +3012,11 @@ footer p {
   text-align: right;
   direction: rtl;
   color: #666;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .mobile-description-content {
