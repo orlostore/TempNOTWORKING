@@ -1471,6 +1471,14 @@ footer p {
   padding: 6px 12px;
 }
 
+@media (min-width: 805px) {
+  .desktop-product .early-price {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+}
+
 
 .early-price-row {
   display: flex;
