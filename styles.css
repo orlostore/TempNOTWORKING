@@ -1594,7 +1594,7 @@ footer p {
   align-items: center;
   justify-content: center;
   height: 48px;
-  min-width: 140px;
+  min-width: 175px;
   padding: 0 1rem;
   background: #e07856;
   color: white;
@@ -1627,8 +1627,8 @@ footer p {
 .early-price-desktop-bar .product-btn-transformed,
 .early-price-desktop-bar .grid-qty-control {
   flex-shrink: 0;
-  min-width: 140px;
-  max-width: 140px;
+  min-width: 175px;
+  max-width: 175px;
   height: 48px;
 }
 .early-price-desktop-bar .grid-qty-btn {
