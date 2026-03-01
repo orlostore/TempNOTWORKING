@@ -405,6 +405,15 @@ async function initProductPage() {
     }
   };
 
+  // Visible breadcrumbs (desktop + mobile)
+  const catName = product.category || 'Products';
+  const catLink = 'index.html?category=' + encodeURIComponent(catName);
+  const crumbHTML = `<a href="index.html">Home</a><span class="crumb-sep">/</span><a href="${catLink}">${catName}</a><span class="crumb-sep">/</span><span class="crumb-current">${product.name}</span>`;
+  const deskCrumb = document.getElementById('desktopBreadcrumb');
+  const mobCrumb = document.getElementById('mobileBreadcrumb');
+  if (deskCrumb) deskCrumb.innerHTML = crumbHTML;
+  if (mobCrumb) mobCrumb.innerHTML = crumbHTML;
+
   // DESKTOP VERSION
   document.getElementById("productTitle").innerText = product.name;
   const titleArEl = document.getElementById("productTitleAr");
