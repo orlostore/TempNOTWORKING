@@ -4150,8 +4150,6 @@ footer p {
     color: #888;
     margin-left: 0.5rem;
     vertical-align: middle;
-    position: relative;
-    top: -1px;
     border-radius: 50%;
     transition: color 0.2s, background 0.15s;
 }
