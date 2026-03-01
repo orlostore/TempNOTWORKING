@@ -1523,35 +1523,118 @@ footer p {
   text-decoration: underline;
 }
 
-/* Non-variant inline: price | button | Arabic price */
+/* Non-variant inline: price | button | Arabic price (legacy) */
 .early-price-inline {
   align-items: center;
   justify-content: center;
   gap: 14px;
 }
 
+/* === Desktop non-variant: three-column bar (Cart | Price | Delivery) === */
+.early-price-desktop-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.early-price-desktop-bar .price-col {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+.early-price-desktop-bar .price-col .early-price-en {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #2c4a5c;
+  letter-spacing: -0.02em;
+}
+.early-price-desktop-bar .price-col .early-price-ar {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #8a9aa6;
+  direction: rtl;
+}
+.early-price-desktop-bar .del-col {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 1;
+  min-width: 0;
+}
+.early-price-desktop-bar .del-col .truck-icon {
+  width: 18px;
+  height: 18px;
+  stroke: #e07856;
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+.early-price-desktop-bar .del-col .del-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.early-price-desktop-bar .del-col .del-en {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #5a7a8c;
+  white-space: nowrap;
+}
+.early-price-desktop-bar .del-col .del-ar {
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: #8a9aa6;
+  direction: rtl;
+}
+
 .inline-add-to-cart {
-  height: 36px;
-  min-width: 180px;
-  padding: 0 0.67rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  min-width: 150px;
+  padding: 0 1rem;
   background: #e07856;
   color: white;
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.15;
+  gap: 0;
   white-space: nowrap;
   transition: background 0.3s;
   font-family: 'Inter', 'Almarai', sans-serif;
   flex-shrink: 0;
+}
+.inline-add-to-cart .btn-en {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.inline-add-to-cart .btn-ar {
+  font-size: 0.65rem;
+  font-weight: 700;
+  opacity: 0.85;
 }
 
 .inline-add-to-cart:hover {
   background: #c9634a;
 }
 
-/* Qty control when inline (non-variant) — same width as the Add to Cart button */
+/* Qty control in desktop bar — same size as the Add to Cart button */
+.early-price-desktop-bar .product-btn-transformed,
+.early-price-desktop-bar .grid-qty-control {
+  flex-shrink: 0;
+  min-width: 150px;
+  height: 42px;
+}
+.early-price-desktop-bar .product-btn-transformed .grid-qty-btn {
+  height: 42px;
+}
+
+/* Legacy inline qty control */
 .early-price-inline .product-btn-transformed,
 .early-price-inline .grid-qty-control {
   flex-shrink: 0;
@@ -3873,7 +3956,8 @@ footer p {
    ============================================ */
 .product-buybox,
 .mobile-cart-section,
-.early-price-inline {
+.early-price-inline,
+.early-price-desktop-bar {
   position: relative;
 }
 
