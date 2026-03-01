@@ -2969,7 +2969,7 @@ footer p {
 /* Product Content Floor – branded bar at end of content */
 .product-content-floor {
   background: var(--primary);
-  color: rgba(255, 255, 255, 0.7);
+  color: white;
   text-align: center;
   font-size: 0.6rem;
   padding: 1rem 1rem;
