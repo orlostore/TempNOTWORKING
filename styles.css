@@ -1728,15 +1728,18 @@ footer p {
   display: flex;
   flex-direction: column;
   gap: 0;
-  margin-bottom: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: #f8fafb;
-  border-radius: 10px;
-  border: 1px solid #e8eef2;
+  margin-bottom: 0.75rem;
+  padding: 0 0 0.75rem 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid #e8eef2;
 }
 
 .product-desc-block:last-child {
   margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .product-desc-en {
@@ -1747,9 +1750,10 @@ footer p {
   text-align: right;
   direction: rtl;
   font-family: 'Almarai', sans-serif;
-  border-top: 1px solid #e0e8ed;
-  padding-top: 0.6rem;
-  margin-top: 0.6rem;
+  border-top: none;
+  padding-top: 0.4rem;
+  margin-top: 0.4rem;
+  opacity: 0.75;
 }
 
 .product-desc-label {
