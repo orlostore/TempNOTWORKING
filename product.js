@@ -206,14 +206,15 @@ function resetToAddButton(productId) {
     if (isEarlyPrice) {
       // Non-variant button inside early-price container
       const isBottomBar = transformed.closest('.early-price-bottom') !== null;
+      const isDesktopBar = transformed.closest('.early-price-desktop-bar') !== null;
       if (isMobile) {
         // Mobile: bottom bar uses stacked bilingual (same as variant)
         transformed.outerHTML = isBottomBar
           ? `<button class="mobile-add-to-cart" id="earlyCartMobile"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`
           : `<button class="mobile-add-to-cart" id="earlyCartMobile">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
       } else {
-        // Desktop: inline layout inside early-price-row
-        transformed.outerHTML = `<button class="inline-add-to-cart" id="earlyCartDesktop">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+        // Desktop: three-column bar uses stacked bilingual
+        transformed.outerHTML = `<button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
       }
     } else {
       const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
@@ -561,8 +562,24 @@ async function initProductPage() {
       }
     }
   } else if (product.price) {
-    // Non-variant products: desktop keeps inline layout
-    const earlyHTMLDesktop = `<div class="early-price-row early-price-inline"><span class="early-price-en">AED ${Number(product.price).toFixed(2)}</span><button class="inline-add-to-cart" id="earlyCartDesktop">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button><span class="early-price-ar arabic-text">${Number(product.price).toFixed(2)} درهم</span></div>`;
+    // Non-variant products: desktop three-column bar (Cart | Price | Delivery)
+    const nvPriceEnD = `AED ${Number(product.price).toFixed(2)}`;
+    const nvPriceArD = `${Number(product.price).toFixed(2)} درهم`;
+    const earlyHTMLDesktop = `
+      <div class="early-price-row early-price-desktop-bar">
+        <button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
+        <div class="price-col">
+          <span class="early-price-en">${nvPriceEnD}</span>
+          <span class="early-price-ar arabic-text">${nvPriceArD}</span>
+        </div>
+        <div class="del-col">
+          <svg class="truck-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <div class="del-text">
+            <span class="del-en">Free delivery over ${threshold} AED</span>
+            <span class="del-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</span>
+          </div>
+        </div>
+      </div>`;
     if (earlyPriceDesktop) earlyPriceDesktop.innerHTML = earlyHTMLDesktop;
     // Non-variant products: mobile gets the same three-column bottom bar as variant
     if (earlyPriceMobile) {
@@ -637,14 +654,11 @@ async function initProductPage() {
   let desktopAddBtn;
   if (!hasVariants) {
     desktopAddBtn = document.getElementById("earlyCartDesktop");
-    // Inject delivery info into early-price container, then hide buybox entirely
-    const deliveryHTML = `<div class="early-delivery-info"><div class="delivery-item"><span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="delivery-en">Free delivery over AED ${threshold}</div><div class="delivery-ar arabic-text">توصيل مجاني فوق ${toArabicNumerals(threshold)} درهم</div></div></div>`;
-    if (earlyPriceDesktop) earlyPriceDesktop.insertAdjacentHTML('beforeend', deliveryHTML);
-    // Hide entire buybox for non-variant products (price + button live in early-price instead)
+    // Delivery is already inside the bar — just hide the buybox
     const buybox = document.querySelector('.product-buybox');
     if (buybox) buybox.style.display = 'none';
     if (isOutOfStock && desktopAddBtn) {
-      desktopAddBtn.innerHTML = 'Out of Stock | <span class="arabic-text">نفد المخزون</span>';
+      desktopAddBtn.innerHTML = '<span class="btn-en">Out of Stock</span><span class="btn-ar arabic-text">نفد المخزون</span>';
       desktopAddBtn.disabled = true;
       desktopAddBtn.style.background = "#999";
       desktopAddBtn.style.cursor = "not-allowed";
