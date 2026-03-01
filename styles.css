@@ -1773,9 +1773,25 @@ footer p {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .product-gallery {
     position: static;
+  }
+
+  /* Fluid gallery when grid stacks to single column */
+  .main-image-container {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+  }
+
+  .main-product-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
 }
 
