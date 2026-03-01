@@ -1361,7 +1361,7 @@ footer p {
   }
 
   footer {
-    padding: calc(1.01rem - 2px) 0.67rem;
+    padding: calc(1.01rem - 4px) 0.67rem;
   }
 
   footer p {
@@ -2973,7 +2973,7 @@ footer p {
   color: white;
   text-align: center;
   font-size: 0.6rem;
-  padding: calc(1rem - 2px) 1rem;
+  padding: calc(1rem - 4px) 1rem;
   letter-spacing: 0.3px;
   line-height: 1.8;
   margin-top: -50px;
