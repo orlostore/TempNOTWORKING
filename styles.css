@@ -2561,7 +2561,7 @@ footer p {
   
   .mobile-product-page {
     display: block;
-    padding-bottom: 160px;
+    padding-bottom: 0;
     overflow-x: clip;
   }
 }
@@ -2981,7 +2981,7 @@ footer p {
 
 @media (max-width: 768px) {
   .product-content-floor {
-    margin-top: -160px;
+    margin-top: 0;
     padding-bottom: 160px;
   }
 }
