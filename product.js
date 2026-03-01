@@ -484,10 +484,8 @@ async function initProductPage() {
   if (hasTiers) {
     productPriceEl.style.display = 'none';
   } else if (hasVariants) {
-    // Price pill for no-tier variant products
-    productPriceEl.innerHTML = `<div class="price-pill"><div class="pill-price">AED ${Number(product.price).toFixed(2)}</div><div class="pill-unit">per piece</div><div class="pill-unit-ar arabic-text">للقطعة</div></div>`;
-    const buybox = document.querySelector('.product-buybox');
-    if (buybox) buybox.classList.add('has-price-pill');
+    // Price already visible in sticky early-price bar — hide duplicate in buybox
+    productPriceEl.style.display = 'none';
   } else {
     productPriceEl.innerText = "AED " + Number(product.price).toFixed(2);
   }
