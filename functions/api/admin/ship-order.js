@@ -78,7 +78,7 @@ export async function onRequestPost(context) {
                     html: `
                         <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden;">
                             <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 20px; text-align: center;">
-                                <img src="https://temp-5lr.pages.dev/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
+                                <img src="https://orlostore.com/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
                                 <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1px;">ORLO Store</div>
                             </div>
                             <div style="background: white; padding: 30px 25px;">
@@ -112,7 +112,7 @@ export async function onRequestPost(context) {
                                 </div>
 
                                 <div style="text-align: center;">
-                                    <a href="https://temp-5lr.pages.dev/account.html" style="background: #2c4a5c; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-block;">
+                                    <a href="https://orlostore.com/account.html" style="background: #2c4a5c; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-block;">
                                         View My Orders | عرض طلباتي
                                     </a>
                                 </div>
