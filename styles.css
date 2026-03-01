@@ -1593,8 +1593,8 @@ footer p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 42px;
-  min-width: 150px;
+  height: 48px;
+  min-width: 140px;
   padding: 0 1rem;
   background: #e07856;
   color: white;
@@ -1610,11 +1610,11 @@ footer p {
   flex-shrink: 0;
 }
 .inline-add-to-cart .btn-en {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
 }
 .inline-add-to-cart .btn-ar {
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   font-weight: 700;
   opacity: 0.85;
 }
@@ -1623,15 +1623,21 @@ footer p {
   background: #c9634a;
 }
 
-/* Qty control in desktop bar — same size as the Add to Cart button */
+/* Qty stepper in desktop bar — exactly matches the cart button */
 .early-price-desktop-bar .product-btn-transformed,
 .early-price-desktop-bar .grid-qty-control {
   flex-shrink: 0;
-  min-width: 150px;
-  height: 42px;
+  min-width: 140px;
+  max-width: 140px;
+  height: 48px;
 }
-.early-price-desktop-bar .product-btn-transformed .grid-qty-btn {
-  height: 42px;
+.early-price-desktop-bar .grid-qty-btn {
+  width: 38px;
+  height: 48px;
+  font-size: 1rem;
+}
+.early-price-desktop-bar .grid-qty-num {
+  font-size: 0.85rem;
 }
 
 /* Legacy inline qty control */
