@@ -2822,7 +2822,7 @@ footer p {
 /* Mobile Buybox - compact single block */
 .mobile-buybox-compact {
   background: white;
-  padding: 12px 15px 0;
+  padding: 12px 15px;
   margin-top: 8px;
   display: flex;
   flex-wrap: wrap;
@@ -2976,14 +2976,8 @@ footer p {
   padding: 0.6rem 1rem;
   letter-spacing: 0.3px;
   line-height: 1.8;
-  margin-top: 0;
-}
-
-@media (max-width: 768px) {
-  .product-content-floor {
-    margin-top: -160px;
-    padding-bottom: 160px;
-  }
+  margin-top: -160px;
+  padding-bottom: 160px;
 }
 
 /* Mobile Details Section (unified for Colors, Packaging, Specs, Description) */
