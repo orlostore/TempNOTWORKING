@@ -2561,7 +2561,7 @@ footer p {
   
   .mobile-product-page {
     display: block;
-    padding-bottom: 0;
+    padding-bottom: 160px;
     overflow-x: clip;
   }
 }
@@ -2973,9 +2973,11 @@ footer p {
   color: rgba(255, 255, 255, 0.7);
   text-align: center;
   font-size: 0.6rem;
-  padding: 1.2rem 1rem 180px;
+  padding: 0.6rem 1rem;
   letter-spacing: 0.3px;
   line-height: 1.8;
+  margin-top: -160px;
+  padding-bottom: 160px;
 }
 
 /* Mobile Details Section (unified for Colors, Packaging, Specs, Description) */
