@@ -2033,17 +2033,21 @@ function productVariantQtyChange(productId, variantId, change) {
     // Reset buttons back to "Add to Cart"
     document.querySelectorAll(`[id="transformedBtn-${productId}"]`).forEach(el => {
       const isMobile = el.closest('.mobile-product-page') !== null;
+      const isEarlyPrice = el.closest('.early-price') !== null;
       const isBottomBar = el.closest('.early-price-bottom') !== null;
-      const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
-      const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
-      if (isBottomBar) {
-        el.outerHTML = `<button class="${btnClass}" id="${btnId}"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
+      if (!isMobile && isEarlyPrice) {
+        // Desktop: restore inline bar button
+        el.outerHTML = `<button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
+      } else if (isMobile && isBottomBar) {
+        el.outerHTML = `<button class="mobile-add-to-cart" id="mobileAddToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
       } else {
-        el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+        const btnId = isMobile ? 'mobileAddToCartBtn' : 'earlyCartDesktop';
+        const btnClass = isMobile ? 'mobile-add-to-cart' : 'inline-add-to-cart';
+        el.outerHTML = `<button class="${btnClass}" id="${btnId}"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
       }
     });
     // Re-attach handlers
-    const newDesktopBtn = document.getElementById('addToCartBtn');
+    const newDesktopBtn = document.getElementById('earlyCartDesktop');
     const newMobileBtn = document.getElementById('mobileAddToCartBtn');
     if (newDesktopBtn) newDesktopBtn.onclick = function() {
       if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, window._selectedVariant);

@@ -1434,6 +1434,7 @@ footer p {
 .product-details {
   display: flex;
   flex-direction: column;
+  align-self: stretch;
 }
 
 .product-details h1 {
