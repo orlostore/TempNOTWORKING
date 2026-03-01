@@ -2967,6 +2967,16 @@ footer p {
   margin-bottom: 0;
 }
 
+/* Product Content Floor – thin branded bar at end of content */
+.product-content-floor {
+  background: var(--primary);
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  font-size: 0.6rem;
+  padding: 0.5rem 1rem;
+  letter-spacing: 0.3px;
+}
+
 /* Mobile Details Section (unified for Colors, Packaging, Specs, Description) */
 .mobile-details-section {
   margin: 8px 15px 0;
