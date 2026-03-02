@@ -1288,7 +1288,15 @@ window.onload = () => {
     const categoryParam = urlParams.get('category');
     loadProducts(categoryParam || 'All Products');
     updateCart();
-    populateHomepageSections(); 
+    populateHomepageSections();
+
+    // If arriving with ?category=, scroll to the products grid
+    if (categoryParam) {
+        const productsSection = document.getElementById('products');
+        if (productsSection) {
+            setTimeout(() => { productsSection.scrollIntoView({ behavior: 'smooth' }); }, 100);
+        }
+    } 
     
     // Auto-open cart if redirected back from login
     if (urlParams.get('openCart') === 'true') {
