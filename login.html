@@ -498,7 +498,12 @@
         if (localStorage.getItem('orlo_token')) { window.location.href = 'account.html'; }
 
         function showAlert(message, type) {
-            document.getElementById('alertBox').innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            const div = document.createElement('div');
+            div.className = `alert alert-${type}`;
+            div.textContent = message;
+            const box = document.getElementById('alertBox');
+            box.innerHTML = '';
+            box.appendChild(div);
         }
 
         function clearErrors() {
@@ -550,7 +555,14 @@
                         sessionStorage.setItem('orlo_customer', JSON.stringify(data.customer));
                     }
                     const urlParams = new URLSearchParams(window.location.search);
-                    const redirect = urlParams.get('redirect') || localStorage.getItem('lastProduct') || 'account.html';
+                    let redirect = urlParams.get('redirect') || localStorage.getItem('lastProduct') || 'account.html';
+                    // Prevent open redirect: only allow relative same-origin paths
+                    try {
+                        const parsed = new URL(redirect, window.location.origin);
+                        if (parsed.origin !== window.location.origin) redirect = 'account.html';
+                    } catch(e) {
+                        if (redirect.startsWith('//') || redirect.includes('://')) redirect = 'account.html';
+                    }
                     setTimeout(() => { window.location.href = redirect; }, 1000);
                 } else {
                     showAlert(data.error || 'Invalid email or password', 'error');

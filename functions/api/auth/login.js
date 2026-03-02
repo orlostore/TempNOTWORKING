@@ -57,7 +57,7 @@ export async function onRequestPost(context) {
         } else {
             // Legacy SHA-256 check
             const legacyHash = await hashPasswordLegacy(password);
-            passwordValid = (legacyHash === customer.password_hash);
+            passwordValid = safeCompareHex(legacyHash, customer.password_hash);
 
             // Auto-upgrade to PBKDF2 on successful login
             if (passwordValid) {
@@ -95,6 +95,14 @@ export async function onRequestPost(context) {
         console.error('Login error:', error);
         return Response.json({ error: 'Login failed' }, { status: 500 });
     }
+}
+
+function safeCompareHex(a, b) {
+    if (typeof a !== 'string' || typeof b !== 'string') return false;
+    if (a.length !== b.length) return false;
+    let result = 0;
+    for (let i = 0; i < a.length; i++) result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    return result === 0;
 }
 
 // Legacy SHA-256 hash (for migration from old passwords)
@@ -135,7 +143,7 @@ async function verifyPasswordPBKDF2(password, storedHash) {
         256
     );
     const hashHex = Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex === expectedHash;
+    return safeCompareHex(hashHex, expectedHash);
 }
 
 // Generate random token

@@ -1,15 +1,31 @@
 // Cloudflare Pages Function - Product Admin API
 // Location: /functions/api/admin/product.js
 
+function safeCompare(a, b) {
+    if (typeof a !== 'string' || typeof b !== 'string') return false;
+    const encoder = new TextEncoder();
+    const aBuf = encoder.encode(a);
+    const bBuf = encoder.encode(b);
+    if (aBuf.length !== bBuf.length) return false;
+    let result = 0;
+    for (let i = 0; i < aBuf.length; i++) result |= aBuf[i] ^ bBuf[i];
+    return result === 0;
+}
+
+function getAdminKey(request) {
+    const authHeader = request.headers.get('Authorization');
+    return authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+}
+
 export async function onRequestPost(context) {
     const { request, env } = context;
     const url = new URL(request.url);
-    const key = url.searchParams.get('key');
+    const key = getAdminKey(request);
     const action = url.searchParams.get('action');
     const id = url.searchParams.get('id');
 
     // Auth check
-    if (key !== env.ADMIN_KEY) {
+    if (!safeCompare(key, env.ADMIN_KEY)) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401,
             headers: { 'Content-Type': 'application/json' }
@@ -217,12 +233,12 @@ async function savePricingTiers(DB, productId, tiers) {
 export async function onRequestGet(context) {
     const { env } = context;
     const url = new URL(context.request.url);
-    const key = url.searchParams.get('key');
+    const key = getAdminKey(context.request);
     const action = url.searchParams.get('action');
     const id = url.searchParams.get('id');
 
     // Auth check
-    if (key !== env.ADMIN_KEY) {
+    if (!safeCompare(key, env.ADMIN_KEY)) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401,
             headers: { 'Content-Type': 'application/json' }
