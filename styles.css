@@ -3299,6 +3299,13 @@ footer p {
   gap: 0;
 }
 
+/* Desktop only: reset nav padding so breadcrumb aligns with headers */
+@media (min-width: 769px) {
+  .breadcrumb {
+    padding: 0;
+  }
+}
+
 .breadcrumb a {
   color: #6b8599;
   text-decoration: none;
