@@ -200,12 +200,16 @@ nav {
   line-height: 1;
 }
 
+.nav-links a br {
+  display: none;
+}
+
 .nav-links a .arabic-text {
   display: block;
   font-size: 0.65rem;
   color: #666;
   line-height: 1;
-  margin-top: -1px;
+  margin-top: 0;
 }
 
 .nav-links a:hover,
