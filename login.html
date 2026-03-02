@@ -556,13 +556,11 @@
                     }
                     const urlParams = new URLSearchParams(window.location.search);
                     let redirect = urlParams.get('redirect') || localStorage.getItem('lastProduct') || 'account.html';
-                    // Prevent open redirect: only allow relative same-origin paths
+                    // Prevent open redirect: only allow same-origin URLs
                     try {
-                        const parsed = new URL(redirect, window.location.origin);
-                        if (parsed.origin !== window.location.origin) redirect = 'account.html';
-                    } catch(e) {
-                        if (redirect.startsWith('//') || redirect.includes('://')) redirect = 'account.html';
-                    }
+                        const rUrl = new URL(redirect, window.location.origin);
+                        if (rUrl.origin !== window.location.origin) redirect = 'account.html';
+                    } catch (e) { redirect = 'account.html'; }
                     setTimeout(() => { window.location.href = redirect; }, 1000);
                 } else {
                     showAlert(data.error || 'Invalid email or password', 'error');
