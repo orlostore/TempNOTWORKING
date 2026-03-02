@@ -550,7 +550,12 @@
                         sessionStorage.setItem('orlo_customer', JSON.stringify(data.customer));
                     }
                     const urlParams = new URLSearchParams(window.location.search);
-                    const redirect = urlParams.get('redirect') || localStorage.getItem('lastProduct') || 'account.html';
+                    let redirect = urlParams.get('redirect') || localStorage.getItem('lastProduct') || 'account.html';
+                    // Prevent open redirect: only allow same-origin URLs
+                    try {
+                        const rUrl = new URL(redirect, window.location.origin);
+                        if (rUrl.origin !== window.location.origin) redirect = 'account.html';
+                    } catch (e) { redirect = 'account.html'; }
                     setTimeout(() => { window.location.href = redirect; }, 1000);
                 } else {
                     showAlert(data.error || 'Invalid email or password', 'error');
