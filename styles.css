@@ -3685,6 +3685,7 @@ footer p {
   margin-right: auto;
   margin-bottom: 0;
   display: block;
+  line-height: 1.4;
 }
 
 .product-buybox .product-btn-transformed {
