@@ -1277,14 +1277,16 @@ window.onload = () => {
     updateCart();
     populateHomepageSections();
 
-    // If arriving with ?category=, scroll so All Products title is at the top of the viewport
+    // If arriving with ?category=, hide homepage sections and show breadcrumb
     if (categoryParam) {
-        const productsSection = document.getElementById('products');
-        if (productsSection) {
-            requestAnimationFrame(() => {
-                window.scrollTo({ top: productsSection.offsetTop, left: 0, behavior: 'instant' });
-            });
+        document.querySelectorAll('.homepage-section').forEach(s => s.style.display = 'none');
+        const breadcrumb = document.getElementById('categoryBreadcrumb');
+        if (breadcrumb) {
+            breadcrumb.innerHTML = '<a href="index.html">Home</a><span class="crumb-sep">/</span><span class="crumb-current">' + categoryParam + '</span>';
+            breadcrumb.style.display = 'flex';
         }
+        const productsSection = document.getElementById('products');
+        if (productsSection) productsSection.scrollIntoView();
     } 
     
     // Auto-open cart if redirected back from login
