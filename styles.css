@@ -3297,7 +3297,13 @@ footer p {
   align-items: center;
   flex-wrap: wrap;
   gap: 0;
-  padding: 0;
+}
+
+/* Desktop only: reset nav padding so breadcrumb aligns with headers */
+@media (min-width: 769px) {
+  .breadcrumb {
+    padding: 0;
+  }
 }
 
 .breadcrumb a {
