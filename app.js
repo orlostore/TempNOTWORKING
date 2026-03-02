@@ -1290,11 +1290,12 @@ window.onload = () => {
     updateCart();
     populateHomepageSections();
 
-    // If arriving with ?category=, scroll to the products grid
+    // If arriving with ?category=, hide homepage sections and jump straight to All Products
     if (categoryParam) {
+        document.querySelectorAll('.homepage-section').forEach(s => s.style.display = 'none');
         const productsSection = document.getElementById('products');
         if (productsSection) {
-            setTimeout(() => { productsSection.scrollIntoView({ behavior: 'smooth' }); }, 100);
+            productsSection.scrollIntoView();
         }
     } 
     
