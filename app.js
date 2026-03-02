@@ -19,10 +19,11 @@ const SVG_INFO = '<svg style="width:1.3em;height:1.3em;vertical-align:-0.2em;str
 const SVG_MAIL_SM = '<svg style="width:1.3em;height:1.3em;vertical-align:-0.2em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
 const SVG_CLIPBOARD_SM = '<svg style="width:1.3em;height:1.3em;vertical-align:-0.2em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>';
 
-// Redirect to cancel page if user presses back from Stripe payment
+// Redirect to cancel page if user presses back from Stripe payment (bfcache fallback)
 window.addEventListener('pageshow', function(event) {
     if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
         if (sessionStorage.getItem('orlo_checkout_pending')) {
+            document.documentElement.style.opacity = '0';
             sessionStorage.removeItem('orlo_checkout_pending');
             window.location.replace('cancel.html');
         }
@@ -684,7 +685,7 @@ function updateCart() {
                     ${SVG_CARD} Pay by Card | <span style="font-family: 'Almarai', sans-serif; font-size: 0.64rem; opacity: 0.85;">الدفع بالبطاقة</span>
                 </div>
                 <div style="display: flex; gap: 8px; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 10px 8px;">
-                    <button id="stripeBtn" onclick="(function(){ var u=new URL(window.location.href); u.searchParams.set('openCart','true'); window.location.href='login.html?redirect='+encodeURIComponent(u.toString()); })()"
+                    <button id="stripeBtn" onclick="(function(){ var u=new URL(window.location.href); u.searchParams.set('openCart','true'); window.location.href='login.html?redirect='+encodeURIComponent(u.pathname+u.search); })()"
                         style="flex: 1; padding: 9px 7px; border: none; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 600; cursor: pointer; text-align: center; background: #3d6178; color: white; border-radius: 5px; transition: all 0.2s;">
                         ${SVG_LOCK_SM} Sign in<span style="font-family: 'Almarai', sans-serif; font-size: 0.62rem; display: block; opacity: 0.8;">تسجيل الدخول</span>
                     </button>

@@ -30,7 +30,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
   <style>html{opacity:0;transition:opacity .15s}</style>
-  <script>Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})</script>
+  <script>
+  if(sessionStorage.getItem('orlo_checkout_pending')){sessionStorage.removeItem('orlo_checkout_pending');window.location.replace('cancel.html');}
+  else{Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})}
+  </script>
   <link rel="stylesheet" href="styles.css?v=8">
   <style>
       .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
@@ -78,7 +81,7 @@
 
 <script>
   /* Remember this product page so account Home button can return here */
-  try { localStorage.setItem('lastProduct', window.location.href); } catch(e){}
+  try { localStorage.setItem('lastProduct', window.location.pathname + window.location.search); } catch(e){}
 
   /** * ANTI-FLICKER SCRIPT
    * Runs immediately before the DOM paints to set the correct cart numbers.
