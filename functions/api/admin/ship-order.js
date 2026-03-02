@@ -71,9 +71,24 @@ export async function onRequestPost(context) {
         let emailError = null;
 
         if (env.RESEND_API_KEY) {
+            // Extract just the product name + variant, strip full descriptions
+            const cleanName = (name) => {
+                if (!name) return 'Item';
+                // Split on newlines, take first line only
+                let short = name.split(/[\n\r]/)[0].trim();
+                // If the name repeats itself (e.g. "Product Name - Variant Product Name are handmade...")
+                // or contains long description sentences, keep only up to the variant part
+                // Typical Stripe format: "Product Name - Variant" or "Product Name (Variant)"
+                // Cut at first lowercase word followed by a sentence pattern (description start)
+                const descMatch = short.match(/^(.{10,}?)\s+(?:are|is|our|these|this|each|made|features?|comes?|includes?|perfect)\s/i);
+                if (descMatch) short = descMatch[1].trim();
+                // Cap at 60 chars just in case
+                return short.length > 60 ? short.substring(0, 57) + '…' : short;
+            };
+
             const itemsList = (items || [])
                 .filter(i => !i.name.toLowerCase().includes('delivery'))
-                .map(i => `<tr><td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;">${i.name}</td><td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#666;text-align:center;">× ${i.quantity}</td></tr>`)
+                .map(i => `<tr><td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;word-break:break-word;">${cleanName(i.name)}</td><td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#666;text-align:center;white-space:nowrap;">× ${i.quantity}</td></tr>`)
                 .join('');
 
             const emailResponse = await fetch('https://api.resend.com/emails', {
@@ -87,7 +102,7 @@ export async function onRequestPost(context) {
                     to: customer_email,
                     subject: 'Your Order Has Been Shipped! | تم شحن طلبك',
                     html: `
-                        <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden;">
+                        <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden; width: 100%; -webkit-text-size-adjust: 100%;">
                             <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 20px; text-align: center;">
                                 <img src="https://temp-5lr.pages.dev/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
                                 <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1px;">ORLO Store</div>
@@ -106,8 +121,9 @@ export async function onRequestPost(context) {
 
                                 ${itemsList ? `
                                 <div style="background: #f8f9fa; border-radius: 8px; overflow: hidden; margin-bottom: 20px;">
-                                    <div style="padding: 10px 12px; background: #eef2f5; font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase;">Order Items</div>
-                                    <table style="width: 100%; border-collapse: collapse;">
+                                    <div style="padding: 10px 12px; background: #eef2f5; font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase;">Order Items | عناصر الطلب</div>
+                                    <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                                        <colgroup><col style="width: 80%;"><col style="width: 20%;"></colgroup>
                                         ${itemsList}
                                     </table>
                                 </div>
