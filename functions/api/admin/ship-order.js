@@ -60,16 +60,24 @@ export async function onRequestPost(context) {
         let emailError = null;
 
         if (env.RESEND_API_KEY) {
-            const truncateName = (name, maxLen = 50) => {
-                if (!name) return '';
-                // Take only the first line / sentence — strip full descriptions
-                const short = name.split(/[\n\r]/)[0].split('. ')[0].split(' - ').slice(0, 2).join(' - ');
-                return short.length > maxLen ? short.substring(0, maxLen) + '…' : short;
+            // Extract just the product name + variant, strip full descriptions
+            const cleanName = (name) => {
+                if (!name) return 'Item';
+                // Split on newlines, take first line only
+                let short = name.split(/[\n\r]/)[0].trim();
+                // If the name repeats itself (e.g. "Product Name - Variant Product Name are handmade...")
+                // or contains long description sentences, keep only up to the variant part
+                // Typical Stripe format: "Product Name - Variant" or "Product Name (Variant)"
+                // Cut at first lowercase word followed by a sentence pattern (description start)
+                const descMatch = short.match(/^(.{10,}?)\s+(?:are|is|our|these|this|each|made|features?|comes?|includes?|perfect)\s/i);
+                if (descMatch) short = descMatch[1].trim();
+                // Cap at 60 chars just in case
+                return short.length > 60 ? short.substring(0, 57) + '…' : short;
             };
 
             const itemsList = (items || [])
                 .filter(i => !i.name.toLowerCase().includes('delivery'))
-                .map(i => `<tr><td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;word-break:break-word;">${truncateName(i.name)}</td><td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#666;text-align:center;white-space:nowrap;">× ${i.quantity}</td></tr>`)
+                .map(i => `<tr><td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;word-break:break-word;">${cleanName(i.name)}</td><td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#666;text-align:center;white-space:nowrap;">× ${i.quantity}</td></tr>`)
                 .join('');
 
             const emailResponse = await fetch('https://api.resend.com/emails', {
