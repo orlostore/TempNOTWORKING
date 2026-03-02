@@ -1295,6 +1295,11 @@ window.onload = () => {
         }
     }
     
+    const categoryParam = urlParams.get('category');
+    if (categoryParam) {
+        loadProducts(categoryParam);
+    }
+
     const searchTerm = urlParams.get('search');
     if (searchTerm) {
         const searchInput = document.getElementById('searchInput');
