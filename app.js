@@ -1277,12 +1277,13 @@ window.onload = () => {
     updateCart();
     populateHomepageSections();
 
-    // If arriving with ?category=, hide homepage sections and jump straight to All Products
+    // If arriving with ?category=, scroll so All Products title is at the top of the viewport
     if (categoryParam) {
-        document.querySelectorAll('.homepage-section').forEach(s => s.style.display = 'none');
         const productsSection = document.getElementById('products');
         if (productsSection) {
-            productsSection.scrollIntoView();
+            requestAnimationFrame(() => {
+                window.scrollTo({ top: productsSection.offsetTop, left: 0, behavior: 'instant' });
+            });
         }
     } 
     
