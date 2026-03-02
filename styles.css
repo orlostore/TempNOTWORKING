@@ -1612,7 +1612,7 @@ footer p {
   cursor: pointer;
   font-weight: 700;
   line-height: 1.15;
-  gap: 0;
+  gap: 2px;
   white-space: nowrap;
   transition: background 0.3s;
   font-family: 'Inter', 'Almarai', sans-serif;
@@ -3685,7 +3685,6 @@ footer p {
   margin-right: auto;
   margin-bottom: 0;
   display: block;
-  line-height: 1.4;
 }
 
 .product-buybox .product-btn-transformed {
