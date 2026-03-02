@@ -1284,11 +1284,11 @@ function initScrollArrows() {
 
 window.onload = () => {
     createCategoryFilters();
-    loadProducts();
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    loadProducts(categoryParam || 'All Products');
     updateCart();
     populateHomepageSections(); 
-    
-    const urlParams = new URLSearchParams(window.location.search);
     
     // Auto-open cart if redirected back from login
     if (urlParams.get('openCart') === 'true') {
@@ -1308,11 +1308,6 @@ window.onload = () => {
         }
     }
     
-    const categoryParam = urlParams.get('category');
-    if (categoryParam) {
-        loadProducts(categoryParam);
-    }
-
     const searchTerm = urlParams.get('search');
     if (searchTerm) {
         const searchInput = document.getElementById('searchInput');
