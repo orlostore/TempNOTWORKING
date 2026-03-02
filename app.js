@@ -1290,13 +1290,16 @@ window.onload = () => {
     updateCart();
     populateHomepageSections();
 
-    // If arriving with ?category=, hide homepage sections and jump straight to All Products
+    // If arriving with ?category=, hide homepage sections and show breadcrumb
     if (categoryParam) {
         document.querySelectorAll('.homepage-section').forEach(s => s.style.display = 'none');
-        const productsSection = document.getElementById('products');
-        if (productsSection) {
-            productsSection.scrollIntoView();
+        const breadcrumb = document.getElementById('categoryBreadcrumb');
+        if (breadcrumb) {
+            breadcrumb.innerHTML = '<a href="index.html">Home</a><span class="crumb-sep">/</span><span class="crumb-current">' + categoryParam + '</span>';
+            breadcrumb.style.display = 'flex';
         }
+        const productsSection = document.getElementById('products');
+        if (productsSection) productsSection.scrollIntoView();
     } 
     
     // Auto-open cart if redirected back from login
