@@ -69,7 +69,7 @@ function updateUIIfNeeded(newProducts) {
             createCategoryFilters();
         }
         if (typeof loadProducts === 'function') {
-            loadProducts();
+            loadProducts(typeof selectedCategory !== 'undefined' ? selectedCategory : 'All Products');
         }
         if (typeof populateHomepageSections === 'function') {
             populateHomepageSections();
@@ -89,7 +89,7 @@ async function initProducts() {
             createCategoryFilters();
         }
         if (typeof loadProducts === 'function') {
-            loadProducts();
+            loadProducts(typeof selectedCategory !== 'undefined' ? selectedCategory : 'All Products');
         }
         if (typeof updateCart === 'function') {
             updateCart();
@@ -98,22 +98,22 @@ async function initProducts() {
             populateHomepageSections();
         }
     }
-    
+
     // Step 3: Fetch fresh data
     const freshProducts = await fetchProducts();
-    
+
     if (freshProducts && freshProducts.length > 0) {
         if (hasCache) {
             updateUIIfNeeded(freshProducts);
         } else {
             products = freshProducts;
             saveToCache(freshProducts);
-            
+
             if (typeof createCategoryFilters === 'function') {
                 createCategoryFilters();
             }
             if (typeof loadProducts === 'function') {
-                loadProducts();
+                loadProducts(typeof selectedCategory !== 'undefined' ? selectedCategory : 'All Products');
             }
             if (typeof updateCart === 'function') {
                 updateCart();
