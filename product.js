@@ -287,6 +287,11 @@ async function initProductPage() {
   const product = products.find(p => p.slug === slug);
 
   if (!product) {
+    // If openCart=true was set (user came back from login to checkout), go home with cart open
+    if (params.get('openCart') === 'true') {
+      window.location.href = '/?openCart=true';
+      return;
+    }
     document.body.innerHTML = "<h2 style='text-align:center;padding:2.4rem;'>Product not found</h2>";
     return;
   }
