@@ -1743,17 +1743,30 @@
         let products = [];
         let authKey = '';
 
+        // Authenticated fetch helper — sends admin key in Authorization header, never in URL
+        function adminFetch(url, options = {}) {
+            if (!options.headers) options.headers = {};
+            options.headers['Authorization'] = 'Bearer ' + authKey;
+            return fetch(url, options);
+        }
+
         function checkAuth() {
             const params = new URLSearchParams(window.location.search);
             const urlKey = params.get('key');
             if (urlKey) {
+                // Strip key from URL immediately to prevent leaking in history/referrers
+                params.delete('key');
+                const cleanUrl = params.toString() ? window.location.pathname + '?' + params.toString() : window.location.pathname;
+                window.history.replaceState({}, '', cleanUrl);
                 verifyKey(urlKey);
             }
         }
 
         async function verifyKey(key) {
             try {
-                const response = await fetch('/api/admin/verify?key=' + encodeURIComponent(key) + '&t=' + Date.now());
+                const response = await fetch('/api/admin/verify?t=' + Date.now(), {
+                    headers: { 'Authorization': 'Bearer ' + key }
+                });
                 if (response.ok) {
                     authKey = key;
                     showAdmin();
@@ -1970,7 +1983,7 @@
             const newVal = product.featured ? 0 : 1;
             btn.classList.add('saving');
             try {
-                const resp = await fetch(`/api/admin/product?key=${authKey}&action=toggle-featured&id=${productId}`, {
+                const resp = await adminFetch(`/api/admin/product?action=toggle-featured&id=${productId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ featured: newVal })
@@ -2006,7 +2019,7 @@
             document.querySelectorAll('.reorder-btn').forEach(b => b.disabled = true);
 
             try {
-                const res = await fetch(`/api/admin/reorder?key=${authKey}`, {
+                const res = await adminFetch('/api/admin/reorder', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id1: id, id2: neighborId })
@@ -2276,11 +2289,11 @@
             }
 
             try {
-                const url = id 
-                    ? `/api/admin/product?key=${authKey}&action=update&id=${id}`
-                    : `/api/admin/product?key=${authKey}&action=add`;
-                
-                const response = await fetch(url, {
+                const url = id
+                    ? `/api/admin/product?action=update&id=${id}`
+                    : `/api/admin/product?action=add`;
+
+                const response = await adminFetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
@@ -2303,7 +2316,7 @@
             if (!confirm(`Delete "${slug}"? This cannot be undone.`)) return;
             
             try {
-                const response = await fetch(`/api/admin/product?key=${authKey}&action=delete&id=${id}`);
+                const response = await adminFetch(`/api/admin/product?action=delete&id=${id}`);
                 const result = await response.json();
                 if (result.success) loadProducts();
                 else alert('Error: ' + (result.error || 'Unknown error'));
@@ -2331,7 +2344,7 @@
             const newQty = document.getElementById('stockNewQty').value;
             
             try {
-                const response = await fetch(`/api/admin/restock?key=${authKey}&slug=${slug}&set=${newQty}`);
+                const response = await adminFetch(`/api/admin/restock?slug=${slug}&set=${newQty}`);
                 const result = await response.json();
                 if (result.success) { 
                     closeStockModal(); 
@@ -2550,7 +2563,7 @@
             `;
             
             try {
-                const response = await fetch(`/api/admin/orders?key=${authKey}&t=${Date.now()}`);
+                const response = await adminFetch(`/api/admin/orders?t=${Date.now()}`);
                 const data = await response.json();
                 
                 if (data.error) {
@@ -2934,7 +2947,7 @@
     const order = orders.find(o => o.id === orderId);
 
     try {
-        const response = await fetch(`/api/admin/ship-order?key=${authKey}`, {
+        const response = await adminFetch('/api/admin/ship-order', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -2982,7 +2995,7 @@
             }
             document.getElementById('analyticsKpis').style.opacity = '0.4';
             try {
-                const response = await fetch('/api/admin/orders?key=' + authKey + '&t=' + Date.now());
+                const response = await adminFetch('/api/admin/orders?t=' + Date.now());
                 const data = await response.json();
                 if (data.error) { alert('Analytics load error: ' + data.error); return; }
                 analyticsOrders = (data.orders || []).map(o => ({

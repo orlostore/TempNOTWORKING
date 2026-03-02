@@ -1,18 +1,29 @@
 // Cloudflare Pages Function - Import Products from Google Sheets
-// Usage: /api/admin/import?key=SECRET
+// Usage: /api/admin/import (with Authorization: Bearer <key> header)
 // This imports ALL products from Google Sheets into D1 (one-time setup)
 
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRPRs_Wd4lFMv_WF6qfxHffAauQ8DoWvrPAIgs0vmz4m1lwBvIwqe0pLcsQc2PcA4xo96IsP5J0v50L/pub?output=csv';
+
+function safeCompare(a, b) {
+    if (typeof a !== 'string' || typeof b !== 'string') return false;
+    const encoder = new TextEncoder();
+    const aBuf = encoder.encode(a);
+    const bBuf = encoder.encode(b);
+    if (aBuf.length !== bBuf.length) return false;
+    let result = 0;
+    for (let i = 0; i < aBuf.length; i++) result |= aBuf[i] ^ bBuf[i];
+    return result === 0;
+}
 
 export async function onRequestGet(context) {
     const { request, env } = context;
     const DB = env.DB;
 
-    const url = new URL(request.url);
-    const key = url.searchParams.get('key');
+    const authHeader = request.headers.get('Authorization');
+    const key = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
     // Verify admin key
-    if (key !== env.ADMIN_KEY) {
+    if (!safeCompare(key, env.ADMIN_KEY)) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401,
             headers: { 'Content-Type': 'application/json' }

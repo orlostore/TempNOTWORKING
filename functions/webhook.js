@@ -125,6 +125,16 @@ export async function onRequestPost(context) {
     }
 }
 
+function safeCompareHex(a, b) {
+    if (typeof a !== 'string' || typeof b !== 'string') return false;
+    if (a.length !== b.length) return false;
+    let result = 0;
+    for (let i = 0; i < a.length; i++) {
+        result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    }
+    return result === 0;
+}
+
 async function verifyStripeSignature(payload, signature, secret) {
     try {
         const parts = signature.split(',').reduce((acc, part) => {
@@ -132,12 +142,20 @@ async function verifyStripeSignature(payload, signature, secret) {
             acc[key] = value;
             return acc;
         }, {});
-        
+
         const timestamp = parts['t'];
         const expectedSig = parts['v1'];
-        
+
         if (!timestamp || !expectedSig) return false;
-        
+
+        // Reject signatures older than 5 minutes to prevent replay attacks
+        const timestampSec = parseInt(timestamp, 10);
+        const nowSec = Math.floor(Date.now() / 1000);
+        if (isNaN(timestampSec) || Math.abs(nowSec - timestampSec) > 300) {
+            console.error('Webhook timestamp too old or invalid:', timestamp);
+            return false;
+        }
+
         const signedPayload = `${timestamp}.${payload}`;
         const encoder = new TextEncoder();
         const key = await crypto.subtle.importKey(
@@ -147,18 +165,19 @@ async function verifyStripeSignature(payload, signature, secret) {
             false,
             ['sign']
         );
-        
+
         const signatureBuffer = await crypto.subtle.sign(
             'HMAC',
             key,
             encoder.encode(signedPayload)
         );
-        
+
         const computedSig = Array.from(new Uint8Array(signatureBuffer))
             .map(b => b.toString(16).padStart(2, '0'))
             .join('');
-        
-        return computedSig === expectedSig;
+
+        // Constant-time comparison to prevent timing attacks
+        return safeCompareHex(computedSig, expectedSig);
     } catch (e) {
         console.error('Signature verification error:', e);
         return false;

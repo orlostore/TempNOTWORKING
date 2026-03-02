@@ -1,4 +1,10 @@
-const WHATSAPP_NUMBER = "971555477206"; 
+const WHATSAPP_NUMBER = "971555477206";
+
+// HTML entity escaping to prevent XSS when inserting DB-sourced data via innerHTML
+function escapeHTML(str) {
+    if (typeof str !== 'string') return str;
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
 
 // SVG icon constants for JS-generated HTML
 const SVG_TRUCK_INLINE = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>';
@@ -309,10 +315,13 @@ function renderProducts(list, arabicMode) {
     const localCart = JSON.parse(localStorage.getItem("cart")) || [];
 
     grid.innerHTML = list.map(p => {
+        const safeName = escapeHTML(p.name);
+        const safeNameAr = escapeHTML(p.nameAr);
+        const safeSlug = encodeURIComponent(p.slug);
         const isUrl = p.image && p.image.startsWith('http');
         const imageHTML = isUrl
-            ? `<img src="${p.image}" alt="${p.name}" loading="lazy" style="max-width:100%; max-height:100%; object-fit:contain;">`
-            : p.image;
+            ? `<img src="${escapeHTML(p.image)}" alt="${safeName}" loading="lazy" style="max-width:100%; max-height:100%; object-fit:contain;">`
+            : escapeHTML(p.image);
 
         // Check if out of stock (use totalStock for variant products)
         const outOfStock = (p.totalStock !== undefined ? p.totalStock : p.quantity) === 0;
@@ -327,8 +336,8 @@ function renderProducts(list, arabicMode) {
                 : `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | <span class="arabic-text">نفذ المخزون</span></button>`;
         } else if (hasVariants) {
             buttonHTML = arabicMode
-                ? `<a href="product.html?product=${p.slug}" class="view-options-btn" style="direction:rtl;"><span class="arabic-text">عرض الخيارات</span> | View Options <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></a>`
-                : `<a href="product.html?product=${p.slug}" class="view-options-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg> View Options | <span class="arabic-text">عرض الخيارات</span></a>`;
+                ? `<a href="product.html?product=${safeSlug}" class="view-options-btn" style="direction:rtl;"><span class="arabic-text">عرض الخيارات</span> | View Options <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></a>`
+                : `<a href="product.html?product=${safeSlug}" class="view-options-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg> View Options | <span class="arabic-text">عرض الخيارات</span></a>`;
         } else if (inCart) {
             buttonHTML = `
                 <div class="grid-qty-control" id="gridQty-${p.id}">
@@ -345,20 +354,20 @@ function renderProducts(list, arabicMode) {
 
         // Arabic mode: show Arabic name first, English secondary
         const titleHTML = arabicMode
-            ? `<p class="product-title-ar" style="font-size:0.95rem;">${p.nameAr || p.name}</p>
-               <h3 class="product-title" style="font-size:0.75rem;color:#888;">${p.name}</h3>`
-            : `<h3 class="product-title">${p.name}</h3>
-               ${p.nameAr ? `<p class="product-title-ar">${p.nameAr}</p>` : ''}`;
+            ? `<p class="product-title-ar" style="font-size:0.95rem;">${safeNameAr || safeName}</p>
+               <h3 class="product-title" style="font-size:0.75rem;color:#888;">${safeName}</h3>`
+            : `<h3 class="product-title">${safeName}</h3>
+               ${safeNameAr ? `<p class="product-title-ar">${safeNameAr}</p>` : ''}`;
 
         return `
         <div class="product-card ${outOfStock ? 'out-of-stock' : ''}" ${arabicMode ? 'dir="rtl"' : ''}>
             ${p.featured ? `<span class="badge">${arabicMode ? 'الأكثر مبيعاً' : 'Best Seller'}</span>` : ""}
             ${outOfStock ? `<span class="badge out-of-stock-badge">${arabicMode ? 'نفذ المخزون' : 'Out of Stock'}</span>` : ""}
-            <a href="product.html?product=${p.slug}" style="text-decoration:none;">
+            <a href="product.html?product=${safeSlug}" style="text-decoration:none;">
                 <div class="product-image">${imageHTML}</div>
             </a>
             <div class="product-info">
-                <a href="product.html?product=${p.slug}" style="text-decoration:none; color:inherit;">
+                <a href="product.html?product=${safeSlug}" style="text-decoration:none; color:inherit;">
                     ${titleHTML}
                 </a>
                 <div class="product-price">${formatProductPrice(p, arabicMode)}</div>
@@ -508,13 +517,13 @@ function showAutocomplete(term) {
     }
     const arMode = isArabic(term);
     dropdown.innerHTML = matches.map((p, i) => {
-        const imgSrc = p.image && p.image.startsWith('http') ? p.image : '';
+        const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
         const imgHTML = imgSrc ? `<img src="${imgSrc}" alt="">` : '';
-        const displayName = arMode ? (p.nameAr || p.name) : p.name;
-        return `<div class="autocomplete-item" data-index="${i}" data-slug="${p.slug}" data-name="${displayName}" ${arMode ? 'dir="rtl"' : ''}>
+        const displayName = escapeHTML(arMode ? (p.nameAr || p.name) : p.name);
+        return `<div class="autocomplete-item" data-index="${i}" data-slug="${escapeHTML(p.slug)}" data-name="${displayName}" ${arMode ? 'dir="rtl"' : ''}>
             ${imgHTML}
             <div class="autocomplete-item-info">
-                <div class="autocomplete-item-name">${arMode ? `<span class="arabic-text">${p.nameAr || p.name}</span>` : p.name}</div>
+                <div class="autocomplete-item-name">${arMode ? `<span class="arabic-text">${escapeHTML(p.nameAr || p.name)}</span>` : escapeHTML(p.name)}</div>
                 <div class="autocomplete-item-price">${formatProductPrice(p, arMode)}</div>
             </div>
         </div>`;
@@ -707,7 +716,7 @@ function updateCart() {
 
     cartItems.innerHTML = cartWithTierPricing.map(i => {
         const cartItemId = i.variantId ? `${i.id}-v${i.variantId}` : `${i.id}`;
-        const variantLine = i.variantName ? `<div style="color:#e07856; font-size:0.7rem; font-weight:500;">${i.variantName}</div>` : '';
+        const variantLine = i.variantName ? `<div style="color:#e07856; font-size:0.7rem; font-weight:500;">${escapeHTML(i.variantName)}</div>` : '';
         const variantBase = (i.variantId && i.variantPrice > 0) ? i.variantPrice : i.price;
         const effectivePrice = i._tierPrice || variantBase;
         const showOrigPrice = i._tierPrice && i._tierPrice < variantBase;
@@ -721,7 +730,7 @@ function updateCart() {
         return `
         <div id="cartItem-${cartItemId}" style="display:flex; justify-content:space-between; align-items:center; padding:${itemPad}; border-bottom:1px solid #eee; position:relative;">
             <div style="flex:1; line-height:1.3;">
-                <strong style="font-size:${itemNameSize}; color:#2c4a5c;">${i.name}</strong>
+                <strong style="font-size:${itemNameSize}; color:#2c4a5c;">${escapeHTML(i.name)}</strong>
                 ${variantLine}
                 <span style="color:#888; font-size:${itemSubSize};">${priceDisplay}</span><br>
                 <span style="color:#e07856; font-weight:600; font-size:${itemTotalSize};">AED ${(effectivePrice * i.quantity).toFixed(2)}</span>
@@ -1161,16 +1170,18 @@ function populatePopularNow() {
     }
 
     container.innerHTML = list.map(p => {
-        const imgSrc = p.image && p.image.startsWith('http') ? p.image : '';
+        const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
+        const safeName = escapeHTML(p.name);
+        const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
-            ? `<img src="${imgSrc}" alt="${p.name}" loading="lazy">`
-            : `<span style="font-size:2rem;">${p.image || ''}</span>`;
+            ? `<img src="${imgSrc}" alt="${safeName}" loading="lazy">`
+            : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
         return `
-        <a href="product.html?product=${p.slug}" class="popular-card">
+        <a href="product.html?product=${encodeURIComponent(p.slug)}" class="popular-card">
             <div class="popular-card-img">${imgHTML}</div>
             <div class="popular-card-info">
-                <div class="popular-card-name">${p.name}</div>
-                ${p.nameAr ? `<div class="popular-card-name-ar">${p.nameAr}</div>` : ''}
+                <div class="popular-card-name">${safeName}</div>
+                ${safeNameAr ? `<div class="popular-card-name-ar">${safeNameAr}</div>` : ''}
                 <div class="popular-card-price">${formatProductPrice(p, false)}</div>
             </div>
         </a>`;
@@ -1207,17 +1218,19 @@ function populateNewArrivals() {
         : sorted.slice(0, 4);
 
     container.innerHTML = arrivals.map(p => {
-        const imgSrc = p.image && p.image.startsWith('http') ? p.image : '';
+        const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
+        const safeName = escapeHTML(p.name);
+        const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
-            ? `<img src="${imgSrc}" alt="${p.name}" loading="lazy">`
-            : `<span style="font-size:2rem;">${p.image || ''}</span>`;
+            ? `<img src="${imgSrc}" alt="${safeName}" loading="lazy">`
+            : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
         return `
-        <a href="product.html?product=${p.slug}" class="arrival-card">
+        <a href="product.html?product=${encodeURIComponent(p.slug)}" class="arrival-card">
             <div class="arrival-card-img">${imgHTML}</div>
             <div class="arrival-card-info">
                 <div class="arrival-card-badge">New</div>
-                <div class="arrival-card-name">${p.name}</div>
-                ${p.nameAr ? `<div class="arrival-card-name-ar">${p.nameAr}</div>` : ''}
+                <div class="arrival-card-name">${safeName}</div>
+                ${safeNameAr ? `<div class="arrival-card-name-ar">${safeNameAr}</div>` : ''}
                 <div class="arrival-card-price">${formatProductPrice(p, false)}</div>
             </div>
         </a>`;

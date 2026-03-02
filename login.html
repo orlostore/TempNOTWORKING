@@ -498,7 +498,12 @@
         if (localStorage.getItem('orlo_token')) { window.location.href = 'account.html'; }
 
         function showAlert(message, type) {
-            document.getElementById('alertBox').innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            const div = document.createElement('div');
+            div.className = `alert alert-${type}`;
+            div.textContent = message;
+            const box = document.getElementById('alertBox');
+            box.innerHTML = '';
+            box.appendChild(div);
         }
 
         function clearErrors() {

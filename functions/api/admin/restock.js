@@ -1,21 +1,33 @@
 // Cloudflare Pages Function - Restock Inventory
-// Usage: /api/admin/restock?key=SECRET&slug=product-slug&add=50
-// Or:    /api/admin/restock?key=SECRET&slug=product-slug&set=100
-// Variant: /api/admin/restock?key=SECRET&slug=product-slug&variant_id=5&set=50
+// Usage: /api/admin/restock?slug=product-slug&add=50 (with Authorization: Bearer <key> header)
+// Or:    /api/admin/restock?slug=product-slug&set=100
+// Variant: /api/admin/restock?slug=product-slug&variant_id=5&set=50
+
+function safeCompare(a, b) {
+    if (typeof a !== 'string' || typeof b !== 'string') return false;
+    const encoder = new TextEncoder();
+    const aBuf = encoder.encode(a);
+    const bBuf = encoder.encode(b);
+    if (aBuf.length !== bBuf.length) return false;
+    let result = 0;
+    for (let i = 0; i < aBuf.length; i++) result |= aBuf[i] ^ bBuf[i];
+    return result === 0;
+}
 
 export async function onRequestGet(context) {
     const { request, env } = context;
     const DB = env.DB;
 
     const url = new URL(request.url);
-    const key = url.searchParams.get('key');
+    const authHeader = request.headers.get('Authorization');
+    const key = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     const slug = url.searchParams.get('slug');
     const variantId = url.searchParams.get('variant_id');
     const addQty = url.searchParams.get('add');
     const setQty = url.searchParams.get('set');
 
     // Verify admin key
-    if (key !== env.ADMIN_KEY) {
+    if (!safeCompare(key, env.ADMIN_KEY)) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401,
             headers: { 'Content-Type': 'application/json' }

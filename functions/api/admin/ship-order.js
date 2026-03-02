@@ -1,14 +1,25 @@
 // Cloudflare Pages Function - Mark Order as Shipped + Send Email via Resend
 // Location: /functions/api/admin/ship-order.js
 
+function safeCompare(a, b) {
+    if (typeof a !== 'string' || typeof b !== 'string') return false;
+    const encoder = new TextEncoder();
+    const aBuf = encoder.encode(a);
+    const bBuf = encoder.encode(b);
+    if (aBuf.length !== bBuf.length) return false;
+    let result = 0;
+    for (let i = 0; i < aBuf.length; i++) result |= aBuf[i] ^ bBuf[i];
+    return result === 0;
+}
+
 export async function onRequestPost(context) {
     const { env, request } = context;
 
     try {
-        const url = new URL(request.url);
-        const key = url.searchParams.get('key');
+        const authHeader = request.headers.get('Authorization');
+        const key = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
-        if (key !== env.ADMIN_KEY) {
+        if (!safeCompare(key, env.ADMIN_KEY)) {
             return Response.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
