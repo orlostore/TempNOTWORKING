@@ -255,29 +255,32 @@ export async function onRequestPost(context) {
         // === CREATE STRIPE SESSION ===
         let stripeCustomerId = null;
 
-        if (customerEmail && customerAddress) {
+        if (customerEmail) {
             const searchRes = await fetch(`https://api.stripe.com/v1/customers/search?query=email:'${encodeURIComponent(customerEmail)}'`, {
                 headers: { 'Authorization': `Bearer ${STRIPE_SECRET_KEY}` }
             });
             const searchData = await searchRes.json();
 
-            const line1 = `${customerAddress.building}, ${customerAddress.street}`;
-            const line2Parts = [];
-            if (customerAddress.area) line2Parts.push(customerAddress.area);
-            if (customerAddress.landmark) line2Parts.push(`Near ${customerAddress.landmark}`);
-            const line2 = line2Parts.join(', ') || undefined;
-
             const customerParams = new URLSearchParams();
             customerParams.append('email', customerEmail);
-            customerParams.append('name', customerAddress.full_name);
-            if (customerPhone) customerParams.append('phone', customerPhone);
-            customerParams.append('shipping[name]', customerAddress.full_name);
-            customerParams.append('shipping[phone]', customerPhone || '');
-            customerParams.append('shipping[address][line1]', line1);
-            if (line2) customerParams.append('shipping[address][line2]', line2);
-            customerParams.append('shipping[address][city]', customerAddress.emirate || 'Dubai');
-            customerParams.append('shipping[address][state]', customerAddress.emirate || 'Dubai');
-            customerParams.append('shipping[address][country]', 'AE');
+
+            if (customerAddress) {
+                const line1 = `${customerAddress.building}, ${customerAddress.street}`;
+                const line2Parts = [];
+                if (customerAddress.area) line2Parts.push(customerAddress.area);
+                if (customerAddress.landmark) line2Parts.push(`Near ${customerAddress.landmark}`);
+                const line2 = line2Parts.join(', ') || undefined;
+
+                customerParams.append('name', customerAddress.full_name);
+                if (customerPhone) customerParams.append('phone', customerPhone);
+                customerParams.append('shipping[name]', customerAddress.full_name);
+                customerParams.append('shipping[phone]', customerPhone || '');
+                customerParams.append('shipping[address][line1]', line1);
+                if (line2) customerParams.append('shipping[address][line2]', line2);
+                customerParams.append('shipping[address][city]', customerAddress.emirate || 'Dubai');
+                customerParams.append('shipping[address][state]', customerAddress.emirate || 'Dubai');
+                customerParams.append('shipping[address][country]', 'AE');
+            }
 
             if (searchData.data && searchData.data.length > 0) {
                 stripeCustomerId = searchData.data[0].id;
