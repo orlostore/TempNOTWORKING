@@ -71,24 +71,17 @@ export async function onRequestPost(context) {
         let emailError = null;
 
         if (env.RESEND_API_KEY) {
-            // Extract just the product name + variant, strip full descriptions
-            const cleanName = (name) => {
-                if (!name) return 'Item';
-                // Split on newlines, take first line only
-                let short = name.split(/[\n\r]/)[0].trim();
-                // If the name repeats itself (e.g. "Product Name - Variant Product Name are handmade...")
-                // or contains long description sentences, keep only up to the variant part
-                // Typical Stripe format: "Product Name - Variant" or "Product Name (Variant)"
-                // Cut at first lowercase word followed by a sentence pattern (description start)
-                const descMatch = short.match(/^(.{10,}?)\s+(?:are|is|our|these|this|each|made|features?|comes?|includes?|perfect)\s/i);
-                if (descMatch) short = descMatch[1].trim();
-                // Cap at 60 chars just in case
-                return short.length > 60 ? short.substring(0, 57) + '…' : short;
-            };
-
             const itemsList = (items || [])
                 .filter(i => !i.name.toLowerCase().includes('delivery'))
-                .map(i => `<tr><td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;word-break:break-word;">${cleanName(i.name)}</td><td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#666;text-align:center;white-space:nowrap;">× ${i.quantity}</td></tr>`)
+                .map(i => {
+                    // Name comes from checkout.js as "Product Name — Variant" — already clean
+                    const name = (i.name || 'Item').split(/[\n\r]/)[0].trim();
+                    // Split into product name and variant on the em dash
+                    const parts = name.split(' — ');
+                    const productName = parts[0] || name;
+                    const variant = parts[1] || '';
+                    return `<tr><td style="padding:12px 16px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;">${productName}${variant ? `<br><span style="font-size:12px;color:#888;">${variant}</span>` : ''}</td><td style="padding:12px 16px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#666;text-align:center;white-space:nowrap;">× ${i.quantity}</td></tr>`;
+                })
                 .join('');
 
             const emailResponse = await fetch('https://api.resend.com/emails', {
@@ -102,56 +95,57 @@ export async function onRequestPost(context) {
                     to: customer_email,
                     subject: 'Your Order Has Been Shipped! | تم شحن طلبك',
                     html: `
-                        <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden; width: 100%; -webkit-text-size-adjust: 100%;">
-                            <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 20px; text-align: center;">
-                                <img src="https://temp-5lr.pages.dev/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
-                                <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1px;">ORLO Store</div>
-                            </div>
-                            <div style="background: white; padding: 30px 25px;">
-                                <div style="text-align: center; margin-bottom: 20px;">
-                                    <div style="font-size: 3rem;">🚚</div>
+                        <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px; -webkit-text-size-adjust: 100%;">
+                            <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+                                <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 35px 30px; text-align: center;">
+                                    <img src="https://temp-5lr.pages.dev/logo.png" alt="ORLO Store" style="width: 65px; height: 65px; margin-bottom: 10px;">
+                                    <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1.5px;">ORLO STORE</div>
                                 </div>
-                                <h2 style="color: #2c4a5c; margin: 0 0 15px; font-size: 18px; font-weight: 600; text-align: center;">Your Order is On Its Way!</h2>
-                                <p style="color: #555; font-size: 14px; line-height: 1.7; margin: 0 0 8px; text-align: center;">
-                                    Hi ${customer_name || 'there'}, great news! Your order has been shipped and is heading your way.
-                                </p>
-                                <p style="color: #888; font-size: 13px; line-height: 1.6; margin: 0 0 20px; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: center;">
-                                    مرحباً، تم شحن طلبك وهو في الطريق إليك!
-                                </p>
-
-                                ${itemsList ? `
-                                <div style="background: #f8f9fa; border-radius: 8px; overflow: hidden; margin-bottom: 20px;">
-                                    <div style="padding: 10px 12px; background: #eef2f5; font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase;">Order Items | عناصر الطلب</div>
-                                    <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                                        <colgroup><col style="width: 80%;"><col style="width: 20%;"></colgroup>
-                                        ${itemsList}
-                                    </table>
-                                </div>
-                                ` : ''}
-
-                                <div style="background: #f0f7ff; border-radius: 8px; padding: 15px; margin-bottom: 20px; border-left: 3px solid #2c4a5c;">
-                                    <p style="margin: 0; font-size: 13px; color: #555;">
-                                        <strong>Estimated Delivery:</strong> 2-5 business days across UAE
+                                <div style="padding: 35px 30px;">
+                                    <div style="text-align: center; margin-bottom: 20px;">
+                                        <div style="font-size: 48px; line-height: 1;">🚚</div>
+                                    </div>
+                                    <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px; font-weight: 700; text-align: center;">Your Order is On Its Way!</h2>
+                                    <p style="color: #555; font-size: 15px; line-height: 1.7; margin: 0 0 6px; text-align: center;">
+                                        Hi ${customer_name || 'there'}, great news! Your order has been shipped and is heading your way.
                                     </p>
-                                    <p style="margin: 5px 0 0; font-size: 12px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl;">
-                                        التوصيل المتوقع: ٢-٥ أيام عمل
+                                    <p style="color: #888; font-size: 14px; line-height: 1.6; margin: 0 0 25px; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: center;">
+                                        مرحباً، تم شحن طلبك وهو في الطريق إليك!
+                                    </p>
+
+                                    ${itemsList ? `
+                                    <div style="background: #f8f9fa; border-radius: 10px; overflow: hidden; margin-bottom: 25px;">
+                                        <div style="padding: 12px 16px; background: #eef2f5; font-size: 11px; font-weight: 700; color: #777; text-transform: uppercase; letter-spacing: 0.5px;">Order Items | عناصر الطلب</div>
+                                        <table style="width: 100%; border-collapse: collapse;">
+                                            ${itemsList}
+                                        </table>
+                                    </div>
+                                    ` : ''}
+
+                                    <div style="background: #f0f7ff; border-radius: 10px; padding: 18px 20px; margin-bottom: 25px; border-left: 3px solid #2c4a5c;">
+                                        <p style="margin: 0; font-size: 14px; color: #555;">
+                                            <strong>Estimated Delivery:</strong> 2-5 business days across UAE
+                                        </p>
+                                        <p style="margin: 6px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl;">
+                                            التوصيل المتوقع: ٢-٥ أيام عمل
+                                        </p>
+                                    </div>
+
+                                    <div style="text-align: center; margin-bottom: 10px;">
+                                        <a href="https://temp-5lr.pages.dev/account.html" style="background: #2c4a5c; color: white; padding: 14px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block;">
+                                            View My Orders | عرض طلباتي
+                                        </a>
+                                    </div>
+
+                                    <p style="color: #999; font-size: 12px; line-height: 1.5; margin: 20px 0 0; text-align: center;">
+                                        Questions? Reply to this email or contact us at <a href="mailto:info@orlostore.com" style="color: #e07856;">info@orlostore.com</a>
                                     </p>
                                 </div>
-
-                                <div style="text-align: center;">
-                                    <a href="https://temp-5lr.pages.dev/account.html" style="background: #2c4a5c; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-block;">
-                                        View My Orders | عرض طلباتي
-                                    </a>
+                                <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eee;">
+                                    <p style="color: #aaa; font-size: 11px; margin: 0;">
+                                        © ORLO Store | info@orlostore.com
+                                    </p>
                                 </div>
-
-                                <p style="color: #999; font-size: 12px; line-height: 1.5; margin: 20px 0 0; text-align: center;">
-                                    Questions? Reply to this email or contact us at <a href="mailto:info@orlostore.com" style="color: #e07856;">info@orlostore.com</a>
-                                </p>
-                            </div>
-                            <div style="background: #f8f9fa; padding: 20px 25px; text-align: center; border-top: 1px solid #eee;">
-                                <p style="color: #aaa; font-size: 11px; margin: 0;">
-                                    © ORLO Store | info@orlostore.com
-                                </p>
                             </div>
                         </div>
                     `
