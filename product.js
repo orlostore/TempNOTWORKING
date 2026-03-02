@@ -1011,9 +1011,9 @@ async function initProductPage() {
     });
   }
 
-  // === STICKY EARLY-PRICE BOX (desktop non-variant only) ===
+  // === STICKY EARLY-PRICE BOX (desktop) ===
   // Mobile uses position:fixed via .early-price-bottom class — do NOT override it here
-  if (!hasVariants && product.price && !isOutOfStock) {
+  if (product.price && !isOutOfStock) {
     var headerEl = document.querySelector('header');
     var headerH = headerEl ? headerEl.offsetHeight : 58;
     if (earlyPriceDesktop) {
