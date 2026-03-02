@@ -256,7 +256,8 @@ export async function onRequestPost(context) {
         let stripeCustomerId = null;
 
         if (customerEmail && customerAddress) {
-            const searchRes = await fetch(`https://api.stripe.com/v1/customers/search?query=email:'${encodeURIComponent(customerEmail)}'`, {
+            const searchParams = new URLSearchParams({ query: `email:'${customerEmail}'` });
+            const searchRes = await fetch(`https://api.stripe.com/v1/customers/search?${searchParams.toString()}`, {
                 headers: { 'Authorization': `Bearer ${STRIPE_SECRET_KEY}` }
             });
             const searchData = await searchRes.json();

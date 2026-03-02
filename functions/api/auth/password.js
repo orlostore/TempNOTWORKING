@@ -39,7 +39,7 @@ export async function onRequestPut(context) {
             currentValid = await verifyPasswordPBKDF2(currentPassword, customer.password_hash);
         } else {
             const legacyHash = await hashPasswordLegacy(currentPassword);
-            currentValid = (legacyHash === customer.password_hash);
+            currentValid = safeCompareHex(legacyHash, customer.password_hash);
         }
 
         if (!currentValid) {
@@ -68,6 +68,14 @@ export async function onRequestPut(context) {
         console.error('Password change error:', error);
         return Response.json({ error: 'Failed to change password' }, { status: 500 });
     }
+}
+
+function safeCompareHex(a, b) {
+    if (typeof a !== 'string' || typeof b !== 'string') return false;
+    if (a.length !== b.length) return false;
+    let result = 0;
+    for (let i = 0; i < a.length; i++) result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    return result === 0;
 }
 
 // Legacy SHA-256 hash (for verifying old passwords)
@@ -106,5 +114,5 @@ async function verifyPasswordPBKDF2(password, storedHash) {
         keyMaterial, 256
     );
     const hashHex = Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex === expectedHash;
+    return safeCompareHex(hashHex, expectedHash);
 }
