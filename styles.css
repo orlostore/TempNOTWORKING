@@ -3332,9 +3332,15 @@ footer p {
   max-width: 160px;
 }
 
-/* Category breadcrumb on index page — match mobile product page style on small screens */
+/* Category breadcrumb on index page — match product page spacing on desktop */
+.category-breadcrumb {
+  margin-top: 1.5rem;
+}
+
+/* Match mobile product page breadcrumb style on small screens */
 @media (max-width: 768px) {
   .category-breadcrumb {
+    margin-top: 0;
     padding: 10px 0 0;
     font-size: 0.72rem;
   }
