@@ -830,9 +830,9 @@
             </div>
 
             <div class="account-tabs">
-                <button class="account-tab active" onclick="switchTab('orders')"><span class="tab-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M12 4v16M2 10h20"/></svg></span><span class="tab-en">Orders</span><span class="tab-ar">طلباتي</span></button>
-                <button class="account-tab" onclick="switchTab('profile')"><span class="tab-icon"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg></span><span class="tab-en">Profile</span><span class="tab-ar">الملف الشخصي</span></button>
-                <button class="account-tab" onclick="switchTab('addresses')"><span class="tab-icon"><svg class="inline-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span><span class="tab-en">Addresses</span><span class="tab-ar">العناوين</span></button>
+                <button class="account-tab active" onclick="switchTab('orders',event)"><span class="tab-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M12 4v16M2 10h20"/></svg></span><span class="tab-en">Orders</span><span class="tab-ar">طلباتي</span></button>
+                <button class="account-tab" onclick="switchTab('profile',event)"><span class="tab-icon"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg></span><span class="tab-en">Profile</span><span class="tab-ar">الملف الشخصي</span></button>
+                <button class="account-tab" onclick="switchTab('addresses',event)"><span class="tab-icon"><svg class="inline-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span><span class="tab-en">Addresses</span><span class="tab-ar">العناوين</span></button>
             </div>
             
             <div id="ordersTab" class="tab-content active">
@@ -1078,11 +1078,12 @@
         document.getElementById('profileEmail').value = customerData?.email || '';
         document.getElementById('profilePhone').value = customerData?.phone || '';
         
-        function switchTab(tabName) {
+        function switchTab(tabName, e) {
             document.querySelectorAll('.account-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabName + 'Tab').classList.add('active');
-            event.target.classList.add('active');
+            const btn = e ? (e.target.closest ? e.target.closest('.account-tab') : e.target) : null;
+            if (btn) btn.classList.add('active');
             if (tabName === 'orders') loadOrders();
             if (tabName === 'addresses') loadAddresses();
         }
