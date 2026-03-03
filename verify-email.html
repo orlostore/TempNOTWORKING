@@ -37,7 +37,7 @@
             background: white;
             border-radius: 20px;
             box-shadow: 0 25px 80px rgba(0,0,0,0.1);
-            max-width: 420px;
+            max-width: 460px;
             width: 100%;
             text-align: center;
             overflow: hidden;
@@ -64,6 +64,25 @@
             font-size: 3.5rem;
             margin-bottom: 1rem;
         }
+        .email-icon-wrap {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e8f4f8 0%, #d4eef6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+        .email-icon-wrap svg {
+            width: 38px;
+            height: 38px;
+            stroke: #2c4a5c;
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
         .status-message {
             font-size: 1.1rem;
             font-weight: 600;
@@ -75,13 +94,17 @@
             font-size: 0.95rem;
             color: #888;
             direction: rtl;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
         .status-detail {
             font-size: 0.9rem;
             color: #666;
             line-height: 1.6;
             margin-bottom: 1.5rem;
+        }
+        .email-highlight {
+            font-weight: 600;
+            color: #2c4a5c;
         }
         .btn {
             display: inline-block;
@@ -91,6 +114,8 @@
             font-weight: 600;
             text-decoration: none;
             transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: none;
         }
         .btn:hover {
             transform: translateY(-2px);
@@ -105,6 +130,111 @@
             color: #2c4a5c;
             border: 2px solid #2c4a5c;
         }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Open email quick links */
+        .email-providers {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .email-provider-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1.5px solid #e0e0e0;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #444;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .email-provider-link:hover {
+            border-color: #2c4a5c;
+            background: #f8f9fa;
+        }
+        .email-provider-link svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* Resend section */
+        .resend-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+        .resend-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.75rem;
+        }
+        .resend-btn {
+            background: none;
+            border: none;
+            color: #e07856;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .resend-btn:hover:not(:disabled) {
+            background: #fff5f2;
+        }
+        .resend-btn:disabled {
+            color: #bbb;
+            cursor: not-allowed;
+        }
+        .resend-timer {
+            font-size: 0.82rem;
+            color: #aaa;
+            margin-top: 4px;
+        }
+        .resend-success {
+            font-size: 0.85rem;
+            color: #28a745;
+            font-weight: 500;
+            margin-top: 6px;
+        }
+
+        /* Spam hint */
+        .spam-hint {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-top: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Countdown redirect */
+        .redirect-countdown {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 1rem;
+        }
+
+        /* Skip link */
+        .skip-link {
+            display: inline-block;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #aaa;
+            text-decoration: none;
+        }
+        .skip-link:hover {
+            color: #666;
+        }
+
         .loading-spinner {
             width: 40px;
             height: 40px;
@@ -181,65 +311,277 @@
     </div>
 
     <script>
-        async function verifyEmail() {
-            const params = new URLSearchParams(window.location.search);
-            const token = params.get('token');
-            const body = document.getElementById('verifyBody');
-            
-            if (!token) {
-                body.innerHTML = `
-                    <div class="status-icon">❌</div>
-                    <p class="status-message">Invalid Link</p>
-                    <p class="status-message-ar">رابط غير صالح</p>
-                    <p class="status-detail">This verification link is invalid or has expired.</p>
-                    <a href="/" class="btn btn-outline">Back to Shop | العودة للمتجر</a>
-                `;
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
+        const emailParam = params.get('email');
+        const body = document.getElementById('verifyBody');
+
+        let resendCooldown = 0;
+        let resendInterval = null;
+
+        function maskEmail(email) {
+            if (!email) return '';
+            const [local, domain] = email.split('@');
+            if (!domain) return email;
+            if (local.length <= 2) return local[0] + '***@' + domain;
+            return local[0] + local[1] + '***@' + domain;
+        }
+
+        function getEmailProvider(email) {
+            if (!email) return null;
+            const domain = email.split('@')[1];
+            if (!domain) return null;
+            const d = domain.toLowerCase();
+            if (d === 'gmail.com' || d === 'googlemail.com') return 'gmail';
+            if (d === 'outlook.com' || d === 'hotmail.com' || d === 'live.com') return 'outlook';
+            if (d === 'yahoo.com' || d === 'ymail.com') return 'yahoo';
+            return null;
+        }
+
+        function buildProviderLinks(email) {
+            const provider = getEmailProvider(email);
+            const links = [];
+
+            // Always show the user's provider first, then the others
+            const providers = {
+                gmail: {
+                    label: 'Gmail',
+                    url: 'https://mail.google.com/mail/u/0/#inbox',
+                    svg: '<svg viewBox="0 0 24 24" fill="none"><path d="M2 6l10 7 10-7" stroke="#EA4335" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="4" width="20" height="16" rx="2" stroke="#4285F4" stroke-width="1.5" fill="none"/></svg>'
+                },
+                outlook: {
+                    label: 'Outlook',
+                    url: 'https://outlook.live.com/mail/0/inbox',
+                    svg: '<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#0078D4" stroke-width="1.5" fill="none"/><path d="M2 6l10 7 10-7" stroke="#0078D4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                },
+                yahoo: {
+                    label: 'Yahoo',
+                    url: 'https://mail.yahoo.com/d/folders/1',
+                    svg: '<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#6001D2" stroke-width="1.5" fill="none"/><path d="M2 6l10 7 10-7" stroke="#6001D2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                }
+            };
+
+            // Show the detected provider first
+            if (provider && providers[provider]) {
+                links.push(providers[provider]);
+            }
+            // Then show others
+            for (const key of Object.keys(providers)) {
+                if (key !== provider) links.push(providers[key]);
+            }
+
+            return links.map(p =>
+                `<a href="${p.url}" target="_blank" rel="noopener" class="email-provider-link">${p.svg} ${p.label}</a>`
+            ).join('');
+        }
+
+        function startResendCooldown(seconds) {
+            resendCooldown = seconds;
+            const btn = document.getElementById('resendBtn');
+            const timer = document.getElementById('resendTimer');
+            if (!btn) return;
+
+            btn.disabled = true;
+            if (timer) timer.textContent = `Resend available in ${resendCooldown}s`;
+
+            resendInterval = setInterval(() => {
+                resendCooldown--;
+                if (timer) timer.textContent = `Resend available in ${resendCooldown}s`;
+                if (resendCooldown <= 0) {
+                    clearInterval(resendInterval);
+                    btn.disabled = false;
+                    if (timer) timer.textContent = '';
+                }
+            }, 1000);
+        }
+
+        async function resendVerification() {
+            const btn = document.getElementById('resendBtn');
+            const feedback = document.getElementById('resendFeedback');
+            const authToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
+
+            if (!authToken) {
+                if (feedback) feedback.innerHTML = '<span style="color:#dc3545">Please log in first to resend.</span>';
                 return;
             }
-            
+
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
             try {
-                const response = await fetch(`/api/auth/verify?token=${token}`);
+                const response = await fetch('/api/auth/verify', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + authToken }
+                });
                 const data = await response.json();
-                
+
+                if (data.success) {
+                    if (data.message === 'Email already verified') {
+                        if (feedback) feedback.innerHTML = '<span class="resend-success">Your email is already verified!</span>';
+                        setTimeout(() => { window.location.href = 'account.html'; }, 1500);
+                    } else {
+                        if (feedback) feedback.innerHTML = '<span class="resend-success">Verification email sent!</span>';
+                        btn.textContent = 'Resend Email';
+                        startResendCooldown(60);
+                    }
+                } else {
+                    if (feedback) feedback.innerHTML = '<span style="color:#dc3545">' + (data.error || 'Failed to send. Try again.') + '</span>';
+                    btn.textContent = 'Resend Email';
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                if (feedback) feedback.innerHTML = '<span style="color:#dc3545">Connection error. Try again.</span>';
+                btn.textContent = 'Resend Email';
+                btn.disabled = false;
+            }
+        }
+
+        function showCheckInbox() {
+            const masked = maskEmail(emailParam);
+            const providerLinks = buildProviderLinks(emailParam);
+
+            body.innerHTML = `
+                <div class="email-icon-wrap">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+                </div>
+                <p class="status-message">Check Your Inbox</p>
+                <p class="status-message-ar">تحقق من بريدك الوارد</p>
+                <p class="status-detail">
+                    We sent a verification link to<br>
+                    <span class="email-highlight">${masked}</span>
+                </p>
+                <div class="email-providers">
+                    ${providerLinks}
+                </div>
+                <div class="spam-hint">
+                    Don't see it? Check your <strong>spam</strong> or <strong>junk</strong> folder.<br>
+                    <span style="font-family:'Almarai',sans-serif;direction:rtl;display:inline-block;margin-top:4px;">لم تجده؟ تحقق من مجلد الرسائل غير المرغوب فيها</span>
+                </div>
+                <div class="resend-section">
+                    <p class="resend-text">Didn't receive the email?</p>
+                    <button class="resend-btn" id="resendBtn" onclick="resendVerification()">Resend Email</button>
+                    <div id="resendTimer" class="resend-timer"></div>
+                    <div id="resendFeedback"></div>
+                </div>
+                <a href="account.html" class="skip-link">Continue to account | الذهاب للحساب</a>
+            `;
+
+            // Start the cooldown immediately (user just signed up, email was just sent)
+            startResendCooldown(60);
+        }
+
+        async function verifyEmail() {
+            try {
+                const response = await fetch('/api/auth/verify?token=' + encodeURIComponent(token));
+                const data = await response.json();
+
                 if (data.success) {
                     if (data.already_verified) {
                         body.innerHTML = `
-                            <div class="status-icon">✅</div>
+                            <div class="status-icon">\u2705</div>
                             <p class="status-message">Already Verified</p>
                             <p class="status-message-ar">تم التحقق مسبقاً</p>
                             <p class="status-detail">Your email is already verified. You're all set!</p>
                             <a href="account.html" class="btn btn-primary">Go to Account | الذهاب للحساب</a>
                         `;
                     } else {
+                        let countdown = 5;
                         body.innerHTML = `
-                            <div class="status-icon">✅</div>
+                            <div class="status-icon">\u2705</div>
                             <p class="status-message">Email Verified!</p>
                             <p class="status-message-ar">تم تأكيد بريدك الإلكتروني بنجاح</p>
-                            <p class="status-detail">Your email has been verified successfully. You can now enjoy the full ORLO experience.</p>
+                            <p class="status-detail">Your email has been verified successfully. Welcome to ORLO!</p>
                             <a href="account.html" class="btn btn-primary">Go to Account | الذهاب للحساب</a>
+                            <p class="redirect-countdown" id="redirectCountdown">Redirecting in ${countdown}s...</p>
                         `;
+                        const cdEl = document.getElementById('redirectCountdown');
+                        const cdInterval = setInterval(() => {
+                            countdown--;
+                            if (cdEl) cdEl.textContent = 'Redirecting in ' + countdown + 's...';
+                            if (countdown <= 0) {
+                                clearInterval(cdInterval);
+                                window.location.href = 'account.html';
+                            }
+                        }, 1000);
                     }
                 } else {
                     body.innerHTML = `
-                        <div class="status-icon">❌</div>
+                        <div class="status-icon">\u274C</div>
                         <p class="status-message">Verification Failed</p>
                         <p class="status-message-ar">فشل التحقق</p>
-                        <p class="status-detail">${data.error || 'This link may have expired. Please request a new verification email from your account.'}</p>
-                        <a href="account.html" class="btn btn-outline">Go to Account | الذهاب للحساب</a>
+                        <p class="status-detail">${data.error || 'This link may have expired or is invalid.'}</p>
+                        <div class="resend-section" style="border-top:none;margin-top:0;padding-top:0;">
+                            <p class="resend-text">Need a new link?</p>
+                            <button class="resend-btn" id="resendBtn" onclick="resendVerification()">Resend Verification Email</button>
+                            <div id="resendTimer" class="resend-timer"></div>
+                            <div id="resendFeedback"></div>
+                        </div>
+                        <a href="account.html" class="btn btn-outline" style="margin-top:1rem;">Go to Account | الذهاب للحساب</a>
                     `;
                 }
             } catch (error) {
                 body.innerHTML = `
-                    <div class="status-icon">⚠️</div>
+                    <div class="status-icon">\u26A0\uFE0F</div>
                     <p class="status-message">Connection Error</p>
                     <p class="status-message-ar">خطأ في الاتصال</p>
                     <p class="status-detail">Please check your connection and try again.</p>
-                    <a href="/" class="btn btn-outline">Back to Shop | العودة للمتجر</a>
+                    <button class="btn btn-outline" onclick="location.reload()">Try Again | حاول مرة أخرى</button>
                 `;
             }
         }
-        
-        verifyEmail();
+
+        // Route: token present → verify, email present → check inbox, neither → redirect
+        if (token) {
+            verifyEmail();
+        } else if (emailParam) {
+            showCheckInbox();
+        } else {
+            // No token and no email — check if user is logged in and needs to verify
+            const authToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
+            const customer = JSON.parse(localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer') || 'null');
+            if (authToken && customer && customer.email) {
+                // Show check inbox with the user's email
+                window.history.replaceState(null, '', '?email=' + encodeURIComponent(customer.email));
+                body.innerHTML = '';
+                const fakeParam = customer.email;
+                const masked = maskEmail(fakeParam);
+                const providerLinks = buildProviderLinks(fakeParam);
+                body.innerHTML = `
+                    <div class="email-icon-wrap">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+                    </div>
+                    <p class="status-message">Verify Your Email</p>
+                    <p class="status-message-ar">قم بتأكيد بريدك الإلكتروني</p>
+                    <p class="status-detail">
+                        A verification link was sent to<br>
+                        <span class="email-highlight">${masked}</span>
+                    </p>
+                    <div class="email-providers">
+                        ${providerLinks}
+                    </div>
+                    <div class="spam-hint">
+                        Don't see it? Check your <strong>spam</strong> or <strong>junk</strong> folder.<br>
+                        <span style="font-family:'Almarai',sans-serif;direction:rtl;display:inline-block;margin-top:4px;">لم تجده؟ تحقق من مجلد الرسائل غير المرغوب فيها</span>
+                    </div>
+                    <div class="resend-section">
+                        <p class="resend-text">Didn't receive the email?</p>
+                        <button class="resend-btn" id="resendBtn" onclick="resendVerification()">Resend Email</button>
+                        <div id="resendTimer" class="resend-timer"></div>
+                        <div id="resendFeedback"></div>
+                    </div>
+                    <a href="account.html" class="skip-link">Continue to account | الذهاب للحساب</a>
+                `;
+            } else {
+                // Not logged in and no params — show generic message
+                body.innerHTML = `
+                    <div class="status-icon">\u274C</div>
+                    <p class="status-message">Invalid Link</p>
+                    <p class="status-message-ar">رابط غير صالح</p>
+                    <p class="status-detail">This verification link is invalid or has expired.</p>
+                    <a href="login.html" class="btn btn-primary">Log In | تسجيل الدخول</a>
+                `;
+            }
+        }
     </script>
 </body>
 </html>
