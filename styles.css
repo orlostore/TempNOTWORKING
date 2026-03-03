@@ -773,6 +773,21 @@ nav {
   transition: all 0.3s;
 }
 
+/* Bilingual button text — shared across all cart buttons */
+.btn-en {
+  display: block;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.2;
+}
+.btn-ar {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1.2;
+  opacity: 0.85;
+}
+
 .add-to-cart:hover {
   background: #c9634a;
   transform: translateY(-1px);
