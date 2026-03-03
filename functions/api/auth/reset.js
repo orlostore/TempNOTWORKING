@@ -38,7 +38,8 @@ export async function onRequestPost(context) {
         // Send reset email via Resend
         if (env.RESEND_API_KEY) {
             try {
-                const resetUrl = `https://orlostore.com/reset-password.html?token=${resetToken}`;
+                const origin = new URL(request.url).origin;
+                const resetUrl = `${origin}/reset-password.html?token=${resetToken}`;
 
                 await fetch('https://api.resend.com/emails', {
                     method: 'POST',
