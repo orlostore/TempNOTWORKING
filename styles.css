@@ -1715,10 +1715,9 @@ footer p {
   width: 100%;
   margin-top: 8px;
   height: 36px;
-  min-height: 36px;
 }
 .mobile-product-header .early-price .product-btn-transformed .grid-qty-btn {
-  height: 36px;
+  height: 100%;
 }
 
 /* Delivery info injected into early-price for non-variant */
@@ -2846,13 +2845,12 @@ footer p {
 .mobile-product-header .early-price.early-price-bottom .grid-qty-control {
   flex: 0 0 120px;
   height: 38px;
-  min-height: 38px;
   width: 120px;
   margin-top: 0;
 }
 .mobile-product-header .early-price.early-price-bottom .grid-qty-btn {
   width: 38px;
-  height: 38px;
+  height: 100%;
 }
 /* Delivery column — can shrink on tight screens but doesn't grow */
 .early-price-bottom .del-col {
