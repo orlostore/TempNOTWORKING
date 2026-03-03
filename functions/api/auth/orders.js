@@ -57,6 +57,16 @@ export async function onRequestGet(context) {
         // Get shipped orders from D1
 const { results: shippedRows } = await DB.prepare('SELECT order_id FROM shipped_orders').all();
 const shippedIds = new Set(shippedRows.map(r => r.order_id));
+
+        // Get cancelled orders from D1
+        let cancelledIds = new Set();
+        try {
+            const { results: cancelledRows } = await DB.prepare('SELECT order_id FROM cancelled_orders').all();
+            cancelledIds = new Set(cancelledRows.map(r => r.order_id));
+        } catch (e) {
+            // Table may not exist yet
+        }
+
         // Format orders
         const orders = completedSessions.map(session => {
             const items = session.line_items?.data?.map(item => ({
@@ -64,13 +74,20 @@ const shippedIds = new Set(shippedRows.map(r => r.order_id));
                 quantity: item.quantity,
                 amount: item.amount_total
             })) || [];
-            
+
+            let status = 'pending';
+            if (cancelledIds.has(session.id)) {
+                status = 'cancelled';
+            } else if (session.metadata?.shipped === 'true' || shippedIds.has(session.id)) {
+                status = 'shipped';
+            }
+
             return {
                 id: session.id,
                 created: session.created,
                 amount_total: session.amount_total,
                 currency: session.currency,
-                status: (session.metadata?.shipped === 'true' || shippedIds.has(session.id)) ? 'shipped' : 'pending',
+                status: status,
                 items: items
             };
         });
