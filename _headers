@@ -6,9 +6,15 @@
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://www.google-analytics.com https://api.stripe.com; frame-ancestors 'none'
 /*.css
-  Cache-Control: public, max-age=300
+  Cache-Control: public, max-age=86400
 /*.js
-  Cache-Control: public, max-age=300
+  Cache-Control: public, max-age=86400
+/*.png
+  Cache-Control: public, max-age=2592000
+/*.ico
+  Cache-Control: public, max-age=2592000
+/*.svg
+  Cache-Control: public, max-age=2592000
 /account*
   Cache-Control: no-cache, no-store, must-revalidate
 /login*
