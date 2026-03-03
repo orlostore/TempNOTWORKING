@@ -2992,14 +2992,15 @@ footer p {
 }
 
 .mobile-add-to-cart {
-  height: 36px;
+  height: auto;
+  min-height: var(--card-btn-min-h);
   width: 100%;
   padding: 6px 0.67rem;
   background: #e07856;
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.3;
   cursor: pointer;
@@ -3729,11 +3730,7 @@ footer p {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  height: 36px;
-}
-
-.mobile-cart-section .product-btn-transformed .grid-qty-btn {
-  height: 36px;
+  min-height: var(--card-btn-min-h);
 }
 
 /* ============================================
