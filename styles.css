@@ -4048,12 +4048,16 @@ footer p {
   flex: none;
 }
 .mobile-buybox-compact.has-price-pill .mobile-cart-section {
-  flex: none;
+  flex: 1;
+  min-width: 0;
   text-align: left;
 }
 .mobile-buybox-compact.has-price-pill .mobile-cart-section .mobile-add-to-cart {
   width: 100%;
   margin: 0;
+}
+.mobile-buybox-compact.has-price-pill .mobile-cart-section .product-btn-transformed {
+  width: 100%;
 }
 
 /* ============================================
