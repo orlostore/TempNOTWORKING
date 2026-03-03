@@ -28,7 +28,7 @@
     <script>Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})</script>
     <link rel="stylesheet" href="styles.css?v=8">
     <style>
-        .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -37,7 +37,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 80px 20px 20px;
+            padding: 20px;
+            overflow-y: scroll;
         }
 
         .arabic-text {
@@ -47,25 +48,24 @@
 
         .auth-container {
             width: 100%;
-            max-width: 860px;
+            max-width: 820px;
             background: white;
             border-radius: 14px;
             box-shadow: 0 25px 80px rgba(0,0,0,0.1);
             overflow: hidden;
             display: flex;
-            min-height: 520px;
+            min-height: 480px;
         }
 
         /* LEFT BRAND PANEL */
         .auth-brand {
-            width: 280px;
-            flex-shrink: 0;
+            flex: 1;
             background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 25px;
+            padding: 40px 30px;
             position: relative;
             overflow: hidden;
         }
@@ -90,6 +90,29 @@
             height: 60%;
             background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
             pointer-events: none;
+        }
+
+        .auth-brand img {
+            width: 120px;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-tagline {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.85rem;
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+        .auth-tagline .ar {
+            display: block;
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.75rem;
+            margin-top: 2px;
+            opacity: 0.7;
         }
 
         .trust-badges {
@@ -133,7 +156,7 @@
             color: #888;
             text-decoration: none;
             font-size: 0.85rem;
-            padding: 14px 24px 0;
+            padding: 16px 24px 0;
             transition: color 0.2s;
         }
         .back-link:hover { color: #2c4a5c; }
@@ -152,12 +175,12 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 18px 28px 20px;
+            padding: 24px 28px;
         }
 
         .form-content h2 {
             color: #2c4a5c;
-            font-size: 1.35rem;
+            font-size: 1.45rem;
             font-weight: 700;
             margin-bottom: 3px;
         }
@@ -166,22 +189,15 @@
             color: #888;
             font-size: 0.85rem;
             font-family: 'Almarai', sans-serif;
-            margin-bottom: 18px;
+            margin-bottom: 22px;
         }
 
-        /* TWO-COLUMN GRID */
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0 14px;
-        }
-
-        .form-group { margin-bottom: 12px; }
+        .form-group { margin-bottom: 14px; }
 
         .form-group label {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
             font-weight: 500;
             color: #2c4a5c;
             font-size: 0.85rem;
@@ -195,7 +211,7 @@
 
         .form-group input {
             width: 100%;
-            padding: 9px 11px;
+            padding: 10px 12px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 0.85rem;
@@ -211,11 +227,11 @@
 
         .form-group input.error { border-color: #dc3545; }
 
-        .form-error { color: #dc3545; font-size: 0.75rem; margin-top: 3px; display: none; }
+        .form-error { color: #dc3545; font-size: 0.8rem; margin-top: 4px; display: none; }
         .form-error.show { display: block; }
 
         .password-input-wrap { position: relative; }
-        .password-input-wrap input { padding-right: 40px; }
+        .password-input-wrap input { padding-right: 42px; }
         .password-toggle {
             position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
             background: none; border: none; cursor: pointer;
@@ -256,7 +272,7 @@
 
         .auth-btn {
             width: 100%;
-            padding: 11px;
+            padding: 12px;
             background: linear-gradient(135deg, #e07856 0%, #c96644 100%);
             color: white; border: none; border-radius: 10px;
             font-size: 0.9rem; font-weight: 600;
@@ -264,7 +280,6 @@
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 15px rgba(224, 120, 86, 0.3);
-            margin-top: 4px;
         }
         .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(224, 120, 86, 0.4); }
         .auth-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
@@ -272,116 +287,113 @@
 
         .auth-footer {
             text-align: center;
-            padding: 12px 24px 18px;
+            padding: 14px 24px 20px;
             border-top: 1px solid #eee;
             color: #666; font-size: 0.85rem;
         }
         .auth-footer a { color: #e07856; text-decoration: none; font-weight: 600; }
         .auth-footer a:hover { text-decoration: underline; }
 
-        .alert { padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; font-size: 0.85rem; }
+        .alert { padding: 10px 12px; border-radius: 8px; margin-bottom: 14px; font-size: 0.85rem; }
         .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
 
-        /* MOBILE */
+        /* Inline SVG icon styling */
+        .inline-icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            display: inline-block;
+        }
+
+        /* MOBILE - compressed to avoid scrolling */
         @media (max-width: 768px) {
-            body { padding: 8px; min-height: auto; background: white; }
+            body { padding: 0; min-height: auto; background: white; }
 
             .auth-container {
                 flex-direction: column;
-                max-width: 420px;
+                max-width: 100%;
                 min-height: auto;
+                border-radius: 0;
+                box-shadow: none;
                 overflow: visible;
-                flex: 1;
             }
 
+            /* Trust banner */
             .auth-brand {
-                width: 100%;
-                padding: 22px 20px;
-                flex-shrink: initial;
+                padding: 12px 20px;
+                flex: none;
                 border-radius: 14px;
-                flex-direction: row;
-                gap: 15px;
+                margin: 0 20px;
+            }
+            .trust-badges { gap: 20px; }
+            .trust-item .icon { margin-bottom: 2px; }
+            .trust-item .icon svg { width: 1.2rem; height: 1.2rem; }
+            .trust-item .en { font-size: 0.68rem; margin-bottom: 1px; }
+            .trust-item .ar { font-size: 0.62rem; }
+
+            .auth-brand img { width: 80px; margin-bottom: 4px; }
+            .auth-tagline { font-size: 0.72rem; margin-bottom: 10px; }
+            .auth-tagline .ar { font-size: 0.65rem; }
+
+            /* Back link */
+            .back-link { padding: 10px 18px 0; font-size: 0.8rem; }
+
+            /* Heading */
+            .form-content {
+                padding: 12px 20px;
+            }
+            .form-content h2 {
+                font-size: 1.15rem;
+                margin-bottom: 1px;
+            }
+            .form-content .subtitle {
+                font-size: 0.78rem;
+                margin-bottom: 12px;
             }
 
-            .auth-logo { height: 48px !important; margin-bottom: 0 !important; }
+            /* Form fields - slightly tighter */
+            .form-group {
+                margin-bottom: 10px;
+            }
+            .form-group label {
+                margin-bottom: 3px;
+                font-size: 0.8rem;
+            }
+            .form-group label .arabic-text {
+                font-size: 0.75rem;
+            }
+            .form-group input {
+                padding: 8px 11px;
+                font-size: 0.82rem;
+            }
+            .auth-btn {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+            .auth-btn .arabic-text {
+                font-size: 0.75rem;
+                margin-top: 1px;
+            }
 
-            .trust-badges { gap: 20px; }
-            .trust-item .icon svg { width: 1.3rem; height: 1.3rem; }
-            .trust-item .en { font-size: 0.7rem; }
-            .trust-item .ar { font-size: 0.6rem; }
-
-            .form-row { grid-template-columns: 1fr; gap: 0; }
-
-            .back-link { padding: 12px 18px 0; font-size: 0.8rem; }
-            .form-content { padding: 16px 18px 18px; }
-            .form-content h2 { font-size: 1.2rem; }
-            .auth-footer { padding: 12px 18px 16px; }
+            /* Footer closer */
+            .auth-footer {
+                padding: 10px 18px 12px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-<header>
-    <nav>
-        <div class="logo-container">
-            <a href="index.html"><img src="logo.png" class="logo-img" alt="ORLO Logo"></a>
-        </div>
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span><span></span><span></span>
-        </button>
-        <div class="mobile-cart-icon" id="mobileCartIcon">
-            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-            <span class="cart-count" id="mobileCartCount"></span>
-        </div>
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | البحث عن منتجات..." autocomplete="off">
-            <button class="search-btn" id="searchBtn"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            <div class="search-autocomplete" id="searchAutocomplete"></div>
-        </div>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
-            <li><a href="index.html#about">About<br><span class="arabic-text">من نحن</span></a></li>
-            <li><a href="index.html#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
-            <li><a href="index.html#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
-            <li><a href="login.html" id="accountLink" class="account-nav-link">Login<br><span class="arabic-text">دخول</span></a></li>
-            <li>
-                <div class="cart-icon" id="cartIcon">
-                    <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-                    <span class="cart-count" id="cartCount"></span>
-                </div>
-            </li>
-        </ul>
-    </nav>
-</header>
-<script>
-(function(){
-    try { var c=JSON.parse(localStorage.getItem('cart')||'[]'); var n=c.reduce(function(s,i){return s+(i.quantity||0);},0); ['cartCount','mobileCartCount'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=n>0?n:'';}); } catch(e){}
-    var searchBtn=document.getElementById('searchBtn'),searchInput=document.getElementById('searchInput'),acIndex=-1;
-    function isAr(t){return /[\u0600-\u06FF]/.test(t);}
-    function doSearch(){var term=searchInput?searchInput.value.trim():'';var dd=document.getElementById('searchAutocomplete');if(dd)dd.classList.remove('active');if(term)window.location.href='index.html?search='+encodeURIComponent(term);}
-    function showAC(term){
-        var dd=document.getElementById('searchAutocomplete');
-        if(!dd||!term||term.length<1){if(dd){dd.classList.remove('active');dd.innerHTML='';}acIndex=-1;return;}
-        if(typeof products==='undefined'||!products.length)return;
-        var m=products.filter(function(p){return p.name.toLowerCase().indexOf(term)!==-1||(p.nameAr&&p.nameAr.indexOf(term)!==-1)||p.category.toLowerCase().indexOf(term)!==-1||(p.categoryAr&&p.categoryAr.indexOf(term)!==-1);}).slice(0,6);
-        if(!m.length){dd.classList.remove('active');dd.innerHTML='';acIndex=-1;return;}
-        var ar=isAr(term);
-        dd.innerHTML=m.map(function(p,i){var img=p.image&&p.image.indexOf('http')===0?'<img src="'+p.image+'" alt="">':'';var dn=ar?(p.nameAr||p.name):p.name;return '<div class="autocomplete-item" data-index="'+i+'" data-slug="'+p.slug+'" data-name="'+dn+'"'+(ar?' dir="rtl"':'')+'>'+img+'<div class="autocomplete-item-info"><div class="autocomplete-item-name">'+(ar?'<span class="arabic-text">'+(p.nameAr||p.name)+'</span>':p.name)+'</div><div class="autocomplete-item-price">'+(ar?p.price+' د.إ':'AED '+p.price)+'</div></div></div>';}).join('');
-        dd.classList.add('active');acIndex=-1;
-        dd.querySelectorAll('.autocomplete-item').forEach(function(item){item.addEventListener('mousedown',function(e){e.preventDefault();searchInput.value=this.dataset.name;dd.classList.remove('active');doSearch();});});
-    }
-    function navAC(dir){var dd=document.getElementById('searchAutocomplete');if(!dd)return;var items=dd.querySelectorAll('.autocomplete-item');if(!items.length)return;items.forEach(function(it){it.classList.remove('active');});acIndex+=dir;if(acIndex<0)acIndex=items.length-1;if(acIndex>=items.length)acIndex=0;items[acIndex].classList.add('active');searchInput.value=items[acIndex].dataset.name;}
-    if(searchBtn)searchBtn.addEventListener('click',doSearch);
-    if(searchInput){searchInput.addEventListener('input',function(){showAC(this.value.toLowerCase().trim());});searchInput.addEventListener('keydown',function(e){if(e.key==='ArrowDown'){e.preventDefault();navAC(1);}else if(e.key==='ArrowUp'){e.preventDefault();navAC(-1);}else if(e.key==='Enter'){e.preventDefault();doSearch();}else if(e.key==='Escape'){var dd=document.getElementById('searchAutocomplete');if(dd)dd.classList.remove('active');}});}
-    var hamburger=document.getElementById('hamburger'),navLinks=document.getElementById('navLinks');
-    if(hamburger&&navLinks){hamburger.addEventListener('click',function(){hamburger.classList.toggle('active');navLinks.classList.toggle('active');});navLinks.querySelectorAll('a').forEach(function(link){link.addEventListener('click',function(){hamburger.classList.remove('active');navLinks.classList.remove('active');});});}
-    try{var token=localStorage.getItem('orlo_token')||sessionStorage.getItem('orlo_token');var customer=JSON.parse(localStorage.getItem('orlo_customer')||sessionStorage.getItem('orlo_customer')||'null');var al=document.getElementById('accountLink');if(token&&customer&&al){var fn=customer.name?customer.name.split(' ')[0]:'Account';al.innerHTML=fn+'<br><span class="arabic-text">حسابي</span>';al.href='account.html';}}catch(e){}
-})();
-</script>
-<script src="products.js"></script>
     <div class="auth-container">
         <div class="auth-brand">
-            <img src="logo.png" alt="ORLO" class="auth-logo" style="height:72px;position:relative;z-index:1;margin-bottom:20px;">
+            <img src="logo.png" alt="ORLO Store">
+            <p class="auth-tagline">Your Everyday Essentials, Delivered<span class="ar">أساسياتك اليومية، توصيل لباب بيتك</span></p>
             <div class="trust-badges">
                 <div class="trust-item">
                     <div class="icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
@@ -406,18 +418,10 @@
                 <form id="signupForm" onsubmit="handleSignup(event)">
                     <div id="alertBox"></div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Full Name <span class="arabic-text">الاسم الكامل</span></label>
-                            <input type="text" id="name" required placeholder="Enter your name">
-                            <div class="form-error" id="nameError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Phone <span class="arabic-text">رقم الهاتف</span></label>
-                            <input type="tel" id="phone" required placeholder="+971 XX XXX XXXX">
-                            <div class="form-error" id="phoneError"></div>
-                        </div>
+                    <div class="form-group">
+                        <label>Full Name <span class="arabic-text">الاسم الكامل</span></label>
+                        <input type="text" id="name" required placeholder="Enter your name">
+                        <div class="form-error" id="nameError"></div>
                     </div>
 
                     <div class="form-group">
@@ -432,6 +436,7 @@
                             <input type="password" id="password" required placeholder="Min 8 characters" oninput="checkPasswordStrength()">
                             <button type="button" class="password-toggle" onclick="togglePassword('password', this)"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
                         </div>
+                        <div class="password-strength"><div class="password-strength-bar" id="passwordStrength"></div></div>
                         <div class="form-error" id="passwordError"></div>
                     </div>
 
@@ -445,8 +450,8 @@
                     </div>
 
                     <button type="submit" class="auth-btn" id="submitBtn">
-                        Create Account
-                        <span class="arabic-text">إنشاء حساب</span>
+                        Create My Account
+                        <span class="arabic-text">إنشاء حسابي</span>
                     </button>
                 </form>
             </div>
@@ -507,14 +512,12 @@
 
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
 
             let hasError = false;
             if (name.length < 2) { showError('name', 'Name is too short'); hasError = true; }
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', 'Please enter a valid email'); hasError = true; }
-            if (phone.length < 9) { showError('phone', 'Please enter a valid phone number'); hasError = true; }
             if (password.length < 8) { showError('password', 'Min 8 characters'); hasError = true; }
             if (password !== confirmPassword) { showError('confirmPassword', 'Passwords do not match'); hasError = true; }
             if (hasError) return;
@@ -527,7 +530,7 @@
                 const response = await fetch('/api/auth/signup', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, phone, password })
+                    body: JSON.stringify({ name, email, password })
                 });
 
                 const data = await response.json();
@@ -540,14 +543,180 @@
                 } else {
                     showAlert(data.error || 'Failed to create account', 'error');
                     btn.disabled = false;
-                    btn.innerHTML = 'Create Account <span class="arabic-text">إنشاء حساب</span>';
+                    btn.innerHTML = 'Create My Account <span class="arabic-text">إنشاء حسابي</span>';
                 }
             } catch (error) {
                 showAlert('Connection error. Please try again.', 'error');
                 btn.disabled = false;
-                btn.innerHTML = 'Create Account <span class="arabic-text">إنشاء حساب</span>';
+                btn.innerHTML = 'Create My Account <span class="arabic-text">إنشاء حسابي</span>';
             }
         }
+    </script>
+
+    <script>
+    (function() {
+        // Mobile menu for signup page bottom nav
+        window.toggleSignupMobileMenu = function() {
+            var overlay = document.querySelector('.mobile-menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'mobile-menu-overlay';
+                var chevron = '<svg class="menu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+                overlay.innerHTML =
+                    '<div class="mobile-menu">' +
+                        '<a href="index.html#products">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Shop</span><span class="menu-ar">تسوق</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#about">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">About</span><span class="menu-ar">من نحن</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#contact">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Contact</span><span class="menu-ar">اتصل بنا</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#terms">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Terms</span><span class="menu-ar">الشروط</span></div>' +
+                            chevron +
+                        '</a>' +
+                    '</div>';
+                document.body.appendChild(overlay);
+                overlay.onclick = function(e) {
+                    if (e.target === overlay) {
+                        overlay.classList.remove('active');
+                    }
+                };
+            }
+            overlay.classList.toggle('active');
+        };
+
+        // Bottom nav indicator positioning
+        function moveIndicator(index) {
+            var indicator = document.getElementById('bottomNavIndicator');
+            if (indicator) indicator.style.left = 'calc(' + (index * 25) + '% + 12.5% - 25px)';
+        }
+        var navItems = document.querySelectorAll('.mobile-bottom-nav .bottom-nav-item');
+        navItems.forEach(function(item, i) {
+            item.addEventListener('click', function() { moveIndicator(i); });
+        });
+        moveIndicator(1); // Account is active on signup page
+    })();
+    </script>
+
+    <!-- Mobile Bottom Navigation -->
+    <style>
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            z-index: 6000;
+            padding: 10px 8px 14px;
+        }
+        .bottom-nav-indicator {
+            position: absolute;
+            top: 0;
+            height: 3px;
+            width: 50px;
+            background: #1a3a52;
+            border-radius: 0 0 4px 4px;
+            left: calc(25% + 12.5% - 25px);
+        }
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            flex: 1;
+            position: relative;
+        }
+        .bottom-nav-item svg {
+            width: 24px;
+            height: 24px;
+            stroke: #c0c8ce;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+        .bottom-nav-item.active svg { stroke: #1a3a52; stroke-width: 2; }
+        .bottom-nav-item .nav-label {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: #c0c8ce;
+            position: relative;
+        }
+        .bottom-nav-item.active .nav-label { color: #1a3a52; }
+        .bottom-nav-item.active .nav-label::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            right: 0;
+            height: 1.5px;
+            background: #e07856;
+            border-radius: 1px;
+        }
+        .bottom-cart-badge:empty,
+        .cart-count:empty { display: none !important; }
+        @media (max-width: 576px) {
+            .mobile-bottom-nav {
+                display: flex;
+                justify-content: space-around;
+            }
+            body { padding-bottom: 80px !important; }
+        }
+    </style>
+
+    <nav class="mobile-bottom-nav">
+        <div class="bottom-nav-indicator" id="bottomNavIndicator"></div>
+        <div class="bottom-nav-item" id="bottomHomeBtn" data-index="0" onclick="window.location.href=localStorage.getItem('lastProduct')||'index.html'">
+            <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="bottom-nav-item active" id="bottomAccountBtn" data-index="1">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
+            <span class="nav-label" id="bottomAccountLabel">Sign Up</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomCartBtn" data-index="2" onclick="var lp=localStorage.getItem('lastProduct')||'index.html';window.location.href=lp+(lp.includes('?')?'&amp;':'?')+'openCart=true'">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+            <span class="bottom-cart-badge" id="bottomCartCount" style="display:none"></span>
+            <span class="nav-label">Cart</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomMenuBtn" data-index="3" onclick="toggleSignupMobileMenu()">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <span class="nav-label">Menu</span>
+        </div>
+    </nav>
+
+    <script>
+    /** Populate all cart badges after full DOM is rendered **/
+    (function(){
+      try {
+        var cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+        var totalCount = cartData.reduce(function(sum, item){ return sum + (item.quantity || 0); }, 0);
+        ['bottomCartCount'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) {
+            if (totalCount > 0) {
+              el.textContent = totalCount;
+              el.style.display = 'flex';
+            } else {
+              el.textContent = '';
+              el.style.display = 'none';
+            }
+          }
+        });
+      } catch(e) {}
+    })();
     </script>
 </body>
 </html>
