@@ -49,6 +49,7 @@ nav {
   --bg: #f8f9fa;
   --white: #ffffff;
   --card-btn-min-h: calc(0.75rem * 2.6 + 15px);
+  --mobile-buybox-btn-h: 46px;
 }
 
 .arabic-text {
@@ -3015,6 +3016,8 @@ footer p {
   flex: 1;
   min-width: 0;
   text-align: center;
+  height: var(--mobile-buybox-btn-h);
+  display: flex;
 }
 
 .mobile-add-to-cart {
@@ -3022,8 +3025,7 @@ footer p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: var(--card-btn-min-h);
-  height: var(--card-btn-min-h);
+  height: 100%;
   width: 100%;
   padding: 0 0.67rem;
   background: #e07856;
@@ -3774,8 +3776,7 @@ footer p {
 }
 
 .mobile-cart-section .product-btn-transformed .grid-qty-btn {
-  min-height: var(--card-btn-min-h);
-  height: var(--card-btn-min-h);
+  height: 100%;
 }
 
 /* ============================================
