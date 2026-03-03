@@ -536,10 +536,10 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    showAlert('Account created! Redirecting...', 'success');
+                    showAlert('Account created! Check your email to verify.', 'success');
                     localStorage.setItem('orlo_token', data.token);
                     localStorage.setItem('orlo_customer', JSON.stringify(data.customer));
-                    setTimeout(() => { window.location.href = 'account.html'; }, 1500);
+                    setTimeout(() => { window.location.href = 'verify-email.html?email=' + encodeURIComponent(email); }, 1500);
                 } else {
                     showAlert(data.error || 'Failed to create account', 'error');
                     btn.disabled = false;
