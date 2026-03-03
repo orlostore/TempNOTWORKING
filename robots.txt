@@ -6,6 +6,7 @@ Disallow: /success.html
 Disallow: /cancel.html
 Disallow: /verify-email.html
 Disallow: /forgot-password.html
+Disallow: /reset-password.html
 Disallow: /category-mockups.html
 Disallow: /mockup-variant-selector.html
 Disallow: /mockup-bottom-bar.html

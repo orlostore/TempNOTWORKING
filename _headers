@@ -25,3 +25,5 @@
   Cache-Control: no-cache, no-store, must-revalidate
 /cancel*
   Cache-Control: no-cache, no-store, must-revalidate
+/reset-password*
+  Cache-Control: no-cache, no-store, must-revalidate
