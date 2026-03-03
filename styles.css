@@ -4217,11 +4217,10 @@ footer p {
   color: #555;
 }
 
-/* Mobile: product-info padding shrinks from 1.34rem to 0.75rem,
-   so drop the tooltip closer to the button */
+/* Mobile: keep tooltip consistent with desktop */
 @media (max-width: 514.56px) {
   .grid-limit-tooltip {
-    bottom: 75px;
+    bottom: 67px;
   }
 }
 
