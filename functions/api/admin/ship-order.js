@@ -98,7 +98,7 @@ export async function onRequestPost(context) {
                         <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px; -webkit-text-size-adjust: 100%;">
                             <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
                                 <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 35px 30px; text-align: center;">
-                                    <img src="https://temp-5lr.pages.dev/logo.png" alt="ORLO Store" style="width: 65px; height: 65px; margin-bottom: 10px;">
+                                    <img src="https://orlostore.com/logo.png" alt="ORLO Store" style="width: 65px; height: 65px; margin-bottom: 10px;">
                                     <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1.5px;">ORLO STORE</div>
                                 </div>
                                 <div style="padding: 35px 30px;">
@@ -132,7 +132,7 @@ export async function onRequestPost(context) {
                                     </div>
 
                                     <div style="text-align: center; margin-bottom: 10px;">
-                                        <a href="https://temp-5lr.pages.dev/account.html" style="background: #2c4a5c; color: white; padding: 14px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block;">
+                                        <a href="https://orlostore.com/account.html" style="background: #2c4a5c; color: white; padding: 14px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block;">
                                             View My Orders | عرض طلباتي
                                         </a>
                                     </div>

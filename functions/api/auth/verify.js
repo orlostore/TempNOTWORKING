@@ -1,41 +1,43 @@
 // Cloudflare Pages Function - Email Verification API
 // Location: /functions/api/auth/verify.js
 
+import { generateToken } from './crypto-utils.js';
+
 export async function onRequestGet(context) {
     const { env, request } = context;
     const DB = env.DB;
-    
+
     try {
         const url = new URL(request.url);
         const token = url.searchParams.get('token');
-        
+
         if (!token) {
             return Response.json({ error: 'Verification token is required' }, { status: 400 });
         }
-        
+
         // Find customer by verification token
         const customer = await DB.prepare('SELECT id, email, email_verified FROM customers WHERE verification_token = ?')
             .bind(token)
             .first();
-        
+
         if (!customer) {
             return Response.json({ error: 'Invalid or expired verification link' }, { status: 400 });
         }
-        
+
         if (customer.email_verified === 1) {
             return Response.json({ success: true, message: 'Email already verified', already_verified: true });
         }
-        
+
         // Mark email as verified and clear the token
         await DB.prepare('UPDATE customers SET email_verified = 1, verification_token = NULL WHERE id = ?')
             .bind(customer.id)
             .run();
-        
-        return Response.json({ 
+
+        return Response.json({
             success: true,
             message: 'Email verified successfully'
         });
-        
+
     } catch (error) {
         console.error('Verification error:', error);
         return Response.json({ error: 'Verification failed' }, { status: 500 });
@@ -46,38 +48,38 @@ export async function onRequestGet(context) {
 export async function onRequestPost(context) {
     const { env, request } = context;
     const DB = env.DB;
-    
+
     try {
         const authHeader = request.headers.get('Authorization');
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return Response.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        
+
         const token = authHeader.replace('Bearer ', '');
-        
+
         const customer = await DB.prepare('SELECT id, email, name, email_verified FROM customers WHERE token = ?')
             .bind(token)
             .first();
-        
+
         if (!customer) {
             return Response.json({ error: 'Invalid token' }, { status: 401 });
         }
-        
+
         if (customer.email_verified === 1) {
             return Response.json({ success: true, message: 'Email already verified' });
         }
-        
+
         // Generate new verification token
         const verificationToken = generateToken();
-        
+
         await DB.prepare('UPDATE customers SET verification_token = ? WHERE id = ?')
             .bind(verificationToken, customer.id)
             .run();
-        
+
         // Send verification email via Resend
         if (env.RESEND_API_KEY) {
-            const verifyUrl = `https://temp-5lr.pages.dev/verify-email.html?token=${verificationToken}`;
-            
+            const verifyUrl = `https://orlostore.com/verify-email.html?token=${verificationToken}`;
+
             await fetch('https://api.resend.com/emails', {
                 method: 'POST',
                 headers: {
@@ -115,20 +117,14 @@ export async function onRequestPost(context) {
                 })
             });
         }
-        
-        return Response.json({ 
+
+        return Response.json({
             success: true,
             message: 'Verification email sent'
         });
-        
+
     } catch (error) {
         console.error('Resend verification error:', error);
         return Response.json({ error: 'Failed to send verification email' }, { status: 500 });
     }
-}
-
-function generateToken() {
-    const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
-    return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
 }

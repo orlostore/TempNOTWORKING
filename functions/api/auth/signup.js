@@ -1,29 +1,31 @@
 // Cloudflare Pages Function - Customer Signup API
 // Location: /functions/api/auth/signup.js
 
+import { hashPasswordPBKDF2, generateToken } from './crypto-utils.js';
+
 export async function onRequestPost(context) {
     const { env, request } = context;
     const DB = env.DB;
-    
+
     try {
         const { name, email, phone, password } = await request.json();
-        
+
         // Validation
         if (!name || !email || !password) {
             return Response.json({ error: 'Name, email and password are required' }, { status: 400 });
         }
-        
+
         if (password.length < 8) {
             return Response.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
         }
-        
+
         // Check if email already exists
         const existing = await DB.prepare('SELECT id FROM customers WHERE email = ?').bind(email.toLowerCase()).first();
-        
+
         if (existing) {
             return Response.json({ error: 'Email already registered' }, { status: 400 });
         }
-        
+
         // Hash password with PBKDF2
         const passwordHash = await hashPasswordPBKDF2(password);
 
@@ -43,14 +45,14 @@ export async function onRequestPost(context) {
             token,
             verificationToken
         ).run();
-        
+
         const customerId = result.meta.last_row_id;
-        
+
         // Send verification email via Resend
         if (env.RESEND_API_KEY) {
             try {
-                const verifyUrl = `https://temp-5lr.pages.dev/verify-email.html?token=${verificationToken}`;
-                
+                const verifyUrl = `https://orlostore.com/verify-email.html?token=${verificationToken}`;
+
                 await fetch('https://api.resend.com/emails', {
                     method: 'POST',
                     headers: {
@@ -64,7 +66,7 @@ export async function onRequestPost(context) {
                         html: `
                             <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden;">
                                 <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 20px; text-align: center;">
-                                    <img src="https://temp-5lr.pages.dev/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
+                                    <img src="https://orlostore.com/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
                                     <div style="color: #2c4a5c; font-size: 22px; font-weight: 700; letter-spacing: 1px;">ORLO Store</div>
                                 </div>
                                 <div style="background: white; padding: 30px 25px;">
@@ -99,7 +101,7 @@ export async function onRequestPost(context) {
                 // Don't fail signup if email fails
             }
         }
-        
+
         return Response.json({
             success: true,
             token: token,
@@ -111,30 +113,9 @@ export async function onRequestPost(context) {
                 email_verified: false
             }
         });
-        
+
     } catch (error) {
         console.error('Signup error:', error);
         return Response.json({ error: 'Failed to create account' }, { status: 500 });
     }
-}
-
-// PBKDF2 password hashing (strong, Cloudflare Workers compatible)
-async function hashPasswordPBKDF2(password) {
-    const encoder = new TextEncoder();
-    const salt = crypto.getRandomValues(new Uint8Array(16));
-    const keyMaterial = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits']);
-    const hash = await crypto.subtle.deriveBits(
-        { name: 'PBKDF2', salt: salt, iterations: 100000, hash: 'SHA-256' },
-        keyMaterial, 256
-    );
-    const saltHex = Array.from(salt, b => b.toString(16).padStart(2, '0')).join('');
-    const hashHex = Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2, '0')).join('');
-    return `pbkdf2:100000:${saltHex}:${hashHex}`;
-}
-
-// Generate random token
-function generateToken() {
-    const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
-    return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
 }

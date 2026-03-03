@@ -8,5 +8,14 @@ Disallow: /verify-email.html
 Disallow: /forgot-password.html
 Disallow: /category-mockups.html
 Disallow: /mockup-variant-selector.html
+Disallow: /mockup-bottom-bar.html
+Disallow: /mockup-cart-price-colors.html
+Disallow: /mockup-new-layout.html
+Disallow: /mockup-pricing-ideas.html
+Disallow: /mockup-symbol-bg.html
+Disallow: /mockups-buybox-symbol.html
+Disallow: /mockups-buybox.html
+Disallow: /pricing-preview.html
+Disallow: /color-preview.html
 
 Sitemap: https://orlostore.com/sitemap.xml

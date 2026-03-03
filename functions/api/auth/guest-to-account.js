@@ -1,6 +1,8 @@
 // Cloudflare Pages Function - Guest to Account (One-Click)
 // Location: /functions/api/auth/guest-to-account.js
 
+import { hashPasswordPBKDF2, generateToken, generateTempPassword } from './crypto-utils.js';
+
 export async function onRequestPost(context) {
     const { env, request } = context;
     const DB = env.DB;
@@ -81,7 +83,7 @@ export async function onRequestPost(context) {
         // 7. Send email with temp password + verify link
         if (env.RESEND_API_KEY) {
             try {
-                const verifyUrl = `https://temp-5lr.pages.dev/verify-email.html?token=${verificationToken}`;
+                const verifyUrl = `https://orlostore.com/verify-email.html?token=${verificationToken}`;
 
                 await fetch('https://api.resend.com/emails', {
                     method: 'POST',
@@ -96,7 +98,7 @@ export async function onRequestPost(context) {
                         html: `
                             <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden;">
                                 <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 20px; text-align: center;">
-                                    <img src="https://temp-5lr.pages.dev/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
+                                    <img src="https://orlostore.com/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
                                     <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1px;">ORLO Store</div>
                                 </div>
                                 <div style="background: white; padding: 30px 25px;">
@@ -155,35 +157,4 @@ export async function onRequestPost(context) {
         console.error('Guest-to-account error:', error);
         return Response.json({ error: 'Failed to create account' }, { status: 500 });
     }
-}
-
-// PBKDF2 password hashing
-async function hashPasswordPBKDF2(password) {
-    const encoder = new TextEncoder();
-    const salt = crypto.getRandomValues(new Uint8Array(16));
-    const keyMaterial = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits']);
-    const hash = await crypto.subtle.deriveBits(
-        { name: 'PBKDF2', salt: salt, iterations: 100000, hash: 'SHA-256' },
-        keyMaterial, 256
-    );
-    const saltHex = Array.from(salt, b => b.toString(16).padStart(2, '0')).join('');
-    const hashHex = Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2, '0')).join('');
-    return `pbkdf2:100000:${saltHex}:${hashHex}`;
-}
-
-function generateToken() {
-    const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
-    return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
-}
-
-// Cryptographically secure temp password (replaces Math.random)
-function generateTempPassword() {
-    const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-    const randomBytes = crypto.getRandomValues(new Uint8Array(12));
-    let password = '';
-    for (let i = 0; i < 12; i++) {
-        password += chars.charAt(randomBytes[i] % chars.length);
-    }
-    return password;
 }

@@ -1,6 +1,8 @@
 // Cloudflare Pages Function - Change Password API
 // Location: /functions/api/auth/password.js
 
+import { safeCompareHex, hashPasswordLegacy, hashPasswordPBKDF2, verifyPasswordPBKDF2 } from './crypto-utils.js';
+
 export async function onRequestPut(context) {
     const { env, request } = context;
     const DB = env.DB;
@@ -68,51 +70,4 @@ export async function onRequestPut(context) {
         console.error('Password change error:', error);
         return Response.json({ error: 'Failed to change password' }, { status: 500 });
     }
-}
-
-function safeCompareHex(a, b) {
-    if (typeof a !== 'string' || typeof b !== 'string') return false;
-    if (a.length !== b.length) return false;
-    let result = 0;
-    for (let i = 0; i < a.length; i++) result |= a.charCodeAt(i) ^ b.charCodeAt(i);
-    return result === 0;
-}
-
-// Legacy SHA-256 hash (for verifying old passwords)
-async function hashPasswordLegacy(password) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password + 'ORLO_SALT_2024');
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-// PBKDF2 password hashing
-async function hashPasswordPBKDF2(password) {
-    const encoder = new TextEncoder();
-    const salt = crypto.getRandomValues(new Uint8Array(16));
-    const keyMaterial = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits']);
-    const hash = await crypto.subtle.deriveBits(
-        { name: 'PBKDF2', salt: salt, iterations: 100000, hash: 'SHA-256' },
-        keyMaterial, 256
-    );
-    const saltHex = Array.from(salt, b => b.toString(16).padStart(2, '0')).join('');
-    const hashHex = Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2, '0')).join('');
-    return `pbkdf2:100000:${saltHex}:${hashHex}`;
-}
-
-async function verifyPasswordPBKDF2(password, storedHash) {
-    const parts = storedHash.split(':');
-    if (parts.length !== 4 || parts[0] !== 'pbkdf2') return false;
-    const iterations = parseInt(parts[1]);
-    const salt = new Uint8Array(parts[2].match(/.{2}/g).map(b => parseInt(b, 16)));
-    const expectedHash = parts[3];
-    const encoder = new TextEncoder();
-    const keyMaterial = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits']);
-    const hash = await crypto.subtle.deriveBits(
-        { name: 'PBKDF2', salt: salt, iterations: iterations, hash: 'SHA-256' },
-        keyMaterial, 256
-    );
-    const hashHex = Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2, '0')).join('');
-    return safeCompareHex(hashHex, expectedHash);
 }
