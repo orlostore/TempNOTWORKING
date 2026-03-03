@@ -54,7 +54,7 @@ export async function onRequestPost(context) {
                         html: `
                             <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden;">
                                 <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 20px; text-align: center;">
-                                    <img src="https://orlostore.com/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
+                                    <img src="${origin}/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
                                     <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1px;">ORLO Store</div>
                                 </div>
                                 <div style="background: white; padding: 30px 25px;">
