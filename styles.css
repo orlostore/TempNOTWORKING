@@ -3765,11 +3765,16 @@ footer p {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  height: 36px;
+}
+
+.mobile-cart-section .product-btn-transformed .grid-qty-control {
+  min-height: 36px;
+  height: auto;
 }
 
 .mobile-cart-section .product-btn-transformed .grid-qty-btn {
-  height: 36px;
+  min-height: 36px;
+  height: auto;
 }
 
 /* ============================================
