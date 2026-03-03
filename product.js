@@ -210,7 +210,7 @@ function resetToAddButton(productId) {
         // Mobile: bottom bar uses stacked bilingual (same as variant)
         transformed.outerHTML = isBottomBar
           ? `<button class="mobile-add-to-cart" id="earlyCartMobile"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`
-          : `<button class="mobile-add-to-cart" id="earlyCartMobile">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+          : `<button class="mobile-add-to-cart" id="earlyCartMobile">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
       } else {
         // Desktop: three-column bar uses stacked bilingual
         transformed.outerHTML = `<button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
@@ -218,7 +218,7 @@ function resetToAddButton(productId) {
     } else {
       const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
       const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
-      transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+      transformed.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
     }
   });
 
@@ -1967,7 +1967,7 @@ function selectVariant(variantId, productId, prefix) {
       const isBottomBar = mobileTransformed.closest('.early-price-bottom') !== null;
       const btnHTML = isBottomBar
         ? `<button class="mobile-add-to-cart" id="mobileAddToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`
-        : `<button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+        : `<button class="mobile-add-to-cart" id="mobileAddToCartBtn">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
       mobileTransformed.outerHTML = btnHTML;
       const newBtn = document.getElementById('mobileAddToCartBtn');
       if (newBtn) {
