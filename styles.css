@@ -4287,7 +4287,6 @@ footer p {
     justify-content: center;
     width: 100%;
     min-height: var(--card-btn-min-h);
-    padding: 6px 0;
     background: #e07856;
     border: 1.5px solid #e07856;
     border-radius: 12px;
@@ -4323,7 +4322,9 @@ footer p {
 
 .grid-qty-display {
     flex: 1;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: white;
     font-weight: 600;
     font-size: 0.85rem;
