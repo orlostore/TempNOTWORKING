@@ -1715,6 +1715,7 @@ footer p {
   width: 100%;
   margin-top: 8px;
   height: 36px;
+  min-height: 36px;
 }
 .mobile-product-header .early-price .product-btn-transformed .grid-qty-btn {
   height: 36px;
@@ -2845,6 +2846,7 @@ footer p {
 .mobile-product-header .early-price.early-price-bottom .grid-qty-control {
   flex: 0 0 120px;
   height: 38px;
+  min-height: 38px;
   width: 120px;
   margin-top: 0;
 }
