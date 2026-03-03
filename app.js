@@ -264,7 +264,7 @@ function gridQtyChange(productId, change, event) {
         // Reset button to original "Add to Cart"
         const container = document.getElementById(`gridQty-${productId}`);
         if (container) {
-            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${productId}, event)">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
+            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${productId}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
         }
     } else {
         item.quantity = newQty;
@@ -353,9 +353,7 @@ function renderProducts(list, arabicMode) {
                 </div>
             `;
         } else {
-            buttonHTML = arabicMode
-                ? `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`
-                : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
+            buttonHTML = `<button class="add-to-cart" onclick="addToCart(${p.id}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
         }
 
         // Arabic mode: show Arabic name first, English secondary
@@ -978,7 +976,7 @@ function removeFromCart(id, variantId) {
                 const isMobile = el.closest('.mobile-product-page') !== null;
                 const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
                 const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
-                el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
+                el.outerHTML = `<button class="${btnClass}" id="${btnId}"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
             });
             // Re-attach click handlers if on product page
             if (typeof addToCartHandlerRef === 'function' && typeof transformToQtyButtonVariant === 'function') {
@@ -1003,7 +1001,7 @@ function removeFromCart(id, variantId) {
         // Reset grid button if visible (non-variant products only)
         const gridQty = document.getElementById(`gridQty-${id}`);
         if (gridQty) {
-            gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
+            gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
         }
 
         // Reset product page button if visible
