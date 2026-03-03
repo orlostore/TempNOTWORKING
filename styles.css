@@ -3022,10 +3022,10 @@ footer p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
-  height: auto;
+  min-height: var(--card-btn-min-h);
+  height: var(--card-btn-min-h);
   width: 100%;
-  padding: 6px 0.67rem;
+  padding: 0 0.67rem;
   background: #e07856;
   color: white;
   border: none;
@@ -3768,13 +3768,13 @@ footer p {
 }
 
 .mobile-cart-section .product-btn-transformed .grid-qty-control {
-  min-height: 36px;
-  height: auto;
+  min-height: var(--card-btn-min-h);
+  height: var(--card-btn-min-h);
 }
 
 .mobile-cart-section .product-btn-transformed .grid-qty-btn {
-  min-height: 36px;
-  height: auto;
+  min-height: var(--card-btn-min-h);
+  height: var(--card-btn-min-h);
 }
 
 /* ============================================
