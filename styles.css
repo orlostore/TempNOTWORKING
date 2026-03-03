@@ -1676,14 +1676,19 @@ footer p {
   align-items: stretch;
 }
 .early-price .mobile-add-to-cart {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   margin-top: 8px;
 }
 /* Variant tiered: centered cart button and full-width delivery */
 .mobile-product-header .early-price .mobile-add-to-cart {
-  display: block;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .mobile-product-header .early-price .early-delivery-info {
   display: flex;
@@ -1825,7 +1830,12 @@ footer p {
 }
 
 .add-to-cart-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   height: auto;
+  min-height: var(--card-btn-min-h);
   width: fit-content;
   padding: 6px 1.2rem;
   background: #e07856;
@@ -1835,6 +1845,7 @@ footer p {
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.3;
+  white-space: nowrap;
   cursor: pointer;
   transition: all 0.3s;
   margin-bottom: 1.2rem;
@@ -2992,7 +3003,12 @@ footer p {
 }
 
 .mobile-add-to-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   min-height: 36px;
+  height: auto;
   width: 100%;
   padding: 6px 0.67rem;
   background: #e07856;
@@ -3002,6 +3018,8 @@ footer p {
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.3;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
   cursor: pointer;
   transition: background 0.3s;
 }
@@ -3718,10 +3736,13 @@ footer p {
 }
 /* Mobile product page - compact centered Add to Cart button (match non-variant sizing) */
 .mobile-cart-section .mobile-add-to-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  display: block;
 }
 
 .mobile-cart-section .product-btn-transformed {
