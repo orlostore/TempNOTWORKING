@@ -48,6 +48,7 @@ nav {
   --text: #333;
   --bg: #f8f9fa;
   --white: #ffffff;
+  --card-btn-min-h: calc(0.75rem * 2.6 + 15px);
 }
 
 .arabic-text {
@@ -753,6 +754,7 @@ nav {
 .add-to-cart {
   width: 100%;
   height: auto;
+  min-height: var(--card-btn-min-h);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -779,6 +781,7 @@ nav {
 .view-options-btn {
   width: 100%;
   height: auto;
+  min-height: var(--card-btn-min-h);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -4283,7 +4286,7 @@ footer p {
     align-items: stretch;
     justify-content: center;
     width: 100%;
-    min-height: 38px;
+    min-height: var(--card-btn-min-h);
     padding: 6px 0;
     background: #e07856;
     border: 1.5px solid #e07856;
