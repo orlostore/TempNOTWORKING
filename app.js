@@ -264,7 +264,7 @@ function gridQtyChange(productId, change, event) {
         // Reset button to original "Add to Cart"
         const container = document.getElementById(`gridQty-${productId}`);
         if (container) {
-            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${productId}, event)">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${productId}, event)">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
         }
     } else {
         item.quantity = newQty;
@@ -338,8 +338,8 @@ function renderProducts(list, arabicMode) {
         let buttonHTML;
         if (outOfStock) {
             buttonHTML = arabicMode
-                ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;"><span class="arabic-text">نفذ المخزون</span> | Out of Stock</button>`
-                : `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock | <span class="arabic-text">نفذ المخزون</span></button>`;
+                ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`
+                : `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`;
         } else if (hasVariants) {
             buttonHTML = arabicMode
                 ? `<a href="product.html?product=${safeSlug}" class="view-options-btn" style="direction:rtl;"><span class="arabic-text">عرض الخيارات</span> | View Options <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></a>`
@@ -354,8 +354,8 @@ function renderProducts(list, arabicMode) {
             `;
         } else {
             buttonHTML = arabicMode
-                ? `<button class="add-to-cart" onclick="addToCart(${p.id}, event)"><span class="arabic-text">أضف إلى السلة</span> | Add to Cart</button>`
-                : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+                ? `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`
+                : `<button class="add-to-cart" onclick="addToCart(${p.id}, event)">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
         }
 
         // Arabic mode: show Arabic name first, English secondary
@@ -978,7 +978,7 @@ function removeFromCart(id, variantId) {
                 const isMobile = el.closest('.mobile-product-page') !== null;
                 const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
                 const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
-                el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+                el.outerHTML = `<button class="${btnClass}" id="${btnId}">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
             });
             // Re-attach click handlers if on product page
             if (typeof addToCartHandlerRef === 'function' && typeof transformToQtyButtonVariant === 'function') {
@@ -1003,7 +1003,7 @@ function removeFromCart(id, variantId) {
         // Reset grid button if visible (non-variant products only)
         const gridQty = document.getElementById(`gridQty-${id}`);
         if (gridQty) {
-            gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)">Add to Cart | <span class="arabic-text">أضف إلى السلة</span></button>`;
+            gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)">Add to Cart<br><span class="arabic-text">أضف إلى السلة</span></button>`;
         }
 
         // Reset product page button if visible
