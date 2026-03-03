@@ -1087,6 +1087,7 @@
                 const response = await fetch('/api/auth/profile', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
+                if (handleAuthError(response)) return;
                 const data = await response.json();
                 if (data.success && !data.customer.email_verified) {
                     document.getElementById('verifyBanner').style.display = 'flex';
@@ -1127,6 +1128,18 @@
         if (!token || !customerData) {
             window.location.href = 'login.html';
         }
+
+        function handleAuthError(response) {
+            if (response.status === 401) {
+                localStorage.removeItem('orlo_token');
+                localStorage.removeItem('orlo_customer');
+                sessionStorage.removeItem('orlo_token');
+                sessionStorage.removeItem('orlo_customer');
+                window.location.href = 'login.html';
+                return true;
+            }
+            return false;
+        }
         
         document.getElementById('customerName').textContent = customerData?.name || 'Customer';
         document.getElementById('profileName').value = customerData?.name || '';
@@ -1158,6 +1171,7 @@
                 const response = await fetch('/api/auth/orders', {
                     headers: { 'Authorization': 'Bearer ' + token }
                 });
+                if (handleAuthError(response)) return;
                 const data = await response.json();
                 
                 if (data.orders && data.orders.length > 0) {
@@ -1285,6 +1299,7 @@
                 const response = await fetch('/api/auth/addresses', {
                     headers: { 'Authorization': 'Bearer ' + token }
                 });
+                if (handleAuthError(response)) return;
                 const data = await response.json();
                 
                 if (data.addresses && data.addresses.length > 0) {
@@ -1339,6 +1354,7 @@
                     },
                     body: JSON.stringify({ name, phone })
                 });
+                if (handleAuthError(response)) return;
                 const data = await response.json();
                 
                 if (data.success) {

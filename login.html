@@ -474,7 +474,7 @@
             else { input.type = 'password'; btn.innerHTML = SVG_EYE_OPEN; }
         }
 
-        if (localStorage.getItem('orlo_token')) { window.location.href = 'account.html'; }
+        if (localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token')) { window.location.href = 'account.html'; }
 
         function showAlert(message, type) {
             const div = document.createElement('div');
@@ -526,13 +526,9 @@
 
                 if (data.success) {
                     showAlert('Login successful! Redirecting...', 'success');
-                    if (remember) {
-                        localStorage.setItem('orlo_token', data.token);
-                        localStorage.setItem('orlo_customer', JSON.stringify(data.customer));
-                    } else {
-                        sessionStorage.setItem('orlo_token', data.token);
-                        sessionStorage.setItem('orlo_customer', JSON.stringify(data.customer));
-                    }
+                    // Always store in localStorage so token survives hard refresh
+                    localStorage.setItem('orlo_token', data.token);
+                    localStorage.setItem('orlo_customer', JSON.stringify(data.customer));
                     const urlParams = new URLSearchParams(window.location.search);
                     let redirect = urlParams.get('redirect') || localStorage.getItem('lastProduct') || 'account.html';
                     // Prevent open redirect: only allow same-origin URLs
