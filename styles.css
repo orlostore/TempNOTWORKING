@@ -1394,7 +1394,6 @@ footer p {
 
   .grid-qty-btn {
     width: 34px;
-    height: 38px;
   }
 
 }
@@ -4281,10 +4280,11 @@ footer p {
    ============================================ */
 .grid-qty-control {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     width: 100%;
-    height: 38px;
+    min-height: 38px;
+    padding: 6px 0;
     background: #e07856;
     border: 1.5px solid #e07856;
     border-radius: 12px;
@@ -4293,7 +4293,6 @@ footer p {
 
 .grid-qty-btn {
     width: 38px;
-    height: 38px;
     border: none;
     background: rgba(0,0,0,0.15);
     color: white;
