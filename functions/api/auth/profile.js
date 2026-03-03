@@ -88,3 +88,42 @@ export async function onRequestGet(context) {
         return Response.json({ error: 'Failed to fetch profile' }, { status: 500 });
     }
 }
+
+export async function onRequestDelete(context) {
+    const { env, request } = context;
+    const DB = env.DB;
+
+    try {
+        const authHeader = request.headers.get('Authorization');
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return Response.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const token = authHeader.replace('Bearer ', '');
+
+        const customer = await DB.prepare('SELECT id, token_created_at FROM customers WHERE token = ?')
+            .bind(token)
+            .first();
+
+        if (!customer) {
+            return Response.json({ error: 'Invalid token' }, { status: 401 });
+        }
+        if (customer.token_created_at && (Date.now() - new Date(customer.token_created_at).getTime() > 30*24*60*60*1000)) {
+            return Response.json({ error: 'Session expired. Please log in again.' }, { status: 401 });
+        }
+
+        // Delete customer addresses
+        await DB.prepare('DELETE FROM customer_addresses WHERE customer_id = ?')
+            .bind(customer.id).run();
+
+        // Delete customer record
+        await DB.prepare('DELETE FROM customers WHERE id = ?')
+            .bind(customer.id).run();
+
+        return Response.json({ success: true, message: 'Account deleted' });
+
+    } catch (error) {
+        console.error('Account delete error:', error);
+        return Response.json({ error: 'Failed to delete account' }, { status: 500 });
+    }
+}

@@ -857,6 +857,7 @@
                         <div class="account-welcome">
                             <h1>Hello, <span id="customerName">Customer</span>!</h1>
                             <p>مرحباً بك في حسابك</p>
+                            <p id="memberSince" style="opacity:0.7;font-size:0.7rem;margin-top:4px;font-family:'Inter',sans-serif;"></p>
                         </div>
                     </div>
                     <div class="account-header-actions">
@@ -950,8 +951,17 @@
                         </form>
                     </div>
                 </div>
+                <div class="card" style="border:1.5px solid #f8d7da;">
+                    <div class="card-header">
+                        <h2 style="color:#dc3545;"><svg class="inline-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete Account | حذف الحساب</h2>
+                    </div>
+                    <div class="card-body">
+                        <p style="font-family:'Inter',sans-serif;font-size:0.8rem;color:#666;margin-bottom:15px;">Permanently delete your account and all associated data. This action cannot be undone.<br><span class="arabic-text">حذف حسابك نهائياً وجميع البيانات المرتبطة. لا يمكن التراجع عن هذا الإجراء.</span></p>
+                        <button class="btn btn-danger" onclick="deleteAccount()">Delete My Account | حذف حسابي</button>
+                    </div>
+                </div>
             </div>
-            
+
             <div id="addressesTab" class="tab-content">
                 <div class="card">
                     <div class="card-header">
@@ -973,7 +983,7 @@
     <div class="modal-overlay" id="addressModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add a new address <span class="arabic-text">| إضافة عنوان جديد</span></h2>
+                <h2 id="addressModalTitle">Add a new address <span class="arabic-text">| إضافة عنوان جديد</span></h2>
                 <button class="modal-close" onclick="closeAddressModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
             <div class="modal-body">
@@ -1045,7 +1055,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-cancel" onclick="closeAddressModal()">Cancel | إلغاء</button>
-                <button class="btn btn-primary" onclick="document.getElementById('addressForm').requestSubmit()">Add Address | إضافة العنوان</button>
+                <button class="btn btn-primary" id="addressModalSubmitBtn" onclick="document.getElementById('addressForm').requestSubmit()">Add Address | إضافة العنوان</button>
             </div>
         </div>
     </div>
@@ -1054,7 +1064,7 @@
         // SVG strings for JS-generated content
         const SVG_EYE_OPEN = '<svg class="inline-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
         const SVG_EYE_CLOSED = '<svg class="inline-icon" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
-        const SVG_MAIL = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:3.5rem;height:3.5rem"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
+        const SVG_MAIL = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:3.5rem;height:3.5rem"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>';
         const ACCT_SVG_WARNING = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:3.5rem;height:3.5rem"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>';
         const SVG_PIN = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:3.5rem;height:3.5rem"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
         const SVG_PHONE = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:0.9em;height:0.9em"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
@@ -1134,6 +1144,7 @@
         }
         
         function logout() {
+            if (!confirm('Are you sure you want to logout?\nهل أنت متأكد أنك تريد تسجيل الخروج؟')) return;
             localStorage.removeItem('orlo_token');
             localStorage.removeItem('orlo_customer');
             sessionStorage.removeItem('orlo_token');
@@ -1175,6 +1186,19 @@
                             footerHtml = `
                                 <div class="order-footer">
                                     <span class="cancelled-label">Refund initiated — 5-7 business days</span>
+                                </div>`;
+                        }
+
+                        // Add reorder button for shipped/delivered/pending (non-cancelled) orders
+                        if (order.status !== 'cancelled') {
+                            const itemsJson = JSON.stringify(order.items).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                            footerHtml += `
+                                <div class="order-footer" style="border-top:1px solid #f0f0f0;">
+                                    <button class="btn btn-primary btn-small" onclick='reorderItems(JSON.parse(this.dataset.items))' data-items="${itemsJson}">
+                                        <svg class="inline-icon" viewBox="0 0 24 24" style="width:0.9em;height:0.9em"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                                        Reorder | إعادة الطلب
+                                    </button>
+                                    <span></span>
                                 </div>`;
                         }
 
@@ -1276,6 +1300,7 @@
                                 UAE
                             </div>
                             <div class="address-actions">
+                                <button class="btn btn-primary btn-small" onclick="editAddress(${addr.id})">Edit</button>
                                 ${!addr.is_default ? `<button class="btn btn-secondary btn-small" onclick="setDefaultAddress(${addr.id})">Set Default</button>` : ''}
                                 <button class="btn btn-danger btn-small" onclick="deleteAddress(${addr.id})">Delete</button>
                             </div>
@@ -1358,7 +1383,12 @@
         }
         
         // Address Modal Functions
+        let editingAddressId = null;
+
         function showAddAddress() {
+            editingAddressId = null;
+            document.getElementById('addressModalTitle').innerHTML = 'Add a new address <span class="arabic-text">| إضافة عنوان جديد</span>';
+            document.getElementById('addressModalSubmitBtn').textContent = 'Add Address | إضافة العنوان';
             document.getElementById('addressModal').classList.add('active');
             document.getElementById('addressForm').reset();
             document.getElementById('addressAlert').innerHTML = '';
@@ -1369,11 +1399,12 @@
         
         function closeAddressModal() {
             document.getElementById('addressModal').classList.remove('active');
+            editingAddressId = null;
         }
         
         async function saveAddress(e) {
             e.preventDefault();
-            
+
             const addressData = {
                 full_name: document.getElementById('addrFullName').value,
                 phone: document.getElementById('addrPhone').value,
@@ -1385,19 +1416,23 @@
                 address_type: document.querySelector('input[name="addrType"]:checked').value,
                 is_default: document.getElementById('addrDefault').checked
             };
-            
+
+            const isEdit = !!editingAddressId;
+            const url = isEdit ? '/api/auth/addresses/' + editingAddressId : '/api/auth/addresses';
+            const method = isEdit ? 'PUT' : 'POST';
+
             try {
-                const response = await fetch('/api/auth/addresses', {
-                    method: 'POST',
+                const response = await fetch(url, {
+                    method,
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify(addressData)
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (data.success) {
                     closeAddressModal();
                     loadAddresses();
@@ -1434,13 +1469,109 @@
             }
         }
         
+        // --- Edit Address ---
+        function editAddress(id) {
+            // Find address from the DOM isn't reliable; fetch from server
+            fetch('/api/auth/addresses', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(r => r.json())
+            .then(data => {
+                const addr = (data.addresses || []).find(a => a.id === id);
+                if (!addr) return alert('Address not found');
+                editingAddressId = id;
+                document.getElementById('addressModalTitle').innerHTML = 'Edit address <span class="arabic-text">| تعديل العنوان</span>';
+                document.getElementById('addressModalSubmitBtn').textContent = 'Save Changes | حفظ التغييرات';
+                document.getElementById('addrFullName').value = addr.full_name || '';
+                document.getElementById('addrPhone').value = addr.phone || '';
+                document.getElementById('addrStreet').value = addr.street || '';
+                document.getElementById('addrBuilding').value = addr.building || '';
+                document.getElementById('addrArea').value = addr.area || '';
+                document.getElementById('addrEmirate').value = addr.emirate || '';
+                document.getElementById('addrLandmark').value = addr.landmark || '';
+                const typeRadio = document.querySelector(`input[name="addrType"][value="${addr.address_type || 'Home'}"]`);
+                if (typeRadio) typeRadio.checked = true;
+                document.getElementById('addrDefault').checked = !!addr.is_default;
+                document.getElementById('addressAlert').innerHTML = '';
+                document.getElementById('addressModal').classList.add('active');
+            });
+        }
+
+        // --- Reorder ---
+        function reorderItems(orderItems) {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            let added = 0;
+            orderItems.forEach(item => {
+                if (item.name.toLowerCase().includes('delivery') || item.name.toLowerCase().includes('shipping')) return;
+                // Try to find existing cart item
+                const existing = cart.find(c => c.name === item.name);
+                if (existing) {
+                    existing.quantity += item.quantity;
+                } else {
+                    cart.push({
+                        name: item.name,
+                        price: item.amount / 100 / item.quantity,
+                        quantity: item.quantity,
+                        id: item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+                    });
+                }
+                added += item.quantity;
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            // Update cart badges
+            const total = cart.reduce((s, i) => s + (i.quantity || 0), 0);
+            ['cartCount', 'mobileCartCount', 'bottomCartCount'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = total > 0 ? total : '';
+            });
+            alert(added + ' item(s) added to cart!\nتمت إضافة ' + added + ' منتج(ات) إلى السلة');
+        }
+
+        // --- Delete Account ---
+        async function deleteAccount() {
+            const confirmation = prompt('This will permanently delete your account and all data.\nType DELETE to confirm:\n\nسيؤدي هذا إلى حذف حسابك نهائياً. اكتب DELETE للتأكيد');
+            if (confirmation !== 'DELETE') return;
+            try {
+                const res = await fetch('/api/auth/profile', {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Account deleted. Goodbye!\nتم حذف الحساب. مع السلامة!');
+                    logout();
+                } else {
+                    alert(data.error || 'Failed to delete account');
+                }
+            } catch (e) {
+                alert('Connection error. Please try again.');
+            }
+        }
+
+        // --- Member Since ---
+        async function loadMemberSince() {
+            try {
+                const res = await fetch('/api/auth/profile', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                if (data.success && data.customer.created_at) {
+                    const d = new Date(data.customer.created_at);
+                    const monthYear = d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+                    const el = document.getElementById('memberSince');
+                    if (el) el.textContent = 'Member since ' + monthYear;
+                }
+            } catch (e) {}
+        }
+
         // Close modal when clicking outside
         document.getElementById('addressModal').addEventListener('click', function(e) {
             if (e.target === this) closeAddressModal();
         });
-        
+
         loadOrders();
         checkEmailVerification();
+        loadMemberSince();
     </script>
 
 <script>
