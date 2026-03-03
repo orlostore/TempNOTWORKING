@@ -93,7 +93,7 @@ export async function onRequestPost(context) {
                 body: JSON.stringify({
                     from: 'ORLO Store <noreply@orlostore.com>',
                     to: customer_email,
-                    subject: 'Your Order Has Been Shipped! | تم شحن طلبك',
+                    subject: 'Your Order Has Been Dispatched! | تم شحن طلبك',
                     html: `
                         <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px; -webkit-text-size-adjust: 100%;">
                             <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
@@ -105,9 +105,9 @@ export async function onRequestPost(context) {
                                     <div style="text-align: center; margin-bottom: 20px;">
                                         <div style="font-size: 48px; line-height: 1;">🚚</div>
                                     </div>
-                                    <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px; font-weight: 700; text-align: center;">Your Order is On Its Way!</h2>
+                                    <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px; font-weight: 700; text-align: center;">Your Order Has Been Dispatched!</h2>
                                     <p style="color: #555; font-size: 15px; line-height: 1.7; margin: 0 0 6px; text-align: center;">
-                                        Hi ${customer_name || 'there'}, great news! Your order has been shipped and is heading your way.
+                                        Hi ${customer_name || 'there'}, great news! Your order has been dispatched and is heading your way.
                                     </p>
                                     <p style="color: #888; font-size: 14px; line-height: 1.6; margin: 0 0 25px; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: center;">
                                         مرحباً، تم شحن طلبك وهو في الطريق إليك!
