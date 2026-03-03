@@ -778,19 +778,20 @@ nav {
 
 .view-options-btn {
   width: 100%;
-  height: 36px;
+  height: auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 0 0.4rem;
+  padding: 6px 0.4rem;
   background: transparent;
   color: var(--primary);
   border: 1.5px solid var(--primary);
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.58rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;
   transition: background 0.3s, color 0.3s;

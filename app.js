@@ -342,8 +342,8 @@ function renderProducts(list, arabicMode) {
                 : `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`;
         } else if (hasVariants) {
             buttonHTML = arabicMode
-                ? `<a href="product.html?product=${safeSlug}" class="view-options-btn" style="direction:rtl;"><span class="arabic-text">عرض الخيارات</span> | View Options <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></a>`
-                : `<a href="product.html?product=${safeSlug}" class="view-options-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg> View Options | <span class="arabic-text">عرض الخيارات</span></a>`;
+                ? `<a href="product.html?product=${safeSlug}" class="view-options-btn">View Options<br><span class="arabic-text">عرض الخيارات</span></a>`
+                : `<a href="product.html?product=${safeSlug}" class="view-options-btn">View Options<br><span class="arabic-text">عرض الخيارات</span></a>`;
         } else if (inCart) {
             buttonHTML = `
                 <div class="grid-qty-control" id="gridQty-${p.id}">
