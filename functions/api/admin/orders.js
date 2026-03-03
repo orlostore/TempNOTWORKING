@@ -41,6 +41,7 @@ export async function onRequestGet(context) {
     try {
         // Fetch shipped order IDs from D1 (source of truth)
         let shippedOrderIds = new Set();
+        let cancelledOrderIds = new Set();
         if (env.DB) {
             try {
                 const { results } = await env.DB.prepare(
@@ -51,6 +52,16 @@ export async function onRequestGet(context) {
                 }
             } catch (dbError) {
                 console.error('D1 shipped_orders query failed (non-blocking):', dbError);
+            }
+            try {
+                const { results } = await env.DB.prepare(
+                    'SELECT order_id FROM cancelled_orders'
+                ).all();
+                for (const row of results) {
+                    cancelledOrderIds.add(row.order_id);
+                }
+            } catch (dbError) {
+                // Table may not exist yet
             }
         }
 
@@ -108,7 +119,7 @@ export async function onRequestGet(context) {
                         amount: item.amount_total
                     })),
                     metadata: session.metadata || {},
-                    status: isShipped ? 'shipped' : 'pending'
+                    status: cancelledOrderIds.has(session.id) ? 'cancelled' : isShipped ? 'shipped' : 'pending'
                 };
             }));
 

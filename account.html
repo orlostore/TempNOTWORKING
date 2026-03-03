@@ -219,6 +219,44 @@
         .order-status.pending { background: #fff3cd; color: #856404; }
         .order-status.shipped { background: #d4edda; color: #155724; }
         .order-status.delivered { background: #cce5ff; color: #004085; }
+        .order-status.cancelled { background: #f8d7da; color: #721c24; }
+
+        .cancel-order-btn {
+            font-family: 'Inter', sans-serif;
+            background: none;
+            border: 1.5px solid #dc3545;
+            color: #dc3545;
+            padding: 5px 14px;
+            border-radius: 8px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cancel-order-btn:hover { background: #dc3545; color: white; }
+        .cancel-order-btn:disabled { opacity: 0.5; cursor: not-allowed; background: none; color: #dc3545; }
+
+        .cancel-timer {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .order-footer {
+            padding: 10px 20px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .cancelled-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            color: #999;
+            font-style: italic;
+        }
         
         .order-body { padding: 15px 20px; }
         .order-products { margin-bottom: 15px; }
@@ -300,43 +338,50 @@
         }
         
         .address-card {
-            border: 2px solid #ececec;
-            border-radius: 10px;
+            background: #fafbfc;
+            border: 1.5px solid #e8edf1;
+            border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
             position: relative;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        
-        .address-card.default { border-color: var(--primary); }
+        .address-card:hover { box-shadow: 0 2px 12px rgba(44, 74, 92, 0.06); }
+
+        .address-card.default {
+            background: linear-gradient(135deg, #f7f9fb 0%, #f0f4f7 100%);
+            border-color: #b8cdd8;
+        }
 
         .address-default-badge {
             font-family: 'Inter', sans-serif;
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--primary);
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #e07856, #c96644);
             color: white;
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             padding: 3px 10px;
             border-radius: 10px;
             font-weight: 600;
+            letter-spacing: 0.3px;
         }
-        
+
         .address-name {
             font-family: 'Inter', sans-serif;
             font-weight: 600;
             font-size: 0.9rem;
-            color: var(--primary);
+            color: #2c4a5c;
             margin-bottom: 5px;
         }
-        
+
         .address-details {
             font-family: 'Inter', sans-serif;
-            color: #666;
+            color: #6b7c8a;
             font-size: 0.8rem;
             line-height: 1.6;
         }
-        
+
         .address-actions {
             margin-top: 15px;
             display: flex;
@@ -1108,6 +1153,31 @@
                     container.innerHTML = data.orders.map(order => {
                         const date = new Date(order.created * 1000);
                         const dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+                        // Cancel button: only for pending orders within 30 min
+                        let footerHtml = '';
+                        if (order.status === 'pending') {
+                            const orderAgeMs = Date.now() - (order.created * 1000);
+                            const thirtyMin = 30 * 60 * 1000;
+                            if (orderAgeMs < thirtyMin) {
+                                const remainMs = thirtyMin - orderAgeMs;
+                                const remainMin = Math.ceil(remainMs / 60000);
+                                footerHtml = `
+                                    <div class="order-footer">
+                                        <div>
+                                            <button class="cancel-order-btn" onclick="cancelOrder('${order.id}', this)">Cancel Order</button>
+                                            <div class="cancel-timer" id="timer-${order.id.slice(-8)}">${remainMin} min left to cancel</div>
+                                        </div>
+                                        <span></span>
+                                    </div>`;
+                            }
+                        } else if (order.status === 'cancelled') {
+                            footerHtml = `
+                                <div class="order-footer">
+                                    <span class="cancelled-label">Refund initiated — 5-7 business days</span>
+                                </div>`;
+                        }
+
                         return `
                             <div class="order-item">
                                 <div class="order-header">
@@ -1128,9 +1198,10 @@
                                     </div>
                                     <div class="order-total">
                                         <span>Total</span>
-                                        <span>AED ${(order.amount_total / 100).toFixed(2)}</span>
+                                        <span>${order.status === 'cancelled' ? '<s style="color:#999">AED ' + (order.amount_total / 100).toFixed(2) + '</s> Refunded' : 'AED ' + (order.amount_total / 100).toFixed(2)}</span>
                                     </div>
                                 </div>
+                                ${footerHtml}
                             </div>
                         `;
                     }).join('');
@@ -1155,6 +1226,35 @@
             }
         }
         
+        async function cancelOrder(orderId, btn) {
+            if (!confirm('Are you sure you want to cancel this order? A full refund will be issued to your card.')) return;
+            btn.disabled = true;
+            btn.textContent = 'Cancelling...';
+            try {
+                const res = await fetch('/api/auth/cancel-order', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ orderId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert(data.message);
+                    loadOrders();
+                } else {
+                    alert(data.error || 'Failed to cancel order');
+                    btn.disabled = false;
+                    btn.textContent = 'Cancel Order';
+                }
+            } catch (e) {
+                alert('Connection error. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Cancel Order';
+            }
+        }
+
         async function loadAddresses() {
             const container = document.getElementById('addressesContainer');
             try {
