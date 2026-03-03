@@ -2992,7 +2992,7 @@ footer p {
 }
 
 .mobile-add-to-cart {
-  height: auto;
+  height: 36px;
   width: 100%;
   padding: 6px 0.67rem;
   background: #e07856;
@@ -4217,12 +4217,9 @@ footer p {
   color: #555;
 }
 
-/* Mobile: keep tooltip consistent with desktop */
-@media (max-width: 514.56px) {
-  .grid-limit-tooltip {
-    bottom: 67px;
-  }
-}
+/* Mobile: no override needed — product-info padding (0.75rem) and
+   button min-height (--card-btn-min-h) are identical to desktop,
+   so the base bottom: 67px applies as-is. */
 
 /* ============================================
    CART SIDEBAR - INLINE LIMIT MESSAGE (Option B)
