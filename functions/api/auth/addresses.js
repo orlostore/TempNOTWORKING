@@ -80,6 +80,64 @@ export async function onRequestPost(context) {
     }
 }
 
+export async function onRequestPut(context) {
+    const { env, request } = context;
+    const DB = env.DB;
+
+    try {
+        const customer = await verifyToken(request, DB);
+        if (!customer) {
+            return Response.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const url = new URL(request.url);
+        const pathParts = url.pathname.split('/');
+        const addressId = pathParts[pathParts.length - 1];
+
+        // Check if this is a "set default" request
+        if (addressId === 'default') {
+            const parentId = pathParts[pathParts.length - 2];
+            await DB.prepare('UPDATE customer_addresses SET is_default = 0 WHERE customer_id = ?')
+                .bind(customer.id).run();
+            await DB.prepare('UPDATE customer_addresses SET is_default = 1 WHERE id = ? AND customer_id = ?')
+                .bind(parentId, customer.id).run();
+            return Response.json({ success: true });
+        }
+
+        if (!addressId || addressId === 'addresses') {
+            return Response.json({ error: 'Address ID required' }, { status: 400 });
+        }
+
+        const { full_name, phone, street, building, area, emirate, landmark, address_type, is_default } = await request.json();
+
+        if (!full_name || !phone || !street || !building || !area || !emirate) {
+            return Response.json({ error: 'Please fill all required fields' }, { status: 400 });
+        }
+
+        // If setting as default, unset other defaults first
+        if (is_default) {
+            await DB.prepare('UPDATE customer_addresses SET is_default = 0 WHERE customer_id = ?')
+                .bind(customer.id).run();
+        }
+
+        await DB.prepare(`
+            UPDATE customer_addresses
+            SET full_name = ?, phone = ?, street = ?, building = ?, area = ?, emirate = ?, landmark = ?, address_type = ?, is_default = ?
+            WHERE id = ? AND customer_id = ?
+        `).bind(
+            full_name, phone, street, building, area, emirate,
+            landmark || '', address_type || 'Home', is_default ? 1 : 0,
+            addressId, customer.id
+        ).run();
+
+        return Response.json({ success: true });
+
+    } catch (error) {
+        console.error('Address update error:', error);
+        return Response.json({ error: 'Failed to update address' }, { status: 500 });
+    }
+}
+
 export async function onRequestDelete(context) {
     const { env, request } = context;
     const DB = env.DB;

@@ -2069,21 +2069,52 @@
         updateHeaderDateTime();
         setInterval(updateHeaderDateTime, 30000);
 
-        // --- Delivery fees (persisted in localStorage) ---
-        function getDeliveryFeeCity() {
-            return parseFloat(localStorage.getItem('adminDeliveryFeeCity')) || 0;
-        }
-        function getDeliveryFeeRural() {
-            return parseFloat(localStorage.getItem('adminDeliveryFeeRural')) || 0;
-        }
+        // --- Delivery fees (persisted in D1 via /api/admin/settings) ---
+        let deliveryFeeCity = 0;
+        let deliveryFeeRural = 0;
+
+        function getDeliveryFeeCity() { return deliveryFeeCity; }
+        function getDeliveryFeeRural() { return deliveryFeeRural; }
+
+        let saveDeliveryTimeout = null;
         function saveDeliveryFees() {
-            localStorage.setItem('adminDeliveryFeeCity', document.getElementById('deliveryFeeCity').value || '0');
-            localStorage.setItem('adminDeliveryFeeRural', document.getElementById('deliveryFeeRural').value || '0');
+            deliveryFeeCity = parseFloat(document.getElementById('deliveryFeeCity').value) || 0;
+            deliveryFeeRural = parseFloat(document.getElementById('deliveryFeeRural').value) || 0;
             calcMinPrice();
+            // Debounce: save to D1 after 500ms of no typing
+            clearTimeout(saveDeliveryTimeout);
+            saveDeliveryTimeout = setTimeout(() => {
+                adminFetch('/api/admin/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        deliveryFeeCity: String(deliveryFeeCity),
+                        deliveryFeeRural: String(deliveryFeeRural)
+                    })
+                }).catch(err => console.error('Failed to save delivery fees:', err));
+            }, 500);
         }
-        // Load saved values on init
-        document.getElementById('deliveryFeeCity').value = getDeliveryFeeCity() || '';
-        document.getElementById('deliveryFeeRural').value = getDeliveryFeeRural() || '';
+
+        // Load saved values from D1 on init
+        (async function loadDeliveryFees() {
+            try {
+                const res = await adminFetch('/api/admin/settings');
+                const data = await res.json();
+                if (data.success && data.settings) {
+                    deliveryFeeCity = parseFloat(data.settings.deliveryFeeCity) || 0;
+                    deliveryFeeRural = parseFloat(data.settings.deliveryFeeRural) || 0;
+                    document.getElementById('deliveryFeeCity').value = deliveryFeeCity || '';
+                    document.getElementById('deliveryFeeRural').value = deliveryFeeRural || '';
+                    calcMinPrice();
+                }
+            } catch (e) {
+                // Fallback: try localStorage for migration
+                deliveryFeeCity = parseFloat(localStorage.getItem('adminDeliveryFeeCity')) || 0;
+                deliveryFeeRural = parseFloat(localStorage.getItem('adminDeliveryFeeRural')) || 0;
+                document.getElementById('deliveryFeeCity').value = deliveryFeeCity || '';
+                document.getElementById('deliveryFeeRural').value = deliveryFeeRural || '';
+            }
+        })();
 
         function getDeliveryFee() {
             // Use city fee for min price calc (most common); rural available for other calcs
@@ -2713,6 +2744,13 @@
                                     <button class="btn btn-small btn-success" onclick="markShipped('${order.id}', '${order.customer_email}')">
                                         ✉️ Mark Shipped
                                     </button>
+                                    <button class="btn btn-small" style="background:#fff;color:#dc3545;border:1.5px solid #dc3545;" onclick="adminCancelOrder('${order.id}', '${order.customer_email}', '${(order.customer_name || '').replace(/'/g, "\\'")}')">
+                                        ✕ Cancel
+                                    </button>
+                                ` : order.status === 'cancelled' ? `
+                                    <button class="btn btn-small" disabled style="background:#f8d7da;color:#721c24;">
+                                        ✕ Cancelled
+                                    </button>
                                 ` : `
                                     <button class="btn btn-small" disabled style="background:#d4edda;color:#155724;">
                                         ✓ Shipped
@@ -2987,6 +3025,43 @@
     }
 }
         
+        async function adminCancelOrder(orderId, customerEmail, customerName) {
+            const reason = prompt('Cancel reason (optional):\nCustomer request / Out of stock / Fraud / Other');
+            if (reason === null) return; // User clicked Cancel on prompt
+            if (!confirm('Cancel this order and issue a full refund to ' + customerEmail + '?')) return;
+
+            try {
+                const response = await adminFetch('/api/admin/cancel-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        reason: reason || 'Admin cancelled',
+                        customer_email: customerEmail,
+                        customer_name: customerName
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update local state
+                    orders = orders.map(o => o.id === orderId ? {...o, status: 'cancelled'} : o);
+                    applyFilters();
+
+                    let msg = 'Order cancelled.';
+                    if (data.refund) msg += ' Refund issued.';
+                    if (data.email_sent) msg += ' Email sent to ' + customerEmail + '.';
+                    else if (data.email_error) msg += ' Email failed: ' + data.email_error;
+                    alert(msg);
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
         // ─── Analytics ─────────────────────────────────────────
         let analyticsOrders = [];
         let analyticsLoaded = false;
