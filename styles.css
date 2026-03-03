@@ -2992,7 +2992,7 @@ footer p {
 }
 
 .mobile-add-to-cart {
-  height: auto;
+  height: 36px;
   width: 100%;
   padding: 6px 0.67rem;
   background: #e07856;
