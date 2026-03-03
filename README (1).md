@@ -155,12 +155,8 @@ Or with auto-login:
 https://your-site.pages.dev/admin.html?key=YOUR_ADMIN_KEY
 ```
 
-### Default Admin Key
-```
-Sy$tem88
-```
-
-⚠️ **Change this in production!** Edit the `ADMIN_KEY` constant in:
+### Admin Key
+Set your `ADMIN_KEY` as an environment variable or update the constant in:
 - `/admin.html`
 - `/functions/api/admin/product.js`
 - `/functions/api/admin/restock.js`
