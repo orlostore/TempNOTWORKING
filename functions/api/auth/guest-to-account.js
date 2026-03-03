@@ -83,7 +83,8 @@ export async function onRequestPost(context) {
         // 7. Send email with temp password + verify link
         if (env.RESEND_API_KEY) {
             try {
-                const verifyUrl = `https://orlostore.com/verify-email.html?token=${verificationToken}`;
+                const origin = new URL(request.url).origin;
+                const verifyUrl = `${origin}/verify-email.html?token=${verificationToken}`;
 
                 await fetch('https://api.resend.com/emails', {
                     method: 'POST',
