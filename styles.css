@@ -4221,7 +4221,7 @@ footer p {
    so drop the tooltip closer to the button */
 @media (max-width: 514.56px) {
   .grid-limit-tooltip {
-    bottom: 55px;
+    bottom: 75px;
   }
 }
 
