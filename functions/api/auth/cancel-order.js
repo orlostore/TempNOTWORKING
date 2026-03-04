@@ -173,6 +173,9 @@ export async function onRequestPost(context) {
             .bind(orderId, customer.id).run();
 
         // Send cancellation confirmation email
+        let emailSent = false;
+        let emailError = null;
+
         if (env.RESEND_API_KEY && customer.email) {
             try {
                 const origin = new URL(request.url).origin;
@@ -197,20 +200,31 @@ export async function onRequestPost(context) {
                     infoTextAr: `تم بدء استرداد مبلغ AED ${(session.amount_total / 100).toFixed(2)} كاملاً. سيظهر في حسابك خلال ٥-٧ أيام عمل.`,
                 });
 
-                await sendEmail({
+                const result = await sendEmail({
                     apiKey: env.RESEND_API_KEY,
                     to: customer.email,
                     subject: 'Order Cancelled & Refund Initiated | تم إلغاء الطلب وبدء الاسترداد',
                     html,
                     text,
                 });
+
+                emailSent = result.success;
+                if (!result.success) {
+                    emailError = result.error;
+                    console.error('Cancellation email failed:', result.error, '| to:', customer.email, '| order:', orderId);
+                }
             } catch (emailErr) {
-                console.error('Cancellation email error:', emailErr);
+                emailError = emailErr.message;
+                console.error('Cancellation email error:', emailErr, '| to:', customer.email, '| order:', orderId);
             }
+        } else {
+            console.error('Cancellation email skipped: RESEND_API_KEY=' + (env.RESEND_API_KEY ? 'set' : 'MISSING') + ', customer.email=' + (customer.email || 'MISSING') + ' | order:', orderId);
         }
 
         return Response.json({
             success: true,
+            email_sent: emailSent,
+            email_error: emailError,
             message: 'Order cancelled and refund of AED ' + (session.amount_total / 100).toFixed(2) + ' initiated. It will appear on your card within 5-7 business days.'
         });
 
