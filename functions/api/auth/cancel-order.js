@@ -50,12 +50,14 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'Order not found' }, { status: 404 });
         }
 
-        // Check if already cancelled
+        // Check if already cancelled (ensure table + column exist)
         await DB.prepare(`CREATE TABLE IF NOT EXISTS cancelled_orders (
             order_id TEXT PRIMARY KEY,
             cancelled_at TEXT DEFAULT (datetime('now')),
             customer_id INTEGER
         )`).run();
+        // Add customer_id column if table was created by an older schema
+        try { await DB.prepare('ALTER TABLE cancelled_orders ADD COLUMN customer_id INTEGER').run(); } catch(e) { /* already exists */ }
 
         const alreadyCancelled = await DB.prepare('SELECT order_id FROM cancelled_orders WHERE order_id = ?')
             .bind(orderId).first();
