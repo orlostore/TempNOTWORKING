@@ -1486,7 +1486,12 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    alert(data.message);
+                    let msg = data.message;
+                    if (data.email_sent === false) {
+                        msg += '\n\nNote: Confirmation email could not be sent. Please save this message for your records.';
+                        if (data.email_error) console.error('Email error:', data.email_error);
+                    }
+                    alert(msg);
                     loadOrders();
                 } else {
                     alert(data.error || 'Failed to cancel order');
