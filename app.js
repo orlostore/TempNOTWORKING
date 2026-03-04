@@ -338,8 +338,8 @@ function renderProducts(list, arabicMode) {
         let buttonHTML;
         if (outOfStock) {
             buttonHTML = arabicMode
-                ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`
-                : `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`;
+                ? `<button class="add-to-cart" disabled style="background:#999;border-color:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`
+                : `<button class="add-to-cart" disabled style="background:#999;border-color:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`;
         } else if (hasVariants) {
             buttonHTML = arabicMode
                 ? `<a href="product.html?product=${safeSlug}" class="view-options-btn">View Options<br><span class="arabic-text">عرض الخيارات</span></a>`
