@@ -1,6 +1,7 @@
 // Cloudflare Pages Function - Admin Process Return Request
 // Location: /functions/api/admin/process-return.js
 // Actions: approve, reject, refund
+// PUT: Admin-initiated return on behalf of customer
 
 import { getKey, getAdminUser, logActivity } from './_helpers.js';
 
@@ -242,5 +243,158 @@ export async function onRequestPost(context) {
     } catch (error) {
         console.error('Process return error:', error);
         return Response.json({ error: 'Failed to process return: ' + error.message }, { status: 500 });
+    }
+}
+
+// PUT: Admin-initiated return on behalf of customer
+export async function onRequestPut(context) {
+    const { env, request } = context;
+
+    const key = getKey(request);
+    const user = await getAdminUser(env, key);
+    if (!user) {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    try {
+        const { order_id, reason } = await request.json();
+
+        if (!order_id) {
+            return Response.json({ error: 'Order ID is required' }, { status: 400 });
+        }
+        if (!reason) {
+            return Response.json({ error: 'Reason is required' }, { status: 400 });
+        }
+
+        // Fetch order from Stripe to get customer info
+        const sessionRes = await fetch(`https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(order_id)}`, {
+            headers: { 'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}` }
+        });
+        const session = await sessionRes.json();
+
+        if (session.error) {
+            return Response.json({ error: 'Order not found in Stripe' }, { status: 404 });
+        }
+
+        if (session.payment_status !== 'paid') {
+            return Response.json({ error: 'Order is not paid' }, { status: 400 });
+        }
+
+        const customerEmail = session.customer_details?.email || session.customer_email || '';
+        const customerName = session.customer_details?.name || '';
+
+        // Check not already cancelled
+        try {
+            const cancelled = await env.DB.prepare('SELECT order_id FROM cancelled_orders WHERE order_id = ?')
+                .bind(order_id).first();
+            if (cancelled) {
+                return Response.json({ error: 'This order has already been cancelled' }, { status: 400 });
+            }
+        } catch (e) {}
+
+        // Ensure return_requests table exists
+        await env.DB.prepare(`CREATE TABLE IF NOT EXISTS return_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_id TEXT UNIQUE,
+            customer_id INTEGER,
+            customer_email TEXT,
+            customer_name TEXT,
+            reason TEXT,
+            status TEXT DEFAULT 'requested',
+            admin_note TEXT,
+            created_at TEXT DEFAULT (datetime('now')),
+            processed_at TEXT
+        )`).run();
+
+        // Check if return already exists
+        const existing = await env.DB.prepare('SELECT id, status FROM return_requests WHERE order_id = ?')
+            .bind(order_id).first();
+        if (existing) {
+            return Response.json({ error: 'A return request already exists for this order (status: ' + existing.status + ')' }, { status: 400 });
+        }
+
+        // Look up customer_id from customers table if they have an account
+        let customerId = null;
+        if (customerEmail) {
+            try {
+                const cust = await env.DB.prepare('SELECT id FROM customers WHERE email = ?')
+                    .bind(customerEmail.toLowerCase()).first();
+                if (cust) customerId = cust.id;
+            } catch (e) {}
+        }
+
+        // Insert return request (admin-initiated)
+        await env.DB.prepare(
+            'INSERT INTO return_requests (order_id, customer_id, customer_email, customer_name, reason, admin_note) VALUES (?, ?, ?, ?, ?, ?)'
+        ).bind(order_id, customerId, customerEmail, customerName, reason, 'Initiated by admin: ' + user.name).run();
+
+        // Send notification email to customer
+        if (env.RESEND_API_KEY && customerEmail) {
+            try {
+                await fetch('https://api.resend.com/emails', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        from: 'ORLO Store <noreply@orlostore.com>',
+                        to: customerEmail,
+                        subject: `Return Initiated for Order #${order_id.slice(-8).toUpperCase()} | تم بدء إرجاع طلبك`,
+                        html: `
+                            <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px;">
+                                <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+                                    <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 35px 30px; text-align: center;">
+                                        <img src="https://orlostore.com/logo.png" alt="ORLO Store" style="width: 65px; height: 65px; margin-bottom: 10px;">
+                                        <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1.5px;">ORLO STORE</div>
+                                    </div>
+                                    <div style="padding: 35px 30px; text-align: center;">
+                                        <div style="font-size: 48px; line-height: 1; margin-bottom: 15px;">🔄</div>
+                                        <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px;">Return Initiated</h2>
+                                        <p style="color: #555; font-size: 15px; line-height: 1.7;">
+                                            Hi ${customerName || 'there'}, a return has been initiated for your order #${order_id.slice(-8).toUpperCase()}.
+                                        </p>
+                                        <p style="color: #888; font-size: 14px; font-family: 'Almarai', Arial, sans-serif; direction: rtl;">
+                                            تم بدء عملية إرجاع لطلبك #${order_id.slice(-8).toUpperCase()}.
+                                        </p>
+                                        <div style="background: #f0f7ff; border-radius: 10px; padding: 18px 20px; margin: 20px 0; border-left: 3px solid #2c4a5c; text-align: left;">
+                                            <p style="margin: 0; font-size: 14px; color: #555;">
+                                                <strong>Reason:</strong> ${reason}
+                                            </p>
+                                            <p style="margin: 10px 0 0; font-size: 14px; color: #555;">
+                                                <strong>Next steps:</strong> Please ship the item back to us. Return shipping costs are the customer's responsibility as per our terms. Once we receive and inspect the item, we will process your refund.
+                                            </p>
+                                            <p style="margin: 8px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
+                                                يرجى شحن المنتج إلينا. تكاليف شحن الإرجاع على العميل. بمجرد استلامنا سنقوم بمعالجة الاسترداد.
+                                            </p>
+                                        </div>
+                                        <p style="color: #999; font-size: 12px; margin: 20px 0 0;">
+                                            Questions? Contact us at <a href="mailto:info@orlostore.com" style="color: #e07856;">info@orlostore.com</a>
+                                        </p>
+                                    </div>
+                                    <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eee;">
+                                        <p style="color: #aaa; font-size: 11px; margin: 0;">&copy; ORLO Store | info@orlostore.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                    })
+                });
+            } catch (mailErr) {
+                console.error('Admin return notification email error:', mailErr);
+            }
+        }
+
+        // Log activity
+        await logActivity(env, user.name, 'initiate_return', order_id, `Reason: ${reason} - ${customerEmail}`);
+
+        return Response.json({
+            success: true,
+            message: 'Return initiated for order #' + order_id.slice(-8).toUpperCase()
+        });
+
+    } catch (error) {
+        console.error('Admin initiate return error:', error);
+        return Response.json({ error: 'Failed to initiate return: ' + error.message }, { status: 500 });
     }
 }

@@ -2114,6 +2114,7 @@
                 document.getElementById('userManagementSection').style.display = '';
             }
             loadProducts();
+            loadDeliveryFees();
             initBrowserNotifications();
         }
 
@@ -2414,8 +2415,8 @@
             }, 500);
         }
 
-        // Load saved values from D1 on init
-        (async function loadDeliveryFees() {
+        // Load saved values from D1 (called after auth in showAdmin)
+        async function loadDeliveryFees() {
             try {
                 const res = await adminFetch('/api/admin/settings');
                 const data = await res.json();
@@ -2433,7 +2434,7 @@
                 document.getElementById('deliveryFeeCity').value = deliveryFeeCity || '';
                 document.getElementById('deliveryFeeRural').value = deliveryFeeRural || '';
             }
-        })();
+        }
 
         function getDeliveryFee() {
             // Use city fee for min price calc (most common); rural available for other calcs
@@ -3096,6 +3097,11 @@
                                     <button class="btn btn-small" disabled style="background:#d4edda;color:#155724;">
                                         ✓ Shipped
                                     </button>
+                                    ${!order.return_request ? `
+                                    <button class="btn btn-small" style="background:#fff;color:#e07856;border:1.5px solid #e07856;" onclick="adminInitiateReturn('${order.id}', '${(order.customer_name || '').replace(/'/g, "\\'")}')">
+                                        🔄 Initiate Return
+                                    </button>
+                                    ` : ''}
                                 `}
                             </div>
                             ${order.return_request ? `
@@ -3465,6 +3471,61 @@
                     if (data.refund) msg += ' Refund issued.';
                     if (data.email_sent) msg += ' Customer notified.';
                     showToast(msg, 'success', 5000);
+                } else {
+                    showToast('Error: ' + (data.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        // ─── Admin Initiate Return ──────────────────────────────
+        async function adminInitiateReturn(orderId, customerName) {
+            const reasons = [
+                'Customer contacted via WhatsApp/email',
+                'Wrong item shipped',
+                'Damaged during shipping',
+                'Defective product',
+                'Customer request (other)'
+            ];
+
+            const result = await showConfirm(
+                'Initiate Return',
+                `Initiate a return for ${customerName || 'this customer'}?\n\nSelect a reason:`,
+                {
+                    icon: '🔄',
+                    input: true,
+                    inputPlaceholder: 'e.g. Customer contacted via WhatsApp — wrong size',
+                    okText: 'Initiate Return',
+                    okClass: 'btn-warning'
+                }
+            );
+            if (result === null) return;
+            const reason = (typeof result === 'string' ? result : '').trim();
+            if (!reason) {
+                showToast('Please provide a reason', 'error');
+                return;
+            }
+
+            try {
+                const response = await adminFetch('/api/admin/process-return', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_id: orderId, reason })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update local order data
+                    orders = orders.map(o => {
+                        if (o.id === orderId) {
+                            return { ...o, return_request: { status: 'requested', reason: reason } };
+                        }
+                        return o;
+                    });
+                    applyFilters();
+                    showToast('Return initiated. Customer notified.', 'success', 5000);
                 } else {
                     showToast('Error: ' + (data.error || 'Unknown error'), 'error');
                 }
