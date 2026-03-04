@@ -54,9 +54,13 @@ export async function onRequestGet(context) {
         const completedSessions = (stripeData.data || []).filter(
             session => session.payment_status === 'paid'
         );
-        // Get shipped orders from D1
-const { results: shippedRows } = await DB.prepare('SELECT order_id FROM shipped_orders').all();
+        // Get shipped orders from D1 (with shipped_at for return window)
+const { results: shippedRows } = await DB.prepare('SELECT order_id, shipped_at FROM shipped_orders').all();
 const shippedIds = new Set(shippedRows.map(r => r.order_id));
+const shippedDates = {};
+for (const r of shippedRows) {
+    shippedDates[r.order_id] = r.shipped_at;
+}
 
         // Get cancelled orders from D1
         let cancelledIds = new Set();
@@ -103,7 +107,8 @@ const shippedIds = new Set(shippedRows.map(r => r.order_id));
                 currency: session.currency,
                 status: status,
                 items: items,
-                return_request: returnReq
+                return_request: returnReq,
+                shipped_at: shippedDates[session.id] || null
             };
         });
         

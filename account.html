@@ -1389,13 +1389,24 @@
                                         <span class="return-status-label ${statusClass}">${statusLabels[rs] || rs}</span>
                                     </div>`;
                             } else {
-                                footerHtml += `
-                                    <div class="order-footer">
-                                        <button class="return-request-btn" onclick="openReturnModal('${order.id}')">
-                                            Request Return | طلب إرجاع
-                                        </button>
-                                        <span></span>
-                                    </div>`;
+                                // Check 7-day return window
+                                const shippedAt = order.shipped_at ? new Date(order.shipped_at).getTime() : null;
+                                const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+                                const withinWindow = shippedAt ? (Date.now() - shippedAt < sevenDaysMs) : true;
+
+                                if (withinWindow) {
+                                    const daysLeft = shippedAt ? Math.ceil((sevenDaysMs - (Date.now() - shippedAt)) / (24 * 60 * 60 * 1000)) : '?';
+                                    footerHtml += `
+                                        <div class="order-footer">
+                                            <div>
+                                                <button class="return-request-btn" onclick="openReturnModal('${order.id}')">
+                                                    Request Return | طلب إرجاع
+                                                </button>
+                                                <div class="cancel-timer">${daysLeft} day${daysLeft !== 1 ? 's' : ''} left to request return</div>
+                                            </div>
+                                            <span></span>
+                                        </div>`;
+                                }
                             }
                         }
 
