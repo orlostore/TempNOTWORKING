@@ -1,25 +1,16 @@
 // Cloudflare Pages Function - Mark Order as Shipped + Send Email via Resend
 // Location: /functions/api/admin/ship-order.js
 
-function safeCompare(a, b) {
-    if (typeof a !== 'string' || typeof b !== 'string') return false;
-    const encoder = new TextEncoder();
-    const aBuf = encoder.encode(a);
-    const bBuf = encoder.encode(b);
-    if (aBuf.length !== bBuf.length) return false;
-    let result = 0;
-    for (let i = 0; i < aBuf.length; i++) result |= aBuf[i] ^ bBuf[i];
-    return result === 0;
-}
+import { getKey, getAdminUser, logActivity } from './_helpers.js';
 
 export async function onRequestPost(context) {
     const { env, request } = context;
 
     try {
-        const authHeader = request.headers.get('Authorization');
-        const key = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+        const key = getKey(request);
+        const user = await getAdminUser(env, key);
 
-        if (!safeCompare(key, env.ADMIN_KEY)) {
+        if (!user) {
             return Response.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -29,7 +20,7 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'Missing order_id or customer_email' }, { status: 400 });
         }
 
-        // 1. Save shipped status to D1 (optional — skip if DB not configured)
+        // 1. Save shipped status to D1
         if (env.DB) {
             try {
                 await env.DB.prepare(`
@@ -41,10 +32,9 @@ export async function onRequestPost(context) {
             }
         }
 
-        // 2. Update Stripe PaymentIntent metadata (sessions can't be updated, but PaymentIntents can)
+        // 2. Update Stripe PaymentIntent metadata
         if (env.STRIPE_SECRET_KEY) {
             try {
-                // First, get the payment_intent ID from the checkout session
                 const sessionRes = await fetch(`https://api.stripe.com/v1/checkout/sessions/${order_id}`, {
                     headers: { 'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}` }
                 });
@@ -74,9 +64,7 @@ export async function onRequestPost(context) {
             const itemsList = (items || [])
                 .filter(i => !i.name.toLowerCase().includes('delivery'))
                 .map(i => {
-                    // Name comes from checkout.js as "Product Name — Variant" — already clean
                     const name = (i.name || 'Item').split(/[\n\r]/)[0].trim();
-                    // Split into product name and variant on the em dash
                     const parts = name.split(' — ');
                     const productName = parts[0] || name;
                     const variant = parts[1] || '';
@@ -163,6 +151,9 @@ export async function onRequestPost(context) {
         } else {
             emailError = 'RESEND_API_KEY not configured';
         }
+
+        // 4. Log activity
+        await logActivity(env, user.name, 'ship_order', order_id, `Shipped to ${customer_email}`);
 
         return Response.json({
             success: true,

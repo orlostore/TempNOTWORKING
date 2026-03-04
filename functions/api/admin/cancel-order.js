@@ -1,25 +1,16 @@
 // Cloudflare Pages Function - Admin Cancel Order + Stripe Refund + Email
 // Location: /functions/api/admin/cancel-order.js
 
-function safeCompare(a, b) {
-    if (typeof a !== 'string' || typeof b !== 'string') return false;
-    const encoder = new TextEncoder();
-    const aBuf = encoder.encode(a);
-    const bBuf = encoder.encode(b);
-    if (aBuf.length !== bBuf.length) return false;
-    let result = 0;
-    for (let i = 0; i < aBuf.length; i++) result |= aBuf[i] ^ bBuf[i];
-    return result === 0;
-}
+import { getKey, getAdminUser, logActivity } from './_helpers.js';
 
 export async function onRequestPost(context) {
     const { env, request } = context;
 
     try {
-        const authHeader = request.headers.get('Authorization');
-        const key = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+        const key = getKey(request);
+        const user = await getAdminUser(env, key);
 
-        if (!safeCompare(key, env.ADMIN_KEY)) {
+        if (!user) {
             return Response.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -83,8 +74,8 @@ export async function onRequestPost(context) {
 
                 await env.DB.prepare(`
                     INSERT OR REPLACE INTO cancelled_orders (order_id, cancelled_at, reason, cancelled_by)
-                    VALUES (?, datetime('now'), ?, 'admin')
-                `).bind(order_id, reason || 'Admin cancelled').run();
+                    VALUES (?, datetime('now'), ?, ?)
+                `).bind(order_id, reason || 'Admin cancelled', user.name).run();
 
                 // Restore inventory
                 try {
@@ -99,12 +90,10 @@ export async function onRequestPost(context) {
                         const variantName = name[1] || null;
 
                         if (productName && !productName.toLowerCase().includes('delivery')) {
-                            // Restore main product quantity
                             await env.DB.prepare(`
                                 UPDATE products SET quantity = quantity + ? WHERE name = ?
                             `).bind(item.quantity, productName).run();
 
-                            // Restore variant quantity if applicable
                             if (variantName) {
                                 await env.DB.prepare(`
                                     UPDATE product_variants SET quantity = quantity + ?
@@ -183,6 +172,9 @@ export async function onRequestPost(context) {
                 emailError = mailErr.message;
             }
         }
+
+        // 4. Log activity
+        await logActivity(env, user.name, 'cancel_order', order_id, `Cancelled: ${reason || 'No reason'} - ${customer_email}`);
 
         return Response.json({
             success: true,
