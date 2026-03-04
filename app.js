@@ -1585,6 +1585,9 @@ async function checkout() {
 
         if (data.url) {
             sessionStorage.setItem('orlo_checkout_pending', '1');
+            // Hide page + replace history entry so browser back goes to cancel.html, not product page
+            document.documentElement.style.visibility = 'hidden';
+            try { history.replaceState(null, '', 'cancel.html'); } catch(e) {}
             window.location.href = data.url;
         } else {
             throw new Error('No URL');
