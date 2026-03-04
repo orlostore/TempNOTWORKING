@@ -1436,6 +1436,16 @@
                         <option value="free">Free Delivery</option>
                     </select>
                 </div>
+                <div class="filter-group">
+                    <label>📋 Status</label>
+                    <select id="statusFilter" onchange="applyFilters()">
+                        <option value="all">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="return_requested">Return Requested</option>
+                    </select>
+                </div>
                 <button class="btn btn-primary btn-small" onclick="loadOrders()">🔄 Refresh</button>
                 <button class="btn btn-small btn-outline" onclick="exportOrdersCSV()">📥 Export CSV</button>
                 <div class="last-refreshed" id="ordersLastRefreshed" style="display:none;">
@@ -2870,10 +2880,11 @@
             const dateFilter = document.getElementById('dateFilter').value;
             const productFilter = document.getElementById('productFilter').value;
             const shippingFilter = document.getElementById('shippingFilter').value;
-            
+            const statusFilter = document.getElementById('statusFilter').value;
+
             const now = new Date();
             let startDate = new Date(0); // Beginning of time
-            
+
             if (dateFilter === 'today') {
                 startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             } else if (dateFilter === 'week') {
@@ -2883,21 +2894,30 @@
             } else if (dateFilter === 'year') {
                 startDate = new Date(now.getFullYear(), 0, 1);
             }
-            
+
             filteredOrders = orders.filter(order => {
                 const orderDate = new Date(order.created * 1000);
                 if (orderDate < startDate) return false;
-                
+
                 // Shipping filter
                 if (shippingFilter === 'paid' && order.shipping_amount === 0) return false;
                 if (shippingFilter === 'free' && order.shipping_amount > 0) return false;
-                
+
                 // Product filter - exact match on item name
                 if (productFilter !== 'all') {
                     const hasProduct = order.items.some(item => item.name === productFilter);
                     if (!hasProduct) return false;
                 }
-                
+
+                // Status filter
+                if (statusFilter !== 'all') {
+                    if (statusFilter === 'return_requested') {
+                        if (!order.return_request) return false;
+                    } else {
+                        if (order.status !== statusFilter) return false;
+                    }
+                }
+
                 return true;
             });
             
@@ -3078,6 +3098,26 @@
                                     </button>
                                 `}
                             </div>
+                            ${order.return_request ? `
+                            <div style="background:${order.return_request.status === 'requested' ? '#fff8f0' : order.return_request.status === 'approved' ? '#f0fff4' : order.return_request.status === 'refunded' ? '#f0f7ff' : '#fff0f0'};border-top:2px solid ${order.return_request.status === 'requested' ? '#e07856' : order.return_request.status === 'approved' ? '#28a745' : order.return_request.status === 'refunded' ? '#004085' : '#dc3545'};padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+                                <div>
+                                    <span style="font-weight:700;font-size:0.85rem;color:#333;">🔄 Return ${order.return_request.status.charAt(0).toUpperCase() + order.return_request.status.slice(1)}</span>
+                                    <span style="font-size:0.8rem;color:#666;margin-left:10px;">Reason: ${order.return_request.reason}</span>
+                                </div>
+                                <div style="display:flex;gap:8px;">
+                                    ${order.return_request.status === 'requested' ? `
+                                        <button class="btn btn-small btn-success" onclick="processReturn('${order.id}', 'approve')">✓ Approve</button>
+                                        <button class="btn btn-small" style="background:#fff;color:#dc3545;border:1.5px solid #dc3545;" onclick="processReturn('${order.id}', 'reject')">✕ Reject</button>
+                                    ` : order.return_request.status === 'approved' ? `
+                                        <button class="btn btn-small" style="background:#004085;color:white;" onclick="processReturn('${order.id}', 'refund')">💸 Issue Refund</button>
+                                    ` : order.return_request.status === 'refunded' ? `
+                                        <span style="font-size:0.8rem;color:#004085;font-weight:600;">Refund issued</span>
+                                    ` : `
+                                        <span style="font-size:0.8rem;color:#dc3545;font-weight:600;">Rejected</span>
+                                    `}
+                                </div>
+                            </div>
+                            ` : ''}
                         </div>
                     </div>
                 `;
@@ -3376,6 +3416,55 @@
                     if (data.email_sent) msg += ' Email sent to ' + customerEmail + '.';
                     showToast(msg, 'success', 6000);
                     if (!data.email_sent && data.email_error) showToast('Email failed: ' + data.email_error, 'warning');
+                } else {
+                    showToast('Error: ' + (data.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        // ─── Process Return ──────────────────────────────────
+        async function processReturn(orderId, action) {
+            const actionLabels = { approve: 'Approve Return', reject: 'Reject Return', refund: 'Issue Refund' };
+            const actionIcons = { approve: '✅', reject: '❌', refund: '💸' };
+
+            let note = '';
+            if (action === 'reject') {
+                const result = await showConfirm('Reject Return', 'Enter a reason for rejecting:', { icon: '❌', input: true, inputPlaceholder: 'e.g. Outside return window / Item not eligible', okText: 'Reject', okClass: 'btn-danger' });
+                if (result === null) return;
+                note = typeof result === 'string' ? result : '';
+            } else if (action === 'refund') {
+                const ok = await showConfirm('Issue Refund', 'Issue a full refund for this returned order?', { icon: '💸', okText: 'Yes, Refund', okClass: 'btn-success' });
+                if (!ok) return;
+            } else {
+                const ok = await showConfirm('Approve Return', 'Approve this return request? Customer will be notified to ship the item back.', { icon: '✅', okText: 'Approve', okClass: 'btn-success' });
+                if (!ok) return;
+            }
+
+            try {
+                const response = await adminFetch('/api/admin/process-return', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_id: orderId, action, note })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update local order data
+                    orders = orders.map(o => {
+                        if (o.id === orderId) {
+                            return { ...o, return_request: { ...o.return_request, status: data.status } };
+                        }
+                        return o;
+                    });
+                    applyFilters();
+
+                    let msg = actionLabels[action] + ' done.';
+                    if (data.refund) msg += ' Refund issued.';
+                    if (data.email_sent) msg += ' Customer notified.';
+                    showToast(msg, 'success', 5000);
                 } else {
                     showToast('Error: ' + (data.error || 'Unknown error'), 'error');
                 }

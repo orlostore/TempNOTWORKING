@@ -67,6 +67,17 @@ const shippedIds = new Set(shippedRows.map(r => r.order_id));
             // Table may not exist yet
         }
 
+        // Get return requests from D1
+        let returnRequests = {};
+        try {
+            const { results: returnRows } = await DB.prepare('SELECT order_id, status, reason FROM return_requests').all();
+            for (const r of returnRows) {
+                returnRequests[r.order_id] = { status: r.status, reason: r.reason };
+            }
+        } catch (e) {
+            // Table may not exist yet
+        }
+
         // Format orders
         const orders = completedSessions.map(session => {
             const items = session.line_items?.data?.map(item => ({
@@ -82,13 +93,17 @@ const shippedIds = new Set(shippedRows.map(r => r.order_id));
                 status = 'shipped';
             }
 
+            // Check for return request
+            const returnReq = returnRequests[session.id] || null;
+
             return {
                 id: session.id,
                 created: session.created,
                 amount_total: session.amount_total,
                 currency: session.currency,
                 status: status,
-                items: items
+                items: items,
+                return_request: returnReq
             };
         });
         

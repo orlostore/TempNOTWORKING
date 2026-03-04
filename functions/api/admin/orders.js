@@ -63,6 +63,25 @@ export async function onRequestGet(context) {
             } catch (dbError) {
                 // Table may not exist yet
             }
+
+            // Get return requests
+            let returnRequests = {};
+            try {
+                const { results } = await env.DB.prepare(
+                    'SELECT order_id, status, reason, customer_name, customer_email, created_at FROM return_requests'
+                ).all();
+                for (const row of results) {
+                    returnRequests[row.order_id] = {
+                        status: row.status,
+                        reason: row.reason,
+                        customer_name: row.customer_name,
+                        customer_email: row.customer_email,
+                        created_at: row.created_at
+                    };
+                }
+            } catch (dbError) {
+                // Table may not exist yet
+            }
         }
 
         // Fetch checkout sessions from Stripe (last 100), expand payment_intent for shipped metadata
@@ -119,7 +138,8 @@ export async function onRequestGet(context) {
                         amount: item.amount_total
                     })),
                     metadata: session.metadata || {},
-                    status: cancelledOrderIds.has(session.id) ? 'cancelled' : isShipped ? 'shipped' : 'pending'
+                    status: cancelledOrderIds.has(session.id) ? 'cancelled' : isShipped ? 'shipped' : 'pending',
+                    return_request: returnRequests[session.id] || null
                 };
             }));
 
