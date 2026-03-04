@@ -3341,44 +3341,51 @@
             const shipping = (order.shipping_amount || 0) / 100;
             const total = order.amount_total / 100;
 
-            const itemsRows = productItems.map(item => `
+            const itemsRows = productItems.map(item => {
+                const parts = (item.name || '').split(' — ');
+                const productName = parts[0] || item.name;
+                const variant = parts[1] || '';
+                return `
                 <tr>
-                    <td style="padding:4px 0;border-bottom:1px solid #eee;">${item.name}</td>
-                    <td style="padding:4px 0;border-bottom:1px solid #eee;text-align:center;">${item.quantity}</td>
-                    <td style="padding:4px 0;border-bottom:1px solid #eee;text-align:right;">AED ${(item.amount / 100).toFixed(2)}</td>
-                </tr>
-            `).join('');
+                    <td style="padding:5px 0;border-bottom:1px solid #eee;">${productName}${variant ? `<br><span style="font-size:10px;color:#888;">${variant}</span>` : ''}</td>
+                    <td style="padding:5px 0;border-bottom:1px solid #eee;text-align:center;">${item.quantity}</td>
+                    <td style="padding:5px 0;border-bottom:1px solid #eee;text-align:right;">AED ${(item.amount / 100).toFixed(2)}</td>
+                </tr>`;
+            }).join('');
 
             const win = window.open('', '_blank');
             win.document.write(`<!DOCTYPE html>
 <html>
 <head>
 <title>Packing Slip - ${order.id.slice(-8).toUpperCase()}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
     @page { size: A5; margin: 8mm; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; color: #333; margin: 0; padding: 10px; max-width: 100%; }
-    .header { text-align: center; border-bottom: 2px solid #2c4a5c; padding-bottom: 8px; margin-bottom: 10px; }
+    body { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; color: #333; margin: 0; padding: 10px; max-width: 100%; }
+    .accent-bar { height: 3px; background: linear-gradient(90deg, #2c4a5c 0%, #e07856 100%); margin-bottom: 10px; border-radius: 2px; }
+    .header { text-align: center; padding-bottom: 8px; margin-bottom: 10px; border-bottom: 1px solid #eee; }
     .header img { width: 40px; height: 40px; }
-    .header h2 { margin: 3px 0 0; color: #2c4a5c; font-size: 13px; letter-spacing: 2px; }
+    .header h2 { margin: 3px 0 0; color: #2c4a5c; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
     .meta { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 11px; }
-    .section-title { font-size: 9px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-bottom: 3px; }
-    .customer-name { font-weight: 600; font-size: 12px; }
+    .section-title { font-size: 9px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-bottom: 3px; font-weight: 600; }
+    .customer-name { font-weight: 600; font-size: 12px; color: #2c4a5c; }
     .customer-details { font-size: 11px; color: #555; line-height: 1.4; }
     table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 11px; }
-    th { text-align: left; padding: 5px 0; border-bottom: 2px solid #2c4a5c; font-size: 9px; text-transform: uppercase; color: #999; letter-spacing: 1px; }
+    th { text-align: left; padding: 5px 0; border-bottom: 2px solid #2c4a5c; font-size: 9px; text-transform: uppercase; color: #888; letter-spacing: 1px; font-weight: 600; }
     th:last-child { text-align: right; }
     th:nth-child(2) { text-align: center; }
-    .totals td { border-bottom: none; padding: 3px 0; font-size: 11px; }
-    .totals .total-row { font-weight: 700; font-size: 13px; border-top: 2px solid #2c4a5c; padding-top: 5px; }
+    .totals td { border-bottom: none; padding: 3px 0; font-size: 11px; color: #555; }
+    .totals .total-row { font-weight: 700; font-size: 13px; color: #2c4a5c; border-top: 2px solid #2c4a5c; padding-top: 5px; }
     .footer { text-align: center; margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; }
     .footer .thanks { font-size: 11px; color: #2c4a5c; line-height: 1.5; }
     .footer .thanks-ar { font-size: 10px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; margin-top: 5px; line-height: 1.5; }
     .footer .heart-icon { vertical-align: middle; margin: 0 1px; }
-    .footer .site { font-size: 9px; color: #aaa; margin-top: 6px; }
-    @media print { body { padding: 0; } }
+    .footer .site { font-size: 9px; color: #e07856; margin-top: 6px; font-weight: 600; }
+    @media print { body { padding: 0; } .accent-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
 </style>
 </head>
 <body>
+    <div class="accent-bar"></div>
     <div class="header">
         <img src="/logo.png" alt="ORLO">
         <h2>ORLO STORE</h2>
