@@ -13,7 +13,7 @@
  * @param {string} [options.infoBoxEn] - English info box content
  * @param {string} [options.infoBoxAr] - Arabic info box content (RTL)
  * @param {string} [options.infoBoxBorder] - Info box left border color (default: brand blue)
- * @param {string} [options.infoBoxBg] - Info box background color (default: #f0f7ff)
+ * @param {string} [options.infoBoxBg] - Info box background color (default: #ececec)
  * @param {string} [options.ctaUrl] - CTA button URL
  * @param {string} [options.ctaText] - CTA button text
  * @param {string} [options.ctaColor] - CTA button color (default: brand orange)
@@ -31,7 +31,7 @@ export function customerEmail({
     infoBoxEn,
     infoBoxAr,
     infoBoxBorder = '#2c4a5c',
-    infoBoxBg = '#f0f7ff',
+    infoBoxBg = '#ececec',
     ctaUrl,
     ctaText,
     ctaColor = '#e07856',
