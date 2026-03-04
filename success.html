@@ -490,8 +490,14 @@
         var sessionId = urlParams.get('session_id');
 
         // Read cart BEFORE clearing — used for GA4 + order summary display
+        // Falls back to sessionStorage backup in case localStorage was cleared during Stripe redirect
         var cartData = [];
-        try { cartData = JSON.parse(localStorage.getItem('cart') || '[]'); } catch(e) {}
+        try {
+            cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (!cartData.length) {
+                cartData = JSON.parse(sessionStorage.getItem('orlo_cart_backup') || '[]');
+            }
+        } catch(e) {}
 
         // GA4: track purchase conversion — deduplicated, fires only once per session_id
         if (sessionId && typeof gtag === 'function') {
@@ -587,6 +593,7 @@
 
         // Clear cart AFTER rendering summary + GA4
         localStorage.removeItem('cart');
+        sessionStorage.removeItem('orlo_cart_backup');
 
         // Guest-to-account flow
         var existingToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
