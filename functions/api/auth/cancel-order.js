@@ -211,7 +211,7 @@ export async function onRequestPost(context) {
 
         return Response.json({
             success: true,
-            message: 'Order cancelled and refund initiated. It will appear on your card within 5-7 business days.'
+            message: 'Order cancelled and refund of AED ' + (session.amount_total / 100).toFixed(2) + ' initiated. It will appear on your card within 5-7 business days.'
         });
 
     } catch (error) {
