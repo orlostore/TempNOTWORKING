@@ -54,15 +54,30 @@ export async function onRequestGet(context) {
         const completedSessions = (stripeData.data || []).filter(
             session => session.payment_status === 'paid'
         );
-        // Get shipped orders from D1
-const { results: shippedRows } = await DB.prepare('SELECT order_id FROM shipped_orders').all();
+        // Get shipped orders from D1 (with shipped_at for return window)
+const { results: shippedRows } = await DB.prepare('SELECT order_id, shipped_at FROM shipped_orders').all();
 const shippedIds = new Set(shippedRows.map(r => r.order_id));
+const shippedDates = {};
+for (const r of shippedRows) {
+    shippedDates[r.order_id] = r.shipped_at;
+}
 
         // Get cancelled orders from D1
         let cancelledIds = new Set();
         try {
             const { results: cancelledRows } = await DB.prepare('SELECT order_id FROM cancelled_orders').all();
             cancelledIds = new Set(cancelledRows.map(r => r.order_id));
+        } catch (e) {
+            // Table may not exist yet
+        }
+
+        // Get return requests from D1
+        let returnRequests = {};
+        try {
+            const { results: returnRows } = await DB.prepare('SELECT order_id, status, reason FROM return_requests').all();
+            for (const r of returnRows) {
+                returnRequests[r.order_id] = { status: r.status, reason: r.reason };
+            }
         } catch (e) {
             // Table may not exist yet
         }
@@ -82,13 +97,18 @@ const shippedIds = new Set(shippedRows.map(r => r.order_id));
                 status = 'shipped';
             }
 
+            // Check for return request
+            const returnReq = returnRequests[session.id] || null;
+
             return {
                 id: session.id,
                 created: session.created,
                 amount_total: session.amount_total,
                 currency: session.currency,
                 status: status,
-                items: items
+                items: items,
+                return_request: returnReq,
+                shipped_at: shippedDates[session.id] || null
             };
         });
         

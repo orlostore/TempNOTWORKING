@@ -257,6 +257,140 @@
             color: #999;
             font-style: italic;
         }
+
+        .return-request-btn {
+            font-family: 'Inter', sans-serif;
+            background: none;
+            border: 1.5px solid #e07856;
+            color: #e07856;
+            padding: 5px 14px;
+            border-radius: 8px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .return-request-btn:hover { background: #e07856; color: white; }
+        .return-request-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .return-status-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+        .return-status-label.requested { color: #856404; }
+        .return-status-label.approved { color: #155724; }
+        .return-status-label.refunded { color: #004085; }
+        .return-status-label.rejected { color: #721c24; }
+
+        .order-status.return_requested { background: #fff3cd; color: #856404; }
+        .order-status.return_approved { background: #d4edda; color: #155724; }
+        .order-status.refunded { background: #cce5ff; color: #004085; }
+
+        /* Return Modal */
+        .return-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .return-modal-overlay.active { display: flex; }
+        .return-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 460px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .return-modal h3 {
+            font-size: 1.1rem;
+            color: #2c4a5c;
+            margin-bottom: 20px;
+        }
+        .return-modal label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        .return-modal select,
+        .return-modal textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 16px;
+        }
+        .return-modal select:focus,
+        .return-modal textarea:focus {
+            outline: none;
+            border-color: #2c4a5c;
+        }
+        .return-shipping-notice {
+            background: #fff8f0;
+            border: 1.5px solid #e07856;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            font-size: 0.8rem;
+            color: #333;
+            line-height: 1.5;
+        }
+        .return-shipping-notice strong { color: #e07856; }
+        .return-checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .return-checkbox-row input[type="checkbox"] {
+            margin-top: 3px;
+            accent-color: #2c4a5c;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        .return-checkbox-row label {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+        .return-modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .return-modal-actions button {
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .return-cancel-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+        .return-submit-btn {
+            background: #e07856;
+            color: white;
+        }
+        .return-submit-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
         
         .order-body { padding: 15px 20px; }
         .order-products { margin-bottom: 15px; }
@@ -980,6 +1114,42 @@
     </div>
     
     <!-- Add Address Modal -->
+    <!-- Return Request Modal -->
+    <div class="return-modal-overlay" id="returnModal">
+        <div class="return-modal">
+            <h3>Request Return <span class="arabic-text" style="font-weight:400;font-size:0.85rem;">| طلب إرجاع</span></h3>
+            <input type="hidden" id="returnOrderId">
+
+            <label>Reason for return <span class="arabic-text">| سبب الإرجاع</span></label>
+            <select id="returnReason" onchange="document.getElementById('returnSubmitBtn').disabled = !this.value || !document.getElementById('returnShippingAck').checked">
+                <option value="">Select a reason...</option>
+                <option value="Defective / Damaged">Defective / Damaged | معيب / تالف</option>
+                <option value="Wrong item received">Wrong item received | تم استلام منتج خاطئ</option>
+                <option value="Changed my mind">Changed my mind | غيرت رأيي</option>
+                <option value="Not as described">Not as described | لا يطابق الوصف</option>
+                <option value="Other">Other | أخرى</option>
+            </select>
+
+            <div class="return-shipping-notice">
+                <strong>Important | مهم:</strong><br>
+                As per our terms & conditions, return shipping costs are the customer's responsibility. Please ship the item back to us once your return is approved.<br>
+                <span class="arabic-text" style="display:block;margin-top:8px;direction:rtl;text-align:right;">
+                    وفقاً للشروط والأحكام، تكاليف شحن الإرجاع يتحملها العميل. يرجى شحن المنتج إلينا بعد الموافقة على الإرجاع.
+                </span>
+            </div>
+
+            <div class="return-checkbox-row">
+                <input type="checkbox" id="returnShippingAck" onchange="document.getElementById('returnSubmitBtn').disabled = !this.checked || !document.getElementById('returnReason').value">
+                <label for="returnShippingAck">I understand that return shipping costs are my responsibility<br><span class="arabic-text" style="font-size:0.72rem;color:#888;">أفهم أن تكاليف شحن الإرجاع تقع على عاتقي</span></label>
+            </div>
+
+            <div class="return-modal-actions">
+                <button class="return-cancel-btn" onclick="closeReturnModal()">Cancel</button>
+                <button class="return-submit-btn" id="returnSubmitBtn" disabled onclick="submitReturnRequest()">Submit Request</button>
+            </div>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="addressModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1203,6 +1373,43 @@
                                 </div>`;
                         }
 
+                        // Return request button for shipped orders
+                        if (order.status === 'shipped') {
+                            if (order.return_request) {
+                                const rs = order.return_request.status;
+                                const statusLabels = {
+                                    requested: 'Return Requested — under review | طلب إرجاع قيد المراجعة',
+                                    approved: 'Return Approved — please ship item back | تمت الموافقة — يرجى إرجاع المنتج',
+                                    refunded: 'Refund Processed — 5-7 business days | تم الاسترداد — ٥-٧ أيام عمل',
+                                    rejected: 'Return Request Declined | تم رفض طلب الإرجاع'
+                                };
+                                const statusClass = rs === 'requested' ? 'requested' : rs === 'approved' ? 'approved' : rs === 'refunded' ? 'refunded' : 'rejected';
+                                footerHtml += `
+                                    <div class="order-footer">
+                                        <span class="return-status-label ${statusClass}">${statusLabels[rs] || rs}</span>
+                                    </div>`;
+                            } else {
+                                // Check 7-day return window
+                                const shippedAt = order.shipped_at ? new Date(order.shipped_at).getTime() : null;
+                                const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+                                const withinWindow = shippedAt ? (Date.now() - shippedAt < sevenDaysMs) : true;
+
+                                if (withinWindow) {
+                                    const daysLeft = shippedAt ? Math.ceil((sevenDaysMs - (Date.now() - shippedAt)) / (24 * 60 * 60 * 1000)) : '?';
+                                    footerHtml += `
+                                        <div class="order-footer">
+                                            <div>
+                                                <button class="return-request-btn" onclick="openReturnModal('${order.id}')">
+                                                    Request Return | طلب إرجاع
+                                                </button>
+                                                <div class="cancel-timer">${daysLeft} day${daysLeft !== 1 ? 's' : ''} left to request return</div>
+                                            </div>
+                                            <span></span>
+                                        </div>`;
+                                }
+                            }
+                        }
+
                         // Add reorder button for shipped/delivered/pending (non-cancelled) orders
                         if (order.status !== 'cancelled') {
                             const itemsJson = JSON.stringify(order.items).replace(/'/g, "\\'").replace(/"/g, '&quot;');
@@ -1292,6 +1499,61 @@
                 btn.textContent = 'Cancel Order';
             }
         }
+
+        // --- Return Request ---
+        function openReturnModal(orderId) {
+            document.getElementById('returnOrderId').value = orderId;
+            document.getElementById('returnReason').value = '';
+            document.getElementById('returnShippingAck').checked = false;
+            document.getElementById('returnSubmitBtn').disabled = true;
+            document.getElementById('returnModal').classList.add('active');
+        }
+
+        function closeReturnModal() {
+            document.getElementById('returnModal').classList.remove('active');
+        }
+
+        async function submitReturnRequest() {
+            const orderId = document.getElementById('returnOrderId').value;
+            const reason = document.getElementById('returnReason').value;
+            const btn = document.getElementById('returnSubmitBtn');
+
+            if (!reason) return alert('Please select a reason.');
+            if (!document.getElementById('returnShippingAck').checked) return alert('Please acknowledge the shipping cost policy.');
+
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+
+            try {
+                const res = await fetch('/api/auth/return-request', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ orderId, reason })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    closeReturnModal();
+                    alert(data.message);
+                    loadOrders();
+                } else {
+                    alert(data.error || 'Failed to submit return request');
+                    btn.textContent = 'Submit Request';
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                alert('Connection error. Please try again.');
+                btn.textContent = 'Submit Request';
+                btn.disabled = false;
+            }
+        }
+
+        // Close return modal when clicking outside
+        document.getElementById('returnModal').addEventListener('click', function(e) {
+            if (e.target === this) closeReturnModal();
+        });
 
         async function loadAddresses() {
             const container = document.getElementById('addressesContainer');
