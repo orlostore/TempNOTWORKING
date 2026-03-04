@@ -36,8 +36,8 @@
             width: 100%;
             max-width: 740px;
             background: white;
-            border-radius: 14px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(44,74,92,0.08), 0 1px 3px rgba(0,0,0,0.04);
             overflow: hidden;
             display: flex;
             opacity: 0;
@@ -50,7 +50,7 @@
         .left-panel {
             width: 240px;
             flex-shrink: 0;
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            background: linear-gradient(160deg, #2c4a5c 0%, #1a3242 60%, #162b3a 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -67,7 +67,18 @@
             right: -40%;
             width: 80%;
             height: 80%;
-            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(224,120,86,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -30%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
             pointer-events: none;
         }
 
