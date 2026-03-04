@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);min-height:100vh">
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-B5JQFPTZT7"></script>
@@ -18,11 +18,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
-    <style>html{opacity:0;transition:opacity .15s}</style>
-    <script>Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})</script>
-    <link rel="stylesheet" href="styles.css?v=8">
     <style>
-        .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -30,7 +28,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 80px 20px 20px;
+            padding: 20px;
         }
         .arabic-text { font-family: 'Almarai', sans-serif; direction: rtl; }
 
@@ -42,9 +40,11 @@
             box-shadow: 0 25px 80px rgba(0,0,0,0.1);
             overflow: hidden;
             display: flex;
-            animation: slideUp 0.5s ease-out;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .page-container.ready { opacity: 1; transform: translateY(0); }
 
         /* LEFT PANEL */
         .left-panel {
@@ -87,7 +87,7 @@
         }
         @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
 
-        .left-panel h2 {
+        .left-panel h1 {
             color: white;
             font-size: 1.2rem;
             font-weight: 700;
@@ -108,7 +108,7 @@
         }
 
         .left-panel .reassure {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.75);
             font-size: 0.8rem;
             text-align: center;
             line-height: 1.5;
@@ -123,6 +123,23 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #999;
+            text-decoration: none;
+            font-size: 0.78rem;
+            margin-bottom: 14px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #2c4a5c; }
+        .back-link svg {
+            width: 1em; height: 1em;
+            stroke: currentColor; fill: none;
+            stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
         }
 
         .info-card {
@@ -184,94 +201,70 @@
             }
 
             .cancel-icon { width: 55px; height: 55px; font-size: 1.6rem; margin-bottom: 10px; }
-            .left-panel h2 { font-size: 1.05rem; }
+            .left-panel h1 { font-size: 1.05rem; }
             .left-panel .ar-title { font-size: 0.85rem; margin-bottom: 8px; }
             .left-panel .reassure { font-size: 0.75rem; }
 
             .right-panel { padding: 18px 20px; }
             .btn-row { flex-direction: column; }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .page-container { opacity: 1; transform: none; }
+        }
     </style>
 </head>
 <body>
-<header>
-    <nav>
-        <div class="logo-container">
-            <a href="index.html"><img src="logo.png" class="logo-img" alt="ORLO Logo"></a>
-        </div>
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span><span></span><span></span>
-        </button>
-        <div class="mobile-cart-icon" id="mobileCartIcon">
-            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-            <span class="cart-count" id="mobileCartCount"></span>
-        </div>
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | البحث عن منتجات..." autocomplete="off">
-            <button class="search-btn" id="searchBtn"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            <div class="search-autocomplete" id="searchAutocomplete"></div>
-        </div>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
-            <li><a href="index.html#about">About<br><span class="arabic-text">من نحن</span></a></li>
-            <li><a href="index.html#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
-            <li><a href="index.html#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
-            <li><a href="login.html" id="accountLink" class="account-nav-link">Login<br><span class="arabic-text">دخول</span></a></li>
-            <li>
-                <div class="cart-icon" id="cartIcon">
-                    <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-                    <span class="cart-count" id="cartCount"></span>
-                </div>
-            </li>
-        </ul>
-    </nav>
-</header>
-<script>
-sessionStorage.removeItem('orlo_checkout_pending');
-(function(){
-    try { var c=JSON.parse(localStorage.getItem('cart')||'[]'); var n=c.reduce(function(s,i){return s+(i.quantity||0);},0); ['cartCount','mobileCartCount'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=n>0?n:'';}); } catch(e){}
-    var searchBtn=document.getElementById('searchBtn'),searchInput=document.getElementById('searchInput'),acIndex=-1;
-    function isAr(t){return /[\u0600-\u06FF]/.test(t);}
-    function doSearch(){var term=searchInput?searchInput.value.trim():'';var dd=document.getElementById('searchAutocomplete');if(dd)dd.classList.remove('active');if(term)window.location.href='index.html?search='+encodeURIComponent(term);}
-    function showAC(term){var dd=document.getElementById('searchAutocomplete');if(!dd||!term||term.length<1){if(dd){dd.classList.remove('active');dd.innerHTML='';}acIndex=-1;return;}if(typeof products==='undefined'||!products.length)return;var m=products.filter(function(p){return p.name.toLowerCase().indexOf(term)!==-1||(p.nameAr&&p.nameAr.indexOf(term)!==-1)||p.category.toLowerCase().indexOf(term)!==-1||(p.categoryAr&&p.categoryAr.indexOf(term)!==-1);}).slice(0,6);if(!m.length){dd.classList.remove('active');dd.innerHTML='';acIndex=-1;return;}var ar=isAr(term);dd.innerHTML=m.map(function(p,i){var img=p.image&&p.image.indexOf('http')===0?'<img src="'+p.image+'" alt="">':'';var dn=ar?(p.nameAr||p.name):p.name;return '<div class="autocomplete-item" data-index="'+i+'" data-slug="'+p.slug+'" data-name="'+dn+'"'+(ar?' dir="rtl"':'')+'>'+img+'<div class="autocomplete-item-info"><div class="autocomplete-item-name">'+(ar?'<span class="arabic-text">'+(p.nameAr||p.name)+'</span>':p.name)+'</div><div class="autocomplete-item-price">'+(ar?p.price+' د.إ':'AED '+p.price)+'</div></div></div>';}).join('');dd.classList.add('active');acIndex=-1;dd.querySelectorAll('.autocomplete-item').forEach(function(item){item.addEventListener('mousedown',function(e){e.preventDefault();searchInput.value=this.dataset.name;dd.classList.remove('active');doSearch();});});}
-    function navAC(dir){var dd=document.getElementById('searchAutocomplete');if(!dd)return;var items=dd.querySelectorAll('.autocomplete-item');if(!items.length)return;items.forEach(function(it){it.classList.remove('active');});acIndex+=dir;if(acIndex<0)acIndex=items.length-1;if(acIndex>=items.length)acIndex=0;items[acIndex].classList.add('active');searchInput.value=items[acIndex].dataset.name;}
-    if(searchBtn)searchBtn.addEventListener('click',doSearch);
-    if(searchInput){searchInput.addEventListener('input',function(){showAC(this.value.toLowerCase().trim());});searchInput.addEventListener('keydown',function(e){if(e.key==='ArrowDown'){e.preventDefault();navAC(1);}else if(e.key==='ArrowUp'){e.preventDefault();navAC(-1);}else if(e.key==='Enter'){e.preventDefault();doSearch();}else if(e.key==='Escape'){var dd=document.getElementById('searchAutocomplete');if(dd)dd.classList.remove('active');}});}
-    var hamburger=document.getElementById('hamburger'),navLinks=document.getElementById('navLinks');
-    if(hamburger&&navLinks){hamburger.addEventListener('click',function(){hamburger.classList.toggle('active');navLinks.classList.toggle('active');});navLinks.querySelectorAll('a').forEach(function(link){link.addEventListener('click',function(){hamburger.classList.remove('active');navLinks.classList.remove('active');});});}
-    try{var token=localStorage.getItem('orlo_token')||sessionStorage.getItem('orlo_token');var customer=JSON.parse(localStorage.getItem('orlo_customer')||sessionStorage.getItem('orlo_customer')||'null');var al=document.getElementById('accountLink');if(token&&customer&&al){var fn=customer.name?customer.name.split(' ')[0]:'Account';al.innerHTML=fn+'<br><span class="arabic-text">حسابي</span>';al.href='account.html';}}catch(e){}
-})();
-</script>
-<script src="products.js"></script>
-    <div class="page-container">
+    <main class="page-container">
         <div class="left-panel">
-            <div class="cancel-icon">🛒</div>
-            <h2>Payment Cancelled</h2>
+            <div class="cancel-icon" aria-hidden="true">🛒</div>
+            <h1>Payment Cancelled</h1>
             <p class="ar-title">تم إلغاء الدفع</p>
             <p class="reassure">Your cart is still waiting for you</p>
         </div>
 
         <div class="right-panel">
+            <a href="/" class="back-link"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Shop <span class="arabic-text" style="font-size:0.72rem">العودة للمتجر</span></a>
+
             <div class="info-card">
-                <h3>💳 No Charges Made</h3>
+                <h3><span aria-hidden="true">💳</span> No Charges Made</h3>
                 <p>Don't worry! No payment was processed and your card was not charged.</p>
                 <p class="arabic-text">لا تقلق! لم تتم معالجة أي دفعة ولم يتم خصم أي مبلغ.</p>
             </div>
 
             <div class="info-card">
-                <h3>🛍️ Your Items Are Saved</h3>
+                <h3><span aria-hidden="true">🛍️</span> Your Items Are Saved</h3>
                 <p>Your shopping cart is still intact. Return anytime to complete your purchase.</p>
                 <p class="arabic-text">سلة التسوق لا تزال محفوظة. يمكنك العودة لإتمام الشراء.</p>
             </div>
 
             <div class="btn-row">
                 <a href="/" class="btn btn-shop">
-                    🛍️ Continue Shopping<span class="arabic-text">متابعة التسوق</span>
+                    <span aria-hidden="true">🛍️</span> Continue Shopping<span class="arabic-text">متابعة التسوق</span>
                 </a>
-                <a href="/cdn-cgi/l/email-protection#3851565e5778574a54574b4c574a5d165b5755" class="btn btn-help">
-                    ✉️ Need Help?<span class="arabic-text">تحتاج مساعدة؟</span>
+                <a href="mailto:info@orlostore.com" class="btn btn-help">
+                    <span aria-hidden="true">✉️</span> Need Help?<span class="arabic-text">تحتاج مساعدة؟</span>
                 </a>
             </div>
 
             <div class="footer-note">
-                Having trouble? <a href="/cdn-cgi/l/email-protection#94fdfaf2fbd4fbe6f8fbe7e0fbe6f1baf7fbf9"><s
+                Having trouble? <a href="mailto:info@orlostore.com">info@orlostore.com</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Reveal content when fonts ready
+        Promise.race([document.fonts.ready, new Promise(function(r){ setTimeout(r, 1200); })]).then(function(){
+            document.querySelector('.page-container').classList.add('ready');
+        });
+
+        sessionStorage.removeItem('orlo_checkout_pending');
+    </script>
+</body>
+</html>

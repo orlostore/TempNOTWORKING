@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);min-height:100vh">
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-B5JQFPTZT7"></script>
@@ -18,11 +18,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
-    <style>html{opacity:0;transition:opacity .15s}</style>
-    <script>Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})</script>
-    <link rel="stylesheet" href="styles.css?v=8">
     <style>
-        .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -30,7 +28,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 80px 20px 20px;
+            padding: 20px;
         }
         .arabic-text { font-family: 'Almarai', sans-serif; direction: rtl; }
 
@@ -42,9 +40,11 @@
             box-shadow: 0 25px 80px rgba(0,0,0,0.1);
             overflow: hidden;
             display: flex;
-            animation: slideUp 0.5s ease-out;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .page-container.ready { opacity: 1; transform: translateY(0); }
 
         /* LEFT PANEL */
         .left-panel {
@@ -89,7 +89,7 @@
         .checkmark { width: 32px; height: 32px; stroke: #28a745; stroke-width: 3; fill: none; animation: drawCheck 0.5s ease-out 0.5s both; }
         @keyframes drawCheck { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
 
-        .left-panel h2 {
+        .left-panel h1 {
             color: white; font-size: 1.15rem; font-weight: 700;
             text-align: center; margin-bottom: 3px; position: relative; z-index: 1;
         }
@@ -123,12 +123,12 @@
             width: 26px; height: 26px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             font-size: 0.65rem; flex-shrink: 0;
-            background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.75);
         }
 
         .tl-step.active .tl-dot { background: white; color: #28a745; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 
-        .tl-text { font-size: 0.7rem; color: rgba(255,255,255,0.5); line-height: 1.3; }
+        .tl-text { font-size: 0.7rem; color: rgba(255,255,255,0.75); line-height: 1.3; }
         .tl-step.active .tl-text { color: white; font-weight: 600; }
         .tl-text .ar { font-family: 'Almarai', sans-serif; font-size: 0.6rem; opacity: 0.8; display: block; }
 
@@ -139,6 +139,23 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #999;
+            text-decoration: none;
+            font-size: 0.78rem;
+            margin-bottom: 14px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #2c4a5c; }
+        .back-link svg {
+            width: 1em; height: 1em;
+            stroke: currentColor; fill: none;
+            stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
         }
 
         .info-card {
@@ -207,7 +224,7 @@
 
             .checkmark-circle { width: 50px; height: 50px; margin-bottom: 10px; }
             .checkmark { width: 25px; height: 25px; }
-            .left-panel h2 { font-size: 1.05rem; }
+            .left-panel h1 { font-size: 1.05rem; }
             .left-panel .ar-title { font-size: 0.85rem; margin-bottom: 12px; }
 
             .timeline-vertical { flex-direction: row; justify-content: space-between; padding: 0; }
@@ -220,97 +237,59 @@
             .right-panel { padding: 16px 18px; }
             .btn-row { flex-direction: column; }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .page-container { opacity: 1; transform: none; }
+        }
     </style>
 </head>
 <body>
-<header>
-    <nav>
-        <div class="logo-container">
-            <a href="index.html"><img src="logo.png" class="logo-img" alt="ORLO Logo"></a>
-        </div>
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span><span></span><span></span>
-        </button>
-        <div class="mobile-cart-icon" id="mobileCartIcon">
-            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-            <span class="cart-count" id="mobileCartCount"></span>
-        </div>
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | البحث عن منتجات..." autocomplete="off">
-            <button class="search-btn" id="searchBtn"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            <div class="search-autocomplete" id="searchAutocomplete"></div>
-        </div>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
-            <li><a href="index.html#about">About<br><span class="arabic-text">من نحن</span></a></li>
-            <li><a href="index.html#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
-            <li><a href="index.html#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
-            <li><a href="login.html" id="accountLink" class="account-nav-link">Login<br><span class="arabic-text">دخول</span></a></li>
-            <li>
-                <div class="cart-icon" id="cartIcon">
-                    <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-                    <span class="cart-count" id="cartCount"></span>
-                </div>
-            </li>
-        </ul>
-    </nav>
-</header>
-<script>
-sessionStorage.removeItem('orlo_checkout_pending');
-(function(){
-    try { var c=JSON.parse(localStorage.getItem('cart')||'[]'); var n=c.reduce(function(s,i){return s+(i.quantity||0);},0); ['cartCount','mobileCartCount'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=n>0?n:'';}); } catch(e){}
-    var searchBtn=document.getElementById('searchBtn'),searchInput=document.getElementById('searchInput'),acIndex=-1;
-    function isAr(t){return /[\u0600-\u06FF]/.test(t);}
-    function doSearch(){var term=searchInput?searchInput.value.trim():'';var dd=document.getElementById('searchAutocomplete');if(dd)dd.classList.remove('active');if(term)window.location.href='index.html?search='+encodeURIComponent(term);}
-    function showAC(term){var dd=document.getElementById('searchAutocomplete');if(!dd||!term||term.length<1){if(dd){dd.classList.remove('active');dd.innerHTML='';}acIndex=-1;return;}if(typeof products==='undefined'||!products.length)return;var m=products.filter(function(p){return p.name.toLowerCase().indexOf(term)!==-1||(p.nameAr&&p.nameAr.indexOf(term)!==-1)||p.category.toLowerCase().indexOf(term)!==-1||(p.categoryAr&&p.categoryAr.indexOf(term)!==-1);}).slice(0,6);if(!m.length){dd.classList.remove('active');dd.innerHTML='';acIndex=-1;return;}var ar=isAr(term);dd.innerHTML=m.map(function(p,i){var img=p.image&&p.image.indexOf('http')===0?'<img src="'+p.image+'" alt="">':'';var dn=ar?(p.nameAr||p.name):p.name;return '<div class="autocomplete-item" data-index="'+i+'" data-slug="'+p.slug+'" data-name="'+dn+'"'+(ar?' dir="rtl"':'')+'>'+img+'<div class="autocomplete-item-info"><div class="autocomplete-item-name">'+(ar?'<span class="arabic-text">'+(p.nameAr||p.name)+'</span>':p.name)+'</div><div class="autocomplete-item-price">'+(ar?p.price+' د.إ':'AED '+p.price)+'</div></div></div>';}).join('');dd.classList.add('active');acIndex=-1;dd.querySelectorAll('.autocomplete-item').forEach(function(item){item.addEventListener('mousedown',function(e){e.preventDefault();searchInput.value=this.dataset.name;dd.classList.remove('active');doSearch();});});}
-    function navAC(dir){var dd=document.getElementById('searchAutocomplete');if(!dd)return;var items=dd.querySelectorAll('.autocomplete-item');if(!items.length)return;items.forEach(function(it){it.classList.remove('active');});acIndex+=dir;if(acIndex<0)acIndex=items.length-1;if(acIndex>=items.length)acIndex=0;items[acIndex].classList.add('active');searchInput.value=items[acIndex].dataset.name;}
-    if(searchBtn)searchBtn.addEventListener('click',doSearch);
-    if(searchInput){searchInput.addEventListener('input',function(){showAC(this.value.toLowerCase().trim());});searchInput.addEventListener('keydown',function(e){if(e.key==='ArrowDown'){e.preventDefault();navAC(1);}else if(e.key==='ArrowUp'){e.preventDefault();navAC(-1);}else if(e.key==='Enter'){e.preventDefault();doSearch();}else if(e.key==='Escape'){var dd=document.getElementById('searchAutocomplete');if(dd)dd.classList.remove('active');}});}
-    var hamburger=document.getElementById('hamburger'),navLinks=document.getElementById('navLinks');
-    if(hamburger&&navLinks){hamburger.addEventListener('click',function(){hamburger.classList.toggle('active');navLinks.classList.toggle('active');});navLinks.querySelectorAll('a').forEach(function(link){link.addEventListener('click',function(){hamburger.classList.remove('active');navLinks.classList.remove('active');});});}
-    try{var token=localStorage.getItem('orlo_token')||sessionStorage.getItem('orlo_token');var customer=JSON.parse(localStorage.getItem('orlo_customer')||sessionStorage.getItem('orlo_customer')||'null');var al=document.getElementById('accountLink');if(token&&customer&&al){var fn=customer.name?customer.name.split(' ')[0]:'Account';al.innerHTML=fn+'<br><span class="arabic-text">حسابي</span>';al.href='account.html';}}catch(e){}
-})();
-</script>
-<script src="products.js"></script>
-    <div class="page-container">
+    <main class="page-container">
         <div class="left-panel">
-            <div class="checkmark-circle">
+            <div class="checkmark-circle" aria-hidden="true">
                 <svg class="checkmark" viewBox="0 0 52 52" stroke-dasharray="100" stroke-dashoffset="100">
                     <path fill="none" d="M14 27l7 7 16-16"/>
                 </svg>
             </div>
-            <h2>Order Confirmed!</h2>
+            <h1>Order Confirmed!</h1>
             <p class="ar-title">تم تأكيد طلبك بنجاح</p>
 
-            <div class="timeline-vertical">
-                <div class="tl-step active">
-                    <div class="tl-dot">✓</div>
+            <div class="timeline-vertical" role="list" aria-label="Order progress">
+                <div class="tl-step active" role="listitem">
+                    <div class="tl-dot" aria-hidden="true">✓</div>
                     <div class="tl-text">Confirmed<span class="ar">تم التأكيد</span></div>
                 </div>
-                <div class="tl-step">
-                    <div class="tl-dot">📦</div>
+                <div class="tl-step" role="listitem">
+                    <div class="tl-dot" aria-hidden="true">📦</div>
                     <div class="tl-text">Processing<span class="ar">قيد التجهيز</span></div>
                 </div>
-                <div class="tl-step">
-                    <div class="tl-dot">🚚</div>
+                <div class="tl-step" role="listitem">
+                    <div class="tl-dot" aria-hidden="true">🚚</div>
                     <div class="tl-text">Shipped<span class="ar">تم الشحن</span></div>
                 </div>
-                <div class="tl-step">
-                    <div class="tl-dot">✨</div>
+                <div class="tl-step" role="listitem">
+                    <div class="tl-dot" aria-hidden="true">✨</div>
                     <div class="tl-text">Delivered<span class="ar">تم التوصيل</span></div>
                 </div>
             </div>
         </div>
 
         <div class="right-panel">
+            <a href="/" class="back-link"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Shop <span class="arabic-text" style="font-size:0.72rem">العودة للمتجر</span></a>
+
             <div class="info-card">
-                <h3>📦 What's Next?</h3>
+                <h3><span aria-hidden="true">📦</span> What's Next?</h3>
                 <p>We're preparing your order! You'll get tracking info once it ships.</p>
                 <p class="arabic-text">نحن نجهز طلبك! ستتلقى معلومات التتبع عند الشحن.</p>
             </div>
 
             <div class="info-card">
-                <h3>⏱️ Estimated Delivery</h3>
+                <h3><span aria-hidden="true">⏱️</span> Estimated Delivery</h3>
                 <p><strong>2-5 business days</strong> across UAE</p>
                 <p class="arabic-text"><strong>٢-٥ أيام عمل</strong> في جميع أنحاء الإمارات</p>
             </div>
@@ -318,15 +297,15 @@ sessionStorage.removeItem('orlo_checkout_pending');
             <div class="btn-stack">
                 <div class="btn-row">
                     <a href="/" class="btn btn-blue" onclick="localStorage.removeItem('cart')">
-                        🛍️ Continue Shopping<span class="ar">متابعة التسوق</span>
+                        <span aria-hidden="true">🛍️</span> Continue Shopping<span class="ar">متابعة التسوق</span>
                     </a>
                     <a href="mailto:info@orlostore.com" class="btn btn-orange">
-                        ✉️ Need Help?<span class="ar">تحتاج مساعدة؟</span>
+                        <span aria-hidden="true">✉️</span> Need Help?<span class="ar">تحتاج مساعدة؟</span>
                     </a>
                 </div>
                 <!-- Guest only: Create Account button -->
                 <button class="btn btn-green" id="registerBtn" style="display:none" onclick="oneClickAccount()">
-                    🔐 Create Hassle-Free Account in One Click<span class="ar">إنشاء حساب بدون عناء بنقرة واحدة</span>
+                    <span aria-hidden="true">🔐</span> Create Hassle-Free Account in One Click<span class="ar">إنشاء حساب بدون عناء بنقرة واحدة</span>
                 </button>
             </div>
 
@@ -336,14 +315,24 @@ sessionStorage.removeItem('orlo_checkout_pending');
                 Questions? <a href="mailto:info@orlostore.com">info@orlostore.com</a>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
-        // GA4: track purchase conversion with full e-commerce data (from local cart)
-        if (typeof gtag === 'function') {
-            const urlP = new URLSearchParams(window.location.search);
-            const sid = urlP.get('session_id');
-            if (sid) {
+        // Reveal content when fonts ready
+        Promise.race([document.fonts.ready, new Promise(function(r){ setTimeout(r, 1200); })]).then(function(){
+            document.querySelector('.page-container').classList.add('ready');
+        });
+
+        sessionStorage.removeItem('orlo_checkout_pending');
+
+        // Capture session_id early (before any potential URL cleanup)
+        var urlParams = new URLSearchParams(window.location.search);
+        var sessionId = urlParams.get('session_id');
+
+        // GA4: track purchase conversion — deduplicated, fires only once per session_id
+        if (sessionId && typeof gtag === 'function') {
+            var firedKey = 'orlo_purchase_fired_' + sessionId;
+            if (!sessionStorage.getItem(firedKey)) {
                 var cartData = [];
                 try { cartData = JSON.parse(localStorage.getItem('cart') || '[]'); } catch(e) {}
                 var gaItems = cartData.map(function(item) {
@@ -351,64 +340,65 @@ sessionStorage.removeItem('orlo_checkout_pending');
                 });
                 var total = cartData.reduce(function(sum, item) { return sum + (item.price * (item.quantity || 1)); }, 0);
                 gtag('event', 'purchase', {
-                    transaction_id: sid,
+                    transaction_id: sessionId,
                     value: total,
                     currency: 'AED',
                     items: gaItems
                 });
+                sessionStorage.setItem(firedKey, '1');
             }
         }
 
+        // Clear cart after GA4 event fires
         localStorage.removeItem('cart');
 
-        const existingToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
-        const urlParams = new URLSearchParams(window.location.search);
-        const sessionId = urlParams.get('session_id');
+        // Guest-to-account flow
+        var existingToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
 
         if (existingToken) {
-            // Logged in user - hide register button
+            // Logged-in user — hide register button
             document.getElementById('registerBtn').style.display = 'none';
         } else if (sessionId) {
-            // Guest - check if email already has an account before showing button
+            // Guest — check if email already has an account before showing button
             (async function() {
                 try {
-                    const res = await fetch('/api/auth/check-session-email', {
+                    var res = await fetch('/api/auth/check-session-email', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ session_id: sessionId })
                     });
-                    const data = await res.json();
+                    var data = await res.json();
                     if (data.registered) {
-                        // Already has account - show login prompt instead
+                        // Already has account — show login prompt instead
                         document.getElementById('registerBtn').style.display = 'none';
-                        const msg = document.getElementById('accountMsg');
+                        var msg = document.getElementById('accountMsg');
                         msg.className = 'account-msg success';
                         msg.innerHTML = 'You already have an account! <a href="login.html">Login to track your order</a><p class="arabic-text">لديك حساب بالفعل! <a href="login.html">سجل دخول لتتبع طلبك</a></p>';
                     } else {
                         document.getElementById('registerBtn').style.display = 'block';
                     }
                 } catch (e) {
-                    // If check fails, show button anyway (fallback to current behavior)
+                    // If check fails, show button anyway (fallback)
                     document.getElementById('registerBtn').style.display = 'block';
                 }
             })();
         }
 
         async function oneClickAccount() {
-            const btn = document.getElementById('registerBtn');
-            const msg = document.getElementById('accountMsg');
+            var btn = document.getElementById('registerBtn');
+            var msg = document.getElementById('accountMsg');
 
             btn.disabled = true;
             btn.innerHTML = 'Creating...<span class="ar">جاري الإنشاء...</span>';
 
             try {
-                const response = await fetch('/api/auth/guest-to-account', {
+                var response = await fetch('/api/auth/guest-to-account', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ session_id: sessionId })
                 });
 
-                const data = await response.json();
+                var data = await response.json();
 
                 if (data.success) {
                     localStorage.setItem('orlo_token', data.token);
@@ -426,14 +416,14 @@ sessionStorage.removeItem('orlo_checkout_pending');
                         msg.className = 'account-msg error';
                         msg.innerHTML = data.error || 'Something went wrong. Please try again.';
                         btn.disabled = false;
-                        btn.innerHTML = '🔐 Create Hassle-Free Account in One Click<span class="ar">إنشاء حساب بدون عناء بنقرة واحدة</span>';
+                        btn.innerHTML = '<span aria-hidden="true">🔐</span> Create Hassle-Free Account in One Click<span class="ar">إنشاء حساب بدون عناء بنقرة واحدة</span>';
                     }
                 }
             } catch (error) {
                 msg.className = 'account-msg error';
                 msg.innerHTML = 'Connection error. Please try again.';
                 btn.disabled = false;
-                btn.innerHTML = '🔐 Create Hassle-Free Account in One Click<span class="ar">إنشاء حساب بدون عناء بنقرة واحدة</span>';
+                btn.innerHTML = '<span aria-hidden="true">🔐</span> Create Hassle-Free Account in One Click<span class="ar">إنشاء حساب بدون عناء بنقرة واحدة</span>';
             }
         }
     </script>
