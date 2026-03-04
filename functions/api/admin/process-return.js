@@ -4,7 +4,7 @@
 // PUT: Admin-initiated return on behalf of customer
 
 import { getKey, getAdminUser, logActivity } from './_helpers.js';
-import { customerEmail, plainText, sendEmail } from '../email-template.js';
+import { customerEmail as buildCustomerEmail, plainText, sendEmail } from '../email-template.js';
 
 export async function onRequestGet(context) {
     // GET: List all return requests
@@ -187,7 +187,7 @@ export async function onRequestPost(context) {
 
                 const cfg = emailConfigs[newStatus];
 
-                const html = customerEmail({
+                const html = buildCustomerEmail({
                     origin,
                     icon: cfg.icon,
                     titleEn: cfg.titleEn,
@@ -327,7 +327,7 @@ export async function onRequestPut(context) {
                 const origin = new URL(request.url).origin;
                 const orderRef = order_id.slice(-8).toUpperCase();
 
-                const html = customerEmail({
+                const html = buildCustomerEmail({
                     origin,
                     icon: '🔄',
                     titleEn: 'Return Initiated',
