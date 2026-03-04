@@ -170,6 +170,63 @@ export async function onRequestPost(context) {
         await DB.prepare('INSERT INTO cancelled_orders (order_id, customer_id) VALUES (?, ?)')
             .bind(orderId, customer.id).run();
 
+        // Send cancellation confirmation email
+        if (env.RESEND_API_KEY && customer.email) {
+            try {
+                const customerName = session.customer_details?.name || '';
+                await fetch('https://api.resend.com/emails', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        from: 'ORLO Store <noreply@orlostore.com>',
+                        to: customer.email,
+                        subject: 'Order Cancelled & Refund Initiated | تم إلغاء الطلب وبدء الاسترداد',
+                        html: `
+                            <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px;">
+                                <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+                                    <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 35px 30px; text-align: center;">
+                                        <img src="https://orlostore.com/logo.png" alt="ORLO Store" style="width: 65px; height: 65px; margin-bottom: 10px;">
+                                        <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1.5px;">ORLO STORE</div>
+                                    </div>
+                                    <div style="padding: 35px 30px; text-align: center;">
+                                        <div style="font-size: 48px; line-height: 1; margin-bottom: 15px;">❌</div>
+                                        <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px; font-weight: 700;">Order Cancelled</h2>
+                                        <p style="color: #555; font-size: 15px; line-height: 1.7; margin: 0 0 6px;">
+                                            Hi ${customerName || 'there'}, your order has been cancelled as requested.
+                                        </p>
+                                        <p style="color: #888; font-size: 14px; font-family: 'Almarai', Arial, sans-serif; direction: rtl; margin: 0 0 25px;">
+                                            مرحباً، تم إلغاء طلبك بناءً على طلبك.
+                                        </p>
+
+                                        <div style="background: #f0f7ff; border-radius: 10px; padding: 18px 20px; margin-bottom: 25px; border-left: 3px solid #2c4a5c; text-align: left;">
+                                            <p style="margin: 0; font-size: 14px; color: #555;">
+                                                <strong>Refund:</strong> A full refund has been initiated. It will appear on your card within 5-7 business days.
+                                            </p>
+                                            <p style="margin: 6px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
+                                                تم بدء استرداد المبلغ كاملاً. سيظهر في حسابك خلال ٥-٧ أيام عمل.
+                                            </p>
+                                        </div>
+
+                                        <p style="color: #999; font-size: 12px; margin: 20px 0 0;">
+                                            Questions? Contact us at <a href="mailto:info@orlostore.com" style="color: #e07856;">info@orlostore.com</a>
+                                        </p>
+                                    </div>
+                                    <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eee;">
+                                        <p style="color: #aaa; font-size: 11px; margin: 0;">© ORLO Store | info@orlostore.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                    })
+                });
+            } catch (emailErr) {
+                console.error('Cancellation email error:', emailErr);
+            }
+        }
+
         return Response.json({
             success: true,
             message: 'Order cancelled and refund initiated. It will appear on your card within 5-7 business days.'
