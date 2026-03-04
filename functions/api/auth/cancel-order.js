@@ -203,10 +203,10 @@ export async function onRequestPost(context) {
 
                                         <div style="background: #f0f7ff; border-radius: 10px; padding: 18px 20px; margin-bottom: 25px; border-left: 3px solid #2c4a5c; text-align: left;">
                                             <p style="margin: 0; font-size: 14px; color: #555;">
-                                                <strong>Refund:</strong> A full refund has been initiated. It will appear on your card within 5-7 business days.
+                                                <strong>Refund:</strong> A full refund of AED ${(session.amount_total / 100).toFixed(2)} has been initiated. It will appear on your card within 5-7 business days.
                                             </p>
                                             <p style="margin: 6px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
-                                                تم بدء استرداد المبلغ كاملاً. سيظهر في حسابك خلال ٥-٧ أيام عمل.
+                                                تم بدء استرداد مبلغ AED ${(session.amount_total / 100).toFixed(2)} كاملاً. سيظهر في حسابك خلال ٥-٧ أيام عمل.
                                             </p>
                                         </div>
 
@@ -229,7 +229,7 @@ export async function onRequestPost(context) {
 
         return Response.json({
             success: true,
-            message: 'Order cancelled and refund initiated. It will appear on your card within 5-7 business days.'
+            message: 'Order cancelled and refund of AED ' + (session.amount_total / 100).toFixed(2) + ' initiated. It will appear on your card within 5-7 business days.'
         });
 
     } catch (error) {
