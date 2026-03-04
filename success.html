@@ -239,6 +239,26 @@
             flex-shrink: 0;
         }
 
+        .order-subtotal-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 8px;
+            margin-top: 6px;
+            border-top: 1px solid #e2e6ea;
+            font-size: 0.78rem;
+            color: #555;
+        }
+        .order-subtotal-row .ar {
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 400;
+            color: #888;
+        }
+        .order-delivery-free {
+            color: #28a745;
+            font-weight: 600;
+        }
         .order-total-row {
             display: flex;
             justify-content: space-between;
@@ -405,6 +425,14 @@
             <div class="order-summary" id="orderSummary" style="display:none">
                 <h3><span aria-hidden="true">🧾</span> Order Summary</h3>
                 <div id="orderItems"></div>
+                <div class="order-subtotal-row" id="orderSubtotalRow" style="display:none">
+                    <span>Subtotal <span class="ar">المجموع الفرعي</span></span>
+                    <span id="orderSubtotal"></span>
+                </div>
+                <div class="order-subtotal-row" id="orderDeliveryRow" style="display:none">
+                    <span>Delivery <span class="ar">التوصيل</span></span>
+                    <span id="orderDeliveryFee"></span>
+                </div>
                 <div class="order-total-row">
                     <span>Total <span class="ar">الإجمالي</span></span>
                     <span id="orderTotal"></span>
@@ -462,8 +490,14 @@
         var sessionId = urlParams.get('session_id');
 
         // Read cart BEFORE clearing — used for GA4 + order summary display
+        // Falls back to sessionStorage backup in case localStorage was cleared during Stripe redirect
         var cartData = [];
-        try { cartData = JSON.parse(localStorage.getItem('cart') || '[]'); } catch(e) {}
+        try {
+            cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (!cartData.length) {
+                cartData = JSON.parse(sessionStorage.getItem('orlo_cart_backup') || '[]');
+            }
+        } catch(e) {}
 
         // GA4: track purchase conversion — deduplicated, fires only once per session_id
         if (sessionId && typeof gtag === 'function') {
@@ -472,10 +506,12 @@
                 var gaItems = cartData.map(function(item) {
                     return { item_id: String(item.id), item_name: item.name, price: item.price, quantity: item.quantity || 1 };
                 });
-                var total = cartData.reduce(function(sum, item) { return sum + (item.price * (item.quantity || 1)); }, 0);
+                var gaSubtotal = cartData.reduce(function(sum, item) { return sum + (item.price * (item.quantity || 1)); }, 0);
+                var gaDelivery = gaSubtotal >= 75 ? 0 : 18;
                 gtag('event', 'purchase', {
                     transaction_id: sessionId,
-                    value: total,
+                    value: gaSubtotal + gaDelivery,
+                    shipping: gaDelivery,
                     currency: 'AED',
                     items: gaItems
                 });
@@ -506,11 +542,28 @@
                 itemsHtml += '<p class="order-more">+' + (cartData.length - maxShow) + ' more item' + (cartData.length - maxShow > 1 ? 's' : '') + '</p>';
             }
 
-            var orderTotal = cartData.reduce(function(sum, item) {
+            var subtotal = cartData.reduce(function(sum, item) {
                 return sum + (item.price * (item.quantity || 1));
             }, 0);
 
+            // Calculate delivery fee using same logic as checkout
+            var FREE_DELIVERY_THRESHOLD = 75;
+            var DELIVERY_FEE = 18;
+            var deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
+            var orderTotal = subtotal + deliveryFee;
+
             document.getElementById('orderItems').innerHTML = itemsHtml;
+
+            // Show subtotal and delivery rows
+            document.getElementById('orderSubtotal').textContent = 'AED ' + subtotal.toFixed(2);
+            document.getElementById('orderSubtotalRow').style.display = 'flex';
+            if (deliveryFee > 0) {
+                document.getElementById('orderDeliveryFee').textContent = 'AED ' + deliveryFee.toFixed(2);
+            } else {
+                document.getElementById('orderDeliveryFee').innerHTML = '<span class="order-delivery-free">FREE | <span class="ar">مجاني</span></span>';
+            }
+            document.getElementById('orderDeliveryRow').style.display = 'flex';
+
             document.getElementById('orderTotal').textContent = 'AED ' + orderTotal.toFixed(2);
             document.getElementById('orderSummary').style.display = 'block';
         }
@@ -540,6 +593,7 @@
 
         // Clear cart AFTER rendering summary + GA4
         localStorage.removeItem('cart');
+        sessionStorage.removeItem('orlo_cart_backup');
 
         // Guest-to-account flow
         var existingToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
