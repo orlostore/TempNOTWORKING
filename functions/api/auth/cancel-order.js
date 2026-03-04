@@ -63,9 +63,14 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'This order has already been cancelled' }, { status: 400 });
         }
 
-        // Check if shipped
-        const shipped = await DB.prepare('SELECT order_id FROM shipped_orders WHERE order_id = ?')
-            .bind(orderId).first();
+        // Check if shipped (table may not exist yet if no orders have been shipped)
+        let shipped = null;
+        try {
+            shipped = await DB.prepare('SELECT order_id FROM shipped_orders WHERE order_id = ?')
+                .bind(orderId).first();
+        } catch (e) {
+            // Table doesn't exist yet — means nothing has been shipped
+        }
         if (shipped || session.metadata?.shipped === 'true') {
             return Response.json({ error: 'Cannot cancel — order has already been shipped. Please contact support.' }, { status: 400 });
         }
@@ -169,7 +174,7 @@ export async function onRequestPost(context) {
         });
 
     } catch (error) {
-        console.error('Cancel order error:', error);
-        return Response.json({ error: 'Failed to cancel order' }, { status: 500 });
+        console.error('Cancel order error:', error.message || error, error.stack || '');
+        return Response.json({ error: 'Failed to cancel order: ' + (error.message || 'Unknown error') }, { status: 500 });
     }
 }
