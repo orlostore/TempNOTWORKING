@@ -1,5 +1,7 @@
 // Cloudflare Pages Function - Stripe Webhook
-// Deducts inventory after successful payment + sends receipt + admin notification
+// Deducts inventory after successful payment + sends receipt + admin notification + order confirmation
+
+import { customerEmail, adminEmail, plainText, sendEmail } from './api/email-template.js';
 
 export async function onRequestPost(context) {
     const { request, env } = context;
@@ -111,6 +113,77 @@ export async function onRequestPost(context) {
                 }
             }
 
+            // === SEND ORDER CONFIRMATION EMAIL TO CUSTOMER ===
+            if (env.RESEND_API_KEY && customerEmail) {
+                try {
+                    const origin = new URL(request.url).origin;
+                    const customerName = session.customer_details?.name || 'there';
+                    const total = (session.amount_total / 100).toFixed(2);
+                    const currency = (session.currency || 'aed').toUpperCase();
+
+                    // Build items table for customer
+                    let customerItemsHtml = '';
+                    if (cartItems.length > 0) {
+                        const rows = cartItems
+                            .filter(i => !(i.name || '').toLowerCase().includes('delivery'))
+                            .map(i => {
+                                const itemName = (i.name || i.slug || 'Item').split(/[\n\r]/)[0].trim();
+                                return `<tr><td style="padding:12px 16px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;">${itemName}</td><td style="padding:12px 16px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#666;text-align:center;white-space:nowrap;">× ${i.quantity}</td></tr>`;
+                            }).join('');
+                        if (rows) {
+                            customerItemsHtml = `
+                                <div style="background: #f8f9fa; border-radius: 10px; overflow: hidden; margin-bottom: 25px;">
+                                    <div style="padding: 12px 16px; background: #eef2f5; font-size: 11px; font-weight: 700; color: #777; text-transform: uppercase; letter-spacing: 0.5px;">Order Items | عناصر الطلب</div>
+                                    <table style="width: 100%; border-collapse: collapse;">${rows}</table>
+                                    <div style="padding: 12px 16px; background: #eef2f5; font-size: 14px; font-weight: 700; color: #333; text-align: right;">Total: ${currency} ${total}</div>
+                                </div>
+                            `;
+                        }
+                    }
+
+                    const confirmHtml = customerEmail({
+                        origin,
+                        icon: '✅',
+                        titleEn: 'Order Confirmed!',
+                        bodyEn: `Hi ${customerName}, thank you for your order! We've received your payment and your order is being prepared.`,
+                        bodyAr: `مرحباً ${customerName}، شكراً لطلبك! تم استلام الدفع وجارٍ تجهيز طلبك.`,
+                        infoBoxEn: '<strong>What\'s next?</strong> We\'ll send you another email when your order has been dispatched.',
+                        infoBoxAr: 'سنرسل لك بريداً آخر عندما يتم شحن طلبك.',
+                        ctaUrl: `${origin}/account.html`,
+                        ctaText: 'View My Orders | عرض طلباتي',
+                        ctaColor: '#2c4a5c',
+                        extraHtml: customerItemsHtml,
+                        preheader: `Order confirmed! Thank you for shopping with ORLO Store. Total: ${currency} ${total}`,
+                    });
+
+                    const itemsText = cartItems
+                        .filter(i => !(i.name || '').toLowerCase().includes('delivery'))
+                        .map(i => `- ${(i.name || i.slug || 'Item').split(/[\n\r]/)[0].trim()} x${i.quantity}`)
+                        .join('\n');
+
+                    const confirmText = plainText({
+                        titleEn: 'Order Confirmed!',
+                        bodyTextEn: `Hi ${customerName}, thank you for your order! We've received your payment and your order is being prepared.\n\n${itemsText}\n\nTotal: ${currency} ${total}`,
+                        bodyTextAr: `مرحباً ${customerName}، شكراً لطلبك! تم استلام الدفع وجارٍ تجهيز طلبك.`,
+                        infoTextEn: 'What\'s next? We\'ll send you another email when your order has been dispatched.',
+                        infoTextAr: 'سنرسل لك بريداً آخر عندما يتم شحن طلبك.',
+                        ctaUrl: `${origin}/account.html`,
+                        ctaText: 'View My Orders',
+                    });
+
+                    await sendEmail({
+                        apiKey: env.RESEND_API_KEY,
+                        to: customerEmail,
+                        subject: `Order Confirmed! | تأكيد الطلب — ${currency} ${total}`,
+                        html: confirmHtml,
+                        text: confirmText,
+                    });
+                    console.log(`Order confirmation sent to: ${customerEmail}`);
+                } catch (e) {
+                    console.error('Order confirmation email error (non-blocking):', e);
+                }
+            }
+
             // === SEND ADMIN NOTIFICATION EMAIL ===
             if (env.RESEND_API_KEY && DB) {
                 try {
@@ -131,6 +204,7 @@ export async function onRequestPost(context) {
                         const customerName = session.customer_details?.name || 'Unknown';
                         const total = (session.amount_total / 100).toFixed(2);
                         const currency = (session.currency || 'aed').toUpperCase();
+                        const origin = new URL(request.url).origin;
 
                         // Build items list
                         let itemsHtml = '';
@@ -140,51 +214,39 @@ export async function onRequestPost(context) {
                             ).join('');
                         }
 
-                        const emailHtml = `
-                            <div style="font-family:'Inter','Segoe UI',Arial,sans-serif;background:#f0f2f5;padding:30px 20px;">
-                                <div style="max-width:500px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-                                    <div style="background:linear-gradient(135deg,#28a745 0%,#1e8e3e 100%);padding:25px 20px;text-align:center;">
-                                        <div style="font-size:36px;margin-bottom:8px;">🛒</div>
-                                        <div style="color:#fff;font-size:18px;font-weight:700;">New Order Received!</div>
-                                    </div>
-                                    <div style="padding:25px 20px;">
-                                        <div style="background:#f8f9fa;border-radius:8px;padding:15px;margin-bottom:15px;">
-                                            <div style="font-size:12px;color:#888;text-transform:uppercase;margin-bottom:4px;">Customer</div>
-                                            <div style="font-size:16px;font-weight:600;color:#333;">${customerName}</div>
-                                            <div style="font-size:13px;color:#666;">${customerEmail || 'N/A'}</div>
-                                        </div>
-                                        <div style="background:#f8f9fa;border-radius:8px;padding:15px;margin-bottom:15px;">
-                                            <div style="font-size:12px;color:#888;text-transform:uppercase;margin-bottom:4px;">Total</div>
-                                            <div style="font-size:24px;font-weight:700;color:#28a745;">${currency} ${total}</div>
-                                        </div>
-                                        ${itemsHtml ? `
-                                        <div style="background:#f8f9fa;border-radius:8px;overflow:hidden;margin-bottom:15px;">
-                                            <div style="padding:10px 12px;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;">Items</div>
-                                            <table style="width:100%;border-collapse:collapse;font-size:13px;">${itemsHtml}</table>
-                                        </div>` : ''}
-                                        <div style="text-align:center;margin-top:20px;">
-                                            <a href="https://orlostore.com/admin.html" style="background:#2c4a5c;color:#fff;padding:12px 30px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;display:inline-block;">Open Admin Panel</a>
-                                        </div>
-                                    </div>
-                                    <div style="background:#f8f9fa;padding:15px;text-align:center;border-top:1px solid #eee;">
-                                        <p style="color:#aaa;font-size:11px;margin:0;">ORLO Store - Order Notification</p>
-                                    </div>
-                                </div>
+                        const bodyHtml = `
+                            <div style="background:#f8f9fa;border-radius:8px;padding:15px;margin-bottom:15px;">
+                                <div style="font-size:12px;color:#888;text-transform:uppercase;margin-bottom:4px;">Customer</div>
+                                <div style="font-size:16px;font-weight:600;color:#333;">${customerName}</div>
+                                <div style="font-size:13px;color:#666;">${customerEmail || 'N/A'}</div>
+                            </div>
+                            <div style="background:#f8f9fa;border-radius:8px;padding:15px;margin-bottom:15px;">
+                                <div style="font-size:12px;color:#888;text-transform:uppercase;margin-bottom:4px;">Total</div>
+                                <div style="font-size:24px;font-weight:700;color:#28a745;">${currency} ${total}</div>
+                            </div>
+                            ${itemsHtml ? `
+                            <div style="background:#f8f9fa;border-radius:8px;overflow:hidden;margin-bottom:15px;">
+                                <div style="padding:10px 12px;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;">Items</div>
+                                <table style="width:100%;border-collapse:collapse;font-size:13px;">${itemsHtml}</table>
+                            </div>` : ''}
+                            <div style="text-align:center;margin-top:20px;">
+                                <a href="${origin}/admin.html" style="background:#2c4a5c;color:#fff;padding:12px 30px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;display:inline-block;">Open Admin Panel</a>
                             </div>
                         `;
 
-                        await fetch('https://api.resend.com/emails', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                from: 'ORLO Store <noreply@orlostore.com>',
-                                to: notifyEmails,
-                                subject: `New Order! ${currency} ${total} from ${customerName}`,
-                                html: emailHtml
-                            })
+                        const emailHtml = adminEmail({
+                            titleEn: 'New Order Received!',
+                            bodyHtml,
+                            icon: '🛒',
+                            headerBg: '#28a745',
+                            preheader: `New order: ${currency} ${total} from ${customerName}`,
+                        });
+
+                        await sendEmail({
+                            apiKey: env.RESEND_API_KEY,
+                            to: notifyEmails,
+                            subject: `New Order! ${currency} ${total} from ${customerName}`,
+                            html: emailHtml,
                         });
                         console.log('Admin notification sent to:', notifyEmails.join(', '));
                     }

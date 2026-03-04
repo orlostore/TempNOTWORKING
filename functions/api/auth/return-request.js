@@ -2,6 +2,8 @@
 // Location: /functions/api/auth/return-request.js
 // Simple return: customer submits request, admin processes manually
 
+import { adminEmail as buildAdminEmail, sendEmail } from '../email-template.js';
+
 export async function onRequestPost(context) {
     const { env, request } = context;
     const DB = env.DB;
@@ -120,34 +122,46 @@ export async function onRequestPost(context) {
         if (env.RESEND_API_KEY) {
             try {
                 // Get admin notification email from settings
-                let adminEmail = 'info@orlostore.com';
+                let adminNotifyEmail = 'info@orlostore.com';
                 try {
                     const setting = await DB.prepare("SELECT value FROM admin_settings WHERE key = 'notification_email'").first();
-                    if (setting?.value) adminEmail = setting.value;
+                    if (setting?.value) adminNotifyEmail = setting.value;
                 } catch (e) {}
 
-                await fetch('https://api.resend.com/emails', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        from: 'ORLO Store <noreply@orlostore.com>',
-                        to: adminEmail,
-                        subject: `Return Request — Order #${orderId.slice(-8).toUpperCase()}`,
-                        html: `
-                            <div style="font-family: 'Inter', Arial, sans-serif; padding: 20px;">
-                                <h2 style="color: #2c4a5c;">New Return Request</h2>
-                                <p><strong>Order:</strong> #${orderId.slice(-8).toUpperCase()}</p>
-                                <p><strong>Customer:</strong> ${customer.name} (${customer.email})</p>
-                                <p><strong>Reason:</strong> ${reason}</p>
-                                <p style="margin-top: 20px;">
-                                    <a href="https://orlostore.com/admin.html" style="background:#2c4a5c;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;">View in Admin Panel</a>
-                                </p>
-                            </div>
-                        `
-                    })
+                const origin = new URL(request.url).origin;
+
+                const bodyHtml = `
+                    <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                        <div style="font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 4px;">Order</div>
+                        <div style="font-size: 16px; font-weight: 600; color: #333;">#${orderId.slice(-8).toUpperCase()}</div>
+                    </div>
+                    <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                        <div style="font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 4px;">Customer</div>
+                        <div style="font-size: 16px; font-weight: 600; color: #333;">${customer.name}</div>
+                        <div style="font-size: 13px; color: #666;">${customer.email}</div>
+                    </div>
+                    <div style="background: #fff3cd; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                        <div style="font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 4px;">Reason</div>
+                        <div style="font-size: 14px; color: #333;">${reason}</div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="${origin}/admin.html" style="background: #2c4a5c; color: #fff; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-block;">View in Admin Panel</a>
+                    </div>
+                `;
+
+                const html = buildAdminEmail({
+                    titleEn: 'New Return Request',
+                    bodyHtml,
+                    icon: '🔄',
+                    headerBg: '#e07856',
+                    preheader: `Return request from ${customer.name} for order #${orderId.slice(-8).toUpperCase()}`,
+                });
+
+                await sendEmail({
+                    apiKey: env.RESEND_API_KEY,
+                    to: adminNotifyEmail,
+                    subject: `Return Request — Order #${orderId.slice(-8).toUpperCase()}`,
+                    html,
                 });
             } catch (e) {
                 console.error('Admin notification email error:', e);

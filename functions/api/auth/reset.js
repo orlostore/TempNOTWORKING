@@ -2,6 +2,7 @@
 // Location: /functions/api/auth/reset.js
 
 import { generateToken } from './crypto-utils.js';
+import { customerEmail, plainText, sendEmail } from '../email-template.js';
 
 export async function onRequestPost(context) {
     const { env, request } = context;
@@ -41,48 +42,34 @@ export async function onRequestPost(context) {
                 const origin = new URL(request.url).origin;
                 const resetUrl = `${origin}/reset-password.html?token=${resetToken}`;
 
-                await fetch('https://api.resend.com/emails', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        from: 'ORLO Store <noreply@orlostore.com>',
-                        to: email.toLowerCase(),
-                        subject: 'Reset Your Password | إعادة تعيين كلمة المرور',
-                        html: `
-                            <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden;">
-                                <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 20px; text-align: center;">
-                                    <img src="${origin}/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
-                                    <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1px;">ORLO Store</div>
-                                </div>
-                                <div style="background: white; padding: 30px 25px;">
-                                    <h2 style="color: #2c4a5c; margin: 0 0 15px; font-size: 18px; font-weight: 600;">Password Reset</h2>
-                                    <p style="color: #555; font-size: 14px; line-height: 1.7; margin: 0 0 10px;">
-                                        Hi ${customer.name}, we received a request to reset your password. Click the button below:
-                                    </p>
-                                    <p style="color: #888; font-size: 13px; line-height: 1.6; margin: 0 0 25px; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
-                                        مرحباً ${customer.name}، تلقينا طلباً لإعادة تعيين كلمة المرور. اضغط على الزر أدناه:
-                                    </p>
-                                    <div style="text-align: center; margin: 25px 0;">
-                                        <a href="${resetUrl}" style="background: #e07856; color: white; padding: 14px 35px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block;">
-                                            Reset Password | إعادة التعيين
-                                        </a>
-                                    </div>
-                                    <p style="color: #999; font-size: 12px; line-height: 1.5; margin: 20px 0 0;">
-                                        This link expires in 1 hour. If you didn't request this, ignore this email.<br>
-                                        <a href="${resetUrl}" style="color: #e07856; word-break: break-all;">${resetUrl}</a>
-                                    </p>
-                                </div>
-                                <div style="background: #f8f9fa; padding: 20px 25px; text-align: center; border-top: 1px solid #eee;">
-                                    <p style="color: #aaa; font-size: 11px; margin: 0;">
-                                        © ORLO Store | info@orlostore.com
-                                    </p>
-                                </div>
-                            </div>
-                        `
-                    })
+                const html = customerEmail({
+                    origin,
+                    icon: '🔑',
+                    titleEn: 'Password Reset',
+                    bodyEn: `Hi ${customer.name}, we received a request to reset your password. Click the button below:`,
+                    bodyAr: `مرحباً ${customer.name}، تلقينا طلباً لإعادة تعيين كلمة المرور. اضغط على الزر أدناه:`,
+                    ctaUrl: resetUrl,
+                    ctaText: 'Reset Password | إعادة التعيين',
+                    fallbackUrl: resetUrl,
+                    extraHtml: '<p style="color: #999; font-size: 12px; margin: 10px 0 0;">This link expires in 1 hour. If you didn\'t request this, ignore this email.</p>',
+                    preheader: 'Reset your ORLO Store password. This link expires in 1 hour.',
+                });
+
+                const text = plainText({
+                    titleEn: 'Password Reset',
+                    bodyTextEn: `Hi ${customer.name}, we received a request to reset your password.`,
+                    bodyTextAr: `مرحباً ${customer.name}، تلقينا طلباً لإعادة تعيين كلمة المرور.`,
+                    ctaUrl: resetUrl,
+                    ctaText: 'Reset Password',
+                    infoTextEn: 'This link expires in 1 hour. If you didn\'t request this, ignore this email.',
+                });
+
+                await sendEmail({
+                    apiKey: env.RESEND_API_KEY,
+                    to: email.toLowerCase(),
+                    subject: 'Reset Your Password | إعادة تعيين كلمة المرور',
+                    html,
+                    text,
                 });
             } catch (emailError) {
                 console.error('Reset email error:', emailError);
