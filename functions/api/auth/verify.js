@@ -2,6 +2,7 @@
 // Location: /functions/api/auth/verify.js
 
 import { generateToken } from './crypto-utils.js';
+import { customerEmail, plainText, sendEmail } from '../email-template.js';
 
 export async function onRequestGet(context) {
     const { env, request } = context;
@@ -81,41 +82,31 @@ export async function onRequestPost(context) {
             const origin = new URL(request.url).origin;
             const verifyUrl = `${origin}/verify-email.html?token=${verificationToken}`;
 
-            await fetch('https://api.resend.com/emails', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    from: 'ORLO <noreply@orlostore.com>',
-                    to: customer.email,
-                    subject: 'Verify Your Email | تأكيد بريدك الإلكتروني',
-                    html: `
-                        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
-                            <div style="text-align: center; margin-bottom: 20px;">
-                                <h1 style="color: #2c4a5c; margin: 0;">ORLO</h1>
-                            </div>
-                            <h2 style="color: #2c4a5c;">Hello, ${customer.name}!</h2>
-                            <p style="color: #555; font-size: 15px; line-height: 1.6;">
-                                Please verify your email address by clicking the button below:
-                            </p>
-                            <div style="text-align: center; margin: 30px 0;">
-                                <a href="${verifyUrl}" style="background: #e07856; color: white; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; display: inline-block;">
-                                    Verify Email | تأكيد البريد
-                                </a>
-                            </div>
-                            <p style="color: #888; font-size: 13px; line-height: 1.5;">
-                                If the button doesn't work, copy and paste this link:<br>
-                                <a href="${verifyUrl}" style="color: #e07856;">${verifyUrl}</a>
-                            </p>
-                            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-                            <p style="color: #aaa; font-size: 12px; text-align: center; font-family: 'Almarai', Arial, sans-serif; direction: rtl;">
-                                يرجى تأكيد بريدك الإلكتروني بالضغط على الزر أعلاه
-                            </p>
-                        </div>
-                    `
-                })
+            const html = customerEmail({
+                origin,
+                titleEn: `Hello, ${customer.name}!`,
+                bodyEn: 'Please verify your email address by clicking the button below:',
+                bodyAr: 'يرجى تأكيد بريدك الإلكتروني بالضغط على الزر أدناه:',
+                ctaUrl: verifyUrl,
+                ctaText: 'Verify Email | تأكيد البريد',
+                fallbackUrl: verifyUrl,
+                preheader: 'Verify your email address to complete your ORLO Store registration.',
+            });
+
+            const text = plainText({
+                titleEn: `Hello, ${customer.name}!`,
+                bodyTextEn: 'Please verify your email address by clicking the link below:',
+                bodyTextAr: 'يرجى تأكيد بريدك الإلكتروني بالضغط على الرابط أدناه:',
+                ctaUrl: verifyUrl,
+                ctaText: 'Verify Email',
+            });
+
+            await sendEmail({
+                apiKey: env.RESEND_API_KEY,
+                to: customer.email,
+                subject: 'Verify Your Email | تأكيد بريدك الإلكتروني',
+                html,
+                text,
             });
         }
 

@@ -2,6 +2,7 @@
 // Location: /functions/api/auth/guest-to-account.js
 
 import { hashPasswordPBKDF2, generateToken, generateTempPassword } from './crypto-utils.js';
+import { customerEmail, plainText, sendEmail } from '../email-template.js';
 
 export async function onRequestPost(context) {
     const { env, request } = context;
@@ -86,55 +87,42 @@ export async function onRequestPost(context) {
                 const origin = new URL(request.url).origin;
                 const verifyUrl = `${origin}/verify-email.html?token=${verificationToken}`;
 
-                await fetch('https://api.resend.com/emails', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        from: 'ORLO Store <noreply@orlostore.com>',
-                        to: email,
-                        subject: 'Your ORLO Account is Ready | حسابك في أورلو جاهز',
-                        html: `
-                            <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #f8f9fa; padding: 0; border-radius: 12px; overflow: hidden;">
-                                <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 20px; text-align: center;">
-                                    <img src="${origin}/logo.png" alt="ORLO Store" style="width: 70px; height: 70px; margin-bottom: 8px;">
-                                    <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1px;">ORLO Store</div>
-                                </div>
-                                <div style="background: white; padding: 30px 25px;">
-                                    <h2 style="color: #2c4a5c; margin: 0 0 15px; font-size: 18px; font-weight: 600;">Welcome, ${name}!</h2>
-                                    <p style="color: #555; font-size: 14px; line-height: 1.7; margin: 0 0 10px;">
-                                        Your account has been created. Here are your login details:
-                                    </p>
-                                    <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin: 15px 0; border-left: 3px solid #e07856;">
-                                        <p style="margin: 0 0 6px; font-size: 13px; color: #666;"><strong>Email:</strong> ${email}</p>
-                                        <p style="margin: 0; font-size: 13px; color: #666;"><strong>Temporary Password:</strong> ${tempPassword}</p>
-                                    </div>
-                                    <p style="color: #d9534f; font-size: 13px; font-weight: 500; margin: 0 0 15px;">
-                                        Please change your password after your first login.
-                                    </p>
-                                    <p style="color: #888; font-size: 13px; line-height: 1.6; margin: 0 0 20px; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
-                                        تم إنشاء حسابك. يرجى تغيير كلمة المرور بعد أول تسجيل دخول.
-                                    </p>
-                                    <div style="text-align: center; margin: 25px 0;">
-                                        <a href="${verifyUrl}" style="background: #e07856; color: white; padding: 14px 35px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block;">
-                                            Verify Email | تأكيد البريد
-                                        </a>
-                                    </div>
-                                    <p style="color: #999; font-size: 12px; line-height: 1.5; margin: 20px 0 0;">
-                                        If the button doesn't work, copy and paste this link:<br>
-                                        <a href="${verifyUrl}" style="color: #e07856; word-break: break-all;">${verifyUrl}</a>
-                                    </p>
-                                </div>
-                                <div style="background: #f8f9fa; padding: 20px 25px; text-align: center; border-top: 1px solid #eee;">
-                                    <p style="color: #aaa; font-size: 11px; margin: 0;">
-                                        © ORLO Store | info@orlostore.com
-                                    </p>
-                                </div>
-                            </div>
-                        `
-                    })
+                const credentialsHtml = `
+                    <div style="background: #f8f9fa; border-radius: 10px; padding: 15px 20px; margin-bottom: 20px; border-left: 3px solid #e07856;">
+                        <p style="margin: 0 0 6px; font-size: 13px; color: #666;"><strong>Email:</strong> ${email}</p>
+                        <p style="margin: 0; font-size: 13px; color: #666;"><strong>Temporary Password:</strong> ${tempPassword}</p>
+                    </div>
+                    <p style="color: #d9534f; font-size: 13px; font-weight: 500; margin: 0 0 15px;">
+                        Please change your password after your first login.
+                    </p>
+                `;
+
+                const html = customerEmail({
+                    origin,
+                    titleEn: `Welcome, ${name}!`,
+                    bodyEn: 'Your account has been created. Here are your login details:',
+                    bodyAr: 'تم إنشاء حسابك. يرجى تغيير كلمة المرور بعد أول تسجيل دخول.',
+                    ctaUrl: verifyUrl,
+                    ctaText: 'Verify Email | تأكيد البريد',
+                    fallbackUrl: verifyUrl,
+                    extraHtml: credentialsHtml,
+                    preheader: 'Your ORLO Store account is ready. Here are your login details.',
+                });
+
+                const text = plainText({
+                    titleEn: `Welcome, ${name}!`,
+                    bodyTextEn: `Your account has been created.\n\nEmail: ${email}\nTemporary Password: ${tempPassword}\n\nPlease change your password after your first login.`,
+                    bodyTextAr: 'تم إنشاء حسابك. يرجى تغيير كلمة المرور بعد أول تسجيل دخول.',
+                    ctaUrl: verifyUrl,
+                    ctaText: 'Verify Email',
+                });
+
+                await sendEmail({
+                    apiKey: env.RESEND_API_KEY,
+                    to: email,
+                    subject: 'Your ORLO Account is Ready | حسابك في أورلو جاهز',
+                    html,
+                    text,
                 });
             } catch (emailError) {
                 console.error('Account email error:', emailError);

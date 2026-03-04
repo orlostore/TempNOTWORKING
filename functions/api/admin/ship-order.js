@@ -2,6 +2,7 @@
 // Location: /functions/api/admin/ship-order.js
 
 import { getKey, getAdminUser, logActivity } from './_helpers.js';
+import { customerEmail, plainText, sendEmail } from '../email-template.js';
 
 export async function onRequestPost(context) {
     const { env, request } = context;
@@ -61,6 +62,8 @@ export async function onRequestPost(context) {
         let emailError = null;
 
         if (env.RESEND_API_KEY) {
+            const origin = new URL(request.url).origin;
+
             const itemsList = (items || [])
                 .filter(i => !i.name.toLowerCase().includes('delivery'))
                 .map(i => {
@@ -72,80 +75,54 @@ export async function onRequestPost(context) {
                 })
                 .join('');
 
-            const emailResponse = await fetch('https://api.resend.com/emails', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    from: 'ORLO Store <noreply@orlostore.com>',
-                    to: customer_email,
-                    subject: 'Your Order Has Been Dispatched! | تم شحن طلبك',
-                    html: `
-                        <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px; -webkit-text-size-adjust: 100%;">
-                            <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
-                                <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 35px 30px; text-align: center;">
-                                    <img src="https://www.orlostore.com/logo.png" alt="ORLO Store" style="width: 65px; height: 65px; margin-bottom: 10px;">
-                                    <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1.5px;">ORLO STORE</div>
-                                </div>
-                                <div style="padding: 35px 30px;">
-                                    <div style="text-align: center; margin-bottom: 20px;">
-                                        <div style="font-size: 48px; line-height: 1;">🚚</div>
-                                    </div>
-                                    <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px; font-weight: 700; text-align: center;">Your Order Has Been Dispatched!</h2>
-                                    <p style="color: #555; font-size: 15px; line-height: 1.7; margin: 0 0 6px; text-align: center;">
-                                        Hi ${customer_name || 'there'}, great news! Your order has been dispatched and is heading your way.
-                                    </p>
-                                    <p style="color: #888; font-size: 14px; line-height: 1.6; margin: 0 0 25px; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: center;">
-                                        مرحباً، تم شحن طلبك وهو في الطريق إليك!
-                                    </p>
+            const itemsTableHtml = itemsList ? `
+                <div style="background: #f8f9fa; border-radius: 10px; overflow: hidden; margin-bottom: 25px;">
+                    <div style="padding: 12px 16px; background: #eef2f5; font-size: 11px; font-weight: 700; color: #777; text-transform: uppercase; letter-spacing: 0.5px;">Order Items | عناصر الطلب</div>
+                    <table style="width: 100%; border-collapse: collapse;">${itemsList}</table>
+                </div>
+            ` : '';
 
-                                    ${itemsList ? `
-                                    <div style="background: #f8f9fa; border-radius: 10px; overflow: hidden; margin-bottom: 25px;">
-                                        <div style="padding: 12px 16px; background: #eef2f5; font-size: 11px; font-weight: 700; color: #777; text-transform: uppercase; letter-spacing: 0.5px;">Order Items | عناصر الطلب</div>
-                                        <table style="width: 100%; border-collapse: collapse;">
-                                            ${itemsList}
-                                        </table>
-                                    </div>
-                                    ` : ''}
-
-                                    <div style="background: #f0f7ff; border-radius: 10px; padding: 18px 20px; margin-bottom: 25px; border-left: 3px solid #2c4a5c;">
-                                        <p style="margin: 0; font-size: 14px; color: #555;">
-                                            <strong>Estimated Delivery:</strong> 2-5 business days across UAE
-                                        </p>
-                                        <p style="margin: 6px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl;">
-                                            التوصيل المتوقع: ٢-٥ أيام عمل
-                                        </p>
-                                    </div>
-
-                                    <div style="text-align: center; margin-bottom: 10px;">
-                                        <a href="https://www.orlostore.com/account.html" style="background: #2c4a5c; color: white; padding: 14px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block;">
-                                            View My Orders | عرض طلباتي
-                                        </a>
-                                    </div>
-
-                                    <p style="color: #999; font-size: 12px; line-height: 1.5; margin: 20px 0 0; text-align: center;">
-                                        Questions? Reply to this email or contact us at <a href="mailto:info@orlostore.com" style="color: #e07856;">info@orlostore.com</a>
-                                    </p>
-                                </div>
-                                <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eee;">
-                                    <p style="color: #aaa; font-size: 11px; margin: 0;">
-                                        © ORLO Store | info@orlostore.com
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    `
-                })
+            const html = customerEmail({
+                origin,
+                icon: '🚚',
+                titleEn: 'Your Order Has Been Dispatched!',
+                bodyEn: `Hi ${customer_name || 'there'}, great news! Your order has been dispatched and is heading your way.`,
+                bodyAr: 'مرحباً، تم شحن طلبك وهو في الطريق إليك!',
+                infoBoxEn: '<strong>Estimated Delivery:</strong> 2-5 business days across UAE',
+                infoBoxAr: 'التوصيل المتوقع: ٢-٥ أيام عمل',
+                ctaUrl: `${origin}/account.html`,
+                ctaText: 'View My Orders | عرض طلباتي',
+                ctaColor: '#2c4a5c',
+                extraHtml: itemsTableHtml,
+                preheader: 'Great news! Your ORLO Store order has been dispatched and is on its way.',
             });
 
-            const emailResult = await emailResponse.json();
+            const itemsText = (items || [])
+                .filter(i => !i.name.toLowerCase().includes('delivery'))
+                .map(i => `- ${(i.name || 'Item').split(/[\n\r]/)[0].trim()} x${i.quantity}`)
+                .join('\n');
 
-            if (emailResponse.ok && emailResult.id) {
-                emailSent = true;
-            } else {
-                emailError = emailResult.message || emailResult.error || 'Unknown Resend error';
+            const text = plainText({
+                titleEn: 'Your Order Has Been Dispatched!',
+                bodyTextEn: `Hi ${customer_name || 'there'}, great news! Your order has been dispatched and is heading your way.\n\n${itemsText}`,
+                bodyTextAr: 'مرحباً، تم شحن طلبك وهو في الطريق إليك!',
+                infoTextEn: 'Estimated Delivery: 2-5 business days across UAE',
+                infoTextAr: 'التوصيل المتوقع: ٢-٥ أيام عمل',
+                ctaUrl: `${origin}/account.html`,
+                ctaText: 'View My Orders',
+            });
+
+            const result = await sendEmail({
+                apiKey: env.RESEND_API_KEY,
+                to: customer_email,
+                subject: 'Your Order Has Been Dispatched! | تم شحن طلبك',
+                html,
+                text,
+            });
+
+            emailSent = result.success;
+            if (!result.success) {
+                emailError = result.error;
                 console.error('Resend error:', emailError);
             }
         } else {

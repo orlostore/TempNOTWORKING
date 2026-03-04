@@ -4,6 +4,7 @@
 // PUT: Admin-initiated return on behalf of customer
 
 import { getKey, getAdminUser, logActivity } from './_helpers.js';
+import { customerEmail, plainText, sendEmail } from '../email-template.js';
 
 export async function onRequestGet(context) {
     // GET: List all return requests
@@ -135,96 +136,88 @@ export async function onRequestPost(context) {
         // Send email to customer
         if (env.RESEND_API_KEY && returnReq.customer_email) {
             try {
+                const origin = new URL(request.url).origin;
+                const custName = returnReq.customer_name || 'there';
+                const orderRef = order_id.slice(-8).toUpperCase();
+
                 const subjects = {
                     approved: 'Return Approved | تمت الموافقة على الإرجاع',
                     rejected: 'Return Request Update | تحديث طلب الإرجاع',
                     refunded: 'Refund Processed | تم معالجة الاسترداد'
                 };
 
-                const bodies = {
-                    approved: `
-                        <div style="font-size: 48px; line-height: 1; margin-bottom: 15px;">✅</div>
-                        <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px;">Return Approved</h2>
-                        <p style="color: #555; font-size: 15px; line-height: 1.7;">
-                            Hi ${returnReq.customer_name || 'there'}, your return request for order #${order_id.slice(-8).toUpperCase()} has been approved.
-                        </p>
-                        <p style="color: #888; font-size: 14px; font-family: 'Almarai', Arial, sans-serif; direction: rtl;">
-                            تمت الموافقة على طلب الإرجاع لطلبك #${order_id.slice(-8).toUpperCase()}.
-                        </p>
-                        <div style="background: #f0f7ff; border-radius: 10px; padding: 18px 20px; margin: 20px 0; border-left: 3px solid #2c4a5c; text-align: left;">
-                            <p style="margin: 0; font-size: 14px; color: #555;">
-                                <strong>Next steps:</strong> Please ship the item back to us. Return shipping costs are the customer's responsibility as per our terms. Once we receive and inspect the item, we will process your refund.
-                            </p>
-                            <p style="margin: 8px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
-                                يرجى شحن المنتج إلينا. تكاليف شحن الإرجاع على العميل. بمجرد استلامنا سنقوم بمعالجة الاسترداد.
-                            </p>
-                        </div>
-                        ${note ? `<p style="color:#555;font-size:14px;"><strong>Note:</strong> ${note}</p>` : ''}
-                    `,
-                    rejected: `
-                        <div style="font-size: 48px; line-height: 1; margin-bottom: 15px;">📋</div>
-                        <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px;">Return Request Update</h2>
-                        <p style="color: #555; font-size: 15px; line-height: 1.7;">
-                            Hi ${returnReq.customer_name || 'there'}, unfortunately we are unable to approve the return for order #${order_id.slice(-8).toUpperCase()}.
-                        </p>
-                        <p style="color: #888; font-size: 14px; font-family: 'Almarai', Arial, sans-serif; direction: rtl;">
-                            للأسف لم نتمكن من الموافقة على إرجاع الطلب #${order_id.slice(-8).toUpperCase()}.
-                        </p>
-                        ${note ? `<div style="background: #fff3cd; border-radius: 10px; padding: 14px 16px; margin: 20px 0;"><p style="margin:0;font-size:14px;color:#555;"><strong>Reason:</strong> ${note}</p></div>` : ''}
-                    `,
-                    refunded: `
-                        <div style="font-size: 48px; line-height: 1; margin-bottom: 15px;">💸</div>
-                        <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px;">Refund Processed</h2>
-                        <p style="color: #555; font-size: 15px; line-height: 1.7;">
-                            Hi ${returnReq.customer_name || 'there'}, a full refund has been issued for order #${order_id.slice(-8).toUpperCase()}.
-                        </p>
-                        <p style="color: #888; font-size: 14px; font-family: 'Almarai', Arial, sans-serif; direction: rtl;">
-                            تم إصدار استرداد كامل لطلبك #${order_id.slice(-8).toUpperCase()}.
-                        </p>
-                        <div style="background: #f0f7ff; border-radius: 10px; padding: 18px 20px; margin: 20px 0; border-left: 3px solid #2c4a5c; text-align: left;">
-                            <p style="margin: 0; font-size: 14px; color: #555;">
-                                The refund will appear on your card within <strong>5-7 business days</strong>.
-                            </p>
-                            <p style="margin: 6px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
-                                سيظهر المبلغ في حسابك خلال ٥-٧ أيام عمل.
-                            </p>
-                        </div>
-                    `
+                const emailConfigs = {
+                    approved: {
+                        icon: '✅',
+                        titleEn: 'Return Approved',
+                        bodyEn: `Hi ${custName}, your return request for order #${orderRef} has been approved.`,
+                        bodyAr: `تمت الموافقة على طلب الإرجاع لطلبك #${orderRef}.`,
+                        infoBoxEn: `<strong>Next steps:</strong> Please ship the item back to us. Return shipping costs are the customer's responsibility as per our terms. Once we receive and inspect the item, we will process your refund.`,
+                        infoBoxAr: 'يرجى شحن المنتج إلينا. تكاليف شحن الإرجاع على العميل. بمجرد استلامنا سنقوم بمعالجة الاسترداد.',
+                        extraHtml: note ? `<p style="color:#555;font-size:14px;"><strong>Note:</strong> ${note}</p>` : '',
+                        preheader: `Your return for order #${orderRef} has been approved.`,
+                        plainEn: `Hi ${custName}, your return request for order #${orderRef} has been approved.`,
+                        plainInfoEn: 'Next steps: Please ship the item back to us. Return shipping costs are the customer\'s responsibility. Once we receive and inspect the item, we will process your refund.',
+                    },
+                    rejected: {
+                        icon: '📋',
+                        titleEn: 'Return Request Update',
+                        bodyEn: `Hi ${custName}, unfortunately we are unable to approve the return for order #${orderRef}.`,
+                        bodyAr: `للأسف لم نتمكن من الموافقة على إرجاع الطلب #${orderRef}.`,
+                        infoBoxEn: note ? `<strong>Reason:</strong> ${note}` : '',
+                        infoBoxBg: '#fff3cd',
+                        infoBoxBorder: '#ffc107',
+                        preheader: `Update on your return request for order #${orderRef}.`,
+                        plainEn: `Hi ${custName}, unfortunately we are unable to approve the return for order #${orderRef}.`,
+                        plainInfoEn: note ? `Reason: ${note}` : '',
+                    },
+                    refunded: {
+                        icon: '💸',
+                        titleEn: 'Refund Processed',
+                        bodyEn: `Hi ${custName}, a full refund has been issued for order #${orderRef}.`,
+                        bodyAr: `تم إصدار استرداد كامل لطلبك #${orderRef}.`,
+                        infoBoxEn: 'The refund will appear on your card within <strong>5-7 business days</strong>.',
+                        infoBoxAr: 'سيظهر المبلغ في حسابك خلال ٥-٧ أيام عمل.',
+                        preheader: `A full refund has been issued for your order #${orderRef}.`,
+                        plainEn: `Hi ${custName}, a full refund has been issued for order #${orderRef}.`,
+                        plainInfoEn: 'The refund will appear on your card within 5-7 business days.',
+                        plainInfoAr: 'سيظهر المبلغ في حسابك خلال ٥-٧ أيام عمل.',
+                    }
                 };
 
-                const emailRes = await fetch('https://api.resend.com/emails', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        from: 'ORLO Store <noreply@orlostore.com>',
-                        to: returnReq.customer_email,
-                        subject: subjects[newStatus] || 'Return Update',
-                        html: `
-                            <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px;">
-                                <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
-                                    <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 35px 30px; text-align: center;">
-                                        <img src="https://orlostore.com/logo.png" alt="ORLO Store" style="width: 65px; height: 65px; margin-bottom: 10px;">
-                                        <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1.5px;">ORLO STORE</div>
-                                    </div>
-                                    <div style="padding: 35px 30px; text-align: center;">
-                                        ${bodies[newStatus] || ''}
-                                        <p style="color: #999; font-size: 12px; margin: 20px 0 0;">
-                                            Questions? Contact us at <a href="mailto:info@orlostore.com" style="color: #e07856;">info@orlostore.com</a>
-                                        </p>
-                                    </div>
-                                    <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eee;">
-                                        <p style="color: #aaa; font-size: 11px; margin: 0;">&copy; ORLO Store | info@orlostore.com</p>
-                                    </div>
-                                </div>
-                            </div>
-                        `
-                    })
+                const cfg = emailConfigs[newStatus];
+
+                const html = customerEmail({
+                    origin,
+                    icon: cfg.icon,
+                    titleEn: cfg.titleEn,
+                    bodyEn: cfg.bodyEn,
+                    bodyAr: cfg.bodyAr,
+                    infoBoxEn: cfg.infoBoxEn || undefined,
+                    infoBoxAr: cfg.infoBoxAr || undefined,
+                    infoBoxBg: cfg.infoBoxBg,
+                    infoBoxBorder: cfg.infoBoxBorder,
+                    extraHtml: cfg.extraHtml || '',
+                    preheader: cfg.preheader,
                 });
-                const emailResult = await emailRes.json();
-                emailSent = emailRes.ok && emailResult.id;
+
+                const text = plainText({
+                    titleEn: cfg.titleEn,
+                    bodyTextEn: cfg.plainEn,
+                    bodyTextAr: cfg.bodyAr,
+                    infoTextEn: cfg.plainInfoEn || undefined,
+                    infoTextAr: cfg.plainInfoAr || undefined,
+                });
+
+                const result = await sendEmail({
+                    apiKey: env.RESEND_API_KEY,
+                    to: returnReq.customer_email,
+                    subject: subjects[newStatus] || 'Return Update',
+                    html,
+                    text,
+                });
+
+                emailSent = result.success;
             } catch (mailErr) {
                 console.error('Return email error:', mailErr);
             }
@@ -331,54 +324,34 @@ export async function onRequestPut(context) {
         // Send notification email to customer
         if (env.RESEND_API_KEY && customerEmail) {
             try {
-                await fetch('https://api.resend.com/emails', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        from: 'ORLO Store <noreply@orlostore.com>',
-                        to: customerEmail,
-                        subject: `Return Initiated for Order #${order_id.slice(-8).toUpperCase()} | تم بدء إرجاع طلبك`,
-                        html: `
-                            <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px;">
-                                <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
-                                    <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 35px 30px; text-align: center;">
-                                        <img src="https://orlostore.com/logo.png" alt="ORLO Store" style="width: 65px; height: 65px; margin-bottom: 10px;">
-                                        <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1.5px;">ORLO STORE</div>
-                                    </div>
-                                    <div style="padding: 35px 30px; text-align: center;">
-                                        <div style="font-size: 48px; line-height: 1; margin-bottom: 15px;">🔄</div>
-                                        <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px;">Return Initiated</h2>
-                                        <p style="color: #555; font-size: 15px; line-height: 1.7;">
-                                            Hi ${customerName || 'there'}, a return has been initiated for your order #${order_id.slice(-8).toUpperCase()}.
-                                        </p>
-                                        <p style="color: #888; font-size: 14px; font-family: 'Almarai', Arial, sans-serif; direction: rtl;">
-                                            تم بدء عملية إرجاع لطلبك #${order_id.slice(-8).toUpperCase()}.
-                                        </p>
-                                        <div style="background: #f0f7ff; border-radius: 10px; padding: 18px 20px; margin: 20px 0; border-left: 3px solid #2c4a5c; text-align: left;">
-                                            <p style="margin: 0; font-size: 14px; color: #555;">
-                                                <strong>Reason:</strong> ${reason}
-                                            </p>
-                                            <p style="margin: 10px 0 0; font-size: 14px; color: #555;">
-                                                <strong>Next steps:</strong> Please ship the item back to us. Return shipping costs are the customer's responsibility as per our terms. Once we receive and inspect the item, we will process your refund.
-                                            </p>
-                                            <p style="margin: 8px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
-                                                يرجى شحن المنتج إلينا. تكاليف شحن الإرجاع على العميل. بمجرد استلامنا سنقوم بمعالجة الاسترداد.
-                                            </p>
-                                        </div>
-                                        <p style="color: #999; font-size: 12px; margin: 20px 0 0;">
-                                            Questions? Contact us at <a href="mailto:info@orlostore.com" style="color: #e07856;">info@orlostore.com</a>
-                                        </p>
-                                    </div>
-                                    <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eee;">
-                                        <p style="color: #aaa; font-size: 11px; margin: 0;">&copy; ORLO Store | info@orlostore.com</p>
-                                    </div>
-                                </div>
-                            </div>
-                        `
-                    })
+                const origin = new URL(request.url).origin;
+                const orderRef = order_id.slice(-8).toUpperCase();
+
+                const html = customerEmail({
+                    origin,
+                    icon: '🔄',
+                    titleEn: 'Return Initiated',
+                    bodyEn: `Hi ${customerName || 'there'}, a return has been initiated for your order #${orderRef}.`,
+                    bodyAr: `تم بدء عملية إرجاع لطلبك #${orderRef}.`,
+                    infoBoxEn: `<strong>Reason:</strong> ${reason}<br><br><strong>Next steps:</strong> Please ship the item back to us. Return shipping costs are the customer's responsibility as per our terms. Once we receive and inspect the item, we will process your refund.`,
+                    infoBoxAr: 'يرجى شحن المنتج إلينا. تكاليف شحن الإرجاع على العميل. بمجرد استلامنا سنقوم بمعالجة الاسترداد.',
+                    preheader: `A return has been initiated for your order #${orderRef}.`,
+                });
+
+                const text = plainText({
+                    titleEn: 'Return Initiated',
+                    bodyTextEn: `Hi ${customerName || 'there'}, a return has been initiated for your order #${orderRef}.`,
+                    bodyTextAr: `تم بدء عملية إرجاع لطلبك #${orderRef}.`,
+                    infoTextEn: `Reason: ${reason}\n\nNext steps: Please ship the item back to us. Return shipping costs are the customer's responsibility. Once we receive and inspect the item, we will process your refund.`,
+                    infoTextAr: 'يرجى شحن المنتج إلينا. تكاليف شحن الإرجاع على العميل. بمجرد استلامنا سنقوم بمعالجة الاسترداد.',
+                });
+
+                await sendEmail({
+                    apiKey: env.RESEND_API_KEY,
+                    to: customerEmail,
+                    subject: `Return Initiated for Order #${orderRef} | تم بدء إرجاع طلبك`,
+                    html,
+                    text,
                 });
             } catch (mailErr) {
                 console.error('Admin return notification email error:', mailErr);
