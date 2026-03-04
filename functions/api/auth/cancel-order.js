@@ -184,8 +184,8 @@ export async function onRequestPost(context) {
                     titleEn: 'Order Cancelled',
                     bodyEn: `Hi ${customerName || 'there'}, your order has been cancelled as requested.`,
                     bodyAr: 'مرحباً، تم إلغاء طلبك بناءً على طلبك.',
-                    infoBoxEn: '<strong>Refund:</strong> A full refund has been initiated. It will appear on your card within 5-7 business days.',
-                    infoBoxAr: 'تم بدء استرداد المبلغ كاملاً. سيظهر في حسابك خلال ٥-٧ أيام عمل.',
+                    infoBoxEn: `<strong>Refund:</strong> A full refund of AED ${(session.amount_total / 100).toFixed(2)} has been initiated. It will appear on your card within 5-7 business days.`,
+                    infoBoxAr: `تم بدء استرداد مبلغ AED ${(session.amount_total / 100).toFixed(2)} كاملاً. سيظهر في حسابك خلال ٥-٧ أيام عمل.`,
                     preheader: 'Your order has been cancelled and a full refund has been initiated.',
                 });
 
@@ -193,8 +193,8 @@ export async function onRequestPost(context) {
                     titleEn: 'Order Cancelled',
                     bodyTextEn: `Hi ${customerName || 'there'}, your order has been cancelled as requested.`,
                     bodyTextAr: 'مرحباً، تم إلغاء طلبك بناءً على طلبك.',
-                    infoTextEn: 'Refund: A full refund has been initiated. It will appear on your card within 5-7 business days.',
-                    infoTextAr: 'تم بدء استرداد المبلغ كاملاً. سيظهر في حسابك خلال ٥-٧ أيام عمل.',
+                    infoTextEn: `Refund: A full refund of AED ${(session.amount_total / 100).toFixed(2)} has been initiated. It will appear on your card within 5-7 business days.`,
+                    infoTextAr: `تم بدء استرداد مبلغ AED ${(session.amount_total / 100).toFixed(2)} كاملاً. سيظهر في حسابك خلال ٥-٧ أيام عمل.`,
                 });
 
                 await sendEmail({
