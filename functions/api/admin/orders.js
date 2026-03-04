@@ -42,6 +42,7 @@ export async function onRequestGet(context) {
         // Fetch shipped order IDs from D1 (source of truth)
         let shippedOrderIds = new Set();
         let cancelledOrderIds = new Set();
+        let returnRequests = {};
         if (env.DB) {
             try {
                 const { results } = await env.DB.prepare(
@@ -65,7 +66,6 @@ export async function onRequestGet(context) {
             }
 
             // Get return requests
-            let returnRequests = {};
             try {
                 const { results } = await env.DB.prepare(
                     'SELECT order_id, status, reason, customer_name, customer_email, created_at FROM return_requests'
