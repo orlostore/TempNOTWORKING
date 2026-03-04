@@ -1337,6 +1337,37 @@
             </div>
         </div>
 
+        <!-- Dashboard Alert Cards -->
+        <div id="dashboardAlerts" style="display:none;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+            <div id="alertNewOrders" onclick="alertGoToOrders('pending')" style="flex:1;min-width:160px;background:white;border-radius:12px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);cursor:pointer;transition:all 0.2s;border-left:4px solid #ddd;">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div>
+                        <div style="font-size:0.75rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">New Orders</div>
+                        <div id="alertNewOrdersCount" style="font-size:1.8rem;font-weight:700;color:var(--text);margin-top:2px;">0</div>
+                    </div>
+                    <div style="font-size:1.6rem;">📦</div>
+                </div>
+            </div>
+            <div id="alertReturns" onclick="alertGoToOrders('return_requested')" style="flex:1;min-width:160px;background:white;border-radius:12px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);cursor:pointer;transition:all 0.2s;border-left:4px solid #ddd;">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div>
+                        <div style="font-size:0.75rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Return Requests</div>
+                        <div id="alertReturnsCount" style="font-size:1.8rem;font-weight:700;color:var(--text);margin-top:2px;">0</div>
+                    </div>
+                    <div style="font-size:1.6rem;">🔄</div>
+                </div>
+            </div>
+            <div id="alertCancelled" onclick="alertGoToOrders('cancelled')" style="flex:1;min-width:160px;background:white;border-radius:12px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);cursor:pointer;transition:all 0.2s;border-left:4px solid #ddd;">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div>
+                        <div style="font-size:0.75rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Cancelled</div>
+                        <div id="alertCancelledCount" style="font-size:1.8rem;font-weight:700;color:var(--text);margin-top:2px;">0</div>
+                    </div>
+                    <div style="font-size:1.6rem;">✕</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Tabs -->
         <div class="tabs">
             <button class="tab active" onclick="switchTab('products')">📦 Products</button>
@@ -2115,6 +2146,7 @@
             }
             loadProducts();
             loadDeliveryFees();
+            loadOrders();
             initBrowserNotifications();
         }
 
@@ -2965,6 +2997,9 @@
                 // Apply filters
                 applyFilters();
 
+                // Update dashboard alert cards
+                updateDashboardAlerts();
+
                 // Update last refreshed
                 updateLastRefreshed('ordersLastRefreshed', 'ordersRefreshTime');
                 
@@ -3233,7 +3268,55 @@
             document.getElementById('statPendingOrders').textContent = pending;
             document.getElementById('pendingOrdersBadge').textContent = pending;
         }
-        
+
+        // ─── Dashboard Alert Cards ──────────────────────────────
+        function updateDashboardAlerts() {
+            // Use full orders array (not filtered) for dashboard counts
+            const pendingCount = orders.filter(o => o.status === 'pending').length;
+            const returnCount = orders.filter(o => o.return_request && o.return_request.status === 'requested').length;
+            const cancelledCount = orders.filter(o => o.status === 'cancelled').length;
+
+            const alertEl = document.getElementById('dashboardAlerts');
+            alertEl.style.display = 'flex';
+
+            // New Orders
+            const newEl = document.getElementById('alertNewOrders');
+            document.getElementById('alertNewOrdersCount').textContent = pendingCount;
+            newEl.style.borderLeftColor = pendingCount > 0 ? '#28a745' : '#ddd';
+            newEl.style.background = pendingCount > 0 ? '#f0fff4' : 'white';
+
+            // Returns
+            const retEl = document.getElementById('alertReturns');
+            document.getElementById('alertReturnsCount').textContent = returnCount;
+            retEl.style.borderLeftColor = returnCount > 0 ? '#e07856' : '#ddd';
+            retEl.style.background = returnCount > 0 ? '#fff8f0' : 'white';
+
+            // Cancelled
+            const canEl = document.getElementById('alertCancelled');
+            document.getElementById('alertCancelledCount').textContent = cancelledCount;
+            canEl.style.borderLeftColor = cancelledCount > 0 ? '#dc3545' : '#ddd';
+            canEl.style.background = cancelledCount > 0 ? '#fff0f0' : 'white';
+        }
+
+        function alertGoToOrders(statusFilter) {
+            // Switch to orders tab with the given status filter
+            switchTab('orders');
+            const statusEl = document.getElementById('statusFilter');
+            if (statusEl) {
+                statusEl.value = statusFilter;
+            }
+            // Wait for orders to load then re-apply filter
+            const checkOrders = setInterval(() => {
+                if (orders.length > 0 || document.getElementById('ordersContainer').querySelector('.order-card, .orders-empty')) {
+                    clearInterval(checkOrders);
+                    if (statusEl) statusEl.value = statusFilter;
+                    applyFilters();
+                }
+            }, 200);
+            // Safety: clear after 5s
+            setTimeout(() => clearInterval(checkOrders), 5000);
+        }
+
         function copyAddress(address) {
             navigator.clipboard.writeText(address).then(() => {
                 showToast('Address copied!', 'success', 2000);
