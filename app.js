@@ -22,14 +22,14 @@ const SVG_CLIPBOARD_SM = '<svg style="width:1.3em;height:1.3em;vertical-align:-0
 // Hide page when navigating away to Stripe so bfcache snapshot is already invisible
 window.addEventListener('pagehide', function() {
     if (sessionStorage.getItem('orlo_checkout_pending')) {
-        document.documentElement.style.opacity = '0';
+        document.documentElement.style.visibility = 'hidden';
     }
 });
 
 // Redirect to cancel page if user presses back from Stripe payment (bfcache + fresh load)
 window.addEventListener('pageshow', function(event) {
     if (sessionStorage.getItem('orlo_checkout_pending')) {
-        document.documentElement.style.opacity = '0';
+        document.documentElement.style.visibility = 'hidden';
         sessionStorage.removeItem('orlo_checkout_pending');
         window.location.replace('cancel.html');
     }
@@ -1585,6 +1585,9 @@ async function checkout() {
 
         if (data.url) {
             sessionStorage.setItem('orlo_checkout_pending', '1');
+            // Hide page + replace history entry so browser back goes to cancel.html, not product page
+            document.documentElement.style.visibility = 'hidden';
+            try { history.replaceState(null, '', 'cancel.html'); } catch(e) {}
             window.location.href = data.url;
         } else {
             throw new Error('No URL');

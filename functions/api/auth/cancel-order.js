@@ -85,19 +85,60 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'Unable to process refund for this order' }, { status: 400 });
         }
 
-        const refundRes = await fetch('https://api.stripe.com/v1/refunds', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `payment_intent=${encodeURIComponent(paymentIntentId)}`
-        });
-        const refund = await refundRes.json();
+        // Check payment intent status first to determine correct action
+        const piRes = await fetch(
+            `https://api.stripe.com/v1/payment_intents/${encodeURIComponent(paymentIntentId)}`,
+            { headers: { 'Authorization': `Bearer ${STRIPE_SECRET_KEY}` } }
+        );
+        const pi = await piRes.json();
 
-        if (refund.error) {
-            console.error('Stripe refund error:', refund.error);
-            return Response.json({ error: 'Refund failed. Please contact support.' }, { status: 500 });
+        if (pi.error) {
+            console.error('Stripe PI fetch error:', pi.error);
+            return Response.json({ error: 'Unable to retrieve payment details. Please try again.' }, { status: 500 });
+        }
+
+        // Handle based on payment intent status
+        if (pi.status === 'canceled') {
+            // Already canceled — just record it, skip Stripe action
+        } else if (pi.status === 'requires_capture') {
+            // Payment authorized but not captured — cancel the intent instead of refunding
+            const cancelRes = await fetch(
+                `https://api.stripe.com/v1/payment_intents/${encodeURIComponent(paymentIntentId)}/cancel`,
+                {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${STRIPE_SECRET_KEY}` }
+                }
+            );
+            const cancelResult = await cancelRes.json();
+            if (cancelResult.error) {
+                console.error('Stripe cancel PI error:', cancelResult.error);
+                return Response.json({ error: 'Cancellation failed. Please contact support at info@orlostore.com' }, { status: 500 });
+            }
+        } else if (pi.status === 'succeeded') {
+            // Payment captured — issue a refund
+            const refundRes = await fetch('https://api.stripe.com/v1/refunds', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `payment_intent=${encodeURIComponent(paymentIntentId)}`
+            });
+            const refund = await refundRes.json();
+
+            if (refund.error) {
+                console.error('Stripe refund error:', refund.error);
+                // Handle already-refunded gracefully
+                if (refund.error.code === 'charge_already_refunded') {
+                    // Already refunded — just record the cancellation below
+                } else {
+                    return Response.json({ error: 'Refund failed (' + (refund.error.code || 'unknown') + '). Please contact support at info@orlostore.com' }, { status: 500 });
+                }
+            }
+        } else {
+            // Payment still processing or in unexpected state
+            console.error('Unexpected PI status for cancel:', pi.status);
+            return Response.json({ error: 'Payment is still processing. Please wait a few minutes and try again.' }, { status: 400 });
         }
 
         // Restore inventory
