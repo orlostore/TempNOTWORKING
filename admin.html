@@ -1126,9 +1126,170 @@
         @media (max-width: 400px) {
             .analytics-kpi-row { grid-template-columns: 1fr; }
         }
+
+        /* ── Toast Notifications ── */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .toast {
+            pointer-events: auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 14px 20px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 280px;
+            max-width: 420px;
+            animation: toastIn 0.3s ease;
+            border-left: 4px solid var(--primary);
+            font-size: 0.9rem;
+        }
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.warning { border-left-color: var(--warning); }
+        .toast-icon { font-size: 1.3rem; flex-shrink: 0; }
+        .toast-msg { flex: 1; color: var(--text); line-height: 1.4; }
+        .toast-close {
+            background: none; border: none; font-size: 1.1rem;
+            color: #999; cursor: pointer; padding: 0 2px; flex-shrink: 0;
+        }
+        .toast-close:hover { color: var(--danger); }
+        .toast.removing { animation: toastOut 0.25s ease forwards; }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes toastOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(60px); } }
+        @media (max-width: 768px) {
+            .toast-container { top: 10px; right: 10px; left: 10px; }
+            .toast { min-width: 0; max-width: 100%; font-size: 0.85rem; padding: 12px 14px; }
+        }
+
+        /* ── Confirm Modal ── */
+        .confirm-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .confirm-overlay.active { display: flex; }
+        .confirm-box {
+            background: #fff; border-radius: 14px; padding: 30px;
+            max-width: 420px; width: 100%; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            animation: toastIn 0.2s ease;
+        }
+        .confirm-box .confirm-icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .confirm-box h3 { color: var(--primary); margin-bottom: 8px; font-size: 1.1rem; }
+        .confirm-box p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; }
+        .confirm-box .confirm-input {
+            width: 100%; padding: 10px 14px; border: 2px solid var(--border);
+            border-radius: 8px; font-size: 0.9rem; margin-bottom: 16px; text-align: center;
+        }
+        .confirm-box .confirm-input:focus { outline: none; border-color: var(--accent); }
+        .confirm-actions { display: flex; gap: 10px; justify-content: center; }
+        .confirm-actions .btn { min-width: 100px; justify-content: center; }
+        @media (max-width: 768px) {
+            .confirm-box { padding: 24px 20px; margin: 10px; }
+        }
+
+        /* ── Activity Log ── */
+        .activity-list { max-height: 500px; overflow-y: auto; }
+        .activity-item {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 12px 0; border-bottom: 1px solid #f0f0f0;
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-icon {
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; flex-shrink: 0;
+            background: #e8f4f8; color: var(--primary);
+        }
+        .activity-icon.order { background: #d4edda; color: #155724; }
+        .activity-icon.ship { background: #cce5ff; color: #004085; }
+        .activity-icon.cancel { background: #f8d7da; color: #721c24; }
+        .activity-icon.product { background: #fff3cd; color: #856404; }
+        .activity-icon.stock { background: #e8f4f8; color: var(--primary); }
+        .activity-body { flex: 1; min-width: 0; }
+        .activity-body strong { color: var(--text); font-size: 0.85rem; }
+        .activity-body .activity-detail { color: var(--text-light); font-size: 0.8rem; margin-top: 2px; }
+        .activity-body .activity-time { color: #aaa; font-size: 0.75rem; margin-top: 3px; }
+        .activity-user {
+            font-size: 0.75rem; color: var(--accent); font-weight: 600;
+            background: #fff5f0; padding: 2px 8px; border-radius: 10px;
+            white-space: nowrap; flex-shrink: 0;
+        }
+
+        /* ── Settings Section ── */
+        .settings-section {
+            background: white; border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 25px; margin-bottom: 20px;
+        }
+        .settings-section h3 {
+            font-size: 1rem; color: var(--primary);
+            margin-bottom: 15px; display: flex; align-items: center; gap: 8px;
+        }
+        .settings-row {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 10px; flex-wrap: wrap;
+        }
+        .settings-row input {
+            padding: 8px 12px; border: 2px solid var(--border);
+            border-radius: 8px; font-size: 0.85rem; flex: 1; min-width: 200px;
+        }
+        .settings-row input:focus { outline: none; border-color: var(--accent); }
+
+        /* ── User Badge ── */
+        .user-badge {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.15); padding: 6px 14px;
+            border-radius: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.9);
+        }
+        .user-badge-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #28a745; flex-shrink: 0;
+        }
+
+        /* ── Last Refreshed ── */
+        .last-refreshed {
+            font-size: 0.75rem; color: var(--text-light);
+            display: flex; align-items: center; gap: 5px;
+            padding: 4px 10px; background: #f8f9fa; border-radius: 6px;
+        }
+        .last-refreshed-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--success);
+        }
+        .last-refreshed-dot.stale { background: var(--warning); }
     </style>
 </head>
 <body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Confirm Modal -->
+    <div class="confirm-overlay" id="confirmOverlay">
+        <div class="confirm-box" id="confirmBox">
+            <div class="confirm-icon" id="confirmIcon"></div>
+            <h3 id="confirmTitle"></h3>
+            <p id="confirmMessage"></p>
+            <input class="confirm-input" id="confirmInput" style="display:none;" placeholder="">
+            <div class="confirm-actions">
+                <button class="btn btn-outline btn-small" id="confirmCancel">Cancel</button>
+                <button class="btn btn-primary btn-small" id="confirmOk">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Auth Screen -->
     <div class="auth-screen" id="authScreen">
         <div class="auth-box">
@@ -1153,6 +1314,10 @@
             </div>
             <div class="header-actions">
                 <div id="headerDateTime" style="text-align:right;font-size:0.8rem;opacity:0.9;line-height:1.4;"></div>
+                <div class="user-badge" id="userBadge" style="display:none;">
+                    <div class="user-badge-dot"></div>
+                    <span id="userBadgeName">Admin</span>
+                </div>
                 <button class="btn btn-primary" onclick="openAddModal()">+ Add Product</button>
                 <button class="btn btn-secondary" onclick="refreshProducts()">Refresh</button>
             </div>
@@ -1177,6 +1342,8 @@
             <button class="tab active" onclick="switchTab('products')">📦 Products</button>
             <button class="tab" onclick="switchTab('orders')">📋 Orders <span class="tab-badge" id="pendingOrdersBadge">0</span></button>
             <button class="tab" onclick="switchTab('analytics')">📊 Analytics</button>
+            <button class="tab" onclick="switchTab('activity')">📝 Activity</button>
+            <button class="tab" onclick="switchTab('settings')">⚙️ Settings</button>
         </div>
 
         <!-- Products Tab -->
@@ -1270,6 +1437,11 @@
                     </select>
                 </div>
                 <button class="btn btn-primary btn-small" onclick="loadOrders()">🔄 Refresh</button>
+                <button class="btn btn-small btn-outline" onclick="exportOrdersCSV()">📥 Export CSV</button>
+                <div class="last-refreshed" id="ordersLastRefreshed" style="display:none;">
+                    <div class="last-refreshed-dot"></div>
+                    <span id="ordersRefreshTime">Just now</span>
+                </div>
             </div>
 
             <!-- Summary Stats -->
@@ -1476,17 +1648,102 @@
                 </div>
             </div>
 
-            <!-- Revenue & AOV Trends -->
+            <!-- Revenue, Profit & AOV Trends -->
             <div class="analytics-section">
-                <h2>📈 Revenue & AOV Trends</h2>
+                <h2>📈 Revenue, Profit & AOV Trends</h2>
                 <div class="analytics-grid">
                     <div class="analytics-chart-box">
                         <h3>Revenue Over Time</h3>
                         <canvas id="chartRevenueTrend"></canvas>
                     </div>
                     <div class="analytics-chart-box">
+                        <h3>Profit Over Time</h3>
+                        <canvas id="chartProfitTrend"></canvas>
+                    </div>
+                </div>
+                <div class="analytics-grid" style="margin-top:20px;">
+                    <div class="analytics-chart-box">
                         <h3>Average Order Value Over Time</h3>
                         <canvas id="chartAOVTrend"></canvas>
+                    </div>
+                    <div class="analytics-chart-box">
+                        <h3>Orders Per Day</h3>
+                        <canvas id="chartOrdersTrend"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export -->
+            <div style="text-align:center;margin-top:15px;">
+                <button class="btn btn-outline" onclick="exportAnalyticsCSV()">📥 Export Analytics CSV</button>
+            </div>
+        </div>
+
+        <!-- Activity Tab -->
+        <div class="tab-content" id="activityTab">
+            <div class="analytics-section">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h2>📝 Activity Log</h2>
+                    <button class="btn btn-primary btn-small" onclick="loadActivity()">🔄 Refresh</button>
+                </div>
+                <div id="activityContainer">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <div>Loading activity...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="tab-content" id="settingsTab">
+            <!-- Notification Emails -->
+            <div class="settings-section">
+                <h3>📧 Order Notification Emails</h3>
+                <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:15px;">
+                    Get an email alert when a new order comes in. Add up to 3 emails.
+                </p>
+                <div id="notificationEmailsContainer">
+                    <div class="settings-row">
+                        <input type="email" id="notifyEmail1" placeholder="e.g. orders@orlostore.com">
+                    </div>
+                    <div class="settings-row">
+                        <input type="email" id="notifyEmail2" placeholder="e.g. fahad@orlostore.com">
+                    </div>
+                    <div class="settings-row">
+                        <input type="email" id="notifyEmail3" placeholder="e.g. personal@gmail.com">
+                    </div>
+                </div>
+                <button class="btn btn-success btn-small" onclick="saveNotificationEmails()" style="margin-top:10px;">Save Emails</button>
+            </div>
+
+            <!-- Browser Notifications -->
+            <div class="settings-section">
+                <h3>🔔 Browser Notifications</h3>
+                <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:15px;">
+                    Get desktop alerts for new orders when this tab is open. Checks every 60 seconds.
+                </p>
+                <button class="btn btn-primary btn-small" id="enableNotifBtn" onclick="enableBrowserNotifications()">Enable Browser Notifications</button>
+                <span id="notifStatus" style="font-size:0.85rem;color:var(--text-light);margin-left:10px;"></span>
+            </div>
+
+            <!-- Admin Users (Super Admin only) -->
+            <div class="settings-section" id="userManagementSection" style="display:none;">
+                <h3>👥 Admin Users</h3>
+                <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:15px;">
+                    Add team members with their own login keys. Only the super admin (master key) can manage users.
+                </p>
+                <div id="adminUsersList" style="margin-bottom:15px;"></div>
+                <div style="background:#f8f9fa;padding:15px;border-radius:10px;">
+                    <h4 style="font-size:0.85rem;color:var(--primary);margin-bottom:10px;">Add New User</h4>
+                    <div class="settings-row">
+                        <input type="text" id="newUserName" placeholder="Name (e.g. Sara)">
+                        <input type="text" id="newUserKey" placeholder="Login key (min 6 chars)">
+                        <select id="newUserRole" style="padding:8px 12px;border:2px solid var(--border);border-radius:8px;font-size:0.85rem;">
+                            <option value="admin">Admin</option>
+                            <option value="viewer">Viewer</option>
+                        </select>
+                        <button class="btn btn-success btn-small" onclick="addAdminUser()">Add User</button>
                     </div>
                 </div>
             </div>
@@ -1746,8 +2003,51 @@
     <script>
         let products = [];
         let authKey = '';
+        let currentUser = null;
 
-        // Authenticated fetch helper — sends admin key in Authorization header, never in URL
+        // ── Toast Notification System ──
+        function showToast(message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            toast.innerHTML = `<span class="toast-icon">${icons[type] || icons.info}</span><span class="toast-msg">${message}</span><button class="toast-close" onclick="this.parentElement.classList.add('removing');setTimeout(()=>this.parentElement.remove(),250)">&times;</button>`;
+            container.appendChild(toast);
+            if (duration > 0) setTimeout(() => { if (toast.parentElement) { toast.classList.add('removing'); setTimeout(() => toast.remove(), 250); } }, duration);
+            return toast;
+        }
+
+        function showConfirm(title, message, opts = {}) {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById('confirmOverlay');
+                document.getElementById('confirmIcon').textContent = opts.icon || '⚠️';
+                document.getElementById('confirmTitle').textContent = title;
+                document.getElementById('confirmMessage').textContent = message;
+                const input = document.getElementById('confirmInput');
+                const okBtn = document.getElementById('confirmOk');
+                const cancelBtn = document.getElementById('confirmCancel');
+
+                if (opts.input) {
+                    input.style.display = '';
+                    input.value = opts.inputDefault || '';
+                    input.placeholder = opts.inputPlaceholder || '';
+                } else {
+                    input.style.display = 'none';
+                }
+
+                okBtn.textContent = opts.okText || 'Confirm';
+                okBtn.className = 'btn btn-small ' + (opts.okClass || 'btn-primary');
+                cancelBtn.textContent = opts.cancelText || 'Cancel';
+
+                const cleanup = () => { overlay.classList.remove('active'); okBtn.onclick = null; cancelBtn.onclick = null; };
+                okBtn.onclick = () => { cleanup(); resolve(opts.input ? (input.value || true) : true); };
+                cancelBtn.onclick = () => { cleanup(); resolve(opts.input ? null : false); };
+                overlay.classList.add('active');
+                if (opts.input) setTimeout(() => input.focus(), 100);
+            });
+        }
+
+        // Authenticated fetch helper
         function adminFetch(url, options = {}) {
             if (!options.headers) options.headers = {};
             options.headers['Authorization'] = 'Bearer ' + authKey;
@@ -1758,7 +2058,6 @@
             const params = new URLSearchParams(window.location.search);
             const urlKey = params.get('key');
             if (urlKey) {
-                // Strip key from URL immediately to prevent leaking in history/referrers
                 params.delete('key');
                 const cleanUrl = params.toString() ? window.location.pathname + '?' + params.toString() : window.location.pathname;
                 window.history.replaceState({}, '', cleanUrl);
@@ -1772,7 +2071,9 @@
                     headers: { 'Authorization': 'Bearer ' + key }
                 });
                 if (response.ok) {
+                    const data = await response.json();
                     authKey = key;
+                    currentUser = data.user || { name: 'Admin', role: 'admin' };
                     showAdmin();
                 } else {
                     document.getElementById('authError').style.display = 'block';
@@ -1793,7 +2094,17 @@
         function showAdmin() {
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
+            // Show user badge
+            if (currentUser) {
+                document.getElementById('userBadge').style.display = '';
+                document.getElementById('userBadgeName').textContent = currentUser.name;
+            }
+            // Show user management if super admin
+            if (currentUser && currentUser.role === 'superadmin') {
+                document.getElementById('userManagementSection').style.display = '';
+            }
             loadProducts();
+            initBrowserNotifications();
         }
 
         async function loadProducts() {
@@ -1998,7 +2309,7 @@
                 btn.title = product.featured ? 'Remove from Best Sellers' : 'Mark as Best Seller';
                 updateStats();
             } catch (e) {
-                alert('Could not update. Please try again.');
+                showToast('Could not update. Please try again.', 'error');
             }
             btn.classList.remove('saving');
         }
@@ -2030,19 +2341,17 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    // Swap locally for instant feedback
                     const temp = products[idx];
                     products[idx] = products[swapIdx];
                     products[swapIdx] = temp;
                     renderProducts();
-                    // Sync from server to confirm persistence
                     loadProducts();
                 } else {
-                    alert('Reorder failed: ' + (data.error || 'Unknown error'));
+                    showToast('Reorder failed: ' + (data.error || 'Unknown error'), 'error');
                     renderProducts();
                 }
             } catch (e) {
-                alert('Reorder failed: ' + e.message);
+                showToast('Reorder failed: ' + e.message, 'error');
                 renderProducts();
             }
         }
@@ -2319,7 +2628,7 @@
             };
 
             if (!data.slug || !data.name || !data.price) {
-                alert('Please fill in required fields: Name, Slug, Price');
+                showToast('Please fill in required fields: Name, Slug, Price', 'warning');
                 return;
             }
 
@@ -2339,24 +2648,26 @@
                 if (result.success) {
                     closeModal();
                     loadProducts();
+                    showToast(id ? 'Product updated!' : 'Product added!', 'success');
                 } else {
-                    alert('Error: ' + (result.error || 'Unknown error'));
+                    showToast('Error: ' + (result.error || 'Unknown error'), 'error');
                 }
             } catch (error) {
-                alert('Error saving product: ' + error.message);
+                showToast('Error saving product: ' + error.message, 'error');
             }
         }
 
         async function deleteProduct(id, slug) {
-            if (!confirm(`Delete "${slug}"? This cannot be undone.`)) return;
-            
+            const ok = await showConfirm('Delete Product', `Delete "${slug}"? This cannot be undone.`, { icon: '🗑️', okText: 'Delete', okClass: 'btn-danger' });
+            if (!ok) return;
+
             try {
                 const response = await adminFetch(`/api/admin/product?action=delete&id=${id}`);
                 const result = await response.json();
-                if (result.success) loadProducts();
-                else alert('Error: ' + (result.error || 'Unknown error'));
+                if (result.success) { loadProducts(); showToast('Product deleted', 'success'); }
+                else showToast('Error: ' + (result.error || 'Unknown error'), 'error');
             } catch (error) {
-                alert('Error deleting product: ' + error.message);
+                showToast('Error deleting product: ' + error.message, 'error');
             }
         }
 
@@ -2381,15 +2692,16 @@
             try {
                 const response = await adminFetch(`/api/admin/restock?slug=${slug}&set=${newQty}`);
                 const result = await response.json();
-                if (result.success) { 
-                    closeStockModal(); 
+                if (result.success) {
+                    closeStockModal();
                     loadProducts();
                     localStorage.removeItem('orlo_products_cache');
                     localStorage.removeItem('orlo_products_cache_time');
+                    showToast('Stock updated!', 'success');
                 }
-                else alert('Error: ' + (result.error || 'Unknown error'));
+                else showToast('Error: ' + (result.error || 'Unknown error'), 'error');
             } catch (error) {
-                alert('Error updating stock: ' + error.message);
+                showToast('Error updating stock: ' + error.message, 'error');
             }
         }
 
@@ -2505,18 +2817,24 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
+            const tabMap = { products: 0, orders: 1, analytics: 2, activity: 3, settings: 4 };
             const tabs = document.querySelectorAll('.tab');
+            if (tabs[tabMap[tab]]) tabs[tabMap[tab]].classList.add('active');
+
             if (tab === 'products') {
-                tabs[0].classList.add('active');
                 document.getElementById('productsTab').classList.add('active');
             } else if (tab === 'orders') {
-                tabs[1].classList.add('active');
                 document.getElementById('ordersTab').classList.add('active');
                 loadOrders();
             } else if (tab === 'analytics') {
-                tabs[2].classList.add('active');
                 document.getElementById('analyticsTab').classList.add('active');
                 loadAnalytics();
+            } else if (tab === 'activity') {
+                document.getElementById('activityTab').classList.add('active');
+                loadActivity();
+            } else if (tab === 'settings') {
+                document.getElementById('settingsTab').classList.add('active');
+                loadSettingsTab();
             }
         }
         
@@ -2613,18 +2931,21 @@
                 }
                 
                 orders = data.orders || [];
-                
+
                 // Apply local shipped status
                 orders = orders.map(order => ({
                     ...order,
                     status: shippedOrders.includes(order.id) ? 'shipped' : order.status
                 }));
-                
+
                 // Populate product filter
                 populateProductFilter();
-                
+
                 // Apply filters
                 applyFilters();
+
+                // Update last refreshed
+                updateLastRefreshed('ordersLastRefreshed', 'ordersRefreshTime');
                 
             } catch (error) {
                 document.getElementById('ordersContainer').innerHTML = `
@@ -2869,15 +3190,15 @@
         
         function copyAddress(address) {
             navigator.clipboard.writeText(address).then(() => {
-                alert('Address copied to clipboard!');
+                showToast('Address copied!', 'success', 2000);
             }).catch(() => {
-                prompt('Copy this address:', address);
+                showConfirm('Copy Address', 'Select and copy:', { input: true, inputDefault: address, okText: 'Done', icon: '📋' });
             });
         }
         
         function printPackingSlip(orderId) {
             const order = orders.find(o => o.id === orderId);
-            if (!order) return alert('Order not found');
+            if (!order) { showToast('Order not found', 'error'); return; }
 
             const date = new Date(order.created * 1000);
             const dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -2981,10 +3302,11 @@
 
         async function markShipped(orderId, customerEmail) {
     if (!customerEmail || customerEmail === 'N/A') {
-        alert('Cannot ship: no customer email on this order.');
+        showToast('Cannot ship: no customer email on this order.', 'error');
         return;
     }
-    if (!confirm('Mark this order as shipped? An email will be sent to ' + customerEmail)) return;
+    const ok = await showConfirm('Mark as Shipped', 'Send shipping email to ' + customerEmail + '?', { icon: '🚚', okText: 'Ship It', okClass: 'btn-success' });
+    if (!ok) return;
 
     const order = orders.find(o => o.id === orderId);
 
@@ -3003,7 +3325,6 @@
         const data = await response.json();
 
         if (data.success) {
-            // Persist shipped status to localStorage
             if (!shippedOrders.includes(orderId)) {
                 shippedOrders.push(orderId);
                 localStorage.setItem('orlo_shipped_orders', JSON.stringify(shippedOrders));
@@ -3013,22 +3334,24 @@
             applyFilters();
 
             if (data.email_sent) {
-                alert('Shipped! Email sent to ' + customerEmail);
+                showToast('Shipped! Email sent to ' + customerEmail, 'success');
             } else {
-                alert('Marked as shipped, but email failed: ' + (data.email_error || 'Unknown error'));
+                showToast('Marked as shipped, but email failed: ' + (data.email_error || 'Unknown error'), 'warning');
             }
         } else {
-            alert('Error: ' + (data.error || 'Unknown error'));
+            showToast('Error: ' + (data.error || 'Unknown error'), 'error');
         }
     } catch (error) {
-        alert('Error: ' + error.message);
+        showToast('Error: ' + error.message, 'error');
     }
 }
         
         async function adminCancelOrder(orderId, customerEmail, customerName) {
-            const reason = prompt('Cancel reason (optional):\nCustomer request / Out of stock / Fraud / Other');
-            if (reason === null) return; // User clicked Cancel on prompt
-            if (!confirm('Cancel this order and issue a full refund to ' + customerEmail + '?')) return;
+            const reason = await showConfirm('Cancel Order', 'Enter a reason (optional):', { icon: '❌', input: true, inputPlaceholder: 'Customer request / Out of stock / Fraud / Other', okText: 'Next', okClass: 'btn-danger' });
+            if (reason === null) return;
+
+            const ok = await showConfirm('Confirm Cancellation', 'Cancel this order and issue a full refund to ' + customerEmail + '?', { icon: '💸', okText: 'Cancel & Refund', okClass: 'btn-danger' });
+            if (!ok) return;
 
             try {
                 const response = await adminFetch('/api/admin/cancel-order', {
@@ -3036,7 +3359,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         order_id: orderId,
-                        reason: reason || 'Admin cancelled',
+                        reason: (typeof reason === 'string' ? reason : '') || 'Admin cancelled',
                         customer_email: customerEmail,
                         customer_name: customerName
                     })
@@ -3045,20 +3368,19 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    // Update local state
                     orders = orders.map(o => o.id === orderId ? {...o, status: 'cancelled'} : o);
                     applyFilters();
 
                     let msg = 'Order cancelled.';
                     if (data.refund) msg += ' Refund issued.';
                     if (data.email_sent) msg += ' Email sent to ' + customerEmail + '.';
-                    else if (data.email_error) msg += ' Email failed: ' + data.email_error;
-                    alert(msg);
+                    showToast(msg, 'success', 6000);
+                    if (!data.email_sent && data.email_error) showToast('Email failed: ' + data.email_error, 'warning');
                 } else {
-                    alert('Error: ' + (data.error || 'Unknown error'));
+                    showToast('Error: ' + (data.error || 'Unknown error'), 'error');
                 }
             } catch (error) {
-                alert('Error: ' + error.message);
+                showToast('Error: ' + error.message, 'error');
             }
         }
 
@@ -3076,7 +3398,7 @@
             try {
                 const response = await adminFetch('/api/admin/orders?t=' + Date.now());
                 const data = await response.json();
-                if (data.error) { alert('Analytics load error: ' + data.error); return; }
+                if (data.error) { showToast('Analytics load error: ' + data.error, 'error'); return; }
                 analyticsOrders = (data.orders || []).map(o => ({
                     ...o,
                     status: shippedOrders.includes(o.id) ? 'shipped' : o.status
@@ -3084,7 +3406,7 @@
                 analyticsLoaded = true;
                 renderAnalytics();
             } catch (e) {
-                alert('Failed to load analytics: ' + e.message);
+                showToast('Failed to load analytics: ' + e.message, 'error');
             } finally {
                 document.getElementById('analyticsKpis').style.opacity = '1';
             }
@@ -3097,7 +3419,8 @@
             if (df === 'week') start = new Date(now.getTime() - 7*24*60*60*1000);
             else if (df === 'month') start = new Date(now.getFullYear(), now.getMonth(), 1);
             else if (df === 'year') start = new Date(now.getFullYear(), 0, 1);
-            return analyticsOrders.filter(o => new Date(o.created * 1000) >= start);
+            // IMPORTANT: Filter out cancelled orders so they don't inflate revenue/profit
+            return analyticsOrders.filter(o => o.status !== 'cancelled' && new Date(o.created * 1000) >= start);
         }
 
         function aggregateSales(filtered) {
@@ -3407,11 +3730,13 @@
             }).join('');
         }
 
-        // ── Revenue & AOV Trends ──
+        // ── Revenue, Profit & AOV Trends ──
         function renderTrends(filtered) {
             if (filtered.length === 0) {
                 destroyChart('chartRevenueTrend');
+                destroyChart('chartProfitTrend');
                 destroyChart('chartAOVTrend');
+                destroyChart('chartOrdersTrend');
                 return;
             }
 
@@ -3420,16 +3745,24 @@
             filtered.forEach(order => {
                 const d = new Date(order.created * 1000);
                 const key = d.toISOString().split('T')[0];
-                if (!byDate[key]) byDate[key] = { revenue: 0, orders: 0 };
+                if (!byDate[key]) byDate[key] = { revenue: 0, cost: 0, orders: 0 };
                 const shipping = (order.shipping_amount || 0) / 100;
                 const total = order.amount_total / 100;
                 byDate[key].revenue += (total - shipping);
                 byDate[key].orders += 1;
+                // Calculate cost for this order
+                order.items.forEach(item => {
+                    if (!item.name.toLowerCase().includes('delivery')) {
+                        byDate[key].cost += getProductCost(item.name) * item.quantity;
+                    }
+                });
             });
 
             const dates = Object.keys(byDate).sort();
             const revenues = dates.map(d => byDate[d].revenue);
+            const profits = dates.map(d => byDate[d].revenue - byDate[d].cost);
             const aovs = dates.map(d => byDate[d].orders > 0 ? byDate[d].revenue / byDate[d].orders : 0);
+            const orderCounts = dates.map(d => byDate[d].orders);
             const dateLabels = dates.map(d => {
                 const dt = new Date(d + 'T00:00:00');
                 return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
@@ -3446,11 +3779,26 @@
                         data: revenues,
                         borderColor: '#e07856',
                         backgroundColor: 'rgba(224,120,86,0.1)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 3,
-                        pointBackgroundColor: '#e07856',
-                        borderWidth: 2
+                        fill: true, tension: 0.3, pointRadius: 3,
+                        pointBackgroundColor: '#e07856', borderWidth: 2
+                    }]
+                },
+                options: trendOpts('AED')
+            });
+
+            // Profit trend
+            destroyChart('chartProfitTrend');
+            analyticsCharts.chartProfitTrend = new Chart(document.getElementById('chartProfitTrend'), {
+                type: 'line',
+                data: {
+                    labels: dateLabels,
+                    datasets: [{
+                        label: 'Profit (AED)',
+                        data: profits,
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40,167,69,0.1)',
+                        fill: true, tension: 0.3, pointRadius: 3,
+                        pointBackgroundColor: '#28a745', borderWidth: 2
                     }]
                 },
                 options: trendOpts('AED')
@@ -3467,14 +3815,27 @@
                         data: aovs,
                         borderColor: '#2c4a5c',
                         backgroundColor: 'rgba(44,74,92,0.1)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 3,
-                        pointBackgroundColor: '#2c4a5c',
-                        borderWidth: 2
+                        fill: true, tension: 0.3, pointRadius: 3,
+                        pointBackgroundColor: '#2c4a5c', borderWidth: 2
                     }]
                 },
                 options: trendOpts('AED')
+            });
+
+            // Orders per day trend
+            destroyChart('chartOrdersTrend');
+            analyticsCharts.chartOrdersTrend = new Chart(document.getElementById('chartOrdersTrend'), {
+                type: 'bar',
+                data: {
+                    labels: dateLabels,
+                    datasets: [{
+                        label: 'Orders',
+                        data: orderCounts,
+                        backgroundColor: '#2c4a5c',
+                        borderRadius: 3
+                    }]
+                },
+                options: trendOpts('orders')
             });
         }
 
@@ -3488,6 +3849,317 @@
                     y: { grid: { color: '#f0f0f0' }, ticks: { callback: v => unit === 'AED' ? v.toLocaleString() : v } }
                 }
             };
+        }
+
+        // ── Activity Log ──
+        async function loadActivity() {
+            const container = document.getElementById('activityContainer');
+            container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div>Loading activity...</div></div>';
+
+            try {
+                const res = await adminFetch('/api/admin/activity?limit=100');
+                const data = await res.json();
+
+                if (!data.success || !data.activities.length) {
+                    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-light);">No activity yet</div>';
+                    return;
+                }
+
+                const iconMap = {
+                    new_order: { icon: '🛒', cls: 'order', label: 'New Order' },
+                    ship_order: { icon: '🚚', cls: 'ship', label: 'Shipped' },
+                    cancel_order: { icon: '❌', cls: 'cancel', label: 'Cancelled' },
+                    add_product: { icon: '➕', cls: 'product', label: 'Product Added' },
+                    update_product: { icon: '✏️', cls: 'product', label: 'Product Updated' },
+                    delete_product: { icon: '🗑️', cls: 'cancel', label: 'Product Deleted' },
+                    toggle_featured: { icon: '⭐', cls: 'product', label: 'Featured Toggle' },
+                    restock: { icon: '📦', cls: 'stock', label: 'Restocked' },
+                    restock_variant: { icon: '📦', cls: 'stock', label: 'Variant Restocked' }
+                };
+
+                container.innerHTML = '<div class="activity-list">' + data.activities.map(a => {
+                    const info = iconMap[a.action] || { icon: '📋', cls: '', label: a.action };
+                    const timeAgo = getTimeAgo(a.created_at);
+                    return `<div class="activity-item">
+                        <div class="activity-icon ${info.cls}">${info.icon}</div>
+                        <div class="activity-body">
+                            <strong>${info.label}</strong>
+                            ${a.details ? `<div class="activity-detail">${a.details}</div>` : ''}
+                            ${a.target ? `<div class="activity-detail" style="font-family:monospace;font-size:0.75rem;">${a.target}</div>` : ''}
+                            <div class="activity-time">${timeAgo}</div>
+                        </div>
+                        <span class="activity-user">${a.admin_name}</span>
+                    </div>`;
+                }).join('') + '</div>';
+            } catch (e) {
+                container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--danger);">Failed to load activity: ' + e.message + '</div>';
+            }
+        }
+
+        function getTimeAgo(utcStr) {
+            const date = new Date(utcStr + 'Z');
+            const now = new Date();
+            const diff = (now - date) / 1000;
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+            if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+            if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+            return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        // ── Settings Tab ──
+        async function loadSettingsTab() {
+            try {
+                const res = await adminFetch('/api/admin/settings');
+                const data = await res.json();
+                if (data.success && data.settings) {
+                    const emails = data.settings.order_notification_emails ? JSON.parse(data.settings.order_notification_emails) : [];
+                    document.getElementById('notifyEmail1').value = emails[0] || '';
+                    document.getElementById('notifyEmail2').value = emails[1] || '';
+                    document.getElementById('notifyEmail3').value = emails[2] || '';
+                }
+            } catch (e) { console.error('Failed to load settings:', e); }
+
+            // Load admin users if super admin
+            if (currentUser && currentUser.role === 'superadmin') {
+                loadAdminUsers();
+            }
+            updateNotifStatus();
+        }
+
+        async function saveNotificationEmails() {
+            const emails = [
+                document.getElementById('notifyEmail1').value.trim(),
+                document.getElementById('notifyEmail2').value.trim(),
+                document.getElementById('notifyEmail3').value.trim()
+            ].filter(e => e && e.includes('@'));
+
+            try {
+                await adminFetch('/api/admin/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order_notification_emails: JSON.stringify(emails) })
+                });
+                showToast('Notification emails saved! (' + emails.length + ' email' + (emails.length !== 1 ? 's' : '') + ')', 'success');
+            } catch (e) {
+                showToast('Failed to save emails: ' + e.message, 'error');
+            }
+        }
+
+        // ── Admin Users Management ──
+        async function loadAdminUsers() {
+            try {
+                const res = await adminFetch('/api/admin/users');
+                const data = await res.json();
+                const container = document.getElementById('adminUsersList');
+
+                if (!data.success || !data.users.length) {
+                    container.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem;">No additional users. Only the master key is active.</p>';
+                    return;
+                }
+
+                container.innerHTML = data.users.map(u => `
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#f8f9fa;border-radius:8px;margin-bottom:8px;">
+                        <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.85rem;">${u.name.charAt(0).toUpperCase()}</div>
+                        <div style="flex:1;">
+                            <strong style="font-size:0.9rem;">${u.name}</strong>
+                            <div style="font-size:0.75rem;color:var(--text-light);">${u.role} · Added ${getTimeAgo(u.created_at)}</div>
+                        </div>
+                        <button class="btn btn-small btn-danger" onclick="removeAdminUser(${u.id}, '${u.name}')">Remove</button>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error('Failed to load users:', e);
+            }
+        }
+
+        async function addAdminUser() {
+            const name = document.getElementById('newUserName').value.trim();
+            const userKey = document.getElementById('newUserKey').value.trim();
+            const role = document.getElementById('newUserRole').value;
+
+            if (!name || !userKey) { showToast('Name and key are required', 'warning'); return; }
+            if (userKey.length < 6) { showToast('Key must be at least 6 characters', 'warning'); return; }
+
+            try {
+                const res = await adminFetch('/api/admin/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'add', name, userKey, role })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast(name + ' added as ' + role, 'success');
+                    document.getElementById('newUserName').value = '';
+                    document.getElementById('newUserKey').value = '';
+                    loadAdminUsers();
+                } else {
+                    showToast('Error: ' + (data.error || 'Unknown'), 'error');
+                }
+            } catch (e) {
+                showToast('Failed: ' + e.message, 'error');
+            }
+        }
+
+        async function removeAdminUser(id, name) {
+            const ok = await showConfirm('Remove User', 'Remove ' + name + ' from admin access?', { icon: '👤', okText: 'Remove', okClass: 'btn-danger' });
+            if (!ok) return;
+
+            try {
+                const res = await adminFetch('/api/admin/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'delete', id })
+                });
+                const data = await res.json();
+                if (data.success) { showToast(name + ' removed', 'success'); loadAdminUsers(); }
+                else showToast('Error: ' + (data.error || 'Unknown'), 'error');
+            } catch (e) {
+                showToast('Failed: ' + e.message, 'error');
+            }
+        }
+
+        // ── CSV Export ──
+        function exportOrdersCSV() {
+            if (!filteredOrders.length) { showToast('No orders to export', 'warning'); return; }
+
+            const rows = [['Date', 'Order ID', 'Customer', 'Email', 'Phone', 'Items', 'Subtotal (AED)', 'Shipping (AED)', 'Total (AED)', 'Cost (AED)', 'Profit (AED)', 'Status']];
+
+            filteredOrders.forEach(o => {
+                const date = new Date(o.created * 1000).toLocaleDateString('en-GB');
+                const items = o.items.filter(i => !i.name.toLowerCase().includes('delivery')).map(i => i.name + ' x' + i.quantity).join('; ');
+                const shipping = (o.shipping_amount || 0) / 100;
+                const total = o.amount_total / 100;
+                const subtotal = total - shipping;
+                let cost = 0;
+                o.items.forEach(i => { if (!i.name.toLowerCase().includes('delivery')) cost += getProductCost(i.name) * i.quantity; });
+                const profit = subtotal - cost;
+
+                rows.push([date, o.id.slice(-8).toUpperCase(), o.customer_name, o.customer_email, o.customer_phone, '"' + items + '"', subtotal.toFixed(2), shipping.toFixed(2), total.toFixed(2), cost.toFixed(2), profit.toFixed(2), o.status]);
+            });
+
+            downloadCSV(rows, 'orlo-orders-' + new Date().toISOString().split('T')[0] + '.csv');
+            showToast('Orders exported!', 'success');
+        }
+
+        function exportAnalyticsCSV() {
+            const filtered = getAnalyticsFiltered();
+            const sales = aggregateSales(filtered);
+            if (!sales.length) { showToast('No analytics data to export', 'warning'); return; }
+
+            const rows = [['Product', 'Units Sold', 'Revenue (AED)', 'Cost (AED)', 'Profit (AED)', 'Margin %']];
+            sales.sort((a, b) => b.revenue - a.revenue).forEach(p => {
+                const profit = p.revenue - p.cost;
+                const margin = p.revenue > 0 ? ((profit / p.revenue) * 100).toFixed(1) : '0.0';
+                rows.push(['"' + p.name + '"', p.units, p.revenue.toFixed(2), p.cost.toFixed(2), profit.toFixed(2), margin]);
+            });
+
+            downloadCSV(rows, 'orlo-analytics-' + new Date().toISOString().split('T')[0] + '.csv');
+            showToast('Analytics exported!', 'success');
+        }
+
+        function downloadCSV(rows, filename) {
+            const csv = rows.map(r => r.join(',')).join('\n');
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = filename; a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ── Browser Notifications ──
+        let lastKnownOrderCount = 0;
+        let notifPollingInterval = null;
+
+        function initBrowserNotifications() {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                startOrderPolling();
+            }
+            updateNotifStatus();
+        }
+
+        function enableBrowserNotifications() {
+            if (!('Notification' in window)) {
+                showToast('Browser does not support notifications', 'warning');
+                return;
+            }
+            Notification.requestPermission().then(perm => {
+                if (perm === 'granted') {
+                    showToast('Browser notifications enabled!', 'success');
+                    startOrderPolling();
+                } else {
+                    showToast('Notification permission denied', 'warning');
+                }
+                updateNotifStatus();
+            });
+        }
+
+        function updateNotifStatus() {
+            const el = document.getElementById('notifStatus');
+            const btn = document.getElementById('enableNotifBtn');
+            if (!el) return;
+            if (!('Notification' in window)) {
+                el.textContent = 'Not supported';
+                btn.disabled = true;
+            } else if (Notification.permission === 'granted') {
+                el.textContent = 'Enabled - checking every 60s';
+                el.style.color = 'var(--success)';
+                btn.textContent = 'Enabled';
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+            } else if (Notification.permission === 'denied') {
+                el.textContent = 'Blocked by browser - check browser settings';
+                el.style.color = 'var(--danger)';
+                btn.disabled = true;
+            } else {
+                el.textContent = 'Not enabled yet';
+            }
+        }
+
+        function startOrderPolling() {
+            if (notifPollingInterval) return;
+            // Get initial count
+            lastKnownOrderCount = orders.length || 0;
+            notifPollingInterval = setInterval(async () => {
+                try {
+                    const res = await adminFetch('/api/admin/orders?t=' + Date.now());
+                    const data = await res.json();
+                    if (data.orders && data.orders.length > lastKnownOrderCount) {
+                        const newCount = data.orders.length - lastKnownOrderCount;
+                        const latest = data.orders[0];
+                        new Notification('ORLO - New Order!', {
+                            body: `${newCount} new order${newCount > 1 ? 's' : ''}${latest ? ' - ' + latest.customer_details?.name || '' : ''}`,
+                            icon: '/logo.png',
+                            tag: 'orlo-new-order'
+                        });
+                        // Flash tab title
+                        const origTitle = document.title;
+                        document.title = '🔔 New Order! - ORLO Admin';
+                        setTimeout(() => { document.title = origTitle; }, 5000);
+                    }
+                    lastKnownOrderCount = data.orders ? data.orders.length : lastKnownOrderCount;
+                } catch (e) { /* silent */ }
+            }, 60000);
+        }
+
+        // ── Last Refreshed ──
+        function updateLastRefreshed(containerId, timeId) {
+            const container = document.getElementById(containerId);
+            const timeEl = document.getElementById(timeId);
+            if (!container || !timeEl) return;
+            container.style.display = '';
+            const now = new Date();
+            timeEl.textContent = 'Updated ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+            // Update staleness indicator
+            const dot = container.querySelector('.last-refreshed-dot');
+            if (dot) dot.classList.remove('stale');
+
+            // Mark stale after 5 minutes
+            setTimeout(() => {
+                if (dot) dot.classList.add('stale');
+                timeEl.textContent += ' (stale)';
+            }, 300000);
         }
 
         checkAuth();

@@ -3,64 +3,40 @@
 // Or:    /api/admin/restock?slug=product-slug&set=100
 // Variant: /api/admin/restock?slug=product-slug&variant_id=5&set=50
 
-function safeCompare(a, b) {
-    if (typeof a !== 'string' || typeof b !== 'string') return false;
-    const encoder = new TextEncoder();
-    const aBuf = encoder.encode(a);
-    const bBuf = encoder.encode(b);
-    if (aBuf.length !== bBuf.length) return false;
-    let result = 0;
-    for (let i = 0; i < aBuf.length; i++) result |= aBuf[i] ^ bBuf[i];
-    return result === 0;
-}
+import { getKey, getAdminUser, logActivity } from './_helpers.js';
 
 export async function onRequestGet(context) {
     const { request, env } = context;
     const DB = env.DB;
 
     const url = new URL(request.url);
-    const authHeader = request.headers.get('Authorization');
-    const key = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+    const key = getKey(request);
     const slug = url.searchParams.get('slug');
     const variantId = url.searchParams.get('variant_id');
     const addQty = url.searchParams.get('add');
     const setQty = url.searchParams.get('set');
 
-    // Verify admin key
-    if (!safeCompare(key, env.ADMIN_KEY)) {
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' }
-        });
+    const user = await getAdminUser(env, key);
+    if (!user) {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Validate parameters
     if (!slug) {
-        return new Response(JSON.stringify({ error: 'Missing slug parameter' }), {
-            status: 400,
-            headers: { 'Content-Type': 'application/json' }
-        });
+        return Response.json({ error: 'Missing slug parameter' }, { status: 400 });
     }
 
     if (!addQty && !setQty) {
-        return new Response(JSON.stringify({ error: 'Missing add or set parameter' }), {
-            status: 400,
-            headers: { 'Content-Type': 'application/json' }
-        });
+        return Response.json({ error: 'Missing add or set parameter' }, { status: 400 });
     }
 
     try {
         // Variant restock
         if (variantId) {
             const variant = await DB.prepare('SELECT id, name, quantity FROM product_variants WHERE id = ?')
-                .bind(variantId)
-                .first();
+                .bind(variantId).first();
 
             if (!variant) {
-                return new Response(JSON.stringify({ error: `Variant not found: ${variantId}` }), {
-                    status: 404,
-                    headers: { 'Content-Type': 'application/json' }
-                });
+                return Response.json({ error: `Variant not found: ${variantId}` }, { status: 404 });
             }
 
             const oldQty = variant.quantity;
@@ -76,29 +52,24 @@ export async function onRequestGet(context) {
                     .bind(newQty, variantId).run();
             }
 
-            return new Response(JSON.stringify({
+            await logActivity(env, user.name, 'restock_variant', `${slug}:${variant.name}`, `${oldQty} -> ${newQty}`);
+
+            return Response.json({
                 success: true,
                 variant: variant.name,
                 variantId: variantId,
                 oldQuantity: oldQty,
                 newQuantity: newQty,
                 action: setQty ? 'set' : 'add'
-            }), {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' }
             });
         }
 
         // Product restock (no variant)
         const product = await DB.prepare('SELECT slug, name, quantity FROM products WHERE slug = ?')
-            .bind(slug)
-            .first();
+            .bind(slug).first();
 
         if (!product) {
-            return new Response(JSON.stringify({ error: `Product not found: ${slug}` }), {
-                status: 404,
-                headers: { 'Content-Type': 'application/json' }
-            });
+            return Response.json({ error: `Product not found: ${slug}` }, { status: 404 });
         }
 
         const oldQty = product.quantity;
@@ -107,31 +78,25 @@ export async function onRequestGet(context) {
         if (setQty) {
             newQty = parseInt(setQty);
             await DB.prepare('UPDATE products SET quantity = ? WHERE slug = ?')
-                .bind(newQty, slug)
-                .run();
+                .bind(newQty, slug).run();
         } else {
             newQty = oldQty + parseInt(addQty);
             await DB.prepare('UPDATE products SET quantity = ? WHERE slug = ?')
-                .bind(newQty, slug)
-                .run();
+                .bind(newQty, slug).run();
         }
 
-        return new Response(JSON.stringify({
+        await logActivity(env, user.name, 'restock', slug, `${product.name}: ${oldQty} -> ${newQty}`);
+
+        return Response.json({
             success: true,
             product: product.name,
             slug: slug,
             oldQuantity: oldQty,
             newQuantity: newQty,
             action: setQty ? 'set' : 'add'
-        }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
         });
 
     } catch (error) {
-        return new Response(JSON.stringify({ error: error.message }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' }
-        });
+        return Response.json({ error: error.message }, { status: 500 });
     }
 }
