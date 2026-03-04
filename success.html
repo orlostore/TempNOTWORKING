@@ -34,7 +34,7 @@
 
         .page-container {
             width: 100%;
-            max-width: 740px;
+            max-width: 780px;
             background: white;
             border-radius: 14px;
             box-shadow: 0 25px 80px rgba(0,0,0,0.1);
@@ -135,10 +135,11 @@
         /* RIGHT PANEL */
         .right-panel {
             flex: 1;
-            padding: 24px 26px;
+            padding: 20px 24px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            overflow-y: auto;
+            max-height: 85vh;
         }
 
         .back-link {
@@ -148,7 +149,7 @@
             color: #999;
             text-decoration: none;
             font-size: 0.78rem;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             transition: color 0.2s;
         }
         .back-link:hover { color: #2c4a5c; }
@@ -156,6 +157,99 @@
             width: 1em; height: 1em;
             stroke: currentColor; fill: none;
             stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        /* Email notice */
+        .email-notice {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            color: #166534;
+        }
+        .email-notice .icon { font-size: 1.1rem; flex-shrink: 0; }
+        .email-notice .ar { display: block; font-family: 'Almarai', sans-serif; font-size: 0.7rem; color: #22863a; margin-top: 2px; }
+
+        /* Order summary */
+        .order-summary {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border-left: 3px solid #2c4a5c;
+        }
+        .order-summary h3 {
+            color: #2c4a5c; font-size: 0.82rem; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+        }
+        .order-item:not(:last-child) { border-bottom: 1px solid #eef0f2; }
+
+        .order-item-img {
+            width: 40px; height: 40px;
+            border-radius: 6px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #eee;
+        }
+
+        .order-item-details {
+            flex: 1;
+            min-width: 0;
+        }
+        .order-item-name {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: #333;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .order-item-qty {
+            font-size: 0.7rem;
+            color: #888;
+        }
+        .order-item-price {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #2c4a5c;
+            flex-shrink: 0;
+        }
+
+        .order-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            margin-top: 6px;
+            border-top: 2px solid #e2e6ea;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #2c4a5c;
+        }
+        .order-total-row .ar {
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 400;
+            color: #888;
+        }
+
+        .order-more {
+            font-size: 0.72rem;
+            color: #888;
+            padding: 4px 0 2px;
         }
 
         .info-card {
@@ -166,6 +260,11 @@
         .info-card h3 { color: #2c4a5c; font-size: 0.82rem; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
         .info-card p { color: #666; font-size: 0.78rem; line-height: 1.5; }
         .info-card .arabic-text { text-align: right; margin-top: 2px; color: #999; font-size: 0.7rem; }
+
+        .delivery-dates {
+            font-weight: 700;
+            color: #2c4a5c;
+        }
 
         /* BUTTONS */
         .btn-stack { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
@@ -234,7 +333,7 @@
             .tl-text { font-size: 0.6rem; }
             .tl-text .ar { font-size: 0.5rem; }
 
-            .right-panel { padding: 16px 18px; }
+            .right-panel { padding: 16px 18px; max-height: none; }
             .btn-row { flex-direction: column; }
         }
 
@@ -282,16 +381,35 @@
         <div class="right-panel">
             <a href="/" class="back-link"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Shop <span class="arabic-text" style="font-size:0.72rem">العودة للمتجر</span></a>
 
-            <div class="info-card">
-                <h3><span aria-hidden="true">📦</span> What's Next?</h3>
-                <p>We're preparing your order! You'll get tracking info once it ships.</p>
-                <p class="arabic-text">نحن نجهز طلبك! ستتلقى معلومات التتبع عند الشحن.</p>
+            <!-- Confirmation email notice -->
+            <div class="email-notice">
+                <span class="icon" aria-hidden="true">✉️</span>
+                <div>
+                    Confirmation email sent with your order details
+                    <span class="ar">تم إرسال بريد التأكيد مع تفاصيل طلبك</span>
+                </div>
+            </div>
+
+            <!-- Order summary — populated dynamically from cart -->
+            <div class="order-summary" id="orderSummary" style="display:none">
+                <h3><span aria-hidden="true">🧾</span> Order Summary</h3>
+                <div id="orderItems"></div>
+                <div class="order-total-row">
+                    <span>Total <span class="ar">الإجمالي</span></span>
+                    <span id="orderTotal"></span>
+                </div>
             </div>
 
             <div class="info-card">
                 <h3><span aria-hidden="true">⏱️</span> Estimated Delivery</h3>
-                <p><strong>2-5 business days</strong> across UAE</p>
-                <p class="arabic-text"><strong>٢-٥ أيام عمل</strong> في جميع أنحاء الإمارات</p>
+                <p><span class="delivery-dates" id="deliveryDates">2-5 business days</span> across UAE</p>
+                <p class="arabic-text" id="deliveryDatesAr"><strong>٢-٥ أيام عمل</strong> في جميع أنحاء الإمارات</p>
+            </div>
+
+            <div class="info-card">
+                <h3><span aria-hidden="true">📦</span> What's Next?</h3>
+                <p>We're preparing your order! You'll get tracking info once it ships.</p>
+                <p class="arabic-text">نحن نجهز طلبك! ستتلقى معلومات التتبع عند الشحن.</p>
             </div>
 
             <div class="btn-stack">
@@ -325,16 +443,21 @@
 
         sessionStorage.removeItem('orlo_checkout_pending');
 
-        // Capture session_id early (before any potential URL cleanup)
+        // XSS-safe text escaping
+        function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+        // Capture session_id early
         var urlParams = new URLSearchParams(window.location.search);
         var sessionId = urlParams.get('session_id');
+
+        // Read cart BEFORE clearing — used for GA4 + order summary display
+        var cartData = [];
+        try { cartData = JSON.parse(localStorage.getItem('cart') || '[]'); } catch(e) {}
 
         // GA4: track purchase conversion — deduplicated, fires only once per session_id
         if (sessionId && typeof gtag === 'function') {
             var firedKey = 'orlo_purchase_fired_' + sessionId;
             if (!sessionStorage.getItem(firedKey)) {
-                var cartData = [];
-                try { cartData = JSON.parse(localStorage.getItem('cart') || '[]'); } catch(e) {}
                 var gaItems = cartData.map(function(item) {
                     return { item_id: String(item.id), item_name: item.name, price: item.price, quantity: item.quantity || 1 };
                 });
@@ -349,17 +472,70 @@
             }
         }
 
-        // Clear cart after GA4 event fires
+        // Render order summary from cart data
+        if (cartData.length > 0) {
+            var maxShow = 4;
+            var itemsHtml = cartData.slice(0, maxShow).map(function(item) {
+                var imgHtml = item.image
+                    ? '<img src="' + esc(item.image) + '" alt="" class="order-item-img">'
+                    : '';
+                var qty = item.quantity || 1;
+                var lineTotal = (item.price * qty).toFixed(2);
+                return '<div class="order-item">' +
+                    imgHtml +
+                    '<div class="order-item-details">' +
+                        '<span class="order-item-name">' + esc(item.name || 'Item') + '</span>' +
+                        '<span class="order-item-qty">Qty: ' + qty + '</span>' +
+                    '</div>' +
+                    '<span class="order-item-price">AED ' + lineTotal + '</span>' +
+                '</div>';
+            }).join('');
+
+            if (cartData.length > maxShow) {
+                itemsHtml += '<p class="order-more">+' + (cartData.length - maxShow) + ' more item' + (cartData.length - maxShow > 1 ? 's' : '') + '</p>';
+            }
+
+            var orderTotal = cartData.reduce(function(sum, item) {
+                return sum + (item.price * (item.quantity || 1));
+            }, 0);
+
+            document.getElementById('orderItems').innerHTML = itemsHtml;
+            document.getElementById('orderTotal').textContent = 'AED ' + orderTotal.toFixed(2);
+            document.getElementById('orderSummary').style.display = 'block';
+        }
+
+        // Calculate actual delivery dates (2-5 business days)
+        function addBusinessDays(date, days) {
+            var result = new Date(date);
+            var added = 0;
+            while (added < days) {
+                result.setDate(result.getDate() + 1);
+                if (result.getDay() !== 0 && result.getDay() !== 6) added++;
+            }
+            return result;
+        }
+
+        var today = new Date();
+        var minDate = addBusinessDays(today, 2);
+        var maxDate = addBusinessDays(today, 5);
+        var enOpts = { month: 'short', day: 'numeric' };
+
+        document.getElementById('deliveryDates').textContent =
+            minDate.toLocaleDateString('en-US', enOpts) + ' – ' + maxDate.toLocaleDateString('en-US', enOpts);
+        document.getElementById('deliveryDatesAr').innerHTML =
+            '<strong>' + minDate.toLocaleDateString('ar-AE', { month: 'long', day: 'numeric' }) +
+            ' – ' + maxDate.toLocaleDateString('ar-AE', { month: 'long', day: 'numeric' }) +
+            '</strong> في جميع أنحاء الإمارات';
+
+        // Clear cart AFTER rendering summary + GA4
         localStorage.removeItem('cart');
 
         // Guest-to-account flow
         var existingToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
 
         if (existingToken) {
-            // Logged-in user — hide register button
             document.getElementById('registerBtn').style.display = 'none';
         } else if (sessionId) {
-            // Guest — check if email already has an account before showing button
             (async function() {
                 try {
                     var res = await fetch('/api/auth/check-session-email', {
@@ -369,7 +545,6 @@
                     });
                     var data = await res.json();
                     if (data.registered) {
-                        // Already has account — show login prompt instead
                         document.getElementById('registerBtn').style.display = 'none';
                         var msg = document.getElementById('accountMsg');
                         msg.className = 'account-msg success';
@@ -378,7 +553,6 @@
                         document.getElementById('registerBtn').style.display = 'block';
                     }
                 } catch (e) {
-                    // If check fails, show button anyway (fallback)
                     document.getElementById('registerBtn').style.display = 'block';
                 }
             })();
