@@ -116,7 +116,7 @@ export async function onRequestPost(context) {
             // === SEND ORDER CONFIRMATION EMAIL TO CUSTOMER ===
             if (env.RESEND_API_KEY && customerEmail) {
                 try {
-                    const origin = new URL(request.url).origin;
+                    const origin = env.SITE_URL || new URL(request.url).origin;
                     const customerName = session.customer_details?.name || 'there';
                     const total = (session.amount_total / 100).toFixed(2);
                     const currency = (session.currency || 'aed').toUpperCase();
@@ -204,7 +204,7 @@ export async function onRequestPost(context) {
                         const customerName = session.customer_details?.name || 'Unknown';
                         const total = (session.amount_total / 100).toFixed(2);
                         const currency = (session.currency || 'aed').toUpperCase();
-                        const origin = new URL(request.url).origin;
+                        const origin = env.SITE_URL || new URL(request.url).origin;
 
                         // Build items list
                         let itemsHtml = '';

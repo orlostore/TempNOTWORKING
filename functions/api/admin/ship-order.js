@@ -62,7 +62,7 @@ export async function onRequestPost(context) {
         let emailError = null;
 
         if (env.RESEND_API_KEY) {
-            const origin = new URL(request.url).origin;
+            const origin = env.SITE_URL || new URL(request.url).origin;
 
             const itemsList = (items || [])
                 .filter(i => !i.name.toLowerCase().includes('delivery'))

@@ -52,7 +52,7 @@ export async function onRequestPost(context) {
         // Send verification email via Resend
         if (env.RESEND_API_KEY) {
             try {
-                const origin = new URL(request.url).origin;
+                const origin = env.SITE_URL || new URL(request.url).origin;
                 const verifyUrl = `${origin}/verify-email.html?token=${verificationToken}`;
 
                 const html = customerEmail({
