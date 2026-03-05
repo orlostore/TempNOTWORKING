@@ -3260,12 +3260,16 @@
         }
         
         function updateOrderStats() {
-            const totalRevenue = filteredOrders.reduce((sum, o) => sum + o.amount_total, 0) / 100;
-            const shippingCollected = filteredOrders.reduce((sum, o) => sum + (o.shipping_amount || 0), 0) / 100;
+            // Money stats: only shipped orders count (pending = not yet earned, cancelled = void)
+            const shippedOrders = filteredOrders.filter(o => o.status === 'shipped');
+            const activeOrders = filteredOrders.filter(o => o.status !== 'cancelled');
+
+            const totalRevenue = shippedOrders.reduce((sum, o) => sum + o.amount_total, 0) / 100;
+            const shippingCollected = shippedOrders.reduce((sum, o) => sum + (o.shipping_amount || 0), 0) / 100;
             const productRevenue = totalRevenue - shippingCollected;
 
             let totalCost = 0;
-            filteredOrders.forEach(order => {
+            shippedOrders.forEach(order => {
                 order.items.forEach(item => {
                     if (!item.name.toLowerCase().includes('delivery')) {
                         totalCost += getProductCost(item.name) * item.quantity;
@@ -3273,8 +3277,8 @@
                 });
             });
 
-            // Shipping cost: deliveryFeeCity per order that was actually shipped (not free shipping)
-            const paidShippingOrders = filteredOrders.filter(o => o.shipping_amount > 0).length;
+            // Shipping cost: deliveryFeeCity per shipped order that had paid shipping
+            const paidShippingOrders = shippedOrders.filter(o => o.shipping_amount > 0).length;
             const shippingCostPerOrder = getDeliveryFeeCity() || 0;
             const totalShippingCost = paidShippingOrders * shippingCostPerOrder;
             const netShipping = shippingCollected - totalShippingCost;
@@ -3282,7 +3286,7 @@
             // Net profit = product profit + net shipping (collected - cost)
             const productProfit = productRevenue - totalCost;
             const netProfit = productProfit + netShipping;
-            const pending = filteredOrders.filter(o => o.status === 'pending').length;
+            const pending = activeOrders.filter(o => o.status === 'pending').length;
 
             document.getElementById('statRevenue').textContent = 'AED ' + productRevenue.toFixed(0);
             document.getElementById('statCost').textContent = 'AED ' + totalCost.toFixed(0);
@@ -3292,7 +3296,7 @@
             document.getElementById('statShipping').textContent = 'AED ' + netShipping.toFixed(0);
             document.getElementById('statShipCollected').textContent = shippingCollected.toFixed(0);
             document.getElementById('statShipCost').textContent = totalShippingCost.toFixed(0);
-            document.getElementById('statTotalOrders').textContent = filteredOrders.length;
+            document.getElementById('statTotalOrders').textContent = activeOrders.length;
             document.getElementById('statPendingOrders').textContent = pending;
             document.getElementById('pendingOrdersBadge').textContent = pending;
         }
