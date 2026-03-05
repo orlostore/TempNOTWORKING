@@ -1495,13 +1495,17 @@
                     <h3>💰 Cost</h3>
                     <div class="value" id="statCost">AED 0</div>
                 </div>
-                <div class="stat-card success">
-                    <h3>✨ Profit</h3>
-                    <div class="value" id="statProfit">AED 0</div>
-                </div>
                 <div class="stat-card">
                     <h3>🚚 Shipping</h3>
                     <div class="value" id="statShipping">AED 0</div>
+                    <div style="font-size:0.7rem;color:#888;margin-top:2px;">
+                        <span id="statShipCollected">0</span> collected · <span id="statShipCost">0</span> cost
+                    </div>
+                </div>
+                <div class="stat-card success">
+                    <h3>✨ Net Profit</h3>
+                    <div class="value" id="statProfit">AED 0</div>
+                    <div style="font-size:0.7rem;color:#888;margin-top:2px;" id="statProfitBreakdown"></div>
                 </div>
                 <div class="stat-card">
                     <h3>📦 Orders</h3>
@@ -1587,12 +1591,14 @@
                                     <th>Order Date</th>
                                     <th>Customer</th>
                                     <th>Order Total</th>
-                                    <th>Shipping</th>
+                                    <th>Collected</th>
+                                    <th>Cost</th>
+                                    <th>Net</th>
                                     <th>Type</th>
                                 </tr>
                             </thead>
                             <tbody id="shippingTableBody">
-                                <tr><td colspan="5" class="loading">Loading...</td></tr>
+                                <tr><td colspan="7" class="loading">Loading...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -3217,26 +3223,36 @@
             const paidShipping = filteredOrders.filter(o => o.shipping_amount > 0);
             const freeShipping = filteredOrders.filter(o => o.shipping_amount === 0);
             const totalCollected = paidShipping.reduce((sum, o) => sum + (o.shipping_amount || 0), 0) / 100;
-            
+            const shippingCostPerOrder = getDeliveryFeeCity() || 0;
+            const totalShippingCost = paidShipping.length * shippingCostPerOrder;
+            const netShipping = totalCollected - totalShippingCost;
+
             document.getElementById('paidShippingCount').textContent = paidShipping.length;
             document.getElementById('paidShippingAmount').textContent = 'AED ' + totalCollected.toFixed(2);
             document.getElementById('freeShippingCount').textContent = freeShipping.length;
-            document.getElementById('totalShippingCollected').textContent = 'AED ' + totalCollected.toFixed(2);
-            
+            document.getElementById('totalShippingCollected').textContent =
+                'AED ' + totalCollected.toFixed(2) + ' collected · AED ' + totalShippingCost.toFixed(2) + ' cost · AED ' + netShipping.toFixed(2) + ' net';
+
             // Shipping table
             const tbody = document.getElementById('shippingTableBody');
             tbody.innerHTML = filteredOrders.map(order => {
                 const date = new Date(order.created * 1000);
                 const dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                const collected = (order.shipping_amount || 0) / 100;
+                const cost = order.shipping_amount > 0 ? shippingCostPerOrder : 0;
+                const net = collected - cost;
                 const shippingType = order.shipping_amount > 0 ? 'Paid' : 'Free';
                 const shippingClass = order.shipping_amount > 0 ? 'qty-low' : 'qty-ok';
-                
+                const netClass = net > 0 ? 'color:#28a745' : net < 0 ? 'color:#dc3545' : '';
+
                 return `
                     <tr>
                         <td>${dateStr}</td>
                         <td>${order.customer_name}</td>
                         <td class="price-tag">AED ${(order.amount_total / 100).toFixed(2)}</td>
-                        <td>AED ${((order.shipping_amount || 0) / 100).toFixed(2)}</td>
+                        <td>AED ${collected.toFixed(2)}</td>
+                        <td>AED ${cost.toFixed(2)}</td>
+                        <td style="${netClass};font-weight:600;">AED ${net.toFixed(2)}</td>
                         <td><span class="qty-badge ${shippingClass}">${shippingType}</span></td>
                     </tr>
                 `;
@@ -3247,7 +3263,7 @@
             const totalRevenue = filteredOrders.reduce((sum, o) => sum + o.amount_total, 0) / 100;
             const shippingCollected = filteredOrders.reduce((sum, o) => sum + (o.shipping_amount || 0), 0) / 100;
             const productRevenue = totalRevenue - shippingCollected;
-            
+
             let totalCost = 0;
             filteredOrders.forEach(order => {
                 order.items.forEach(item => {
@@ -3256,14 +3272,26 @@
                     }
                 });
             });
-            
-            const profit = productRevenue - totalCost;
+
+            // Shipping cost: deliveryFeeCity per order that was actually shipped (not free shipping)
+            const paidShippingOrders = filteredOrders.filter(o => o.shipping_amount > 0).length;
+            const shippingCostPerOrder = getDeliveryFeeCity() || 0;
+            const totalShippingCost = paidShippingOrders * shippingCostPerOrder;
+            const netShipping = shippingCollected - totalShippingCost;
+
+            // Net profit = product profit + net shipping (collected - cost)
+            const productProfit = productRevenue - totalCost;
+            const netProfit = productProfit + netShipping;
             const pending = filteredOrders.filter(o => o.status === 'pending').length;
-            
+
             document.getElementById('statRevenue').textContent = 'AED ' + productRevenue.toFixed(0);
             document.getElementById('statCost').textContent = 'AED ' + totalCost.toFixed(0);
-            document.getElementById('statProfit').textContent = 'AED ' + profit.toFixed(0);
-            document.getElementById('statShipping').textContent = 'AED ' + shippingCollected.toFixed(0);
+            document.getElementById('statProfit').textContent = 'AED ' + netProfit.toFixed(0);
+            document.getElementById('statProfitBreakdown').textContent =
+                'Product ' + productProfit.toFixed(0) + ' + Ship ' + netShipping.toFixed(0);
+            document.getElementById('statShipping').textContent = 'AED ' + netShipping.toFixed(0);
+            document.getElementById('statShipCollected').textContent = shippingCollected.toFixed(0);
+            document.getElementById('statShipCost').textContent = totalShippingCost.toFixed(0);
             document.getElementById('statTotalOrders').textContent = filteredOrders.length;
             document.getElementById('statPendingOrders').textContent = pending;
             document.getElementById('pendingOrdersBadge').textContent = pending;
