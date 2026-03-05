@@ -494,8 +494,8 @@ function renderProducts(list, arabicMode) {
         let buttonHTML;
         if (outOfStock) {
             buttonHTML = arabicMode
-                ? `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`
-                : `<button class="add-to-cart" disabled style="background:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`;
+                ? `<button class="add-to-cart" disabled style="background:#999;border-color:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`
+                : `<button class="add-to-cart" disabled style="background:#999;border-color:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`;
         } else if (hasVariants) {
             buttonHTML = arabicMode
                 ? `<a href="product.html?product=${safeSlug}" class="view-options-btn">View Options<br><span class="arabic-text">عرض الخيارات</span></a>`
@@ -1741,6 +1741,9 @@ async function checkout() {
 
         if (data.url) {
             sessionStorage.setItem('orlo_checkout_pending', '1');
+            // Backup cart to sessionStorage so success page can display order summary
+            // even if localStorage cart is cleared during Stripe redirect
+            try { sessionStorage.setItem('orlo_cart_backup', localStorage.getItem('cart') || '[]'); } catch(e) {}
             // Hide page + replace history entry so browser back goes to cancel.html, not product page
             document.documentElement.style.visibility = 'hidden';
             try { history.replaceState(null, '', 'cancel.html'); } catch(e) {}

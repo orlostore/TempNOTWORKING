@@ -689,6 +689,14 @@ nav {
   z-index: 10;
   text-transform: uppercase;
 }
+.badge.out-of-stock-badge {
+  background: #999;
+}
+.add-to-cart:disabled {
+  background: #999 !important;
+  border-color: #999 !important;
+  cursor: not-allowed;
+}
 
 .product-image {
   width: 100%;

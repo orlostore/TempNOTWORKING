@@ -117,7 +117,7 @@ export async function onRequestPost(context) {
 
         if (env.RESEND_API_KEY && customer_email && customer_email !== 'N/A') {
             try {
-                const origin = new URL(request.url).origin;
+                const origin = env.SITE_URL || new URL(request.url).origin;
 
                 const html = customerEmail({
                     origin,
