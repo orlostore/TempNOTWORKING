@@ -1499,7 +1499,7 @@
                     <h3>🚚 Shipping Profit</h3>
                     <div class="value" id="statShipping">AED 0</div>
                     <div style="font-size:0.7rem;color:#888;margin-top:2px;">
-                        <span id="statShipCollected">0</span> collected · <span id="statShipCost">0</span> cost
+                        <span id="statShipCollected">0</span> collected · <span id="statShipCost">0</span> cost · <span id="statShipRefundLoss" style="color:#dc3545;">0</span> refund loss
                     </div>
                 </div>
                 <div class="stat-card success">
@@ -3230,8 +3230,11 @@
             document.getElementById('paidShippingCount').textContent = paidShipping.length;
             document.getElementById('paidShippingAmount').textContent = 'AED ' + totalCollected.toFixed(2);
             document.getElementById('freeShippingCount').textContent = freeShipping.length;
+            const refundedFreeShipCount = freeShipping.filter(o => o.return_request && o.return_request.status === 'refunded').length;
+            const refundShipLoss = refundedFreeShipCount * shippingCostPerOrder;
+            const netShippingFinal = netShipping - refundShipLoss;
             document.getElementById('totalShippingCollected').textContent =
-                'AED ' + totalCollected.toFixed(2) + ' collected · AED ' + totalShippingCost.toFixed(2) + ' cost · AED ' + netShipping.toFixed(2) + ' net';
+                'AED ' + totalCollected.toFixed(2) + ' collected · AED ' + totalShippingCost.toFixed(2) + ' cost' + (refundShipLoss > 0 ? ' · AED ' + refundShipLoss.toFixed(2) + ' refund loss' : '') + ' · AED ' + netShippingFinal.toFixed(2) + ' net';
 
             // Shipping table
             const tbody = document.getElementById('shippingTableBody');
@@ -3239,10 +3242,11 @@
                 const date = new Date(order.created * 1000);
                 const dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
                 const collected = (order.shipping_amount || 0) / 100;
-                const cost = order.shipping_amount > 0 ? shippingCostPerOrder : 0;
+                const isRefundedFreeShip = order.shipping_amount === 0 && order.return_request && order.return_request.status === 'refunded';
+                const cost = order.shipping_amount > 0 ? shippingCostPerOrder : (isRefundedFreeShip ? shippingCostPerOrder : 0);
                 const net = collected - cost;
-                const shippingType = order.shipping_amount > 0 ? 'Paid' : 'Free';
-                const shippingClass = order.shipping_amount > 0 ? 'qty-low' : 'qty-ok';
+                const shippingType = isRefundedFreeShip ? 'Free (Refunded)' : (order.shipping_amount > 0 ? 'Paid' : 'Free');
+                const shippingClass = isRefundedFreeShip ? 'qty-critical' : (order.shipping_amount > 0 ? 'qty-low' : 'qty-ok');
                 const netClass = net > 0 ? 'color:#28a745' : net < 0 ? 'color:#dc3545' : '';
 
                 return `
@@ -3281,9 +3285,14 @@
             const paidShippingOrders = shippedOrders.filter(o => o.shipping_amount > 0).length;
             const shippingCostPerOrder = getDeliveryFeeCity() || 0;
             const totalShippingCost = paidShippingOrders * shippingCostPerOrder;
-            const netShipping = shippingCollected - totalShippingCost;
 
-            // Net profit = product profit + net shipping (collected - cost)
+            // Refund shipping loss: free-shipping orders that got refunded — we paid Zajel but collected nothing
+            const refundedFreeShipOrders = filteredOrders.filter(o => o.shipping_amount === 0 && o.return_request && o.return_request.status === 'refunded').length;
+            const refundShipLoss = refundedFreeShipOrders * shippingCostPerOrder;
+
+            const netShipping = shippingCollected - totalShippingCost - refundShipLoss;
+
+            // Net profit = product profit + net shipping (collected - cost - refund loss)
             const productProfit = productRevenue - totalCost;
             const netProfit = productProfit + netShipping;
             const pending = activeOrders.filter(o => o.status === 'pending').length;
@@ -3296,6 +3305,7 @@
             document.getElementById('statShipping').textContent = 'AED ' + netShipping.toFixed(0);
             document.getElementById('statShipCollected').textContent = shippingCollected.toFixed(0);
             document.getElementById('statShipCost').textContent = totalShippingCost.toFixed(0);
+            document.getElementById('statShipRefundLoss').textContent = refundShipLoss.toFixed(0);
             document.getElementById('statTotalOrders').textContent = activeOrders.length;
             document.getElementById('statPendingOrders').textContent = pending;
             document.getElementById('pendingOrdersBadge').textContent = pending;
