@@ -1326,8 +1326,15 @@
             if (tabName === 'addresses') loadAddresses();
         }
         
-        function logout() {
-            if (!confirm('Are you sure you want to logout?\nهل أنت متأكد أنك تريد تسجيل الخروج؟')) return;
+        async function logout() {
+            const yes = await orloConfirm({
+                title: 'Logout',
+                msg: 'Are you sure you want to logout?\nهل أنت متأكد أنك تريد تسجيل الخروج؟',
+                confirmText: 'Logout',
+                cancelText: 'Stay',
+                type: 'info'
+            });
+            if (!yes) return;
             localStorage.removeItem('orlo_token');
             localStorage.removeItem('orlo_customer');
             sessionStorage.removeItem('orlo_token');
@@ -1472,7 +1479,14 @@
         }
         
         async function cancelOrder(orderId, btn) {
-            if (!confirm('Are you sure you want to cancel this order? A full refund will be issued to your card.')) return;
+            const yes = await orloConfirm({
+                title: 'Cancel Order',
+                msg: 'Are you sure you want to cancel this order?\nA full refund will be issued to your card.',
+                confirmText: 'Cancel Order',
+                cancelText: 'Keep Order',
+                type: 'danger'
+            });
+            if (!yes) return;
             btn.disabled = true;
             btn.textContent = 'Cancelling...';
             try {
@@ -1486,15 +1500,15 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    alert(data.message);
+                    orloToast('success', 'Order Cancelled', data.message);
                     loadOrders();
                 } else {
-                    alert(data.error || 'Failed to cancel order');
+                    orloToast('error', 'Cancellation Failed', data.error || 'Failed to cancel order');
                     btn.disabled = false;
                     btn.textContent = 'Cancel Order';
                 }
             } catch (e) {
-                alert('Connection error. Please try again.');
+                orloToast('error', 'Connection Error', 'Could not reach the server. Please try again.');
                 btn.disabled = false;
                 btn.textContent = 'Cancel Order';
             }
@@ -1518,8 +1532,8 @@
             const reason = document.getElementById('returnReason').value;
             const btn = document.getElementById('returnSubmitBtn');
 
-            if (!reason) return alert('Please select a reason.');
-            if (!document.getElementById('returnShippingAck').checked) return alert('Please acknowledge the shipping cost policy.');
+            if (!reason) return orloToast('warning', 'Missing Information', 'Please select a return reason.');
+            if (!document.getElementById('returnShippingAck').checked) return orloToast('warning', 'Missing Information', 'Please acknowledge the shipping cost policy.');
 
             btn.disabled = true;
             btn.textContent = 'Submitting...';
@@ -1536,15 +1550,15 @@
                 const data = await res.json();
                 if (data.success) {
                     closeReturnModal();
-                    alert(data.message);
+                    orloToast('success', 'Return Requested', data.message);
                     loadOrders();
                 } else {
-                    alert(data.error || 'Failed to submit return request');
+                    orloToast('error', 'Return Failed', data.error || 'Failed to submit return request');
                     btn.textContent = 'Submit Request';
                     btn.disabled = false;
                 }
             } catch (e) {
-                alert('Connection error. Please try again.');
+                orloToast('error', 'Connection Error', 'Could not reach the server. Please try again.');
                 btn.textContent = 'Submit Request';
                 btn.disabled = false;
             }
@@ -1730,12 +1744,19 @@
                 });
                 loadAddresses();
             } catch (error) {
-                alert('Error setting default address');
+                orloToast('error', 'Address Error', 'Error setting default address. Please try again.');
             }
         }
         
         async function deleteAddress(id) {
-            if (!confirm('Delete this address?')) return;
+            const yes = await orloConfirm({
+                title: 'Delete Address',
+                msg: 'This address will be permanently removed from your account.',
+                confirmText: 'Delete',
+                cancelText: 'Keep It',
+                type: 'danger'
+            });
+            if (!yes) return;
             try {
                 await fetch('/api/auth/addresses/' + id, {
                     method: 'DELETE',
@@ -1743,7 +1764,7 @@
                 });
                 loadAddresses();
             } catch (error) {
-                alert('Error deleting address');
+                orloToast('error', 'Address Error', 'Error deleting address. Please try again.');
             }
         }
         
@@ -1756,7 +1777,7 @@
             .then(r => r.json())
             .then(data => {
                 const addr = (data.addresses || []).find(a => a.id === id);
-                if (!addr) return alert('Address not found');
+                if (!addr) return orloToast('error', 'Not Found', 'Address not found.');
                 editingAddressId = id;
                 document.getElementById('addressModalTitle').innerHTML = 'Edit address <span class="arabic-text">| تعديل العنوان</span>';
                 document.getElementById('addressModalSubmitBtn').textContent = 'Save Changes | حفظ التغييرات';
@@ -1802,12 +1823,19 @@
                 const el = document.getElementById(id);
                 if (el) el.textContent = total > 0 ? total : '';
             });
-            alert(added + ' item(s) added to cart!\nتمت إضافة ' + added + ' منتج(ات) إلى السلة');
+            orloToast('success', 'Added to Cart', added + ' item(s) added to cart!\nتمت إضافة ' + added + ' منتج(ات) إلى السلة');
         }
 
         // --- Delete Account ---
         async function deleteAccount() {
-            const confirmation = prompt('This will permanently delete your account and all data.\nType DELETE to confirm:\n\nسيؤدي هذا إلى حذف حسابك نهائياً. اكتب DELETE للتأكيد');
+            const confirmation = await orloPrompt({
+                title: 'Delete Account',
+                msg: 'This will permanently delete your account and all data.\nسيؤدي هذا إلى حذف حسابك نهائياً.',
+                matchValue: 'DELETE',
+                placeholder: 'Type DELETE here',
+                confirmText: 'Delete My Account',
+                cancelText: 'Cancel'
+            });
             if (confirmation !== 'DELETE') return;
             try {
                 const res = await fetch('/api/auth/profile', {
@@ -1816,13 +1844,19 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    alert('Account deleted. Goodbye!\nتم حذف الحساب. مع السلامة!');
-                    logout();
+                    orloToast('success', 'Account Deleted', 'Your account has been deleted. Goodbye!\nتم حذف الحساب. مع السلامة!');
+                    setTimeout(function() {
+                        localStorage.removeItem('orlo_token');
+                        localStorage.removeItem('orlo_customer');
+                        sessionStorage.removeItem('orlo_token');
+                        sessionStorage.removeItem('orlo_customer');
+                        window.location.href = '/';
+                    }, 2000);
                 } else {
-                    alert(data.error || 'Failed to delete account');
+                    orloToast('error', 'Deletion Failed', data.error || 'Failed to delete account');
                 }
             } catch (e) {
-                alert('Connection error. Please try again.');
+                orloToast('error', 'Connection Error', 'Could not reach the server. Please try again.');
             }
         }
 
