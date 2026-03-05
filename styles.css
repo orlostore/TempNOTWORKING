@@ -4940,3 +4940,231 @@ footer p {
   background: rgba(0,0,0,0.65);
 }
 
+/* ============================================
+   ORLO TOAST NOTIFICATIONS
+   ============================================ */
+.orlo-toast-container {
+  position: fixed;
+  top: 70px;
+  right: 16px;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.orlo-toast {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 40px 14px 16px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  min-width: 300px;
+  max-width: 400px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  animation: orloToastIn 0.3s ease;
+  overflow: hidden;
+  pointer-events: auto;
+}
+.orlo-toast.toast-out {
+  animation: orloToastOut 0.3s ease forwards;
+}
+@keyframes orloToastIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes orloToastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(40px); }
+}
+.orlo-toast-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+.orlo-toast-icon.success { background: #e8f5e9; color: #2e7d32; }
+.orlo-toast-icon.error { background: #fce4ec; color: #c62828; }
+.orlo-toast-icon.warning { background: #fff3e0; color: #e65100; }
+.orlo-toast-body { flex: 1; min-width: 0; }
+.orlo-toast-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 2px;
+}
+.orlo-toast-msg {
+  font-size: 12px;
+  color: #777;
+  line-height: 1.45;
+}
+.orlo-toast-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #bbb;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px;
+  pointer-events: auto;
+}
+.orlo-toast-close:hover { color: #333; }
+.orlo-toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  border-radius: 0 0 10px 10px;
+  animation: orloProgressShrink 4s linear forwards;
+}
+.orlo-toast-progress.success { background: #2e7d32; }
+.orlo-toast-progress.error { background: #c62828; }
+.orlo-toast-progress.warning { background: #e65100; }
+@keyframes orloProgressShrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+/* ============================================
+   ORLO CONFIRM/PROMPT MODALS
+   ============================================ */
+.orlo-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(3px);
+  z-index: 100001;
+  justify-content: center;
+  align-items: center;
+}
+.orlo-modal-overlay.active { display: flex; }
+.orlo-modal {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 28px 22px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: orloModalIn 0.25s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+@keyframes orloModalIn {
+  from { opacity: 0; transform: scale(0.93) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.orlo-modal-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 24px;
+}
+.orlo-modal-icon.warn { background: #fff3e0; }
+.orlo-modal-icon.danger { background: #fce4ec; }
+.orlo-modal-icon.info { background: #e3f2fd; }
+.orlo-modal h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 8px;
+}
+.orlo-modal p {
+  font-size: 14px;
+  color: #777;
+  line-height: 1.55;
+  margin-bottom: 22px;
+}
+.orlo-modal-actions {
+  display: flex;
+  gap: 10px;
+}
+.orlo-modal-actions button {
+  flex: 1;
+  padding: 11px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.orlo-modal-actions button:hover { opacity: 0.85; }
+.orlo-modal-actions .btn-cancel {
+  background: #f0f0f0;
+  color: #555;
+}
+.orlo-modal-actions .btn-danger {
+  background: #c62828;
+  color: #fff;
+}
+.orlo-modal-actions .btn-primary {
+  background: var(--primary, #2c4a5c);
+  color: #fff;
+}
+.orlo-modal .delete-input {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+  color: #333;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 14px;
+  outline: none;
+  letter-spacing: 2px;
+}
+.orlo-modal .delete-input:focus { border-color: #c62828; }
+.orlo-modal .delete-hint {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 14px;
+}
+
+/* ============================================
+   ORLO INLINE CHECKOUT ERRORS
+   ============================================ */
+.orlo-inline-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  animation: orloInlineIn 0.3s ease;
+}
+@keyframes orloInlineIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.orlo-inline-error .ie-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.orlo-inline-error .ie-body { flex: 1; }
+.orlo-inline-error .ie-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #b91c1c;
+  margin-bottom: 4px;
+}
+.orlo-inline-error .ie-msg {
+  font-size: 13px;
+  color: #7f1d1d;
+  line-height: 1.5;
+}
+

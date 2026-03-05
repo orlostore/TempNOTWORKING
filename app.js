@@ -6,6 +6,162 @@ function escapeHTML(str) {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+// ============================================
+// ORLO TOAST + MODAL SYSTEM
+// Replaces native alert(), confirm(), prompt()
+// ============================================
+
+// Auto-inject toast container + modal overlay into DOM
+(function() {
+    if (!document.getElementById('orloToastContainer')) {
+        const tc = document.createElement('div');
+        tc.className = 'orlo-toast-container';
+        tc.id = 'orloToastContainer';
+        document.body.appendChild(tc);
+    }
+    if (!document.getElementById('orloModalOverlay')) {
+        const mo = document.createElement('div');
+        mo.className = 'orlo-modal-overlay';
+        mo.id = 'orloModalOverlay';
+        document.body.appendChild(mo);
+        mo.addEventListener('click', function(e) {
+            if (e.target === mo && mo._onCancel) mo._onCancel();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && mo.classList.contains('active') && mo._onCancel) mo._onCancel();
+        });
+    }
+})();
+
+/**
+ * Show a toast notification.
+ * @param {'success'|'error'|'warning'} type
+ * @param {string} title
+ * @param {string} msg
+ * @param {number} [duration=4000]
+ */
+function orloToast(type, title, msg, duration) {
+    duration = duration || 4000;
+    const container = document.getElementById('orloToastContainer');
+    if (!container) return;
+    const icons = { success: '\u2713', error: '\u2717', warning: '!' };
+    const toast = document.createElement('div');
+    toast.className = 'orlo-toast';
+    toast.innerHTML =
+        '<div class="orlo-toast-icon ' + type + '">' + (icons[type] || '') + '</div>' +
+        '<div class="orlo-toast-body">' +
+            '<div class="orlo-toast-title">' + escapeHTML(title) + '</div>' +
+            '<div class="orlo-toast-msg">' + escapeHTML(msg).replace(/\n/g, '<br>') + '</div>' +
+        '</div>' +
+        '<button class="orlo-toast-close" aria-label="Close">\u00d7</button>' +
+        '<div class="orlo-toast-progress ' + type + '" style="animation-duration:' + duration + 'ms"></div>';
+    toast.querySelector('.orlo-toast-close').onclick = function() { removeOrloToast(toast); };
+    container.appendChild(toast);
+    var timer = setTimeout(function() { removeOrloToast(toast); }, duration);
+    toast._timer = timer;
+}
+
+function removeOrloToast(toast) {
+    if (!toast || !toast.parentElement) return;
+    clearTimeout(toast._timer);
+    toast.classList.add('toast-out');
+    setTimeout(function() { if (toast.parentElement) toast.remove(); }, 300);
+}
+
+/**
+ * Show a confirm modal. Returns a Promise<boolean>.
+ * @param {object} opts - { title, msg, confirmText, cancelText, type }
+ */
+function orloConfirm(opts) {
+    return new Promise(function(resolve) {
+        var overlay = document.getElementById('orloModalOverlay');
+        var iconMap = { warn: '\u26a0\ufe0f', danger: '\u26a0\ufe0f', info: '\ud83d\udc4b' };
+        var iconClass = opts.type || 'warn';
+        var btnClass = (iconClass === 'danger') ? 'btn-danger' : 'btn-primary';
+
+        overlay.innerHTML =
+            '<div class="orlo-modal" onclick="event.stopPropagation()">' +
+                '<div class="orlo-modal-icon ' + iconClass + '">' + (iconMap[iconClass] || '\u26a0\ufe0f') + '</div>' +
+                '<h3>' + escapeHTML(opts.title || 'Confirm') + '</h3>' +
+                '<p>' + escapeHTML(opts.msg || '').replace(/\n/g, '<br>') + '</p>' +
+                '<div class="orlo-modal-actions">' +
+                    '<button class="btn-cancel" id="orloModalCancel">' + escapeHTML(opts.cancelText || 'Cancel') + '</button>' +
+                    '<button class="' + btnClass + '" id="orloModalConfirm">' + escapeHTML(opts.confirmText || 'Confirm') + '</button>' +
+                '</div>' +
+            '</div>';
+
+        overlay.classList.add('active');
+
+        function cleanup(result) {
+            overlay.classList.remove('active');
+            overlay._onCancel = null;
+            resolve(result);
+        }
+
+        overlay._onCancel = function() { cleanup(false); };
+        document.getElementById('orloModalCancel').onclick = function() { cleanup(false); };
+        document.getElementById('orloModalConfirm').onclick = function() { cleanup(true); };
+    });
+}
+
+/**
+ * Show a prompt modal with text input. Returns a Promise<string|null>.
+ * @param {object} opts - { title, msg, placeholder, matchValue, confirmText, cancelText }
+ */
+function orloPrompt(opts) {
+    return new Promise(function(resolve) {
+        var overlay = document.getElementById('orloModalOverlay');
+        var needsMatch = opts.matchValue ? true : false;
+
+        overlay.innerHTML =
+            '<div class="orlo-modal" onclick="event.stopPropagation()">' +
+                '<div class="orlo-modal-icon danger">\u26a0\ufe0f</div>' +
+                '<h3>' + escapeHTML(opts.title || 'Confirm') + '</h3>' +
+                '<p>' + escapeHTML(opts.msg || '').replace(/\n/g, '<br>') + '</p>' +
+                (needsMatch ? '<div class="delete-hint">Type <strong style="color:#c62828">' + escapeHTML(opts.matchValue) + '</strong> to confirm</div>' : '') +
+                '<input type="text" class="delete-input" id="orloPromptInput" placeholder="' + escapeHTML(opts.placeholder || '') + '">' +
+                '<div class="orlo-modal-actions">' +
+                    '<button class="btn-cancel" id="orloModalCancel">' + escapeHTML(opts.cancelText || 'Cancel') + '</button>' +
+                    '<button class="btn-danger" id="orloModalConfirm" ' + (needsMatch ? 'disabled style="opacity:0.4;cursor:not-allowed"' : '') + '>' + escapeHTML(opts.confirmText || 'Confirm') + '</button>' +
+                '</div>' +
+            '</div>';
+
+        overlay.classList.add('active');
+
+        var input = document.getElementById('orloPromptInput');
+        var confirmBtn = document.getElementById('orloModalConfirm');
+
+        if (needsMatch) {
+            input.addEventListener('input', function() {
+                if (input.value === opts.matchValue) {
+                    confirmBtn.disabled = false;
+                    confirmBtn.style.opacity = '1';
+                    confirmBtn.style.cursor = 'pointer';
+                } else {
+                    confirmBtn.disabled = true;
+                    confirmBtn.style.opacity = '0.4';
+                    confirmBtn.style.cursor = 'not-allowed';
+                }
+            });
+        }
+
+        input.focus();
+
+        function cleanup(val) {
+            overlay.classList.remove('active');
+            overlay._onCancel = null;
+            resolve(val);
+        }
+
+        overlay._onCancel = function() { cleanup(null); };
+        document.getElementById('orloModalCancel').onclick = function() { cleanup(null); };
+        confirmBtn.onclick = function() { if (!confirmBtn.disabled) cleanup(input.value); };
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !confirmBtn.disabled) cleanup(input.value);
+        });
+    });
+}
+
 // SVG icon constants for JS-generated HTML
 const SVG_TRUCK_INLINE = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>';
 const SVG_CLOSE_SM = '<svg style="width:0.7em;height:0.7em;vertical-align:-0.1em;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
@@ -1561,19 +1717,19 @@ async function checkout() {
         if (data.error) {
             // Handle stock errors
             if (data.error === 'out_of_stock') {
-                alert(data.message);
+                orloToast('error', 'Out of Stock', data.message);
                 // Refresh products to get updated stock
                 if (typeof initProducts === 'function') {
                     initProducts();
                 }
             } else if (data.error === 'insufficient_stock') {
-                let msg = 'Stock issue:\n';
+                let msg = '';
                 data.items.forEach(item => {
-                    msg += `${item.name}: Only ${item.available} available (you wanted ${item.requested})\n`;
+                    msg += item.name + ': Only ' + item.available + ' available (you wanted ' + item.requested + ')\n';
                 });
-                alert(msg);
+                orloToast('error', 'Stock Issue', msg);
             } else {
-                alert(data.message || 'Payment failed. Please try again.');
+                orloToast('error', 'Payment Failed', data.message || 'Payment failed. Please try again.');
             }
             
             if (btn) {
@@ -1598,7 +1754,7 @@ async function checkout() {
 
     } catch (err) {
         console.error("Payment Error:", err);
-        alert("Payment system is syncing. Please try again.");
+        orloToast('error', 'Payment System Busy', 'Our payment system is syncing. Please wait a moment and try again.');
         if (btn) {
             btn.disabled = false;
             btn.innerHTML = originalText;
