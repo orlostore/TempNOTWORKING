@@ -136,7 +136,7 @@ export async function onRequestPost(context) {
         // Send email to customer
         if (env.RESEND_API_KEY && returnReq.customer_email) {
             try {
-                const origin = new URL(request.url).origin;
+                const origin = env.SITE_URL || new URL(request.url).origin;
                 const custName = returnReq.customer_name || 'there';
                 const orderRef = order_id.slice(-8).toUpperCase();
 
@@ -324,7 +324,7 @@ export async function onRequestPut(context) {
         // Send notification email to customer
         if (env.RESEND_API_KEY && customerEmail) {
             try {
-                const origin = new URL(request.url).origin;
+                const origin = env.SITE_URL || new URL(request.url).origin;
                 const orderRef = order_id.slice(-8).toUpperCase();
 
                 const html = buildCustomerEmail({

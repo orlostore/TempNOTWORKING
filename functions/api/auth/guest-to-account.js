@@ -84,7 +84,7 @@ export async function onRequestPost(context) {
         // 7. Send email with temp password + verify link
         if (env.RESEND_API_KEY) {
             try {
-                const origin = new URL(request.url).origin;
+                const origin = env.SITE_URL || new URL(request.url).origin;
                 const verifyUrl = `${origin}/verify-email.html?token=${verificationToken}`;
 
                 const credentialsHtml = `

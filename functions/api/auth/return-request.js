@@ -128,7 +128,7 @@ export async function onRequestPost(context) {
                     if (setting?.value) adminNotifyEmail = setting.value;
                 } catch (e) {}
 
-                const origin = new URL(request.url).origin;
+                const origin = env.SITE_URL || new URL(request.url).origin;
 
                 const bodyHtml = `
                     <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
