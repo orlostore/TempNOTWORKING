@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orlo Store - All Popups Demo</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; padding: 30px; }
+h1 { text-align: center; margin-bottom: 10px; font-size: 28px; }
+.subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 14px; }
+.section { margin-bottom: 40px; }
+.section h2 { color: #c8a165; margin-bottom: 15px; font-size: 20px; border-bottom: 1px solid #222; padding-bottom: 8px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+.card { background: #151515; border: 1px solid #252525; border-radius: 10px; padding: 20px; }
+.card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; margin-bottom: 6px; }
+.card .desc { font-size: 13px; color: #aaa; margin-bottom: 14px; line-height: 1.4; }
+.card button {
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity .2s;
+}
+.card button:hover { opacity: 0.85; }
+.btn-alert { background: #c0392b; color: #fff; }
+.btn-confirm { background: #2980b9; color: #fff; }
+.btn-prompt { background: #8e44ad; color: #fff; }
+.btn-success { background: #27ae60; color: #fff; }
+.tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.tag-alert { background: #c0392b33; color: #e74c3c; }
+.tag-confirm { background: #2980b933; color: #3498db; }
+.tag-prompt { background: #8e44ad33; color: #9b59b6; }
+.counter { text-align: center; margin-bottom: 30px; }
+.counter span {
+    display: inline-block;
+    background: #1a1a1a;
+    border: 1px solid #252525;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin: 5px;
+    font-size: 13px;
+}
+.counter span strong { color: #c8a165; }
+</style>
+</head>
+<body>
+
+<h1>Orlo Store — All Native Popups</h1>
+<p class="subtitle">Click each button to see exactly what customers see. These are real browser alert/confirm/prompt dialogs.</p>
+
+<div class="counter">
+    <span><strong>16</strong> in account.html</span>
+    <span><strong>4</strong> in checkout (app.js)</span>
+    <span><strong>20</strong> total ugly popups</span>
+</div>
+
+<!-- ACCOUNT PAGE -->
+<div class="section">
+    <h2>Account Page — Logout</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag tag-confirm">confirm</span>
+            <div class="label">Logout Confirmation</div>
+            <div class="desc">When customer clicks logout button</div>
+            <button class="btn-confirm" onclick="confirm('Are you sure you want to logout?\nهل أنت متأكد أنك تريد تسجيل الخروج؟')">Try It</button>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Account Page — Cancel Order</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag tag-confirm">confirm</span>
+            <div class="label">Cancel Order Confirmation</div>
+            <div class="desc">When customer clicks "Cancel Order"</div>
+            <button class="btn-confirm" onclick="confirm('Are you sure you want to cancel this order? A full refund will be issued to your card.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Cancel Order Success</div>
+            <div class="desc">After order is successfully cancelled</div>
+            <button class="btn-success" onclick="alert('Order cancelled successfully. Refund will be processed within 5-10 business days.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Cancel Order Error</div>
+            <div class="desc">If cancellation fails on server</div>
+            <button class="btn-alert" onclick="alert('Failed to cancel order')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Cancel Order Connection Error</div>
+            <div class="desc">If network request fails entirely</div>
+            <button class="btn-alert" onclick="alert('Connection error. Please try again.')">Try It</button>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Account Page — Return Request</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">No Reason Selected</div>
+            <div class="desc">Customer didn't pick a return reason</div>
+            <button class="btn-alert" onclick="alert('Please select a reason.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Checkbox Not Ticked</div>
+            <div class="desc">Customer didn't acknowledge shipping cost</div>
+            <button class="btn-alert" onclick="alert('Please acknowledge the shipping cost policy.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Return Request Success</div>
+            <div class="desc">After return request submitted</div>
+            <button class="btn-success" onclick="alert('Return request submitted successfully!')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Return Request Error</div>
+            <div class="desc">If return request fails</div>
+            <button class="btn-alert" onclick="alert('Failed to submit return request')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Return Connection Error</div>
+            <div class="desc">If network fails during return</div>
+            <button class="btn-alert" onclick="alert('Connection error. Please try again.')">Try It</button>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Account Page — Addresses</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Set Default Address Error</div>
+            <div class="desc">If setting default address fails</div>
+            <button class="btn-alert" onclick="alert('Error setting default address')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-confirm">confirm</span>
+            <div class="label">Delete Address Confirmation</div>
+            <div class="desc">When customer deletes a saved address</div>
+            <button class="btn-confirm" onclick="confirm('Delete this address?')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Delete Address Error</div>
+            <div class="desc">If address deletion fails</div>
+            <button class="btn-alert" onclick="alert('Error deleting address')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Address Not Found</div>
+            <div class="desc">If address doesn't exist when editing</div>
+            <button class="btn-alert" onclick="alert('Address not found')">Try It</button>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Account Page — Reorder & Delete Account</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Reorder Success</div>
+            <div class="desc">After re-adding items to cart</div>
+            <button class="btn-success" onclick="alert('3 item(s) added to cart!\nتمت إضافة 3 منتج(ات) إلى السلة')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-prompt">prompt</span>
+            <div class="label">Delete Account</div>
+            <div class="desc">Customer must type DELETE to confirm — the scariest popup</div>
+            <button class="btn-prompt" onclick="var r = prompt('This will permanently delete your account and all data.\nType DELETE to confirm:\n\nسيؤدي هذا إلى حذف حسابك نهائياً. اكتب DELETE للتأكيد'); if(r) alert('You typed: ' + r)">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Account Deleted Success</div>
+            <div class="desc">After account is deleted</div>
+            <button class="btn-success" onclick="alert('Account deleted. Goodbye!\nتم حذف الحساب. مع السلامة!')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Account Delete Error</div>
+            <div class="desc">If deletion fails</div>
+            <button class="btn-alert" onclick="alert('Failed to delete account')">Try It</button>
+        </div>
+    </div>
+</div>
+
+<!-- CHECKOUT -->
+<div class="section">
+    <h2>Checkout (app.js) — Payment Errors</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Out of Stock</div>
+            <div class="desc">Item sold out between cart and payment</div>
+            <button class="btn-alert" onclick="alert('Sorry, Black Leather Bag is now out of stock.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Insufficient Stock</div>
+            <div class="desc">Wanted more than available</div>
+            <button class="btn-alert" onclick="alert('Stock issue:\nBlack Leather Bag: Only 1 available (you wanted 3)\nSilk Scarf: Only 2 available (you wanted 5)')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Payment Failed</div>
+            <div class="desc">Generic payment failure</div>
+            <button class="btn-alert" onclick="alert('Payment failed. Please try again.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-alert">alert</span>
+            <div class="label">Payment System Syncing</div>
+            <div class="desc">Server/connection error during payment</div>
+            <button class="btn-alert" onclick="alert('Payment system is syncing. Please try again.')">Try It</button>
+        </div>
+    </div>
+</div>
+
+<div style="text-align:center; margin-top: 50px; padding: 30px; background: #151515; border-radius: 10px; border: 1px solid #252525;">
+    <p style="color: #888; font-size: 14px;">All 20 popups above are what customers currently see.<br>Click each one — that's the actual browser dialog.</p>
+</div>
+
+</body>
+</html>
