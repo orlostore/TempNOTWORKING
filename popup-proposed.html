@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orlo Store — Proposed Popup Replacements</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; padding: 30px; }
+h1 { text-align: center; margin-bottom: 10px; font-size: 28px; }
+.subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 14px; }
+.section { margin-bottom: 40px; }
+.section h2 { color: #c8a165; margin-bottom: 15px; font-size: 20px; border-bottom: 1px solid #222; padding-bottom: 8px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+.card { background: #151515; border: 1px solid #252525; border-radius: 10px; padding: 20px; }
+.card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; margin-bottom: 6px; }
+.card .desc { font-size: 13px; color: #aaa; margin-bottom: 14px; line-height: 1.4; }
+.card button {
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity .2s;
+}
+.card button:hover { opacity: 0.85; }
+.btn-alert { background: #c0392b; color: #fff; }
+.btn-confirm { background: #2980b9; color: #fff; }
+.btn-prompt { background: #8e44ad; color: #fff; }
+.btn-success { background: #27ae60; color: #fff; }
+.tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.tag-toast { background: #27ae6033; color: #2ecc71; }
+.tag-modal { background: #c8a16533; color: #c8a165; }
+.tag-inline { background: #e67e2233; color: #e67e22; }
+
+/* ===== OVERLAY ===== */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+.overlay.active { display: flex; }
+
+/* ===== MODAL ===== */
+.modal {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    animation: modalIn 0.25s ease;
+}
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.92) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal .modal-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+    font-size: 26px;
+}
+.modal .modal-icon.warn { background: #c0392b22; }
+.modal .modal-icon.info { background: #2980b922; }
+.modal .modal-icon.danger { background: #e74c3c22; }
+.modal h3 { font-size: 18px; margin-bottom: 10px; color: #fff; }
+.modal p { font-size: 14px; color: #999; line-height: 1.6; margin-bottom: 24px; }
+.modal .modal-actions { display: flex; gap: 10px; }
+.modal .modal-actions button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+}
+.modal .btn-cancel { background: #252525; color: #999; }
+.modal .btn-cancel:hover { background: #333; color: #fff; }
+.modal .btn-danger { background: #c0392b; color: #fff; }
+.modal .btn-danger:hover { background: #e74c3c; }
+.modal .btn-primary { background: #c8a165; color: #000; }
+.modal .btn-primary:hover { background: #d4b07a; }
+
+/* Delete account input */
+.modal input.delete-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background: #111;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 16px;
+    outline: none;
+    letter-spacing: 2px;
+}
+.modal input.delete-input:focus { border-color: #c0392b; }
+.modal .delete-hint { font-size: 12px; color: #666; margin-bottom: 16px; }
+
+/* ===== TOAST ===== */
+.toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    min-width: 320px;
+    max-width: 420px;
+    animation: toastIn 0.3s ease;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+.toast.toast-out { animation: toastOut 0.3s ease forwards; }
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes toastOut {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(40px); }
+}
+.toast .toast-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.toast .toast-icon.success { background: #27ae6022; }
+.toast .toast-icon.error { background: #c0392b22; }
+.toast .toast-icon.warning { background: #f39c1222; }
+.toast .toast-body { flex: 1; }
+.toast .toast-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.toast .toast-msg { font-size: 12px; color: #888; line-height: 1.4; }
+.toast .toast-close {
+    background: none; border: none; color: #555; cursor: pointer;
+    font-size: 18px; padding: 4px; line-height: 1; flex-shrink: 0;
+}
+.toast .toast-close:hover { color: #fff; }
+.toast .toast-progress {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 3px;
+    border-radius: 0 0 10px 10px;
+    animation: progressShrink 4s linear forwards;
+}
+.toast { position: relative; overflow: hidden; }
+@keyframes progressShrink {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+/* ===== INLINE ERROR ===== */
+.inline-demo {
+    background: #151515;
+    border: 1px solid #252525;
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 15px;
+}
+.inline-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #c0392b15;
+    border: 1px solid #c0392b44;
+    border-radius: 10px;
+    animation: inlineIn 0.3s ease;
+}
+@keyframes inlineIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.inline-error .ie-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.inline-error .ie-body { flex: 1; }
+.inline-error .ie-title { font-size: 14px; font-weight: 600; color: #e74c3c; margin-bottom: 4px; }
+.inline-error .ie-msg { font-size: 13px; color: #cc8888; line-height: 1.5; }
+.inline-error .ie-item { margin: 4px 0; }
+.fake-pay-btn {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px;
+    background: #c8a165;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: default;
+    opacity: 0.5;
+}
+.inline-label { font-size: 12px; color: #666; margin-bottom: 12px; }
+
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
+.compare > div { background: #151515; border: 1px solid #252525; border-radius: 10px; padding: 20px; }
+.compare h4 { font-size: 13px; color: #666; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+<div class="overlay" id="overlay" onclick="closeModal()"></div>
+
+<h1>Proposed Replacements</h1>
+<p class="subtitle">Click each button to see the styled version that would replace the ugly browser dialogs.</p>
+
+<!-- ===== TOASTS ===== -->
+<div class="section">
+    <h2>Toast Notifications — Replaces all alert() success/error messages</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag tag-toast">toast</span>
+            <div class="label">Cancel Order Success</div>
+            <div class="desc">Replaces: alert('Order cancelled...')</div>
+            <button class="btn-success" onclick="showToast('success','Order Cancelled','Your order has been cancelled. Refund will be processed within 5-10 business days.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-toast">toast</span>
+            <div class="label">Cancel Order Error</div>
+            <div class="desc">Replaces: alert('Failed to cancel order')</div>
+            <button class="btn-alert" onclick="showToast('error','Cancellation Failed','Could not cancel your order. Please try again or contact support.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-toast">toast</span>
+            <div class="label">Connection Error</div>
+            <div class="desc">Replaces: alert('Connection error...')</div>
+            <button class="btn-alert" onclick="showToast('error','Connection Error','Unable to reach the server. Please check your connection and try again.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-toast">toast</span>
+            <div class="label">Return Request Success</div>
+            <div class="desc">Replaces: alert('Return request submitted')</div>
+            <button class="btn-success" onclick="showToast('success','Return Requested','Your return request has been submitted. We\'ll review it within 24 hours.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-toast">toast</span>
+            <div class="label">Return Validation Error</div>
+            <div class="desc">Replaces: alert('Please select a reason')</div>
+            <button class="btn-alert" onclick="showToast('warning','Missing Information','Please select a return reason and acknowledge the shipping policy.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-toast">toast</span>
+            <div class="label">Address Errors</div>
+            <div class="desc">Replaces: alert('Error setting/deleting address')</div>
+            <button class="btn-alert" onclick="showToast('error','Address Error','Could not update your address. Please try again.')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-toast">toast</span>
+            <div class="label">Reorder Success</div>
+            <div class="desc">Replaces: alert('3 items added to cart!')</div>
+            <button class="btn-success" onclick="showToast('success','Added to Cart','3 item(s) added to your cart.\nتمت إضافة 3 منتج(ات) إلى السلة')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-toast">toast</span>
+            <div class="label">Account Deleted</div>
+            <div class="desc">Replaces: alert('Account deleted. Goodbye!')</div>
+            <button class="btn-success" onclick="showToast('success','Account Deleted','Your account has been deleted. Goodbye!\nتم حذف الحساب. مع السلامة!')">Try It</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<div class="section">
+    <h2>Styled Modals — Replaces all confirm() and prompt() dialogs</h2>
+    <div class="grid">
+        <div class="card">
+            <span class="tag tag-modal">modal</span>
+            <div class="label">Logout Confirmation</div>
+            <div class="desc">Replaces: confirm('Are you sure you want to logout?')</div>
+            <button class="btn-confirm" onclick="showModal('logout')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-modal">modal</span>
+            <div class="label">Cancel Order Confirmation</div>
+            <div class="desc">Replaces: confirm('Are you sure you want to cancel?')</div>
+            <button class="btn-confirm" onclick="showModal('cancelOrder')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-modal">modal</span>
+            <div class="label">Delete Address Confirmation</div>
+            <div class="desc">Replaces: confirm('Delete this address?')</div>
+            <button class="btn-confirm" onclick="showModal('deleteAddress')">Try It</button>
+        </div>
+        <div class="card">
+            <span class="tag tag-modal">modal</span>
+            <div class="label">Delete Account (Type DELETE)</div>
+            <div class="desc">Replaces: prompt('Type DELETE to confirm')</div>
+            <button class="btn-prompt" onclick="showModal('deleteAccount')">Try It</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== INLINE ERRORS ===== -->
+<div class="section">
+    <h2>Inline Errors — Replaces checkout alert() errors</h2>
+    <p style="color:#888; font-size:13px; margin-bottom:15px;">These show directly on the checkout page, not as popups. Much clearer for customers.</p>
+    <div class="grid">
+        <div class="inline-demo">
+            <div class="inline-label">Out of Stock — shows above pay button</div>
+            <div class="inline-error">
+                <span class="ie-icon">⚠️</span>
+                <div class="ie-body">
+                    <div class="ie-title">Item Out of Stock</div>
+                    <div class="ie-msg">Sorry, <strong>Black Leather Bag</strong> is no longer available. Please remove it from your cart to continue.</div>
+                </div>
+            </div>
+            <button class="fake-pay-btn">Pay Now — 450 SAR</button>
+        </div>
+        <div class="inline-demo">
+            <div class="inline-label">Insufficient Stock — shows above pay button</div>
+            <div class="inline-error">
+                <span class="ie-icon">⚠️</span>
+                <div class="ie-body">
+                    <div class="ie-title">Stock Issue</div>
+                    <div class="ie-msg">
+                        <div class="ie-item">• <strong>Black Leather Bag</strong> — only 1 available (you wanted 3)</div>
+                        <div class="ie-item">• <strong>Silk Scarf</strong> — only 2 available (you wanted 5)</div>
+                    </div>
+                </div>
+            </div>
+            <button class="fake-pay-btn">Pay Now — 450 SAR</button>
+        </div>
+        <div class="inline-demo">
+            <div class="inline-label">Payment Failed — shows above pay button</div>
+            <div class="inline-error">
+                <span class="ie-icon">⚠️</span>
+                <div class="ie-body">
+                    <div class="ie-title">Payment Failed</div>
+                    <div class="ie-msg">Your payment could not be processed. Please check your card details and try again.</div>
+                </div>
+            </div>
+            <button class="fake-pay-btn">Pay Now — 450 SAR</button>
+        </div>
+        <div class="inline-demo">
+            <div class="inline-label">System Syncing — shows above pay button</div>
+            <div class="inline-error">
+                <span class="ie-icon">⚠️</span>
+                <div class="ie-body">
+                    <div class="ie-title">Payment System Busy</div>
+                    <div class="ie-msg">Our payment system is syncing. Please wait a moment and try again.</div>
+                </div>
+            </div>
+            <button class="fake-pay-btn">Pay Now — 450 SAR</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TEMPLATES -->
+<script>
+const modals = {
+    logout: {
+        icon: '👋', iconClass: 'info',
+        title: 'Logout',
+        msg: 'Are you sure you want to logout?<br><span style="color:#666">هل أنت متأكد أنك تريد تسجيل الخروج؟</span>',
+        cancelText: 'Stay', confirmText: 'Logout', confirmClass: 'btn-primary'
+    },
+    cancelOrder: {
+        icon: '🚫', iconClass: 'warn',
+        title: 'Cancel Order',
+        msg: 'Are you sure you want to cancel this order?<br>A full refund will be issued to your card.',
+        cancelText: 'Keep Order', confirmText: 'Cancel Order', confirmClass: 'btn-danger'
+    },
+    deleteAddress: {
+        icon: '🗑️', iconClass: 'warn',
+        title: 'Delete Address',
+        msg: 'This address will be permanently removed from your account.',
+        cancelText: 'Keep It', confirmText: 'Delete', confirmClass: 'btn-danger'
+    },
+    deleteAccount: {
+        icon: '⚠️', iconClass: 'danger',
+        title: 'Delete Account',
+        msg: 'This will permanently delete your account and all your data. This action cannot be undone.<br><span style="color:#666">سيؤدي هذا إلى حذف حسابك نهائياً.</span>',
+        cancelText: 'Cancel', confirmText: 'Delete My Account', confirmClass: 'btn-danger',
+        requireInput: true
+    }
+};
+
+function showModal(type) {
+    const m = modals[type];
+    const overlay = document.getElementById('overlay');
+    overlay.innerHTML = `<div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-icon ${m.iconClass}">${m.icon}</div>
+        <h3>${m.title}</h3>
+        <p>${m.msg}</p>
+        ${m.requireInput ? `
+            <div class="delete-hint">Type <strong style="color:#e74c3c">DELETE</strong> to confirm</div>
+            <input type="text" class="delete-input" placeholder="Type DELETE here" oninput="toggleDeleteBtn(this)">
+        ` : ''}
+        <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeModal()">${m.cancelText}</button>
+            <button class="${m.confirmClass}" id="modalConfirmBtn" onclick="closeModal();showToast('success','Done','Action completed successfully.')" ${m.requireInput ? 'disabled style="opacity:0.4;cursor:not-allowed"' : ''}>${m.confirmText}</button>
+        </div>
+    </div>`;
+    overlay.classList.add('active');
+}
+
+function toggleDeleteBtn(input) {
+    const btn = document.getElementById('modalConfirmBtn');
+    if (input.value === 'DELETE') {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+    } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.4';
+        btn.style.cursor = 'not-allowed';
+    }
+}
+
+function closeModal() {
+    document.getElementById('overlay').classList.remove('active');
+}
+
+function showToast(type, title, msg) {
+    const container = document.getElementById('toastContainer');
+    const icons = { success: '✓', error: '✕', warning: '!' };
+    const colors = { success: '#27ae60', error: '#c0392b', warning: '#f39c12' };
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+        <div class="toast-icon ${type}" style="color:${colors[type]}">${icons[type]}</div>
+        <div class="toast-body">
+            <div class="toast-title">${title}</div>
+            <div class="toast-msg">${msg.replace(/\n/g, '<br>')}</div>
+        </div>
+        <button class="toast-close" onclick="removeToast(this.parentElement)">×</button>
+        <div class="toast-progress" style="background:${colors[type]}"></div>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => removeToast(toast), 4000);
+}
+
+function removeToast(toast) {
+    if (!toast.parentElement) return;
+    toast.classList.add('toast-out');
+    setTimeout(() => toast.remove(), 300);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+
+</body>
+</html>
