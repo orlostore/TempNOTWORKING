@@ -3068,7 +3068,9 @@
                     }
                 });
                 const productRevenue = (order.amount_total - (order.shipping_amount || 0)) / 100;
-                const orderProfit = productRevenue - orderCost;
+                const orderRefunded = order.return_request && order.return_request.status === 'refunded';
+                const zajelCost = getDeliveryFeeCity() || 0;
+                const orderProfit = orderRefunded ? -zajelCost : (productRevenue - orderCost);
                 
                 return `
                     <div class="order-card">
@@ -3110,7 +3112,7 @@
                                     </div>
                                 `}).join('')}
                                 <div class="order-item" style="border-top:2px solid #ddd;margin-top:10px;padding-top:10px;font-weight:600;">
-                                    <span>Profit</span>
+                                    <span>${orderRefunded ? 'Loss (Zajel)' : 'Profit'}</span>
                                     <span></span>
                                     <span style="color:${orderProfit >= 0 ? 'var(--success)' : 'var(--danger)'}">AED ${orderProfit.toFixed(2)}</span>
                                     <span></span>
@@ -3177,10 +3179,12 @@
             // Aggregate sales by product
             const productSales = {};
             
-            filteredOrders.forEach(order => {
+            // Exclude refunded orders — revenue was returned
+            const nonRefundedOrders = filteredOrders.filter(o => !(o.return_request && o.return_request.status === 'refunded'));
+            nonRefundedOrders.forEach(order => {
                 order.items.forEach(item => {
                     if (item.name.toLowerCase().includes('delivery')) return;
-                    
+
                     const key = item.name;
                     if (!productSales[key]) {
                         productSales[key] = {
@@ -3264,8 +3268,10 @@
         }
         
         function updateOrderStats() {
-            // Money stats: only shipped orders count (pending = not yet earned, cancelled = void)
-            const shippedOrders = filteredOrders.filter(o => o.status === 'shipped');
+            const isRefunded = o => o.return_request && o.return_request.status === 'refunded';
+            // Exclude refunded orders from revenue — money was given back
+            const shippedOrders = filteredOrders.filter(o => o.status === 'shipped' && !isRefunded(o));
+            const refundedOrders = filteredOrders.filter(o => o.status === 'shipped' && isRefunded(o));
             const activeOrders = filteredOrders.filter(o => o.status !== 'cancelled');
 
             const totalRevenue = shippedOrders.reduce((sum, o) => sum + o.amount_total, 0) / 100;
@@ -3286,13 +3292,12 @@
             const shippingCostPerOrder = getDeliveryFeeCity() || 0;
             const totalShippingCost = paidShippingOrders * shippingCostPerOrder;
 
-            // Refund shipping loss: free-shipping orders that got refunded — we paid Zajel but collected nothing
-            const refundedFreeShipOrders = filteredOrders.filter(o => o.shipping_amount === 0 && o.return_request && o.return_request.status === 'refunded').length;
-            const refundShipLoss = refundedFreeShipOrders * shippingCostPerOrder;
+            // Refund shipping loss: ALL refunded orders — we paid Zajel but refunded the customer
+            const refundShipLoss = refundedOrders.length * shippingCostPerOrder;
 
             const netShipping = shippingCollected - totalShippingCost - refundShipLoss;
 
-            // Net profit = product profit + net shipping (collected - cost - refund loss)
+            // Net profit = product profit + net shipping
             const productProfit = productRevenue - totalCost;
             const netProfit = productProfit + netShipping;
             const pending = activeOrders.filter(o => o.status === 'pending').length;
