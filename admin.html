@@ -1374,6 +1374,8 @@
             <button class="tab" onclick="switchTab('orders')">📋 Orders <span class="tab-badge" id="pendingOrdersBadge">0</span></button>
             <button class="tab" onclick="switchTab('analytics')">📊 Analytics</button>
             <button class="tab" onclick="switchTab('activity')">📝 Activity</button>
+            <button class="tab" onclick="switchTab('stripe')">💳 Stripe Fees</button>
+            <button class="tab" onclick="switchTab('delivery')">🚚 Delivery Fees</button>
             <button class="tab" onclick="switchTab('settings')">⚙️ Settings</button>
         </div>
 
@@ -1742,6 +1744,52 @@
             </div>
         </div>
 
+        <!-- Stripe Fees Tab -->
+        <div class="tab-content" id="stripeTab">
+            <div class="settings-section">
+                <h3>💳 Stripe Fee Configuration</h3>
+                <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:20px;">
+                    Configure Stripe processing fees to accurately calculate minimum selling prices.
+                    <br>Formula: <strong>(percentage% + fixed fee) × tax multiplier</strong>
+                </p>
+                <div class="settings-row">
+                    <div style="flex:1;min-width:200px;">
+                        <label style="font-weight:600;font-size:0.85rem;color:var(--text);display:block;margin-bottom:6px;">Percentage Fee (%)</label>
+                        <input type="number" id="stripePercent" step="0.01" min="0" value="2.9" placeholder="2.9" style="width:100%;padding:8px 12px;border:2px solid var(--border);border-radius:8px;font-size:0.9rem;font-weight:600;text-align:center;" oninput="saveStripeFees()">
+                        <div style="font-size:0.75rem;color:var(--text-light);margin-top:4px;">Stripe's percentage per transaction</div>
+                    </div>
+                    <div style="flex:1;min-width:200px;">
+                        <label style="font-weight:600;font-size:0.85rem;color:var(--text);display:block;margin-bottom:6px;">Fixed Fee (AED)</label>
+                        <input type="number" id="stripeFixed" step="0.01" min="0" value="1" placeholder="1.00" style="width:100%;padding:8px 12px;border:2px solid var(--border);border-radius:8px;font-size:0.9rem;font-weight:600;text-align:center;" oninput="saveStripeFees()">
+                        <div style="font-size:0.75rem;color:var(--text-light);margin-top:4px;">Fixed amount per transaction</div>
+                    </div>
+                    <div style="flex:1;min-width:200px;">
+                        <label style="font-weight:600;font-size:0.85rem;color:var(--text);display:block;margin-bottom:6px;">Tax on Fees (%)</label>
+                        <input type="number" id="stripeTax" step="0.01" min="0" value="5" placeholder="5" style="width:100%;padding:8px 12px;border:2px solid var(--border);border-radius:8px;font-size:0.9rem;font-weight:600;text-align:center;" oninput="saveStripeFees()">
+                        <div style="font-size:0.75rem;color:var(--text-light);margin-top:4px;">VAT/tax applied on Stripe fees</div>
+                    </div>
+                </div>
+                <div style="margin-top:20px;padding:15px;background:#f0f4f0;border-radius:10px;border:1px solid #d4e8d4;">
+                    <div style="font-weight:700;color:#2d6a2e;font-size:0.9rem;margin-bottom:8px;">Current Fee Formula</div>
+                    <div id="stripeFeePreview" style="font-size:0.95rem;font-weight:600;color:var(--text);">(2.9% + 1 AED) × 1.05 = 3.045% + 1.05 AED per transaction</div>
+                    <div style="margin-top:10px;font-size:0.8rem;color:var(--text-light);">
+                        <strong>Min Price divisor:</strong> <span id="stripeDivisorPreview">0.96955</span> &nbsp;|&nbsp;
+                        <strong>Fixed fee after tax:</strong> <span id="stripeFixedPreview">1.05</span> AED
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delivery Fees Tab -->
+        <div class="tab-content" id="deliveryTab">
+            <div class="settings-section">
+                <h3>🚚 Delivery Fees</h3>
+                <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:20px;">
+                    Delivery fee configuration — coming soon.
+                </p>
+            </div>
+        </div>
+
         <!-- Settings Tab -->
         <div class="tab-content" id="settingsTab">
             <!-- Notification Emails -->
@@ -1850,7 +1898,7 @@
                         <div class="form-group">
                             <label>Min. Selling Price (AED)</label>
                             <input type="text" id="formMinPrice" readonly style="background:#f0f4f0; color:#2d6a2e; font-weight:700; cursor:default;" placeholder="—" tabindex="-1">
-                            <div class="form-hint">= (cost×2 + delivery/2) ÷ 0.97</div>
+                            <div class="form-hint">= (cost×2 + delivery/2 + Stripe fixed) ÷ Stripe divisor</div>
                         </div>
                         <div class="form-group">
                             <label>Price (AED) *</label>
@@ -2152,6 +2200,7 @@
             }
             loadProducts();
             loadDeliveryFees();
+            loadStripeFees();
             loadOrders();
             initBrowserNotifications();
         }
@@ -2474,6 +2523,72 @@
             }
         }
 
+        // --- Stripe fees (persisted in D1 via /api/admin/settings) ---
+        let stripePercent = 2.9;
+        let stripeFixed = 1;
+        let stripeTax = 5;
+
+        function getStripeDivisor() {
+            return 1 - (stripePercent / 100) * (1 + stripeTax / 100);
+        }
+        function getStripeFixedAfterTax() {
+            return stripeFixed * (1 + stripeTax / 100);
+        }
+
+        function updateStripeFeePreview() {
+            const taxMult = (1 + stripeTax / 100).toFixed(2);
+            const effectivePercent = (stripePercent * (1 + stripeTax / 100)).toFixed(3);
+            const fixedAfterTax = getStripeFixedAfterTax().toFixed(2);
+            const divisor = getStripeDivisor().toFixed(5);
+            const el = document.getElementById('stripeFeePreview');
+            if (el) el.textContent = `(${stripePercent}% + ${stripeFixed} AED) × ${taxMult} = ${effectivePercent}% + ${fixedAfterTax} AED per transaction`;
+            const dEl = document.getElementById('stripeDivisorPreview');
+            if (dEl) dEl.textContent = divisor;
+            const fEl = document.getElementById('stripeFixedPreview');
+            if (fEl) fEl.textContent = fixedAfterTax;
+        }
+
+        let saveStripeTimeout = null;
+        function saveStripeFees() {
+            stripePercent = parseFloat(document.getElementById('stripePercent').value) || 0;
+            stripeFixed = parseFloat(document.getElementById('stripeFixed').value) || 0;
+            stripeTax = parseFloat(document.getElementById('stripeTax').value) || 0;
+            updateStripeFeePreview();
+            calcMinPrice();
+            clearTimeout(saveStripeTimeout);
+            saveStripeTimeout = setTimeout(() => {
+                adminFetch('/api/admin/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        stripePercent: String(stripePercent),
+                        stripeFixed: String(stripeFixed),
+                        stripeTax: String(stripeTax)
+                    })
+                }).catch(err => console.error('Failed to save stripe fees:', err));
+            }, 500);
+        }
+
+        async function loadStripeFees() {
+            try {
+                const res = await adminFetch('/api/admin/settings');
+                const data = await res.json();
+                if (data.success && data.settings) {
+                    stripePercent = parseFloat(data.settings.stripePercent) || 2.9;
+                    stripeFixed = parseFloat(data.settings.stripeFixed) || 1;
+                    stripeTax = parseFloat(data.settings.stripeTax) || 5;
+                }
+            } catch (e) { /* keep defaults */ }
+            const pEl = document.getElementById('stripePercent');
+            const fEl = document.getElementById('stripeFixed');
+            const tEl = document.getElementById('stripeTax');
+            if (pEl) pEl.value = stripePercent;
+            if (fEl) fEl.value = stripeFixed;
+            if (tEl) tEl.value = stripeTax;
+            updateStripeFeePreview();
+            calcMinPrice();
+        }
+
         function getDeliveryFee() {
             // Use city fee for min price calc (most common); rural available for other calcs
             return getDeliveryFeeCity();
@@ -2487,7 +2602,7 @@
                 return 0;
             }
             const deliveryFee = getDeliveryFee();
-            const minPrice = Math.ceil(((cost * 2) + (deliveryFee / 2)) / 0.97 * 100) / 100;
+            const minPrice = Math.ceil(((cost * 2) + (deliveryFee / 2) + getStripeFixedAfterTax()) / getStripeDivisor() * 100) / 100;
             minPriceEl.value = minPrice.toFixed(2) + ' AED';
             return minPrice;
         }
@@ -2866,7 +2981,7 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
-            const tabMap = { products: 0, orders: 1, analytics: 2, activity: 3, settings: 4 };
+            const tabMap = { products: 0, orders: 1, analytics: 2, activity: 3, stripe: 4, delivery: 5, settings: 6 };
             const tabs = document.querySelectorAll('.tab');
             if (tabs[tabMap[tab]]) tabs[tabMap[tab]].classList.add('active');
 
@@ -2881,6 +2996,11 @@
             } else if (tab === 'activity') {
                 document.getElementById('activityTab').classList.add('active');
                 loadActivity();
+            } else if (tab === 'stripe') {
+                document.getElementById('stripeTab').classList.add('active');
+                loadStripeFees();
+            } else if (tab === 'delivery') {
+                document.getElementById('deliveryTab').classList.add('active');
             } else if (tab === 'settings') {
                 document.getElementById('settingsTab').classList.add('active');
                 loadSettingsTab();
