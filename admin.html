@@ -2663,8 +2663,10 @@
                 const totalFee = subtotalFee * taxMult;
                 const afterFees = orderTotal - totalFee;
 
-                totalRevenue += orderTotal;
-                totalFees += totalFee;
+                if (!isRefunded) {
+                    totalRevenue += orderTotal;
+                    totalFees += totalFee;
+                }
 
                 const isRefunded = order.return_request && order.return_request.status === 'refunded';
                 const rowStyle = isRefunded ? 'opacity:0.5;text-decoration:line-through;' : '';
@@ -2684,7 +2686,8 @@
                 `;
             }).join('');
 
-            document.getElementById('stripeFeeOrderCount').textContent = activeOrders.length;
+            const nonRefundedOrders = activeOrders.filter(o => !(o.return_request && o.return_request.status === 'refunded'));
+            document.getElementById('stripeFeeOrderCount').textContent = nonRefundedOrders.length;
             document.getElementById('stripeFeeRevenue').textContent = 'AED ' + totalRevenue.toFixed(2);
             document.getElementById('stripeFeeTotalFees').textContent = 'AED ' + totalFees.toFixed(2);
             document.getElementById('stripeFeeNetRevenue').textContent = 'AED ' + (totalRevenue - totalFees).toFixed(2);
