@@ -1396,13 +1396,13 @@
                                         <span class="return-status-label ${statusClass}">${statusLabels[rs] || rs}</span>
                                     </div>`;
                             } else {
-                                // Check 7-day return window
+                                // Check 5-day return window
                                 const shippedAt = order.shipped_at ? new Date(order.shipped_at).getTime() : null;
-                                const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
-                                const withinWindow = shippedAt ? (Date.now() - shippedAt < sevenDaysMs) : true;
+                                const fiveDaysMs = 5 * 24 * 60 * 60 * 1000;
+                                const withinWindow = shippedAt ? (Date.now() - shippedAt < fiveDaysMs) : true;
 
                                 if (withinWindow) {
-                                    const daysLeft = shippedAt ? Math.ceil((sevenDaysMs - (Date.now() - shippedAt)) / (24 * 60 * 60 * 1000)) : '?';
+                                    const daysLeft = shippedAt ? Math.ceil((fiveDaysMs - (Date.now() - shippedAt)) / (24 * 60 * 60 * 1000)) : '?';
                                     footerHtml += `
                                         <div class="order-footer">
                                             <div>
