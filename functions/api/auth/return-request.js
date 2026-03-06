@@ -55,7 +55,7 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'Order not found' }, { status: 404 });
         }
 
-        // Only allow returns on shipped orders, within 7-day window
+        // Only allow returns on shipped orders, within 5-day window
         let isShipped = false;
         let shippedAt = null;
         try {
@@ -74,12 +74,12 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'Returns can only be requested for shipped orders.' }, { status: 400 });
         }
 
-        // Enforce 7-day return window from shipping date
+        // Enforce 5-day return window from shipping date
         if (shippedAt) {
             const shippedMs = new Date(shippedAt).getTime();
-            const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
-            if (Date.now() - shippedMs > sevenDaysMs) {
-                return Response.json({ error: 'The 7-day return window has expired. Returns must be requested within 7 days of shipping.' }, { status: 400 });
+            const fiveDaysMs = 5 * 24 * 60 * 60 * 1000;
+            if (Date.now() - shippedMs > fiveDaysMs) {
+                return Response.json({ error: 'The 5-day return window has expired. Returns must be requested within 5 days of shipping.' }, { status: 400 });
             }
         }
 
