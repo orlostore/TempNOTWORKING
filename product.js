@@ -2,6 +2,9 @@
 const params = new URLSearchParams(window.location.search);
 const slug = params.get("product");
 
+// Helper: safely quote an ID for use in inline onclick attributes
+function qId(id) { return typeof id === 'string' ? `'${id}'` : id; }
+
 // === XSS SANITIZER: strip dangerous tags/attributes from HTML ===
 function sanitizeHTML(html) {
   if (!html) return '';
@@ -129,9 +132,9 @@ function transformToQtyButton(btn, product) {
   
   btn.outerHTML = `
     <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}">
-      <button class="grid-qty-btn" onclick="productQtyChange(${product.id}, -1)">−</button>
+      <button class="grid-qty-btn" onclick="productQtyChange(${qId(product.id)}, -1)">−</button>
       <span class="grid-qty-display" id="qtyDisplay-${product.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
-      <button class="grid-qty-btn" onclick="productQtyChange(${product.id}, 1)">+</button>
+      <button class="grid-qty-btn" onclick="productQtyChange(${qId(product.id)}, 1)">+</button>
     </div>
   `;
   updateTierHighlight(product.id);
@@ -1611,7 +1614,7 @@ function renderVariantSelector(containerId, product, isMobile) {
 
     return `
       <div class="${classes}" data-variant-id="${v.id}" id="${prefix}-vtile-${v.id}"
-           onclick="${isOOS ? '' : `selectVariant(${v.id}, ${product.id}, '${prefix}')`}">
+           onclick="${isOOS ? '' : `selectVariant(${qId(v.id)}, ${qId(product.id)}, '${prefix}')`}">
         ${imgHTML}
         <div class="variant-tile-name">${v.name}</div>
         <div class="variant-tile-stock">${stockLabel}</div>
@@ -1990,9 +1993,9 @@ function replaceStepperForVariant(stepperDiv, product, variant) {
 
   stepperDiv.outerHTML = `
     <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}">
-      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, -1)">−</button>
+      <button class="grid-qty-btn" onclick="productVariantQtyChange(${qId(product.id)}, ${qId(variant.id)}, -1)">−</button>
       <span class="grid-qty-display" id="qtyDisplay-${product.id}-${variant.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
-      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
+      <button class="grid-qty-btn" onclick="productVariantQtyChange(${qId(product.id)}, ${qId(variant.id)}, 1)">+</button>
     </div>
   `;
 }
@@ -2005,9 +2008,9 @@ function transformToQtyButtonVariant(btn, product, variant) {
 
   btn.outerHTML = `
     <div class="grid-qty-control product-btn-transformed" id="transformedBtn-${product.id}">
-      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, -1)">−</button>
+      <button class="grid-qty-btn" onclick="productVariantQtyChange(${qId(product.id)}, ${qId(variant.id)}, -1)">−</button>
       <span class="grid-qty-display" id="qtyDisplay-${product.id}-${variant.id}" onclick="if(typeof toggleCart === 'function') toggleCart(); else if(typeof toggleCartSidebar === 'function') toggleCartSidebar();" style="cursor:pointer;">${qty}</span>
-      <button class="grid-qty-btn" onclick="productVariantQtyChange(${product.id}, ${variant.id}, 1)">+</button>
+      <button class="grid-qty-btn" onclick="productVariantQtyChange(${qId(product.id)}, ${qId(variant.id)}, 1)">+</button>
     </div>
   `;
   updateTierHighlight(product.id);
