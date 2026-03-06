@@ -1850,7 +1850,7 @@
                         <div class="form-group">
                             <label>Min. Selling Price (AED)</label>
                             <input type="text" id="formMinPrice" readonly style="background:#f0f4f0; color:#2d6a2e; font-weight:700; cursor:default;" placeholder="—" tabindex="-1">
-                            <div class="form-hint">= (cost×2 + delivery/2) ÷ 0.97</div>
+                            <div class="form-hint">= (cost×2 + delivery/2 + 1.05) ÷ 0.96955</div>
                         </div>
                         <div class="form-group">
                             <label>Price (AED) *</label>
@@ -2487,7 +2487,7 @@
                 return 0;
             }
             const deliveryFee = getDeliveryFee();
-            const minPrice = Math.ceil(((cost * 2) + (deliveryFee / 2)) / 0.97 * 100) / 100;
+            const minPrice = Math.ceil(((cost * 2) + (deliveryFee / 2) + 1.05) / 0.96955 * 100) / 100;
             minPriceEl.value = minPrice.toFixed(2) + ' AED';
             return minPrice;
         }
