@@ -2592,6 +2592,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         function getStripeFixedAfterTax() {
             return stripeFixed * (1 + stripeTax / 100);
         }
+        function calcStripeFee(orderTotalAED) {
+            return (orderTotalAED * stripePercent / 100 + stripeFixed) * (1 + stripeTax / 100);
+        }
 
         function updateStripeFeePreview() {
             const taxMult = (1 + stripeTax / 100).toFixed(2);
@@ -3312,10 +3315,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         orderCost += getProductCost(item.name) * item.quantity;
                     }
                 });
-                const productRevenue = (order.amount_total - (order.shipping_amount || 0)) / 100;
+                const orderTotal = order.amount_total / 100;
                 const orderRefunded = order.return_request && order.return_request.status === 'refunded';
                 const zajelCost = getDeliveryFeeCity() || 0;
-                const orderProfit = orderRefunded ? -zajelCost : (productRevenue - orderCost);
+                const stripeFee = calcStripeFee(orderTotal);
+                const orderProfit = orderRefunded ? -(zajelCost + stripeFee) : (orderTotal - orderCost - zajelCost - stripeFee);
                 
                 return `
                     <div class="order-card">
@@ -3356,8 +3360,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                         ${!isDelivery ? `<span style="color:${itemProfit >= 0 ? 'var(--success)' : 'var(--danger)'};font-size:0.8rem;">P: ${itemProfit.toFixed(2)}</span>` : ''}
                                     </div>
                                 `}).join('')}
+                                <div style="border-top:1px dashed #ccc;margin-top:6px;padding-top:6px;font-size:0.78rem;color:#888;">
+                                    <div style="display:flex;justify-content:space-between;"><span>Stripe fee</span><span>−AED ${stripeFee.toFixed(2)}</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span>Zajel shipping</span><span>−AED ${zajelCost.toFixed(2)}</span></div>
+                                </div>
                                 <div class="order-item" style="border-top:2px solid #ddd;margin-top:10px;padding-top:10px;font-weight:600;">
-                                    <span>${orderRefunded ? 'Loss (Zajel)' : 'Profit'}</span>
+                                    <span>${orderRefunded ? 'Loss (Zajel + Stripe)' : 'Net Profit'}</span>
                                     <span></span>
                                     <span style="color:${orderProfit >= 0 ? 'var(--success)' : 'var(--danger)'}">AED ${orderProfit.toFixed(2)}</span>
                                     <span></span>
@@ -3473,7 +3481,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             const freeShipping = filteredOrders.filter(o => o.shipping_amount === 0);
             const totalCollected = paidShipping.reduce((sum, o) => sum + (o.shipping_amount || 0), 0) / 100;
             const shippingCostPerOrder = getDeliveryFeeCity() || 0;
-            const totalShippingCost = paidShipping.length * shippingCostPerOrder;
+            // Zajel cost applies to ALL orders (paid + free shipping)
+            const totalShippingCost = (paidShipping.length + freeShipping.length) * shippingCostPerOrder;
             const netShipping = totalCollected - totalShippingCost;
 
             document.getElementById('paidShippingCount').textContent = paidShipping.length;
@@ -3492,7 +3501,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 const dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
                 const collected = (order.shipping_amount || 0) / 100;
                 const isRefundedFreeShip = order.shipping_amount === 0 && order.return_request && order.return_request.status === 'refunded';
-                const cost = order.shipping_amount > 0 ? shippingCostPerOrder : (isRefundedFreeShip ? shippingCostPerOrder : 0);
+                // Zajel cost applies to ALL orders regardless of whether customer paid shipping
+                const cost = shippingCostPerOrder;
                 const net = collected - cost;
                 const shippingType = isRefundedFreeShip ? 'Free (Refunded)' : (order.shipping_amount > 0 ? 'Paid' : 'Free');
                 const shippingClass = isRefundedFreeShip ? 'qty-critical' : (order.shipping_amount > 0 ? 'qty-low' : 'qty-ok');
@@ -3532,26 +3542,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 });
             });
 
-            // Shipping cost: deliveryFeeCity per shipped order that had paid shipping
-            const paidShippingOrders = shippedOrders.filter(o => o.shipping_amount > 0).length;
+            // Shipping cost: deliveryFeeCity per ALL shipped orders (including free shipping)
             const shippingCostPerOrder = getDeliveryFeeCity() || 0;
-            const totalShippingCost = paidShippingOrders * shippingCostPerOrder;
+            const totalShippingCost = shippedOrders.length * shippingCostPerOrder;
 
             // Refund shipping loss: ALL refunded orders — we paid Zajel but refunded the customer
             const refundShipLoss = refundedOrders.length * shippingCostPerOrder;
 
             const netShipping = shippingCollected - totalShippingCost - refundShipLoss;
 
-            // Net profit = product profit + net shipping
+            // Stripe fees on all shipped orders
+            const totalStripeFees = shippedOrders.reduce((sum, o) => sum + calcStripeFee(o.amount_total / 100), 0);
+
+            // Net profit = product profit + net shipping - stripe fees
             const productProfit = productRevenue - totalCost;
-            const netProfit = productProfit + netShipping;
+            const netProfit = productProfit + netShipping - totalStripeFees;
             const pending = activeOrders.filter(o => o.status === 'pending').length;
 
             document.getElementById('statRevenue').textContent = 'AED ' + productRevenue.toFixed(0);
             document.getElementById('statCost').textContent = 'AED ' + totalCost.toFixed(0);
             document.getElementById('statProfit').textContent = 'AED ' + netProfit.toFixed(0);
             document.getElementById('statProfitBreakdown').textContent =
-                'Product ' + productProfit.toFixed(0) + ' + Ship ' + netShipping.toFixed(0);
+                'Product ' + productProfit.toFixed(0) + ' + Ship ' + netShipping.toFixed(0) + ' − Stripe ' + totalStripeFees.toFixed(0);
             document.getElementById('statShipping').textContent = 'AED ' + netShipping.toFixed(0);
             document.getElementById('statShipCollected').textContent = shippingCollected.toFixed(0);
             document.getElementById('statShipCost').textContent = totalShippingCost.toFixed(0);
@@ -3981,7 +3993,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             // KPIs
             const totalRev = sales.reduce((s, p) => s + p.revenue, 0);
             const totalCost = sales.reduce((s, p) => s + p.cost, 0);
-            const totalProfit = totalRev - totalCost;
+            const zajelPerOrder = getDeliveryFeeCity() || 0;
+            const totalZajel = filtered.length * zajelPerOrder;
+            const totalStripe = filtered.reduce((s, o) => s + calcStripeFee(o.amount_total / 100), 0);
+            const totalProfit = totalRev - totalCost - totalZajel - totalStripe;
             const orderCount = filtered.length;
             const aov = orderCount > 0 ? totalRev / orderCount : 0;
             document.getElementById('kpiRevenue').textContent = 'AED ' + totalRev.toFixed(0);
@@ -4274,14 +4289,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             // Group by date
             const byDate = {};
+            const zajelPerOrder = getDeliveryFeeCity() || 0;
             filtered.forEach(order => {
                 const d = new Date(order.created * 1000);
                 const key = d.toISOString().split('T')[0];
-                if (!byDate[key]) byDate[key] = { revenue: 0, cost: 0, orders: 0 };
+                if (!byDate[key]) byDate[key] = { revenue: 0, cost: 0, orders: 0, stripeFees: 0, zajelCost: 0 };
                 const shipping = (order.shipping_amount || 0) / 100;
                 const total = order.amount_total / 100;
                 byDate[key].revenue += (total - shipping);
                 byDate[key].orders += 1;
+                byDate[key].stripeFees += calcStripeFee(total);
+                byDate[key].zajelCost += zajelPerOrder;
                 // Calculate cost for this order
                 order.items.forEach(item => {
                     if (!item.name.toLowerCase().includes('delivery')) {
@@ -4292,7 +4310,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             const dates = Object.keys(byDate).sort();
             const revenues = dates.map(d => byDate[d].revenue);
-            const profits = dates.map(d => byDate[d].revenue - byDate[d].cost);
+            const profits = dates.map(d => byDate[d].revenue - byDate[d].cost - byDate[d].stripeFees - byDate[d].zajelCost);
             const aovs = dates.map(d => byDate[d].orders > 0 ? byDate[d].revenue / byDate[d].orders : 0);
             const orderCounts = dates.map(d => byDate[d].orders);
             const dateLabels = dates.map(d => {
@@ -4555,8 +4573,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         function exportOrdersCSV() {
             if (!filteredOrders.length) { showToast('No orders to export', 'warning'); return; }
 
-            const rows = [['Date', 'Order ID', 'Customer', 'Email', 'Phone', 'Items', 'Subtotal (AED)', 'Shipping (AED)', 'Total (AED)', 'Cost (AED)', 'Profit (AED)', 'Status']];
+            const rows = [['Date', 'Order ID', 'Customer', 'Email', 'Phone', 'Items', 'Subtotal (AED)', 'Shipping (AED)', 'Total (AED)', 'Cost (AED)', 'Stripe Fee (AED)', 'Zajel (AED)', 'Net Profit (AED)', 'Status']];
 
+            const zajelPerOrder = getDeliveryFeeCity() || 0;
             filteredOrders.forEach(o => {
                 const date = new Date(o.created * 1000).toLocaleDateString('en-GB');
                 const items = o.items.filter(i => !i.name.toLowerCase().includes('delivery')).map(i => i.name + ' x' + i.quantity).join('; ');
@@ -4565,9 +4584,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 const subtotal = total - shipping;
                 let cost = 0;
                 o.items.forEach(i => { if (!i.name.toLowerCase().includes('delivery')) cost += getProductCost(i.name) * i.quantity; });
-                const profit = subtotal - cost;
+                const stripeFee = calcStripeFee(total);
+                const profit = total - cost - zajelPerOrder - stripeFee;
 
-                rows.push([date, o.id.slice(-8).toUpperCase(), o.customer_name, o.customer_email, o.customer_phone, '"' + items + '"', subtotal.toFixed(2), shipping.toFixed(2), total.toFixed(2), cost.toFixed(2), profit.toFixed(2), o.status]);
+                rows.push([date, o.id.slice(-8).toUpperCase(), o.customer_name, o.customer_email, o.customer_phone, '"' + items + '"', subtotal.toFixed(2), shipping.toFixed(2), total.toFixed(2), cost.toFixed(2), stripeFee.toFixed(2), zajelPerOrder.toFixed(2), profit.toFixed(2), o.status]);
             });
 
             downloadCSV(rows, 'orlo-orders-' + new Date().toISOString().split('T')[0] + '.csv');
