@@ -1778,6 +1778,48 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Stripe Fees Per Order Breakdown -->
+            <div class="settings-section" style="margin-top:20px;">
+                <h3>💳 Stripe Fees Per Order</h3>
+                <div style="display:flex;gap:15px;margin-bottom:15px;flex-wrap:wrap;">
+                    <div class="shipping-card" style="flex:1;min-width:150px;">
+                        <h4>Total Orders</h4>
+                        <div class="shipping-value" id="stripeFeeOrderCount">0</div>
+                    </div>
+                    <div class="shipping-card" style="flex:1;min-width:150px;">
+                        <h4>Total Revenue</h4>
+                        <div class="shipping-value" id="stripeFeeRevenue">AED 0</div>
+                    </div>
+                    <div class="shipping-card" style="flex:1;min-width:150px;">
+                        <h4>Total Stripe Fees</h4>
+                        <div class="shipping-value highlight" id="stripeFeeTotalFees" style="color:#dc3545;">AED 0</div>
+                    </div>
+                    <div class="shipping-card" style="flex:1;min-width:150px;">
+                        <h4>Revenue After Fees</h4>
+                        <div class="shipping-value" id="stripeFeeNetRevenue" style="color:#28a745;">AED 0</div>
+                    </div>
+                </div>
+                <div class="products-table" style="border-radius:12px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Order Total</th>
+                                <th>% Fee</th>
+                                <th>Fixed Fee</th>
+                                <th>Tax on Fee</th>
+                                <th>Total Fee</th>
+                                <th>After Fees</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stripeFeeTableBody">
+                            <tr><td colspan="8" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <!-- Delivery Fees Tab -->
@@ -2555,6 +2597,7 @@
             stripeTax = parseFloat(document.getElementById('stripeTax').value) || 0;
             updateStripeFeePreview();
             calcMinPrice();
+            renderStripeFeeBreakdown();
             clearTimeout(saveStripeTimeout);
             saveStripeTimeout = setTimeout(() => {
                 adminFetch('/api/admin/settings', {
@@ -2587,6 +2630,64 @@
             if (tEl) tEl.value = stripeTax;
             updateStripeFeePreview();
             calcMinPrice();
+            renderStripeFeeBreakdown();
+        }
+
+        function renderStripeFeeBreakdown() {
+            const tbody = document.getElementById('stripeFeeTableBody');
+            if (!tbody) return;
+            const activeOrders = orders.filter(o => o.status !== 'cancelled');
+            if (activeOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="loading">No orders yet</td></tr>';
+                document.getElementById('stripeFeeOrderCount').textContent = '0';
+                document.getElementById('stripeFeeRevenue').textContent = 'AED 0';
+                document.getElementById('stripeFeeTotalFees').textContent = 'AED 0';
+                document.getElementById('stripeFeeNetRevenue').textContent = 'AED 0';
+                return;
+            }
+
+            const pct = stripePercent / 100;
+            const fixed = stripeFixed;
+            const taxMult = 1 + stripeTax / 100;
+            let totalRevenue = 0;
+            let totalFees = 0;
+
+            tbody.innerHTML = activeOrders.map(order => {
+                const date = new Date(order.created * 1000);
+                const dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                const orderTotal = order.amount_total / 100;
+                const percentFee = orderTotal * pct;
+                const fixedFee = fixed;
+                const subtotalFee = percentFee + fixedFee;
+                const taxOnFee = subtotalFee * (stripeTax / 100);
+                const totalFee = subtotalFee * taxMult;
+                const afterFees = orderTotal - totalFee;
+
+                totalRevenue += orderTotal;
+                totalFees += totalFee;
+
+                const isRefunded = order.return_request && order.return_request.status === 'refunded';
+                const rowStyle = isRefunded ? 'opacity:0.5;text-decoration:line-through;' : '';
+                const afterClass = afterFees >= 0 ? 'color:#28a745' : 'color:#dc3545';
+
+                return `
+                    <tr style="${rowStyle}">
+                        <td>${dateStr}</td>
+                        <td>${order.customer_name}${isRefunded ? ' <span class="qty-badge qty-critical">Refunded</span>' : ''}</td>
+                        <td class="price-tag">AED ${orderTotal.toFixed(2)}</td>
+                        <td>AED ${percentFee.toFixed(2)}</td>
+                        <td>AED ${fixedFee.toFixed(2)}</td>
+                        <td>AED ${taxOnFee.toFixed(2)}</td>
+                        <td style="color:#dc3545;font-weight:600;">AED ${totalFee.toFixed(2)}</td>
+                        <td style="${afterClass};font-weight:600;">AED ${afterFees.toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('stripeFeeOrderCount').textContent = activeOrders.length;
+            document.getElementById('stripeFeeRevenue').textContent = 'AED ' + totalRevenue.toFixed(2);
+            document.getElementById('stripeFeeTotalFees').textContent = 'AED ' + totalFees.toFixed(2);
+            document.getElementById('stripeFeeNetRevenue').textContent = 'AED ' + (totalRevenue - totalFees).toFixed(2);
         }
 
         function getDeliveryFee() {
@@ -2999,6 +3100,7 @@
             } else if (tab === 'stripe') {
                 document.getElementById('stripeTab').classList.add('active');
                 loadStripeFees();
+                renderStripeFeeBreakdown();
             } else if (tab === 'delivery') {
                 document.getElementById('deliveryTab').classList.add('active');
             } else if (tab === 'settings') {
