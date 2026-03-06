@@ -1796,6 +1796,14 @@
                         <div class="shipping-value highlight" id="stripeFeeTotalFees" style="color:#dc3545;">AED 0</div>
                     </div>
                     <div class="shipping-card" style="flex:1;min-width:150px;">
+                        <h4>VAT on Stripe</h4>
+                        <div class="shipping-value" id="stripeFeeVAT" style="color:#dc3545;">AED 0</div>
+                    </div>
+                    <div class="shipping-card" style="flex:1;min-width:150px;">
+                        <h4>Delivery</h4>
+                        <div class="shipping-value" id="stripeFeeDelivery" style="color:#888;">AED 0</div>
+                    </div>
+                    <div class="shipping-card" style="flex:1;min-width:150px;">
                         <h4>Revenue After Fees</h4>
                         <div class="shipping-value" id="stripeFeeNetRevenue" style="color:#28a745;">AED 0</div>
                     </div>
@@ -2642,6 +2650,8 @@
                 document.getElementById('stripeFeeOrderCount').textContent = '0';
                 document.getElementById('stripeFeeRevenue').textContent = 'AED 0';
                 document.getElementById('stripeFeeTotalFees').textContent = 'AED 0';
+                document.getElementById('stripeFeeVAT').textContent = 'AED 0';
+                document.getElementById('stripeFeeDelivery').textContent = 'AED 0';
                 document.getElementById('stripeFeeNetRevenue').textContent = 'AED 0';
                 return;
             }
@@ -2651,6 +2661,7 @@
             const taxMult = 1 + stripeTax / 100;
             let totalRevenue = 0;
             let totalFees = 0;
+            let totalVAT = 0;
 
             tbody.innerHTML = activeOrders.map(order => {
                 const date = new Date(order.created * 1000);
@@ -2663,12 +2674,12 @@
                 const totalFee = subtotalFee * taxMult;
                 const afterFees = orderTotal - totalFee;
 
+                const isRefunded = order.return_request && order.return_request.status === 'refunded';
                 if (!isRefunded) {
                     totalRevenue += orderTotal;
                     totalFees += totalFee;
+                    totalVAT += taxOnFee;
                 }
-
-                const isRefunded = order.return_request && order.return_request.status === 'refunded';
                 const rowStyle = isRefunded ? 'opacity:0.5;text-decoration:line-through;' : '';
                 const afterClass = afterFees >= 0 ? 'color:#28a745' : 'color:#dc3545';
 
@@ -2690,6 +2701,8 @@
             document.getElementById('stripeFeeOrderCount').textContent = nonRefundedOrders.length;
             document.getElementById('stripeFeeRevenue').textContent = 'AED ' + totalRevenue.toFixed(2);
             document.getElementById('stripeFeeTotalFees').textContent = 'AED ' + totalFees.toFixed(2);
+            document.getElementById('stripeFeeVAT').textContent = 'AED ' + totalVAT.toFixed(2);
+            document.getElementById('stripeFeeDelivery').textContent = 'AED 0';
             document.getElementById('stripeFeeNetRevenue').textContent = 'AED ' + (totalRevenue - totalFees).toFixed(2);
         }
 
