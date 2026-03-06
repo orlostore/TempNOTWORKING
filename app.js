@@ -162,6 +162,9 @@ function orloPrompt(opts) {
     });
 }
 
+// Helper: safely quote an ID for use in inline onclick attributes
+function qId(id) { return typeof id === 'string' ? `'${id}'` : id; }
+
 // SVG icon constants for JS-generated HTML
 const SVG_TRUCK_INLINE = '<svg style="width:1em;height:1em;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>';
 const SVG_CLOSE_SM = '<svg style="width:0.7em;height:0.7em;vertical-align:-0.1em;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;display:inline-block;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
@@ -420,7 +423,7 @@ function gridQtyChange(productId, change, event) {
         // Reset button to original "Add to Cart"
         const container = document.getElementById(`gridQty-${productId}`);
         if (container) {
-            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${productId}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
+            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${qId(productId)}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
         }
     } else {
         item.quantity = newQty;
@@ -503,13 +506,13 @@ function renderProducts(list, arabicMode) {
         } else if (inCart) {
             buttonHTML = `
                 <div class="grid-qty-control" id="gridQty-${p.id}">
-                    <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, -1, event)">−</button>
+                    <button class="grid-qty-btn" onclick="gridQtyChange(${qId(p.id)}, -1, event)">−</button>
                     <span class="grid-qty-display" id="gridQtyNum-${p.id}">${cartItem.quantity}</span>
-                    <button class="grid-qty-btn" onclick="gridQtyChange(${p.id}, 1, event)">+</button>
+                    <button class="grid-qty-btn" onclick="gridQtyChange(${qId(p.id)}, 1, event)">+</button>
                 </div>
             `;
         } else {
-            buttonHTML = `<button class="add-to-cart" onclick="addToCart(${p.id}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
+            buttonHTML = `<button class="add-to-cart" onclick="addToCart(${qId(p.id)}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
         }
 
         // Arabic mode: show Arabic name first, English secondary
@@ -763,9 +766,9 @@ function addToCart(id, event) {
         const qty = cart.find(i => i.id === id)?.quantity || 1;
         btn.outerHTML = `
             <div class="grid-qty-control" id="gridQty-${id}">
-                <button class="grid-qty-btn" onclick="gridQtyChange(${id}, -1, event)">−</button>
+                <button class="grid-qty-btn" onclick="gridQtyChange(${qId(id)}, -1, event)">−</button>
                 <span class="grid-qty-display" id="gridQtyNum-${id}">${qty}</span>
-                <button class="grid-qty-btn" onclick="gridQtyChange(${id}, 1, event)">+</button>
+                <button class="grid-qty-btn" onclick="gridQtyChange(${qId(id)}, 1, event)">+</button>
             </div>
         `;
     }
@@ -883,9 +886,11 @@ function updateCart() {
         const priceDisplay = showOrigPrice
             ? `<span style="text-decoration:line-through;color:#bbb;font-size:0.65rem;">AED ${variantBase}</span> AED ${effectivePrice} × ${i.quantity}`
             : `AED ${effectivePrice} × ${i.quantity}`;
-        const updateArgs = i.variantId ? `${i.id}, -1, ${i.variantId}` : `${i.id}, -1`;
-        const updateArgsPlus = i.variantId ? `${i.id}, 1, ${i.variantId}` : `${i.id}, 1`;
-        const removeArgs = i.variantId ? `${i.id}, ${i.variantId}` : `${i.id}`;
+        const safeId = qId(i.id);
+        const safeVid = i.variantId ? qId(i.variantId) : null;
+        const updateArgs = safeVid ? `${safeId}, -1, ${safeVid}` : `${safeId}, -1`;
+        const updateArgsPlus = safeVid ? `${safeId}, 1, ${safeVid}` : `${safeId}, 1`;
+        const removeArgs = safeVid ? `${safeId}, ${safeVid}` : `${safeId}`;
 
         return `
         <div id="cartItem-${cartItemId}" style="display:flex; justify-content:space-between; align-items:center; padding:${itemPad}; border-bottom:1px solid #eee; position:relative;">
@@ -931,7 +936,7 @@ function updateCart() {
                             <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
                                 <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
                                 <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${formatProductPrice(p, false)}</div>
-                                <button onclick="addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
+                                <button onclick="addUpsellItem(${qId(p.id)}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
                             </div>
                         `).join('')}
                     </div>
@@ -951,7 +956,7 @@ function updateCart() {
                                     <div style="display: flex; align-items: center; padding: 0.25rem 0; border-bottom: 1px solid #f0f0f0; gap: 0.5rem;">
                                         <div style="flex: 1; font-weight: 500; color: #2c4a5c; font-size: 0.8rem;">${p.name}</div>
                                         <div style="font-size: 0.75rem; color: #888; white-space: nowrap;">${formatProductPrice(p, false)}</div>
-                                        <button onclick="event.stopPropagation(); addUpsellItem(${p.id}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
+                                        <button onclick="event.stopPropagation(); addUpsellItem(${qId(p.id)}, event)" style="padding: 0.25rem 0.5rem; background: #2c4a5c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">Add</button>
                                     </div>
                                 `).join('')}
                             </div>
@@ -1157,7 +1162,7 @@ function removeFromCart(id, variantId) {
         // Reset grid button if visible (non-variant products only)
         const gridQty = document.getElementById(`gridQty-${id}`);
         if (gridQty) {
-            gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${id}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
+            gridQty.outerHTML = `<button class="add-to-cart" onclick="addToCart(${qId(id)}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
         }
 
         // Reset product page button if visible
