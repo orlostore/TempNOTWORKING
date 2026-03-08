@@ -108,12 +108,15 @@
         /* Scene 3 - Hero Product Spotlight */
         .scene-spotlight {
             background: #ffffff;
+            padding: 40px 0;
+            align-items: center; justify-content: center;
         }
         .spotlight-container {
             text-align: center;
+            max-height: 100%; overflow: hidden;
         }
         .spotlight-container img {
-            width: 500px; height: 400px; object-fit: contain;
+            width: 450px; height: 350px; object-fit: contain;
             animation: spotlightZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
             filter: drop-shadow(0 20px 60px rgba(44, 74, 92, 0.1));
         }
@@ -122,16 +125,16 @@
             animation: spotlightZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
         }
         .spotlight-container .hero-name {
-            font-size: 48px; font-weight: 800; margin-top: 40px;
+            font-size: 44px; font-weight: 800; margin-top: 24px;
             color: #2c4a5c;
             animation: fadeSlideUp 0.8s ease 0.8s both;
         }
         .spotlight-container .hero-desc {
-            font-size: 24px; color: #666; margin-top: 12px;
+            font-size: 22px; color: #666; margin-top: 8px;
             animation: fadeSlideUp 0.8s ease 1s both;
         }
         .spotlight-container .hero-price {
-            font-size: 56px; font-weight: 800; color: #e07856; margin-top: 30px;
+            font-size: 48px; font-weight: 800; color: #e07856; margin-top: 20px;
             animation: fadeSlideUp 0.8s ease 1.2s both;
         }
 
@@ -472,7 +475,7 @@
                 : `<span class="emoji-img">${p.image || '📦'}</span>`;
             const price = p.salePrice || p.price;
             const slug = p.slug || '';
-            const productUrl = slug ? `https://orlostore.com/product/${slug}` : 'https://orlostore.com';
+            const productUrl = slug ? `https://orlostore.com/product.html?product=${slug}` : 'https://orlostore.com';
             return `
                 <div class="product-card">
                     <a href="${productUrl}" target="_blank">
@@ -492,7 +495,7 @@
         const heroPrice = hero.salePrice || hero.price;
 
         const heroSlug = hero.slug || '';
-        const heroUrl = heroSlug ? `https://orlostore.com/product/${heroSlug}` : 'https://orlostore.com';
+        const heroUrl = heroSlug ? `https://orlostore.com/product.html?product=${heroSlug}` : 'https://orlostore.com';
         document.getElementById('spotlightContainer').innerHTML = `
             <a href="${heroUrl}" target="_blank" style="text-decoration:none;color:inherit;">
                 ${heroImg}
