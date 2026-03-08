@@ -166,7 +166,7 @@
         /* Scene 5 - CTA / Outro */
         .scene-cta {
             background: #ffffff;
-            text-align: center; gap: 30px;
+            text-align: center; gap: 20px;
         }
         .scene-cta .cta-logo {
             width: 200px; animation: logoReveal 1s ease 0.2s both;
@@ -352,10 +352,9 @@
 <!-- Scene 5: CTA / Outro -->
 <div class="scene scene-cta" id="scene-4">
     <img src="logo.png" class="cta-logo" alt="ORLO">
-    <div class="cta-heading">Organize Your <span>Space</span> Today</div>
-    <div class="cta-sub">Desk organizers & home essentials</div>
-    <a href="https://orlostore.com" target="_blank" class="cta-button">Shop Now | تسوق الآن</a>
-    <div class="free-delivery">Free delivery over 75 AED | توصيل مجاني فوق 75 درهم</div>
+    <div class="cta-heading">نظّم <span>مساحتك</span></div>
+    <a href="https://orlostore.com" target="_blank" class="cta-button">تسوق الآن | Shop Now</a>
+    <div class="free-delivery">توصيل مجاني فوق 75 درهم</div>
     <a href="https://orlostore.com" target="_blank" class="cta-url" style="text-decoration:none;">orlostore.com</a>
 </div>
 
@@ -564,6 +563,11 @@
             btn.disabled = false;
             btn.textContent = '⏺ Record Video';
             document.getElementById('controls').style.opacity = '1';
+            if (e.name === 'NotAllowedError') {
+                alert('Recording cancelled. Please select the current tab when prompted and click "Share".');
+            } else {
+                alert('Recording failed: ' + e.message);
+            }
         }
     }
 
