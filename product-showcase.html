@@ -511,7 +511,9 @@
     }
 
     // Show record button only for admin (?record=true)
-    if (new URLSearchParams(window.location.search).get('record') === 'true') {
+    // Show record button only on desktop (getDisplayMedia not available on mobile)
+    if (new URLSearchParams(window.location.search).get('record') === 'true'
+        && navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
         document.getElementById('recordBtn').style.display = '';
     }
 
