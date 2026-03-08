@@ -42,19 +42,25 @@
     <meta name="description" content="Shop desk organizers, cable management kits, home organization accessories in Dubai & UAE. Free delivery over 75 AED. Quality workspace & home essentials from a local UAE store.">
     <meta name="keywords" content="desk organizer Dubai, cable management UAE, home organization Dubai, workspace accessories UAE, desk accessories Dubai, buy desk organizer online UAE, office organization products Dubai, home essentials UAE">
     <link rel="canonical" href="https://orlostore.com/">
-    <!-- Open Graph -->
+    <!-- Open Graph (Instagram, Facebook, WhatsApp link previews) -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="ORLO – Desk Organizers & Home Essentials | Dubai UAE">
     <meta property="og:description" content="Shop desk organizers, cable management kits & home essentials in Dubai. Free delivery over 75 AED. Local UAE store.">
     <meta property="og:url" content="https://orlostore.com/">
     <meta property="og:image" content="https://orlostore.com/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="ORLO Store - Desk Organizers & Home Essentials in Dubai UAE">
     <meta property="og:site_name" content="ORLO Store">
     <meta property="og:locale" content="en_AE">
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary">
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="ORLO – Desk Organizers & Home Essentials | Dubai UAE">
     <meta name="twitter:description" content="Shop desk organizers, cable management & home essentials in Dubai UAE. Free delivery over 75 AED.">
     <meta name="twitter:image" content="https://orlostore.com/logo.png">
+    <!-- Snapchat / Social deep link hints -->
+    <meta name="snapchat:sticker" content="https://orlostore.com/logo.png">
+    <meta name="theme-color" content="#000000">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,6 +105,34 @@
       }
     }
     </script>
+    <!-- UTM Parameter Tracking for Social Media Campaigns -->
+    <script>
+    (function(){
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+        var utmData = {};
+        var hasUtm = false;
+        utmKeys.forEach(function(k){
+          var v = params.get(k);
+          if(v){ utmData[k] = v; hasUtm = true; }
+        });
+        if(hasUtm){
+          sessionStorage.setItem('orlo_utm', JSON.stringify(utmData));
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push(Object.assign({event: 'utm_captured'}, utmData));
+        } else {
+          var stored = sessionStorage.getItem('orlo_utm');
+          if(stored){
+            var d = JSON.parse(stored);
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push(Object.assign({event: 'utm_restored'}, d));
+          }
+        }
+      } catch(e){}
+    })();
+    </script>
+    <!-- End UTM Tracking -->
     <style>
         .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
         .close-cart svg, .policy-close-btn svg { width: 1.2rem; height: 1.2rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
