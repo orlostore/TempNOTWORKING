@@ -532,9 +532,11 @@
         document.getElementById('recordBtn').style.display = '';
     }
 
-    // Pick best supported recording format — WebM is reliable, MP4 via MediaRecorder is often corrupt
+    // Pick best supported recording format — prefer MP4 for Instagram compatibility
     function pickMimeType() {
         const candidates = [
+            'video/mp4;codecs=avc1',
+            'video/mp4',
             'video/webm;codecs=vp9',
             'video/webm;codecs=vp8',
             'video/webm'
@@ -557,24 +559,44 @@
                 preferCurrentTab: true
             });
 
+            // Add silent audio track — Instagram rejects videos without audio
+            const audioCtx = new AudioContext();
+            const oscillator = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            gain.gain.value = 0; // silent
+            oscillator.connect(gain);
+            gain.connect(audioCtx.destination);
+            oscillator.start();
+            const silentDest = audioCtx.createMediaStreamDestination();
+            gain.connect(silentDest);
+            silentDest.stream.getAudioTracks().forEach(t => stream.addTrack(t));
+
             const mimeType = pickMimeType();
+            const isMP4 = mimeType.startsWith('video/mp4');
+            const ext = isMP4 ? 'mp4' : 'webm';
 
             const recorder = new MediaRecorder(stream, {
                 mimeType,
-                videoBitsPerSecond: 5000000
+                videoBitsPerSecond: 8000000
             });
             const chunks = [];
             recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
             recorder.onstop = () => {
                 stream.getTracks().forEach(t => t.stop());
+                oscillator.stop();
+                audioCtx.close();
                 const blob = new Blob(chunks, { type: mimeType });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
-                a.download = 'orlo-reel-' + Date.now() + '.webm';
+                a.download = 'orlo-reel-' + Date.now() + '.' + ext;
                 a.click();
                 URL.revokeObjectURL(a.href);
 
-                alert('Video saved as .webm\nTo convert to MP4 for Instagram:\n1. Go to cloudconvert.com/webm-to-mp4\n2. Upload the file → Convert → Download\n\nOr use ffmpeg: ffmpeg -i file.webm -c:v libx264 output.mp4');
+                if (!isMP4) {
+                    alert('Video saved as .' + ext + '\nInstagram requires MP4. To convert:\n1. Go to cloudconvert.com/webm-to-mp4\n2. Upload → Convert → Download\n\nOr use ffmpeg:\nffmpeg -i file.webm -c:v libx264 -pix_fmt yuv420p -c:a aac output.mp4');
+                } else {
+                    alert('Video saved as .mp4 — ready to upload to Instagram!');
+                }
                 btn.disabled = false;
                 btn.textContent = '⏺ Record Video';
                 document.getElementById('controls').style.opacity = '1';
