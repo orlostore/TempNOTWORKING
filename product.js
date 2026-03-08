@@ -314,19 +314,20 @@ async function initProductPage() {
   document.querySelectorAll('.threshold-value-ar').forEach(el => el.textContent = toArabicNumerals(threshold));
 
   // === SEO: Update page title, meta tags, and inject JSON-LD ===
-  document.title = product.name + ' - ORLO Store';
+  document.title = product.name + ' | Buy Online in Dubai UAE – ORLO Store';
   const metaDesc = (product.description || '').replace(/<[^>]*>/g, '').slice(0, 155);
   const productUrl = 'https://orlostore.com/product.html?product=' + encodeURIComponent(product.slug);
   const productImage = (product.images && product.images.length > 0 && product.images[0].startsWith('http')) ? product.images[0] : 'https://orlostore.com/logo.png';
+  const seoDesc = metaDesc || ('Buy ' + product.name + ' online in Dubai & UAE. Free delivery over 75 AED. Shop at ORLO Store.');
 
   const metaUpdates = {
-    'meta[name="description"]': metaDesc || ('Shop ' + product.name + ' at ORLO Store. Delivered across the UAE.'),
-    'meta[property="og:title"]': product.name + ' - ORLO Store',
-    'meta[property="og:description"]': metaDesc || ('Shop ' + product.name + ' at ORLO Store.'),
+    'meta[name="description"]': seoDesc,
+    'meta[property="og:title"]': product.name + ' | Buy Online in Dubai UAE – ORLO Store',
+    'meta[property="og:description"]': seoDesc,
     'meta[property="og:url"]': productUrl,
     'meta[property="og:image"]': productImage,
-    'meta[name="twitter:title"]': product.name + ' - ORLO Store',
-    'meta[name="twitter:description"]': metaDesc || ('Shop ' + product.name + ' at ORLO Store.'),
+    'meta[name="twitter:title"]': product.name + ' | Buy Online in Dubai UAE – ORLO Store',
+    'meta[name="twitter:description"]': seoDesc,
     'meta[name="twitter:image"]': productImage
   };
   Object.entries(metaUpdates).forEach(function(entry) {
