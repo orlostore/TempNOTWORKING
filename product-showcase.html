@@ -524,12 +524,9 @@
         document.getElementById('recordBtn').style.display = '';
     }
 
-    // Pick best supported recording format — prefer MP4 (native), then H264 webm, then VP9 webm
+    // Pick best supported recording format — WebM is reliable, MP4 via MediaRecorder is often corrupt
     function pickMimeType() {
         const candidates = [
-            'video/mp4;codecs=avc1',
-            'video/mp4',
-            'video/webm;codecs=h264',
             'video/webm;codecs=vp9',
             'video/webm;codecs=vp8',
             'video/webm'
@@ -553,10 +550,11 @@
             });
 
             const mimeType = pickMimeType();
-            const isMp4 = mimeType.startsWith('video/mp4');
-            const ext = isMp4 ? 'mp4' : 'webm';
 
-            const recorder = new MediaRecorder(stream, { mimeType });
+            const recorder = new MediaRecorder(stream, {
+                mimeType,
+                videoBitsPerSecond: 5000000
+            });
             const chunks = [];
             recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
             recorder.onstop = () => {
@@ -564,13 +562,11 @@
                 const blob = new Blob(chunks, { type: mimeType });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
-                a.download = 'orlo-reel-' + Date.now() + '.' + ext;
+                a.download = 'orlo-reel-' + Date.now() + '.webm';
                 a.click();
                 URL.revokeObjectURL(a.href);
 
-                if (!isMp4) {
-                    alert('Video saved as .' + ext + ' (H264 encoded).\nMost editors accept this. If Instagram rejects it, convert at cloudconvert.com');
-                }
+                alert('Video saved as .webm\nTo convert to MP4 for Instagram:\n1. Go to cloudconvert.com/webm-to-mp4\n2. Upload the file → Convert → Download\n\nOr use ffmpeg: ffmpeg -i file.webm -c:v libx264 output.mp4');
                 btn.disabled = false;
                 btn.textContent = '⏺ Record Video';
                 document.getElementById('controls').style.opacity = '1';
@@ -580,7 +576,8 @@
             document.getElementById('controls').style.opacity = '0';
             document.getElementById('sceneDots').style.opacity = '0';
 
-            recorder.start();
+            // Request data every 1 second for reliable chunking
+            recorder.start(1000);
             btn.textContent = '⏺ Recording...';
 
             // Auto-play through all scenes
