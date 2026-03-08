@@ -10,8 +10,8 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #000;
-            color: #fff;
+            background: #ffffff;
+            color: #2c4a5c;
             overflow: hidden;
             width: 1080px;
             height: 1920px;
@@ -28,7 +28,7 @@
 
         /* Scene 1 - Logo Intro */
         .scene-logo {
-            background: linear-gradient(135deg, #000 0%, #1a1a2e 50%, #000 100%);
+            background: #ffffff;
             animation: sceneFadeIn 0.6s ease forwards;
         }
         .scene-logo .logo-img {
@@ -37,25 +37,24 @@
         }
         .scene-logo .tagline {
             font-size: 28px; font-weight: 300; letter-spacing: 8px; text-transform: uppercase;
-            color: rgba(255,255,255,0.7); margin-top: 30px;
+            color: #2c4a5c; margin-top: 30px;
             animation: fadeSlideUp 0.8s ease 1s both;
         }
         .scene-logo .tagline-ar {
-            font-size: 24px; font-weight: 400; color: rgba(255,255,255,0.5); margin-top: 12px;
+            font-size: 24px; font-weight: 400; color: #666; margin-top: 12px;
             animation: fadeSlideUp 0.8s ease 1.3s both;
         }
 
         /* Scene 2 - Product Cards Cascade */
         .scene-products {
-            background: linear-gradient(180deg, #0a0a0a 0%, #111 100%);
+            background: #ffffff;
             padding: 60px 40px;
             justify-content: flex-start;
             padding-top: 120px;
         }
         .scene-products .section-title {
             font-size: 52px; font-weight: 800; text-align: center;
-            background: linear-gradient(135deg, #fff, #ccc);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            color: #2c4a5c;
             animation: fadeSlideDown 0.6s ease both;
             margin-bottom: 60px;
         }
@@ -64,10 +63,11 @@
             gap: 30px; width: 100%; max-width: 960px;
         }
         .product-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
             border-radius: 24px; padding: 30px;
             text-align: center;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
             opacity: 0; transform: translateY(60px) scale(0.9);
             animation: cardReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
@@ -80,7 +80,7 @@
         .product-card img {
             width: 100%; height: 200px; object-fit: contain;
             margin-bottom: 16px;
-            filter: drop-shadow(0 10px 30px rgba(255,255,255,0.05));
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.05));
         }
         .product-card .emoji-img {
             font-size: 80px; display: block; height: 200px;
@@ -88,20 +88,21 @@
         }
         .product-card .name {
             font-size: 22px; font-weight: 600; margin-bottom: 8px;
+            color: #2c4a5c;
         }
         .product-card .price {
             font-size: 26px; font-weight: 700;
-            color: #4ecdc4;
+            color: #e07856;
         }
         .product-card .price-badge {
-            display: inline-block; background: #4ecdc4; color: #000;
+            display: inline-block; background: #e07856; color: #fff;
             padding: 6px 18px; border-radius: 50px; font-weight: 700;
             font-size: 20px; margin-top: 8px;
         }
 
         /* Scene 3 - Hero Product Spotlight */
         .scene-spotlight {
-            background: radial-gradient(ellipse at center, #1a1a2e 0%, #000 70%);
+            background: #ffffff;
         }
         .spotlight-container {
             text-align: center;
@@ -109,7 +110,7 @@
         .spotlight-container img {
             width: 600px; height: 500px; object-fit: contain;
             animation: spotlightZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-            filter: drop-shadow(0 20px 60px rgba(78, 205, 196, 0.2));
+            filter: drop-shadow(0 20px 60px rgba(44, 74, 92, 0.1));
         }
         .spotlight-container .emoji-hero {
             font-size: 200px; display: block;
@@ -117,20 +118,21 @@
         }
         .spotlight-container .hero-name {
             font-size: 48px; font-weight: 800; margin-top: 40px;
+            color: #2c4a5c;
             animation: fadeSlideUp 0.8s ease 0.8s both;
         }
         .spotlight-container .hero-desc {
-            font-size: 24px; color: rgba(255,255,255,0.6); margin-top: 12px;
+            font-size: 24px; color: #666; margin-top: 12px;
             animation: fadeSlideUp 0.8s ease 1s both;
         }
         .spotlight-container .hero-price {
-            font-size: 56px; font-weight: 800; color: #4ecdc4; margin-top: 30px;
+            font-size: 56px; font-weight: 800; color: #e07856; margin-top: 30px;
             animation: fadeSlideUp 0.8s ease 1.2s both;
         }
 
         /* Scene 4 - Features / Benefits */
         .scene-features {
-            background: linear-gradient(180deg, #0d0d0d 0%, #1a1a2e 100%);
+            background: #ffffff;
             padding: 80px 60px;
             justify-content: center; gap: 50px;
         }
@@ -146,16 +148,16 @@
         .feature-item:nth-child(4) { animation-delay: 1.1s; }
         .feature-icon {
             width: 90px; height: 90px; border-radius: 50%;
-            background: rgba(78, 205, 196, 0.15); border: 2px solid rgba(78, 205, 196, 0.3);
+            background: rgba(224, 120, 86, 0.12); border: 2px solid rgba(224, 120, 86, 0.25);
             display: flex; align-items: center; justify-content: center;
             font-size: 40px; flex-shrink: 0;
         }
-        .feature-text h3 { font-size: 28px; font-weight: 700; }
-        .feature-text p { font-size: 20px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+        .feature-text h3 { font-size: 28px; font-weight: 700; color: #2c4a5c; }
+        .feature-text p { font-size: 20px; color: #666; margin-top: 4px; }
 
         /* Scene 5 - CTA / Outro */
         .scene-cta {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: #ffffff;
             text-align: center; gap: 30px;
         }
         .scene-cta .cta-logo {
@@ -163,34 +165,35 @@
         }
         .scene-cta .cta-heading {
             font-size: 56px; font-weight: 800; line-height: 1.2;
+            color: #2c4a5c;
             animation: fadeSlideUp 0.8s ease 0.5s both;
         }
-        .scene-cta .cta-heading span { color: #4ecdc4; }
+        .scene-cta .cta-heading span { color: #e07856; }
         .scene-cta .cta-sub {
-            font-size: 28px; color: rgba(255,255,255,0.6);
+            font-size: 28px; color: #666;
             animation: fadeSlideUp 0.8s ease 0.8s both;
         }
         .scene-cta .cta-button {
             display: inline-block; padding: 24px 60px; border-radius: 60px;
-            background: #4ecdc4; color: #000; font-size: 28px; font-weight: 700;
+            background: #e07856; color: #fff; font-size: 28px; font-weight: 700;
             text-decoration: none; margin-top: 20px;
             animation: fadeSlideUp 0.8s ease 1.1s both;
-            box-shadow: 0 10px 40px rgba(78, 205, 196, 0.3);
+            box-shadow: 0 10px 40px rgba(224, 120, 86, 0.3);
         }
         .scene-cta .cta-url {
             font-size: 32px; font-weight: 600; letter-spacing: 2px;
-            color: #4ecdc4; margin-top: 40px;
+            color: #e07856; margin-top: 40px;
             animation: pulse 2s ease-in-out 1.5s infinite;
         }
         .scene-cta .free-delivery {
-            font-size: 22px; color: rgba(255,255,255,0.5);
+            font-size: 22px; color: #666;
             animation: fadeSlideUp 0.8s ease 1.4s both;
         }
 
         /* ===== PROGRESS BAR ===== */
         .progress-bar {
             position: fixed; top: 0; left: 0; height: 4px;
-            background: #4ecdc4; z-index: 999;
+            background: #e07856; z-index: 999;
             transition: width 0.3s linear;
         }
 
@@ -200,14 +203,14 @@
             display: flex; gap: 16px; z-index: 100;
         }
         .controls button {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            color: #fff; padding: 14px 32px; border-radius: 50px; cursor: pointer;
+            background: rgba(44, 74, 92, 0.08); border: 1px solid rgba(44, 74, 92, 0.15);
+            color: #2c4a5c; padding: 14px 32px; border-radius: 50px; cursor: pointer;
             font-size: 16px; font-family: 'Inter', sans-serif; font-weight: 600;
             transition: all 0.2s;
         }
-        .controls button:hover { background: rgba(255,255,255,0.2); }
-        .controls .btn-record { background: #e74c3c; border-color: #e74c3c; }
-        .controls .btn-record:hover { background: #c0392b; }
+        .controls button:hover { background: rgba(44, 74, 92, 0.15); }
+        .controls .btn-record { background: #e07856; border-color: #e07856; color: #fff; }
+        .controls .btn-record:hover { background: #c96545; }
 
         /* Scene indicators */
         .scene-dots {
@@ -216,10 +219,10 @@
         }
         .scene-dots .dot {
             width: 12px; height: 12px; border-radius: 50%;
-            background: rgba(255,255,255,0.2); transition: all 0.3s;
+            background: rgba(44, 74, 92, 0.15); transition: all 0.3s;
         }
         .scene-dots .dot.active {
-            background: #4ecdc4; width: 36px; border-radius: 6px;
+            background: #e07856; width: 36px; border-radius: 6px;
         }
 
         /* ===== KEYFRAMES ===== */
@@ -270,7 +273,7 @@
 
         /* Loading state */
         .loading-msg {
-            color: rgba(255,255,255,0.4);
+            color: #999;
             font-size: 18px; margin-top: 20px;
         }
     </style>
@@ -388,8 +391,8 @@
             }
         } catch(e) {}
         // Final fallback: show a helpful message
-        document.getElementById('productsGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.4);font-size:20px;padding:40px;">Open orlostore.com first to cache your products,<br>then refresh this page.</div>';
-        document.getElementById('spotlightContainer').innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.4);font-size:20px;padding:40px;">Visit orlostore.com first, then come back here.</div>';
+        document.getElementById('productsGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#999;font-size:20px;padding:40px;">Open orlostore.com first to cache your products,<br>then refresh this page.</div>';
+        document.getElementById('spotlightContainer').innerHTML = '<div style="text-align:center;color:#999;font-size:20px;padding:40px;">Visit orlostore.com first, then come back here.</div>';
     }
 
     // Create dots
