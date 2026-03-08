@@ -8,13 +8,15 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html { background: #ffffff; }
         body {
             font-family: 'Inter', sans-serif;
             background: #ffffff;
             color: #2c4a5c;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             width: 1080px;
-            height: 1920px;
+            min-height: 1920px;
             position: relative;
         }
 
@@ -65,7 +67,7 @@
         .product-card {
             background: #ffffff;
             border: none;
-            border-radius: 0; padding: 30px;
+            border-radius: 0; padding: 20px;
             text-align: center;
             box-shadow: none;
             opacity: 0; transform: translateY(60px) scale(0.9);
@@ -77,14 +79,17 @@
         .product-card:nth-child(4) { animation-delay: 0.8s; }
         .product-card:nth-child(5) { animation-delay: 1.0s; }
         .product-card:nth-child(6) { animation-delay: 1.2s; }
+        .product-card a {
+            text-decoration: none; color: inherit; display: block;
+        }
         .product-card img {
-            width: 100%; height: 200px; object-fit: contain;
-            margin-bottom: 16px;
+            width: 100%; height: 140px; object-fit: contain;
+            margin-bottom: 12px;
             filter: drop-shadow(0 10px 30px rgba(0,0,0,0.05));
         }
         .product-card .emoji-img {
-            font-size: 80px; display: block; height: 200px;
-            line-height: 200px;
+            font-size: 60px; display: block; height: 140px;
+            line-height: 140px;
         }
         .product-card .name {
             font-size: 22px; font-weight: 600; margin-bottom: 8px;
@@ -258,7 +263,7 @@
 
         /* Mobile-friendly override for testing on regular screens */
         @media (max-width: 1080px) {
-            body { width: 100vw; height: 100vh; }
+            body { width: 100vw; min-height: 100vh; height: auto; }
             .product-card img { height: 120px; }
             .spotlight-container img { width: 300px; height: 280px; }
             .scene-products .section-title { font-size: 32px; }
@@ -342,9 +347,9 @@
     <img src="logo.png" class="cta-logo" alt="ORLO">
     <div class="cta-heading">Organize Your <span>Space</span> Today</div>
     <div class="cta-sub">Desk organizers & home essentials</div>
-    <div class="cta-button">Shop Now</div>
+    <a href="https://orlostore.com" target="_blank" class="cta-button">Shop Now</a>
     <div class="free-delivery">Free delivery over 75 AED | توصيل مجاني</div>
-    <div class="cta-url">orlostore.com</div>
+    <a href="https://orlostore.com" target="_blank" class="cta-url" style="text-decoration:none;">orlostore.com</a>
 </div>
 
 <!-- Controls (visible when not auto-playing) -->
@@ -466,11 +471,15 @@
                 ? `<img src="${p.image}" alt="${p.name || ''}" loading="eager">`
                 : `<span class="emoji-img">${p.image || '📦'}</span>`;
             const price = p.salePrice || p.price;
+            const slug = p.slug || '';
+            const productUrl = slug ? `https://orlostore.com/product/${slug}` : 'https://orlostore.com';
             return `
                 <div class="product-card">
-                    ${imgHTML}
-                    <div class="name">${p.name || 'Product'}</div>
-                    <div class="price-badge">${price} AED</div>
+                    <a href="${productUrl}" target="_blank">
+                        ${imgHTML}
+                        <div class="name">${p.name || 'Product'}</div>
+                        <div class="price-badge">${price} AED</div>
+                    </a>
                 </div>
             `;
         }).join('');
@@ -482,11 +491,15 @@
             : `<span class="emoji-hero">${hero.image || '📦'}</span>`;
         const heroPrice = hero.salePrice || hero.price;
 
+        const heroSlug = hero.slug || '';
+        const heroUrl = heroSlug ? `https://orlostore.com/product/${heroSlug}` : 'https://orlostore.com';
         document.getElementById('spotlightContainer').innerHTML = `
-            ${heroImg}
-            <div class="hero-name">${hero.name || 'Featured Product'}</div>
-            <div class="hero-desc">${hero.description || 'Premium quality essentials'}</div>
-            <div class="hero-price">${heroPrice} AED</div>
+            <a href="${heroUrl}" target="_blank" style="text-decoration:none;color:inherit;">
+                ${heroImg}
+                <div class="hero-name">${hero.name || 'Featured Product'}</div>
+                <div class="hero-desc">${hero.description || 'Premium quality essentials'}</div>
+                <div class="hero-price">${heroPrice} AED</div>
+            </a>
         `;
     }
 
