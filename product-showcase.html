@@ -559,18 +559,6 @@
                 preferCurrentTab: true
             });
 
-            // Add silent audio track — Instagram rejects videos without audio
-            const audioCtx = new AudioContext();
-            const oscillator = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            gain.gain.value = 0; // silent
-            oscillator.connect(gain);
-            gain.connect(audioCtx.destination);
-            oscillator.start();
-            const silentDest = audioCtx.createMediaStreamDestination();
-            gain.connect(silentDest);
-            silentDest.stream.getAudioTracks().forEach(t => stream.addTrack(t));
-
             const mimeType = pickMimeType();
             const isMP4 = mimeType.startsWith('video/mp4');
             const ext = isMP4 ? 'mp4' : 'webm';
@@ -583,8 +571,6 @@
             recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
             recorder.onstop = () => {
                 stream.getTracks().forEach(t => t.stop());
-                oscillator.stop();
-                audioCtx.close();
                 const blob = new Blob(chunks, { type: mimeType });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
@@ -593,7 +579,7 @@
                 URL.revokeObjectURL(a.href);
 
                 if (!isMP4) {
-                    alert('Video saved as .' + ext + '\nInstagram requires MP4. To convert:\n1. Go to cloudconvert.com/webm-to-mp4\n2. Upload → Convert → Download\n\nOr use ffmpeg:\nffmpeg -i file.webm -c:v libx264 -pix_fmt yuv420p -c:a aac output.mp4');
+                    alert('Video saved as .' + ext + '\nInstagram requires MP4 with AAC audio. To convert:\n1. Go to cloudconvert.com/webm-to-mp4\n2. Upload → Convert → Download\n\nOr use ffmpeg:\nffmpeg -i file.webm -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest output.mp4');
                 } else {
                     alert('Video saved as .mp4 — ready to upload to Instagram!');
                 }
