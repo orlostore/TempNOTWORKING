@@ -47,11 +47,16 @@
   <meta property="og:description" content="Buy desk organizers & home essentials online in Dubai UAE. Free delivery over 75 AED.">
   <meta property="og:url" content="https://orlostore.com/product.html">
   <meta property="og:image" content="https://orlostore.com/logo.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ORLO Store Product">
   <meta property="og:site_name" content="ORLO Store">
+  <meta property="og:locale" content="en_AE">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Product - ORLO Store">
   <meta name="twitter:description" content="Quality everyday essentials delivered across the UAE.">
   <meta name="twitter:image" content="https://orlostore.com/logo.png">
+  <meta name="theme-color" content="#000000">
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,6 +66,34 @@
   if(sessionStorage.getItem('orlo_checkout_pending')){sessionStorage.removeItem('orlo_checkout_pending');window.location.replace('cancel.html');}
   else{Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})}
   </script>
+  <!-- UTM Parameter Tracking for Social Media Campaigns -->
+  <script>
+  (function(){
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var utmKeys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+      var utmData = {};
+      var hasUtm = false;
+      utmKeys.forEach(function(k){
+        var v = params.get(k);
+        if(v){ utmData[k] = v; hasUtm = true; }
+      });
+      if(hasUtm){
+        sessionStorage.setItem('orlo_utm', JSON.stringify(utmData));
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(Object.assign({event: 'utm_captured'}, utmData));
+      } else {
+        var stored = sessionStorage.getItem('orlo_utm');
+        if(stored){
+          var d = JSON.parse(stored);
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push(Object.assign({event: 'utm_restored'}, d));
+        }
+      }
+    } catch(e){}
+  })();
+  </script>
+  <!-- End UTM Tracking -->
   <link rel="stylesheet" href="styles.css?v=8">
   <style>
       .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
