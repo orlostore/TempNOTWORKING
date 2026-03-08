@@ -113,9 +113,11 @@
         }
         .spotlight-container {
             text-align: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            max-height: 90vh;
         }
         .spotlight-container img {
-            width: 400px; height: 300px; object-fit: contain;
+            width: 400px; max-height: 45vh; object-fit: contain;
             animation: spotlightZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
             filter: drop-shadow(0 20px 60px rgba(44, 74, 92, 0.1));
         }
