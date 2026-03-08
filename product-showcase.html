@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ORLO Product Showcase</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module">
-        import { Muxer, ArrayBufferTarget } from 'https://cdn.jsdelivr.net/npm/mp4-muxer@5.1.3/+esm';
-        window._Mp4Muxer = { Muxer, ArrayBufferTarget };
-    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -121,11 +117,15 @@
         }
         .spotlight-container img {
             width: 500px; max-width: 80%; height: auto; max-height: 700px; object-fit: contain;
-            animation: spotlightZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
             filter: drop-shadow(0 20px 60px rgba(44, 74, 92, 0.1));
+        }
+        .scene-spotlight.active .spotlight-container img {
+            animation: spotlightZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
         }
         .spotlight-container .emoji-hero {
             font-size: 200px; display: block;
+        }
+        .scene-spotlight.active .spotlight-container .emoji-hero {
             animation: spotlightZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
         }
         .spotlight-container .hero-name {
@@ -272,7 +272,7 @@
         @media (max-width: 1080px) {
             body { width: 100vw; min-height: 100vh; height: auto; }
             .product-card img { height: 120px; }
-            .spotlight-container img { width: 300px; max-height: 50vh; height: auto; }
+            .spotlight-container img { width: 80vw; max-width: 300px; max-height: 50vh; height: auto; display: block; }
             .scene-products .section-title { font-size: 32px; }
             .product-card .name { font-size: 16px; }
             .product-card .price { font-size: 20px; }
@@ -498,7 +498,7 @@
         const hero = featured[0] || products[0];
         const heroIsUrl = hero.image && hero.image.startsWith('http');
         const heroImg = heroIsUrl
-            ? `<img src="${hero.image}" alt="${hero.name || ''}">`
+            ? `<img src="${hero.image}" alt="${hero.name || ''}" crossorigin="anonymous" style="display:block;opacity:1;" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<span class=emoji-hero>📦</span>')">`
             : `<span class="emoji-hero">${hero.image || '📦'}</span>`;
         const heroPrice = hero.salePrice || hero.price;
 
@@ -521,73 +521,23 @@
         document.getElementById('recordBtn').style.display = '';
     }
 
-    // Convert webm blob to MP4 using VideoEncoder + mp4-muxer (preloaded)
-    async function webmToMp4(webmBlob) {
-        // Wait up to 5s for the preloaded mp4-muxer module
-        for (let i = 0; i < 50 && !window._Mp4Muxer; i++) {
-            await new Promise(r => setTimeout(r, 100));
+    // Pick best supported recording format — prefer MP4 (native), then H264 webm, then VP9 webm
+    function pickMimeType() {
+        const candidates = [
+            'video/mp4;codecs=avc1',
+            'video/mp4',
+            'video/webm;codecs=h264',
+            'video/webm;codecs=vp9',
+            'video/webm;codecs=vp8',
+            'video/webm'
+        ];
+        for (const mt of candidates) {
+            if (MediaRecorder.isTypeSupported(mt)) return mt;
         }
-        if (!window._Mp4Muxer) throw new Error('mp4-muxer not loaded');
-        if (typeof VideoEncoder === 'undefined') throw new Error('VideoEncoder not supported');
-
-        const { Muxer, ArrayBufferTarget } = window._Mp4Muxer;
-
-        const video = document.createElement('video');
-        video.muted = true;
-        video.playsInline = true;
-        video.src = URL.createObjectURL(webmBlob);
-        await new Promise((res, rej) => { video.onloadedmetadata = res; video.onerror = rej; });
-
-        const w = video.videoWidth;
-        const h = video.videoHeight;
-        if (!w || !h) throw new Error('Cannot read video dimensions');
-        const fps = 30;
-
-        const target = new ArrayBufferTarget();
-        const muxer = new Muxer({
-            target,
-            video: { codec: 'avc', width: w, height: h },
-            fastStart: 'in-memory'
-        });
-
-        const encoder = new VideoEncoder({
-            output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
-            error: e => console.error('Encode error:', e)
-        });
-        encoder.configure({
-            codec: 'avc1.640028',
-            width: w,
-            height: h,
-            bitrate: 8_000_000,
-            framerate: fps
-        });
-
-        // Use regular canvas (more compatible than OffscreenCanvas)
-        const canvas = document.createElement('canvas');
-        canvas.width = w;
-        canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        const duration = video.duration;
-        const totalFrames = Math.ceil(duration * fps);
-
-        for (let i = 0; i < totalFrames; i++) {
-            video.currentTime = i / fps;
-            await new Promise(r => { video.onseeked = r; });
-            ctx.drawImage(video, 0, 0, w, h);
-            const frame = new VideoFrame(canvas, { timestamp: (i / fps) * 1_000_000 });
-            encoder.encode(frame, { keyFrame: i % (fps * 2) === 0 });
-            frame.close();
-        }
-
-        await encoder.flush();
-        encoder.close();
-        muxer.finalize();
-        URL.revokeObjectURL(video.src);
-
-        return new Blob([target.buffer], { type: 'video/mp4' });
+        return 'video/webm';
     }
 
-    // Record the reel as a video
+    // Record the reel as a video — NO external libraries needed
     async function recordReel() {
         const btn = document.getElementById('recordBtn');
         btn.disabled = true;
@@ -598,31 +548,25 @@
                 video: { displaySurface: 'browser' },
                 preferCurrentTab: true
             });
-            // Record as webm (reliable), convert to MP4 after
-            const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+
+            const mimeType = pickMimeType();
+            const isMp4 = mimeType.startsWith('video/mp4');
+            const ext = isMp4 ? 'mp4' : 'webm';
+
+            const recorder = new MediaRecorder(stream, { mimeType });
             const chunks = [];
             recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
-            recorder.onstop = async () => {
+            recorder.onstop = () => {
                 stream.getTracks().forEach(t => t.stop());
-                const webmBlob = new Blob(chunks, { type: 'video/webm' });
+                const blob = new Blob(chunks, { type: mimeType });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'orlo-reel-' + Date.now() + '.' + ext;
+                a.click();
+                URL.revokeObjectURL(a.href);
 
-                // Convert to MP4 for Instagram compatibility
-                btn.textContent = '⏺ Converting to MP4...';
-                try {
-                    const mp4Blob = await webmToMp4(webmBlob);
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(mp4Blob);
-                    a.download = 'orlo-reel-' + Date.now() + '.mp4';
-                    a.click();
-                    URL.revokeObjectURL(a.href);
-                } catch(convErr) {
-                    console.error('MP4 conversion failed, downloading webm:', convErr);
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(webmBlob);
-                    a.download = 'orlo-reel-' + Date.now() + '.webm';
-                    a.click();
-                    URL.revokeObjectURL(a.href);
-                    alert('MP4 conversion failed. Downloaded as .webm instead.\nUse cloudconvert.com to convert to MP4 for Instagram.');
+                if (!isMp4) {
+                    alert('Video saved as .' + ext + ' (H264 encoded).\nMost editors accept this. If Instagram rejects it, convert at cloudconvert.com');
                 }
                 btn.disabled = false;
                 btn.textContent = '⏺ Record Video';
