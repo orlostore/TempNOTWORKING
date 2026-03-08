@@ -109,7 +109,7 @@
         /* Scene 3 - Hero Product Spotlight */
         .scene-spotlight {
             background: #ffffff;
-            padding: 40px 0;
+            padding: 80px 40px 120px;
             align-items: center; justify-content: center;
             overflow: hidden;
         }
@@ -117,9 +117,10 @@
             text-align: center;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             max-height: 100%; overflow: hidden;
+            padding: 0 40px;
         }
         .spotlight-container img {
-            width: 500px; max-width: 80%; height: auto; max-height: 60%; object-fit: contain;
+            width: 400px; max-width: 70%; height: auto; max-height: 50vh; object-fit: contain;
             filter: drop-shadow(0 20px 60px rgba(44, 74, 92, 0.1));
         }
         .scene-spotlight.active .spotlight-container img {
@@ -132,16 +133,22 @@
             animation: spotlightZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
         }
         .spotlight-container .hero-name {
-            font-size: 32px; font-weight: 800; margin-top: 16px;
+            font-size: 32px; font-weight: 800; margin-top: 20px;
             color: #2c4a5c;
             animation: fadeSlideUp 0.8s ease 0.8s both;
+            max-width: 90%;
+            line-height: 1.2;
         }
         .spotlight-container .hero-desc {
-            font-size: 18px; color: #666; margin-top: 4px;
+            font-size: 18px; color: #666; margin-top: 8px;
             animation: fadeSlideUp 0.8s ease 1s both;
+            max-width: 80%;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
         }
         .spotlight-container .hero-price {
-            font-size: 36px; font-weight: 800; color: #e07856; margin-top: 12px;
+            font-size: 44px; font-weight: 800; color: #e07856; margin-top: 16px;
             animation: fadeSlideUp 0.8s ease 1.2s both;
         }
 
@@ -275,7 +282,7 @@
         @media (max-width: 1080px) {
             body { width: 100vw; min-height: 100dvh; height: auto; }
             .product-card img { height: 120px; }
-            .spotlight-container img { width: 80vw; max-width: 300px; max-height: 45%; height: auto; display: block; }
+            .spotlight-container img { width: 70vw; max-width: 280px; max-height: 40vh; height: auto; display: block; }
             .scene-products .section-title { font-size: 32px; }
             .product-card .name { font-size: 16px; }
             .product-card .price { font-size: 20px; }
