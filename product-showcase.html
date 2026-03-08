@@ -110,35 +110,37 @@
             background: #ffffff;
             padding: 40px 0;
             align-items: center; justify-content: center;
+            overflow: hidden;
         }
         .spotlight-container {
             text-align: center;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            max-height: 100%; overflow: hidden;
         }
         .spotlight-container img {
-            width: 500px; max-width: 80%; height: auto; max-height: 700px; object-fit: contain;
+            width: 500px; max-width: 80%; height: auto; max-height: 60%; object-fit: contain;
             filter: drop-shadow(0 20px 60px rgba(44, 74, 92, 0.1));
         }
         .scene-spotlight.active .spotlight-container img {
             animation: spotlightZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
         }
         .spotlight-container .emoji-hero {
-            font-size: 200px; display: block;
+            font-size: 160px; display: block;
         }
         .scene-spotlight.active .spotlight-container .emoji-hero {
             animation: spotlightZoom 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
         }
         .spotlight-container .hero-name {
-            font-size: 44px; font-weight: 800; margin-top: 24px;
+            font-size: 32px; font-weight: 800; margin-top: 16px;
             color: #2c4a5c;
             animation: fadeSlideUp 0.8s ease 0.8s both;
         }
         .spotlight-container .hero-desc {
-            font-size: 22px; color: #666; margin-top: 8px;
+            font-size: 18px; color: #666; margin-top: 4px;
             animation: fadeSlideUp 0.8s ease 1s both;
         }
         .spotlight-container .hero-price {
-            font-size: 48px; font-weight: 800; color: #e07856; margin-top: 20px;
+            font-size: 36px; font-weight: 800; color: #e07856; margin-top: 12px;
             animation: fadeSlideUp 0.8s ease 1.2s both;
         }
 
@@ -270,14 +272,15 @@
 
         /* Mobile-friendly override for testing on regular screens */
         @media (max-width: 1080px) {
-            body { width: 100vw; min-height: 100vh; height: auto; }
+            body { width: 100vw; min-height: 100dvh; height: auto; }
             .product-card img { height: 120px; }
-            .spotlight-container img { width: 80vw; max-width: 300px; max-height: 50vh; height: auto; display: block; }
+            .spotlight-container img { width: 80vw; max-width: 300px; max-height: 45%; height: auto; display: block; }
             .scene-products .section-title { font-size: 32px; }
             .product-card .name { font-size: 16px; }
             .product-card .price { font-size: 20px; }
-            .spotlight-container .hero-name { font-size: 32px; }
-            .spotlight-container .hero-price { font-size: 40px; }
+            .spotlight-container .hero-name { font-size: 24px; }
+            .spotlight-container .hero-desc { font-size: 15px; }
+            .spotlight-container .hero-price { font-size: 28px; }
             .scene-cta .cta-heading { font-size: 36px; }
             .feature-text h3 { font-size: 22px; }
             .feature-text p { font-size: 16px; }
