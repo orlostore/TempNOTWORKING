@@ -300,7 +300,7 @@
 
 <!-- Scene 2: Product Grid (populated by JS) -->
 <div class="scene scene-products" id="scene-1">
-    <div class="section-title">Best Sellers</div>
+    <div class="section-title">Best Sellers<br><span style="font-size:32px;font-weight:400;color:#666;">الأكثر مبيعاً</span></div>
     <div class="products-grid" id="productsGrid">
         <div class="loading-msg">Loading products...</div>
     </div>
@@ -320,6 +320,7 @@
         <div class="feature-text">
             <h3>Free Delivery</h3>
             <p>Orders over 75 AED across UAE</p>
+            <p style="color:#999;font-size:16px;margin-top:2px;">توصيل مجاني فوق 75 درهم</p>
         </div>
     </div>
     <div class="feature-item">
@@ -327,6 +328,7 @@
         <div class="feature-text">
             <h3>Local UAE Store</h3>
             <p>Ships from Dubai, fast delivery</p>
+            <p style="color:#999;font-size:16px;margin-top:2px;">متجر محلي في الإمارات</p>
         </div>
     </div>
     <div class="feature-item">
@@ -334,6 +336,7 @@
         <div class="feature-text">
             <h3>Secure Payment</h3>
             <p>Apple Pay, cards & cash on delivery</p>
+            <p style="color:#999;font-size:16px;margin-top:2px;">دفع آمن</p>
         </div>
     </div>
     <div class="feature-item">
@@ -341,6 +344,7 @@
         <div class="feature-text">
             <h3>Quality Guaranteed</h3>
             <p>Premium desk & home essentials</p>
+            <p style="color:#999;font-size:16px;margin-top:2px;">جودة مضمونة</p>
         </div>
     </div>
 </div>
@@ -350,8 +354,8 @@
     <img src="logo.png" class="cta-logo" alt="ORLO">
     <div class="cta-heading">Organize Your <span>Space</span> Today</div>
     <div class="cta-sub">Desk organizers & home essentials</div>
-    <a href="https://orlostore.com" target="_blank" class="cta-button">Shop Now</a>
-    <div class="free-delivery">Free delivery over 75 AED | توصيل مجاني</div>
+    <a href="https://orlostore.com" target="_blank" class="cta-button">Shop Now | تسوق الآن</a>
+    <div class="free-delivery">Free delivery over 75 AED | توصيل مجاني فوق 75 درهم</div>
     <a href="https://orlostore.com" target="_blank" class="cta-url" style="text-decoration:none;">orlostore.com</a>
 </div>
 
@@ -360,6 +364,7 @@
     <button onclick="prevScene()">← Prev</button>
     <button onclick="toggleAutoPlay()" id="autoBtn">▶ Auto Play</button>
     <button onclick="nextScene()">Next →</button>
+    <button class="btn-record" onclick="recordReel()" id="recordBtn" style="display:none;">⏺ Record Video</button>
 </div>
 
 <script>
@@ -504,6 +509,62 @@
                 <div class="hero-price">${heroPrice} AED</div>
             </a>
         `;
+    }
+
+    // Show record button only for admin (?record=true)
+    if (new URLSearchParams(window.location.search).get('record') === 'true') {
+        document.getElementById('recordBtn').style.display = '';
+    }
+
+    // Record the reel as a video
+    async function recordReel() {
+        const btn = document.getElementById('recordBtn');
+        btn.disabled = true;
+        btn.textContent = '⏺ Starting...';
+
+        try {
+            const stream = await navigator.mediaDevices.getDisplayMedia({
+                video: { displaySurface: 'browser' },
+                preferCurrentTab: true
+            });
+            const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            const chunks = [];
+            recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+            recorder.onstop = () => {
+                stream.getTracks().forEach(t => t.stop());
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'orlo-reel-' + Date.now() + '.webm';
+                a.click();
+                URL.revokeObjectURL(a.href);
+                btn.disabled = false;
+                btn.textContent = '⏺ Record Video';
+                document.getElementById('controls').style.opacity = '1';
+            };
+
+            // Hide controls during recording
+            document.getElementById('controls').style.opacity = '0';
+            document.getElementById('sceneDots').style.opacity = '0';
+
+            recorder.start();
+            btn.textContent = '⏺ Recording...';
+
+            // Auto-play through all scenes
+            showScene(0);
+            for (let i = 1; i < SCENE_COUNT; i++) {
+                await new Promise(r => setTimeout(r, SCENE_DURATION));
+                showScene(i);
+            }
+            // Hold last scene then stop
+            await new Promise(r => setTimeout(r, SCENE_DURATION));
+            recorder.stop();
+            document.getElementById('sceneDots').style.opacity = '1';
+        } catch(e) {
+            btn.disabled = false;
+            btn.textContent = '⏺ Record Video';
+            document.getElementById('controls').style.opacity = '1';
+        }
     }
 
     // Start loading
