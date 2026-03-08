@@ -351,13 +351,46 @@
     <button onclick="nextScene()">Next →</button>
 </div>
 
-<script src="products.js"></script>
 <script>
     const SCENE_COUNT = 5;
     const SCENE_DURATION = 4000; // 4 seconds per scene
     let currentScene = 0;
     let autoPlayInterval = null;
     let isAutoPlaying = false;
+    let products = [];
+
+    // Fetch products directly from the live ORLO API
+    async function loadProducts() {
+        // Try relative path first (works on orlostore.com)
+        const urls = ['/api/products', 'https://orlostore.com/api/products'];
+        for (const url of urls) {
+            try {
+                const res = await fetch(url);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        products = data;
+                        populateShowcase();
+                        return;
+                    }
+                }
+            } catch(e) { /* try next */ }
+        }
+        // If API fails, try reading from localStorage cache (same as main site)
+        try {
+            const cached = localStorage.getItem('orlo_products_cache');
+            if (cached) {
+                products = JSON.parse(cached);
+                if (products.length > 0) {
+                    populateShowcase();
+                    return;
+                }
+            }
+        } catch(e) {}
+        // Final fallback: show a helpful message
+        document.getElementById('productsGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.4);font-size:20px;padding:40px;">Open orlostore.com first to cache your products,<br>then refresh this page.</div>';
+        document.getElementById('spotlightContainer').innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.4);font-size:20px;padding:40px;">Visit orlostore.com first, then come back here.</div>';
+    }
 
     // Create dots
     const dotsEl = document.getElementById('sceneDots');
@@ -370,30 +403,17 @@
     function showScene(idx) {
         document.querySelectorAll('.scene').forEach((s, i) => {
             s.classList.toggle('active', i === idx);
-            // Re-trigger animations by cloning
             if (i === idx) {
-                s.style.animation = 'none';
-                s.offsetHeight; // force reflow
-                s.style.animation = '';
-                // Re-trigger child animations
-                s.querySelectorAll('[style*="animation"]').forEach(el => {
-                    el.style.animation = 'none';
-                    el.offsetHeight;
-                    el.style.animation = '';
-                });
-                // Re-trigger CSS animation classes
+                // Re-trigger all CSS animations
                 const animated = s.querySelectorAll('.product-card, .feature-item, .logo-img, .tagline, .tagline-ar, .section-title, .spotlight-container img, .spotlight-container .emoji-hero, .hero-name, .hero-desc, .hero-price, .cta-logo, .cta-heading, .cta-sub, .cta-button, .cta-url, .free-delivery');
                 animated.forEach(el => {
-                    const anim = getComputedStyle(el).animation;
                     el.style.animation = 'none';
                     el.offsetHeight;
                     el.style.animation = '';
                 });
             }
         });
-        // Update dots
         dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-        // Update progress
         document.getElementById('progressBar').style.width = ((idx + 1) / SCENE_COUNT * 100) + '%';
         currentScene = idx;
     }
@@ -417,7 +437,6 @@
             btn.textContent = '⏸ Pause';
             showScene(0);
             autoPlayInterval = setInterval(nextScene, SCENE_DURATION);
-            // Hide controls during autoplay for clean recording
             setTimeout(() => {
                 if (isAutoPlaying) document.getElementById('controls').style.opacity = '0';
             }, 1000);
@@ -431,11 +450,9 @@
         if (e.key === 'p') toggleAutoPlay();
     });
 
-    // Populate products when ready
     function populateShowcase() {
         if (!products || products.length === 0) return;
 
-        // Grid - show top 6 featured products
         const featured = products.filter(p => p.featured).slice(0, 6);
         const gridProducts = featured.length >= 4 ? featured : products.slice(0, 6);
 
@@ -455,7 +472,6 @@
             `;
         }).join('');
 
-        // Spotlight - pick the first featured product or first product
         const hero = featured[0] || products[0];
         const heroIsUrl = hero.image && hero.image.startsWith('http');
         const heroImg = heroIsUrl
@@ -471,11 +487,8 @@
         `;
     }
 
-    // Wait for products to load
-    window.addEventListener('productsReady', populateShowcase);
-    // Also try immediately in case products already loaded
-    setTimeout(populateShowcase, 500);
-    setTimeout(populateShowcase, 2000);
+    // Start loading
+    loadProducts();
 </script>
 
 </body>
