@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "5d9023fe-2e49-4fa9-b23d-8c8c57bea47b",
+		"name": "Zajel x TRSH",
+		"description": "Dedicated collection for TRSH",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2720789"
+	},
+	"item": [
+		{
+			"name": "CreateShipment",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "76s7d8fs76df878sdsd7f876a8s76asdy7asdn1okmb219y2mk21j80021831nb2eb",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-Auth-Api-Key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"customer_reference_number\": \"48979\",\n  \"weight_in_kg\": \"0.2500\",\n  \"cod_amount\": \"212\",\n  \"customer_code\": \"TRSH\",\n  \"service_type_id\": \"DDN\",\n  \"product_type\": \"NON-DOCUMENT\",\n  \"description\": \"\",\n  \"length_in_cm\": \"1.0000\",\n  \"width_in_cm\": \"1.0000\",\n  \"height_in_cm\": \"1.0000\",\n  \"num_of_pieces\": \"1\",\n  \"origin\": {\n    \"name\": \"TRSH\",\n    \"phone\": \"971563298222\",\n    \"company_name\": \"TRSH\",\n    \"address_line_1\": \"TRSH\",\n    \"address_line_2\": \"1st Floor - 92 20th St - Al Khabaisi - Dubai\",\n    \"area\": \"Al Khabaisi\",\n    \"city\": \"DXB\",\n    \"country\": \"UAE\",\n    \"email\": \"trsh@trsh.com\",\n    \"latitude\": \"\",\n    \"longitude\": \"\"\n  },\n  \"destination\": {\n    \"name\": \"Adel\",\n    \"phone\": \"971561234567\",\n    \"companyName\": \"\",\n    \"address_line_1\": \"Building no 1901 Room no 104 \",\n    \"address_line_2\": \"Muweilah\",\n    \"area\": \"SHARJAH INDUSTRIAL AREA 13\",\n    \"city\": \"SHJ\",\n    \"country\": \"UAE\",\n    \"email\": \"adel@trsh.com\",\n    \"latitude\": \"\",\n    \"longitude\": \"\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-stg.zajel.com/services/integration/api/Merchant/CreateShipment",
+					"protocol": "https",
+					"host": [
+						"api-stg",
+						"zajel",
+						"com"
+					],
+					"path": [
+						"services",
+						"integration",
+						"api",
+						"Merchant",
+						"CreateShipment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCities",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GetShipmentLabel",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "TrackShipment",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GetShipmentDetails",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "76s7d8fs76df878sdsd7f876a8s76asdy7asdn1okmb219y2mk21j80021831nb2eb",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-Auth-Api-Key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-stg.zajel.com/services/integration/api/Merchant/GetShipment?reference_number=9050000107",
+					"protocol": "https",
+					"host": [
+						"api-stg",
+						"zajel",
+						"com"
+					],
+					"path": [
+						"services",
+						"integration",
+						"api",
+						"Merchant",
+						"GetShipment"
+					],
+					"query": [
+						{
+							"key": "reference_number",
+							"value": "9050000107"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
