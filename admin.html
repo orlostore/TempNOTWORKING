@@ -3958,8 +3958,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         // ─── Zajel: Print AWB Label ──────────────────────────────
         function printAWB(orderId) {
-            const adminKey = localStorage.getItem('orlo_admin_key');
-            window.open(`/api/admin/shipment-label?order_id=${orderId}&key=${encodeURIComponent(adminKey)}`, '_blank');
+            window.open(`/api/admin/shipment-label?order_id=${orderId}&key=${encodeURIComponent(authKey)}`, '_blank');
         }
 
         // ─── Zajel: Cancel Shipment ──────────────────────────────
