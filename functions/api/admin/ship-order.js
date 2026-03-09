@@ -29,6 +29,7 @@ export async function onRequestPost(context) {
         // ─── 1. Create Zajel Shipment (if configured) ─────────────
         let zajelRef = null;
         let zajelError = null;
+        let zajelPayloadDebug = null;
 
         if (env.ZAJEL_API_KEY && env.ZAJEL_CUSTOMER_CODE && !skip_zajel) {
             try {
@@ -60,6 +61,7 @@ export async function onRequestPost(context) {
                         destinationArea: area,
                         description: desc,
                     });
+                    zajelPayloadDebug = payload;
 
                     const result = await zajelApi(env, {
                         method: 'POST',
@@ -248,6 +250,7 @@ export async function onRequestPost(context) {
             email_error: emailError,
             zajel_reference: zajelRef,
             zajel_error: zajelError,
+            zajel_payload_debug: zajelPayloadDebug,
         });
 
     } catch (error) {
