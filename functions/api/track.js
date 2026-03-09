@@ -1,6 +1,6 @@
 // Cloudflare Pages Function - Public Shipment Tracking
 // Location: /functions/api/track.js
-// No auth required — customer-facing endpoint
+// Requires AWB + email verification
 
 import { zajelApi, ensureShipmentsTable } from './admin/zajel.js';
 
@@ -10,20 +10,24 @@ export async function onRequestGet(context) {
     try {
         const url = new URL(request.url);
         const awb = url.searchParams.get('awb');
+        const email = url.searchParams.get('email');
 
         if (!awb) {
             return Response.json({ error: 'awb parameter required' }, { status: 400 });
         }
+        if (!email) {
+            return Response.json({ error: 'email parameter required' }, { status: 400 });
+        }
 
         await ensureShipmentsTable(env.DB);
 
-        // Verify this AWB exists in our shipments table (only allow tracking our own shipments)
+        // Verify AWB exists AND belongs to this customer email
         const shipment = await env.DB.prepare(
-            'SELECT order_id, zajel_reference, customer_name, zajel_status, zajel_status_date FROM shipments WHERE zajel_reference = ?'
-        ).bind(awb).first();
+            'SELECT order_id, zajel_reference, customer_email, zajel_status, zajel_status_date FROM shipments WHERE zajel_reference = ? AND LOWER(customer_email) = LOWER(?)'
+        ).bind(awb, email).first();
 
         if (!shipment) {
-            return Response.json({ error: 'Shipment not found' }, { status: 404 });
+            return Response.json({ error: 'Shipment not found. Please check your AWB number and email.' }, { status: 404 });
         }
 
         // Call Zajel TrackShipment API
