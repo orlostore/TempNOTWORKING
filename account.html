@@ -1831,33 +1831,87 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         // --- Reorder ---
-        function reorderItems(orderItems) {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            let added = 0;
-            orderItems.forEach(item => {
-                if (item.name.toLowerCase().includes('delivery') || item.name.toLowerCase().includes('shipping')) return;
-                // Try to find existing cart item
-                const existing = cart.find(c => c.name === item.name);
-                if (existing) {
-                    existing.quantity += item.quantity;
-                } else {
-                    cart.push({
-                        name: item.name,
-                        price: item.amount / 100 / item.quantity,
-                        quantity: item.quantity,
-                        id: item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-                    });
+        async function reorderItems(orderItems) {
+            const btn = event && event.target ? event.target.closest('button') : null;
+            if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+
+            try {
+                const res = await fetch('/api/products');
+                if (!res.ok) throw new Error('Failed to fetch products');
+                const products = await res.json();
+
+                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                let added = 0;
+                const skipped = [];
+
+                for (const item of orderItems) {
+                    if (item.name.toLowerCase().includes('delivery') || item.name.toLowerCase().includes('shipping')) continue;
+
+                    // Order item name is "Product Name" or "Product Name — Variant"
+                    const parts = item.name.split(' — ');
+                    const productName = parts[0].trim();
+                    const variantName = parts.length > 1 ? parts.slice(1).join(' — ').trim() : null;
+
+                    const product = products.find(p => p.name === productName);
+                    if (!product) { skipped.push(item.name); continue; }
+
+                    let variant = null;
+                    if (variantName && product.variants && product.variants.length > 0) {
+                        variant = product.variants.find(v => v.name === variantName);
+                        if (!variant) { skipped.push(item.name); continue; }
+                    }
+
+                    // Check stock
+                    const stockQty = variant ? variant.quantity : product.quantity;
+                    if (stockQty === 0) { skipped.push(item.name); continue; }
+
+                    // Find existing cart item (variant-aware)
+                    const existing = variant
+                        ? cart.find(c => c.id === product.id && c.variantId === variant.id)
+                        : cart.find(c => c.id === product.id && !c.variantId);
+
+                    const currentInCart = existing ? existing.quantity : 0;
+                    const maxAllowed = Math.min(10, stockQty);
+                    const canAdd = Math.min(item.quantity, maxAllowed - currentInCart);
+                    if (canAdd <= 0) { skipped.push(item.name); continue; }
+
+                    if (existing) {
+                        existing.quantity += canAdd;
+                    } else {
+                        const cartItem = { ...product, quantity: canAdd };
+                        if (variant) {
+                            cartItem.variantId = variant.id;
+                            cartItem.variantName = variant.name;
+                            cartItem.variantNameAr = variant.nameAr || '';
+                            cartItem.variantImage = variant.image || '';
+                            if (variant.price > 0) cartItem.variantPrice = variant.price;
+                        }
+                        cart.push(cartItem);
+                    }
+                    added += canAdd;
                 }
-                added += item.quantity;
-            });
-            localStorage.setItem('cart', JSON.stringify(cart));
-            // Update cart badges
-            const total = cart.reduce((s, i) => s + (i.quantity || 0), 0);
-            ['cartCount', 'mobileCartCount', 'bottomCartCount'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = total > 0 ? total : '';
-            });
-            orloToast('success', 'Added to Cart', added + ' item(s) added to cart!\nتمت إضافة ' + added + ' منتج(ات) إلى السلة');
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+
+                // Update cart badges
+                const total = cart.reduce((s, i) => s + (i.quantity || 0), 0);
+                ['cartCount', 'mobileCartCount', 'bottomCartCount'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = total > 0 ? total : '';
+                });
+
+                if (added > 0) {
+                    let msg = added + ' item(s) added to cart!\nتمت إضافة ' + added + ' منتج(ات) إلى السلة';
+                    if (skipped.length > 0) msg += '\n\nUnavailable: ' + skipped.join(', ');
+                    orloToast('success', 'Added to Cart', msg);
+                } else {
+                    orloToast('error', 'Unavailable', 'These items are no longer available:\nهذه المنتجات غير متوفرة حالياً:\n' + skipped.join(', '));
+                }
+            } catch (err) {
+                orloToast('error', 'Error', 'Could not reorder. Please try again.\nتعذرت إعادة الطلب. يرجى المحاولة مرة أخرى.');
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerHTML = '<svg class="inline-icon" viewBox="0 0 24 24" style="width:0.9em;height:0.9em"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg> Reorder | إعادة الطلب'; }
+            }
         }
 
         // --- Delete Account ---
