@@ -4,6 +4,7 @@
 
 // Map emirates/cities to Zajel city codes
 export const CITY_MAP = {
+    // English
     'dubai': 'DXB',
     'dxb': 'DXB',
     'sharjah': 'SHJ',
@@ -22,12 +23,42 @@ export const CITY_MAP = {
     'uaq': 'UAQ',
     'al ain': 'AIN',
     'ain': 'AIN',
+    // Arabic
+    'دبي': 'DXB',
+    'الشارقة': 'SHJ',
+    'شارقة': 'SHJ',
+    'أبوظبي': 'AUH',
+    'أبو ظبي': 'AUH',
+    'ابوظبي': 'AUH',
+    'عجمان': 'AJM',
+    'الفجيرة': 'FUJ',
+    'فجيرة': 'FUJ',
+    'رأس الخيمة': 'RAK',
+    'راس الخيمة': 'RAK',
+    'أم القيوين': 'UAQ',
+    'ام القيوين': 'UAQ',
+    'العين': 'AIN',
+    // Common Stripe address variants
+    'إمارة دبي': 'DXB',
+    'إما': 'DXB',
+    'emirate of dubai': 'DXB',
+    'dubai emirate': 'DXB',
 };
 
 export function resolveCity(cityInput) {
     if (!cityInput) return 'DXB';
     const key = cityInput.toLowerCase().trim();
-    return CITY_MAP[key] || cityInput.toUpperCase().slice(0, 3);
+    if (CITY_MAP[key]) return CITY_MAP[key];
+    // Check if input contains a known city name (e.g. "Dubai Land" contains "dubai")
+    for (const [mapKey, code] of Object.entries(CITY_MAP)) {
+        if (key.includes(mapKey) || mapKey.includes(key)) return code;
+    }
+    // If it's not ASCII (e.g. Arabic), default to DXB rather than garbage
+    if (/[^\x00-\x7F]/.test(cityInput)) return 'DXB';
+    // For short ASCII codes like "DXB", "SHJ" — pass through
+    const upper = cityInput.toUpperCase().trim();
+    if (/^[A-Z]{3}$/.test(upper)) return upper;
+    return 'DXB';
 }
 
 /**
