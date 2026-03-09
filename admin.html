@@ -2192,7 +2192,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 const overlay = document.getElementById('confirmOverlay');
                 document.getElementById('confirmIcon').textContent = opts.icon || '⚠️';
                 document.getElementById('confirmTitle').textContent = title;
-                document.getElementById('confirmMessage').textContent = message;
+                document.getElementById('confirmMessage').innerHTML = message;
                 const input = document.getElementById('confirmInput');
                 const okBtn = document.getElementById('confirmOk');
                 const cancelBtn = document.getElementById('confirmCancel');
