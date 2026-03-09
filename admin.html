@@ -3957,8 +3957,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         // ─── Zajel: Print AWB Label ──────────────────────────────
-        function printAWB(orderId) {
-            window.open(`/api/admin/shipment-label?order_id=${orderId}&key=${encodeURIComponent(authKey)}`, '_blank');
+        async function printAWB(orderId) {
+            try {
+                showToast('Loading AWB...', 'info');
+                const response = await adminFetch(`/api/admin/shipment-label?order_id=${orderId}`);
+                if (!response.ok) {
+                    const err = await response.json().catch(() => ({}));
+                    throw new Error(err.error || `HTTP ${response.status}`);
+                }
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+            } catch (error) {
+                showToast('AWB error: ' + error.message, 'error');
+            }
         }
 
         // ─── Zajel: Cancel Shipment ──────────────────────────────
