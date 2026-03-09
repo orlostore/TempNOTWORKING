@@ -3889,6 +3889,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         address_line_1: addr.line1 || '',
                         address_line_2: addr.line2 || '',
                         city: addr.city || addr.state || '',
+                        area: addr.line2 || addr.city || '',
                         items: order.items,
                     })
                 });
@@ -3903,7 +3904,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     applyFilters();
                     showToast(`AWB Created: ${data.reference_number}${data.already_exists ? ' (already existed)' : ''}`, 'success');
                 } else {
-                    showToast('Zajel error: ' + (data.error || 'Unknown'), 'error', 8000);
+                    const detail = data.zajel_raw ? ' | Raw: ' + JSON.stringify(data.zajel_raw).slice(0, 200) : '';
+                    showToast('Zajel error: ' + (data.error || 'Unknown') + detail, 'error', 12000);
                 }
             } catch (error) {
                 showToast('Error: ' + error.message, 'error');

@@ -48,7 +48,7 @@ export async function zajelApi(env, { method = 'GET', endpoint, body, params }) 
     }
 
     const headers = {
-        'X-AUTH-API-KEY': apiKey,
+        'X-Auth-Api-Key': apiKey,
         'accept': '*/*',
     };
 
@@ -120,15 +120,15 @@ export function createShipmentPayload(env, {
 
     return {
         customer_reference_number: customerReference || '',
-        weight_in_kg: weight,
+        weight_in_kg: String(weight || '0.5000'),
         customer_code: customerCode,
         service_type_id: serviceType,
         product_type: 'NON-DOCUMENT',
         description: (description || 'ORLO Store Order').slice(0, 150),
-        length_in_cm: 0,
-        width_in_cm: 0,
-        height_in_cm: 0,
-        num_of_pieces: numPieces,
+        length_in_cm: '1.0000',
+        width_in_cm: '1.0000',
+        height_in_cm: '1.0000',
+        num_of_pieces: String(numPieces || 1),
         cod_amount: String(codAmount || 0),
         origin: {
             name: env.ZAJEL_ORIGIN_NAME || 'ORLO Store',

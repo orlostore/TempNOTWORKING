@@ -67,7 +67,7 @@ export async function onRequestPost(context) {
                         body: payload,
                     });
 
-                    if (result.ok && result.data?.success) {
+                    if (result.ok && result.data?.referenceNumber) {
                         zajelRef = result.data.referenceNumber;
 
                         await env.DB.prepare(`
@@ -81,9 +81,17 @@ export async function onRequestPost(context) {
                             resolveCity(city), address_line_1 || ''
                         ).run();
                     } else {
-                        zajelError = result.data?.errors
-                            ? Object.values(result.data.errors).flat().join(', ')
-                            : result.data?.title || 'Zajel API error';
+                        console.error('Zajel CreateShipment raw response:', JSON.stringify(result.data));
+                        if (result.data?.errors && typeof result.data.errors === 'object') {
+                            zajelError = Object.entries(result.data.errors)
+                                .map(([k, v]) => {
+                                    const msgs = Array.isArray(v) ? v.join(', ') : String(v);
+                                    return k ? `${k}: ${msgs}` : msgs;
+                                })
+                                .join('; ');
+                        } else {
+                            zajelError = result.data?.title || result.data?.message || JSON.stringify(result.data).slice(0, 200);
+                        }
                         console.error('Zajel CreateShipment failed:', zajelError);
                     }
                 }

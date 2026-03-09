@@ -81,7 +81,8 @@ export async function onRequestPost(context) {
             body: payload,
         });
 
-        if (result.ok && result.data?.success) {
+        // Zajel returns referenceNumber on success (may or may not include a 'success' field)
+        if (result.ok && result.data?.referenceNumber) {
             const ref = result.data.referenceNumber;
             const custRef = result.data.customerReferenceNumber;
 
@@ -118,10 +119,23 @@ export async function onRequestPost(context) {
             });
         }
 
-        // Handle Zajel API errors
-        const errorMsg = result.data?.errors
-            ? Object.entries(result.data.errors).map(([k, v]) => `${k}: ${v.join(', ')}`).join('; ')
-            : result.data?.title || result.data?.message || 'Unknown Zajel error';
+        // Handle Zajel API errors — log full response for debugging
+        console.error('Zajel API rejected:', JSON.stringify(result.data));
+        let errorMsg = 'Unknown Zajel error';
+        if (result.data?.errors && typeof result.data.errors === 'object') {
+            errorMsg = Object.entries(result.data.errors)
+                .map(([k, v]) => {
+                    const msgs = Array.isArray(v) ? v.join(', ') : String(v);
+                    return k ? `${k}: ${msgs}` : msgs;
+                })
+                .join('; ');
+        } else if (result.data?.title) {
+            errorMsg = result.data.title;
+        } else if (result.data?.message) {
+            errorMsg = result.data.message;
+        } else if (result.data?.raw) {
+            errorMsg = result.data.raw;
+        }
 
         // Save failed attempt
         if (!existing) {
@@ -145,6 +159,7 @@ export async function onRequestPost(context) {
             success: false,
             error: errorMsg,
             zajel_status: result.status,
+            zajel_raw: result.data,
         }, { status: 400 });
 
     } catch (error) {
