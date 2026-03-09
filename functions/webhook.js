@@ -262,32 +262,42 @@ export async function onRequestPost(context) {
                         id TEXT PRIMARY KEY,
                         customer_email TEXT NOT NULL,
                         customer_name TEXT DEFAULT '',
+                        customer_phone TEXT DEFAULT '',
                         amount_total INTEGER DEFAULT 0,
                         currency TEXT DEFAULT 'aed',
+                        shipping_address TEXT DEFAULT '{}',
+                        shipping_amount INTEGER DEFAULT 0,
                         items TEXT DEFAULT '[]',
+                        metadata TEXT DEFAULT '{}',
                         created_at INTEGER NOT NULL
                     )`).run();
                     await DB.prepare(`CREATE INDEX IF NOT EXISTS idx_orders_email ON orders(customer_email)`).run();
 
                     // Build items JSON from cart_items metadata
-                    const orderItems = cartItems
-                        .filter(i => !(i.name || '').toLowerCase().includes('delivery'))
-                        .map(i => ({
-                            name: (i.name || i.slug || 'Item').split(/[\n\r]/)[0].trim(),
-                            quantity: i.quantity,
-                            amount: Math.round((i.price || 0) * 100) * i.quantity
-                        }));
+                    const orderItems = cartItems.map(i => ({
+                        name: (i.name || i.slug || 'Item').split(/[\n\r]/)[0].trim(),
+                        quantity: i.quantity,
+                        amount: Math.round((i.price || 0) * 100) * i.quantity
+                    }));
+
+                    // Calculate shipping amount from delivery line item
+                    const deliveryItem = cartItems.find(i => (i.name || '').toLowerCase().includes('delivery'));
+                    const shippingAmount = deliveryItem ? Math.round((deliveryItem.price || 0) * 100) * (deliveryItem.quantity || 1) : (session.shipping_cost?.amount_total || 0);
 
                     await DB.prepare(
-                        `INSERT OR IGNORE INTO orders (id, customer_email, customer_name, amount_total, currency, items, created_at)
-                         VALUES (?, ?, ?, ?, ?, ?, ?)`
+                        `INSERT OR IGNORE INTO orders (id, customer_email, customer_name, customer_phone, amount_total, currency, shipping_address, shipping_amount, items, metadata, created_at)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
                     ).bind(
                         session.id,
                         customerEmail || '',
                         session.customer_details?.name || '',
+                        session.customer_details?.phone || '',
                         session.amount_total || 0,
                         session.currency || 'aed',
+                        JSON.stringify(session.customer_details?.address || session.shipping_details?.address || {}),
+                        shippingAmount,
                         JSON.stringify(orderItems),
+                        JSON.stringify(session.metadata || {}),
                         session.created
                     ).run();
                     console.log(`Order ${session.id} stored in D1`);
