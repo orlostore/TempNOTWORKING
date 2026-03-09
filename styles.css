@@ -1291,6 +1291,13 @@ footer p {
   }
 }
 
+@media (min-width: 805px) {
+  .terms-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+}
+
 @media (max-width: 686.08px) {
   .products-grid {
     grid-template-columns: repeat(auto-fill, minmax(187.6px, 1fr));
