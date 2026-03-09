@@ -56,7 +56,9 @@ export async function zajelApi(env, { method = 'GET', endpoint, body, params }) 
 
     if (body && (method === 'POST' || method === 'PUT')) {
         headers['Content-Type'] = 'application/json';
-        options.body = JSON.stringify(body);
+        const jsonBody = JSON.stringify(body);
+        options.body = jsonBody;
+        console.log('Zajel request payload:', jsonBody);
     }
 
     const response = await fetch(url, options);
