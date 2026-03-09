@@ -1285,7 +1285,8 @@ footer p {
     grid-template-columns: repeat(2, 1fr);
   }
   .terms-grid .term-card:last-child {
-    grid-column: 1 / -1;
+    grid-column: 1 / span 2;
+    text-align: center;
   }
 }
 
@@ -1371,6 +1372,10 @@ footer p {
 
   .terms-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .terms-grid .term-card:last-child {
+    grid-column: 1 / span 2;
+    text-align: center;
   }
 
   .products-grid {
