@@ -43,6 +43,7 @@ export async function onRequestGet(context) {
         let shippedOrderIds = new Set();
         let cancelledOrderIds = new Set();
         let returnRequests = {};
+        let shipmentsMap = {};
         if (env.DB) {
             try {
                 const { results } = await env.DB.prepare(
@@ -77,6 +78,25 @@ export async function onRequestGet(context) {
                         customer_name: row.customer_name,
                         customer_email: row.customer_email,
                         created_at: row.created_at
+                    };
+                }
+            } catch (dbError) {
+                // Table may not exist yet
+            }
+
+            // Get Zajel shipment data
+            try {
+                const { results } = await env.DB.prepare(
+                    'SELECT order_id, zajel_reference, status, zajel_status, zajel_status_date, failure_reason, created_at FROM shipments'
+                ).all();
+                for (const row of results) {
+                    shipmentsMap[row.order_id] = {
+                        zajel_reference: row.zajel_reference,
+                        shipment_status: row.status,
+                        zajel_status: row.zajel_status,
+                        zajel_status_date: row.zajel_status_date,
+                        failure_reason: row.failure_reason,
+                        created_at: row.created_at,
                     };
                 }
             } catch (dbError) {
@@ -139,7 +159,8 @@ export async function onRequestGet(context) {
                     })),
                     metadata: session.metadata || {},
                     status: cancelledOrderIds.has(session.id) ? 'cancelled' : isShipped ? 'shipped' : 'pending',
-                    return_request: returnRequests[session.id] || null
+                    return_request: returnRequests[session.id] || null,
+                    shipment: shipmentsMap[session.id] || null
                 };
             }));
 
