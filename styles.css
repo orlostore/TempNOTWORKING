@@ -958,7 +958,6 @@ nav {
   max-width: 1180px;
   margin-left: auto;
   margin-right: auto;
-  justify-content: center;
 }
 
 .term-card {
@@ -1284,6 +1283,11 @@ footer p {
 @media (max-width: 804.0px) {
   .terms-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .terms-grid .term-card:last-child {
+    grid-column: 1 / -1;
+    max-width: 50%;
+    margin: 0 auto;
   }
 }
 
