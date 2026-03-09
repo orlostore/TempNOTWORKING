@@ -3904,8 +3904,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     applyFilters();
                     showToast(`AWB Created: ${data.reference_number}${data.already_exists ? ' (already existed)' : ''}`, 'success');
                 } else {
-                    const detail = data.zajel_raw ? ' | Raw: ' + JSON.stringify(data.zajel_raw).slice(0, 200) : '';
-                    showToast('Zajel error: ' + (data.error || 'Unknown') + detail, 'error', 12000);
+                    console.error('Zajel full error response:', JSON.stringify(data, null, 2));
+                    showToast('Zajel error: ' + (data.error || 'Unknown') + ' — check console for payload', 'error', 12000);
                 }
             } catch (error) {
                 showToast('Error: ' + error.message, 'error');

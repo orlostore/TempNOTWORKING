@@ -160,6 +160,7 @@ export async function onRequestPost(context) {
             error: errorMsg,
             zajel_status: result.status,
             zajel_raw: result.data,
+            zajel_payload_sent: payload,
         }, { status: 400 });
 
     } catch (error) {
