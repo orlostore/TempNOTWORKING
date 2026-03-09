@@ -60,6 +60,8 @@ export async function onRequestGet(context) {
                                 amount: item.amount_total
                             })) || [];
 
+                            const shippingAmount = session.shipping_cost?.amount_total || items.find(i => i.name?.toLowerCase().includes('delivery'))?.amount || 0;
+
                             d1Orders.push({
                                 id: session.id,
                                 customer_email: customer.email,
@@ -70,18 +72,22 @@ export async function onRequestGet(context) {
                                 created_at: session.created
                             });
 
-                            // Persist to D1 for next time
+                            // Persist to D1 for next time (full schema)
                             try {
                                 await DB.prepare(
-                                    `INSERT OR IGNORE INTO orders (id, customer_email, customer_name, amount_total, currency, items, created_at)
-                                     VALUES (?, ?, ?, ?, ?, ?, ?)`
+                                    `INSERT OR IGNORE INTO orders (id, customer_email, customer_name, customer_phone, amount_total, currency, shipping_address, shipping_amount, items, metadata, created_at)
+                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
                                 ).bind(
                                     session.id,
                                     customer.email,
                                     session.customer_details?.name || '',
+                                    session.customer_details?.phone || '',
                                     session.amount_total || 0,
                                     session.currency || 'aed',
+                                    JSON.stringify(session.customer_details?.address || session.shipping_details?.address || {}),
+                                    shippingAmount,
                                     JSON.stringify(items),
+                                    JSON.stringify(session.metadata || {}),
                                     session.created
                                 ).run();
                             } catch (e) {
