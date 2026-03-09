@@ -171,16 +171,23 @@ export async function onRequestPost(context) {
             // Tracking info box — include AWB if available
             let trackingHtml = '';
             if (zajelRef) {
+                const trackUrl = `https://zajel.com/Tracking/`;
                 trackingHtml = `
                 <div style="background: #e8f4fd; border-radius: 10px; padding: 18px 20px; margin-bottom: 25px; border-left: 3px solid #0077b6; text-align: left;">
                     <p style="margin: 0; font-size: 14px; color: #333;">
                         <strong>Tracking Number (AWB):</strong> ${zajelRef}
                     </p>
-                    <p style="margin: 6px 0 0; font-size: 13px; color: #555;">
-                        Shipped via <strong>Zajel</strong> — you can track your shipment using the AWB number above.
+                    <p style="margin: 8px 0 0; font-size: 13px; color: #555;">
+                        Shipped via <strong>Zajel</strong>
+                    </p>
+                    <p style="margin: 12px 0 0;">
+                        <a href="${trackUrl}" style="display:inline-block;background:#0077b6;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Track My Shipment</a>
                     </p>
                     <p style="margin: 6px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
                         رقم التتبع: ${zajelRef} — تم الشحن عبر <strong>زاجل</strong>
+                    </p>
+                    <p style="margin: 4px 0 0; direction: rtl; text-align: right;">
+                        <a href="${trackUrl}" style="font-size:13px;color:#0077b6;text-decoration:underline;">تتبع الشحنة</a>
                     </p>
                 </div>`;
             }
@@ -207,7 +214,7 @@ export async function onRequestPost(context) {
                 .map(i => `- ${(i.name || 'Item').split(/[\n\r]/)[0].trim()} x${i.quantity}`)
                 .join('\n');
 
-            const trackingText = zajelRef ? `\nTracking Number (AWB): ${zajelRef}\nShipped via Zajel\n` : '';
+            const trackingText = zajelRef ? `\nTracking Number (AWB): ${zajelRef}\nShipped via Zajel\nTrack your shipment: https://zajel.com/Tracking/\n` : '';
 
             const text = plainText({
                 titleEn: 'Your Order Has Been Dispatched!',
