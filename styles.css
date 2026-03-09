@@ -1285,7 +1285,9 @@ footer p {
     grid-template-columns: repeat(2, 1fr);
   }
   .terms-grid .term-card:last-child {
-    grid-column: 1;
+    grid-column: 1 / -1;
+    justify-self: center;
+    max-width: calc(50% - 0.5rem);
   }
 }
 
@@ -1371,6 +1373,11 @@ footer p {
 
   .terms-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .terms-grid .term-card:last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    max-width: calc(50% - 0.5rem);
   }
 
   .products-grid {
