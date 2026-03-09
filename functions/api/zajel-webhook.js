@@ -3,11 +3,18 @@
 // Receives status updates from Zajel about shipment events
 // Give this URL to Zajel: https://orlostore.com/api/zajel-webhook
 
+// GET handler — lets Zajel (or you) verify the webhook URL is alive
+export async function onRequestGet() {
+    return Response.json({ status: 'ok', endpoint: 'zajel-webhook', accepts: 'POST' });
+}
+
 export async function onRequestPost(context) {
     const { env, request } = context;
 
     try {
-        // Verify webhook auth (API key or Basic Auth — configured with Zajel)
+        console.log('Zajel webhook hit — headers:', JSON.stringify(Object.fromEntries(request.headers)));
+
+        // Verify webhook auth — skip if ZAJEL_WEBHOOK_SECRET is not set
         const webhookSecret = env.ZAJEL_WEBHOOK_SECRET;
         if (webhookSecret) {
             const authHeader = request.headers.get('Authorization') || '';
@@ -18,11 +25,17 @@ export async function onRequestPost(context) {
                 || authHeader === `Basic ${btoa(webhookSecret)}`;
 
             if (!isValid) {
+                console.error('Zajel webhook: auth FAILED — apiKey:', apiKeyHeader ? 'present' : 'missing', 'auth:', authHeader ? 'present' : 'missing');
                 return Response.json({ error: 'Unauthorized' }, { status: 401 });
             }
         }
 
-        const payload = await request.json();
+        const rawBody = await request.text();
+        console.log('Zajel webhook payload:', rawBody);
+        let payload;
+        try { payload = JSON.parse(rawBody); } catch {
+            return Response.json({ error: 'Invalid JSON', body: rawBody.slice(0, 200) }, { status: 400 });
+        }
 
         const {
             reference_number,
