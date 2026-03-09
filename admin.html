@@ -2217,11 +2217,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             });
         }
 
-        // Authenticated fetch helper
-        function adminFetch(url, options = {}) {
+        // Authenticated fetch helper with 401 re-auth handling
+        async function adminFetch(url, options = {}) {
             if (!options.headers) options.headers = {};
             options.headers['Authorization'] = 'Bearer ' + authKey;
-            return fetch(url, options);
+            const response = await fetch(url, options);
+            if (response.status === 401) {
+                authKey = '';
+                document.getElementById('adminPanel').style.display = 'none';
+                document.getElementById('authScreen').style.display = 'flex';
+                document.getElementById('authError').style.display = 'block';
+                document.getElementById('authError').textContent = 'Session expired. Please log in again.';
+                document.getElementById('authKey').style.borderColor = '#dc3545';
+                throw new Error('Session expired');
+            }
+            return response;
         }
 
         function checkAuth() {
@@ -3249,6 +3259,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <div class="orders-empty-icon">⚠️</div>
                             <h3>Error loading orders</h3>
                             <p>${data.error}</p>
+                            <button onclick="loadOrders()" style="margin-top:12px;padding:8px 20px;border-radius:8px;border:none;background:#007bff;color:#fff;cursor:pointer">Retry</button>
                         </div>
                     `;
                     return;
@@ -3275,11 +3286,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 updateLastRefreshed('ordersLastRefreshed', 'ordersRefreshTime');
                 
             } catch (error) {
+                if (error.message === 'Session expired') return;
                 document.getElementById('ordersContainer').innerHTML = `
                     <div class="orders-empty">
                         <div class="orders-empty-icon">❌</div>
                         <h3>Failed to load orders</h3>
                         <p>${error.message}</p>
+                        <button onclick="loadOrders()" style="margin-top:12px;padding:8px 20px;border-radius:8px;border:none;background:#007bff;color:#fff;cursor:pointer">Retry</button>
                     </div>
                 `;
             }
