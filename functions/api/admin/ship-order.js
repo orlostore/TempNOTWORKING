@@ -171,7 +171,7 @@ export async function onRequestPost(context) {
             // Tracking info box — include AWB if available
             let trackingHtml = '';
             if (zajelRef) {
-                const trackUrl = `https://zajel.com/Tracking/`;
+                const trackUrl = `${origin}/track?awb=${encodeURIComponent(zajelRef)}`;
                 trackingHtml = `
                 <div style="background: #e8f4fd; border-radius: 10px; padding: 18px 20px; margin-bottom: 25px; border-left: 3px solid #0077b6; text-align: left;">
                     <p style="margin: 0; font-size: 14px; color: #333;">
@@ -200,9 +200,9 @@ export async function onRequestPost(context) {
                 bodyAr: 'مرحباً، تم شحن طلبك وهو في الطريق إليك!',
                 infoBoxEn: '<strong>Estimated Delivery:</strong> 2-5 business days across UAE',
                 infoBoxAr: 'التوصيل المتوقع: ٢-٥ أيام عمل',
-                ctaUrl: `${origin}/account.html`,
+                ctaUrl: zajelRef ? `${origin}/track?awb=${encodeURIComponent(zajelRef)}` : `${origin}/account.html`,
                 ctaText: 'Track My Order | تتبع طلبي',
-                ctaColor: '#2c4a5c',
+                ctaColor: '#0077b6',
                 extraHtml: trackingHtml + itemsTableHtml,
                 preheader: zajelRef
                     ? `Your order is on its way! Tracking: ${zajelRef}`
@@ -214,7 +214,7 @@ export async function onRequestPost(context) {
                 .map(i => `- ${(i.name || 'Item').split(/[\n\r]/)[0].trim()} x${i.quantity}`)
                 .join('\n');
 
-            const trackingText = zajelRef ? `\nTracking Number (AWB): ${zajelRef}\nShipped via Zajel\nTrack your shipment: https://zajel.com/Tracking/\n` : '';
+            const trackingText = zajelRef ? `\nTracking Number (AWB): ${zajelRef}\nShipped via Zajel\nTrack your shipment: ${origin}/track?awb=${encodeURIComponent(zajelRef)}\n` : '';
 
             const text = plainText({
                 titleEn: 'Your Order Has Been Dispatched!',
