@@ -1893,12 +1893,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 localStorage.setItem('cart', JSON.stringify(cart));
 
-                // Update cart badges
-                const total = cart.reduce((s, i) => s + (i.quantity || 0), 0);
-                ['cartCount', 'mobileCartCount', 'bottomCartCount'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.textContent = total > 0 ? total : '';
-                });
+                // Refresh cart sidebar and badges
+                if (typeof updateCart === 'function') updateCart();
 
                 if (added > 0) {
                     let msg = added + ' item(s) added to cart!\nتمت إضافة ' + added + ' منتج(ات) إلى السلة';
