@@ -119,9 +119,19 @@ export async function onRequestGet(context) {
         } catch (e) {}
 
         try {
-            const { results: returnRows } = await DB.prepare('SELECT order_id, status, reason FROM return_requests').all();
+            const { results: returnRows } = await DB.prepare('SELECT order_id, status, reason, created_at FROM return_requests').all();
             for (const r of returnRows) {
-                returnRequests[r.order_id] = { status: r.status, reason: r.reason };
+                returnRequests[r.order_id] = { status: r.status, reason: r.reason, created_at: r.created_at };
+            }
+        } catch (e) {}
+
+        let trackingNumbers = {};
+        try {
+            const { results: shipmentRows } = await DB.prepare('SELECT order_id, zajel_reference, zajel_status FROM shipments').all();
+            for (const r of shipmentRows) {
+                if (r.zajel_reference) {
+                    trackingNumbers[r.order_id] = { awb: r.zajel_reference, zajel_status: r.zajel_status };
+                }
             }
         } catch (e) {}
 
@@ -151,7 +161,8 @@ export async function onRequestGet(context) {
                     status: status,
                     items: items,
                     return_request: returnRequests[order.id] || null,
-                    shipped_at: shippedDates[order.id] || null
+                    shipped_at: shippedDates[order.id] || null,
+                    tracking: trackingNumbers[order.id] || null
                 };
             });
 
