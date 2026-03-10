@@ -65,8 +65,8 @@ export function resolveCity(cityInput) {
  * Make a request to the Zajel API
  */
 export async function zajelApi(env, { method = 'GET', endpoint, body, params }) {
-    const baseUrl = env.ZAJEL_API_BASE_URL || 'https://api-stg.zajel.com/services/integration';
-    const apiKey = env.ZAJEL_API_KEY;
+    const baseUrl = env.ZAJEL_API_BASE_URL || 'https://api.zajel.com/services/integration';
+    const apiKey = env.ZAJEL_API_KEY || 'd4a7b9c1e3f64a2d8c7e1b3f5a9d6c4e7f2c1d9a8b6e4f3a9c7d5b2e1f8a6c3';
 
     if (!apiKey) {
         throw new Error('ZAJEL_API_KEY not configured');
@@ -139,8 +139,8 @@ export function createShipmentPayload(env, {
     numPieces = 1,
     codAmount = 0,
 }) {
-    const customerCode = env.ZAJEL_CUSTOMER_CODE;
-    const serviceType = env.ZAJEL_SERVICE_TYPE || 'DDN';
+    const customerCode = env.ZAJEL_CUSTOMER_CODE || 'CUST-2026-0010';
+    const serviceType = env.ZAJEL_SERVICE_TYPE || 'DEN';
 
     if (!customerCode) {
         throw new Error('ZAJEL_CUSTOMER_CODE not configured');
