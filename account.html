@@ -239,7 +239,10 @@
             font-size: 0.65rem;
             font-weight: 600;
             text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
+        .order-status:hover { opacity: 0.8; }
         
         .order-status.pending { background: #fff3cd; color: #856404; }
         .order-status.shipped { background: #d4edda; color: #155724; }
@@ -268,44 +271,82 @@
             margin-top: 4px;
         }
 
-        .order-tracking-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 20px;
+        .order-tracking-panel {
+            display: none;
             background: #f0f7ff;
+            border-top: 1px solid #d6e8f7;
             border-bottom: 1px solid #d6e8f7;
-            font-size: 0.75rem;
-            gap: 10px;
+            padding: 14px 20px;
+            font-size: 0.78rem;
+            line-height: 1.7;
+            color: #333;
         }
-        .order-tracking-bar .tracking-info {
+        .order-tracking-panel.open { display: block; }
+        .order-tracking-panel .tracking-timeline {
             display: flex;
             align-items: center;
-            gap: 6px;
-            color: #004085;
+            gap: 0;
+            margin: 10px 0 14px;
+            padding: 0;
         }
-        .order-tracking-bar .tracking-zajel-status {
-            background: #e0ecff;
-            padding: 1px 8px;
-            border-radius: 8px;
+        .order-tracking-panel .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
             font-size: 0.68rem;
-            text-transform: capitalize;
+            color: #999;
         }
+        .order-tracking-panel .timeline-step.active { color: #155724; font-weight: 600; }
+        .order-tracking-panel .timeline-step.completed { color: #155724; }
+        .order-tracking-panel .timeline-dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            margin-bottom: 4px;
+            z-index: 1;
+        }
+        .order-tracking-panel .timeline-step.active .timeline-dot,
+        .order-tracking-panel .timeline-step.completed .timeline-dot { background: #155724; }
+        .order-tracking-panel .timeline-line {
+            position: absolute;
+            top: 5px;
+            left: calc(50% + 6px);
+            right: calc(-50% + 6px);
+            height: 2px;
+            background: #ddd;
+        }
+        .order-tracking-panel .timeline-step.completed .timeline-line { background: #155724; }
+        .order-tracking-panel .tracking-detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3px 0;
+        }
+        .order-tracking-panel .tracking-label { color: #666; font-weight: 500; }
+        .order-tracking-panel .tracking-value { font-weight: 600; color: #004085; }
         .track-shipment-link {
             font-family: 'Inter', 'Almarai', sans-serif;
+            display: inline-block;
+            margin-top: 8px;
             color: #004085;
             font-weight: 600;
             font-size: 0.72rem;
             text-decoration: none;
             border: 1px solid #004085;
-            padding: 3px 10px;
+            padding: 4px 12px;
             border-radius: 6px;
-            white-space: nowrap;
             transition: all 0.2s;
         }
-        .track-shipment-link:hover {
-            background: #004085;
-            color: white;
+        .track-shipment-link:hover { background: #004085; color: white; }
+        .tracking-ar {
+            font-family: 'Almarai', Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            color: #666;
+            margin-top: 6px;
+            font-size: 0.72rem;
         }
 
         .order-footer {
@@ -1571,19 +1612,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                         <span class="order-id">#${order.id.slice(-8).toUpperCase()}</span>
                                         <span class="order-date">${dateStr}</span>
                                     </div>
-                                    <span class="order-status ${order.status}">${({pending:'Pending <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| قيد الانتظار</span>',shipped:'Shipped <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| تم الشحن</span>',delivered:'Delivered <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| تم التوصيل</span>',cancelled:'Cancelled <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| ملغي</span>',return_requested:'Return Requested <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| طلب إرجاع</span>',return_approved:'Return Approved <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| تمت الموافقة</span>',refunded:'Refunded <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| مسترد</span>'})[order.status] || order.status}</span>
+                                    <span class="order-status ${order.status}" onclick="document.getElementById('tracking-${order.id.slice(-8)}').classList.toggle('open')" title="Click for details">${({pending:'Pending <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| قيد الانتظار</span>',shipped:'Shipped <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| تم الشحن</span>',delivered:'Delivered <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| تم التوصيل</span>',cancelled:'Cancelled <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| ملغي</span>',return_requested:'Return Requested <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| طلب إرجاع</span>',return_approved:'Return Approved <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| تمت الموافقة</span>',refunded:'Refunded <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| مسترد</span>'})[order.status] || order.status} ▾</span>
                                 </div>
-                                ${order.tracking && order.tracking.awb ? `
-                                <div class="order-tracking-bar">
-                                    <div class="tracking-info">
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                                        <span>AWB: <strong>${order.tracking.awb}</strong></span>
-                                        ${order.tracking.zajel_status ? '<span class="tracking-zajel-status">' + order.tracking.zajel_status + '</span>' : ''}
+                                <div class="order-tracking-panel" id="tracking-${order.id.slice(-8)}">
+                                    <div class="tracking-timeline">
+                                        <div class="timeline-step ${['pending','shipped','delivered','cancelled'].indexOf(order.status) >= 0 ? 'completed' : ''}" style="flex:1">
+                                            <div class="timeline-dot"></div>
+                                            <span>Ordered</span>
+                                        </div>
+                                        <div class="timeline-step ${order.status === 'shipped' || order.status === 'delivered' ? 'completed' : ''} ${order.status === 'shipped' ? 'active' : ''}" style="flex:1">
+                                            <div class="timeline-dot"></div>
+                                            <div class="timeline-line" style="position:absolute;top:5px;right:calc(50% + 6px);left:calc(-50% + 6px);"></div>
+                                            <span>Shipped <span style="font-family:'Almarai',Arial,sans-serif;">شُحن</span></span>
+                                        </div>
+                                        <div class="timeline-step ${order.status === 'delivered' ? 'completed active' : ''}" style="flex:1">
+                                            <div class="timeline-dot"></div>
+                                            <div class="timeline-line" style="position:absolute;top:5px;right:calc(50% + 6px);left:calc(-50% + 6px);"></div>
+                                            <span>Delivered <span style="font-family:'Almarai',Arial,sans-serif;">وُصّل</span></span>
+                                        </div>
                                     </div>
-                                    <a href="/track?awb=${encodeURIComponent(order.tracking.awb)}&email=${encodeURIComponent(customerData.email)}" class="track-shipment-link" target="_blank">
-                                        Track Shipment <span style="font-family:'Almarai',Arial,sans-serif;direction:rtl;">| تتبع الشحنة</span>
-                                    </a>
-                                </div>` : ''}
+                                    <div class="tracking-detail-row">
+                                        <span class="tracking-label">Order Date</span>
+                                        <span class="tracking-value">${dateStr}</span>
+                                    </div>
+                                    ${order.shipped_at ? '<div class="tracking-detail-row"><span class="tracking-label">Shipped</span><span class="tracking-value">' + new Date(order.shipped_at).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) + '</span></div>' : ''}
+                                    ${order.tracking && order.tracking.awb ? '<div class="tracking-detail-row"><span class="tracking-label">AWB</span><span class="tracking-value">' + order.tracking.awb + '</span></div>' : ''}
+                                    ${order.tracking && order.tracking.zajel_status ? '<div class="tracking-detail-row"><span class="tracking-label">Status</span><span class="tracking-value" style="text-transform:capitalize;">' + order.tracking.zajel_status + '</span></div>' : ''}
+                                    ${order.status === 'cancelled' ? '<div class="tracking-detail-row"><span class="tracking-label">Cancelled</span><span class="tracking-value" style="color:#721c24;">Order cancelled — refund initiated</span></div>' : ''}
+                                    ${order.tracking && order.tracking.awb ? '<a href="/track?awb=' + encodeURIComponent(order.tracking.awb) + '&email=' + encodeURIComponent(customerData.email) + '" class="track-shipment-link" target="_blank">Track Shipment <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| تتبع الشحنة</span></a>' : ''}
+                                    <div class="tracking-ar">تاريخ الطلب: ${dateStr}${order.shipped_at ? ' · تم الشحن: ' + new Date(order.shipped_at).toLocaleDateString('ar-AE', {day:'numeric',month:'long'}) : ''}${order.tracking && order.tracking.awb ? ' · رقم التتبع: ' + order.tracking.awb : ''}</div>
+                                </div>
                                 <div class="order-body">
                                     <div class="order-products">
                                         ${order.items.map(item => `
