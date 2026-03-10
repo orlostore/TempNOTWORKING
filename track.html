@@ -76,11 +76,22 @@
     <script>
         const STATUS_MAP = {
             'softdata_upload': { icon: '📦', label: 'Order Received', labelAr: 'تم استلام الطلب', cls: 'status-pending' },
+            'softdata_update': { icon: '📦', label: 'Order Updated', labelAr: 'تم تحديث الطلب', cls: 'status-pending' },
             'pickup_awaited': { icon: '📦', label: 'Awaiting Pickup', labelAr: 'بانتظار الاستلام', cls: 'status-pending' },
+            'pickup_completed': { icon: '🚛', label: 'Picked Up', labelAr: 'تم الاستلام', cls: 'status-transit' },
             'picked_up': { icon: '🚛', label: 'Picked Up', labelAr: 'تم الاستلام', cls: 'status-transit' },
+            'inscan_at_hub': { icon: '🏢', label: 'Received at Hub', labelAr: 'تم الاستلام في المستودع', cls: 'status-transit' },
+            'reachedathub': { icon: '🏢', label: 'Reached Hub', labelAr: 'وصلت المستودع', cls: 'status-transit' },
             'in_transit': { icon: '🚚', label: 'In Transit', labelAr: 'في الطريق', cls: 'status-transit' },
+            'outfordelivery': { icon: '🛵', label: 'Out for Delivery', labelAr: 'خرج للتوصيل', cls: 'status-transit' },
             'out_for_delivery': { icon: '🛵', label: 'Out for Delivery', labelAr: 'خرج للتوصيل', cls: 'status-transit' },
             'delivered': { icon: '✅', label: 'Delivered', labelAr: 'تم التوصيل', cls: 'status-delivered' },
+            'attempted': { icon: '⚠️', label: 'Delivery Attempted', labelAr: 'تمت محاولة التوصيل', cls: 'status-failed' },
+            'on_hold': { icon: '⏸️', label: 'On Hold', labelAr: 'قيد الانتظار', cls: 'status-pending' },
+            'cancelled': { icon: '❌', label: 'Cancelled', labelAr: 'تم الإلغاء', cls: 'status-failed' },
+            'rto': { icon: '↩️', label: 'Returning to Sender', labelAr: 'جاري الإرجاع للمرسل', cls: 'status-failed' },
+            'rto_attempted': { icon: '↩️', label: 'Return Attempted', labelAr: 'تمت محاولة الإرجاع', cls: 'status-failed' },
+            'rto_delivered': { icon: '↩️', label: 'Returned to Sender', labelAr: 'تم الإرجاع للمرسل', cls: 'status-failed' },
             'returned': { icon: '↩️', label: 'Returned', labelAr: 'تم الإرجاع', cls: 'status-failed' },
             'failed': { icon: '❌', label: 'Delivery Failed', labelAr: 'فشل التوصيل', cls: 'status-failed' },
         };
