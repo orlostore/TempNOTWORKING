@@ -273,9 +273,9 @@
 
         .order-tracking-panel {
             display: none;
-            background: #f0f7ff;
-            border-top: 1px solid #d6e8f7;
-            border-bottom: 1px solid #d6e8f7;
+            background: #fff;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
             padding: 14px 20px;
             font-size: 0.78rem;
             line-height: 1.7;
@@ -1513,7 +1513,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                     <div class="order-footer">
                                         <div>
                                             <button class="cancel-order-btn" onclick="cancelOrder('${order.id}', this)">Cancel Order <span class="arabic-part" style="font-family:'Almarai',Arial,sans-serif;">| إلغاء الطلب</span></button>
-                                            <div class="cancel-timer" id="timer-${order.id.slice(-8)}">${remainMin} min left to cancel <span style="font-family:'Almarai',Arial,sans-serif;direction:rtl;">| ${remainMin} دقيقة متبقية</span></div>
                                         </div>
                                         <span></span>
                                     </div>`;
@@ -1577,14 +1576,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                 const withinWindow = shippedAt ? (Date.now() - shippedAt < fiveDaysMs) : true;
 
                                 if (withinWindow) {
-                                    const daysLeft = shippedAt ? Math.ceil((fiveDaysMs - (Date.now() - shippedAt)) / (24 * 60 * 60 * 1000)) : '?';
                                     footerHtml += `
                                         <div class="order-footer">
                                             <div>
                                                 <button class="return-request-btn" onclick="openReturnModal('${order.id}')">
                                                     Request Return | طلب إرجاع
                                                 </button>
-                                                <div class="cancel-timer">${daysLeft} day${daysLeft !== 1 ? 's' : ''} left to request return <span style="font-family:'Almarai',Arial,sans-serif;direction:rtl;">| ${daysLeft} يوم متبقي للإرجاع</span></div>
                                             </div>
                                             <span></span>
                                         </div>`;
