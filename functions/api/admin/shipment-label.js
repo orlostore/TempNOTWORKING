@@ -88,6 +88,24 @@ export async function onRequestGet(context) {
                 }, { status: 502 });
             }
 
+            // Check if response is raw base64-encoded PDF (starts with JVBER = %PDF in base64)
+            const trimmed = body.trim();
+            if (trimmed.startsWith('JVBER') || trimmed.match(/^[A-Za-z0-9+/=\s]+$/) && trimmed.length > 100) {
+                try {
+                    const clean = trimmed.replace(/\s/g, '');
+                    const binary = Uint8Array.from(atob(clean), c => c.charCodeAt(0));
+                    return new Response(binary, {
+                        status: 200,
+                        headers: {
+                            'Content-Type': 'application/pdf',
+                            'Content-Disposition': `inline; filename="AWB-${zajelRef}.pdf"`,
+                        },
+                    });
+                } catch (e) {
+                    // Not valid base64, fall through
+                }
+            }
+
             // Fallback: treat as raw PDF bytes (some APIs don't set content-type correctly)
             const fallbackBuf = new TextEncoder().encode(body);
             // Quick check: PDF files start with %PDF
