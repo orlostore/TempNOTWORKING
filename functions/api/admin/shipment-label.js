@@ -39,11 +39,10 @@ export async function onRequestGet(context) {
         }
 
         // Call Zajel GetShipmentLabel API — returns PDF binary
-        const size = url.searchParams.get('size') || 'standard';
         const result = await zajelApi(env, {
             method: 'GET',
             endpoint: '/api/Merchant/GetShipmentLabel',
-            params: { reference_number: zajelRef, size },
+            params: { reference_number: zajelRef },
         });
 
         if (result.ok && result.response) {
