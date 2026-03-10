@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order — ORLO Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            max-width: 480px;
+            width: 100%;
+            padding: 40px 32px;
+            text-align: center;
+        }
+        .logo { font-size: 28px; font-weight: 700; color: #2c4a5c; margin-bottom: 8px; }
+        .subtitle { font-size: 14px; color: #888; margin-bottom: 32px; }
+        .status-icon { font-size: 56px; margin-bottom: 16px; }
+        .status-label { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .status-date { font-size: 13px; color: #888; margin-bottom: 24px; }
+        .awb-number { font-size: 13px; color: #aaa; margin-bottom: 24px; font-family: monospace; }
+        .info-box {
+            background: #f0f7ff; border-radius: 10px; padding: 16px; margin-bottom: 20px; text-align: left;
+        }
+        .info-box p { font-size: 13px; color: #555; margin-bottom: 4px; }
+        .info-box .ar { direction: rtl; text-align: right; font-family: 'Almarai', sans-serif; color: #888; }
+        .loading { color: #888; font-size: 15px; }
+        .error { color: #d32f2f; font-size: 14px; margin-bottom: 16px; }
+        .back-link { display: inline-block; margin-top: 20px; color: #2c4a5c; text-decoration: none; font-size: 13px; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+        .status-pending { color: #e67e22; }
+        .status-transit { color: #0077b6; }
+        .status-delivered { color: #28a745; }
+        .status-failed { color: #d32f2f; }
+
+        /* Verify form */
+        .verify-form { text-align: left; margin-bottom: 8px; }
+        .verify-form label { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .verify-form input {
+            width: 100%; padding: 12px 14px; border: 1.5px solid #ddd; border-radius: 10px;
+            font-size: 14px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s;
+        }
+        .verify-form input:focus { border-color: #0077b6; }
+        .verify-btn {
+            display: block; width: 100%; margin-top: 16px; padding: 13px;
+            background: #0077b6; color: #fff; border: none; border-radius: 10px;
+            font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;
+        }
+        .verify-btn:hover { background: #005f8f; }
+        .verify-btn:disabled { background: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">ORLO</div>
+        <div class="subtitle">Shipment Tracking | تتبع الشحنة</div>
+
+        <div id="content"></div>
+
+        <a href="/" class="back-link">&larr; Back to ORLO Store</a>
+    </div>
+
+    <script>
+        const STATUS_MAP = {
+            'softdata_upload': { icon: '📦', label: 'Order Received', labelAr: 'تم استلام الطلب', cls: 'status-pending' },
+            'pickup_awaited': { icon: '📦', label: 'Awaiting Pickup', labelAr: 'بانتظار الاستلام', cls: 'status-pending' },
+            'picked_up': { icon: '🚛', label: 'Picked Up', labelAr: 'تم الاستلام', cls: 'status-transit' },
+            'in_transit': { icon: '🚚', label: 'In Transit', labelAr: 'في الطريق', cls: 'status-transit' },
+            'out_for_delivery': { icon: '🛵', label: 'Out for Delivery', labelAr: 'خرج للتوصيل', cls: 'status-transit' },
+            'delivered': { icon: '✅', label: 'Delivered', labelAr: 'تم التوصيل', cls: 'status-delivered' },
+            'returned': { icon: '↩️', label: 'Returned', labelAr: 'تم الإرجاع', cls: 'status-failed' },
+            'failed': { icon: '❌', label: 'Delivery Failed', labelAr: 'فشل التوصيل', cls: 'status-failed' },
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const awb = params.get('awb');
+        const emailParam = params.get('email');
+        const el = document.getElementById('content');
+
+        function showVerifyForm(prefillEmail) {
+            el.innerHTML = `
+                <div class="verify-form">
+                    <label>Email Address | البريد الإلكتروني</label>
+                    <input type="email" id="verifyEmail" placeholder="Enter your order email" value="${prefillEmail || ''}">
+                </div>
+                <button class="verify-btn" id="verifyBtn">Track Shipment | تتبع الشحنة</button>
+                <div id="verifyError" class="error" style="margin-top:12px;display:none;"></div>
+            `;
+            document.getElementById('verifyBtn').onclick = () => doTrack();
+            document.getElementById('verifyEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doTrack(); });
+        }
+
+        async function doTrack() {
+            const email = document.getElementById('verifyEmail').value.trim();
+            const errEl = document.getElementById('verifyError');
+            const btn = document.getElementById('verifyBtn');
+
+            if (!email) {
+                errEl.textContent = 'Please enter your email address.';
+                errEl.style.display = '';
+                return;
+            }
+            errEl.style.display = 'none';
+            btn.disabled = true;
+            btn.textContent = 'Loading...';
+
+            try {
+                const res = await fetch(`/api/track?awb=${encodeURIComponent(awb)}&email=${encodeURIComponent(email)}`);
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    errEl.textContent = data.error || 'Shipment not found';
+                    errEl.style.display = '';
+                    btn.disabled = false;
+                    btn.textContent = 'Track Shipment | تتبع الشحنة';
+                    return;
+                }
+
+                showResult(data);
+            } catch (err) {
+                errEl.textContent = 'Unable to load tracking. Please try again.';
+                errEl.style.display = '';
+                btn.disabled = false;
+                btn.textContent = 'Track Shipment | تتبع الشحنة';
+            }
+        }
+
+        function showResult(data) {
+            const statusKey = (data.status || '').toLowerCase().replace(/\s+/g, '_');
+            const mapped = STATUS_MAP[statusKey] || { icon: '📦', label: data.status || 'Processing', labelAr: 'قيد المعالجة', cls: 'status-pending' };
+
+            let dateStr = '';
+            if (data.status_date) {
+                try { dateStr = new Date(data.status_date).toLocaleString('en-AE', { dateStyle: 'medium', timeStyle: 'short' }); }
+                catch { dateStr = data.status_date; }
+            }
+
+            el.innerHTML = `
+                <div class="status-icon">${mapped.icon}</div>
+                <div class="status-label ${mapped.cls}">${mapped.label}</div>
+                <div class="status-label ${mapped.cls}" style="font-size:16px;font-family:'Almarai',sans-serif;margin-bottom:8px;">${mapped.labelAr}</div>
+                ${dateStr ? `<div class="status-date">Updated: ${dateStr}</div>` : ''}
+                <div class="awb-number">AWB: ${data.awb}</div>
+                <div class="info-box">
+                    <p>Your shipment is being handled by <strong>Zajel</strong>.</p>
+                    <p class="ar">يتم التعامل مع شحنتك عبر <strong>زاجل</strong>.</p>
+                </div>
+            `;
+        }
+
+        // Init
+        if (!awb) {
+            el.innerHTML = '<div class="error">No tracking number provided.</div>';
+        } else if (emailParam) {
+            // Email provided in URL (from email link) — auto-track
+            el.innerHTML = '<div class="loading">Loading tracking info...</div>';
+            fetch(`/api/track?awb=${encodeURIComponent(awb)}&email=${encodeURIComponent(emailParam)}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) showResult(data);
+                    else showVerifyForm(emailParam);
+                })
+                .catch(() => showVerifyForm(emailParam));
+        } else {
+            // No email in URL — show verify form
+            showVerifyForm('');
+        }
+    </script>
+</body>
+</html>
