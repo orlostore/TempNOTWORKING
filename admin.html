@@ -1479,9 +1479,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <select id="dateFilter" onchange="applyFilters()">
                         <option value="today">Today</option>
                         <option value="week">This Week</option>
-                        <option value="month" selected>This Month</option>
+                        <option value="month">This Month</option>
                         <option value="year">This Year</option>
-                        <option value="all">All Time</option>
+                        <option value="all" selected>All Time</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -3129,7 +3129,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // ========== ORDERS FUNCTIONS ==========
         let orders = [];
         let filteredOrders = [];
-        let shippedOrders = JSON.parse(localStorage.getItem('orlo_shipped_orders') || '[]');
+        // Shipped status is now tracked server-side in D1 — no localStorage needed
         
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -3266,12 +3266,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 }
                 
                 orders = data.orders || [];
-
-                // Apply local shipped status
-                orders = orders.map(order => ({
-                    ...order,
-                    status: shippedOrders.includes(order.id) ? 'shipped' : order.status
-                }));
 
                 // Populate product filter
                 populateProductFilter();
@@ -3649,7 +3643,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             // Use full orders array (not filtered) for dashboard counts
             const pendingCount = orders.filter(o => o.status === 'pending').length;
             const returnCount = orders.filter(o => o.return_request && o.return_request.status === 'requested').length;
-            const cancelledCount = orders.filter(o => o.status === 'cancelled').length;
+            // Only count cancellations from the last 7 days so the card acts as an alert, not a permanent counter
+            const sevenDaysAgo = Date.now() / 1000 - 7 * 24 * 60 * 60;
+            const cancelledCount = orders.filter(o => o.status === 'cancelled' && o.created > sevenDaysAgo).length;
 
             const alertEl = document.getElementById('dashboardAlerts');
             alertEl.style.display = 'flex';
@@ -3842,11 +3838,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         const data = await response.json();
 
         if (data.success) {
-            if (!shippedOrders.includes(orderId)) {
-                shippedOrders.push(orderId);
-                localStorage.setItem('orlo_shipped_orders', JSON.stringify(shippedOrders));
-            }
-
             // Update order with shipment data
             orders = orders.map(o => {
                 if (o.id !== orderId) return o;
@@ -3861,6 +3852,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 return updated;
             });
             applyFilters();
+            updateDashboardAlerts();
 
             let msg = 'Shipped!';
             if (data.zajel_reference) msg += ' AWB: ' + data.zajel_reference;
@@ -4025,6 +4017,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 if (data.success) {
                     orders = orders.map(o => o.id === orderId ? {...o, status: 'cancelled'} : o);
                     applyFilters();
+                    updateDashboardAlerts();
 
                     let msg = 'Order cancelled.';
                     if (data.refund) msg += ' Refund issued.';
@@ -4075,6 +4068,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         return o;
                     });
                     applyFilters();
+                    updateDashboardAlerts();
 
                     let msg = actionLabels[action] + ' done.';
                     if (data.refund) msg += ' Refund issued.';
@@ -4158,10 +4152,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 const response = await adminFetch('/api/admin/orders?t=' + Date.now());
                 const data = await response.json();
                 if (data.error) { showToast('Analytics load error: ' + data.error, 'error'); return; }
-                analyticsOrders = (data.orders || []).map(o => ({
-                    ...o,
-                    status: shippedOrders.includes(o.id) ? 'shipped' : o.status
-                }));
+                analyticsOrders = data.orders || [];
                 analyticsLoaded = true;
                 renderAnalytics();
             } catch (e) {
