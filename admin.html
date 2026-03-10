@@ -3419,8 +3419,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                         <button class="btn btn-small btn-outline" onclick="trackShipment('${order.id}')" style="font-size:0.75rem;padding:4px 10px;">
                                             🔍 Track
                                         </button>
-                                        <button class="btn btn-small btn-outline" onclick="printAWB('${order.id}')" style="font-size:0.75rem;padding:4px 10px;">
-                                            🏷️ AWB Label
+                                        <button class="btn btn-small btn-outline" onclick="printAWB('${order.id}', 'standard')" style="font-size:0.75rem;padding:4px 10px;">
+                                            🏷️ AWB Standard
+                                        </button>
+                                        <button class="btn btn-small btn-outline" onclick="printAWB('${order.id}', 'small')" style="font-size:0.75rem;padding:4px 10px;">
+                                            🏷️ AWB Small
                                         </button>
                                         ${order.shipment.zajel_status === 'pickup_awaited' || order.shipment.zajel_status === 'softdata_upload' ? `
                                             <button class="btn btn-small" onclick="cancelZajelShipment('${order.id}')" style="font-size:0.75rem;padding:4px 10px;background:#fff;color:#dc3545;border:1px solid #dc3545;">
@@ -3949,10 +3952,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         // ─── Zajel: Print AWB Label ──────────────────────────────
-        async function printAWB(orderId) {
+        async function printAWB(orderId, size) {
             try {
                 showToast('Loading AWB...', 'info');
-                const response = await adminFetch(`/api/admin/shipment-label?order_id=${orderId}`);
+                const response = await adminFetch(`/api/admin/shipment-label?order_id=${orderId}&size=${size || 'standard'}`);
                 if (!response.ok) {
                     const err = await response.json().catch(() => ({}));
                     throw new Error(err.error || `HTTP ${response.status}`);
