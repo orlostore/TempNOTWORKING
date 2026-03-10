@@ -65,11 +65,11 @@ export function resolveCity(cityInput) {
  * Make a request to the Zajel API
  */
 export async function zajelApi(env, { method = 'GET', endpoint, body, params }) {
-    const baseUrl = env.ZAJEL_API_BASE_URL || 'https://api-stg.zajel.com/services/integration';
+    const baseUrl = env.ZAJEL_API_BASE_URL;
     const apiKey = env.ZAJEL_API_KEY;
 
-    if (!apiKey) {
-        throw new Error('ZAJEL_API_KEY not configured');
+    if (!apiKey || !baseUrl) {
+        throw new Error('ZAJEL_API_KEY and ZAJEL_API_BASE_URL must be set in Cloudflare env vars');
     }
 
     let url = `${baseUrl}${endpoint}`;
@@ -140,10 +140,10 @@ export function createShipmentPayload(env, {
     codAmount = 0,
 }) {
     const customerCode = env.ZAJEL_CUSTOMER_CODE;
-    const serviceType = env.ZAJEL_SERVICE_TYPE || 'DDN';
+    const serviceType = env.ZAJEL_SERVICE_TYPE;
 
-    if (!customerCode) {
-        throw new Error('ZAJEL_CUSTOMER_CODE not configured');
+    if (!customerCode || !serviceType) {
+        throw new Error('ZAJEL_CUSTOMER_CODE and ZAJEL_SERVICE_TYPE must be set in Cloudflare env vars');
     }
 
     // Normalize phone to 971 format
@@ -165,14 +165,14 @@ export function createShipmentPayload(env, {
         cod_amount: String(codAmount || 0),
         origin: {
             name: env.ZAJEL_ORIGIN_NAME || 'ORLO Store',
-            phone: env.ZAJEL_ORIGIN_PHONE || '971555477206',
-            company_name: env.ZAJEL_ORIGIN_COMPANY || 'ORLO FOR ONLINE SELLING',
+            phone: env.ZAJEL_ORIGIN_PHONE,
+            company_name: env.ZAJEL_ORIGIN_COMPANY,
             address_line_1: env.ZAJEL_ORIGIN_ADDRESS1 || 'Dubai',
             address_line_2: env.ZAJEL_ORIGIN_ADDRESS2 || '',
             area: env.ZAJEL_ORIGIN_AREA || '',
             city: env.ZAJEL_ORIGIN_CITY || 'DXB',
             country: 'UAE',
-            email: env.ZAJEL_ORIGIN_EMAIL || 'info@orlostore.com',
+            email: env.ZAJEL_ORIGIN_EMAIL,
             latitude: '',
             longitude: '',
         },
