@@ -299,14 +299,49 @@
         .return-request-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .return-status-label {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.72rem;
+            font-family: 'Inter', 'Almarai', sans-serif;
+            font-size: 0.8rem;
             font-weight: 600;
+            cursor: pointer;
+        }
+        .return-status-label:hover { opacity: 0.8; }
+        .return-status-label .arabic-part {
+            font-family: 'Almarai', Arial, sans-serif;
+            direction: rtl;
+            display: inline;
         }
         .return-status-label.requested { color: #856404; }
         .return-status-label.approved { color: #155724; }
         .return-status-label.refunded { color: #004085; }
         .return-status-label.rejected { color: #721c24; }
+
+        .return-detail-panel {
+            display: none;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-top: 8px;
+            font-size: 0.78rem;
+            line-height: 1.6;
+            color: #333;
+        }
+        .return-detail-panel.open { display: block; }
+        .return-detail-panel .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0;
+        }
+        .return-detail-panel .detail-label { color: #666; font-weight: 500; }
+        .return-detail-panel .detail-value { font-weight: 600; }
+        .return-detail-panel .detail-ar {
+            font-family: 'Almarai', Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            color: #666;
+            margin-top: 6px;
+            font-size: 0.75rem;
+        }
 
         .order-status.return_requested { background: #fff3cd; color: #856404; }
         .order-status.return_approved { background: #d4edda; color: #155724; }
@@ -1396,8 +1431,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                 footerHtml = `
                                     <div class="order-footer">
                                         <div>
-                                            <button class="cancel-order-btn" onclick="cancelOrder('${order.id}', this)">Cancel Order</button>
-                                            <div class="cancel-timer" id="timer-${order.id.slice(-8)}">${remainMin} min left to cancel</div>
+                                            <button class="cancel-order-btn" onclick="cancelOrder('${order.id}', this)">Cancel Order <span class="arabic-part" style="font-family:'Almarai',Arial,sans-serif;">| إلغاء الطلب</span></button>
+                                            <div class="cancel-timer" id="timer-${order.id.slice(-8)}">${remainMin} min left to cancel <span style="font-family:'Almarai',Arial,sans-serif;direction:rtl;">| ${remainMin} دقيقة متبقية</span></div>
                                         </div>
                                         <span></span>
                                     </div>`;
@@ -1405,7 +1440,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         } else if (order.status === 'cancelled') {
                             footerHtml = `
                                 <div class="order-footer">
-                                    <span class="cancelled-label">Refund initiated — 5-7 business days</span>
+                                    <span class="cancelled-label">Refund initiated — 5-7 business days <span style="font-family:'Almarai',Arial,sans-serif;direction:rtl;">| تم بدء الاسترداد — ٥-٧ أيام عمل</span></span>
                                 </div>`;
                         }
 
@@ -1413,16 +1448,46 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         if (order.status === 'shipped') {
                             if (order.return_request) {
                                 const rs = order.return_request.status;
-                                const statusLabels = {
-                                    requested: 'Return Requested — under review | طلب إرجاع قيد المراجعة',
-                                    approved: 'Return Approved — please ship item back | تمت الموافقة — يرجى إرجاع المنتج',
-                                    refunded: 'Refund Processed — 5-7 business days | تم الاسترداد — ٥-٧ أيام عمل',
-                                    rejected: 'Return Request Declined | تم رفض طلب الإرجاع'
+                                const statusLabelsEn = {
+                                    requested: 'Return Requested — under review',
+                                    approved: 'Return Approved — please ship item back',
+                                    refunded: 'Refund Processed — 5-7 business days',
+                                    rejected: 'Return Request Declined'
+                                };
+                                const statusLabelsAr = {
+                                    requested: 'طلب إرجاع قيد المراجعة',
+                                    approved: 'تمت الموافقة — يرجى إرجاع المنتج',
+                                    refunded: 'تم الاسترداد — ٥-٧ أيام عمل',
+                                    rejected: 'تم رفض طلب الإرجاع'
+                                };
+                                const nextStepsEn = {
+                                    requested: 'We are reviewing your return request. You will receive an email once a decision is made.',
+                                    approved: 'Please ship the item back to us. Return shipping costs are the customer\'s responsibility.',
+                                    refunded: 'Your refund has been processed. It will appear on your card within 5-7 business days.',
+                                    rejected: 'Unfortunately your return request was not approved. Contact support if you have questions.'
+                                };
+                                const nextStepsAr = {
+                                    requested: 'نحن نراجع طلب الإرجاع. ستتلقى بريداً إلكترونياً عند اتخاذ القرار.',
+                                    approved: 'يرجى شحن المنتج إلينا. تكاليف شحن الإرجاع على العميل.',
+                                    refunded: 'تم معالجة الاسترداد. سيظهر المبلغ في حسابك خلال ٥-٧ أيام عمل.',
+                                    rejected: 'للأسف لم تتم الموافقة على طلب الإرجاع. تواصل مع الدعم إذا كان لديك أسئلة.'
                                 };
                                 const statusClass = rs === 'requested' ? 'requested' : rs === 'approved' ? 'approved' : rs === 'refunded' ? 'refunded' : 'rejected';
+                                const panelId = 'return-detail-' + order.id.slice(-8);
+                                const returnReason = order.return_request.reason || 'Not specified';
+                                const returnDate = order.return_request.created_at ? new Date(order.return_request.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
                                 footerHtml += `
-                                    <div class="order-footer">
-                                        <span class="return-status-label ${statusClass}">${statusLabels[rs] || rs}</span>
+                                    <div class="order-footer" style="flex-direction:column;align-items:flex-start;">
+                                        <span class="return-status-label ${statusClass}" onclick="document.getElementById('${panelId}').classList.toggle('open')" title="Click for details">
+                                            ${statusLabelsEn[rs] || rs} <span class="arabic-part">| ${statusLabelsAr[rs] || ''}</span> ▾
+                                        </span>
+                                        <div class="return-detail-panel" id="${panelId}">
+                                            <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value" style="text-transform:capitalize;">${rs}</span></div>
+                                            ${returnDate ? '<div class="detail-row"><span class="detail-label">Requested</span><span class="detail-value">' + returnDate + '</span></div>' : ''}
+                                            <div class="detail-row"><span class="detail-label">Reason</span><span class="detail-value">${returnReason}</span></div>
+                                            <div style="margin-top:8px;color:#444;"><strong>Next steps:</strong> ${nextStepsEn[rs] || ''}</div>
+                                            <div class="detail-ar">${nextStepsAr[rs] || ''}</div>
+                                        </div>
                                     </div>`;
                             } else {
                                 // Check 5-day return window
@@ -1438,7 +1503,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                                 <button class="return-request-btn" onclick="openReturnModal('${order.id}')">
                                                     Request Return | طلب إرجاع
                                                 </button>
-                                                <div class="cancel-timer">${daysLeft} day${daysLeft !== 1 ? 's' : ''} left to request return</div>
+                                                <div class="cancel-timer">${daysLeft} day${daysLeft !== 1 ? 's' : ''} left to request return <span style="font-family:'Almarai',Arial,sans-serif;direction:rtl;">| ${daysLeft} يوم متبقي للإرجاع</span></div>
                                             </div>
                                             <span></span>
                                         </div>`;
@@ -1466,7 +1531,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                         <span class="order-id">#${order.id.slice(-8).toUpperCase()}</span>
                                         <span class="order-date">${dateStr}</span>
                                     </div>
-                                    <span class="order-status ${order.status}">${order.status}</span>
+                                    <span class="order-status ${order.status}">${({pending:'Pending | قيد الانتظار',shipped:'Shipped | تم الشحن',delivered:'Delivered | تم التوصيل',cancelled:'Cancelled | ملغي',return_requested:'Return Requested | طلب إرجاع',return_approved:'Return Approved | تمت الموافقة',refunded:'Refunded | مسترد'})[order.status] || order.status}</span>
                                 </div>
                                 <div class="order-body">
                                     <div class="order-products">
@@ -1479,7 +1544,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                     </div>
                                     <div class="order-total">
                                         <span>Total</span>
-                                        <span>${order.status === 'cancelled' ? '<s style="color:#999">AED ' + (order.amount_total / 100).toFixed(2) + '</s> Refunded' : 'AED ' + (order.amount_total / 100).toFixed(2)}</span>
+                                        <span>${order.status === 'cancelled' ? '<s style="color:#999">AED ' + (order.amount_total / 100).toFixed(2) + '</s> Refunded <span style="font-family:\'Almarai\',Arial,sans-serif;direction:rtl;">| مسترد</span>' : 'AED ' + (order.amount_total / 100).toFixed(2)}</span>
                                     </div>
                                 </div>
                                 ${footerHtml}
