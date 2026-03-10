@@ -74,6 +74,7 @@ export function customerEmail({
         : '';
 
     return `
+        <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Almarai:wght@400;700&display=swap');</style>
         ${preheaderHtml}
         <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px; -webkit-text-size-adjust: 100%;">
             <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
@@ -124,6 +125,7 @@ export function adminEmail({
         : '';
 
     return `
+        <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Almarai:wght@400;700&display=swap');</style>
         ${preheaderHtml}
         <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px; -webkit-text-size-adjust: 100%;">
             <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">

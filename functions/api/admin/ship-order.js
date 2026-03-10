@@ -173,7 +173,7 @@ export async function onRequestPost(context) {
             if (zajelRef) {
                 const trackUrl = `${origin}/track?awb=${encodeURIComponent(zajelRef)}&email=${encodeURIComponent(custEmail)}`;
                 trackingHtml = `
-                <div style="background: #e8f4fd; border-radius: 10px; padding: 18px 20px; margin-bottom: 25px; border-left: 3px solid #0077b6; text-align: left;">
+                <div style="background: #ffffff; border-radius: 10px; padding: 18px 20px; margin-bottom: 25px; border-left: 3px solid #2c4a5c; text-align: left;">
                     <p style="margin: 0; font-size: 14px; color: #333;">
                         <strong>Tracking Number (AWB):</strong> ${zajelRef}
                     </p>
@@ -181,13 +181,13 @@ export async function onRequestPost(context) {
                         Shipped via <strong>Zajel</strong>
                     </p>
                     <p style="margin: 12px 0 0;">
-                        <a href="${trackUrl}" style="display:inline-block;background:#0077b6;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Track My Shipment</a>
+                        <a href="${trackUrl}" style="font-size:14px;color:#e07856;text-decoration:underline;font-weight:600;">Track My Shipment</a>
                     </p>
                     <p style="margin: 6px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">
                         رقم التتبع: ${zajelRef} — تم الشحن عبر <strong>زاجل</strong>
                     </p>
                     <p style="margin: 4px 0 0; direction: rtl; text-align: right;">
-                        <a href="${trackUrl}" style="font-size:13px;color:#0077b6;text-decoration:underline;">تتبع الشحنة</a>
+                        <a href="${trackUrl}" style="font-size:13px;color:#e07856;text-decoration:underline;">تتبع الشحنة</a>
                     </p>
                 </div>`;
             }
@@ -202,7 +202,7 @@ export async function onRequestPost(context) {
                 infoBoxAr: 'التوصيل المتوقع: ٢-٥ أيام عمل',
                 ctaUrl: zajelRef ? `${origin}/track?awb=${encodeURIComponent(zajelRef)}&email=${encodeURIComponent(custEmail)}` : `${origin}/account.html`,
                 ctaText: 'Track My Order | تتبع طلبي',
-                ctaColor: '#0077b6',
+                ctaColor: '#e07856',
                 extraHtml: trackingHtml + itemsTableHtml,
                 preheader: zajelRef
                     ? `Your order is on its way! Tracking: ${zajelRef}`
