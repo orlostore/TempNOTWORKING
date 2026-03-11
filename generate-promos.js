@@ -558,7 +558,7 @@ function getBadgesHTML(category) {
     ? `<div class="cta-badge"><div class="cta-badge-icon">🎨</div>Handmade<br><span style="font-family:'Almarai',sans-serif">صناعة يدوية</span></div>`
     : `<div class="cta-badge"><div class="cta-badge-icon">✅</div>Quality<br><span style="font-family:'Almarai',sans-serif">جودة عالية</span></div>`;
   return `
-      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق 75 درهم</span></div>
       <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Ships from UAE<br><span style="font-family:'Almarai',sans-serif">شحن من الإمارات</span></div>
       ${thirdBadge}`;
 }
@@ -1122,7 +1122,7 @@ ${sharedCSS}
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
-      <div class="cta-badge"><div class="cta-badge-icon">\uD83D\uDE9A</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">\u062A\u0648\u0635\u064A\u0644 \u0645\u062C\u0627\u0646\u064A</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">\uD83D\uDE9A</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">\u062A\u0648\u0635\u064A\u0644 \u0645\u062C\u0627\u0646\u064A \u0641\u0648\u0642 75 \u062F\u0631\u0647\u0645</span></div>
       <div class="cta-badge"><div class="cta-badge-icon">\uD83C\uDDE6\uD83C\uDDEA</div>Ships from UAE<br><span style="font-family:'Almarai',sans-serif">\u0634\u062D\u0646 \u0645\u0646 \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062A</span></div>
       <div class="cta-badge"><div class="cta-badge-icon">\uD83C\uDF81</div>Unique Gifts<br><span style="font-family:'Almarai',sans-serif">\u0647\u062F\u0627\u064A\u0627 \u0645\u0645\u064A\u0632\u0629</span></div>
     </div>
