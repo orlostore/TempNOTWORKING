@@ -761,6 +761,29 @@ function addToCart(id, event) {
         });
     }
 
+    // Meta Pixel: track AddToCart event
+    if (typeof fbq === 'function') {
+        fbq('track', 'AddToCart', {
+            content_ids: [String(product.id)],
+            content_name: product.name,
+            content_type: 'product',
+            value: product.price,
+            currency: 'AED'
+        });
+    }
+
+    // TikTok Pixel: track AddToCart event
+    if (typeof ttq !== 'undefined') {
+        ttq.track('AddToCart', {
+            content_id: String(product.id),
+            content_name: product.name,
+            content_type: 'product',
+            value: product.price,
+            currency: 'AED',
+            quantity: 1
+        });
+    }
+
     // Transform button to qty stepper
     const btn = event ? event.target.closest('.add-to-cart') : null;
     if (btn) {
@@ -1701,6 +1724,31 @@ async function checkout() {
                 currency: 'AED',
                 value: checkoutValue,
                 items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i._tierPrice || i.price, quantity: i.quantity }))
+            });
+        }
+
+        // Meta Pixel: track InitiateCheckout event
+        if (typeof fbq === 'function') {
+            const cartWithPricingFb = calculateTierPricing(cart);
+            const checkoutValueFb = cartWithPricingFb.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
+            fbq('track', 'InitiateCheckout', {
+                content_ids: cart.map(i => String(i.id)),
+                content_type: 'product',
+                num_items: cart.reduce((s, i) => s + i.quantity, 0),
+                value: checkoutValueFb,
+                currency: 'AED'
+            });
+        }
+
+        // TikTok Pixel: track InitiateCheckout event
+        if (typeof ttq !== 'undefined') {
+            const cartWithPricingTt = calculateTierPricing(cart);
+            const checkoutValueTt = cartWithPricingTt.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
+            ttq.track('InitiateCheckout', {
+                content_type: 'product',
+                value: checkoutValueTt,
+                currency: 'AED',
+                quantity: cart.reduce((s, i) => s + i.quantity, 0)
             });
         }
 
