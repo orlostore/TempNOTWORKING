@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ORLO – Dangling Buddies</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -100,7 +100,7 @@ html, body {
 .intro-ar {
   margin-top: 1.5vh;
   font-size: clamp(16px, 3.5vw, 24px); font-weight: 500;
-  color: #e07856; direction: rtl;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
   opacity: 0; transform: translateY(15px);
 }
 
@@ -118,7 +118,7 @@ html, body {
 }
 .parade-ar {
   font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
-  direction: rtl; margin-top: 0.5vh;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
   opacity: 0; transform: translateY(-15px);
 }
 
@@ -132,6 +132,7 @@ html, body {
   width: 100%; height: 100%; object-fit: contain;
   opacity: 0;
   filter: drop-shadow(0 8px 25px rgba(0,0,0,0.12));
+  background: #ffffff;
 }
 /* Swing animation — dangling effect */
 @keyframes swingIn {
@@ -167,7 +168,7 @@ html, body {
 }
 .char-label-ar {
   font-size: clamp(15px, 3.5vw, 22px); font-weight: 500; color: #e07856;
-  direction: rtl; margin-top: 0.3vh;
+  direction: rtl; margin-top: 0.3vh; font-family: 'Almarai', sans-serif;
 }
 
 .parade-price {
@@ -203,7 +204,7 @@ html, body {
 }
 .life-ar {
   font-size: clamp(14px, 3.2vw, 20px); font-weight: 500; color: #e07856;
-  direction: rtl; margin-top: 0.5vh;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
 }
 
 /* ─── Scene 4: CTA Outro ─── */
@@ -220,7 +221,7 @@ html, body {
 .cta-head span { color: #e07856; }
 .cta-head-ar {
   font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
-  color: rgba(44,74,92,0.6); direction: rtl; text-align: center;
+  color: rgba(44,74,92,0.6); direction: rtl; text-align: center; font-family: 'Almarai', sans-serif;
   margin-top: -1vh;
   opacity: 0; transform: translateY(20px);
 }
@@ -350,14 +351,14 @@ html, body {
     <div class="cta-head" id="ctaHead">Tiny Friends for<br>Your <span>Fridge</span></div>
     <div class="cta-head-ar" id="ctaHeadAr">أصدقاء صغار لثلاجتك</div>
     <div class="cta-box" id="ctaBox">
-      <div class="cta-price">16 <sub>AED / درهم</sub></div>
-      <div class="cta-tier">Buy 3, Save 10% &nbsp;|&nbsp; اشتري ٣ ووفّر ١٠٪</div>
+      <div class="cta-price">16 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-tier">Buy 3, Save 10% &nbsp;|&nbsp; <span style="font-family:'Almarai',sans-serif">اشتري ٣ ووفّر ١٠٪</span></div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
-      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery<br>توصيل مجاني</div>
-      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Ships from UAE<br>شحن من الإمارات</div>
-      <div class="cta-badge"><div class="cta-badge-icon">🎨</div>Handmade<br>صناعة يدوية</div>
+      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Ships from UAE<br><span style="font-family:'Almarai',sans-serif">شحن من الإمارات</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🎨</div>Handmade<br><span style="font-family:'Almarai',sans-serif">صناعة يدوية</span></div>
     </div>
   </div>
 </div>
