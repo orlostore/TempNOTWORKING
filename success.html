@@ -548,6 +548,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             }
         }
 
+        // Meta Pixel: track Purchase conversion — deduplicated with same key
+        if (sessionId && typeof fbq === 'function') {
+            var fbFiredKey = 'orlo_fb_purchase_fired_' + sessionId;
+            if (!sessionStorage.getItem(fbFiredKey)) {
+                var fbContentIds = cartData.map(function(item) { return String(item.id); });
+                var fbSubtotal = cartData.reduce(function(sum, item) { return sum + (item.price * (item.quantity || 1)); }, 0);
+                var fbDelivery = fbSubtotal >= 75 ? 0 : 18;
+                fbq('track', 'Purchase', {
+                    content_ids: fbContentIds,
+                    content_type: 'product',
+                    num_items: cartData.reduce(function(sum, item) { return sum + (item.quantity || 1); }, 0),
+                    value: fbSubtotal + fbDelivery,
+                    currency: 'AED'
+                });
+                sessionStorage.setItem(fbFiredKey, '1');
+            }
+        }
+
+        // TikTok Pixel: track PlaceAnOrder conversion — deduplicated with same key
+        if (sessionId && typeof ttq !== 'undefined') {
+            var ttFiredKey = 'orlo_tt_purchase_fired_' + sessionId;
+            if (!sessionStorage.getItem(ttFiredKey)) {
+                var ttSubtotal = cartData.reduce(function(sum, item) { return sum + (item.price * (item.quantity || 1)); }, 0);
+                var ttDelivery = ttSubtotal >= 75 ? 0 : 18;
+                ttq.track('PlaceAnOrder', {
+                    content_type: 'product',
+                    value: ttSubtotal + ttDelivery,
+                    currency: 'AED',
+                    quantity: cartData.reduce(function(sum, item) { return sum + (item.quantity || 1); }, 0)
+                });
+                sessionStorage.setItem(ttFiredKey, '1');
+            }
+        }
+
         // Render order summary from cart data
         if (cartData.length > 0) {
             var maxShow = 4;

@@ -370,6 +370,29 @@ async function initProductPage() {
     });
   }
 
+  // Meta Pixel: track ViewContent event
+  if (typeof fbq === 'function') {
+    fbq('track', 'ViewContent', {
+      content_ids: [String(product.id)],
+      content_name: product.name,
+      content_type: 'product',
+      content_category: product.category,
+      value: product.price,
+      currency: 'AED'
+    });
+  }
+
+  // TikTok Pixel: track ViewContent event
+  if (typeof ttq !== 'undefined') {
+    ttq.track('ViewContent', {
+      content_id: String(product.id),
+      content_name: product.name,
+      content_type: 'product',
+      value: product.price,
+      currency: 'AED'
+    });
+  }
+
   // Inject BreadcrumbList JSON-LD
   var breadcrumbLd = {
     '@context': 'https://schema.org',
@@ -903,6 +926,29 @@ async function initProductPage() {
             currency: 'AED',
             value: product.price,
             items: [{ item_id: product.id, item_name: product.name, price: product.price, quantity: 1, item_variant: hasVariants && sv ? sv.name : undefined }]
+        });
+    }
+
+    // Meta Pixel: track AddToCart event
+    if (typeof fbq === 'function') {
+        fbq('track', 'AddToCart', {
+            content_ids: [String(product.id)],
+            content_name: product.name,
+            content_type: 'product',
+            value: product.price,
+            currency: 'AED'
+        });
+    }
+
+    // TikTok Pixel: track AddToCart event
+    if (typeof ttq !== 'undefined') {
+        ttq.track('AddToCart', {
+            content_id: String(product.id),
+            content_name: product.name,
+            content_type: 'product',
+            value: product.price,
+            currency: 'AED',
+            quantity: 1
         });
     }
 
