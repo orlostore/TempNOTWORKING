@@ -16,7 +16,8 @@
             overflow-x: hidden;
             overflow-y: auto;
             width: 1080px;
-            min-height: 1920px;
+            height: 1080px;
+            min-height: 1080px;
             position: relative;
         }
 
@@ -51,15 +52,15 @@
         /* Scene 2 - Product Cards Cascade */
         .scene-products {
             background: #ffffff;
-            padding: 60px 40px;
+            padding: 40px 30px;
             justify-content: flex-start;
-            padding-top: 120px;
+            padding-top: 80px;
         }
         .scene-products .section-title {
-            font-size: 52px; font-weight: 800; text-align: center;
+            font-size: 42px; font-weight: 800; text-align: center;
             color: #2c4a5c;
             animation: fadeSlideDown 0.6s ease both;
-            margin-bottom: 60px;
+            margin-bottom: 30px;
         }
         .products-grid {
             display: grid; grid-template-columns: 1fr 1fr;
@@ -84,13 +85,13 @@
             text-decoration: none; color: inherit; display: block;
         }
         .product-card img {
-            width: 100%; height: 140px; object-fit: contain;
+            width: 100%; height: 110px; object-fit: contain;
             margin-bottom: 12px;
             filter: drop-shadow(0 10px 30px rgba(0,0,0,0.05));
         }
         .product-card .emoji-img {
-            font-size: 60px; display: block; height: 140px;
-            line-height: 140px;
+            font-size: 50px; display: block; height: 110px;
+            line-height: 110px;
         }
         .product-card .name {
             font-size: 22px; font-weight: 600; margin-bottom: 8px;
@@ -109,7 +110,7 @@
         /* Scene 3 - Hero Product Spotlight */
         .scene-spotlight {
             background: #ffffff;
-            padding: 80px 40px 120px;
+            padding: 40px 30px 60px;
             align-items: center; justify-content: center;
             overflow: hidden;
         }
@@ -155,8 +156,8 @@
         /* Scene 4 - Features / Benefits */
         .scene-features {
             background: #ffffff;
-            padding: 80px 60px;
-            justify-content: center; gap: 50px;
+            padding: 40px 40px;
+            justify-content: center; gap: 30px;
         }
         .feature-item {
             display: flex; align-items: center; gap: 30px;
@@ -280,7 +281,7 @@
 
         /* Mobile-friendly override for testing on regular screens */
         @media (max-width: 1080px) {
-            body { width: 100vw; min-height: 100dvh; height: auto; }
+            body { width: 100vw; height: 100vw; min-height: 100vw; max-height: 100vw; }
             .product-card img { height: 120px; }
             .spotlight-container img { width: 70vw; max-width: 280px; max-height: 40vh; height: auto; display: block; }
             .scene-products .section-title { font-size: 32px; }
@@ -383,7 +384,7 @@
 
 <script>
     const SCENE_COUNT = 5;
-    const SCENE_DURATION = 4000; // 4 seconds per scene
+    const SCENE_DURATION = 2500; // 2.5 seconds per scene
     let currentScene = 0;
     let autoPlayInterval = null;
     let isAutoPlaying = false;
