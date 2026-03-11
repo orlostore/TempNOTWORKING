@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ORLO – FlexiWrap Velcro Straps | TikTok</title>
+<title>ORLO – All Products</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <style>
 
@@ -23,6 +23,48 @@ html, body {
   position: relative; overflow: hidden;
   background: #ffffff;
 }
+
+/* ═══════════════════════════════════════════
+   MODE SELECTOR
+   ═══════════════════════════════════════════ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100;
+  background: #ffffff !important;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
+}
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -1vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
 
 .scene {
   position: absolute; inset: 0;
@@ -144,56 +186,61 @@ html, body {
 }
 
 
-/* ─── Scene 2: Product Showcase ─── */
-.scene-product { background: #ffffff !important; }
-.product-header {
+/* ─── Scene 2: Quick Product Parade ─── */
+.scene-parade { background: #ffffff !important; }
+.parade-header {
   position: absolute; top: 5vh;
   text-align: center; z-index: 5;
 }
-.product-header-en {
+.parade-en {
   font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
   opacity: 0; transform: translateY(-15px);
 }
-.product-header-ar {
+.parade-ar {
   font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
   direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
   opacity: 0; transform: translateY(-15px);
 }
 .product-stage {
   position: relative;
-  width: 65vw; height: 65vw; max-width: 400px; max-height: 400px;
+  width: 55vw; height: 55vw; max-width: 340px; max-height: 340px;
   margin-top: -2vh;
 }
-.product-img {
+.product-stage img {
+  position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: contain;
-  opacity: 0; transform: scale(0.75) translateY(20px);
-  mix-blend-mode: multiply;
+  opacity: 0; mix-blend-mode: multiply;
 }
-@keyframes productReveal {
-  0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
-  60%  { opacity: 1; transform: scale(1.03) translateY(-5px); }
+@keyframes quickIn {
+  0%   { opacity: 0; transform: scale(0.7) translateY(15px); }
+  50%  { opacity: 1; transform: scale(1.04) translateY(-3px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
-@keyframes productFloat {
-  0%, 100% { transform: translateY(-4px); }
-  50%      { transform: translateY(4px); }
+.product-stage img.show {
+  animation: quickIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
-.product-img.reveal {
-  animation: productReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.product-stage img.hide {
+  transition: all 0.25s ease-in;
+  opacity: 0; transform: scale(1.05) translateY(8px);
 }
-.product-img.float {
-  opacity: 1;
-  animation: productFloat 2.5s ease-in-out infinite;
+.item-label {
+  position: absolute; bottom: 14vh;
+  text-align: center; z-index: 5;
+  opacity: 0; transform: translateY(15px);
 }
-.product-price {
+.item-label-en { font-size: clamp(17px, 4.2vw, 28px); font-weight: 700; color: #2c4a5c; }
+.item-label-ar {
+  font-size: clamp(13px, 3vw, 20px); font-weight: 500; color: #e07856;
+  direction: rtl; margin-top: 0.3vh; font-family: 'Almarai', sans-serif;
+}
+.item-price {
   position: absolute; bottom: 7vh;
   background: #e07856; color: #fff;
-  padding: 1.5vh 6vw; border-radius: 50px;
-  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
+  padding: 1.2vh 5vw; border-radius: 50px;
+  font-size: clamp(14px, 3.5vw, 22px); font-weight: 800;
   box-shadow: 0 4px 20px rgba(224,120,86,0.4);
   opacity: 0; transform: scale(0.7);
 }
-
 </style>
 </head>
 <body>
@@ -202,51 +249,56 @@ html, body {
   <div class="progress-bar" id="progressBar"></div>
   <div class="dots" id="dots"></div>
 
+  <!-- ── Mode Selector ── -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">All <span>Products</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">♪</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">◎</span> Instagram
+      </button>
+    </div>
+  </div>
+
   <!-- Scene 1: Logo Intro -->
   <div class="scene scene-intro" id="scene1">
     <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
     <div class="intro-line" id="introLine"></div>
-    <div class="intro-en" id="introEn">Organize With Style</div>
-    <div class="intro-ar" id="introAr">نظّم بأناقة</div>
+    <div class="intro-en" id="introEn">Unique Finds, Delivered</div>
+    <div class="intro-ar" id="introAr">منتجات مميزة... توصلك لباب بيتك</div>
   </div>
 
-  <!-- Scene 2: Product Showcase -->
-  <div class="scene scene-product" id="scene2">
-    <div class="product-header">
-      <div class="product-header-en" id="headerEn">FlexiWrap Velcro Straps</div>
-      <div class="product-header-ar" id="headerAr">أشرطة فليكسي راب أسود</div>
+  <!-- Scene 2: Quick Product Parade -->
+  <div class="scene scene-parade" id="scene2">
+    <div class="parade-header">
+      <div class="parade-en" id="paradeEn">Our Collection</div>
+      <div class="parade-ar" id="paradeAr">مجموعتنا</div>
     </div>
-    <div class="product-stage">
-      <img class="product-img" id="productImg" src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap Velcro Straps">
+    <div class="product-stage" id="productStage"></div>
+    <div class="item-label" id="itemLabel">
+      <div class="item-label-en" id="itemLabelEn"></div>
+      <div class="item-label-ar" id="itemLabelAr"></div>
     </div>
-    <div class="product-price" id="productPrice">22 AED</div>
-  </div>
-
-  <!-- Scene 3: Lifestyle -->
-  <div class="scene scene-lifestyle" id="scene3">
-    <div class="lifestyle-frame" id="lifeFrame">
-      <img id="lifeImg" src="https://lh3.googleusercontent.com/d/1sBaS2Jzz52oBASRLgPv6PTRu7ymi6X0e" alt="FlexiWrap Velcro Straps">
-    </div>
-    <div class="life-label" id="lifeLabel">
-      <div class="life-en">Professional cable control</div>
-      <div class="life-ar">تحكّم احترافي بالكابلات</div>
-    </div>
+    <div class="item-price" id="itemPrice"></div>
   </div>
 
   <!-- Scene 4: CTA Outro -->
   <div class="scene scene-cta" id="scene4">
     <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
-    <div class="cta-head" id="ctaHead">Clean Look,<br>Zero <span>Mess</span></div>
-    <div class="cta-head-ar" id="ctaHeadAr">مظهر نظيف، بدون فوضى</div>
+    <div class="cta-head" id="ctaHead">Unique Finds for<br>Your <span>Home</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">منتجات فريدة لبيتك</div>
     <div class="cta-box" id="ctaBox">
-      <div class="cta-price">22 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-price" style="font-size:clamp(24px,6vw,40px);">Starting from 16 <sub>AED</sub></div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
-      
       <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني</span></div>
       <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Ships from UAE<br><span style="font-family:'Almarai',sans-serif">شحن من الإمارات</span></div>
-      <div class="cta-badge"><div class="cta-badge-icon">✅</div>Quality<br><span style="font-family:'Almarai',sans-serif">جودة عالية</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🎁</div>Unique Gifts<br><span style="font-family:'Almarai',sans-serif">هدايا مميزة</span></div>
     </div>
   </div>
 </div>
@@ -281,17 +333,42 @@ function createDots() {
 }
 
 
-// Preload images
+var T = {
+  tiktok: { intro: 1800, eachTime: 1200, cta: 2800 },
+  insta:  { intro: 2500, eachTime: 1600, cta: 3500 }
+};
+
+var ITEMS = [{"en":"Dangling Buddies","ar":"رفاق الثلاجة","price":16,"img":"https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj"},{"en":"Vintage Rotary Telephone","ar":"هاتف دوّار كلاسيكي","price":63,"img":"https://lh3.googleusercontent.com/d/1j7U1UnIqoWB5ceyd7sO_KXdqDn-YUhmD"},{"en":"Miniature Vintage Red TV","ar":"مجسم تلفزيون أحمر كلاسيكي","price":29,"img":"https://lh3.googleusercontent.com/d/1N1y_QydjwRI7iebdrL1ziRkQlIqJOJ7u"},{"en":"Vintage Upright Piano","ar":"بيانو مصغر أنتيك","price":29,"img":"https://lh3.googleusercontent.com/d/1qnGqruaDVnEBL9NwdfyghWw-FsphbfPg"},{"en":"Vintage Miniature Radio","ar":"راديو صغير كلاسيكي","price":27,"img":"https://lh3.googleusercontent.com/d/1fo5-3SD-z1vbGtwCr_PV4iRRdfayxJ3k"},{"en":"Miniature Vintage Gramophone","ar":"غرامافون مصغّر كلاسيكي","price":61,"img":"https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA"},{"en":"Dreamer Wall Hanging","ar":"لوحة أنتَ مميز المعلّقة","price":40,"img":"https://lh3.googleusercontent.com/d/1149qBolmVukonwQz_ne4tMfarNJcvsza"},{"en":"Vintage Rotary Phone","ar":"هاتف دوّار مصغّر","price":32,"img":"https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq"},{"en":"ProDesk Cable Kit","ar":"أدوات تنظيم الكابلات برو ديسك","price":62,"img":"https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl"},{"en":"FlexiWrap Velcro Straps","ar":"أشرطة فليكسي راب ملون","price":22,"img":"https://lh3.googleusercontent.com/d/1RNIMgIhDF2NBfM24NlsKuNF5RIHuM3jV"},{"en":"FlexiWrap Velcro Straps","ar":"أشرطة فليكسي راب أسود","price":22,"img":"https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG"},{"en":"SilkTie Cable Organizers","ar":"منظم كابلات سيلك تاي ملون","price":22,"img":"https://lh3.googleusercontent.com/d/14YlqqxameQDM_HzxIKwpQG4uYHmwv6ah"},{"en":"SilkTie Cable Organizers","ar":"منظم كابلات سيلك تاي أسود","price":24,"img":"https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ"}];
+
+// Build product images
+function buildStage() {
+  var stage = document.getElementById('productStage');
+  ITEMS.forEach(function(item, i) {
+    var img = document.createElement('img');
+    img.src = item.img;
+    img.alt = item.en;
+    img.id = 'pImg' + i;
+    stage.appendChild(img);
+  });
+}
+
+// Preload
 (function() {
-  var urls = ['https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG', 'https://lh3.googleusercontent.com/d/1sBaS2Jzz52oBASRLgPv6PTRu7ymi6X0e'];
-  urls.forEach(function(u) { var img = new Image(); img.src = u; });
+  ITEMS.forEach(function(item) { var img = new Image(); img.src = item.img; });
 })();
 
 // ═══════════════════════════════════════════
 // MAIN ANIMATION
 // ═══════════════════════════════════════════
-async function startPromo() {
-  var totalDuration = 10800;
+async function startPromo(mode) {
+  var t = T[mode];
+  var paradeTime = ITEMS.length * t.eachTime;
+  var totalDuration = t.intro + paradeTime + t.cta + 2000;
+
+  // Hide mode selector
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
   var bar = document.getElementById('progressBar');
   var startTime = Date.now();
   var progressTick = setInterval(function() {
@@ -313,40 +390,50 @@ async function startPromo() {
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await anim(document.getElementById('introAr'),
     { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(1800 - 1700);
+  await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
-  // ── SCENE 2 — Product Showcase ──
+  // ── SCENE 2 — Quick Product Parade ──
   var s2 = document.getElementById('scene2');
   await anim(s2, { opacity: '1' }, 300);
-  await anim(document.getElementById('headerEn'),
+  await anim(document.getElementById('paradeEn'),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  anim(document.getElementById('headerAr'),
+  anim(document.getElementById('paradeAr'),
     { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await wait(200);
 
-  var productImg = document.getElementById('productImg');
-  productImg.classList.add('reveal');
-  await wait(800);
-  productImg.classList.remove('reveal');
-  productImg.classList.add('float');
+  var itemLabel = document.getElementById('itemLabel');
+  var itemLabelEn = document.getElementById('itemLabelEn');
+  var itemLabelAr = document.getElementById('itemLabelAr');
+  var itemPrice = document.getElementById('itemPrice');
 
-  anim(document.getElementById('productPrice'),
-    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
-
-  await wait(2200 - 1300);
+  for (var i = 0; i < ITEMS.length; i++) {
+    var item = ITEMS[i];
+    var img = document.getElementById('pImg' + i);
+    itemLabelEn.textContent = item.en;
+    itemLabelAr.textContent = item.ar;
+    itemPrice.textContent = item.price + ' AED';
+    img.classList.add('show');
+    anim(itemLabel, { opacity: '1', transform: 'translateY(0)' }, 250, 'cubic-bezier(0.16, 1, 0.3, 1)');
+    anim(itemPrice, { opacity: '1', transform: 'scale(1)' }, 300, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+    await wait(t.eachTime - 400);
+    itemLabel.style.transition = 'all 150ms ease';
+    itemLabel.style.opacity = '0';
+    itemLabel.style.transform = 'translateY(15px)';
+    itemPrice.style.transition = 'all 150ms ease';
+    itemPrice.style.opacity = '0';
+    itemPrice.style.transform = 'scale(0.7)';
+    await wait(150);
+    if (i < ITEMS.length - 1) {
+      img.classList.remove('show');
+      img.classList.add('hide');
+      await wait(200);
+      img.classList.remove('hide');
+      img.style.opacity = '0';
+    }
+  }
+  await wait(300);
   await anim(s2, { opacity: '0' }, 400);
-
-  // ── SCENE 3 — Lifestyle ──
-  var s3 = document.getElementById('scene3');
-  await anim(s3, { opacity: '1' }, 300);
-  await anim(document.getElementById('lifeFrame'),
-    { opacity: '1', transform: 'scale(1)' }, 800, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(350);
-  await anim(document.getElementById('lifeLabel'),
-    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(2000 - 1750);
-  await anim(s3, { opacity: '0' }, 400);
 
   // ── SCENE 4 — CTA ──
   var s4 = document.getElementById('scene4');
@@ -370,7 +457,7 @@ async function startPromo() {
 }
 
 createDots();
-startPromo();
+buildStage();
 </script>
 </body>
 </html>
