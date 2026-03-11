@@ -12,7 +12,7 @@ html, body {
   width: 100vw; height: 100vh;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
-  background: #ffffff;
+  background: #ffffff !important;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
@@ -20,6 +20,7 @@ html, body {
 .canvas {
   width: 100vw; height: 100vh;
   position: relative; overflow: hidden;
+  background: #ffffff;
 }
 
 /* ═══════════════════════════════════════════
@@ -30,7 +31,7 @@ html, body {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 4vh; z-index: 100;
-  background: #ffffff;
+  background: #ffffff !important;
 }
 .mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
 .mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
@@ -77,7 +78,7 @@ html, body {
 
 /* ─── Scene 1: Logo Intro ─── */
 .scene-intro {
-  background: #ffffff;
+  background: #ffffff !important;
 }
 .intro-glow {
   width: 36vw; height: 36vw; max-width: 220px; max-height: 220px;
@@ -106,7 +107,7 @@ html, body {
 
 /* ─── Scene 2: Character Parade ─── */
 .scene-parade {
-  background: #ffffff;
+  background: #ffffff !important;
 }
 .parade-header {
   position: absolute; top: 5vh;
@@ -131,7 +132,6 @@ html, body {
   position: absolute; inset: 0;
   width: 100%; height: 100%; object-fit: contain;
   opacity: 0;
-  filter: drop-shadow(0 8px 25px rgba(0,0,0,0.12));
   mix-blend-mode: multiply;
 }
 /* Swing animation — dangling effect */
@@ -182,7 +182,7 @@ html, body {
 
 /* ─── Scene 3: Lifestyle ─── */
 .scene-lifestyle {
-  background: #ffffff;
+  background: #ffffff !important;
 }
 .lifestyle-frame {
   width: 88vw; max-width: 440px;
@@ -209,7 +209,7 @@ html, body {
 
 /* ─── Scene 4: CTA Outro ─── */
 .scene-cta {
-  background: #ffffff;
+  background: #ffffff !important;
   gap: 2.5vh;
 }
 .cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
