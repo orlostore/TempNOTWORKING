@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Dangling Buddies</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #0a0a0a;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.canvas {
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   MODE SELECTOR
+   ═══════════════════════════════════════════ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100;
+  background: linear-gradient(160deg, #1a1210 0%, #2a1a14 40%, #0a0a0a 100%);
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; filter: brightness(10); margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: rgba(255,255,255,0.7); letter-spacing: 0.4em; text-transform: uppercase;
+}
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #fff; text-align: center; line-height: 1.3; margin-top: -1vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
+
+/* ═══════════════════════════════════════════
+   SCENES (shared)
+   ═══════════════════════════════════════════ */
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  will-change: opacity, transform;
+}
+
+/* ─── Scene 1: Logo Intro ─── */
+.scene-intro {
+  background: linear-gradient(160deg, #1a1210 0%, #2a1a14 40%, #0a0a0a 100%);
+}
+.intro-glow {
+  width: 36vw; height: 36vw; max-width: 220px; max-height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224,120,86,0.25) 0%, transparent 70%);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5);
+}
+.intro-glow img { width: 65%; filter: brightness(10); }
+.intro-line {
+  width: 12vw; height: 2px; background: #e07856; margin-top: 3vh;
+  opacity: 0; transform: scaleX(0);
+}
+.intro-en {
+  margin-top: 2.5vh;
+  font-size: clamp(15px, 3.2vw, 22px); font-weight: 300;
+  color: rgba(255,255,255,0.9); letter-spacing: 0.35em; text-transform: uppercase;
+  opacity: 0; transform: translateY(15px);
+}
+.intro-ar {
+  margin-top: 1.5vh;
+  font-size: clamp(16px, 3.5vw, 24px); font-weight: 500;
+  color: #e07856; direction: rtl;
+  opacity: 0; transform: translateY(15px);
+}
+
+/* ─── Scene 2: Character Parade ─── */
+.scene-parade {
+  background: linear-gradient(180deg, #FDF8F0 0%, #F5EDE0 100%);
+}
+.parade-header {
+  position: absolute; top: 5vh;
+  text-align: center; z-index: 5;
+}
+.parade-en {
+  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
+}
+.parade-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
+  direction: rtl; margin-top: 0.5vh;
+  opacity: 0; transform: translateY(-15px);
+}
+
+.char-stage {
+  position: relative;
+  width: 60vw; height: 60vw; max-width: 380px; max-height: 380px;
+  margin-top: -2vh;
+}
+.char-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: contain;
+  opacity: 0;
+  filter: drop-shadow(0 8px 25px rgba(0,0,0,0.12));
+}
+/* Swing animation — dangling effect */
+@keyframes swingIn {
+  0%   { opacity: 0; transform: rotate(-12deg) translateY(-25px) scale(0.7); }
+  50%  { opacity: 1; transform: rotate(5deg) translateY(5px) scale(1.03); }
+  70%  { transform: rotate(-3deg) translateY(-2px) scale(1); }
+  85%  { transform: rotate(1.5deg) translateY(1px) scale(1); }
+  100% { opacity: 1; transform: rotate(0deg) translateY(0) scale(1); }
+}
+@keyframes swingIdle {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(1.5deg); }
+}
+.char-img.swing-in {
+  animation: swingIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.char-img.idle {
+  opacity: 1;
+  animation: swingIdle 2s ease-in-out infinite;
+}
+.char-img.exit-out {
+  transition: all 0.35s ease-in;
+  opacity: 0; transform: scale(1.08) translateY(10px);
+}
+
+.char-label {
+  position: absolute; bottom: 16vh;
+  text-align: center; z-index: 5;
+  opacity: 0; transform: translateY(15px);
+}
+.char-label-en {
+  font-size: clamp(20px, 5vw, 32px); font-weight: 700; color: #2c4a5c;
+}
+.char-label-ar {
+  font-size: clamp(15px, 3.5vw, 22px); font-weight: 500; color: #e07856;
+  direction: rtl; margin-top: 0.3vh;
+}
+
+.parade-price {
+  position: absolute; bottom: 7vh;
+  background: #e07856; color: #fff;
+  padding: 1.5vh 6vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
+  box-shadow: 0 4px 20px rgba(224,120,86,0.4);
+  opacity: 0; transform: scale(0.7);
+}
+
+/* ─── Scene 3: Lifestyle ─── */
+.scene-lifestyle {
+  background: linear-gradient(180deg, #FDF8F0 0%, #F0E8D8 100%);
+}
+.lifestyle-frame {
+  width: 88vw; max-width: 440px;
+  height: 55vh; max-height: 600px;
+  border-radius: 4vw;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(44,74,92,0.12), 0 0 0 1px rgba(44,74,92,0.06);
+  opacity: 0; transform: scale(0.88);
+}
+.lifestyle-frame img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.life-label {
+  margin-top: 4vh; text-align: center;
+  opacity: 0; transform: translateY(15px);
+}
+.life-en {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700; color: #2c4a5c;
+}
+.life-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 500; color: #e07856;
+  direction: rtl; margin-top: 0.5vh;
+}
+
+/* ─── Scene 4: CTA Outro ─── */
+.scene-cta {
+  background: linear-gradient(160deg, #1a1210 0%, #2a1a14 40%, #0a0a0a 100%);
+  gap: 2.5vh;
+}
+.cta-logo { width: 14vw; max-width: 80px; filter: brightness(10); opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #fff; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(255,255,255,0.7); direction: rtl; text-align: center;
+  margin-top: -1vh;
+  opacity: 0; transform: translateY(20px);
+}
+.cta-box {
+  background: rgba(224,120,86,0.12); border: 2px solid rgba(224,120,86,0.25);
+  border-radius: 4vw; padding: 3vh 8vw;
+  text-align: center;
+  opacity: 0; transform: scale(0.85);
+}
+.cta-price {
+  font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856;
+  line-height: 1;
+}
+.cta-price sub {
+  font-size: 0.4em; font-weight: 400; color: rgba(255,255,255,0.5);
+  vertical-align: baseline;
+}
+.cta-tier {
+  margin-top: 1vh;
+  font-size: clamp(13px, 3vw, 18px); font-weight: 600;
+  color: rgba(255,255,255,0.75);
+}
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+.cta-badges {
+  display: flex; gap: 5vw; opacity: 0;
+}
+.cta-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(10px, 2.5vw, 14px); color: rgba(255,255,255,0.6); font-weight: 500;
+}
+.cta-badge-icon {
+  width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
+  border-radius: 50%; background: rgba(224,120,86,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESS BAR
+   ═══════════════════════════════════════════ */
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+  z-index: 50;
+}
+
+/* ═══════════════════════════════════════════
+   FLOATING DOTS (decoration)
+   ═══════════════════════════════════════════ */
+.dots { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.dot {
+  position: absolute; border-radius: 50%;
+  background: rgba(224,120,86,0.25);
+  animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="dots" id="dots"></div>
+
+  <!-- ── Mode Selector ── -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">Dangling <span>Buddies</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">♪</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">◎</span> Instagram
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Scene 1: Logo Intro ── -->
+  <div class="scene scene-intro" id="scene1">
+    <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
+    <div class="intro-line" id="introLine"></div>
+    <div class="intro-en" id="introEn">Handmade With Love</div>
+    <div class="intro-ar" id="introAr">صُنعت يدوياً... بكل حب</div>
+  </div>
+
+  <!-- ── Scene 2: Character Parade ── -->
+  <div class="scene scene-parade" id="scene2">
+    <div class="parade-header">
+      <div class="parade-en" id="paradeEn">Meet the Crew</div>
+      <div class="parade-ar" id="paradeAr">تعرّف على الطاقم</div>
+    </div>
+    <div class="char-stage" id="charStage"></div>
+    <div class="char-label" id="charLabel">
+      <div class="char-label-en" id="charLabelEn"></div>
+      <div class="char-label-ar" id="charLabelAr"></div>
+    </div>
+    <div class="parade-price" id="paradePrice">16 AED</div>
+  </div>
+
+  <!-- ── Scene 3: Lifestyle ── -->
+  <div class="scene scene-lifestyle" id="scene3">
+    <div class="lifestyle-frame" id="lifeFrame">
+      <!-- ★ REPLACE THIS URL with your uploaded Google Drive lifestyle image ★ -->
+      <img id="lifeImg" src="https://lh3.googleusercontent.com/d/15KZ5PJMQ0rcSbNXCSD7UopzRIWiEPpYY" alt="Dangling Buddies">
+    </div>
+    <div class="life-label" id="lifeLabel">
+      <div class="life-en">Your fridge, their new home</div>
+      <div class="life-ar">ثلاجتك... بيتهم الجديد</div>
+    </div>
+  </div>
+
+  <!-- ── Scene 4: CTA Outro ── -->
+  <div class="scene scene-cta" id="scene4">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Tiny Friends for<br>Your <span>Fridge</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">أصدقاء صغار لثلاجتك</div>
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-price">16 <sub>AED / درهم</sub></div>
+      <div class="cta-tier">Buy 3, Save 10% &nbsp;|&nbsp; اشتري ٣ ووفّر ١٠٪</div>
+    </div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-badges" id="ctaBadges">
+      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery<br>توصيل مجاني</div>
+      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Ships from UAE<br>شحن من الإمارات</div>
+      <div class="cta-badge"><div class="cta-badge-icon">🎨</div>Handmade<br>صناعة يدوية</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Characters (6 picked for variety) ──
+const CHARACTERS = [
+  { en: 'Watermelon',     ar: 'البطيخ',     img: 'https://lh3.googleusercontent.com/d/1ZjiAspl49X2Ln6Y_tPnkYIDzyLZNVsP5' },
+  { en: 'Grape',           ar: 'العنب',       img: 'https://lh3.googleusercontent.com/d/1qhQX0PXI9jsnaXDs3YIKOYq2vfUqfgkZ' },
+  { en: 'Mushroom',        ar: 'الفطر',       img: 'https://lh3.googleusercontent.com/d/1-oSW_5Fa15HRvKUTQyoBba9ki9XeDebk' },
+  { en: 'Strawberry',      ar: 'الفراولة',    img: 'https://lh3.googleusercontent.com/d/1no16D1IhGLnZSJtryh4BGjr2lvoNYlQb' },
+  { en: 'Farmer Woman',    ar: 'المزارعة',    img: 'https://lh3.googleusercontent.com/d/1jM4_XdzSm5Mrlu7X_in9FyZgLKgHVv8g' },
+  { en: 'Orange Pumpkin',  ar: 'اليقطين',     img: 'https://lh3.googleusercontent.com/d/1ZJBJXnubEcUYcUN0BfCfWAQB1E31awP5' },
+];
+
+// ── Timing configs ──
+const T = {
+  tiktok: { intro: 1800, charEach: 900,  lifestyle: 2000, cta: 2800 },
+  insta:  { intro: 2500, charEach: 1200, lifestyle: 2800, cta: 3500 },
+};
+
+// ── Helpers ──
+function anim(el, props, ms, ease = 'ease') {
+  return new Promise(resolve => {
+    el.style.transition = 'all ' + ms + 'ms ' + ease;
+    requestAnimationFrame(() => {
+      Object.assign(el.style, props);
+      setTimeout(resolve, ms);
+    });
+  });
+}
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── Create decorative dots ──
+function createDots() {
+  const c = document.getElementById('dots');
+  for (let i = 0; i < 20; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDuration = (5 + Math.random() * 7) + 's';
+    d.style.animationDelay = Math.random() * 12 + 's';
+    const size = 3 + Math.random() * 5;
+    d.style.width = size + 'px';
+    d.style.height = size + 'px';
+    c.appendChild(d);
+  }
+}
+
+// ── Preload all images ──
+function preloadImages() {
+  const urls = CHARACTERS.map(c => c.img);
+  urls.push(document.getElementById('lifeImg').src);
+  urls.forEach(u => { const img = new Image(); img.src = u; });
+}
+
+// ── Build character img elements ──
+function buildCharStage() {
+  const stage = document.getElementById('charStage');
+  CHARACTERS.forEach((c, i) => {
+    const img = document.createElement('img');
+    img.className = 'char-img';
+    img.src = c.img;
+    img.alt = c.en;
+    img.id = 'charImg' + i;
+    stage.appendChild(img);
+  });
+}
+
+// ═══════════════════════════════════════════
+// MAIN ANIMATION SEQUENCE
+// ═══════════════════════════════════════════
+async function startPromo(mode) {
+  const t = T[mode];
+
+  // Calculate total duration for progress bar
+  const charTotal = CHARACTERS.length * t.charEach;
+  const totalDuration = t.intro + charTotal + t.lifestyle + t.cta + 2000; // +2s buffer for transitions
+
+  // Hide mode selector
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  // Start progress bar
+  const bar = document.getElementById('progressBar');
+  const start = Date.now();
+  const progressTick = setInterval(() => {
+    const pct = Math.min(((Date.now() - start) / totalDuration) * 100, 100);
+    bar.style.width = pct + '%';
+    bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(progressTick);
+  }, 80);
+
+  // ────────────────────────────────────
+  // SCENE 1 — Logo Intro
+  // ────────────────────────────────────
+  const s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+
+  await anim(document.getElementById('introGlow'),
+    { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await anim(document.getElementById('introLine'),
+    { opacity: '1', transform: 'scaleX(1)' }, 400);
+
+  await wait(150);
+  await anim(document.getElementById('introEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  await anim(document.getElementById('introAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  await wait(t.intro - 1700);
+  await anim(s1, { opacity: '0' }, 400);
+
+  // ────────────────────────────────────
+  // SCENE 2 — Character Parade
+  // ────────────────────────────────────
+  const s2 = document.getElementById('scene2');
+  await anim(s2, { opacity: '1' }, 300);
+
+  // Header
+  await anim(document.getElementById('paradeEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('paradeAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  // Price tag (appears and stays)
+  await wait(200);
+  anim(document.getElementById('paradePrice'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  const charLabel = document.getElementById('charLabel');
+  const charLabelEn = document.getElementById('charLabelEn');
+  const charLabelAr = document.getElementById('charLabelAr');
+
+  for (let i = 0; i < CHARACTERS.length; i++) {
+    const c = CHARACTERS[i];
+    const img = document.getElementById('charImg' + i);
+
+    // Set label
+    charLabelEn.textContent = c.en;
+    charLabelAr.textContent = c.ar;
+
+    // Swing in character
+    img.classList.add('swing-in');
+
+    // Fade in label
+    await anim(charLabel,
+      { opacity: '1', transform: 'translateY(0)' }, 300, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+    // Hold
+    await wait(t.charEach - 600);
+
+    // Fade out label
+    charLabel.style.transition = 'all 200ms ease';
+    charLabel.style.opacity = '0';
+    charLabel.style.transform = 'translateY(15px)';
+    await wait(200);
+
+    // Exit character (except last)
+    if (i < CHARACTERS.length - 1) {
+      img.classList.remove('swing-in');
+      img.classList.add('exit-out');
+      await wait(250);
+      img.classList.remove('exit-out');
+      img.style.opacity = '0';
+    } else {
+      // Last character: gentle idle swing
+      img.classList.remove('swing-in');
+      img.classList.add('idle');
+      await wait(300);
+    }
+  }
+
+  await anim(s2, { opacity: '0' }, 400);
+
+  // ────────────────────────────────────
+  // SCENE 3 — Lifestyle
+  // ────────────────────────────────────
+  const s3 = document.getElementById('scene3');
+  await anim(s3, { opacity: '1' }, 300);
+
+  await anim(document.getElementById('lifeFrame'),
+    { opacity: '1', transform: 'scale(1)' }, 800, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  await wait(350);
+  await anim(document.getElementById('lifeLabel'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  await wait(t.lifestyle - 1750);
+  await anim(s3, { opacity: '0' }, 400);
+
+  // ────────────────────────────────────
+  // SCENE 4 — CTA Outro
+  // ────────────────────────────────────
+  const s4 = document.getElementById('scene4');
+  await anim(s4, { opacity: '1' }, 300);
+
+  await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
+
+  await anim(document.getElementById('ctaHead'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  await anim(document.getElementById('ctaHeadAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  await wait(150);
+  await anim(document.getElementById('ctaBox'),
+    { opacity: '1', transform: 'scale(1)' }, 550, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await wait(200);
+  await anim(document.getElementById('ctaUrl'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  await anim(document.getElementById('ctaBadges'), { opacity: '1' }, 500);
+
+  // Done
+  clearInterval(progressTick);
+  bar.style.width = '100%';
+  bar.style.transition = 'width 300ms linear';
+}
+
+// ── Init ──
+createDots();
+buildCharStage();
+preloadImages();
+</script>
+</body>
+</html>
