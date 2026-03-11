@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ORLO – Vintage Miniature Radio | TikTok</title>
+<title>ORLO – Miniature Vintage Gramophone</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <style>
 
@@ -23,6 +23,48 @@ html, body {
   position: relative; overflow: hidden;
   background: #ffffff;
 }
+
+/* ═══════════════════════════════════════════
+   MODE SELECTOR
+   ═══════════════════════════════════════════ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100;
+  background: #ffffff !important;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
+}
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -1vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
 
 .scene {
   position: absolute; inset: 0;
@@ -202,6 +244,21 @@ html, body {
   <div class="progress-bar" id="progressBar"></div>
   <div class="dots" id="dots"></div>
 
+  <!-- ── Mode Selector ── -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">Miniature Vintage <span>Gramophone</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">♪</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">◎</span> Instagram
+      </button>
+    </div>
+  </div>
+
   <!-- Scene 1: Logo Intro -->
   <div class="scene scene-intro" id="scene1">
     <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
@@ -213,33 +270,33 @@ html, body {
   <!-- Scene 2: Product Showcase -->
   <div class="scene scene-product" id="scene2">
     <div class="product-header">
-      <div class="product-header-en" id="headerEn">Vintage Miniature Radio</div>
-      <div class="product-header-ar" id="headerAr">راديو صغير كلاسيكي</div>
+      <div class="product-header-en" id="headerEn">Miniature Vintage Gramophone</div>
+      <div class="product-header-ar" id="headerAr">غرامافون مصغّر كلاسيكي</div>
     </div>
     <div class="product-stage">
-      <img class="product-img" id="productImg" src="https://lh3.googleusercontent.com/d/1fo5-3SD-z1vbGtwCr_PV4iRRdfayxJ3k" alt="Vintage Miniature Radio">
+      <img class="product-img" id="productImg" src="https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA" alt="Miniature Vintage Gramophone">
     </div>
-    <div class="product-price" id="productPrice">27 AED</div>
+    <div class="product-price" id="productPrice">61 AED</div>
   </div>
 
   <!-- Scene 3: Lifestyle -->
   <div class="scene scene-lifestyle" id="scene3">
     <div class="lifestyle-frame" id="lifeFrame">
-      <img id="lifeImg" src="https://lh3.googleusercontent.com/d/1jmbtn8jqYmIdv3joXdYJ3o9NhJIIn9GH" alt="Vintage Miniature Radio">
+      <img id="lifeImg" src="https://lh3.googleusercontent.com/d/1GK-0zparAlJTmJiC0YPQKvwhfTWrRo0u" alt="Miniature Vintage Gramophone">
     </div>
     <div class="life-label" id="lifeLabel">
-      <div class="life-en">Old-school charm, new favorite decor</div>
-      <div class="life-ar">سحر كلاسيكي، ديكور مفضّل جديد</div>
+      <div class="life-en">Elegant nostalgia for any room</div>
+      <div class="life-ar">حنين أنيق لأي غرفة</div>
     </div>
   </div>
 
   <!-- Scene 4: CTA Outro -->
   <div class="scene scene-cta" id="scene4">
     <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
-    <div class="cta-head" id="ctaHead">Tune Into<br><span>Nostalgia</span></div>
-    <div class="cta-head-ar" id="ctaHeadAr">موجة من الحنين</div>
+    <div class="cta-head" id="ctaHead">Music From<br>Another <span>Era</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">موسيقى من زمن آخر</div>
     <div class="cta-box" id="ctaBox">
-      <div class="cta-price">27 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-price">61 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
@@ -281,17 +338,28 @@ function createDots() {
 }
 
 
+var T = {
+  tiktok: { intro: 1800, product: 2200, lifestyle: 2000, cta: 2800 },
+  insta:  { intro: 2500, product: 3000, lifestyle: 2800, cta: 3500 }
+};
+
 // Preload images
 (function() {
-  var urls = ['https://lh3.googleusercontent.com/d/1fo5-3SD-z1vbGtwCr_PV4iRRdfayxJ3k', 'https://lh3.googleusercontent.com/d/1jmbtn8jqYmIdv3joXdYJ3o9NhJIIn9GH'];
+  var urls = ['https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA', 'https://lh3.googleusercontent.com/d/1GK-0zparAlJTmJiC0YPQKvwhfTWrRo0u'];
   urls.forEach(function(u) { var img = new Image(); img.src = u; });
 })();
 
 // ═══════════════════════════════════════════
 // MAIN ANIMATION
 // ═══════════════════════════════════════════
-async function startPromo() {
-  var totalDuration = 10800;
+async function startPromo(mode) {
+  var t = T[mode];
+  var totalDuration = t.intro + t.product + t.lifestyle + t.cta + 2000;
+
+  // Hide mode selector
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
   var bar = document.getElementById('progressBar');
   var startTime = Date.now();
   var progressTick = setInterval(function() {
@@ -313,7 +381,7 @@ async function startPromo() {
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await anim(document.getElementById('introAr'),
     { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(1800 - 1700);
+  await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
   // ── SCENE 2 — Product Showcase ──
@@ -334,7 +402,7 @@ async function startPromo() {
   anim(document.getElementById('productPrice'),
     { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
 
-  await wait(2200 - 1300);
+  await wait(t.product - 1300);
   await anim(s2, { opacity: '0' }, 400);
 
   // ── SCENE 3 — Lifestyle ──
@@ -345,7 +413,7 @@ async function startPromo() {
   await wait(350);
   await anim(document.getElementById('lifeLabel'),
     { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(2000 - 1750);
+  await wait(t.lifestyle - 1750);
   await anim(s3, { opacity: '0' }, 400);
 
   // ── SCENE 4 — CTA ──
@@ -370,7 +438,6 @@ async function startPromo() {
 }
 
 createDots();
-startPromo();
 </script>
 </body>
 </html>

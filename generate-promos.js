@@ -229,6 +229,48 @@ html, body {
   background: #ffffff;
 }
 
+/* ═══════════════════════════════════════════
+   MODE SELECTOR
+   ═══════════════════════════════════════════ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100;
+  background: #ffffff !important;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
+}
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -1vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
+
 .scene {
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
@@ -522,19 +564,15 @@ function getBadgesHTML(category) {
 }
 
 // ═══════════════════════════════════════════
-// GENERATE SINGLE PRODUCT HTML
+// GENERATE SINGLE PRODUCT HTML (with mode selector)
 // ═══════════════════════════════════════════
-function generateSingleProduct(p, mode) {
-  const t = TIMING[mode];
-  const modeLabel = mode === 'tiktok' ? 'TikTok' : 'Instagram';
-  const totalDuration = t.intro + t.product + t.lifestyle + t.cta + 2000;
-
+function generateSingleProduct(p) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ORLO – ${p.titleEn} | ${modeLabel}</title>
+<title>ORLO – ${p.titleEn}</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <style>
 ${sharedCSS}
@@ -546,6 +584,21 @@ ${singleProductCSS}
 <div class="canvas" id="canvas">
   <div class="progress-bar" id="progressBar"></div>
   <div class="dots" id="dots"></div>
+
+  <!-- ── Mode Selector ── -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">${p.titleEn.split(' ').slice(0, -1).join(' ')} <span>${p.titleEn.split(' ').slice(-1)[0]}</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">\u266A</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">\u25CE</span> Instagram
+      </button>
+    </div>
+  </div>
 
   <!-- Scene 1: Logo Intro -->
   <div class="scene scene-intro" id="scene1">
@@ -584,7 +637,7 @@ ${singleProductCSS}
     <div class="cta-head" id="ctaHead">${p.taglineEn}</div>
     <div class="cta-head-ar" id="ctaHeadAr">${p.taglineAr}</div>
     <div class="cta-box" id="ctaBox">
-      <div class="cta-price">${p.price} <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-price">${p.price} <sub>AED / <span style="font-family:'Almarai',sans-serif">\u062F\u0631\u0647\u0645</span></sub></div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
@@ -596,6 +649,11 @@ ${singleProductCSS}
 <script>
 ${sharedJS}
 
+var T = {
+  tiktok: { intro: 1800, product: 2200, lifestyle: 2000, cta: 2800 },
+  insta:  { intro: 2500, product: 3000, lifestyle: 2800, cta: 3500 }
+};
+
 // Preload images
 (function() {
   var urls = ['${p.mainImage}', '${p.lifestyleImage}'];
@@ -605,8 +663,14 @@ ${sharedJS}
 // ═══════════════════════════════════════════
 // MAIN ANIMATION
 // ═══════════════════════════════════════════
-async function startPromo() {
-  var totalDuration = ${totalDuration};
+async function startPromo(mode) {
+  var t = T[mode];
+  var totalDuration = t.intro + t.product + t.lifestyle + t.cta + 2000;
+
+  // Hide mode selector
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
   var bar = document.getElementById('progressBar');
   var startTime = Date.now();
   var progressTick = setInterval(function() {
@@ -628,7 +692,7 @@ async function startPromo() {
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await anim(document.getElementById('introAr'),
     { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(${t.intro} - 1700);
+  await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
   // ── SCENE 2 — Product Showcase ──
@@ -649,7 +713,7 @@ async function startPromo() {
   anim(document.getElementById('productPrice'),
     { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
 
-  await wait(${t.product} - 1300);
+  await wait(t.product - 1300);
   await anim(s2, { opacity: '0' }, 400);
 
   // ── SCENE 3 — Lifestyle ──
@@ -660,7 +724,7 @@ async function startPromo() {
   await wait(350);
   await anim(document.getElementById('lifeLabel'),
     { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(${t.lifestyle} - 1750);
+  await wait(t.lifestyle - 1750);
   await anim(s3, { opacity: '0' }, 400);
 
   // ── SCENE 4 — CTA ──
@@ -685,7 +749,6 @@ async function startPromo() {
 }
 
 createDots();
-startPromo();
 </script>
 </body>
 </html>`;
@@ -694,14 +757,9 @@ startPromo();
 // ═══════════════════════════════════════════
 // GENERATE VARIANT PARADE HTML
 // ═══════════════════════════════════════════
-function generateVariantProduct(p, mode) {
-  const t = TIMING[mode];
-  const modeLabel = mode === 'tiktok' ? 'TikTok' : 'Instagram';
-  const charTotal = p.variants.length * t.charEach;
-  const totalDuration = t.intro + charTotal + t.lifestyle + t.cta + 2000;
+function generateVariantProduct(p) {
   const headerEn = p.sceneHeader ? p.sceneHeader.en : p.titleEn;
   const headerAr = p.sceneHeader ? p.sceneHeader.ar : p.titleAr;
-
   const charsJSON = JSON.stringify(p.variants);
 
   return `<!DOCTYPE html>
@@ -709,7 +767,7 @@ function generateVariantProduct(p, mode) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ORLO – ${p.titleEn} | ${modeLabel}</title>
+<title>ORLO – ${p.titleEn}</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <style>
 ${sharedCSS}
@@ -721,6 +779,21 @@ ${variantParadeCSS}
 <div class="canvas" id="canvas">
   <div class="progress-bar" id="progressBar"></div>
   <div class="dots" id="dots"></div>
+
+  <!-- ── Mode Selector ── -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">${p.titleEn.split(' ').slice(0, -1).join(' ')} <span>${p.titleEn.split(' ').slice(-1)[0]}</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">\u266A</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">\u25CE</span> Instagram
+      </button>
+    </div>
+  </div>
 
   <!-- Scene 1: Logo Intro -->
   <div class="scene scene-intro" id="scene1">
@@ -761,7 +834,7 @@ ${variantParadeCSS}
     <div class="cta-head" id="ctaHead">${p.taglineEn}</div>
     <div class="cta-head-ar" id="ctaHeadAr">${p.taglineAr}</div>
     <div class="cta-box" id="ctaBox">
-      <div class="cta-price">${p.price} <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-price">${p.price} <sub>AED / <span style="font-family:'Almarai',sans-serif">\u062F\u0631\u0647\u0645</span></sub></div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
@@ -773,8 +846,12 @@ ${variantParadeCSS}
 <script>
 ${sharedJS}
 
+var T = {
+  tiktok: { intro: 1800, charEach: 900, lifestyle: 2000, cta: 2800 },
+  insta:  { intro: 2500, charEach: 1200, lifestyle: 2800, cta: 3500 }
+};
+
 var CHARS = ${charsJSON};
-var CHAR_EACH = ${t.charEach};
 
 // Build char img elements
 function buildCharStage() {
@@ -799,8 +876,15 @@ function buildCharStage() {
 // ═══════════════════════════════════════════
 // MAIN ANIMATION
 // ═══════════════════════════════════════════
-async function startPromo() {
-  var totalDuration = ${totalDuration};
+async function startPromo(mode) {
+  var t = T[mode];
+  var charTotal = CHARS.length * t.charEach;
+  var totalDuration = t.intro + charTotal + t.lifestyle + t.cta + 2000;
+
+  // Hide mode selector
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
   var bar = document.getElementById('progressBar');
   var startTime = Date.now();
   var progressTick = setInterval(function() {
@@ -822,7 +906,7 @@ async function startPromo() {
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await anim(document.getElementById('introAr'),
     { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(${t.intro} - 1700);
+  await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
   // ── SCENE 2 — Variant Parade ──
@@ -848,7 +932,7 @@ async function startPromo() {
     img.classList.add('swing-in');
     await anim(charLabel,
       { opacity: '1', transform: 'translateY(0)' }, 300, 'cubic-bezier(0.16, 1, 0.3, 1)');
-    await wait(CHAR_EACH - 600);
+    await wait(t.charEach - 600);
     charLabel.style.transition = 'all 200ms ease';
     charLabel.style.opacity = '0';
     charLabel.style.transform = 'translateY(15px)';
@@ -875,7 +959,7 @@ async function startPromo() {
   await wait(350);
   await anim(document.getElementById('lifeLabel'),
     { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(${t.lifestyle} - 1750);
+  await wait(t.lifestyle - 1750);
   await anim(s3, { opacity: '0' }, 400);
 
   // ── SCENE 4 — CTA ──
@@ -901,7 +985,6 @@ async function startPromo() {
 
 createDots();
 buildCharStage();
-startPromo();
 </script>
 </body>
 </html>`;
@@ -910,19 +993,13 @@ startPromo();
 // ═══════════════════════════════════════════
 // GENERATE ALL-PRODUCTS MEGA PAGE
 // ═══════════════════════════════════════════
-function generateAllProducts(mode) {
-  const t = TIMING[mode];
-  const modeLabel = mode === 'tiktok' ? 'TikTok' : 'Instagram';
-  const eachTime = mode === 'tiktok' ? 1200 : 1600;
+function generateAllProducts() {
   const allItems = [
-    // Include Dangling Buddies too
     { en: 'Dangling Buddies', ar: 'رفاق الثلاجة', price: 16, img: 'https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj' },
     ...products.map(function(p) {
       return { en: p.titleEn, ar: p.titleAr, price: p.price, img: p.mainImage };
     })
   ];
-  const paradeTime = allItems.length * eachTime;
-  const totalDuration = t.intro + paradeTime + t.cta + 2000;
   const itemsJSON = JSON.stringify(allItems);
 
   return `<!DOCTYPE html>
@@ -930,7 +1007,7 @@ function generateAllProducts(mode) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ORLO – All Products | ${modeLabel}</title>
+<title>ORLO – All Products</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <style>
 ${sharedCSS}
@@ -998,19 +1075,34 @@ ${sharedCSS}
   <div class="progress-bar" id="progressBar"></div>
   <div class="dots" id="dots"></div>
 
+  <!-- ── Mode Selector ── -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">All <span>Products</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">\u266A</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">\u25CE</span> Instagram
+      </button>
+    </div>
+  </div>
+
   <!-- Scene 1: Logo Intro -->
   <div class="scene scene-intro" id="scene1">
     <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
     <div class="intro-line" id="introLine"></div>
     <div class="intro-en" id="introEn">Unique Finds, Delivered</div>
-    <div class="intro-ar" id="introAr">منتجات مميزة... توصلك لباب بيتك</div>
+    <div class="intro-ar" id="introAr">\u0645\u0646\u062A\u062C\u0627\u062A \u0645\u0645\u064A\u0632\u0629... \u062A\u0648\u0635\u0644\u0643 \u0644\u0628\u0627\u0628 \u0628\u064A\u062A\u0643</div>
   </div>
 
   <!-- Scene 2: Quick Product Parade -->
   <div class="scene scene-parade" id="scene2">
     <div class="parade-header">
       <div class="parade-en" id="paradeEn">Our Collection</div>
-      <div class="parade-ar" id="paradeAr">مجموعتنا</div>
+      <div class="parade-ar" id="paradeAr">\u0645\u062C\u0645\u0648\u0639\u062A\u0646\u0627</div>
     </div>
     <div class="product-stage" id="productStage"></div>
     <div class="item-label" id="itemLabel">
@@ -1024,15 +1116,15 @@ ${sharedCSS}
   <div class="scene scene-cta" id="scene4">
     <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
     <div class="cta-head" id="ctaHead">Unique Finds for<br>Your <span>Home</span></div>
-    <div class="cta-head-ar" id="ctaHeadAr">منتجات فريدة لبيتك</div>
+    <div class="cta-head-ar" id="ctaHeadAr">\u0645\u0646\u062A\u062C\u0627\u062A \u0641\u0631\u064A\u062F\u0629 \u0644\u0628\u064A\u062A\u0643</div>
     <div class="cta-box" id="ctaBox">
       <div class="cta-price" style="font-size:clamp(24px,6vw,40px);">Starting from 16 <sub>AED</sub></div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
-      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني</span></div>
-      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Ships from UAE<br><span style="font-family:'Almarai',sans-serif">شحن من الإمارات</span></div>
-      <div class="cta-badge"><div class="cta-badge-icon">🎁</div>Unique Gifts<br><span style="font-family:'Almarai',sans-serif">هدايا مميزة</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">\uD83D\uDE9A</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">\u062A\u0648\u0635\u064A\u0644 \u0645\u062C\u0627\u0646\u064A</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">\uD83C\uDDE6\uD83C\uDDEA</div>Ships from UAE<br><span style="font-family:'Almarai',sans-serif">\u0634\u062D\u0646 \u0645\u0646 \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062A</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">\uD83C\uDF81</div>Unique Gifts<br><span style="font-family:'Almarai',sans-serif">\u0647\u062F\u0627\u064A\u0627 \u0645\u0645\u064A\u0632\u0629</span></div>
     </div>
   </div>
 </div>
@@ -1040,8 +1132,12 @@ ${sharedCSS}
 <script>
 ${sharedJS}
 
+var T = {
+  tiktok: { intro: 1800, eachTime: 1200, cta: 2800 },
+  insta:  { intro: 2500, eachTime: 1600, cta: 3500 }
+};
+
 var ITEMS = ${itemsJSON};
-var EACH_TIME = ${eachTime};
 
 // Build product images
 function buildStage() {
@@ -1063,8 +1159,15 @@ function buildStage() {
 // ═══════════════════════════════════════════
 // MAIN ANIMATION
 // ═══════════════════════════════════════════
-async function startPromo() {
-  var totalDuration = ${totalDuration};
+async function startPromo(mode) {
+  var t = T[mode];
+  var paradeTime = ITEMS.length * t.eachTime;
+  var totalDuration = t.intro + paradeTime + t.cta + 2000;
+
+  // Hide mode selector
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
   var bar = document.getElementById('progressBar');
   var startTime = Date.now();
   var progressTick = setInterval(function() {
@@ -1086,7 +1189,7 @@ async function startPromo() {
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await anim(document.getElementById('introAr'),
     { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(${t.intro} - 1700);
+  await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
   // ── SCENE 2 — Quick Product Parade ──
@@ -1112,7 +1215,7 @@ async function startPromo() {
     img.classList.add('show');
     anim(itemLabel, { opacity: '1', transform: 'translateY(0)' }, 250, 'cubic-bezier(0.16, 1, 0.3, 1)');
     anim(itemPrice, { opacity: '1', transform: 'scale(1)' }, 300, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
-    await wait(EACH_TIME - 400);
+    await wait(t.eachTime - 400);
     itemLabel.style.transition = 'all 150ms ease';
     itemLabel.style.opacity = '0';
     itemLabel.style.transform = 'translateY(15px)';
@@ -1154,7 +1257,6 @@ async function startPromo() {
 
 createDots();
 buildStage();
-startPromo();
 </script>
 </body>
 </html>`;
@@ -1165,24 +1267,21 @@ startPromo();
 // ═══════════════════════════════════════════
 let count = 0;
 
+// Single file per product (with mode selector inside)
 products.forEach(function(p) {
-  ['tiktok', 'insta'].forEach(function(mode) {
-    const filename = `promo-${p.fileSlug}-${mode}.html`;
-    const html = p.variants.length > 0
-      ? generateVariantProduct(p, mode)
-      : generateSingleProduct(p, mode);
-    fs.writeFileSync(filename, html);
-    count++;
-    console.log(`✓ ${filename}`);
-  });
-});
-
-// Mega pages
-['tiktok', 'insta'].forEach(function(mode) {
-  const filename = `promo-all-products-${mode}.html`;
-  fs.writeFileSync(filename, generateAllProducts(mode));
+  const filename = `promo-${p.fileSlug}.html`;
+  const html = p.variants.length > 0
+    ? generateVariantProduct(p)
+    : generateSingleProduct(p);
+  fs.writeFileSync(filename, html);
   count++;
-  console.log(`✓ ${filename}`);
+  console.log(`\u2713 ${filename}`);
 });
 
-console.log(`\n✅ Done! Generated ${count} promo files.`);
+// Single mega page (with mode selector inside)
+const megaFilename = 'promo-all-products.html';
+fs.writeFileSync(megaFilename, generateAllProducts());
+count++;
+console.log(`\u2713 ${megaFilename}`);
+
+console.log(`\n\u2705 Done! Generated ${count} promo files.`);
