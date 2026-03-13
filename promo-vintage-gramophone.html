@@ -10,8 +10,8 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
-  width: 100vw; height: 100vh;
-  overflow: hidden;
+  width: 100vw; min-height: 100vh;
+  overflow-x: hidden;
   font-family: 'Inter', sans-serif;
   background: #ffffff !important;
   -webkit-tap-highlight-color: transparent;
@@ -163,6 +163,36 @@ html, body {
   font-size: clamp(16px, 4vw, 24px);
 }
 
+/* ─── Caption Section ─── */
+.caption-section {
+  position: relative;
+  max-width: 500px; margin: 0 auto;
+  padding: 4vh 5vw 6vh;
+  display: flex; flex-direction: column; gap: 2.5vh;
+  z-index: 90;
+}
+.caption-card {
+  background: #f8f9fa; border: 1px solid #e2e8f0;
+  border-radius: 12px; padding: 16px; position: relative;
+}
+.caption-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #e07856; margin-bottom: 8px;
+}
+.caption-text {
+  font-size: 13px; line-height: 1.6; color: #2c4a5c;
+  white-space: pre-wrap; word-break: break-word;
+}
+.copy-btn {
+  position: absolute; top: 12px; right: 12px;
+  background: #e07856; color: #fff; border: none;
+  border-radius: 6px; padding: 5px 14px; cursor: pointer;
+  font-size: 12px; font-weight: 600; font-family: 'Inter', sans-serif;
+  transition: background 0.2s;
+}
+.copy-btn:hover { background: #c9614a; }
+.copy-btn.copied { background: #38a169; }
+
 /* ─── Progress Bar ─── */
 .progress-bar {
   position: absolute; bottom: 0; left: 0;
@@ -256,6 +286,35 @@ html, body {
       <button class="mode-btn btn-insta" onclick="startPromo('insta')">
         <span class="btn-icon">◎</span> Instagram
       </button>
+    </div>
+  </div>
+
+  <!-- ── Social Caption & Hashtags ── -->
+  <div class="caption-section" id="captionSection">
+    <div class="caption-card">
+      <div class="caption-label">Caption (EN)</div>
+      <div class="caption-text" id="captionEn">Music from another era. This handmade miniature vintage gramophone brings old-world charm to your shelf, desk, or living room. A tiny statement piece with big character.
+
+Handcrafted with care. Delivered to your door across the UAE.
+
+Shop now at orlostore.com</div>
+      <button class="copy-btn" onclick="copyText('captionEn')">Copy</button>
+    </div>
+
+    <div class="caption-card">
+      <div class="caption-label">Caption (AR)</div>
+      <div class="caption-text" dir="rtl" id="captionAr">موسيقى من زمن آخر. غرامافون مصغّر كلاسيكي مصنوع يدوياً، يضيف لمسة أنيقة لأي زاوية في بيتك.
+
+صناعة يدوية بعناية. توصيل لجميع أنحاء الإمارات.
+
+تسوّق الآن من orlostore.com</div>
+      <button class="copy-btn" onclick="copyText('captionAr')">Copy</button>
+    </div>
+
+    <div class="caption-card">
+      <div class="caption-label">Hashtags</div>
+      <div class="caption-text" id="captionHashtags">#orlostore #gramophone #vintagegramophone #miniaturegramophone #vintagedecor #retrohome #antiquevibes #oldworldcharm #classicstyle #handmadedecor #handcraftedgifts #homedecor #shelfdecorating #deskaccessories #roominspo #livingroomdecor #decorideas #uniquegifts #giftideasuae #shopuae #madeinuae #dubaihome #uaestore #dubai #dubailife #uaeshopping #mydubai #hometour #interiorinspo #aestheticdecor</div>
+      <button class="copy-btn" onclick="copyText('captionHashtags')">Copy</button>
     </div>
   </div>
 
@@ -438,6 +497,17 @@ async function startPromo(mode) {
 }
 
 createDots();
+
+function copyText(id) {
+  var el = document.getElementById(id);
+  var text = el.innerText;
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = el.parentElement.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
 </script>
 </body>
 </html>
