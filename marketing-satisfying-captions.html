@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORLO – Satisfying Videos: Captions & Hashtags</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f5f5f5;
+  color: #2c4a5c;
+  padding: 3vh 4vw;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 5vh;
+}
+.header img { height: 50px; margin-bottom: 1.5vh; }
+.header h1 {
+  font-size: clamp(22px, 4vw, 36px); font-weight: 800;
+  color: #2c4a5c;
+}
+.header h1 span { color: #e07856; }
+.header p {
+  font-size: clamp(14px, 2.5vw, 18px); color: #7a8f9c;
+  margin-top: 0.5vh;
+}
+
+.video-section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 4vh 4vw;
+  margin-bottom: 3vh;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+  border: 1px solid rgba(224,120,86,0.1);
+}
+
+.video-section h2 {
+  font-size: clamp(18px, 3.5vw, 26px); font-weight: 800;
+  color: #2c4a5c; margin-bottom: 0.5vh;
+  display: flex; align-items: center; gap: 10px;
+}
+.video-section h2 .badge {
+  font-size: 0.5em; font-weight: 700;
+  background: #e07856; color: #fff;
+  padding: 4px 12px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.video-section .file-ref {
+  font-size: clamp(11px, 2vw, 13px); color: #7a8f9c;
+  margin-bottom: 2.5vh; font-family: monospace;
+}
+
+.platform-tabs {
+  display: flex; gap: 10px; margin-bottom: 2vh;
+}
+.platform-tab {
+  padding: 8px 20px; border-radius: 20px;
+  font-size: clamp(12px, 2.5vw, 15px); font-weight: 700;
+  cursor: pointer; border: 2px solid transparent;
+  transition: all 0.2s;
+}
+.tab-tiktok { background: #1a1a1a; color: #fff; }
+.tab-insta { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743); color: #fff; }
+
+.caption-block {
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 2.5vh 3vw;
+  margin-bottom: 2vh;
+  position: relative;
+}
+.caption-block h3 {
+  font-size: clamp(13px, 2.5vw, 16px); font-weight: 700;
+  color: #e07856; text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 1vh;
+}
+.caption-block .lang-label {
+  font-size: clamp(10px, 2vw, 12px); font-weight: 600;
+  color: #7a8f9c; text-transform: uppercase;
+  letter-spacing: 0.1em; margin-bottom: 0.5vh; margin-top: 1.5vh;
+}
+.caption-block .lang-label:first-of-type { margin-top: 0; }
+
+.caption-text {
+  font-size: clamp(14px, 2.8vw, 17px);
+  color: #2c4a5c; line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.caption-text.ar {
+  font-family: 'Almarai', sans-serif;
+  direction: rtl; text-align: right;
+}
+
+.copy-btn {
+  position: absolute; top: 12px; right: 12px;
+  background: #e07856; color: #fff;
+  border: none; border-radius: 8px;
+  padding: 6px 14px; font-size: 12px; font-weight: 700;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+}
+.copy-btn:hover { background: #c96544; }
+.copy-btn.copied { background: #28a745; }
+
+.hashtags-block {
+  background: #f0f7fa;
+  border-radius: 12px;
+  padding: 2.5vh 3vw;
+  margin-bottom: 2vh;
+  position: relative;
+}
+.hashtags-block h3 {
+  font-size: clamp(13px, 2.5vw, 16px); font-weight: 700;
+  color: #2c4a5c; margin-bottom: 1vh;
+}
+.hashtag {
+  display: inline-block;
+  background: #e8f4f8;
+  color: #2c4a5c;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: clamp(11px, 2.2vw, 13px);
+  font-weight: 600;
+  margin: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.hashtag:hover {
+  background: #2c4a5c;
+  color: #fff;
+}
+.hashtag.brand {
+  background: rgba(224,120,86,0.12);
+  color: #e07856;
+}
+.hashtag.brand:hover {
+  background: #e07856;
+  color: #fff;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(224,120,86,0.15);
+  margin: 2.5vh 0;
+}
+
+.tip {
+  background: #fff8f0;
+  border-left: 4px solid #e07856;
+  border-radius: 0 8px 8px 0;
+  padding: 2vh 3vw;
+  font-size: clamp(12px, 2.5vw, 14px);
+  color: #7a5c42;
+  line-height: 1.5;
+}
+.tip strong { color: #e07856; }
+
+.master-hashtags {
+  background: #fff;
+  border-radius: 16px;
+  padding: 4vh 4vw;
+  margin-bottom: 3vh;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+  border: 1px solid rgba(224,120,86,0.1);
+}
+.master-hashtags h2 {
+  font-size: clamp(18px, 3.5vw, 26px); font-weight: 800;
+  color: #2c4a5c; margin-bottom: 2vh;
+}
+.hashtag-category {
+  margin-bottom: 2vh;
+}
+.hashtag-category h4 {
+  font-size: clamp(12px, 2.5vw, 15px); font-weight: 700;
+  color: #e07856; margin-bottom: 0.8vh;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="logo.png" alt="ORLO">
+  <h1>Satisfying Videos — <span>Captions & Hashtags</span></h1>
+  <p>Ready-to-copy social media captions for all 4 satisfying marketing videos</p>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- VIDEO 1: Desk Organization -->
+<!-- ═══════════════════════════════════════ -->
+<div class="video-section">
+  <h2>1. Desk Organization <span class="badge">Before / After</span></h2>
+  <div class="file-ref">marketing-satisfying-organize.html</div>
+
+  <div class="platform-tabs">
+    <div class="platform-tab tab-tiktok">TikTok</div>
+    <div class="platform-tab tab-insta">Instagram</div>
+  </div>
+
+  <div class="caption-block" id="cap1en">
+    <button class="copy-btn" onclick="copyCaption('cap1en')">Copy</button>
+    <div class="lang-label">English Caption</div>
+    <div class="caption-text">Before vs After with ORLO products is SO satisfying
+
+From cable chaos to clean desk in seconds. Which side are you on?
+
+Shop the full collection at orlostore.com
+Free delivery above AED 75 across UAE</div>
+  </div>
+
+  <div class="caption-block" id="cap1ar">
+    <button class="copy-btn" onclick="copyCaption('cap1ar')">Copy</button>
+    <div class="lang-label">Arabic Caption</div>
+    <div class="caption-text ar">قبل وبعد مع منتجات أورلو — مرضي جداً
+
+من فوضى الكابلات لمكتب نظيف في ثواني. أنت على أي جهة؟
+
+تسوّق المجموعة الكاملة على orlostore.com
+توصيل مجاني فوق 75 درهم في الإمارات</div>
+  </div>
+
+  <div class="caption-block" id="cap1mix">
+    <button class="copy-btn" onclick="copyCaption('cap1mix')">Copy</button>
+    <div class="lang-label">Mixed (EN + AR) — Best for UAE audience</div>
+    <div class="caption-text">Before vs After with ORLO is SO satisfying
+قبل وبعد مع أورلو — مرضي جداً
+
+From cable chaos to a clean desk in seconds
+من فوضى الكابلات لمكتب نظيف في ثواني
+
+Shop now at orlostore.com
+تسوّق الحين | توصيل مجاني فوق 75 درهم</div>
+  </div>
+
+  <div class="hashtags-block" id="hash1">
+    <button class="copy-btn" onclick="copyHashtags('hash1')">Copy All</button>
+    <h3>Hashtags</h3>
+    <span class="hashtag brand">#orlostore</span>
+    <span class="hashtag brand">#orlouae</span>
+    <span class="hashtag">#satisfying</span>
+    <span class="hashtag">#beforeandafter</span>
+    <span class="hashtag">#desksetup</span>
+    <span class="hashtag">#deskorganization</span>
+    <span class="hashtag">#cleandesk</span>
+    <span class="hashtag">#desktransformation</span>
+    <span class="hashtag">#cablemanagement</span>
+    <span class="hashtag">#oddlysatisfying</span>
+    <span class="hashtag">#workfromhome</span>
+    <span class="hashtag">#homeoffice</span>
+    <span class="hashtag">#dubai</span>
+    <span class="hashtag">#uae</span>
+    <span class="hashtag">#abudhabi</span>
+    <span class="hashtag">#تنظيم</span>
+    <span class="hashtag">#مكتب</span>
+    <span class="hashtag">#مرضي</span>
+    <span class="hashtag">#الامارات</span>
+    <span class="hashtag">#دبي</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- VIDEO 2: Cable Management -->
+<!-- ═══════════════════════════════════════ -->
+<div class="video-section">
+  <h2>2. Cable Management <span class="badge">Problem / Solution</span></h2>
+  <div class="file-ref">marketing-satisfying-cables.html</div>
+
+  <div class="platform-tabs">
+    <div class="platform-tab tab-tiktok">TikTok</div>
+    <div class="platform-tab tab-insta">Instagram</div>
+  </div>
+
+  <div class="caption-block" id="cap2en">
+    <button class="copy-btn" onclick="copyCaption('cap2en')">Copy</button>
+    <div class="lang-label">English Caption</div>
+    <div class="caption-text">Tangled cables? We've ALL been there.
+
+3 steps. That's it. FlexiWrap Velcro Straps fix the mess in seconds. One wrap = total control.
+
+AED 22 only at orlostore.com
+Free delivery above AED 75 across UAE</div>
+  </div>
+
+  <div class="caption-block" id="cap2ar">
+    <button class="copy-btn" onclick="copyCaption('cap2ar')">Copy</button>
+    <div class="lang-label">Arabic Caption</div>
+    <div class="caption-text ar">كابلات متشابكة؟ كلنا مرّينا بهالموقف
+
+3 خطوات بس. أشرطة فليكسي راب تحل المشكلة في ثواني. لفة واحدة = تحكّم كامل.
+
+بس 22 درهم على orlostore.com
+توصيل مجاني فوق 75 درهم في الإمارات</div>
+  </div>
+
+  <div class="caption-block" id="cap2mix">
+    <button class="copy-btn" onclick="copyCaption('cap2mix')">Copy</button>
+    <div class="lang-label">Mixed (EN + AR) — Best for UAE audience</div>
+    <div class="caption-text">Tangled cables? We've ALL been there
+كابلات متشابكة؟ كلنا مرّينا بهالموقف
+
+FlexiWrap fixes the mess in 3 easy steps
+لفة واحدة. تحكّم كامل.
+
+AED 22 only | orlostore.com
+توصيل مجاني فوق 75 درهم</div>
+  </div>
+
+  <div class="hashtags-block" id="hash2">
+    <button class="copy-btn" onclick="copyHashtags('hash2')">Copy All</button>
+    <h3>Hashtags</h3>
+    <span class="hashtag brand">#orlostore</span>
+    <span class="hashtag brand">#orlouae</span>
+    <span class="hashtag brand">#flexiwrap</span>
+    <span class="hashtag">#satisfying</span>
+    <span class="hashtag">#cablemanagement</span>
+    <span class="hashtag">#tangledcables</span>
+    <span class="hashtag">#cablesolution</span>
+    <span class="hashtag">#desksetup</span>
+    <span class="hashtag">#cleandesk</span>
+    <span class="hashtag">#lifehack</span>
+    <span class="hashtag">#oddlysatisfying</span>
+    <span class="hashtag">#problemsolved</span>
+    <span class="hashtag">#workfromhome</span>
+    <span class="hashtag">#gamingsetup</span>
+    <span class="hashtag">#dubai</span>
+    <span class="hashtag">#uae</span>
+    <span class="hashtag">#كابلات</span>
+    <span class="hashtag">#تنظيم_كابلات</span>
+    <span class="hashtag">#مرضي</span>
+    <span class="hashtag">#الامارات</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- VIDEO 3: Unboxing -->
+<!-- ═══════════════════════════════════════ -->
+<div class="video-section">
+  <h2>3. Unboxing <span class="badge">Reveal</span></h2>
+  <div class="file-ref">marketing-satisfying-unboxing.html</div>
+
+  <div class="platform-tabs">
+    <div class="platform-tab tab-tiktok">TikTok</div>
+    <div class="platform-tab tab-insta">Instagram</div>
+  </div>
+
+  <div class="caption-block" id="cap3en">
+    <button class="copy-btn" onclick="copyCaption('cap3en')">Copy</button>
+    <div class="lang-label">English Caption</div>
+    <div class="caption-text">Unboxing my ORLO haul and I'm obsessed
+
+FlexiWrap, SilkTie, ProDesk Kit, Dangling Buddies — everything you need to transform your desk. Starting from just AED 16!
+
+Shop yours at orlostore.com
+Free delivery above AED 75 across UAE</div>
+  </div>
+
+  <div class="caption-block" id="cap3ar">
+    <button class="copy-btn" onclick="copyCaption('cap3ar')">Copy</button>
+    <div class="lang-label">Arabic Caption</div>
+    <div class="caption-text ar">فتحت طلبي من أورلو وأنا مبسوط
+
+فليكسي راب، سيلك تاي، برو ديسك، أصدقاء معلّقين — كل شي تحتاجه لترتيب مكتبك. تبدأ من 16 درهم بس!
+
+تسوّق على orlostore.com
+توصيل مجاني فوق 75 درهم في الإمارات</div>
+  </div>
+
+  <div class="caption-block" id="cap3mix">
+    <button class="copy-btn" onclick="copyCaption('cap3mix')">Copy</button>
+    <div class="lang-label">Mixed (EN + AR) — Best for UAE audience</div>
+    <div class="caption-text">Unboxing my ORLO haul and I'm OBSESSED
+طلبي من أورلو وصل — شو بالداخل؟
+
+Everything you need for the perfect desk setup
+كل شي تحتاجه لترتيب مكتبك
+
+Starting from AED 16 | orlostore.com
+توصيل مجاني فوق 75 درهم</div>
+  </div>
+
+  <div class="hashtags-block" id="hash3">
+    <button class="copy-btn" onclick="copyHashtags('hash3')">Copy All</button>
+    <h3>Hashtags</h3>
+    <span class="hashtag brand">#orlostore</span>
+    <span class="hashtag brand">#orlouae</span>
+    <span class="hashtag">#satisfying</span>
+    <span class="hashtag">#unboxing</span>
+    <span class="hashtag">#unboxingvideo</span>
+    <span class="hashtag">#haul</span>
+    <span class="hashtag">#desksetup</span>
+    <span class="hashtag">#deskorganization</span>
+    <span class="hashtag">#cablemanagement</span>
+    <span class="hashtag">#newdesk</span>
+    <span class="hashtag">#deskaccessories</span>
+    <span class="hashtag">#oddlysatisfying</span>
+    <span class="hashtag">#workfromhome</span>
+    <span class="hashtag">#homeoffice</span>
+    <span class="hashtag">#dubai</span>
+    <span class="hashtag">#uae</span>
+    <span class="hashtag">#اورلو</span>
+    <span class="hashtag">#فتح_طلبية</span>
+    <span class="hashtag">#مرضي</span>
+    <span class="hashtag">#الامارات</span>
+    <span class="hashtag">#دبي</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- VIDEO 4: What Can I Do? -->
+<!-- ═══════════════════════════════════════ -->
+<div class="video-section">
+  <h2>4. What Can I Do? <span class="badge">Product Showcase</span></h2>
+  <div class="file-ref">marketing-satisfying-whatcanido.html</div>
+
+  <div class="platform-tabs">
+    <div class="platform-tab tab-tiktok">TikTok</div>
+    <div class="platform-tab tab-insta">Instagram</div>
+  </div>
+
+  <div class="caption-block" id="cap4en">
+    <button class="copy-btn" onclick="copyCaption('cap4en')">Copy</button>
+    <div class="lang-label">English Caption</div>
+    <div class="caption-text">Each ORLO product asked: "What can I do?"
+
+FlexiWrap bundles cables in one wrap. ProDesk Kit transforms any workspace. SilkTie holds tight with zero waste. Dangling Buddies add personality to your monitor.
+
+Together from just AED 16 at orlostore.com
+Free delivery above AED 75 across UAE</div>
+  </div>
+
+  <div class="caption-block" id="cap4ar">
+    <button class="copy-btn" onclick="copyCaption('cap4ar')">Copy</button>
+    <div class="lang-label">Arabic Caption</div>
+    <div class="caption-text ar">كل منتج من أورلو سأل: "شو أقدر أسوي؟"
+
+فليكسي راب يلف كابلاتك بلفة وحدة. برو ديسك يرتّب أي مكتب. سيلك تاي يمسك بقوة بدون هدر. أصدقاء معلّقين يضيفون شخصية لشاشتك.
+
+الكل مع بعض تبدأ من 16 درهم بس على orlostore.com
+توصيل مجاني فوق 75 درهم في الإمارات</div>
+  </div>
+
+  <div class="caption-block" id="cap4mix">
+    <button class="copy-btn" onclick="copyCaption('cap4mix')">Copy</button>
+    <div class="lang-label">Mixed (EN + AR) — Best for UAE audience</div>
+    <div class="caption-text">Each ORLO product: "What can I do?"
+كل منتج من أورلو: "شو أقدر أسوي؟"
+
+FlexiWrap wraps. ProDesk transforms. SilkTie holds. Buddies vibe.
+الكل مع بعض — المكتب المثالي
+
+Starting from AED 16 | orlostore.com
+توصيل مجاني فوق 75 درهم</div>
+  </div>
+
+  <div class="hashtags-block" id="hash4">
+    <button class="copy-btn" onclick="copyHashtags('hash4')">Copy All</button>
+    <h3>Hashtags</h3>
+    <span class="hashtag brand">#orlostore</span>
+    <span class="hashtag brand">#orlouae</span>
+    <span class="hashtag brand">#flexiwrap</span>
+    <span class="hashtag brand">#prodesk</span>
+    <span class="hashtag brand">#silktie</span>
+    <span class="hashtag brand">#danglingbuddies</span>
+    <span class="hashtag">#satisfying</span>
+    <span class="hashtag">#whatcanido</span>
+    <span class="hashtag">#desksetup</span>
+    <span class="hashtag">#cablemanagement</span>
+    <span class="hashtag">#deskorganization</span>
+    <span class="hashtag">#deskaccessories</span>
+    <span class="hashtag">#oddlysatisfying</span>
+    <span class="hashtag">#cleandesk</span>
+    <span class="hashtag">#dubai</span>
+    <span class="hashtag">#uae</span>
+    <span class="hashtag">#abudhabi</span>
+    <span class="hashtag">#شو_أقدر_أسوي</span>
+    <span class="hashtag">#تنظيم</span>
+    <span class="hashtag">#مرضي</span>
+    <span class="hashtag">#الامارات</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- MASTER HASHTAG SETS -->
+<!-- ═══════════════════════════════════════ -->
+<div class="master-hashtags">
+  <h2>Master Hashtag Sets</h2>
+  <p style="color:#7a8f9c; margin-bottom:2vh; font-size:clamp(12px,2.5vw,14px)">Pre-built sets ready to paste. Click "Copy All" to grab an entire set.</p>
+
+  <div class="hashtag-category">
+    <h4>TikTok Optimized Set (max 5 hashtags for reach)</h4>
+    <div class="hashtags-block" id="hashTiktok" style="margin-bottom:0">
+      <button class="copy-btn" onclick="copyHashtags('hashTiktok')">Copy All</button>
+      <span class="hashtag brand">#orlostore</span>
+      <span class="hashtag">#satisfying</span>
+      <span class="hashtag">#cablemanagement</span>
+      <span class="hashtag">#desksetup</span>
+      <span class="hashtag">#dubai</span>
+    </div>
+  </div>
+
+  <div class="hashtag-category">
+    <h4>Instagram Reels — English Set</h4>
+    <div class="hashtags-block" id="hashInstaEn" style="margin-bottom:0">
+      <button class="copy-btn" onclick="copyHashtags('hashInstaEn')">Copy All</button>
+      <span class="hashtag brand">#orlostore</span>
+      <span class="hashtag brand">#orlouae</span>
+      <span class="hashtag">#satisfying</span>
+      <span class="hashtag">#oddlysatisfying</span>
+      <span class="hashtag">#desksetup</span>
+      <span class="hashtag">#deskorganization</span>
+      <span class="hashtag">#cablemanagement</span>
+      <span class="hashtag">#cleandesk</span>
+      <span class="hashtag">#workfromhome</span>
+      <span class="hashtag">#homeoffice</span>
+      <span class="hashtag">#deskaccessories</span>
+      <span class="hashtag">#gamingsetup</span>
+      <span class="hashtag">#techlife</span>
+      <span class="hashtag">#minimalist</span>
+      <span class="hashtag">#organized</span>
+      <span class="hashtag">#dubai</span>
+      <span class="hashtag">#uae</span>
+      <span class="hashtag">#abudhabi</span>
+      <span class="hashtag">#sharjah</span>
+      <span class="hashtag">#dubailife</span>
+    </div>
+  </div>
+
+  <div class="hashtag-category">
+    <h4>Instagram Reels — Arabic Set</h4>
+    <div class="hashtags-block" id="hashInstaAr" style="margin-bottom:0">
+      <button class="copy-btn" onclick="copyHashtags('hashInstaAr')">Copy All</button>
+      <span class="hashtag brand">#orlostore</span>
+      <span class="hashtag brand">#اورلو</span>
+      <span class="hashtag">#مرضي</span>
+      <span class="hashtag">#تنظيم</span>
+      <span class="hashtag">#تنظيم_كابلات</span>
+      <span class="hashtag">#مكتب</span>
+      <span class="hashtag">#ترتيب_المكتب</span>
+      <span class="hashtag">#اكسسوارات_مكتب</span>
+      <span class="hashtag">#الامارات</span>
+      <span class="hashtag">#دبي</span>
+      <span class="hashtag">#ابوظبي</span>
+      <span class="hashtag">#الشارقة</span>
+      <span class="hashtag">#تسوق_اونلاين</span>
+      <span class="hashtag">#هدايا</span>
+      <span class="hashtag">#فيديو_مرضي</span>
+    </div>
+  </div>
+
+  <div class="hashtag-category">
+    <h4>Instagram Reels — Mixed EN/AR Set</h4>
+    <div class="hashtags-block" id="hashInstaMix" style="margin-bottom:0">
+      <button class="copy-btn" onclick="copyHashtags('hashInstaMix')">Copy All</button>
+      <span class="hashtag brand">#orlostore</span>
+      <span class="hashtag brand">#orlouae</span>
+      <span class="hashtag brand">#اورلو</span>
+      <span class="hashtag">#satisfying</span>
+      <span class="hashtag">#مرضي</span>
+      <span class="hashtag">#desksetup</span>
+      <span class="hashtag">#تنظيم</span>
+      <span class="hashtag">#cablemanagement</span>
+      <span class="hashtag">#تنظيم_كابلات</span>
+      <span class="hashtag">#dubai</span>
+      <span class="hashtag">#دبي</span>
+      <span class="hashtag">#uae</span>
+      <span class="hashtag">#الامارات</span>
+      <span class="hashtag">#cleandesk</span>
+      <span class="hashtag">#oddlysatisfying</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- POSTING TIPS -->
+<!-- ═══════════════════════════════════════ -->
+<div class="video-section">
+  <h2>Posting Tips</h2>
+
+  <div class="tip" style="margin-bottom:1.5vh">
+    <strong>TikTok:</strong> Use 3-5 hashtags max. Put the most important hook in the first line. TikTok auto-suggests trending sounds — pair these videos with trending "satisfying" audios.
+  </div>
+  <div class="tip" style="margin-bottom:1.5vh">
+    <strong>Instagram Reels:</strong> Use 15-20 hashtags. Put them in the caption, not comments. Mix English and Arabic for UAE reach. Add location tag: Dubai, UAE.
+  </div>
+  <div class="tip" style="margin-bottom:1.5vh">
+    <strong>Best posting times for UAE:</strong> 8-10 PM GST (weekdays), 12-2 PM GST (weekends). Friday and Saturday evenings get highest engagement.
+  </div>
+  <div class="tip" style="margin-bottom:1.5vh">
+    <strong>Mixed captions work best:</strong> UAE audience responds well to bilingual EN/AR captions. Lead with English, follow with Arabic translation below.
+  </div>
+  <div class="tip">
+    <strong>CTA in bio:</strong> Make sure your bio link goes to orlostore.com. Add "Link in bio" or "الرابط في البايو" at the end of captions.
+  </div>
+</div>
+
+<script>
+function copyCaption(blockId) {
+  var block = document.getElementById(blockId);
+  var texts = block.querySelectorAll('.caption-text');
+  var fullText = '';
+  texts.forEach(function(t) { fullText += t.textContent.trim() + '\n\n'; });
+  navigator.clipboard.writeText(fullText.trim()).then(function() {
+    var btn = block.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+function copyHashtags(blockId) {
+  var block = document.getElementById(blockId);
+  var tags = block.querySelectorAll('.hashtag');
+  var text = Array.from(tags).map(function(t) { return t.textContent.trim(); }).join(' ');
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = block.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy All';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>
