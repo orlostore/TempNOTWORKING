@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Satisfying Unboxing</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff !important;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.canvas {
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+  background: #ffffff;
+}
+
+/* ═══ MODE SELECTOR ═══ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100;
+  background: #ffffff !important;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
+}
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -1vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
+
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  will-change: opacity, transform;
+}
+
+/* ─── Scene 1: Package arrives ─── */
+.scene-arrive { background: #f8f8f8 !important; }
+.package-box {
+  width: 40vw; height: 40vw; max-width: 240px; max-height: 240px;
+  background: linear-gradient(145deg, #f5e6d3, #e8d5c0);
+  border-radius: 3vw;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  opacity: 0; transform: translateY(60px) scale(0.7);
+  position: relative;
+}
+.package-box::before {
+  content: '';
+  position: absolute; top: 0; left: 50%; width: 3vw;
+  height: 100%; background: rgba(224,120,86,0.3);
+  transform: translateX(-50%);
+}
+.package-box::after {
+  content: '';
+  position: absolute; left: 0; top: 50%; height: 3vw;
+  width: 100%; background: rgba(224,120,86,0.3);
+  transform: translateY(-50%);
+}
+.package-logo {
+  width: 50%; z-index: 2; opacity: 0.6;
+}
+.arrive-text {
+  font-size: clamp(24px, 6vw, 40px); font-weight: 800;
+  color: #2c4a5c; text-align: center; margin-top: 4vh;
+  opacity: 0; transform: translateY(15px);
+}
+.arrive-text span { color: #e07856; }
+.arrive-sub {
+  font-size: clamp(14px, 3.5vw, 20px); font-weight: 400;
+  color: #7a8f9c; margin-top: 1vh;
+  opacity: 0; transform: translateY(10px);
+}
+
+/* ─── Scene 2: Box opens ─── */
+.scene-open { background: #ffffff !important; }
+.box-open-anim {
+  width: 50vw; height: 50vw; max-width: 300px; max-height: 300px;
+  position: relative;
+}
+.lid-top {
+  position: absolute; top: 0; left: 5%; right: 5%;
+  height: 30%;
+  background: linear-gradient(145deg, #e8d5c0, #dcc8b0);
+  border-radius: 2vw 2vw 0 0;
+  transform-origin: bottom center;
+  z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+}
+.lid-top::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  width: 20%; height: 3px; background: rgba(224,120,86,0.4);
+  transform: translate(-50%, -50%);
+}
+.box-body {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 75%;
+  background: linear-gradient(145deg, #f5e6d3, #e8d5c0);
+  border-radius: 0 0 2vw 2vw;
+  z-index: 2;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.box-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center 30%, rgba(255,215,0,0.4) 0%, transparent 70%);
+  opacity: 0;
+}
+.box-product {
+  font-size: clamp(50px, 12vw, 80px);
+  opacity: 0; transform: translateY(20px);
+  z-index: 4;
+}
+.open-text {
+  font-size: clamp(20px, 5vw, 32px); font-weight: 800;
+  color: #2c4a5c; text-align: center; margin-top: 3vh;
+  opacity: 0; transform: translateY(15px);
+}
+.open-text span { color: #e07856; }
+
+/* ─── Scene 3: Products fan out ─── */
+.scene-fan { background: #ffffff !important; }
+.fan-title {
+  font-size: clamp(20px, 5vw, 32px); font-weight: 800;
+  color: #2c4a5c; text-align: center; margin-bottom: 3vh;
+  opacity: 0; transform: translateY(-15px);
+}
+.fan-title span { color: #e07856; }
+.fan-container {
+  position: relative;
+  width: 85vw; max-width: 420px;
+  height: 45vh; max-height: 450px;
+}
+.fan-item {
+  position: absolute;
+  width: 35vw; max-width: 180px;
+  background: #fff; border-radius: 4vw;
+  padding: 3vh 3vw; text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  opacity: 0; transform: scale(0.5) rotate(var(--fan-rot));
+  transform-origin: bottom center;
+}
+.fan-item-icon { font-size: clamp(35px, 9vw, 55px); margin-bottom: 1vh; }
+.fan-item-name {
+  font-size: clamp(11px, 2.8vw, 15px); font-weight: 700; color: #2c4a5c;
+}
+.fan-item-price {
+  font-size: clamp(14px, 3.5vw, 20px); font-weight: 800; color: #e07856;
+  margin-top: 0.5vh;
+}
+
+/* ─── Scene 4: "What can I do" feature list ─── */
+.scene-features { background: #ffffff !important; }
+.features-title {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 900;
+  color: #2c4a5c; text-align: center; margin-bottom: 3vh;
+  opacity: 0; transform: translateY(-15px);
+}
+.features-title span { color: #e07856; }
+.feature-bubble {
+  display: flex; align-items: center; gap: 3vw;
+  width: 80vw; max-width: 400px;
+  background: rgba(224,120,86,0.05);
+  border: 1px solid rgba(224,120,86,0.12);
+  border-radius: 50px; padding: 2vh 4vw;
+  margin-bottom: 1.5vh;
+  opacity: 0; transform: translateX(40px);
+}
+.feature-check {
+  width: 7vw; height: 7vw; max-width: 36px; max-height: 36px;
+  border-radius: 50%; background: #e07856;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: clamp(14px, 3.5vw, 20px); font-weight: 800;
+  flex-shrink: 0;
+}
+.feature-text {
+  font-size: clamp(14px, 3.5vw, 18px); font-weight: 600; color: #2c4a5c;
+}
+
+/* ─── Scene 5: CTA ─── */
+.scene-cta { background: #ffffff !important; gap: 2.5vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; text-align: center;
+  font-family: 'Almarai', sans-serif; margin-top: -1vh;
+  opacity: 0; transform: translateY(20px);
+}
+.cta-price-big {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 600;
+  color: #7a8f9c; opacity: 0; transform: translateY(10px);
+}
+.cta-price-big b { color: #e07856; font-size: 1.3em; font-weight: 900; }
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+.cta-badges { display: flex; gap: 5vw; opacity: 0; }
+.cta-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(10px, 2.5vw, 14px); color: #6a8090; font-weight: 500;
+  text-align: center;
+}
+.cta-badge-icon {
+  width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
+  border-radius: 50%; background: rgba(224,120,86,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
+}
+
+/* ─── Progress Bar ─── */
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+  z-index: 50;
+}
+
+/* ─── Floating Dots ─── */
+.dots { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.dot {
+  position: absolute; border-radius: 50%;
+  background: rgba(224,120,86,0.12);
+  animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.5; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* ─── Confetti ─── */
+.confetti-piece {
+  position: absolute; width: 8px; height: 8px;
+  z-index: 30; pointer-events: none;
+  border-radius: 2px;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="dots" id="dots"></div>
+  <div id="confettiContainer"></div>
+
+  <!-- Mode Selector -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Satisfying Video</div>
+    <div class="mode-subtitle">Unboxing <span>ORLO</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">&#9835;</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">&#9678;</span> Instagram
+      </button>
+    </div>
+  </div>
+
+  <!-- Scene 1: Package arrives -->
+  <div class="scene scene-arrive" id="scene1">
+    <div class="package-box" id="packageBox">
+      <img src="logo.png" class="package-logo" alt="ORLO">
+    </div>
+    <div class="arrive-text" id="arriveText">Your <span>ORLO</span> just arrived</div>
+    <div class="arrive-sub" id="arriveSub">Let's see what's inside...</div>
+  </div>
+
+  <!-- Scene 2: Box opens -->
+  <div class="scene scene-open" id="scene2">
+    <div class="box-open-anim" id="boxAnim">
+      <div class="lid-top" id="lidTop"></div>
+      <div class="box-body" id="boxBody">
+        <div class="box-glow" id="boxGlow"></div>
+        <div class="box-product" id="boxProduct">&#127873;</div>
+      </div>
+    </div>
+    <div class="open-text" id="openText">What's <span>inside?</span></div>
+  </div>
+
+  <!-- Scene 3: Products fan out -->
+  <div class="scene scene-fan" id="scene3">
+    <div class="fan-title" id="fanTitle">Your ORLO <span>Haul</span></div>
+    <div class="fan-container" id="fanContainer">
+      <div class="fan-item" id="fan1" style="--fan-rot:-15deg; left:2%; top:5%;">
+        <div class="fan-item-icon">&#127899;</div>
+        <div class="fan-item-name">FlexiWrap Straps</div>
+        <div class="fan-item-price">22 AED</div>
+      </div>
+      <div class="fan-item" id="fan2" style="--fan-rot:5deg; right:2%; top:0;">
+        <div class="fan-item-icon">&#129526;</div>
+        <div class="fan-item-name">SilkTie Cable Ties</div>
+        <div class="fan-item-price">18 AED</div>
+      </div>
+      <div class="fan-item" id="fan3" style="--fan-rot:-8deg; left:8%; bottom:5%;">
+        <div class="fan-item-icon">&#128188;</div>
+        <div class="fan-item-name">ProDesk Kit</div>
+        <div class="fan-item-price">65 AED</div>
+      </div>
+      <div class="fan-item" id="fan4" style="--fan-rot:12deg; right:8%; bottom:0;">
+        <div class="fan-item-icon">&#128037;</div>
+        <div class="fan-item-name">Dangling Buddies</div>
+        <div class="fan-item-price">35 AED</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 4: What can I do -->
+  <div class="scene scene-features" id="scene4">
+    <div class="features-title" id="featuresTitle">What Can <span>I Do?</span></div>
+    <div class="feature-bubble" id="feat1">
+      <div class="feature-check">&#10003;</div>
+      <div class="feature-text">Organize all your cables instantly</div>
+    </div>
+    <div class="feature-bubble" id="feat2">
+      <div class="feature-check">&#10003;</div>
+      <div class="feature-text">Transform a messy desk in seconds</div>
+    </div>
+    <div class="feature-bubble" id="feat3">
+      <div class="feature-check">&#10003;</div>
+      <div class="feature-text">Add personality with desk buddies</div>
+    </div>
+    <div class="feature-bubble" id="feat4">
+      <div class="feature-check">&#10003;</div>
+      <div class="feature-text">Reusable &amp; premium quality</div>
+    </div>
+    <div class="feature-bubble" id="feat5">
+      <div class="feature-check">&#10003;</div>
+      <div class="feature-text">Makes the perfect gift</div>
+    </div>
+  </div>
+
+  <!-- Scene 5: CTA -->
+  <div class="scene scene-cta" id="scene5">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Unbox Your <span>New Space</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">&#1575;&#1601;&#1578;&#1581; &#1605;&#1587;&#1575;&#1581;&#1578;&#1603; &#1575;&#1604;&#1580;&#1583;&#1610;&#1583;&#1577;</div>
+    <div class="cta-price-big" id="ctaPriceBig">Starting from <b>18 AED</b></div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-badges" id="ctaBadges">
+      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery<br>Above 75 AED</div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed<br>UAE Store</div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Premium<br>Quality</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function anim(el, props, ms, ease) {
+  ease = ease || 'ease';
+  return new Promise(function(resolve) {
+    el.style.transition = 'all ' + ms + 'ms ' + ease;
+    requestAnimationFrame(function() {
+      Object.assign(el.style, props);
+      setTimeout(resolve, ms);
+    });
+  });
+}
+function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+function createDots() {
+  var c = document.getElementById('dots');
+  for (var i = 0; i < 18; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDuration = (5 + Math.random() * 7) + 's';
+    d.style.animationDelay = Math.random() * 12 + 's';
+    var size = 3 + Math.random() * 5;
+    d.style.width = size + 'px';
+    d.style.height = size + 'px';
+    c.appendChild(d);
+  }
+}
+
+function burstConfetti() {
+  var container = document.getElementById('confettiContainer');
+  var colors = ['#e07856', '#f4a261', '#2c4a5c', '#28a745', '#ffc107', '#dc3545'];
+  for (var i = 0; i < 40; i++) {
+    var piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = (10 + Math.random() * 80) + '%';
+    piece.style.top = '-5%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.width = (5 + Math.random() * 8) + 'px';
+    piece.style.height = (5 + Math.random() * 8) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.animation = 'confettiFall ' + (1.5 + Math.random() * 2) + 's ease-out ' + (Math.random() * 0.5) + 's forwards';
+    container.appendChild(piece);
+  }
+}
+
+var T = {
+  tiktok: { arrive: 2000, open: 2500, fan: 2500, features: 3200, cta: 2300 },
+  insta:  { arrive: 2600, open: 3200, fan: 3200, features: 4000, cta: 3000 }
+};
+
+async function startPromo(mode) {
+  var t = T[mode];
+  var totalDuration = t.arrive + t.open + t.fan + t.features + t.cta + 2000;
+
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  var bar = document.getElementById('progressBar');
+  var startTime = Date.now();
+  var progressTick = setInterval(function() {
+    var pct = Math.min(((Date.now() - startTime) / totalDuration) * 100, 100);
+    bar.style.width = pct + '%';
+    bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(progressTick);
+  }, 80);
+
+  // ── SCENE 1 — Package arrives ──
+  var s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+  await anim(document.getElementById('packageBox'),
+    { opacity: '1', transform: 'translateY(0) scale(1)' }, 700, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(200);
+  await anim(document.getElementById('arriveText'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('arriveSub'),
+    { opacity: '1', transform: 'translateY(0)' }, 400);
+  await wait(t.arrive - 1800);
+  await anim(s1, { opacity: '0' }, 300);
+
+  // ── SCENE 2 — Box opens ──
+  var s2 = document.getElementById('scene2');
+  s2.style.opacity = '1';
+  await wait(400);
+
+  // Lid opens
+  var lid = document.getElementById('lidTop');
+  await anim(lid, { transform: 'rotateX(-120deg)', opacity: '0.3' }, 800, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  // Glow
+  await anim(document.getElementById('boxGlow'), { opacity: '1' }, 400);
+
+  // Product rises
+  burstConfetti();
+  await anim(document.getElementById('boxProduct'),
+    { opacity: '1', transform: 'translateY(-40px)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await anim(document.getElementById('openText'),
+    { opacity: '1', transform: 'translateY(0)' }, 400);
+
+  await wait(t.open - 2600);
+  await anim(s2, { opacity: '0' }, 300);
+
+  // ── SCENE 3 — Products fan out ──
+  var s3 = document.getElementById('scene3');
+  s3.style.opacity = '1';
+  await anim(document.getElementById('fanTitle'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  var fans = ['fan1', 'fan2', 'fan3', 'fan4'];
+  for (var i = 0; i < fans.length; i++) {
+    await anim(document.getElementById(fans[i]),
+      { opacity: '1', transform: 'scale(1) rotate(0deg)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+    await wait(100);
+  }
+
+  await wait(t.fan - 2700);
+  await anim(s3, { opacity: '0' }, 300);
+
+  // ── SCENE 4 — What can I do ──
+  var s4 = document.getElementById('scene4');
+  s4.style.opacity = '1';
+  await anim(document.getElementById('featuresTitle'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  var feats = ['feat1', 'feat2', 'feat3', 'feat4', 'feat5'];
+  for (var f = 0; f < feats.length; f++) {
+    await anim(document.getElementById(feats[f]),
+      { opacity: '1', transform: 'translateX(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+    await wait(100);
+  }
+
+  await wait(t.features - 2750);
+  await anim(s4, { opacity: '0' }, 300);
+
+  // ── SCENE 5 — CTA ──
+  var s5 = document.getElementById('scene5');
+  await anim(s5, { opacity: '1' }, 300);
+  await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
+  await anim(document.getElementById('ctaHead'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaHeadAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(150);
+  await anim(document.getElementById('ctaPriceBig'),
+    { opacity: '1', transform: 'translateY(0)' }, 400);
+  await anim(document.getElementById('ctaUrl'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaBadges'), { opacity: '1' }, 500);
+
+  clearInterval(progressTick);
+  bar.style.width = '100%';
+  bar.style.transition = 'width 300ms linear';
+}
+
+createDots();
+</script>
+</body>
+</html>
