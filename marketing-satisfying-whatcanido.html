@@ -110,7 +110,12 @@ html, body {
   display: flex; align-items: center; justify-content: center;
   opacity: 0; transform: scale(0.5);
 }
-.pdo-emoji { font-size: clamp(55px, 14vw, 90px); }
+.pdo-emoji {
+  width: 70%; height: 70%; border-radius: 50%; overflow: hidden;
+}
+.pdo-emoji img {
+  width: 100%; height: 100%; object-fit: cover;
+}
 .pdo-name {
   font-size: clamp(20px, 5vw, 30px); font-weight: 800;
   color: #2c4a5c; text-align: center; margin-top: 2.5vh;
@@ -164,7 +169,13 @@ html, body {
   padding: 3vh 3vw; text-align: center;
   opacity: 0; transform: scale(0.7);
 }
-.all-card-icon { font-size: clamp(35px, 9vw, 55px); margin-bottom: 1vh; }
+.all-card-icon {
+  width: 16vw; height: 16vw; max-width: 80px; max-height: 80px;
+  border-radius: 2vw; overflow: hidden; margin: 0 auto 1vh;
+}
+.all-card-icon img {
+  width: 100%; height: 100%; object-fit: cover;
+}
 .all-card-name {
   font-size: clamp(12px, 3vw, 16px); font-weight: 700; color: #2c4a5c;
 }
@@ -268,7 +279,7 @@ html, body {
   <!-- Scene 2: Product 1 — FlexiWrap -->
   <div class="scene scene-product-do" id="scene2">
     <div class="pdo-product-bubble" id="pdo1Bubble">
-      <div class="pdo-emoji">&#127899;</div>
+      <div class="pdo-emoji"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
     </div>
     <div class="pdo-name" id="pdo1Name">FlexiWrap Velcro Straps</div>
     <div class="pdo-ican" id="pdo1Ican">"Here's what I can do..."</div>
@@ -292,7 +303,7 @@ html, body {
   <!-- Scene 3: Product 2 — ProDesk Kit -->
   <div class="scene scene-product-do" id="scene3">
     <div class="pdo-product-bubble" id="pdo2Bubble">
-      <div class="pdo-emoji">&#128188;</div>
+      <div class="pdo-emoji"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
     </div>
     <div class="pdo-name" id="pdo2Name">ProDesk Cable Kit</div>
     <div class="pdo-ican" id="pdo2Ican">"Here's what I can do..."</div>
@@ -316,7 +327,7 @@ html, body {
   <!-- Scene 4: Product 3 — SilkTie -->
   <div class="scene scene-product-do" id="scene4">
     <div class="pdo-product-bubble" id="pdo3Bubble">
-      <div class="pdo-emoji">&#129526;</div>
+      <div class="pdo-emoji"><img src="https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ" alt="SilkTie"></div>
     </div>
     <div class="pdo-name" id="pdo3Name">SilkTie Cable Ties</div>
     <div class="pdo-ican" id="pdo3Ican">"Here's what I can do..."</div>
@@ -340,7 +351,7 @@ html, body {
   <!-- Scene 5: Product 4 — Dangling Buddies -->
   <div class="scene scene-product-do" id="scene5">
     <div class="pdo-product-bubble" id="pdo4Bubble">
-      <div class="pdo-emoji">&#128037;</div>
+      <div class="pdo-emoji"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
     </div>
     <div class="pdo-name" id="pdo4Name">Dangling Buddies</div>
     <div class="pdo-ican" id="pdo4Ican">"Here's what I can do..."</div>
@@ -366,22 +377,22 @@ html, body {
     <div class="all-title" id="allTitle">All <span>Together</span></div>
     <div class="all-grid" id="allGrid">
       <div class="all-card" id="allCard1">
-        <div class="all-card-icon">&#127899;</div>
+        <div class="all-card-icon"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
         <div class="all-card-name">FlexiWrap</div>
         <div class="all-card-price">22 AED</div>
       </div>
       <div class="all-card" id="allCard2">
-        <div class="all-card-icon">&#128188;</div>
+        <div class="all-card-icon"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
         <div class="all-card-name">ProDesk Kit</div>
         <div class="all-card-price">65 AED</div>
       </div>
       <div class="all-card" id="allCard3">
-        <div class="all-card-icon">&#129526;</div>
+        <div class="all-card-icon"><img src="https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ" alt="SilkTie"></div>
         <div class="all-card-name">SilkTie</div>
         <div class="all-card-price">18 AED</div>
       </div>
       <div class="all-card" id="allCard4">
-        <div class="all-card-icon">&#128037;</div>
+        <div class="all-card-icon"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
         <div class="all-card-name">Dangling Buddies</div>
         <div class="all-card-price">35 AED</div>
       </div>
@@ -430,6 +441,17 @@ function createDots() {
     c.appendChild(d);
   }
 }
+
+// Preload product images
+(function() {
+  var urls = [
+    'https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG',
+    'https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl',
+    'https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ',
+    'https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj'
+  ];
+  urls.forEach(function(u) { var img = new Image(); img.src = u; });
+})();
 
 // Product scenes data
 var productScenes = [

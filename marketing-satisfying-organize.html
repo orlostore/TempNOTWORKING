@@ -177,8 +177,11 @@ html, body {
   opacity: 0; transform: translateY(20px);
 }
 .clean-item {
-  font-size: clamp(35px, 9vw, 60px);
-  transition: transform 0.3s ease;
+  width: 14vw; height: 14vw; max-width: 70px; max-height: 70px;
+  border-radius: 2vw; overflow: hidden; flex-shrink: 0;
+}
+.clean-item img {
+  width: 100%; height: 100%; object-fit: cover;
 }
 .clean-label {
   font-size: clamp(12px, 3vw, 18px); font-weight: 600;
@@ -212,7 +215,13 @@ html, body {
   opacity: 0; transform: translateX(-30px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.04);
 }
-.lineup-icon { font-size: clamp(32px, 8vw, 50px); }
+.lineup-icon {
+  width: 14vw; height: 14vw; max-width: 70px; max-height: 70px;
+  border-radius: 2vw; overflow: hidden; flex-shrink: 0;
+}
+.lineup-icon img {
+  width: 100%; height: 100%; object-fit: cover;
+}
 .lineup-info { flex: 1; }
 .lineup-name {
   font-size: clamp(14px, 3.5vw, 20px); font-weight: 700; color: #2c4a5c;
@@ -353,20 +362,20 @@ html, body {
     </div>
     <div class="after-frame" id="afterFrame">
       <div class="clean-row" id="row1">
-        <div class="clean-item">&#128187;</div>
-        <div class="clean-label">Laptop — organized</div>
+        <div class="clean-item"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
+        <div class="clean-label">Cables — managed with FlexiWrap</div>
       </div>
       <div class="clean-row" id="row2">
-        <div class="clean-item">&#127899;</div>
-        <div class="clean-label">Cables — managed</div>
+        <div class="clean-item"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
+        <div class="clean-label">Desk — organized with ProDesk Kit</div>
       </div>
       <div class="clean-row" id="row3">
-        <div class="clean-item">&#128221;</div>
-        <div class="clean-label">Desk — clean</div>
+        <div class="clean-item"><img src="https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ" alt="SilkTie"></div>
+        <div class="clean-label">Ties — neat with SilkTie</div>
       </div>
       <div class="clean-row" id="row4">
-        <div class="clean-item">&#129505;</div>
-        <div class="clean-label">Vibes — immaculate</div>
+        <div class="clean-item"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
+        <div class="clean-label">Vibes — immaculate with Buddies</div>
       </div>
     </div>
     <div class="after-caption" id="afterCaption">All thanks to <span>ORLO</span></div>
@@ -377,7 +386,7 @@ html, body {
     <div class="products-title" id="productsTitle">What Can <span>I</span> Do?</div>
     <div class="product-lineup" id="productLineup">
       <div class="lineup-card" id="card1">
-        <div class="lineup-icon">&#127899;</div>
+        <div class="lineup-icon"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
         <div class="lineup-info">
           <div class="lineup-name">FlexiWrap Velcro Straps</div>
           <div class="lineup-desc">Tame any cable in seconds</div>
@@ -385,7 +394,7 @@ html, body {
         <div class="lineup-price">22 AED</div>
       </div>
       <div class="lineup-card" id="card2">
-        <div class="lineup-icon">&#128188;</div>
+        <div class="lineup-icon"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
         <div class="lineup-info">
           <div class="lineup-name">ProDesk Cable Kit</div>
           <div class="lineup-desc">Complete desk organization</div>
@@ -393,7 +402,7 @@ html, body {
         <div class="lineup-price">65 AED</div>
       </div>
       <div class="lineup-card" id="card3">
-        <div class="lineup-icon">&#129526;</div>
+        <div class="lineup-icon"><img src="https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ" alt="SilkTie"></div>
         <div class="lineup-info">
           <div class="lineup-name">SilkTie Cable Ties</div>
           <div class="lineup-desc">Reusable, premium feel</div>
@@ -401,7 +410,7 @@ html, body {
         <div class="lineup-price">18 AED</div>
       </div>
       <div class="lineup-card" id="card4">
-        <div class="lineup-icon">&#128037;</div>
+        <div class="lineup-icon"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
         <div class="lineup-info">
           <div class="lineup-name">Dangling Buddies</div>
           <div class="lineup-desc">Fun desk companions</div>
@@ -479,6 +488,17 @@ function populateMess() {
     container.appendChild(el);
   });
 }
+
+// Preload product images
+(function() {
+  var urls = [
+    'https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG',
+    'https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl',
+    'https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ',
+    'https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj'
+  ];
+  urls.forEach(function(u) { var img = new Image(); img.src = u; });
+})();
 
 var T = {
   tiktok: { hook: 1600, before: 2200, trans: 1200, after: 2200, products: 2800, cta: 2500 },
