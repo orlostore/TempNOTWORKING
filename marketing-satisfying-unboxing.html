@@ -108,6 +108,11 @@ html, body {
   color: #7a8f9c; margin-top: 1vh;
   opacity: 0; transform: translateY(10px);
 }
+.arrive-text-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh; opacity: 0; transform: translateY(10px);
+}
 
 /* ─── Scene 2: Box opens ─── */
 .scene-open { background: #ffffff !important; }
@@ -154,6 +159,11 @@ html, body {
   opacity: 0; transform: translateY(15px);
 }
 .open-text span { color: #e07856; }
+.open-text-ar {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh; opacity: 0; transform: translateY(10px);
+}
 
 /* ─── Scene 3: Products fan out ─── */
 .scene-fan { background: #ffffff !important; }
@@ -163,6 +173,17 @@ html, body {
   opacity: 0; transform: translateY(-15px);
 }
 .fan-title span { color: #e07856; }
+.fan-title-ar {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: -2vh; margin-bottom: 2vh;
+  opacity: 0; transform: translateY(-10px);
+}
+.fan-item-name-ar {
+  font-size: clamp(9px, 2.2vw, 12px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.2vh;
+}
 .fan-container {
   position: relative;
   width: 85vw; max-width: 420px;
@@ -207,6 +228,12 @@ html, body {
   opacity: 0; transform: translateY(-15px);
 }
 .features-title span { color: #e07856; }
+.features-title-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: -2vh; margin-bottom: 2vh;
+  opacity: 0; transform: translateY(-10px);
+}
 .feature-bubble {
   display: flex; align-items: center; gap: 3vw;
   width: 80vw; max-width: 400px;
@@ -328,6 +355,7 @@ html, body {
     </div>
     <div class="arrive-text" id="arriveText">Your <span>ORLO</span> just arrived</div>
     <div class="arrive-sub" id="arriveSub">Let's see what's inside...</div>
+    <div class="arrive-text-ar" id="arriveTextAr">طلبك من أورلو وصل!</div>
   </div>
 
   <!-- Scene 2: Box opens -->
@@ -340,31 +368,37 @@ html, body {
       </div>
     </div>
     <div class="open-text" id="openText">What's <span>inside?</span></div>
+    <div class="open-text-ar" id="openTextAr">شو بالداخل؟</div>
   </div>
 
   <!-- Scene 3: Products fan out -->
   <div class="scene scene-fan" id="scene3">
     <div class="fan-title" id="fanTitle">Your ORLO <span>Haul</span></div>
+    <div class="fan-title-ar" id="fanTitleAr">مشترياتك من أورلو</div>
     <div class="fan-container" id="fanContainer">
       <div class="fan-item" id="fan1" style="--fan-rot:-15deg; left:2%; top:5%;">
         <div class="fan-item-icon"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
         <div class="fan-item-name">FlexiWrap Straps</div>
-        <div class="fan-item-price">22 AED</div>
+        <div class="fan-item-name-ar">أشرطة فليكسي راب</div>
+        <div class="fan-item-price">AED 22</div>
       </div>
       <div class="fan-item" id="fan2" style="--fan-rot:5deg; right:2%; top:0;">
         <div class="fan-item-icon"><img src="https://lh3.googleusercontent.com/d/14YlqqxameQDM_HzxIKwpQG4uYHmwv6ah" alt="SilkTie"></div>
         <div class="fan-item-name">SilkTie Cable Ties</div>
-        <div class="fan-item-price">18 AED</div>
+        <div class="fan-item-name-ar">منظم كابلات سيلك تاي</div>
+        <div class="fan-item-price">AED 18</div>
       </div>
       <div class="fan-item" id="fan3" style="--fan-rot:-8deg; left:8%; bottom:5%;">
         <div class="fan-item-icon"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
         <div class="fan-item-name">ProDesk Kit</div>
-        <div class="fan-item-price">65 AED</div>
+        <div class="fan-item-name-ar">أدوات تنظيم الكابلات برو ديسك</div>
+        <div class="fan-item-price">AED 65</div>
       </div>
       <div class="fan-item" id="fan4" style="--fan-rot:12deg; right:8%; bottom:0;">
         <div class="fan-item-icon"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
         <div class="fan-item-name">Dangling Buddies</div>
-        <div class="fan-item-price">16 AED</div>
+        <div class="fan-item-name-ar">أصدقاء معلّقين</div>
+        <div class="fan-item-price">AED 16</div>
       </div>
     </div>
   </div>
@@ -372,6 +406,7 @@ html, body {
   <!-- Scene 4: What can I do -->
   <div class="scene scene-features" id="scene4">
     <div class="features-title" id="featuresTitle">What Can <span>I Do?</span></div>
+    <div class="features-title-ar" id="featuresTitleAr">شو أقدر أسوي؟</div>
     <div class="feature-bubble" id="feat1">
       <div class="feature-check">&#10003;</div>
       <div class="feature-text">Organize all your cables instantly</div>
@@ -399,12 +434,12 @@ html, body {
     <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
     <div class="cta-head" id="ctaHead">Unbox Your <span>New Space</span></div>
     <div class="cta-head-ar" id="ctaHeadAr">&#1575;&#1601;&#1578;&#1581; &#1605;&#1587;&#1575;&#1581;&#1578;&#1603; &#1575;&#1604;&#1580;&#1583;&#1610;&#1583;&#1577;</div>
-    <div class="cta-price-big" id="ctaPriceBig">Starting from <b>18 AED</b></div>
+    <div class="cta-price-big" id="ctaPriceBig">Starting from <b>AED 16</b></div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
-      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery<br>Above 75 AED</div>
-      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed<br>UAE Store</div>
-      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Premium<br>Quality</div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق 75 درهم</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Quality<br><span style="font-family:'Almarai',sans-serif">جودة عالية</span></div>
     </div>
   </div>
 </div>
@@ -496,7 +531,9 @@ async function startPromo(mode) {
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await anim(document.getElementById('arriveSub'),
     { opacity: '1', transform: 'translateY(0)' }, 400);
-  await wait(t.arrive - 1800);
+  await anim(document.getElementById('arriveTextAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
+  await wait(t.arrive - 2150);
   await anim(s1, { opacity: '0' }, 300);
 
   // ── SCENE 2 — Box opens ──
@@ -518,8 +555,10 @@ async function startPromo(mode) {
 
   await anim(document.getElementById('openText'),
     { opacity: '1', transform: 'translateY(0)' }, 400);
+  await anim(document.getElementById('openTextAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
 
-  await wait(t.open - 2600);
+  await wait(t.open - 2950);
   await anim(s2, { opacity: '0' }, 300);
 
   // ── SCENE 3 — Products fan out ──
@@ -527,6 +566,8 @@ async function startPromo(mode) {
   s3.style.opacity = '1';
   await anim(document.getElementById('fanTitle'),
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('fanTitleAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
 
   var fans = ['fan1', 'fan2', 'fan3', 'fan4'];
   for (var i = 0; i < fans.length; i++) {
@@ -543,6 +584,8 @@ async function startPromo(mode) {
   s4.style.opacity = '1';
   await anim(document.getElementById('featuresTitle'),
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('featuresTitleAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
 
   var feats = ['feat1', 'feat2', 'feat3', 'feat4', 'feat5'];
   for (var f = 0; f < feats.length; f++) {

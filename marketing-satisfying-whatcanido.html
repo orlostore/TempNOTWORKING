@@ -121,6 +121,12 @@ html, body {
   color: #2c4a5c; text-align: center; margin-top: 2.5vh;
   opacity: 0; transform: translateY(15px);
 }
+.pdo-name-ar {
+  font-size: clamp(16px, 4vw, 22px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  text-align: center; margin-top: 0.3vh;
+  opacity: 0; transform: translateY(10px);
+}
 .pdo-ican {
   font-size: clamp(15px, 3.8vw, 22px); font-weight: 600;
   color: #e07856; text-align: center; margin-top: 1.5vh;
@@ -160,6 +166,17 @@ html, body {
   opacity: 0; transform: translateY(-15px);
 }
 .all-title span { color: #e07856; }
+.all-title-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: -2vh; margin-bottom: 2vh;
+  opacity: 0; transform: translateY(-10px);
+}
+.all-card-name-ar {
+  font-size: clamp(9px, 2.2vw, 12px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.2vh;
+}
 .all-grid {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 3vw; width: 85vw; max-width: 420px;
@@ -282,6 +299,7 @@ html, body {
       <div class="pdo-emoji"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
     </div>
     <div class="pdo-name" id="pdo1Name">FlexiWrap Velcro Straps</div>
+    <div class="pdo-name-ar" id="pdo1NameAr">أشرطة فليكسي راب</div>
     <div class="pdo-ican" id="pdo1Ican">"Here's what I can do..."</div>
     <div class="pdo-abilities" id="pdo1Abilities">
       <div class="pdo-ability" id="pdo1a1">
@@ -297,7 +315,7 @@ html, body {
         <div class="pdo-ability-text">Color-coded for easy sorting</div>
       </div>
     </div>
-    <div class="pdo-price-tag" id="pdo1Price">22 AED</div>
+    <div class="pdo-price-tag" id="pdo1Price">AED 22</div>
   </div>
 
   <!-- Scene 3: Product 2 — ProDesk Kit -->
@@ -306,6 +324,7 @@ html, body {
       <div class="pdo-emoji"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
     </div>
     <div class="pdo-name" id="pdo2Name">ProDesk Cable Kit</div>
+    <div class="pdo-name-ar" id="pdo2NameAr">أدوات تنظيم الكابلات برو ديسك</div>
     <div class="pdo-ican" id="pdo2Ican">"Here's what I can do..."</div>
     <div class="pdo-abilities" id="pdo2Abilities">
       <div class="pdo-ability" id="pdo2a1">
@@ -321,7 +340,7 @@ html, body {
         <div class="pdo-ability-text">Everything you need in one kit</div>
       </div>
     </div>
-    <div class="pdo-price-tag" id="pdo2Price">65 AED</div>
+    <div class="pdo-price-tag" id="pdo2Price">AED 65</div>
   </div>
 
   <!-- Scene 4: Product 3 — SilkTie -->
@@ -330,6 +349,7 @@ html, body {
       <div class="pdo-emoji"><img src="https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ" alt="SilkTie"></div>
     </div>
     <div class="pdo-name" id="pdo3Name">SilkTie Cable Ties</div>
+    <div class="pdo-name-ar" id="pdo3NameAr">منظم كابلات سيلك تاي</div>
     <div class="pdo-ican" id="pdo3Ican">"Here's what I can do..."</div>
     <div class="pdo-abilities" id="pdo3Abilities">
       <div class="pdo-ability" id="pdo3a1">
@@ -345,7 +365,7 @@ html, body {
         <div class="pdo-ability-text">Sleek look, minimal design</div>
       </div>
     </div>
-    <div class="pdo-price-tag" id="pdo3Price">18 AED</div>
+    <div class="pdo-price-tag" id="pdo3Price">AED 18</div>
   </div>
 
   <!-- Scene 5: Product 4 — Dangling Buddies -->
@@ -354,6 +374,7 @@ html, body {
       <div class="pdo-emoji"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
     </div>
     <div class="pdo-name" id="pdo4Name">Dangling Buddies</div>
+    <div class="pdo-name-ar" id="pdo4NameAr">أصدقاء معلّقين</div>
     <div class="pdo-ican" id="pdo4Ican">"Here's what I can do..."</div>
     <div class="pdo-abilities" id="pdo4Abilities">
       <div class="pdo-ability" id="pdo4a1">
@@ -369,35 +390,40 @@ html, body {
         <div class="pdo-ability-text">Instagram-worthy desk vibes</div>
       </div>
     </div>
-    <div class="pdo-price-tag" id="pdo4Price">16 AED</div>
+    <div class="pdo-price-tag" id="pdo4Price">AED 16</div>
   </div>
 
   <!-- Scene 6: All Together -->
   <div class="scene scene-all" id="scene6">
     <div class="all-title" id="allTitle">All <span>Together</span></div>
+    <div class="all-title-ar" id="allTitleAr">الكل مع بعض</div>
     <div class="all-grid" id="allGrid">
       <div class="all-card" id="allCard1">
         <div class="all-card-icon"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
         <div class="all-card-name">FlexiWrap</div>
-        <div class="all-card-price">22 AED</div>
+        <div class="all-card-name-ar">فليكسي راب</div>
+        <div class="all-card-price">AED 22</div>
       </div>
       <div class="all-card" id="allCard2">
         <div class="all-card-icon"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
         <div class="all-card-name">ProDesk Kit</div>
-        <div class="all-card-price">65 AED</div>
+        <div class="all-card-name-ar">برو ديسك</div>
+        <div class="all-card-price">AED 65</div>
       </div>
       <div class="all-card" id="allCard3">
         <div class="all-card-icon"><img src="https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ" alt="SilkTie"></div>
         <div class="all-card-name">SilkTie</div>
-        <div class="all-card-price">18 AED</div>
+        <div class="all-card-name-ar">سيلك تاي</div>
+        <div class="all-card-price">AED 18</div>
       </div>
       <div class="all-card" id="allCard4">
         <div class="all-card-icon"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
         <div class="all-card-name">Dangling Buddies</div>
-        <div class="all-card-price">16 AED</div>
+        <div class="all-card-name-ar">أصدقاء معلّقين</div>
+        <div class="all-card-price">AED 16</div>
       </div>
     </div>
-    <div class="all-total" id="allTotal">Complete your space from <span>16 AED</span></div>
+    <div class="all-total" id="allTotal">Complete your space from <span>AED 16</span></div>
   </div>
 
   <!-- Scene 7: CTA -->
@@ -407,9 +433,9 @@ html, body {
     <div class="cta-head-ar" id="ctaHeadAr">&#1575;&#1604;&#1581;&#1610;&#1606; &#1578;&#1593;&#1585;&#1601; &#1588;&#1608; &#1606;&#1602;&#1583;&#1585; &#1606;&#1587;&#1608;&#1610;</div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
-      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery<br>Above 75 AED</div>
-      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed<br>UAE Store</div>
-      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Premium<br>Quality</div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق 75 درهم</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Quality<br><span style="font-family:'Almarai',sans-serif">جودة عالية</span></div>
     </div>
   </div>
 </div>
@@ -455,10 +481,10 @@ function createDots() {
 
 // Product scenes data
 var productScenes = [
-  { scene: 2, bubble: 'pdo1Bubble', name: 'pdo1Name', ican: 'pdo1Ican', abilities: ['pdo1a1','pdo1a2','pdo1a3'], price: 'pdo1Price' },
-  { scene: 3, bubble: 'pdo2Bubble', name: 'pdo2Name', ican: 'pdo2Ican', abilities: ['pdo2a1','pdo2a2','pdo2a3'], price: 'pdo2Price' },
-  { scene: 4, bubble: 'pdo3Bubble', name: 'pdo3Name', ican: 'pdo3Ican', abilities: ['pdo3a1','pdo3a2','pdo3a3'], price: 'pdo3Price' },
-  { scene: 5, bubble: 'pdo4Bubble', name: 'pdo4Name', ican: 'pdo4Ican', abilities: ['pdo4a1','pdo4a2','pdo4a3'], price: 'pdo4Price' }
+  { scene: 2, bubble: 'pdo1Bubble', name: 'pdo1Name', nameAr: 'pdo1NameAr', ican: 'pdo1Ican', abilities: ['pdo1a1','pdo1a2','pdo1a3'], price: 'pdo1Price' },
+  { scene: 3, bubble: 'pdo2Bubble', name: 'pdo2Name', nameAr: 'pdo2NameAr', ican: 'pdo2Ican', abilities: ['pdo2a1','pdo2a2','pdo2a3'], price: 'pdo2Price' },
+  { scene: 4, bubble: 'pdo3Bubble', name: 'pdo3Name', nameAr: 'pdo3NameAr', ican: 'pdo3Ican', abilities: ['pdo3a1','pdo3a2','pdo3a3'], price: 'pdo3Price' },
+  { scene: 5, bubble: 'pdo4Bubble', name: 'pdo4Name', nameAr: 'pdo4NameAr', ican: 'pdo4Ican', abilities: ['pdo4a1','pdo4a2','pdo4a3'], price: 'pdo4Price' }
 ];
 
 var T = {
@@ -474,6 +500,8 @@ async function animateProductScene(pd, holdTime) {
     { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
   await anim(document.getElementById(pd.name),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById(pd.nameAr),
+    { opacity: '1', transform: 'translateY(0)' }, 300);
   await anim(document.getElementById(pd.ican),
     { opacity: '1', transform: 'translateY(0)' }, 350);
 
@@ -532,6 +560,8 @@ async function startPromo(mode) {
   s6.style.opacity = '1';
   await anim(document.getElementById('allTitle'),
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('allTitleAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
 
   var allCards = ['allCard1', 'allCard2', 'allCard3', 'allCard4'];
   for (var c = 0; c < allCards.length; c++) {
