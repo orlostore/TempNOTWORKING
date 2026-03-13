@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – What Can I Do? Product Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff !important;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.canvas {
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+  background: #ffffff;
+}
+
+/* ═══ MODE SELECTOR ═══ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100;
+  background: #ffffff !important;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
+}
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -1vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
+
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  will-change: opacity, transform;
+}
+
+/* ─── Scene 1: Big Question Hook ─── */
+.scene-question { background: #ffffff !important; }
+.q-circle {
+  width: 30vw; height: 30vw; max-width: 180px; max-height: 180px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(224,120,86,0.1), rgba(44,74,92,0.05));
+  border: 3px solid rgba(224,120,86,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(50px, 12vw, 80px); font-weight: 900;
+  color: #e07856;
+  opacity: 0; transform: scale(0.3) rotate(-180deg);
+}
+.q-title {
+  font-size: clamp(30px, 7.5vw, 50px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.1;
+  margin-top: 3vh; opacity: 0; transform: translateY(20px);
+}
+.q-title span { color: #e07856; }
+.q-subtitle {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 400;
+  color: #7a8f9c; margin-top: 1.5vh;
+  opacity: 0; transform: translateY(15px);
+}
+.q-subtitle-ar {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 500;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh; opacity: 0; transform: translateY(10px);
+}
+
+/* ─── Scene 2-5: Product "I Can Do" Cards ─── */
+.scene-product-do { background: #ffffff !important; }
+.pdo-product-bubble {
+  width: 35vw; height: 35vw; max-width: 200px; max-height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #f8f8f8, #ffffff);
+  box-shadow: 0 8px 40px rgba(224,120,86,0.12), 0 0 0 2px rgba(224,120,86,0.08);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5);
+}
+.pdo-emoji { font-size: clamp(55px, 14vw, 90px); }
+.pdo-name {
+  font-size: clamp(20px, 5vw, 30px); font-weight: 800;
+  color: #2c4a5c; text-align: center; margin-top: 2.5vh;
+  opacity: 0; transform: translateY(15px);
+}
+.pdo-ican {
+  font-size: clamp(15px, 3.8vw, 22px); font-weight: 600;
+  color: #e07856; text-align: center; margin-top: 1.5vh;
+  opacity: 0; transform: translateY(10px);
+}
+.pdo-abilities {
+  width: 80vw; max-width: 400px;
+  margin-top: 3vh;
+  display: flex; flex-direction: column; gap: 1.5vh;
+}
+.pdo-ability {
+  display: flex; align-items: center; gap: 3vw;
+  background: rgba(224,120,86,0.04);
+  border-radius: 50px; padding: 1.5vh 4vw;
+  opacity: 0; transform: translateX(-30px);
+}
+.pdo-ability-icon {
+  font-size: clamp(20px, 5vw, 30px); flex-shrink: 0;
+}
+.pdo-ability-text {
+  font-size: clamp(13px, 3.2vw, 17px); font-weight: 600; color: #2c4a5c;
+}
+.pdo-price-tag {
+  margin-top: 2vh;
+  background: #e07856; color: #fff;
+  padding: 1vh 5vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
+  box-shadow: 0 4px 20px rgba(224,120,86,0.3);
+  opacity: 0; transform: scale(0.7);
+}
+
+/* ─── Scene 6: All Together ─── */
+.scene-all { background: #ffffff !important; }
+.all-title {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 900;
+  color: #2c4a5c; text-align: center; margin-bottom: 3vh;
+  opacity: 0; transform: translateY(-15px);
+}
+.all-title span { color: #e07856; }
+.all-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3vw; width: 85vw; max-width: 420px;
+}
+.all-card {
+  background: #f8f8f8; border-radius: 4vw;
+  padding: 3vh 3vw; text-align: center;
+  opacity: 0; transform: scale(0.7);
+}
+.all-card-icon { font-size: clamp(35px, 9vw, 55px); margin-bottom: 1vh; }
+.all-card-name {
+  font-size: clamp(12px, 3vw, 16px); font-weight: 700; color: #2c4a5c;
+}
+.all-card-price {
+  font-size: clamp(14px, 3.5vw, 20px); font-weight: 800; color: #e07856;
+  margin-top: 0.3vh;
+}
+.all-total {
+  margin-top: 3vh;
+  font-size: clamp(16px, 4vw, 22px); font-weight: 700;
+  color: #2c4a5c; text-align: center;
+  opacity: 0; transform: translateY(15px);
+}
+.all-total span { color: #e07856; font-weight: 900; font-size: 1.2em; }
+
+/* ─── Scene 7: CTA ─── */
+.scene-cta { background: #ffffff !important; gap: 2.5vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; text-align: center;
+  font-family: 'Almarai', sans-serif; margin-top: -1vh;
+  opacity: 0; transform: translateY(20px);
+}
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+.cta-badges { display: flex; gap: 5vw; opacity: 0; }
+.cta-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(10px, 2.5vw, 14px); color: #6a8090; font-weight: 500;
+  text-align: center;
+}
+.cta-badge-icon {
+  width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
+  border-radius: 50%; background: rgba(224,120,86,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
+}
+
+/* ─── Progress Bar ─── */
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+  z-index: 50;
+}
+
+/* ─── Floating Dots ─── */
+.dots { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.dot {
+  position: absolute; border-radius: 50%;
+  background: rgba(224,120,86,0.12);
+  animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.5; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="dots" id="dots"></div>
+
+  <!-- Mode Selector -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Satisfying Video</div>
+    <div class="mode-subtitle">What Can <span>I Do?</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">&#9835;</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">&#9678;</span> Instagram
+      </button>
+    </div>
+  </div>
+
+  <!-- Scene 1: Big Question -->
+  <div class="scene scene-question" id="scene1">
+    <div class="q-circle" id="qCircle">?</div>
+    <div class="q-title" id="qTitle">What Can <span>I</span> Do?</div>
+    <div class="q-subtitle" id="qSub">Let each product tell you</div>
+    <div class="q-subtitle-ar" id="qSubAr">&#1582;&#1604;&#1617;&#1610; &#1603;&#1604; &#1605;&#1606;&#1578;&#1580; &#1610;&#1582;&#1576;&#1585;&#1603;</div>
+  </div>
+
+  <!-- Scene 2: Product 1 — FlexiWrap -->
+  <div class="scene scene-product-do" id="scene2">
+    <div class="pdo-product-bubble" id="pdo1Bubble">
+      <div class="pdo-emoji">&#127899;</div>
+    </div>
+    <div class="pdo-name" id="pdo1Name">FlexiWrap Velcro Straps</div>
+    <div class="pdo-ican" id="pdo1Ican">"Here's what I can do..."</div>
+    <div class="pdo-abilities" id="pdo1Abilities">
+      <div class="pdo-ability" id="pdo1a1">
+        <div class="pdo-ability-icon">&#128268;</div>
+        <div class="pdo-ability-text">Bundle messy cables in one wrap</div>
+      </div>
+      <div class="pdo-ability" id="pdo1a2">
+        <div class="pdo-ability-icon">&#128260;</div>
+        <div class="pdo-ability-text">Reusable — wrap, unwrap, repeat</div>
+      </div>
+      <div class="pdo-ability" id="pdo1a3">
+        <div class="pdo-ability-icon">&#127912;</div>
+        <div class="pdo-ability-text">Color-coded for easy sorting</div>
+      </div>
+    </div>
+    <div class="pdo-price-tag" id="pdo1Price">22 AED</div>
+  </div>
+
+  <!-- Scene 3: Product 2 — ProDesk Kit -->
+  <div class="scene scene-product-do" id="scene3">
+    <div class="pdo-product-bubble" id="pdo2Bubble">
+      <div class="pdo-emoji">&#128188;</div>
+    </div>
+    <div class="pdo-name" id="pdo2Name">ProDesk Cable Kit</div>
+    <div class="pdo-ican" id="pdo2Ican">"Here's what I can do..."</div>
+    <div class="pdo-abilities" id="pdo2Abilities">
+      <div class="pdo-ability" id="pdo2a1">
+        <div class="pdo-ability-icon">&#128421;</div>
+        <div class="pdo-ability-text">Complete desk cable management</div>
+      </div>
+      <div class="pdo-ability" id="pdo2a2">
+        <div class="pdo-ability-icon">&#10024;</div>
+        <div class="pdo-ability-text">Transform any workspace instantly</div>
+      </div>
+      <div class="pdo-ability" id="pdo2a3">
+        <div class="pdo-ability-icon">&#128736;</div>
+        <div class="pdo-ability-text">Everything you need in one kit</div>
+      </div>
+    </div>
+    <div class="pdo-price-tag" id="pdo2Price">65 AED</div>
+  </div>
+
+  <!-- Scene 4: Product 3 — SilkTie -->
+  <div class="scene scene-product-do" id="scene4">
+    <div class="pdo-product-bubble" id="pdo3Bubble">
+      <div class="pdo-emoji">&#129526;</div>
+    </div>
+    <div class="pdo-name" id="pdo3Name">SilkTie Cable Ties</div>
+    <div class="pdo-ican" id="pdo3Ican">"Here's what I can do..."</div>
+    <div class="pdo-abilities" id="pdo3Abilities">
+      <div class="pdo-ability" id="pdo3a1">
+        <div class="pdo-ability-icon">&#128171;</div>
+        <div class="pdo-ability-text">Hold cables tight, premium grip</div>
+      </div>
+      <div class="pdo-ability" id="pdo3a2">
+        <div class="pdo-ability-icon">&#9851;&#65039;</div>
+        <div class="pdo-ability-text">100% reusable, zero waste</div>
+      </div>
+      <div class="pdo-ability" id="pdo3a3">
+        <div class="pdo-ability-icon">&#128142;</div>
+        <div class="pdo-ability-text">Sleek look, minimal design</div>
+      </div>
+    </div>
+    <div class="pdo-price-tag" id="pdo3Price">18 AED</div>
+  </div>
+
+  <!-- Scene 5: Product 4 — Dangling Buddies -->
+  <div class="scene scene-product-do" id="scene5">
+    <div class="pdo-product-bubble" id="pdo4Bubble">
+      <div class="pdo-emoji">&#128037;</div>
+    </div>
+    <div class="pdo-name" id="pdo4Name">Dangling Buddies</div>
+    <div class="pdo-ican" id="pdo4Ican">"Here's what I can do..."</div>
+    <div class="pdo-abilities" id="pdo4Abilities">
+      <div class="pdo-ability" id="pdo4a1">
+        <div class="pdo-ability-icon">&#128522;</div>
+        <div class="pdo-ability-text">Add personality to your monitor</div>
+      </div>
+      <div class="pdo-ability" id="pdo4a2">
+        <div class="pdo-ability-icon">&#127873;</div>
+        <div class="pdo-ability-text">Perfect quirky gift idea</div>
+      </div>
+      <div class="pdo-ability" id="pdo4a3">
+        <div class="pdo-ability-icon">&#128247;</div>
+        <div class="pdo-ability-text">Instagram-worthy desk vibes</div>
+      </div>
+    </div>
+    <div class="pdo-price-tag" id="pdo4Price">35 AED</div>
+  </div>
+
+  <!-- Scene 6: All Together -->
+  <div class="scene scene-all" id="scene6">
+    <div class="all-title" id="allTitle">All <span>Together</span></div>
+    <div class="all-grid" id="allGrid">
+      <div class="all-card" id="allCard1">
+        <div class="all-card-icon">&#127899;</div>
+        <div class="all-card-name">FlexiWrap</div>
+        <div class="all-card-price">22 AED</div>
+      </div>
+      <div class="all-card" id="allCard2">
+        <div class="all-card-icon">&#128188;</div>
+        <div class="all-card-name">ProDesk Kit</div>
+        <div class="all-card-price">65 AED</div>
+      </div>
+      <div class="all-card" id="allCard3">
+        <div class="all-card-icon">&#129526;</div>
+        <div class="all-card-name">SilkTie</div>
+        <div class="all-card-price">18 AED</div>
+      </div>
+      <div class="all-card" id="allCard4">
+        <div class="all-card-icon">&#128037;</div>
+        <div class="all-card-name">Dangling Buddies</div>
+        <div class="all-card-price">35 AED</div>
+      </div>
+    </div>
+    <div class="all-total" id="allTotal">Complete your space from <span>18 AED</span></div>
+  </div>
+
+  <!-- Scene 7: CTA -->
+  <div class="scene scene-cta" id="scene7">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Now You Know<br>What <span>We</span> Can Do</div>
+    <div class="cta-head-ar" id="ctaHeadAr">&#1575;&#1604;&#1581;&#1610;&#1606; &#1578;&#1593;&#1585;&#1601; &#1588;&#1608; &#1606;&#1602;&#1583;&#1585; &#1606;&#1587;&#1608;&#1610;</div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-badges" id="ctaBadges">
+      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery<br>Above 75 AED</div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed<br>UAE Store</div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Premium<br>Quality</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function anim(el, props, ms, ease) {
+  ease = ease || 'ease';
+  return new Promise(function(resolve) {
+    el.style.transition = 'all ' + ms + 'ms ' + ease;
+    requestAnimationFrame(function() {
+      Object.assign(el.style, props);
+      setTimeout(resolve, ms);
+    });
+  });
+}
+function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+function createDots() {
+  var c = document.getElementById('dots');
+  for (var i = 0; i < 18; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDuration = (5 + Math.random() * 7) + 's';
+    d.style.animationDelay = Math.random() * 12 + 's';
+    var size = 3 + Math.random() * 5;
+    d.style.width = size + 'px';
+    d.style.height = size + 'px';
+    c.appendChild(d);
+  }
+}
+
+// Product scenes data
+var productScenes = [
+  { scene: 2, bubble: 'pdo1Bubble', name: 'pdo1Name', ican: 'pdo1Ican', abilities: ['pdo1a1','pdo1a2','pdo1a3'], price: 'pdo1Price' },
+  { scene: 3, bubble: 'pdo2Bubble', name: 'pdo2Name', ican: 'pdo2Ican', abilities: ['pdo2a1','pdo2a2','pdo2a3'], price: 'pdo2Price' },
+  { scene: 4, bubble: 'pdo3Bubble', name: 'pdo3Name', ican: 'pdo3Ican', abilities: ['pdo3a1','pdo3a2','pdo3a3'], price: 'pdo3Price' },
+  { scene: 5, bubble: 'pdo4Bubble', name: 'pdo4Name', ican: 'pdo4Ican', abilities: ['pdo4a1','pdo4a2','pdo4a3'], price: 'pdo4Price' }
+];
+
+var T = {
+  tiktok: { question: 2000, perProduct: 2800, all: 2200, cta: 2200 },
+  insta:  { question: 2600, perProduct: 3500, all: 2800, cta: 3000 }
+};
+
+async function animateProductScene(pd, holdTime) {
+  var sceneEl = document.getElementById('scene' + pd.scene);
+  sceneEl.style.opacity = '1';
+
+  await anim(document.getElementById(pd.bubble),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await anim(document.getElementById(pd.name),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById(pd.ican),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
+
+  for (var a = 0; a < pd.abilities.length; a++) {
+    await anim(document.getElementById(pd.abilities[a]),
+      { opacity: '1', transform: 'translateX(0)' }, 300, 'cubic-bezier(0.16, 1, 0.3, 1)');
+    await wait(80);
+  }
+
+  await anim(document.getElementById(pd.price),
+    { opacity: '1', transform: 'scale(1)' }, 400, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await wait(holdTime);
+  await anim(sceneEl, { opacity: '0' }, 300);
+}
+
+async function startPromo(mode) {
+  var t = T[mode];
+  var totalDuration = t.question + (t.perProduct * 4) + t.all + t.cta + 2000;
+
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  var bar = document.getElementById('progressBar');
+  var startTime = Date.now();
+  var progressTick = setInterval(function() {
+    var pct = Math.min(((Date.now() - startTime) / totalDuration) * 100, 100);
+    bar.style.width = pct + '%';
+    bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(progressTick);
+  }, 80);
+
+  // ── SCENE 1 — Question Hook ──
+  var s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+  await anim(document.getElementById('qCircle'),
+    { opacity: '1', transform: 'scale(1) rotate(0deg)' }, 700, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(200);
+  await anim(document.getElementById('qTitle'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('qSub'),
+    { opacity: '1', transform: 'translateY(0)' }, 400);
+  await anim(document.getElementById('qSubAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
+  await wait(t.question - 2150);
+  await anim(s1, { opacity: '0' }, 300);
+
+  // ── SCENES 2-5 — Product "I Can Do" cards ──
+  for (var p = 0; p < productScenes.length; p++) {
+    var holdTime = t.perProduct - 2300;
+    await animateProductScene(productScenes[p], holdTime);
+  }
+
+  // ── SCENE 6 — All Together ──
+  var s6 = document.getElementById('scene6');
+  s6.style.opacity = '1';
+  await anim(document.getElementById('allTitle'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  var allCards = ['allCard1', 'allCard2', 'allCard3', 'allCard4'];
+  for (var c = 0; c < allCards.length; c++) {
+    await anim(document.getElementById(allCards[c]),
+      { opacity: '1', transform: 'scale(1)' }, 350, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+    await wait(100);
+  }
+
+  await anim(document.getElementById('allTotal'),
+    { opacity: '1', transform: 'translateY(0)' }, 400);
+  await wait(t.all - 2250);
+  await anim(s6, { opacity: '0' }, 300);
+
+  // ── SCENE 7 — CTA ──
+  var s7 = document.getElementById('scene7');
+  await anim(s7, { opacity: '1' }, 300);
+  await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
+  await anim(document.getElementById('ctaHead'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaHeadAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(150);
+  await anim(document.getElementById('ctaUrl'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaBadges'), { opacity: '1' }, 500);
+
+  clearInterval(progressTick);
+  bar.style.width = '100%';
+  bar.style.transition = 'width 300ms linear';
+}
+
+createDots();
+</script>
+</body>
+</html>

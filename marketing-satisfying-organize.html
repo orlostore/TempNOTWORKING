@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Satisfying Desk Organization</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff !important;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.canvas {
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+  background: #ffffff;
+}
+
+/* ═══ MODE SELECTOR ═══ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100;
+  background: #ffffff !important;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
+}
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -1vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
+
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  will-change: opacity, transform;
+}
+
+/* ─── Scene 1: Hook — "Watch This" ─── */
+.scene-hook { background: #ffffff !important; }
+.hook-emoji {
+  font-size: clamp(60px, 15vw, 100px);
+  opacity: 0; transform: scale(0.3) rotate(-20deg);
+}
+.hook-text {
+  font-size: clamp(28px, 7vw, 48px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.2;
+  margin-top: 2vh; opacity: 0; transform: translateY(20px);
+}
+.hook-text span { color: #e07856; }
+.hook-text-ar {
+  font-size: clamp(20px, 5vw, 32px); font-weight: 700;
+  color: rgba(44,74,92,0.5); direction: rtl;
+  font-family: 'Almarai', sans-serif;
+  margin-top: 1vh; opacity: 0; transform: translateY(15px);
+}
+
+/* ─── Scene 2: Before — Messy Desk ─── */
+.scene-before { background: #f8f8f8 !important; }
+.before-label {
+  position: absolute; top: 6vh; left: 0; right: 0;
+  text-align: center; z-index: 5;
+}
+.before-tag {
+  display: inline-block;
+  background: #dc3545; color: #fff;
+  padding: 1vh 5vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 26px); font-weight: 800;
+  letter-spacing: 0.08em;
+  opacity: 0; transform: scale(0.5);
+}
+.before-frame {
+  width: 85vw; max-width: 420px;
+  height: 50vh; max-height: 500px;
+  border-radius: 4vw; overflow: hidden;
+  background: #eee;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  opacity: 0; transform: scale(0.85);
+  display: flex; align-items: center; justify-content: center;
+}
+.before-illustration {
+  width: 100%; height: 100%;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 2vw; padding: 4vw;
+  background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
+}
+.mess-item {
+  font-size: clamp(30px, 8vw, 55px);
+  transform: rotate(var(--rot));
+  opacity: 0;
+  animation: messAppear 0.3s ease forwards;
+}
+
+@keyframes messAppear {
+  0% { opacity: 0; transform: rotate(var(--rot)) scale(0); }
+  80% { transform: rotate(var(--rot)) scale(1.2); }
+  100% { opacity: 1; transform: rotate(var(--rot)) scale(1); }
+}
+
+/* ─── Scene 3: Satisfying Transition ─── */
+.scene-transition { background: #ffffff !important; }
+.swipe-wipe {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #e07856, #f4a261);
+  transform: translateX(-100%);
+  z-index: 5;
+}
+.trans-sparkle {
+  position: absolute;
+  font-size: clamp(40px, 10vw, 70px);
+  opacity: 0;
+  z-index: 6;
+}
+
+/* ─── Scene 4: After — Clean Desk ─── */
+.scene-after { background: #ffffff !important; }
+.after-label {
+  position: absolute; top: 6vh; left: 0; right: 0;
+  text-align: center; z-index: 5;
+}
+.after-tag {
+  display: inline-block;
+  background: #28a745; color: #fff;
+  padding: 1vh 5vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 26px); font-weight: 800;
+  letter-spacing: 0.08em;
+  opacity: 0; transform: scale(0.5);
+}
+.after-frame {
+  width: 85vw; max-width: 420px;
+  height: 50vh; max-height: 500px;
+  border-radius: 4vw; overflow: hidden;
+  background: #fff;
+  box-shadow: 0 10px 40px rgba(44,74,92,0.12);
+  opacity: 0; transform: scale(0.85);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3vh;
+}
+.clean-row {
+  display: flex; gap: 4vw; align-items: center;
+  opacity: 0; transform: translateY(20px);
+}
+.clean-item {
+  font-size: clamp(35px, 9vw, 60px);
+  transition: transform 0.3s ease;
+}
+.clean-label {
+  font-size: clamp(12px, 3vw, 18px); font-weight: 600;
+  color: #2c4a5c;
+}
+.after-caption {
+  position: absolute; bottom: 8vh;
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: #2c4a5c; text-align: center;
+  opacity: 0; transform: translateY(15px);
+}
+.after-caption span { color: #e07856; }
+
+/* ─── Scene 5: Product Lineup ─── */
+.scene-products { background: #ffffff !important; }
+.products-title {
+  font-size: clamp(20px, 5vw, 32px); font-weight: 800;
+  color: #2c4a5c; text-align: center;
+  opacity: 0; transform: translateY(-20px);
+  margin-bottom: 3vh;
+}
+.products-title span { color: #e07856; }
+.product-lineup {
+  display: flex; flex-direction: column;
+  gap: 2.5vh; width: 85vw; max-width: 420px;
+}
+.lineup-card {
+  display: flex; align-items: center; gap: 4vw;
+  background: #f8f8f8; border-radius: 3vw;
+  padding: 2.5vh 4vw;
+  opacity: 0; transform: translateX(-30px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+.lineup-icon { font-size: clamp(32px, 8vw, 50px); }
+.lineup-info { flex: 1; }
+.lineup-name {
+  font-size: clamp(14px, 3.5vw, 20px); font-weight: 700; color: #2c4a5c;
+}
+.lineup-desc {
+  font-size: clamp(11px, 2.5vw, 14px); font-weight: 400; color: #7a8f9c;
+  margin-top: 0.3vh;
+}
+.lineup-price {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800; color: #e07856;
+}
+
+/* ─── Scene 6: CTA ─── */
+.scene-cta { background: #ffffff !important; gap: 2.5vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; text-align: center;
+  font-family: 'Almarai', sans-serif; margin-top: -1vh;
+  opacity: 0; transform: translateY(20px);
+}
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+.cta-badges { display: flex; gap: 5vw; opacity: 0; }
+.cta-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(10px, 2.5vw, 14px); color: #6a8090; font-weight: 500;
+  text-align: center;
+}
+.cta-badge-icon {
+  width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
+  border-radius: 50%; background: rgba(224,120,86,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
+}
+
+/* ─── Progress Bar ─── */
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+  z-index: 50;
+}
+
+/* ─── Floating Dots ─── */
+.dots { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.dot {
+  position: absolute; border-radius: 50%;
+  background: rgba(224,120,86,0.12);
+  animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.5; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* ─── Checkmark animation ─── */
+.checkmark-ring {
+  width: 20vw; height: 20vw; max-width: 120px; max-height: 120px;
+  border-radius: 50%;
+  border: 4px solid #28a745;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5);
+  position: absolute; top: 50%; left: 50%;
+  margin-top: -10vw; margin-left: -10vw;
+  z-index: 10;
+}
+.checkmark-ring .check {
+  font-size: clamp(40px, 10vw, 70px); color: #28a745;
+}
+</style>
+</head>
+<body>
+
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="dots" id="dots"></div>
+
+  <!-- Mode Selector -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Satisfying Video</div>
+    <div class="mode-subtitle">Watch This <span>Transformation</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">&#9835;</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">&#9678;</span> Instagram
+      </button>
+    </div>
+  </div>
+
+  <!-- Scene 1: Hook -->
+  <div class="scene scene-hook" id="scene1">
+    <div class="hook-emoji" id="hookEmoji">&#128064;</div>
+    <div class="hook-text" id="hookText">Watch This <span>Satisfying</span><br>Desk Makeover</div>
+    <div class="hook-text-ar" id="hookTextAr">&#1588;&#1575;&#1607;&#1583; &#1607;&#1584;&#1575; &#1575;&#1604;&#1578;&#1581;&#1608;&#1604; &#1575;&#1604;&#1605;&#1585;&#1590;&#1610;</div>
+  </div>
+
+  <!-- Scene 2: Before -->
+  <div class="scene scene-before" id="scene2">
+    <div class="before-label">
+      <div class="before-tag" id="beforeTag">BEFORE</div>
+    </div>
+    <div class="before-frame" id="beforeFrame">
+      <div class="before-illustration" id="messContainer"></div>
+    </div>
+  </div>
+
+  <!-- Scene 3: Satisfying Transition -->
+  <div class="scene scene-transition" id="scene3">
+    <div class="swipe-wipe" id="swipeWipe"></div>
+    <div class="checkmark-ring" id="checkRing">
+      <div class="check">&#10003;</div>
+    </div>
+    <div class="trans-sparkle" id="sparkle1" style="top:20%;left:20%">&#10024;</div>
+    <div class="trans-sparkle" id="sparkle2" style="top:30%;right:15%">&#10024;</div>
+    <div class="trans-sparkle" id="sparkle3" style="bottom:25%;left:25%">&#10024;</div>
+    <div class="trans-sparkle" id="sparkle4" style="bottom:35%;right:20%">&#10024;</div>
+  </div>
+
+  <!-- Scene 4: After -->
+  <div class="scene scene-after" id="scene4">
+    <div class="after-label">
+      <div class="after-tag" id="afterTag">AFTER</div>
+    </div>
+    <div class="after-frame" id="afterFrame">
+      <div class="clean-row" id="row1">
+        <div class="clean-item">&#128187;</div>
+        <div class="clean-label">Laptop — organized</div>
+      </div>
+      <div class="clean-row" id="row2">
+        <div class="clean-item">&#127899;</div>
+        <div class="clean-label">Cables — managed</div>
+      </div>
+      <div class="clean-row" id="row3">
+        <div class="clean-item">&#128221;</div>
+        <div class="clean-label">Desk — clean</div>
+      </div>
+      <div class="clean-row" id="row4">
+        <div class="clean-item">&#129505;</div>
+        <div class="clean-label">Vibes — immaculate</div>
+      </div>
+    </div>
+    <div class="after-caption" id="afterCaption">All thanks to <span>ORLO</span></div>
+  </div>
+
+  <!-- Scene 5: Products -->
+  <div class="scene scene-products" id="scene5">
+    <div class="products-title" id="productsTitle">What Can <span>I</span> Do?</div>
+    <div class="product-lineup" id="productLineup">
+      <div class="lineup-card" id="card1">
+        <div class="lineup-icon">&#127899;</div>
+        <div class="lineup-info">
+          <div class="lineup-name">FlexiWrap Velcro Straps</div>
+          <div class="lineup-desc">Tame any cable in seconds</div>
+        </div>
+        <div class="lineup-price">22 AED</div>
+      </div>
+      <div class="lineup-card" id="card2">
+        <div class="lineup-icon">&#128188;</div>
+        <div class="lineup-info">
+          <div class="lineup-name">ProDesk Cable Kit</div>
+          <div class="lineup-desc">Complete desk organization</div>
+        </div>
+        <div class="lineup-price">65 AED</div>
+      </div>
+      <div class="lineup-card" id="card3">
+        <div class="lineup-icon">&#129526;</div>
+        <div class="lineup-info">
+          <div class="lineup-name">SilkTie Cable Ties</div>
+          <div class="lineup-desc">Reusable, premium feel</div>
+        </div>
+        <div class="lineup-price">18 AED</div>
+      </div>
+      <div class="lineup-card" id="card4">
+        <div class="lineup-icon">&#128037;</div>
+        <div class="lineup-info">
+          <div class="lineup-name">Dangling Buddies</div>
+          <div class="lineup-desc">Fun desk companions</div>
+        </div>
+        <div class="lineup-price">35 AED</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 6: CTA -->
+  <div class="scene scene-cta" id="scene6">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Simplify Your <span>Space</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">&#1576;&#1587;&#1617;&#1591; &#1605;&#1587;&#1575;&#1581;&#1578;&#1603;</div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-badges" id="ctaBadges">
+      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery<br>Above 75 AED</div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed<br>UAE Store</div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Premium<br>Quality</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function anim(el, props, ms, ease) {
+  ease = ease || 'ease';
+  return new Promise(function(resolve) {
+    el.style.transition = 'all ' + ms + 'ms ' + ease;
+    requestAnimationFrame(function() {
+      Object.assign(el.style, props);
+      setTimeout(resolve, ms);
+    });
+  });
+}
+function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+function createDots() {
+  var c = document.getElementById('dots');
+  for (var i = 0; i < 18; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDuration = (5 + Math.random() * 7) + 's';
+    d.style.animationDelay = Math.random() * 12 + 's';
+    var size = 3 + Math.random() * 5;
+    d.style.width = size + 'px';
+    d.style.height = size + 'px';
+    c.appendChild(d);
+  }
+}
+
+var messItems = [
+  { emoji: '\uD83D\uDD0C', rot: '-15deg' },
+  { emoji: '\uD83D\uDCF1', rot: '22deg' },
+  { emoji: '\u2615', rot: '-8deg' },
+  { emoji: '\uD83D\uDD11', rot: '35deg' },
+  { emoji: '\uD83D\uDCDD', rot: '-25deg' },
+  { emoji: '\uD83C\uDFA7', rot: '12deg' },
+  { emoji: '\uD83D\uDCBF', rot: '-30deg' },
+  { emoji: '\uD83D\uDD0B', rot: '18deg' },
+  { emoji: '\uD83D\uDCCE', rot: '-20deg' },
+  { emoji: '\uD83E\uDDF2', rot: '28deg' },
+  { emoji: '\uD83D\uDDA5', rot: '-5deg' },
+  { emoji: '\uD83D\uDCF7', rot: '15deg' }
+];
+
+function populateMess() {
+  var container = document.getElementById('messContainer');
+  messItems.forEach(function(item, i) {
+    var el = document.createElement('div');
+    el.className = 'mess-item';
+    el.style.setProperty('--rot', item.rot);
+    el.textContent = item.emoji;
+    el.style.animationDelay = (i * 0.08) + 's';
+    container.appendChild(el);
+  });
+}
+
+var T = {
+  tiktok: { hook: 1600, before: 2200, trans: 1200, after: 2200, products: 2800, cta: 2500 },
+  insta:  { hook: 2200, before: 2800, trans: 1500, after: 2800, products: 3500, cta: 3200 }
+};
+
+async function startPromo(mode) {
+  var t = T[mode];
+  var totalDuration = t.hook + t.before + t.trans + t.after + t.products + t.cta + 2000;
+
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  var bar = document.getElementById('progressBar');
+  var startTime = Date.now();
+  var progressTick = setInterval(function() {
+    var pct = Math.min(((Date.now() - startTime) / totalDuration) * 100, 100);
+    bar.style.width = pct + '%';
+    bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(progressTick);
+  }, 80);
+
+  // ── SCENE 1 — Hook ──
+  var s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+  await anim(document.getElementById('hookEmoji'),
+    { opacity: '1', transform: 'scale(1) rotate(0deg)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(150);
+  await anim(document.getElementById('hookText'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('hookTextAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.hook - 1550);
+  await anim(s1, { opacity: '0' }, 300);
+
+  // ── SCENE 2 — Before (messy) ──
+  var s2 = document.getElementById('scene2');
+  s2.style.opacity = '1';
+  await anim(document.getElementById('beforeTag'),
+    { opacity: '1', transform: 'scale(1)' }, 400, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await anim(document.getElementById('beforeFrame'),
+    { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  populateMess();
+  await wait(t.before - 1000);
+  await anim(s2, { opacity: '0' }, 300);
+
+  // ── SCENE 3 — Satisfying transition ──
+  var s3 = document.getElementById('scene3');
+  s3.style.opacity = '1';
+  s3.style.background = '#ffffff';
+
+  var wipe = document.getElementById('swipeWipe');
+  await anim(wipe, { transform: 'translateX(0)' }, 400, 'cubic-bezier(0.65, 0, 0.35, 1)');
+  await anim(wipe, { transform: 'translateX(100%)' }, 400, 'cubic-bezier(0.65, 0, 0.35, 1)');
+
+  await anim(document.getElementById('checkRing'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  // Sparkles
+  var sparkles = ['sparkle1', 'sparkle2', 'sparkle3', 'sparkle4'];
+  sparkles.forEach(function(id, i) {
+    setTimeout(function() {
+      anim(document.getElementById(id), { opacity: '1', transform: 'scale(1.2)' }, 300);
+      setTimeout(function() {
+        anim(document.getElementById(id), { opacity: '0', transform: 'scale(0.5)' }, 200);
+      }, 300);
+    }, i * 100);
+  });
+
+  await wait(t.trans - 1300);
+  await anim(s3, { opacity: '0' }, 300);
+
+  // ── SCENE 4 — After (clean) ──
+  var s4 = document.getElementById('scene4');
+  s4.style.opacity = '1';
+  await anim(document.getElementById('afterTag'),
+    { opacity: '1', transform: 'scale(1)' }, 400, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await anim(document.getElementById('afterFrame'),
+    { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  var rows = ['row1', 'row2', 'row3', 'row4'];
+  for (var i = 0; i < rows.length; i++) {
+    await anim(document.getElementById(rows[i]),
+      { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+    await wait(100);
+  }
+
+  await anim(document.getElementById('afterCaption'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.after - 2200);
+  await anim(s4, { opacity: '0' }, 300);
+
+  // ── SCENE 5 — Products ──
+  var s5 = document.getElementById('scene5');
+  s5.style.opacity = '1';
+  await anim(document.getElementById('productsTitle'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  var cards = ['card1', 'card2', 'card3', 'card4'];
+  for (var j = 0; j < cards.length; j++) {
+    await anim(document.getElementById(cards[j]),
+      { opacity: '1', transform: 'translateX(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+    await wait(80);
+  }
+
+  await wait(t.products - 2100);
+  await anim(s5, { opacity: '0' }, 300);
+
+  // ── SCENE 6 — CTA ──
+  var s6 = document.getElementById('scene6');
+  await anim(s6, { opacity: '1' }, 300);
+  await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
+  await anim(document.getElementById('ctaHead'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaHeadAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(150);
+  await anim(document.getElementById('ctaUrl'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaBadges'), { opacity: '1' }, 500);
+
+  clearInterval(progressTick);
+  bar.style.width = '100%';
+  bar.style.transition = 'width 300ms linear';
+}
+
+createDots();
+</script>
+</body>
+</html>
