@@ -177,7 +177,20 @@ html, body {
   opacity: 0; transform: scale(0.5) rotate(var(--fan-rot));
   transform-origin: bottom center;
 }
-.fan-item-icon { font-size: clamp(35px, 9vw, 55px); margin-bottom: 1vh; }
+.fan-item-icon {
+  width: 16vw; height: 16vw; max-width: 80px; max-height: 80px;
+  border-radius: 2vw; overflow: hidden; margin: 0 auto 1vh;
+}
+.fan-item-icon img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.box-product-img {
+  width: 60%; height: 60%; border-radius: 2vw; overflow: hidden;
+  opacity: 0; transform: translateY(20px); z-index: 4;
+}
+.box-product-img img {
+  width: 100%; height: 100%; object-fit: cover;
+}
 .fan-item-name {
   font-size: clamp(11px, 2.8vw, 15px); font-weight: 700; color: #2c4a5c;
 }
@@ -323,7 +336,7 @@ html, body {
       <div class="lid-top" id="lidTop"></div>
       <div class="box-body" id="boxBody">
         <div class="box-glow" id="boxGlow"></div>
-        <div class="box-product" id="boxProduct">&#127873;</div>
+        <div class="box-product-img" id="boxProduct"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ORLO Products"></div>
       </div>
     </div>
     <div class="open-text" id="openText">What's <span>inside?</span></div>
@@ -334,22 +347,22 @@ html, body {
     <div class="fan-title" id="fanTitle">Your ORLO <span>Haul</span></div>
     <div class="fan-container" id="fanContainer">
       <div class="fan-item" id="fan1" style="--fan-rot:-15deg; left:2%; top:5%;">
-        <div class="fan-item-icon">&#127899;</div>
+        <div class="fan-item-icon"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
         <div class="fan-item-name">FlexiWrap Straps</div>
         <div class="fan-item-price">22 AED</div>
       </div>
       <div class="fan-item" id="fan2" style="--fan-rot:5deg; right:2%; top:0;">
-        <div class="fan-item-icon">&#129526;</div>
+        <div class="fan-item-icon"><img src="https://lh3.googleusercontent.com/d/14YlqqxameQDM_HzxIKwpQG4uYHmwv6ah" alt="SilkTie"></div>
         <div class="fan-item-name">SilkTie Cable Ties</div>
         <div class="fan-item-price">18 AED</div>
       </div>
       <div class="fan-item" id="fan3" style="--fan-rot:-8deg; left:8%; bottom:5%;">
-        <div class="fan-item-icon">&#128188;</div>
+        <div class="fan-item-icon"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
         <div class="fan-item-name">ProDesk Kit</div>
         <div class="fan-item-price">65 AED</div>
       </div>
       <div class="fan-item" id="fan4" style="--fan-rot:12deg; right:8%; bottom:0;">
-        <div class="fan-item-icon">&#128037;</div>
+        <div class="fan-item-icon"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
         <div class="fan-item-name">Dangling Buddies</div>
         <div class="fan-item-price">35 AED</div>
       </div>
@@ -440,6 +453,17 @@ function burstConfetti() {
     container.appendChild(piece);
   }
 }
+
+// Preload product images
+(function() {
+  var urls = [
+    'https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl',
+    'https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG',
+    'https://lh3.googleusercontent.com/d/14YlqqxameQDM_HzxIKwpQG4uYHmwv6ah',
+    'https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj'
+  ];
+  urls.forEach(function(u) { var img = new Image(); img.src = u; });
+})();
 
 var T = {
   tiktok: { arrive: 2000, open: 2500, fan: 2500, features: 3200, cta: 2300 },
