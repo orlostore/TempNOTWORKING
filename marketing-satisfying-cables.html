@@ -98,6 +98,17 @@ html, body {
   color: #7a8f9c; text-align: center;
   margin-top: 1vh; opacity: 0; transform: translateY(15px);
 }
+.hook-sub-ar {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 500;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh; opacity: 0; transform: translateY(10px);
+}
+.steps-title-ar {
+  font-size: clamp(14px, 3.5vw, 20px); font-weight: 500;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-bottom: 2vh; margin-top: -2vh;
+  opacity: 0; transform: translateY(-10px);
+}
 
 /* ─── Scene 2: Problem Steps ─── */
 .scene-problems { background: #f8f8f8 !important; }
@@ -311,6 +322,7 @@ html, body {
     </div>
     <div class="hook-question" id="hookQ">Tangled <span>Cables?</span></div>
     <div class="hook-sub" id="hookSub">We've all been there...</div>
+    <div class="hook-sub-ar" id="hookSubAr">كابلات متشابكة؟ كلنا مرّينا بهالموقف</div>
   </div>
 
   <!-- Scene 2: Problems -->
@@ -335,6 +347,7 @@ html, body {
   <!-- Scene 4: Steps -->
   <div class="scene scene-steps" id="scene4">
     <div class="steps-title" id="stepsTitle">How <span>Easy</span> Is It?</div>
+    <div class="steps-title-ar" id="stepsTitleAr">كم سهل؟</div>
     <div class="step-row" id="step1">
       <div class="step-num">1</div>
       <div class="step-content">
@@ -366,7 +379,8 @@ html, body {
     <div class="result-frame" id="resultFrame">
       <div class="result-product-img"><img src="https://lh3.googleusercontent.com/d/1sBaS2Jzz52oBASRLgPv6PTRu7ymi6X0e" alt="FlexiWrap in use"></div>
       <div class="result-text">So <span>Satisfying</span></div>
-      <div class="result-price">22 <sub>AED</sub></div>
+      <div style="font-size:clamp(14px,3.5vw,20px);font-weight:500;color:#e07856;direction:rtl;font-family:'Almarai',sans-serif;margin-top:0.5vh">مرضي جداً</div>
+      <div class="result-price"><sub>AED</sub> 22</div>
     </div>
   </div>
 
@@ -377,9 +391,9 @@ html, body {
     <div class="cta-head-ar" id="ctaHeadAr">&#1585;&#1578;&#1617;&#1576; &#1603;&#1575;&#1576;&#1604;&#1575;&#1578;&#1603;</div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
-      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery<br>Above 75 AED</div>
-      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed<br>UAE Store</div>
-      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Premium<br>Quality</div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق 75 درهم</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Quality<br><span style="font-family:'Almarai',sans-serif">جودة عالية</span></div>
     </div>
   </div>
 </div>
@@ -476,7 +490,9 @@ async function startPromo(mode) {
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await anim(document.getElementById('hookSub'),
     { opacity: '1', transform: 'translateY(0)' }, 400);
-  await wait(t.hook - 1700);
+  await anim(document.getElementById('hookSubAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
+  await wait(t.hook - 2050);
   await anim(s1, { opacity: '0' }, 300);
 
   // ── SCENE 2 — Problems (cycle 3 cards) ──
@@ -530,6 +546,8 @@ async function startPromo(mode) {
   s4.style.opacity = '1';
   await anim(document.getElementById('stepsTitle'),
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('stepsTitleAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
 
   var steps = ['step1', 'step2', 'step3'];
   for (var s = 0; s < steps.length; s++) {

@@ -235,6 +235,18 @@ html, body {
 }
 
 /* ─── Scene 6: CTA ─── */
+/* ─── Arabic text helper ─── */
+.ar-sub {
+  font-size: clamp(13px, 3.2vw, 18px); font-weight: 500;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh; opacity: 0; transform: translateY(10px);
+}
+.lineup-name-ar {
+  font-size: clamp(10px, 2.3vw, 13px); font-weight: 500;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.2vh;
+}
+
 .scene-cta { background: #ffffff !important; gap: 2.5vh; }
 .cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
 .cta-head {
@@ -336,7 +348,7 @@ html, body {
   <!-- Scene 2: Before -->
   <div class="scene scene-before" id="scene2">
     <div class="before-label">
-      <div class="before-tag" id="beforeTag">BEFORE</div>
+      <div class="before-tag" id="beforeTag">BEFORE · <span style="font-family:'Almarai',sans-serif">قبل</span></div>
     </div>
     <div class="before-frame" id="beforeFrame">
       <div class="before-illustration" id="messContainer"></div>
@@ -358,7 +370,7 @@ html, body {
   <!-- Scene 4: After -->
   <div class="scene scene-after" id="scene4">
     <div class="after-label">
-      <div class="after-tag" id="afterTag">AFTER</div>
+      <div class="after-tag" id="afterTag">AFTER · <span style="font-family:'Almarai',sans-serif">بعد</span></div>
     </div>
     <div class="after-frame" id="afterFrame">
       <div class="clean-row" id="row1">
@@ -378,44 +390,49 @@ html, body {
         <div class="clean-label">Vibes — immaculate with Buddies</div>
       </div>
     </div>
-    <div class="after-caption" id="afterCaption">All thanks to <span>ORLO</span></div>
+    <div class="after-caption" id="afterCaption">All thanks to <span>ORLO</span><br><span style="font-family:'Almarai',sans-serif;font-size:0.7em;color:#e07856">كل هذا بفضل أورلو</span></div>
   </div>
 
   <!-- Scene 5: Products -->
   <div class="scene scene-products" id="scene5">
     <div class="products-title" id="productsTitle">What Can <span>I</span> Do?</div>
+    <div class="ar-sub" id="productsTitleAr" style="margin-bottom:2vh;margin-top:-2vh">شو أقدر أسوي؟</div>
     <div class="product-lineup" id="productLineup">
       <div class="lineup-card" id="card1">
         <div class="lineup-icon"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
         <div class="lineup-info">
           <div class="lineup-name">FlexiWrap Velcro Straps</div>
+          <div class="lineup-name-ar">أشرطة فليكسي راب</div>
           <div class="lineup-desc">Tame any cable in seconds</div>
         </div>
-        <div class="lineup-price">22 AED</div>
+        <div class="lineup-price">AED 22</div>
       </div>
       <div class="lineup-card" id="card2">
         <div class="lineup-icon"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
         <div class="lineup-info">
           <div class="lineup-name">ProDesk Cable Kit</div>
+          <div class="lineup-name-ar">أدوات تنظيم الكابلات برو ديسك</div>
           <div class="lineup-desc">Complete desk organization</div>
         </div>
-        <div class="lineup-price">65 AED</div>
+        <div class="lineup-price">AED 65</div>
       </div>
       <div class="lineup-card" id="card3">
         <div class="lineup-icon"><img src="https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ" alt="SilkTie"></div>
         <div class="lineup-info">
           <div class="lineup-name">SilkTie Cable Ties</div>
+          <div class="lineup-name-ar">منظم كابلات سيلك تاي</div>
           <div class="lineup-desc">Reusable, premium feel</div>
         </div>
-        <div class="lineup-price">18 AED</div>
+        <div class="lineup-price">AED 18</div>
       </div>
       <div class="lineup-card" id="card4">
         <div class="lineup-icon"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
         <div class="lineup-info">
           <div class="lineup-name">Dangling Buddies</div>
+          <div class="lineup-name-ar">أصدقاء معلّقين</div>
           <div class="lineup-desc">Fun desk companions</div>
         </div>
-        <div class="lineup-price">16 AED</div>
+        <div class="lineup-price">AED 16</div>
       </div>
     </div>
   </div>
@@ -427,9 +444,9 @@ html, body {
     <div class="cta-head-ar" id="ctaHeadAr">&#1576;&#1587;&#1617;&#1591; &#1605;&#1587;&#1575;&#1581;&#1578;&#1603;</div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
-      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery<br>Above 75 AED</div>
-      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed<br>UAE Store</div>
-      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Premium<br>Quality</div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#128666;</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق 75 درهم</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#127462;&#127466;</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#9989;</div>Quality<br><span style="font-family:'Almarai',sans-serif">جودة عالية</span></div>
     </div>
   </div>
 </div>
@@ -596,6 +613,8 @@ async function startPromo(mode) {
   s5.style.opacity = '1';
   await anim(document.getElementById('productsTitle'),
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('productsTitleAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
 
   var cards = ['card1', 'card2', 'card3', 'card4'];
   for (var j = 0; j < cards.length; j++) {
