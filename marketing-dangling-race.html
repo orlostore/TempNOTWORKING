@@ -288,7 +288,7 @@ html, body {
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
       <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق 75 درهم</span></div>
-      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon"><svg viewBox="0 0 60 40" width="28" height="19"><rect width="60" height="13.3" fill="#00732f"/><rect y="13.3" width="60" height="13.4" fill="#fff"/><rect y="26.7" width="60" height="13.3" fill="#000"/><rect width="15" height="40" fill="#ee1c25"/></svg></div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
       <div class="cta-badge"><div class="cta-badge-icon">🎨</div>Handmade<br><span style="font-family:'Almarai',sans-serif">صناعة يدوية</span></div>
     </div>
   </div>
@@ -383,7 +383,8 @@ async function startPromo(mode) {
 
   // Generate random speeds, pick winner
   const winIdx = Math.floor(Math.random() * CHARS.length);
-  const finishY = window.innerHeight * 0.75; // finish line position
+  const racerH = Math.min(window.innerWidth * 0.12, 70);
+  const finishY = window.innerHeight * 0.88 - racerH; // align with finish-line at bottom:12vh
   const speeds = CHARS.map((_, i) => {
     const base = finishY / (t.race / 30);
     return i === winIdx ? base * 1.15 : base * (0.6 + Math.random() * 0.45);
