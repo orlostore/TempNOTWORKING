@@ -193,6 +193,10 @@ html, body {
   color: #e07856; letter-spacing: 0.08em;
   opacity: 0; transform: translateY(15px);
 }
+.cta-uae {
+  font-size: clamp(12px, 3vw, 17px); font-weight: 600;
+  color: #4a6a7a; opacity: 0; margin-top: 1vh;
+}
 
 .progress-bar {
   position: absolute; bottom: 0; left: 0;
@@ -271,9 +275,10 @@ html, body {
     <div class="cta-head" id="ctaHead">Race to get<br><span>yours!</span></div>
     <div class="cta-head-ar" id="ctaHeadAr">سارع واحصل على واحدك!</div>
     <div class="cta-box" id="ctaBox">
-      <div class="cta-price">16 <sub>🇦🇪 AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-price">16 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-uae" id="ctaUae">🇦🇪 Licensed UAE Store · <span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
   </div>
 </div>
 
@@ -430,6 +435,7 @@ async function startPromo(mode) {
   await anim(document.getElementById('ctaHeadAr'), {opacity:'1'}, 400);
   await anim(document.getElementById('ctaBox'), {opacity:'1', transform:'scale(1)'}, 500, 'cubic-bezier(0.34,1.56,0.64,1)');
   await anim(document.getElementById('ctaUrl'), {opacity:'1', transform:'translateY(0)'}, 400);
+  await anim(document.getElementById('ctaUae'), {opacity:'1'}, 400);
 
   clearInterval(tick);
   bar.style.width = '100%';
