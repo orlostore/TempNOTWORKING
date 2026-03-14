@@ -362,13 +362,16 @@ async function initProductPage() {
   document.head.appendChild(ldScript);
 
   // GA4: track view_item event
-  if (typeof gtag === 'function') {
-    gtag('event', 'view_item', {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ ecommerce: null });
+  window.dataLayer.push({
+    event: 'view_item',
+    ecommerce: {
       currency: 'AED',
       value: product.price,
       items: [{ item_id: product.id, item_name: product.name, price: product.price, item_category: product.category }]
-    });
-  }
+    }
+  });
 
   // Meta Pixel: track ViewContent event
   if (typeof fbq === 'function') {
@@ -921,13 +924,16 @@ async function initProductPage() {
     localStorage.setItem("cart", JSON.stringify(localCart));
 
     // GA4: track add_to_cart event
-    if (typeof gtag === 'function') {
-        gtag('event', 'add_to_cart', {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+        event: 'add_to_cart',
+        ecommerce: {
             currency: 'AED',
             value: product.price,
             items: [{ item_id: product.id, item_name: product.name, price: product.price, quantity: 1, item_variant: hasVariants && sv ? sv.name : undefined }]
-        });
-    }
+        }
+    });
 
     // Meta Pixel: track AddToCart event
     if (typeof fbq === 'function') {
