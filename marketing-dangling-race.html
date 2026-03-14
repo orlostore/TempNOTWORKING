@@ -120,10 +120,30 @@ html, body {
 .race-header-ar { font-size: clamp(12px, 2.8vw, 18px); font-weight: 600; color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif; }
 
 /* Scene 3: Winner */
-.winner-crown { font-size: clamp(40px, 10vw, 70px); opacity: 0; transform: translateY(-20px); }
+.winner-gift {
+  position: relative;
+  width: clamp(80px, 22vw, 140px); height: clamp(80px, 22vw, 140px);
+  opacity: 0; transform: translateY(-20px) scale(0.6);
+}
+.winner-gift svg { width: 100%; height: 100%; }
+.gift-tag {
+  position: absolute; bottom: -1.5vh; right: -3vw;
+  background: #e07856; color: #fff;
+  padding: 0.5vh 2vw; border-radius: 50px;
+  font-size: clamp(9px, 2.2vw, 13px); font-weight: 800;
+  letter-spacing: 0.1em; white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(224,120,86,0.4);
+  transform: rotate(8deg);
+}
+@keyframes giftFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+.winner-gift.floating { animation: giftFloat 2s ease-in-out infinite; }
 .winner-img-wrap {
   width: 50vw; height: 50vw; max-width: 300px; max-height: 300px;
   opacity: 0; transform: scale(0.3);
+  margin-top: 1vh;
 }
 .winner-img-wrap img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
 @keyframes winnerDance {
@@ -215,7 +235,30 @@ html, body {
 
   <!-- Scene 3: Winner -->
   <div class="scene" id="scene3">
-    <div class="winner-crown" id="winCrown">👑</div>
+    <div class="winner-gift" id="winGift">
+      <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Box base -->
+        <rect x="15" y="55" width="90" height="55" rx="6" fill="#e07856" opacity="0.15" stroke="#e07856" stroke-width="2.5"/>
+        <!-- Box lid -->
+        <rect x="10" y="45" width="100" height="16" rx="4" fill="#e07856" opacity="0.25" stroke="#e07856" stroke-width="2.5"/>
+        <!-- Vertical ribbon -->
+        <rect x="52" y="45" width="16" height="65" rx="2" fill="#e07856" opacity="0.35"/>
+        <!-- Horizontal ribbon -->
+        <rect x="10" y="49" width="100" height="8" rx="2" fill="#e07856" opacity="0.35"/>
+        <!-- Bow left -->
+        <ellipse cx="48" cy="38" rx="16" ry="12" fill="#e07856" opacity="0.3" transform="rotate(-20 48 38)"/>
+        <!-- Bow right -->
+        <ellipse cx="72" cy="38" rx="16" ry="12" fill="#e07856" opacity="0.3" transform="rotate(20 72 38)"/>
+        <!-- Bow center -->
+        <circle cx="60" cy="42" r="6" fill="#e07856" opacity="0.5"/>
+        <!-- Sparkle accents -->
+        <circle cx="28" cy="30" r="2" fill="#e07856" opacity="0.5"/>
+        <circle cx="92" cy="28" r="1.5" fill="#e07856" opacity="0.4"/>
+        <circle cx="18" cy="50" r="1.5" fill="#e07856" opacity="0.3"/>
+        <circle cx="102" cy="46" r="2" fill="#e07856" opacity="0.4"/>
+      </svg>
+      <div class="gift-tag">ORLO</div>
+    </div>
     <div class="winner-img-wrap" id="winWrap"><img id="winImg" src="" alt="winner"></div>
     <div class="winner-name" id="winName"></div>
     <div class="winner-name-ar" id="winNameAr"></div>
@@ -228,7 +271,7 @@ html, body {
     <div class="cta-head" id="ctaHead">Race to get<br><span>yours!</span></div>
     <div class="cta-head-ar" id="ctaHeadAr">سارع واحصل على واحدك!</div>
     <div class="cta-box" id="ctaBox">
-      <div class="cta-price">16 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-price">16 <sub>🇦🇪 AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
   </div>
@@ -369,7 +412,8 @@ async function startPromo(mode) {
 
   const s3 = document.getElementById('scene3');
   s3.style.opacity = '1';
-  await anim(document.getElementById('winCrown'), {opacity:'1', transform:'translateY(0)'}, 400, 'cubic-bezier(0.34,1.56,0.64,1)');
+  await anim(document.getElementById('winGift'), {opacity:'1', transform:'translateY(0) scale(1)'}, 500, 'cubic-bezier(0.34,1.56,0.64,1)');
+  document.getElementById('winGift').classList.add('floating');
   await anim(document.getElementById('winWrap'), {opacity:'1', transform:'scale(1)'}, 500, 'cubic-bezier(0.34,1.56,0.64,1)');
   document.getElementById('winWrap').classList.add('dancing');
   await anim(document.getElementById('winName'), {opacity:'1'}, 300);
