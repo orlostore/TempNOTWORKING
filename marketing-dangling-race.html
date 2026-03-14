@@ -383,7 +383,8 @@ async function startPromo(mode) {
 
   // Generate random speeds, pick winner
   const winIdx = Math.floor(Math.random() * CHARS.length);
-  const finishY = window.innerHeight * 0.75; // finish line position
+  const racerH = Math.min(window.innerWidth * 0.12, 70);
+  const finishY = window.innerHeight * 0.88 - racerH; // align with finish-line at bottom:12vh
   const speeds = CHARS.map((_, i) => {
     const base = finishY / (t.race / 30);
     return i === winIdx ? base * 1.15 : base * (0.6 + Math.random() * 0.45);
