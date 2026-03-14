@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Dangling Race</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100vw; height: 100vh; overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.canvas { width: 100vw; height: 100vh; position: relative; overflow: hidden; background: #fff; }
+
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3vh; z-index: 100; background: #fff;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; }
+.mode-title { font-size: clamp(14px, 3vw, 22px); font-weight: 300; color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase; }
+.mode-subtitle { font-size: clamp(22px, 5.5vw, 36px); font-weight: 800; color: #2c4a5c; }
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  color: #fff; display: flex; align-items: center; justify-content: center; gap: 3vw;
+  transition: transform 0.15s;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok { background: linear-gradient(135deg, #010101, #1a1a1a); border: 2px solid #333; }
+.btn-insta { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+}
+
+/* Scene 1: Countdown hook */
+.countdown-num {
+  font-size: clamp(80px, 22vw, 160px); font-weight: 900;
+  color: #e07856; opacity: 0; transform: scale(2);
+  position: absolute;
+}
+.countdown-text {
+  position: absolute; bottom: 22vh;
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: #2c4a5c; text-align: center; opacity: 0;
+}
+.countdown-ar {
+  position: absolute; bottom: 16vh;
+  font-size: clamp(16px, 3.5vw, 24px); font-weight: 600;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  opacity: 0;
+}
+
+/* Scene 2: Race track */
+.race-track {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: row;
+  align-items: flex-start; justify-content: center;
+  gap: 1vw; padding: 0 3vw; padding-top: 3vh;
+}
+.race-lane {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  position: relative; height: 100%;
+}
+.lane-line {
+  position: absolute; top: 0; bottom: 0; width: 1px;
+  background: rgba(224,120,86,0.1);
+  left: 0;
+}
+.racer {
+  width: 12vw; max-width: 70px; height: 12vw; max-height: 70px;
+  position: absolute; top: -15vw;
+  transition: top 0.1s linear;
+}
+.racer img {
+  width: 100%; height: 100%; object-fit: contain;
+  mix-blend-mode: multiply;
+}
+@keyframes wobble {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+}
+.racer.racing img { animation: wobble 0.3s ease-in-out infinite; }
+.racer-name {
+  position: absolute; top: 2vh;
+  font-size: clamp(8px, 2vw, 12px); font-weight: 700;
+  color: #2c4a5c; text-align: center; white-space: nowrap;
+  writing-mode: horizontal-tb;
+}
+.finish-line {
+  position: absolute; bottom: 12vh; left: 3vw; right: 3vw;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, #2c4a5c 0, #2c4a5c 8px, #fff 8px, #fff 16px);
+  opacity: 0.4;
+}
+.finish-label {
+  position: absolute; bottom: 8vh; width: 100%;
+  text-align: center; font-size: clamp(10px, 2.5vw, 14px);
+  color: #9ab; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+}
+.race-header {
+  position: absolute; top: 2vh; z-index: 5; text-align: center;
+  opacity: 0;
+}
+.race-header-en { font-size: clamp(14px, 3.5vw, 22px); font-weight: 800; color: #2c4a5c; }
+.race-header-ar { font-size: clamp(12px, 2.8vw, 18px); font-weight: 600; color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif; }
+
+/* Scene 3: Winner */
+.winner-crown { font-size: clamp(40px, 10vw, 70px); opacity: 0; transform: translateY(-20px); }
+.winner-img-wrap {
+  width: 50vw; height: 50vw; max-width: 300px; max-height: 300px;
+  opacity: 0; transform: scale(0.3);
+}
+.winner-img-wrap img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+@keyframes winnerDance {
+  0%, 100% { transform: rotate(-5deg) scale(1); }
+  25% { transform: rotate(5deg) scale(1.05); }
+  50% { transform: rotate(-3deg) scale(1); }
+  75% { transform: rotate(4deg) scale(1.03); }
+}
+.winner-img-wrap.dancing { animation: winnerDance 0.8s ease-in-out infinite; }
+.winner-name {
+  font-size: clamp(24px, 6vw, 40px); font-weight: 900; color: #2c4a5c;
+  margin-top: 2vh; opacity: 0;
+}
+.winner-name-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700; color: #e07856;
+  direction: rtl; font-family: 'Almarai', sans-serif; opacity: 0;
+}
+.winner-label {
+  margin-top: 1vh;
+  font-size: clamp(13px, 3vw, 18px); font-weight: 600; color: #4a6a7a;
+  opacity: 0;
+}
+
+/* Scene 4: CTA */
+.scene-cta { gap: 2vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; font-family: 'Almarai', sans-serif;
+  opacity: 0;
+}
+.cta-box {
+  background: rgba(224,120,86,0.08); border: 2px solid rgba(224,120,86,0.2);
+  border-radius: 4vw; padding: 3vh 8vw; text-align: center;
+  opacity: 0; transform: scale(0.85);
+}
+.cta-price { font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856; }
+.cta-price sub { font-size: 0.4em; font-weight: 400; color: #7a8f9c; vertical-align: baseline; }
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%; z-index: 50;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+}
+</style>
+</head>
+<body>
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">Dangling <span>Race!</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')"><span>♪</span> TikTok</button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')"><span>◎</span> Instagram</button>
+    </div>
+  </div>
+
+  <!-- Scene 1: Countdown -->
+  <div class="scene" id="scene1">
+    <div class="countdown-num" id="countNum">3</div>
+    <div class="countdown-text" id="countText">Who reaches the fridge first?</div>
+    <div class="countdown-ar" id="countAr">مين يوصل الثلاجة أول؟</div>
+  </div>
+
+  <!-- Scene 2: Race -->
+  <div class="scene" id="scene2">
+    <div class="race-header" id="raceHeader">
+      <div class="race-header-en">GO GO GO!</div>
+      <div class="race-header-ar">يالله يالله!</div>
+    </div>
+    <div class="race-track" id="raceTrack"></div>
+    <div class="finish-line"></div>
+    <div class="finish-label">🏁 FINISH / النهاية 🏁</div>
+  </div>
+
+  <!-- Scene 3: Winner -->
+  <div class="scene" id="scene3">
+    <div class="winner-crown" id="winCrown">👑</div>
+    <div class="winner-img-wrap" id="winWrap"><img id="winImg" src="" alt="winner"></div>
+    <div class="winner-name" id="winName"></div>
+    <div class="winner-name-ar" id="winNameAr"></div>
+    <div class="winner-label" id="winLabel">First to the fridge! · أول واحد وصل!</div>
+  </div>
+
+  <!-- Scene 4: CTA -->
+  <div class="scene scene-cta" id="scene4">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Race to get<br><span>yours!</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">سارع واحصل على واحدك!</div>
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-price">16 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+    </div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+  </div>
+</div>
+
+<script>
+const CHARS = [
+  { en:'Watermelon', ar:'البطيخ', img:'https://lh3.googleusercontent.com/d/1ZjiAspl49X2Ln6Y_tPnkYIDzyLZNVsP5' },
+  { en:'Grape', ar:'العنب', img:'https://lh3.googleusercontent.com/d/1qhQX0PXI9jsnaXDs3YIKOYq2vfUqfgkZ' },
+  { en:'Mushroom', ar:'الفطر', img:'https://lh3.googleusercontent.com/d/1-oSW_5Fa15HRvKUTQyoBba9ki9XeDebk' },
+  { en:'Strawberry', ar:'الفراولة', img:'https://lh3.googleusercontent.com/d/1no16D1IhGLnZSJtryh4BGjr2lvoNYlQb' },
+  { en:'Farmer Woman', ar:'المزارعة', img:'https://lh3.googleusercontent.com/d/1jM4_XdzSm5Mrlu7X_in9FyZgLKgHVv8g' },
+  { en:'Orange Pumpkin', ar:'اليقطين', img:'https://lh3.googleusercontent.com/d/1ZJBJXnubEcUYcUN0BfCfWAQB1E31awP5' },
+];
+
+const T = {
+  tiktok: { countdown: 2400, race: 3500, winner: 2000, cta: 2500 },
+  insta:  { countdown: 3000, race: 4500, winner: 2600, cta: 3200 },
+};
+
+function anim(el, props, ms, ease='ease') {
+  return new Promise(r => {
+    el.style.transition = 'all '+ms+'ms '+ease;
+    requestAnimationFrame(() => { Object.assign(el.style, props); setTimeout(r, ms); });
+  });
+}
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+CHARS.forEach(c => { const i = new Image(); i.src = c.img; });
+
+// Build race lanes
+function buildTrack() {
+  const track = document.getElementById('raceTrack');
+  CHARS.forEach((c, i) => {
+    const lane = document.createElement('div');
+    lane.className = 'race-lane';
+    lane.innerHTML = `
+      <div class="racer" id="racer${i}"><img src="${c.img}" alt="${c.en}"></div>
+      <div class="racer-name">${c.en}</div>
+    `;
+    if (i > 0) lane.innerHTML += '<div class="lane-line"></div>';
+    track.appendChild(lane);
+  });
+}
+buildTrack();
+
+async function startPromo(mode) {
+  const t = T[mode];
+  const total = t.countdown + t.race + t.winner + t.cta + 1500;
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  const bar = document.getElementById('progressBar');
+  const start = Date.now();
+  const tick = setInterval(() => {
+    const pct = Math.min(((Date.now()-start)/total)*100, 100);
+    bar.style.width = pct+'%'; bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(tick);
+  }, 80);
+
+  // Scene 1: Countdown
+  const s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+  const numEl = document.getElementById('countNum');
+
+  // Show question first
+  await anim(document.getElementById('countText'), {opacity:'1'}, 400);
+  await anim(document.getElementById('countAr'), {opacity:'1'}, 300);
+  await wait(800);
+  document.getElementById('countText').style.opacity = '0';
+  document.getElementById('countAr').style.opacity = '0';
+  await wait(300);
+
+  // 3, 2, 1
+  for (let n = 3; n >= 1; n--) {
+    numEl.textContent = n;
+    numEl.style.opacity = '0'; numEl.style.transform = 'scale(2)';
+    await anim(numEl, {opacity:'1', transform:'scale(1)'}, 250, 'cubic-bezier(0.34,1.56,0.64,1)');
+    await wait(350);
+    await anim(numEl, {opacity:'0', transform:'scale(0.5)'}, 150);
+  }
+  numEl.textContent = 'GO!';
+  numEl.style.color = '#e07856';
+  await anim(numEl, {opacity:'1', transform:'scale(1.2)'}, 300, 'cubic-bezier(0.34,1.56,0.64,1)');
+  await wait(250);
+  await anim(s1, {opacity:'0'}, 250);
+
+  // Scene 2: Race
+  const s2 = document.getElementById('scene2');
+  s2.style.opacity = '1';
+  await anim(document.getElementById('raceHeader'), {opacity:'1'}, 300);
+
+  // Generate random speeds, pick winner
+  const winIdx = Math.floor(Math.random() * CHARS.length);
+  const finishY = window.innerHeight * 0.75; // finish line position
+  const speeds = CHARS.map((_, i) => {
+    const base = finishY / (t.race / 30);
+    return i === winIdx ? base * 1.15 : base * (0.6 + Math.random() * 0.45);
+  });
+  const positions = CHARS.map(() => -15);
+
+  // Start wobble
+  CHARS.forEach((_, i) => document.getElementById('racer'+i).classList.add('racing'));
+
+  // Animate race
+  let raceOver = false;
+  const raceStart = Date.now();
+  await new Promise(resolve => {
+    const frame = () => {
+      if (raceOver) return;
+      const elapsed = Date.now() - raceStart;
+      CHARS.forEach((_, i) => {
+        if (positions[i] < finishY) {
+          positions[i] += speeds[i] * (0.8 + Math.random() * 0.4);
+          document.getElementById('racer'+i).style.top = positions[i] + 'px';
+        }
+      });
+      if (positions[winIdx] >= finishY || elapsed > t.race) {
+        raceOver = true;
+        // Ensure winner is at finish
+        document.getElementById('racer'+winIdx).style.top = finishY + 'px';
+        resolve();
+      } else {
+        requestAnimationFrame(frame);
+      }
+    };
+    requestAnimationFrame(frame);
+  });
+
+  await wait(500);
+  await anim(s2, {opacity:'0'}, 350);
+
+  // Scene 3: Winner
+  const winner = CHARS[winIdx];
+  document.getElementById('winImg').src = winner.img;
+  document.getElementById('winName').textContent = winner.en;
+  document.getElementById('winNameAr').textContent = winner.ar;
+
+  const s3 = document.getElementById('scene3');
+  s3.style.opacity = '1';
+  await anim(document.getElementById('winCrown'), {opacity:'1', transform:'translateY(0)'}, 400, 'cubic-bezier(0.34,1.56,0.64,1)');
+  await anim(document.getElementById('winWrap'), {opacity:'1', transform:'scale(1)'}, 500, 'cubic-bezier(0.34,1.56,0.64,1)');
+  document.getElementById('winWrap').classList.add('dancing');
+  await anim(document.getElementById('winName'), {opacity:'1'}, 300);
+  await anim(document.getElementById('winNameAr'), {opacity:'1'}, 250);
+  await anim(document.getElementById('winLabel'), {opacity:'1'}, 300);
+  await wait(t.winner - 1800);
+  await anim(s3, {opacity:'0'}, 350);
+
+  // Scene 4: CTA
+  const s4 = document.getElementById('scene4');
+  await anim(s4, {opacity:'1'}, 300);
+  await anim(document.getElementById('ctaLogo'), {opacity:'1'}, 350);
+  await anim(document.getElementById('ctaHead'), {opacity:'1', transform:'translateY(0)'}, 500, 'cubic-bezier(0.16,1,0.3,1)');
+  await anim(document.getElementById('ctaHeadAr'), {opacity:'1'}, 400);
+  await anim(document.getElementById('ctaBox'), {opacity:'1', transform:'scale(1)'}, 500, 'cubic-bezier(0.34,1.56,0.64,1)');
+  await anim(document.getElementById('ctaUrl'), {opacity:'1', transform:'translateY(0)'}, 400);
+
+  clearInterval(tick);
+  bar.style.width = '100%';
+}
+</script>
+</body>
+</html>
