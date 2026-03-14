@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Emoji to Real Reveal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100vw; height: 100vh; overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.canvas { width: 100vw; height: 100vh; position: relative; overflow: hidden; background: #fff; }
+
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3vh; z-index: 100; background: #fff;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; }
+.mode-title { font-size: clamp(14px, 3vw, 22px); font-weight: 300; color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase; }
+.mode-subtitle { font-size: clamp(22px, 5.5vw, 36px); font-weight: 800; color: #2c4a5c; }
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  color: #fff; display: flex; align-items: center; justify-content: center; gap: 3vw;
+  transition: transform 0.15s;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok { background: linear-gradient(135deg, #010101, #1a1a1a); border: 2px solid #333; }
+.btn-insta { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+}
+
+/* Scene 1: Hook */
+.hook-emoji {
+  font-size: clamp(60px, 16vw, 110px);
+  opacity: 0; transform: scale(0.3);
+}
+.hook-question {
+  font-size: clamp(20px, 5vw, 34px); font-weight: 800;
+  color: #2c4a5c; margin-top: 3vh; opacity: 0;
+}
+.hook-ar {
+  font-size: clamp(16px, 4vw, 26px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 1vh; opacity: 0;
+}
+
+/* Scene 2: Reveal pairs */
+.reveal-container {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 3vh;
+}
+.reveal-emoji {
+  font-size: clamp(70px, 18vw, 120px);
+  opacity: 0; transform: scale(0.5);
+  transition: all 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.reveal-arrow {
+  font-size: clamp(30px, 7vw, 50px); color: #e07856;
+  opacity: 0; transform: rotate(-90deg);
+}
+.reveal-real {
+  width: 50vw; height: 50vw; max-width: 300px; max-height: 300px;
+  opacity: 0; transform: scale(0.3) rotate(15deg);
+}
+.reveal-real img {
+  width: 100%; height: 100%; object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.reveal-name {
+  font-size: clamp(22px, 5.5vw, 34px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(10px);
+}
+.reveal-name-ar {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 600; color: #e07856;
+  direction: rtl; font-family: 'Almarai', sans-serif;
+  opacity: 0;
+}
+
+/* Dissolve ring effect */
+@keyframes ringPulse {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+.ring {
+  position: absolute; width: 30vw; height: 30vw;
+  border-radius: 50%; border: 3px solid #e07856;
+  pointer-events: none; opacity: 0;
+}
+
+/* But wait text */
+.but-wait {
+  font-size: clamp(16px, 3.5vw, 24px); font-weight: 700; color: #e07856;
+  opacity: 0; position: absolute; bottom: 10vh;
+  letter-spacing: 0.1em;
+}
+
+/* Scene 3: CTA */
+.scene-cta { gap: 2vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; font-family: 'Almarai', sans-serif;
+  opacity: 0;
+}
+.cta-box {
+  background: rgba(224,120,86,0.08); border: 2px solid rgba(224,120,86,0.2);
+  border-radius: 4vw; padding: 3vh 8vw; text-align: center;
+  opacity: 0; transform: scale(0.85);
+}
+.cta-price { font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856; }
+.cta-price sub { font-size: 0.4em; font-weight: 400; color: #7a8f9c; vertical-align: baseline; }
+.cta-tier { margin-top: 1vh; font-size: clamp(13px, 3vw, 18px); font-weight: 600; color: #4a6a7a; }
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%; z-index: 50;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+}
+</style>
+</head>
+<body>
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">Emoji → <span>Real!</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')"><span>♪</span> TikTok</button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')"><span>◎</span> Instagram</button>
+    </div>
+  </div>
+
+  <!-- Scene 1: Hook -->
+  <div class="scene" id="scene1">
+    <div class="hook-emoji" id="hookEmoji">🍉 🍇 🍄</div>
+    <div class="hook-question" id="hookQ">What if emojis were real?</div>
+    <div class="hook-ar" id="hookAr">لو الإيموجي صار حقيقي؟</div>
+  </div>
+
+  <!-- Scene 2: Reveals -->
+  <div class="scene" id="scene2">
+    <div class="reveal-container" id="revealBox">
+      <div class="reveal-emoji" id="revEmoji"></div>
+      <div class="reveal-arrow" id="revArrow">↓</div>
+      <div class="reveal-real" id="revReal"><img id="revImg" src="" alt=""></div>
+      <div class="reveal-name" id="revName"></div>
+      <div class="reveal-name-ar" id="revNameAr"></div>
+    </div>
+    <div class="but-wait" id="butWait">✨ But wait... ✨</div>
+  </div>
+
+  <!-- Scene 3: CTA -->
+  <div class="scene scene-cta" id="scene3">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Emojis came<br>to <span>life!</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">الإيموجي صار حقيقي!</div>
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-price">16 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-tier">Buy 3, Save 10% · <span style="font-family:'Almarai',sans-serif">اشتري ٣ ووفّر ١٠٪</span></div>
+    </div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+  </div>
+</div>
+
+<script>
+const CHARS = [
+  { en:'Watermelon', ar:'البطيخ', emoji:'🍉', img:'https://lh3.googleusercontent.com/d/1ZjiAspl49X2Ln6Y_tPnkYIDzyLZNVsP5' },
+  { en:'Grape', ar:'العنب', emoji:'🍇', img:'https://lh3.googleusercontent.com/d/1qhQX0PXI9jsnaXDs3YIKOYq2vfUqfgkZ' },
+  { en:'Mushroom', ar:'الفطر', emoji:'🍄', img:'https://lh3.googleusercontent.com/d/1-oSW_5Fa15HRvKUTQyoBba9ki9XeDebk' },
+  { en:'Strawberry', ar:'الفراولة', emoji:'🍓', img:'https://lh3.googleusercontent.com/d/1no16D1IhGLnZSJtryh4BGjr2lvoNYlQb' },
+  { en:'Farmer Woman', ar:'المزارعة', emoji:'👩‍🌾', img:'https://lh3.googleusercontent.com/d/1jM4_XdzSm5Mrlu7X_in9FyZgLKgHVv8g' },
+  { en:'Orange Pumpkin', ar:'اليقطين', emoji:'🎃', img:'https://lh3.googleusercontent.com/d/1ZJBJXnubEcUYcUN0BfCfWAQB1E31awP5' },
+];
+
+const T = {
+  tiktok: { hook: 1800, perReveal: 1400, cta: 2600 },
+  insta:  { hook: 2400, perReveal: 1800, cta: 3200 },
+};
+
+function anim(el, props, ms, ease='ease') {
+  return new Promise(r => {
+    el.style.transition = 'all '+ms+'ms '+ease;
+    requestAnimationFrame(() => { Object.assign(el.style, props); setTimeout(r, ms); });
+  });
+}
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+CHARS.forEach(c => { const i = new Image(); i.src = c.img; });
+
+function spawnRing(parent) {
+  const ring = document.createElement('div');
+  ring.className = 'ring';
+  ring.style.animation = 'ringPulse 0.6s ease forwards';
+  parent.appendChild(ring);
+  setTimeout(() => ring.remove(), 700);
+}
+
+async function startPromo(mode) {
+  const t = T[mode];
+  const total = t.hook + CHARS.length * t.perReveal + t.cta + 1500;
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  const bar = document.getElementById('progressBar');
+  const start = Date.now();
+  const tick = setInterval(() => {
+    const pct = Math.min(((Date.now()-start)/total)*100, 100);
+    bar.style.width = pct+'%'; bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(tick);
+  }, 80);
+
+  // Scene 1: Hook
+  const s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+  await anim(document.getElementById('hookEmoji'), {opacity:'1', transform:'scale(1)'}, 500, 'cubic-bezier(0.34,1.56,0.64,1)');
+  await wait(300);
+  await anim(document.getElementById('hookQ'), {opacity:'1'}, 400);
+  await anim(document.getElementById('hookAr'), {opacity:'1'}, 350);
+  await wait(t.hook - 1550);
+  await anim(s1, {opacity:'0'}, 300);
+
+  // Scene 2: Reveal each character
+  const s2 = document.getElementById('scene2');
+  s2.style.opacity = '1';
+  const revEmoji = document.getElementById('revEmoji');
+  const revArrow = document.getElementById('revArrow');
+  const revReal = document.getElementById('revReal');
+  const revImg = document.getElementById('revImg');
+  const revName = document.getElementById('revName');
+  const revNameAr = document.getElementById('revNameAr');
+  const butWait = document.getElementById('butWait');
+
+  for (let i = 0; i < CHARS.length; i++) {
+    const c = CHARS[i];
+    // Reset
+    revEmoji.style.opacity = '0'; revEmoji.style.transform = 'scale(0.5)';
+    revArrow.style.opacity = '0'; revArrow.style.transform = 'rotate(-90deg)';
+    revReal.style.opacity = '0'; revReal.style.transform = 'scale(0.3) rotate(15deg)';
+    revName.style.opacity = '0'; revName.style.transform = 'translateY(10px)';
+    revNameAr.style.opacity = '0';
+    butWait.style.opacity = '0';
+
+    revEmoji.textContent = c.emoji;
+    revImg.src = c.img;
+    revName.textContent = c.en;
+    revNameAr.textContent = c.ar;
+
+    // Emoji pops in
+    await anim(revEmoji, {opacity:'1', transform:'scale(1)'}, 300, 'cubic-bezier(0.34,1.56,0.64,1)');
+    await wait(200);
+
+    // Arrow
+    await anim(revArrow, {opacity:'1', transform:'rotate(0deg)'}, 250);
+
+    // Real product reveals — emoji shrinks while product grows
+    anim(revEmoji, {opacity:'0.3', transform:'scale(0.6)'}, 300);
+    spawnRing(document.getElementById('revealBox'));
+    await anim(revReal, {opacity:'1', transform:'scale(1) rotate(0deg)'}, 450, 'cubic-bezier(0.34,1.56,0.64,1)');
+
+    // Name
+    await anim(revName, {opacity:'1', transform:'translateY(0)'}, 250);
+    anim(revNameAr, {opacity:'1'}, 200);
+
+    await wait(t.perReveal - 1450);
+
+    // "But wait" on intermediate reveals
+    if (i < CHARS.length - 1) {
+      await anim(butWait, {opacity:'1'}, 200);
+      await wait(300);
+    }
+
+    // Fade out for next
+    await anim(document.getElementById('revealBox'), {opacity:'0'}, 200);
+    await wait(100);
+    document.getElementById('revealBox').style.opacity = '1';
+  }
+
+  await anim(s2, {opacity:'0'}, 300);
+
+  // Scene 3: CTA
+  const s3 = document.getElementById('scene3');
+  await anim(s3, {opacity:'1'}, 300);
+  await anim(document.getElementById('ctaLogo'), {opacity:'1'}, 350);
+  await anim(document.getElementById('ctaHead'), {opacity:'1', transform:'translateY(0)'}, 500, 'cubic-bezier(0.16,1,0.3,1)');
+  await anim(document.getElementById('ctaHeadAr'), {opacity:'1'}, 400);
+  await anim(document.getElementById('ctaBox'), {opacity:'1', transform:'scale(1)'}, 500, 'cubic-bezier(0.34,1.56,0.64,1)');
+  await anim(document.getElementById('ctaUrl'), {opacity:'1', transform:'translateY(0)'}, 400);
+
+  clearInterval(tick);
+  bar.style.width = '100%';
+}
+</script>
+</body>
+</html>

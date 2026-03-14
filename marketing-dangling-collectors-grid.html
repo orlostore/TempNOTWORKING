@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Collector's Grid</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100vw; height: 100vh; overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.canvas { width: 100vw; height: 100vh; position: relative; overflow: hidden; background: #fff; }
+
+/* ═══ Mode Select ═══ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100; background: #ffffff;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
+}
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -1vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok { background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%); border: 2px solid #333; }
+.btn-insta { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); box-shadow: 0 4px 30px rgba(225,48,108,0.25); }
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
+
+/* ═══ Scenes ═══ */
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  will-change: opacity, transform;
+}
+
+/* ─── Scene 1: Hook ─── */
+.scene-hook { background: #ffffff; }
+.hook-empty-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2vw;
+  width: 70vw; max-width: 360px;
+}
+.hook-cell {
+  aspect-ratio: 1; border-radius: 3vw;
+  border: 2px dashed rgba(224,120,86,0.25);
+  background: rgba(224,120,86,0.03);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(20px, 5vw, 34px); color: rgba(224,120,86,0.3);
+  opacity: 0; transform: scale(0.5);
+}
+.hook-text {
+  margin-top: 4vh; text-align: center;
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; opacity: 0; transform: translateY(20px);
+}
+.hook-text span { color: #e07856; }
+.hook-ar {
+  font-size: clamp(16px, 4vw, 26px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 1vh; opacity: 0;
+}
+
+/* ─── Scene 2: Tetris Drop ─── */
+.scene-tetris { background: #ffffff; }
+.tetris-header {
+  position: absolute; top: 5vh; text-align: center; z-index: 5;
+}
+.tetris-en {
+  font-size: clamp(16px, 4vw, 26px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
+}
+.tetris-ar {
+  font-size: clamp(13px, 3vw, 20px); font-weight: 600; color: #e07856;
+  direction: rtl; font-family: 'Almarai', sans-serif; margin-top: 0.5vh;
+  opacity: 0; transform: translateY(-15px);
+}
+.tetris-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5vw;
+  width: 75vw; max-width: 400px;
+  margin-top: 2vh;
+}
+.tetris-cell {
+  aspect-ratio: 1; border-radius: 3vw;
+  background: rgba(224,120,86,0.04);
+  border: 1px solid rgba(224,120,86,0.1);
+  position: relative; overflow: hidden;
+}
+.tetris-char {
+  width: 100%; height: 100%; object-fit: contain;
+  mix-blend-mode: multiply;
+  position: absolute; inset: 0;
+  opacity: 0;
+}
+/* Drop-in animation */
+@keyframes dropIn {
+  0%   { opacity: 0; transform: translateY(-200%) scale(0.5); }
+  60%  { opacity: 1; transform: translateY(8%) scale(1.05); }
+  80%  { transform: translateY(-3%) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0%) scale(1); }
+}
+.tetris-char.dropped {
+  animation: dropIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.tetris-name {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  text-align: center; padding: 0.5vh 0;
+  font-size: clamp(8px, 2vw, 12px); font-weight: 700;
+  color: #2c4a5c; background: rgba(255,255,255,0.85);
+  opacity: 0; transition: opacity 0.3s;
+}
+.tetris-name.show { opacity: 1; }
+
+/* Counter */
+.tetris-counter {
+  position: absolute; bottom: 12vh;
+  display: flex; align-items: center; gap: 2vw;
+  opacity: 0;
+}
+.counter-num {
+  font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856;
+  line-height: 1;
+}
+.counter-label {
+  font-size: clamp(12px, 2.8vw, 16px); font-weight: 600; color: #4a6a7a;
+  line-height: 1.3;
+}
+
+/* ─── Scene 3: Complete Grid Pulse ─── */
+.scene-complete { background: #ffffff; }
+.complete-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5vw;
+  width: 75vw; max-width: 400px;
+}
+.complete-cell {
+  aspect-ratio: 1; border-radius: 3vw;
+  background: rgba(224,120,86,0.04);
+  border: 2px solid rgba(224,120,86,0.15);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; opacity: 0;
+}
+.complete-cell img {
+  width: 90%; height: 90%; object-fit: contain;
+  mix-blend-mode: multiply;
+}
+@keyframes gridPulse {
+  0%, 100% { transform: scale(1); border-color: rgba(224,120,86,0.15); }
+  50% { transform: scale(1.05); border-color: rgba(224,120,86,0.5); }
+}
+.complete-cell.pulse { animation: gridPulse 0.8s ease-in-out; }
+.complete-label {
+  margin-top: 4vh; text-align: center;
+  opacity: 0; transform: translateY(15px);
+}
+.complete-en {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 900; color: #2c4a5c;
+}
+.complete-en span { color: #e07856; }
+.complete-ar {
+  font-size: clamp(16px, 4vw, 26px); font-weight: 700; color: #e07856;
+  direction: rtl; font-family: 'Almarai', sans-serif; margin-top: 0.5vh;
+}
+
+/* ─── Scene 4: CTA ─── */
+.scene-cta { background: #ffffff; gap: 2.5vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; text-align: center; font-family: 'Almarai', sans-serif;
+  margin-top: -1vh; opacity: 0; transform: translateY(20px);
+}
+.cta-box {
+  background: rgba(224,120,86,0.08); border: 2px solid rgba(224,120,86,0.2);
+  border-radius: 4vw; padding: 3vh 8vw; text-align: center;
+  opacity: 0; transform: scale(0.85);
+}
+.cta-price { font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856; line-height: 1; }
+.cta-price sub { font-size: 0.4em; font-weight: 400; color: #7a8f9c; vertical-align: baseline; }
+.cta-tier { margin-top: 1vh; font-size: clamp(13px, 3vw, 18px); font-weight: 600; color: #4a6a7a; }
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+.cta-badges { display: flex; gap: 5vw; opacity: 0; }
+.cta-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(10px, 2.5vw, 14px); color: #6a8090; font-weight: 500;
+}
+.cta-badge-icon {
+  width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
+  border-radius: 50%; background: rgba(224,120,86,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
+}
+
+/* ═══ Progress Bar ═══ */
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+  z-index: 50;
+}
+
+/* ═══ Floating Dots ═══ */
+.dots { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.dot {
+  position: absolute; border-radius: 50%;
+  background: rgba(224,120,86,0.15);
+  animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+</style>
+</head>
+<body>
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="dots" id="dots"></div>
+
+  <!-- Mode Selector -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">Collect Them <span>All!</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">♪</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">◎</span> Instagram
+      </button>
+    </div>
+  </div>
+
+  <!-- Scene 1: Empty Grid Hook -->
+  <div class="scene scene-hook" id="scene1">
+    <div class="hook-empty-grid" id="hookGrid"></div>
+    <div class="hook-text" id="hookText">Can you collect<br>them <span>all</span>?</div>
+    <div class="hook-ar" id="hookAr">تقدر تجمعهم كلهم؟</div>
+  </div>
+
+  <!-- Scene 2: Tetris Drop -->
+  <div class="scene scene-tetris" id="scene2">
+    <div class="tetris-header">
+      <div class="tetris-en" id="tetrisEn">Building Your Collection</div>
+      <div class="tetris-ar" id="tetrisAr">نبني مجموعتك</div>
+    </div>
+    <div class="tetris-grid" id="tetrisGrid"></div>
+    <div class="tetris-counter" id="tetrisCounter">
+      <div class="counter-num" id="counterNum">0</div>
+      <div class="counter-label">/ 6<br>collected</div>
+    </div>
+  </div>
+
+  <!-- Scene 3: Complete Grid -->
+  <div class="scene scene-complete" id="scene3">
+    <div class="complete-grid" id="completeGrid"></div>
+    <div class="complete-label" id="completeLabel">
+      <div class="complete-en">Collect Them <span>All!</span></div>
+      <div class="complete-ar">اجمعهم كلهم!</div>
+    </div>
+  </div>
+
+  <!-- Scene 4: CTA -->
+  <div class="scene scene-cta" id="scene4">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Start Your<br><span>Collection</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">ابدأ مجموعتك الآن</div>
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-price">16 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-tier">Buy 3, Save 10% &nbsp;|&nbsp; <span style="font-family:'Almarai',sans-serif">اشتري ٣ ووفّر ١٠٪</span></div>
+    </div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-badges" id="ctaBadges">
+      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق 75 درهم</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🎨</div>Handmade<br><span style="font-family:'Almarai',sans-serif">صناعة يدوية</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CHARACTERS = [
+  { en:'Watermelon', ar:'البطيخ', img:'https://lh3.googleusercontent.com/d/1ZjiAspl49X2Ln6Y_tPnkYIDzyLZNVsP5' },
+  { en:'Grape', ar:'العنب', img:'https://lh3.googleusercontent.com/d/1qhQX0PXI9jsnaXDs3YIKOYq2vfUqfgkZ' },
+  { en:'Mushroom', ar:'الفطر', img:'https://lh3.googleusercontent.com/d/1-oSW_5Fa15HRvKUTQyoBba9ki9XeDebk' },
+  { en:'Strawberry', ar:'الفراولة', img:'https://lh3.googleusercontent.com/d/1no16D1IhGLnZSJtryh4BGjr2lvoNYlQb' },
+  { en:'Farmer Woman', ar:'المزارعة', img:'https://lh3.googleusercontent.com/d/1jM4_XdzSm5Mrlu7X_in9FyZgLKgHVv8g' },
+  { en:'Orange Pumpkin', ar:'اليقطين', img:'https://lh3.googleusercontent.com/d/1ZJBJXnubEcUYcUN0BfCfWAQB1E31awP5' },
+];
+
+const T = {
+  tiktok: { hook: 2000, perDrop: 700, complete: 2200, cta: 2800 },
+  insta:  { hook: 2600, perDrop: 900, complete: 2800, cta: 3500 },
+};
+
+function anim(el, props, ms, ease = 'ease') {
+  return new Promise(resolve => {
+    el.style.transition = 'all ' + ms + 'ms ' + ease;
+    requestAnimationFrame(() => {
+      Object.assign(el.style, props);
+      setTimeout(resolve, ms);
+    });
+  });
+}
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// Create dots
+function createDots() {
+  const c = document.getElementById('dots');
+  for (let i = 0; i < 20; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDuration = (5 + Math.random() * 7) + 's';
+    d.style.animationDelay = Math.random() * 12 + 's';
+    const size = 3 + Math.random() * 5;
+    d.style.width = size + 'px'; d.style.height = size + 'px';
+    c.appendChild(d);
+  }
+}
+
+// Preload
+function preloadImages() {
+  CHARACTERS.forEach(c => { const img = new Image(); img.src = c.img; });
+}
+
+// Build hook grid (empty cells with ?)
+function buildHookGrid() {
+  const grid = document.getElementById('hookGrid');
+  for (let i = 0; i < 6; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'hook-cell';
+    cell.id = 'hookCell' + i;
+    cell.textContent = '?';
+    grid.appendChild(cell);
+  }
+}
+
+// Build tetris grid
+function buildTetrisGrid() {
+  const grid = document.getElementById('tetrisGrid');
+  CHARACTERS.forEach((c, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'tetris-cell';
+    cell.innerHTML = `
+      <img class="tetris-char" id="tetrisChar${i}" src="${c.img}" alt="${c.en}">
+      <div class="tetris-name" id="tetrisName${i}">${c.en}</div>
+    `;
+    grid.appendChild(cell);
+  });
+}
+
+// Build complete grid
+function buildCompleteGrid() {
+  const grid = document.getElementById('completeGrid');
+  CHARACTERS.forEach((c, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'complete-cell';
+    cell.id = 'completeCell' + i;
+    cell.innerHTML = `<img src="${c.img}" alt="${c.en}">`;
+    grid.appendChild(cell);
+  });
+}
+
+async function startPromo(mode) {
+  const t = T[mode];
+  const totalDuration = t.hook + (CHARACTERS.length * t.perDrop) + t.complete + t.cta + 2000;
+
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  // Progress bar
+  const bar = document.getElementById('progressBar');
+  const start = Date.now();
+  const progressTick = setInterval(() => {
+    const pct = Math.min(((Date.now() - start) / totalDuration) * 100, 100);
+    bar.style.width = pct + '%';
+    bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(progressTick);
+  }, 80);
+
+  // ── SCENE 1: Empty Grid Hook ──
+  const s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+
+  // Stagger in empty cells
+  for (let i = 0; i < 6; i++) {
+    await wait(120);
+    await anim(document.getElementById('hookCell' + i),
+      { opacity: '1', transform: 'scale(1)' }, 300, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  }
+
+  await wait(300);
+  await anim(document.getElementById('hookText'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('hookAr'), { opacity: '1' }, 400);
+  await wait(t.hook - 2200);
+  await anim(s1, { opacity: '0' }, 400);
+
+  // ── SCENE 2: Tetris Drop ──
+  const s2 = document.getElementById('scene2');
+  s2.style.opacity = '1';
+
+  await anim(document.getElementById('tetrisEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('tetrisAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('tetrisCounter'), { opacity: '1' }, 300);
+
+  const counterNum = document.getElementById('counterNum');
+
+  // Drop characters one by one
+  for (let i = 0; i < CHARACTERS.length; i++) {
+    const charImg = document.getElementById('tetrisChar' + i);
+    const charName = document.getElementById('tetrisName' + i);
+
+    charImg.classList.add('dropped');
+    await wait(t.perDrop * 0.6);
+
+    charName.classList.add('show');
+    counterNum.textContent = (i + 1).toString();
+
+    // Bounce the counter
+    counterNum.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+    counterNum.style.transform = 'scale(1.3)';
+    await wait(150);
+    counterNum.style.transform = 'scale(1)';
+
+    await wait(t.perDrop * 0.4);
+  }
+
+  await wait(500);
+  await anim(s2, { opacity: '0' }, 400);
+
+  // ── SCENE 3: Complete Grid Pulse ──
+  const s3 = document.getElementById('scene3');
+  s3.style.opacity = '1';
+
+  // All cells appear
+  for (let i = 0; i < CHARACTERS.length; i++) {
+    const cell = document.getElementById('completeCell' + i);
+    cell.style.opacity = '1';
+    cell.classList.add('pulse');
+    await wait(100);
+  }
+
+  await wait(600);
+
+  // Second pulse wave
+  for (let i = 0; i < CHARACTERS.length; i++) {
+    const cell = document.getElementById('completeCell' + i);
+    cell.classList.remove('pulse');
+    await wait(30);
+    cell.classList.add('pulse');
+  }
+
+  await wait(300);
+  await anim(document.getElementById('completeLabel'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  await wait(t.complete - 2000);
+  await anim(s3, { opacity: '0' }, 400);
+
+  // ── SCENE 4: CTA Outro ──
+  const s4 = document.getElementById('scene4');
+  await anim(s4, { opacity: '1' }, 300);
+  await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
+  await anim(document.getElementById('ctaHead'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaHeadAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(150);
+  await anim(document.getElementById('ctaBox'),
+    { opacity: '1', transform: 'scale(1)' }, 550, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(200);
+  await anim(document.getElementById('ctaUrl'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaBadges'), { opacity: '1' }, 500);
+
+  clearInterval(progressTick);
+  bar.style.width = '100%';
+  bar.style.transition = 'width 300ms linear';
+}
+
+// Init
+createDots();
+buildHookGrid();
+buildTetrisGrid();
+buildCompleteGrid();
+preloadImages();
+</script>
+</body>
+</html>

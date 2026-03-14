@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Pick Your Buddy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100vw; height: 100vh; overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.canvas { width: 100vw; height: 100vh; position: relative; overflow: hidden; background: #fff; }
+
+/* Mode Select */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3vh; z-index: 100; background: #fff;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; }
+.mode-title { font-size: clamp(14px, 3vw, 22px); font-weight: 300; color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase; }
+.mode-subtitle { font-size: clamp(22px, 5.5vw, 36px); font-weight: 800; color: #2c4a5c; text-align: center; }
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2vh; margin-top: 1vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  color: #fff; display: flex; align-items: center; justify-content: center; gap: 3vw;
+  transition: transform 0.15s;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok { background: linear-gradient(135deg, #010101, #1a1a1a); border: 2px solid #333; }
+.btn-insta { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+
+/* Scenes */
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+}
+
+/* Scene 1: Hook */
+.hook-text {
+  font-size: clamp(28px, 7vw, 48px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.2;
+  opacity: 0; transform: scale(0.6);
+}
+.hook-text span { color: #e07856; }
+.hook-ar {
+  font-size: clamp(20px, 5vw, 34px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 2vh; opacity: 0; transform: translateY(20px);
+}
+.hook-hand {
+  font-size: clamp(50px, 12vw, 80px); margin-top: 3vh;
+  opacity: 0; animation: none;
+}
+@keyframes pointBounce {
+  0%, 100% { transform: translateY(0) rotate(-10deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* Scene 2: Picker carousel */
+.picker-title {
+  font-size: clamp(16px, 3.5vw, 24px); font-weight: 700;
+  color: #2c4a5c; margin-bottom: 1vh; opacity: 0;
+}
+.picker-title-ar {
+  font-size: clamp(14px, 3vw, 20px); font-weight: 600;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-bottom: 2vh; opacity: 0;
+}
+.carousel {
+  position: relative;
+  width: 70vw; height: 70vw; max-width: 400px; max-height: 400px;
+}
+.carousel-item {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5) rotate(-15deg);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.carousel-item.active {
+  opacity: 1; transform: scale(1) rotate(0deg);
+}
+.carousel-item.exit-left {
+  opacity: 0; transform: translateX(-120%) rotate(-20deg) scale(0.6);
+}
+.carousel-item img {
+  width: 85%; height: 85%; object-fit: contain;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.1));
+}
+.carousel-name {
+  position: absolute; bottom: -6vh;
+  text-align: center;
+}
+.carousel-name-en {
+  font-size: clamp(20px, 5vw, 32px); font-weight: 800; color: #2c4a5c;
+}
+.carousel-name-ar {
+  font-size: clamp(14px, 3.5vw, 22px); font-weight: 600; color: #e07856;
+  direction: rtl; font-family: 'Almarai', sans-serif;
+}
+
+/* Swipe hint */
+.swipe-hint {
+  position: absolute; bottom: 14vh;
+  font-size: clamp(12px, 2.8vw, 16px); color: #9ab; font-weight: 500;
+  opacity: 0;
+  display: flex; align-items: center; gap: 1.5vw;
+}
+@keyframes swipeArrow { 0%,100%{transform:translateX(0)} 50%{transform:translateX(8px)} }
+.swipe-hint span { animation: swipeArrow 1s ease-in-out infinite; display: inline-block; }
+
+/* Scene 3: Chosen one */
+.chosen-badge {
+  background: #e07856; color: #fff;
+  padding: 1.2vh 5vw; border-radius: 50px;
+  font-size: clamp(14px, 3.5vw, 22px); font-weight: 800;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  opacity: 0; transform: scale(0.5);
+  margin-bottom: 2vh;
+}
+.chosen-badge-ar {
+  font-size: clamp(13px, 3vw, 18px); font-weight: 600;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-bottom: 2vh; opacity: 0;
+}
+.chosen-img-wrap {
+  width: 55vw; height: 55vw; max-width: 340px; max-height: 340px;
+  position: relative; opacity: 0; transform: scale(0.3) rotate(20deg);
+}
+.chosen-img-wrap img {
+  width: 100%; height: 100%; object-fit: contain;
+  mix-blend-mode: multiply;
+}
+@keyframes chosenBounce {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+.chosen-img-wrap.bouncing { animation: chosenBounce 1.2s ease-in-out infinite; }
+
+/* Sparkles */
+.sparkle {
+  position: absolute; font-size: clamp(18px, 4vw, 28px);
+  opacity: 0; pointer-events: none;
+}
+@keyframes sparkPop {
+  0% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.3) rotate(180deg); }
+  100% { opacity: 0; transform: scale(0.5) rotate(360deg); }
+}
+
+/* Scene 4: CTA */
+.scene-cta { gap: 2vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(20px);
+}
+.cta-box {
+  background: rgba(224,120,86,0.08); border: 2px solid rgba(224,120,86,0.2);
+  border-radius: 4vw; padding: 3vh 8vw; text-align: center;
+  opacity: 0; transform: scale(0.85);
+}
+.cta-price { font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856; }
+.cta-price sub { font-size: 0.4em; font-weight: 400; color: #7a8f9c; vertical-align: baseline; }
+.cta-tier { margin-top: 1vh; font-size: clamp(13px, 3vw, 18px); font-weight: 600; color: #4a6a7a; }
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+
+/* Progress */
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%; z-index: 50;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+}
+</style>
+</head>
+<body>
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Mode Select -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">Pick Your <span>Buddy</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')"><span>♪</span> TikTok</button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')"><span>◎</span> Instagram</button>
+    </div>
+  </div>
+
+  <!-- Scene 1: Hook -->
+  <div class="scene" id="scene1">
+    <div class="hook-text" id="hookText">Which one<br>are <span>you</span>?</div>
+    <div class="hook-ar" id="hookAr">أيهم يشبهك؟</div>
+    <div class="hook-hand" id="hookHand">👇</div>
+  </div>
+
+  <!-- Scene 2: Picker -->
+  <div class="scene" id="scene2">
+    <div class="picker-title" id="pickerTitle">Swipe to Pick</div>
+    <div class="picker-title-ar" id="pickerTitleAr">اسحب واختر</div>
+    <div class="carousel" id="carousel"></div>
+    <div class="swipe-hint" id="swipeHint">swipe <span>→</span></div>
+  </div>
+
+  <!-- Scene 3: Chosen -->
+  <div class="scene" id="scene3">
+    <div class="chosen-badge" id="chosenBadge">YOUR BUDDY!</div>
+    <div class="chosen-badge-ar" id="chosenBadgeAr">صديقك المختار!</div>
+    <div class="chosen-img-wrap" id="chosenWrap">
+      <img id="chosenImg" src="" alt="chosen">
+    </div>
+  </div>
+
+  <!-- Scene 4: CTA -->
+  <div class="scene scene-cta" id="scene4">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Tiny Friends for<br>Your <span>Fridge</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">أصدقاء صغار لثلاجتك</div>
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-price">16 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-tier">Buy 3, Save 10% · <span style="font-family:'Almarai',sans-serif">اشتري ٣ ووفّر ١٠٪</span></div>
+    </div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+  </div>
+</div>
+
+<script>
+const CHARS = [
+  { en:'Watermelon', ar:'البطيخ', img:'https://lh3.googleusercontent.com/d/1ZjiAspl49X2Ln6Y_tPnkYIDzyLZNVsP5' },
+  { en:'Grape', ar:'العنب', img:'https://lh3.googleusercontent.com/d/1qhQX0PXI9jsnaXDs3YIKOYq2vfUqfgkZ' },
+  { en:'Mushroom', ar:'الفطر', img:'https://lh3.googleusercontent.com/d/1-oSW_5Fa15HRvKUTQyoBba9ki9XeDebk' },
+  { en:'Strawberry', ar:'الفراولة', img:'https://lh3.googleusercontent.com/d/1no16D1IhGLnZSJtryh4BGjr2lvoNYlQb' },
+  { en:'Farmer Woman', ar:'المزارعة', img:'https://lh3.googleusercontent.com/d/1jM4_XdzSm5Mrlu7X_in9FyZgLKgHVv8g' },
+  { en:'Orange Pumpkin', ar:'اليقطين', img:'https://lh3.googleusercontent.com/d/1ZJBJXnubEcUYcUN0BfCfWAQB1E31awP5' },
+];
+
+const T = {
+  tiktok: { hook: 1600, perChar: 800, chosen: 2200, cta: 2600 },
+  insta:  { hook: 2200, perChar: 1100, chosen: 2800, cta: 3200 },
+};
+
+function anim(el, props, ms, ease='ease') {
+  return new Promise(r => {
+    el.style.transition = 'all '+ms+'ms '+ease;
+    requestAnimationFrame(() => { Object.assign(el.style, props); setTimeout(r, ms); });
+  });
+}
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// Preload
+CHARS.forEach(c => { const i = new Image(); i.src = c.img; });
+
+// Build carousel
+function buildCarousel() {
+  const el = document.getElementById('carousel');
+  CHARS.forEach((c, i) => {
+    const div = document.createElement('div');
+    div.className = 'carousel-item';
+    div.id = 'carItem' + i;
+    div.innerHTML = `<img src="${c.img}" alt="${c.en}">
+      <div class="carousel-name"><div class="carousel-name-en">${c.en}</div><div class="carousel-name-ar">${c.ar}</div></div>`;
+    el.appendChild(div);
+  });
+}
+buildCarousel();
+
+// Sparkle helper
+function spawnSparkles(parent) {
+  const emojis = ['✨','⭐','💫','🌟'];
+  for (let i = 0; i < 8; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.textContent = emojis[i % emojis.length];
+    s.style.top = (10 + Math.random() * 80) + '%';
+    s.style.left = (5 + Math.random() * 90) + '%';
+    s.style.animation = `sparkPop 0.6s ${i * 0.08}s ease forwards`;
+    parent.appendChild(s);
+    setTimeout(() => s.remove(), 800);
+  }
+}
+
+async function startPromo(mode) {
+  const t = T[mode];
+  const total = t.hook + CHARS.length * t.perChar + t.chosen + t.cta + 1500;
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  const bar = document.getElementById('progressBar');
+  const start = Date.now();
+  const tick = setInterval(() => {
+    const pct = Math.min(((Date.now()-start)/total)*100, 100);
+    bar.style.width = pct+'%'; bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(tick);
+  }, 80);
+
+  // Scene 1: Hook
+  const s1 = document.getElementById('scene1');
+  s1.style.opacity = '1'; s1.style.pointerEvents = 'auto';
+  await anim(document.getElementById('hookText'), {opacity:'1', transform:'scale(1)'}, 500, 'cubic-bezier(0.34,1.56,0.64,1)');
+  await anim(document.getElementById('hookAr'), {opacity:'1', transform:'translateY(0)'}, 400);
+  const hand = document.getElementById('hookHand');
+  hand.style.opacity = '1';
+  hand.style.animation = 'pointBounce 0.8s ease-in-out infinite';
+  await wait(t.hook - 900);
+  await anim(s1, {opacity:'0'}, 350);
+  s1.style.pointerEvents = 'none';
+
+  // Scene 2: Carousel auto-swipe
+  const s2 = document.getElementById('scene2');
+  s2.style.opacity = '1'; s2.style.pointerEvents = 'auto';
+  await anim(document.getElementById('pickerTitle'), {opacity:'1'}, 300);
+  await anim(document.getElementById('pickerTitleAr'), {opacity:'1'}, 250);
+  await anim(document.getElementById('swipeHint'), {opacity:'1'}, 300);
+
+  // Pick a random "winner" (for the auto-play feel)
+  const winnerIdx = Math.floor(Math.random() * CHARS.length);
+
+  for (let i = 0; i < CHARS.length; i++) {
+    const item = document.getElementById('carItem' + i);
+    item.classList.add('active');
+    await wait(t.perChar - 300);
+    if (i < CHARS.length - 1) {
+      item.classList.remove('active');
+      item.classList.add('exit-left');
+      await wait(300);
+    } else {
+      // Last one stays briefly then exit
+      await wait(200);
+      item.classList.remove('active');
+      item.classList.add('exit-left');
+    }
+  }
+
+  // Flash back to winner
+  await wait(200);
+  document.querySelectorAll('.carousel-item').forEach(el => {
+    el.classList.remove('active','exit-left');
+    el.style.opacity = '0'; el.style.transform = 'scale(0.5)';
+  });
+  const winItem = document.getElementById('carItem' + winnerIdx);
+  winItem.style.transition = 'all 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+  winItem.style.opacity = '1'; winItem.style.transform = 'scale(1.1)';
+  await wait(600);
+
+  await anim(s2, {opacity:'0'}, 300);
+  s2.style.pointerEvents = 'none';
+
+  // Scene 3: Chosen
+  const winner = CHARS[winnerIdx];
+  document.getElementById('chosenImg').src = winner.img;
+  const s3 = document.getElementById('scene3');
+  s3.style.opacity = '1';
+
+  await anim(document.getElementById('chosenBadge'), {opacity:'1', transform:'scale(1)'}, 500, 'cubic-bezier(0.34,1.56,0.64,1)');
+  await anim(document.getElementById('chosenBadgeAr'), {opacity:'1'}, 300);
+  await anim(document.getElementById('chosenWrap'), {opacity:'1', transform:'scale(1) rotate(0deg)'}, 600, 'cubic-bezier(0.34,1.56,0.64,1)');
+  document.getElementById('chosenWrap').classList.add('bouncing');
+  spawnSparkles(s3);
+  await wait(t.chosen - 1400);
+  await anim(s3, {opacity:'0'}, 350);
+
+  // Scene 4: CTA
+  const s4 = document.getElementById('scene4');
+  await anim(s4, {opacity:'1'}, 300);
+  await anim(document.getElementById('ctaLogo'), {opacity:'1'}, 350);
+  await anim(document.getElementById('ctaHead'), {opacity:'1', transform:'translateY(0)'}, 500, 'cubic-bezier(0.16,1,0.3,1)');
+  await anim(document.getElementById('ctaHeadAr'), {opacity:'1', transform:'translateY(0)'}, 400);
+  await anim(document.getElementById('ctaBox'), {opacity:'1', transform:'scale(1)'}, 500, 'cubic-bezier(0.34,1.56,0.64,1)');
+  await anim(document.getElementById('ctaUrl'), {opacity:'1', transform:'translateY(0)'}, 400);
+
+  clearInterval(tick);
+  bar.style.width = '100%';
+}
+</script>
+</body>
+</html>
