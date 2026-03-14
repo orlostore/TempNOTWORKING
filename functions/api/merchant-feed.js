@@ -17,6 +17,43 @@ function stripHtml(html) {
     return html.replace(/<[^>]*>/g, '').trim();
 }
 
+const GOOGLE_CATEGORY_MAP = {
+    'Kitchen': 'Home & Garden > Kitchen & Dining',
+    'Home Accessories': 'Home & Garden > Home Decor',
+    'Bathroom': 'Home & Garden > Bathroom Accessories',
+    'Organization': 'Home & Garden > Household Supplies > Storage & Organization',
+    'Storage': 'Home & Garden > Household Supplies > Storage & Organization',
+    'Office': 'Furniture > Office Furniture > Desk Accessories',
+    'Workspace': 'Furniture > Office Furniture > Desk Accessories',
+    'Work Space': 'Furniture > Office Furniture > Desk Accessories',
+    'Home Office': 'Furniture > Office Furniture > Desk Accessories',
+    'Bedroom': 'Home & Garden > Linens & Bedding',
+    'Cleaning': 'Home & Garden > Household Supplies > Household Cleaning Supplies',
+    'Laundry': 'Home & Garden > Household Supplies > Household Cleaning Supplies',
+    'Garden': 'Home & Garden > Lawn & Garden',
+    'Outdoor': 'Home & Garden > Lawn & Garden',
+    'Dining': 'Home & Garden > Kitchen & Dining',
+    'Lifestyle': 'Home & Garden > Home Decor',
+    'Kids': 'Baby & Toddler',
+    'Baby': 'Baby & Toddler',
+    'Pets': 'Animals & Pet Supplies',
+    'Electronics': 'Electronics',
+    'Travel': 'Luggage & Bags',
+    'Fitness': 'Sporting Goods > Exercise & Fitness',
+    'Beauty': 'Health & Beauty',
+    'Tools': 'Hardware > Tools',
+    'Car': 'Vehicles & Parts > Vehicle Parts & Accessories',
+};
+
+function getGoogleCategory(category) {
+    if (!category) return 'Home & Garden';
+    if (GOOGLE_CATEGORY_MAP[category]) return GOOGLE_CATEGORY_MAP[category];
+    const key = Object.keys(GOOGLE_CATEGORY_MAP).find(
+        k => category.toLowerCase().includes(k.toLowerCase())
+    );
+    return key ? GOOGLE_CATEGORY_MAP[key] : 'Home & Garden';
+}
+
 export async function onRequestGet(context) {
     const { env } = context;
     const DB = env.DB;
@@ -92,6 +129,8 @@ export async function onRequestGet(context) {
   <g:availability>${availability}</g:availability>
   <g:condition>new</g:condition>
   <g:brand>${escapeXml(row.brand || 'ORLO')}</g:brand>
+  <g:identifier_exists>false</g:identifier_exists>
+  <g:google_product_category>${escapeXml(getGoogleCategory(row.category))}</g:google_product_category>
 `;
 
             if (row.category) {
