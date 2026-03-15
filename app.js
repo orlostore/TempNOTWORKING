@@ -1815,6 +1815,8 @@ async function checkout() {
             // Hide page + replace history entry so browser back goes to cancel.html, not product page
             document.documentElement.style.visibility = 'hidden';
             try { history.replaceState(null, '', 'cancel.html'); } catch(e) {}
+            // Brief delay so GA4 begin_checkout beacon completes before page unloads
+            await new Promise(r => setTimeout(r, 300));
             window.location.href = data.url;
         } else {
             throw new Error('No URL');
