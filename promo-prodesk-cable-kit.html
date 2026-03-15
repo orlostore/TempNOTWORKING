@@ -113,6 +113,7 @@ html, body {
 }
 .chaos-container img {
   width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(1.15);
 }
 .chaos-overlay {
   position: absolute; inset: 0;
@@ -139,7 +140,7 @@ html, body {
   margin-top: 0.5vh; text-shadow: 0 2px 15px rgba(0,0,0,0.5);
 }
 .chaos-badge {
-  position: absolute; bottom: 5vh; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 12vh; left: 50%; transform: translateX(-50%);
   z-index: 5; opacity: 0;
   background: rgba(224,120,86,0.9); color: #fff;
   padding: 1.2vh 5vw; border-radius: 50px;
@@ -184,6 +185,7 @@ html, body {
   width: 100%; height: 100%; object-fit: contain;
   opacity: 0; transform: scale(0.75) translateY(20px);
   mix-blend-mode: multiply;
+  filter: brightness(1.15);
 }
 @keyframes productReveal {
   0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
@@ -226,6 +228,7 @@ html, body {
 }
 .transform-after img {
   width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(1.15);
 }
 .transform-before {
   position: absolute; inset: 0; z-index: 2;
@@ -233,6 +236,7 @@ html, body {
 }
 .transform-before img {
   width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(1.15);
 }
 .transform-slider {
   position: absolute; top: 0; bottom: 0; left: 100%;
