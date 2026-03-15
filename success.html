@@ -529,7 +529,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         } catch(e) {}
 
         // GA4: track purchase conversion — deduplicated, fires only once per session_id
-        if (sessionId && typeof gtag === 'function') {
+        if (sessionId) {
             var firedKey = 'orlo_purchase_fired_' + sessionId;
             if (!sessionStorage.getItem(firedKey)) {
                 var gaItems = cartData.map(function(item) {
