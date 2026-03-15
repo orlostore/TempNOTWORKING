@@ -101,28 +101,194 @@ html, body {
   opacity: 0; transform: translateY(15px);
 }
 
-/* ─── Scene 3: Lifestyle ─── */
-.scene-lifestyle { background: #ffffff !important; }
-.lifestyle-frame {
-  width: 88vw; max-width: 440px;
-  height: 55vh; max-height: 600px;
-  border-radius: 4vw;
+/* ─── Scene 2: The Chaos (Before) ─── */
+.scene-chaos { background: #0a0a0a !important; }
+.chaos-container {
+  position: relative;
+  width: 92vw; max-width: 460px;
+  height: 65vh; max-height: 700px;
+  border-radius: 3vw;
   overflow: hidden;
-  box-shadow: 0 15px 50px rgba(44,74,92,0.12), 0 0 0 1px rgba(44,74,92,0.06);
-  opacity: 0; transform: scale(0.88);
+  opacity: 0; transform: scale(0.92);
 }
-.lifestyle-frame img { width: 100%; height: 100%; object-fit: cover; }
-.life-label {
-  margin-top: 4vh; text-align: center;
-  opacity: 0; transform: translateY(15px);
+.chaos-container img {
+  width: 100%; height: 100%; object-fit: cover;
 }
-.life-en { font-size: clamp(18px, 4.5vw, 28px); font-weight: 700; color: #2c4a5c; }
-.life-ar {
-  font-size: clamp(14px, 3.2vw, 20px); font-weight: 500; color: #e07856;
-  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
+.chaos-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+  z-index: 2;
+}
+.chaos-vignette {
+  position: absolute; inset: 0;
+  box-shadow: inset 0 0 80px rgba(0,0,0,0.5);
+  z-index: 3; pointer-events: none;
+}
+.chaos-label {
+  position: absolute; top: 5vh; left: 0; right: 0;
+  text-align: center; z-index: 5;
+  opacity: 0; transform: translateY(-20px);
+}
+.chaos-label-en {
+  font-size: clamp(24px, 6vw, 40px); font-weight: 900;
+  color: #fff; text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+.chaos-label-ar {
+  font-size: clamp(16px, 3.8vw, 24px); font-weight: 600;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh; text-shadow: 0 2px 15px rgba(0,0,0,0.5);
+}
+.chaos-badge {
+  position: absolute; bottom: 5vh; left: 50%; transform: translateX(-50%);
+  z-index: 5; opacity: 0;
+  background: rgba(224,120,86,0.9); color: #fff;
+  padding: 1.2vh 5vw; border-radius: 50px;
+  font-size: clamp(13px, 3.2vw, 18px); font-weight: 700;
+  letter-spacing: 0.05em; white-space: nowrap;
+  box-shadow: 0 4px 25px rgba(224,120,86,0.4);
+}
+@keyframes chaosShake {
+  0%, 100% { transform: scale(0.92) translate(0, 0); }
+  10% { transform: scale(0.92) translate(-2px, -1px); }
+  20% { transform: scale(0.92) translate(2px, 1px); }
+  30% { transform: scale(0.92) translate(-1px, 2px); }
+  40% { transform: scale(0.92) translate(1px, -1px); }
+  50% { transform: scale(0.92) translate(-2px, 1px); }
+  60% { transform: scale(0.92) translate(2px, -2px); }
+  70% { transform: scale(0.92) translate(-1px, -1px); }
+  80% { transform: scale(0.92) translate(1px, 2px); }
+  90% { transform: scale(0.92) translate(-2px, -1px); }
 }
 
-/* ─── Scene 4: CTA Outro ─── */
+/* ─── Scene 3: Product Showcase ─── */
+.scene-product { background: #ffffff !important; }
+.product-header {
+  position: absolute; top: 5vh;
+  text-align: center; z-index: 5;
+}
+.product-header-en {
+  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
+}
+.product-header-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(-15px);
+}
+.product-stage {
+  position: relative;
+  width: 65vw; height: 65vw; max-width: 400px; max-height: 400px;
+  margin-top: -2vh;
+}
+.product-img {
+  width: 100%; height: 100%; object-fit: contain;
+  opacity: 0; transform: scale(0.75) translateY(20px);
+  mix-blend-mode: multiply;
+}
+@keyframes productReveal {
+  0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
+  60%  { opacity: 1; transform: scale(1.03) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes productFloat {
+  0%, 100% { transform: translateY(-4px); }
+  50%      { transform: translateY(4px); }
+}
+.product-img.reveal {
+  animation: productReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.product-img.float {
+  opacity: 1;
+  animation: productFloat 2.5s ease-in-out infinite;
+}
+.product-price {
+  position: absolute; bottom: 7vh;
+  background: #e07856; color: #fff;
+  padding: 1.5vh 6vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
+  box-shadow: 0 4px 20px rgba(224,120,86,0.4);
+  opacity: 0; transform: scale(0.7);
+}
+
+/* ─── Scene 4: The Transformation (Before → After wipe) ─── */
+.scene-transform { background: #111 !important; }
+.transform-container {
+  position: relative;
+  width: 92vw; max-width: 460px;
+  height: 60vh; max-height: 650px;
+  border-radius: 3vw;
+  overflow: hidden;
+  opacity: 0; transform: scale(0.92);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.transform-after {
+  position: absolute; inset: 0; z-index: 1;
+}
+.transform-after img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.transform-before {
+  position: absolute; inset: 0; z-index: 2;
+  clip-path: inset(0 0 0 0);
+}
+.transform-before img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.transform-slider {
+  position: absolute; top: 0; bottom: 0; left: 100%;
+  width: 4px; z-index: 10;
+  background: #e07856;
+  box-shadow: 0 0 15px rgba(224,120,86,0.6), 0 0 30px rgba(224,120,86,0.3);
+}
+.transform-slider::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: #e07856;
+  box-shadow: 0 2px 15px rgba(224,120,86,0.5);
+}
+.transform-slider::after {
+  content: '◂ ▸';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff; font-size: 11px; font-weight: 900;
+  letter-spacing: 2px; white-space: nowrap;
+  z-index: 1;
+}
+.transform-label-before {
+  position: absolute; top: 3vh; left: 4vw;
+  z-index: 15; opacity: 0;
+  background: rgba(44,74,92,0.85); color: #fff;
+  padding: 0.8vh 3vw; border-radius: 50px;
+  font-size: clamp(11px, 2.8vw, 15px); font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+.transform-label-after {
+  position: absolute; top: 3vh; right: 4vw;
+  z-index: 15; opacity: 0;
+  background: rgba(224,120,86,0.9); color: #fff;
+  padding: 0.8vh 3vw; border-radius: 50px;
+  font-size: clamp(11px, 2.8vw, 15px); font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.transform-text {
+  margin-top: 3vh; text-align: center;
+  opacity: 0; transform: translateY(15px);
+}
+.transform-text-en {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 800; color: #fff;
+}
+.transform-text-en span { color: #e07856; }
+.transform-text-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh;
+}
+
+/* ─── Scene 5: CTA Outro ─── */
 .scene-cta { background: #ffffff !important; gap: 2.5vh; }
 .cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
 .cta-head {
@@ -185,57 +351,6 @@ html, body {
   100% { transform: translateY(-10vh) scale(1); opacity: 0; }
 }
 
-
-/* ─── Scene 2: Product Showcase ─── */
-.scene-product { background: #ffffff !important; }
-.product-header {
-  position: absolute; top: 5vh;
-  text-align: center; z-index: 5;
-}
-.product-header-en {
-  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
-  opacity: 0; transform: translateY(-15px);
-}
-.product-header-ar {
-  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
-  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
-  opacity: 0; transform: translateY(-15px);
-}
-.product-stage {
-  position: relative;
-  width: 65vw; height: 65vw; max-width: 400px; max-height: 400px;
-  margin-top: -2vh;
-}
-.product-img {
-  width: 100%; height: 100%; object-fit: contain;
-  opacity: 0; transform: scale(0.75) translateY(20px);
-  mix-blend-mode: multiply;
-}
-@keyframes productReveal {
-  0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
-  60%  { opacity: 1; transform: scale(1.03) translateY(-5px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-@keyframes productFloat {
-  0%, 100% { transform: translateY(-4px); }
-  50%      { transform: translateY(4px); }
-}
-.product-img.reveal {
-  animation: productReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-.product-img.float {
-  opacity: 1;
-  animation: productFloat 2.5s ease-in-out infinite;
-}
-.product-price {
-  position: absolute; bottom: 7vh;
-  background: #e07856; color: #fff;
-  padding: 1.5vh 6vw; border-radius: 50px;
-  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
-  box-shadow: 0 4px 20px rgba(224,120,86,0.4);
-  opacity: 0; transform: scale(0.7);
-}
-
 </style>
 </head>
 <body>
@@ -267,8 +382,23 @@ html, body {
     <div class="intro-ar" id="introAr">نظّم بأناقة</div>
   </div>
 
-  <!-- Scene 2: Product Showcase -->
-  <div class="scene scene-product" id="scene2">
+  <!-- Scene 2: The Chaos (Before — messy gaming desk) -->
+  <div class="scene scene-chaos" id="scene2">
+    <div class="chaos-container" id="chaosContainer">
+      <!-- TODO: Replace with your hosted messy gaming desk image URL -->
+      <img id="chaosImg" src="BEFORE_IMAGE_URL" alt="Messy desk">
+      <div class="chaos-overlay"></div>
+      <div class="chaos-vignette"></div>
+    </div>
+    <div class="chaos-label" id="chaosLabel">
+      <div class="chaos-label-en">Look Familiar?</div>
+      <div class="chaos-label-ar">مألوف، صح؟</div>
+    </div>
+    <div class="chaos-badge" id="chaosBadge">Cable Chaos Ends Today</div>
+  </div>
+
+  <!-- Scene 3: Product Showcase (The Solution) -->
+  <div class="scene scene-product" id="scene3">
     <div class="product-header">
       <div class="product-header-en" id="headerEn">ProDesk Cable Kit</div>
       <div class="product-header-ar" id="headerAr">أدوات تنظيم الكابلات برو ديسك</div>
@@ -279,19 +409,31 @@ html, body {
     <div class="product-price" id="productPrice">62 AED</div>
   </div>
 
-  <!-- Scene 3: Lifestyle -->
-  <div class="scene scene-lifestyle" id="scene3">
-    <div class="lifestyle-frame" id="lifeFrame">
-      <img id="lifeImg" src="https://lh3.googleusercontent.com/d/1Z18_n-FHcUkbWPeb3oda1fjzydq49LyI" alt="ProDesk Cable Kit">
+  <!-- Scene 4: The Transformation (Before → After wipe reveal) -->
+  <div class="scene scene-transform" id="scene4">
+    <div class="transform-container" id="transformContainer">
+      <!-- After image (revealed underneath) -->
+      <div class="transform-after">
+        <!-- TODO: Replace with your hosted clean gaming desk image URL -->
+        <img src="AFTER_IMAGE_URL" alt="Clean desk">
+      </div>
+      <!-- Before image (wiped away) -->
+      <div class="transform-before" id="transformBefore">
+        <!-- TODO: Replace with your hosted messy gaming desk image URL -->
+        <img src="BEFORE_IMAGE_URL" alt="Messy desk">
+      </div>
+      <div class="transform-slider" id="transformSlider"></div>
+      <div class="transform-label-before" id="labelBefore">Before</div>
+      <div class="transform-label-after" id="labelAfter">After</div>
     </div>
-    <div class="life-label" id="lifeLabel">
-      <div class="life-en">300 pieces, zero mess</div>
-      <div class="life-ar">٣٠٠ قطعة، صفر فوضى</div>
+    <div class="transform-text" id="transformText">
+      <div class="transform-text-en">Same Desk. <span>Zero Mess.</span></div>
+      <div class="transform-text-ar">نفس المكتب. صفر فوضى.</div>
     </div>
   </div>
 
-  <!-- Scene 4: CTA Outro -->
-  <div class="scene scene-cta" id="scene4">
+  <!-- Scene 5: CTA Outro -->
+  <div class="scene scene-cta" id="scene5">
     <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
     <div class="cta-head" id="ctaHead">Tame the<br><span>Chaos</span></div>
     <div class="cta-head-ar" id="ctaHeadAr">رتّب الفوضى</div>
@@ -300,7 +442,7 @@ html, body {
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
-      
+
       <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق 75 درهم</span></div>
       <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
       <div class="cta-badge"><div class="cta-badge-icon">✅</div>Quality<br><span style="font-family:'Almarai',sans-serif">جودة عالية</span></div>
@@ -337,24 +479,27 @@ function createDots() {
   }
 }
 
-
 var T = {
-  tiktok: { intro: 1800, product: 2200, lifestyle: 2000, cta: 2800 },
-  insta:  { intro: 2500, product: 3000, lifestyle: 2800, cta: 3500 }
+  tiktok: { intro: 1800, chaos: 2200, product: 2200, transform: 3200, cta: 2800 },
+  insta:  { intro: 2500, chaos: 2800, product: 3000, transform: 4000, cta: 3500 }
 };
 
 // Preload images
 (function() {
-  var urls = ['https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl', 'https://lh3.googleusercontent.com/d/1Z18_n-FHcUkbWPeb3oda1fjzydq49LyI'];
+  var urls = [
+    'https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl',
+    'BEFORE_IMAGE_URL',
+    'AFTER_IMAGE_URL'
+  ];
   urls.forEach(function(u) { var img = new Image(); img.src = u; });
 })();
 
 // ═══════════════════════════════════════════
-// MAIN ANIMATION
+// MAIN ANIMATION — 5-SCENE CINEMATIC
 // ═══════════════════════════════════════════
 async function startPromo(mode) {
   var t = T[mode];
-  var totalDuration = t.intro + t.product + t.lifestyle + t.cta + 2000;
+  var totalDuration = t.intro + t.chaos + t.product + t.transform + t.cta + 2000;
 
   // Hide mode selector
   document.getElementById('modeSelect').classList.add('gone');
@@ -384,9 +529,27 @@ async function startPromo(mode) {
   await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
-  // ── SCENE 2 — Product Showcase ──
+  // ── SCENE 2 — The Chaos (messy desk) ──
   var s2 = document.getElementById('scene2');
+  var chaosContainer = document.getElementById('chaosContainer');
   await anim(s2, { opacity: '1' }, 300);
+  await anim(chaosContainer, { opacity: '1', transform: 'scale(1)' }, 700, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  // Dramatic shake
+  chaosContainer.style.animation = 'chaosShake 0.4s ease-in-out 2';
+  await wait(300);
+  // "Look familiar?" label drops in
+  await anim(document.getElementById('chaosLabel'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(600);
+  // Badge slides up
+  await anim(document.getElementById('chaosBadge'),
+    { opacity: '1' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.chaos - 2000);
+  await anim(s2, { opacity: '0' }, 400);
+
+  // ── SCENE 3 — Product Showcase (The Solution) ──
+  var s3 = document.getElementById('scene3');
+  await anim(s3, { opacity: '1' }, 300);
   await anim(document.getElementById('headerEn'),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
   anim(document.getElementById('headerAr'),
@@ -403,22 +566,47 @@ async function startPromo(mode) {
     { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
 
   await wait(t.product - 1300);
-  await anim(s2, { opacity: '0' }, 400);
-
-  // ── SCENE 3 — Lifestyle ──
-  var s3 = document.getElementById('scene3');
-  await anim(s3, { opacity: '1' }, 300);
-  await anim(document.getElementById('lifeFrame'),
-    { opacity: '1', transform: 'scale(1)' }, 800, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(350);
-  await anim(document.getElementById('lifeLabel'),
-    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(t.lifestyle - 1750);
   await anim(s3, { opacity: '0' }, 400);
 
-  // ── SCENE 4 — CTA ──
+  // ── SCENE 4 — The Transformation (wipe reveal) ──
   var s4 = document.getElementById('scene4');
+  var transformBefore = document.getElementById('transformBefore');
+  var transformSlider = document.getElementById('transformSlider');
+
   await anim(s4, { opacity: '1' }, 300);
+  await anim(document.getElementById('transformContainer'),
+    { opacity: '1', transform: 'scale(1)' }, 700, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  // Show "Before" label
+  await anim(document.getElementById('labelBefore'), { opacity: '1' }, 300);
+  await wait(600);
+
+  // Animate the wipe: slider moves from right to left, revealing the "after" image
+  var wipeDuration = mode === 'tiktok' ? 1200 : 1600;
+  transformSlider.style.transition = 'left ' + wipeDuration + 'ms cubic-bezier(0.4, 0, 0.2, 1)';
+  transformBefore.style.transition = 'clip-path ' + wipeDuration + 'ms cubic-bezier(0.4, 0, 0.2, 1)';
+
+  requestAnimationFrame(function() {
+    transformSlider.style.left = '0%';
+    transformBefore.style.clipPath = 'inset(0 100% 0 0)';
+  });
+
+  await wait(wipeDuration * 0.3);
+  // Show "After" label partway through the wipe
+  anim(document.getElementById('labelAfter'), { opacity: '1' }, 300);
+
+  await wait(wipeDuration * 0.7 + 200);
+
+  // Show bottom text
+  await anim(document.getElementById('transformText'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  await wait(t.transform - wipeDuration - 1800);
+  await anim(s4, { opacity: '0' }, 400);
+
+  // ── SCENE 5 — CTA ──
+  var s5 = document.getElementById('scene5');
+  await anim(s5, { opacity: '1' }, 300);
   await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
   await anim(document.getElementById('ctaHead'),
     { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
