@@ -1719,22 +1719,18 @@ async function checkout() {
             btn.innerHTML = "Checking stock...";
         }
 
-        // GA4: track begin_checkout event with eventCallback to prevent race condition
+        // GA4: track begin_checkout event (simple push, matching add_to_cart pattern)
         const cartWithPricing = calculateTierPricing(cart);
         const checkoutValue = cartWithPricing.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({ ecommerce: null });
-        const gtmDone = new Promise(resolve => {
-            window.dataLayer.push({
-                event: 'begin_checkout',
-                ecommerce: {
-                    currency: 'AED',
-                    value: checkoutValue,
-                    items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i._tierPrice || i.price, quantity: i.quantity }))
-                },
-                eventCallback: resolve,
-                eventTimeout: 2000
-            });
+        window.dataLayer.push({
+            event: 'begin_checkout',
+            ecommerce: {
+                currency: 'AED',
+                value: checkoutValue,
+                items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i._tierPrice || i.price, quantity: i.quantity }))
+            }
         });
 
         // Meta Pixel: track InitiateCheckout event
@@ -1762,23 +1758,22 @@ async function checkout() {
             });
         }
 
+        // Brief pause so GA4/pixel beacons complete before page navigates
+        await new Promise(r => setTimeout(r, 500));
+
         // Use relative URL (same domain)
         const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
         const headers = { 'Content-Type': 'application/json' };
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
-        // Run Stripe fetch in parallel with GTM — wait for both before redirecting
-        const [, response] = await Promise.all([
-            gtmDone,
-            fetch('/checkout', {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify({
-                    cart: cart,
-                    deliveryZoneKey: selectedDeliveryZone
-                }),
-            })
-        ]);
+        const response = await fetch('/checkout', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                cart: cart,
+                deliveryZoneKey: selectedDeliveryZone
+            }),
+        });
 
         const data = await response.json();
 
@@ -1815,8 +1810,6 @@ async function checkout() {
             // Hide page + replace history entry so browser back goes to cancel.html, not product page
             document.documentElement.style.visibility = 'hidden';
             try { history.replaceState(null, '', 'cancel.html'); } catch(e) {}
-            // Brief delay so GA4 begin_checkout beacon completes before page unloads
-            await new Promise(r => setTimeout(r, 300));
             window.location.href = data.url;
         } else {
             throw new Error('No URL');
