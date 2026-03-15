@@ -1719,18 +1719,22 @@ async function checkout() {
             btn.innerHTML = "Checking stock...";
         }
 
-        // GA4: track begin_checkout event
+        // GA4: track begin_checkout event with eventCallback to prevent race condition
         const cartWithPricing = calculateTierPricing(cart);
         const checkoutValue = cartWithPricing.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({ ecommerce: null });
-        window.dataLayer.push({
-            event: 'begin_checkout',
-            ecommerce: {
-                currency: 'AED',
-                value: checkoutValue,
-                items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i._tierPrice || i.price, quantity: i.quantity }))
-            }
+        const gtmDone = new Promise(resolve => {
+            window.dataLayer.push({
+                event: 'begin_checkout',
+                ecommerce: {
+                    currency: 'AED',
+                    value: checkoutValue,
+                    items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i._tierPrice || i.price, quantity: i.quantity }))
+                },
+                eventCallback: resolve,
+                eventTimeout: 2000
+            });
         });
 
         // Meta Pixel: track InitiateCheckout event
@@ -1762,15 +1766,19 @@ async function checkout() {
         const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
         const headers = { 'Content-Type': 'application/json' };
         if (token) headers['Authorization'] = `Bearer ${token}`;
-        
-        const response = await fetch('/checkout', {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({
-                cart: cart,
-                deliveryZoneKey: selectedDeliveryZone
-            }),
-        });
+
+        // Run Stripe fetch in parallel with GTM — wait for both before redirecting
+        const [, response] = await Promise.all([
+            gtmDone,
+            fetch('/checkout', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    cart: cart,
+                    deliveryZoneKey: selectedDeliveryZone
+                }),
+            })
+        ]);
 
         const data = await response.json();
 
@@ -1791,7 +1799,7 @@ async function checkout() {
             } else {
                 orloToast('error', 'Payment Failed', data.message || 'Payment failed. Please try again.');
             }
-            
+
             if (btn) {
                 btn.disabled = false;
                 btn.innerHTML = originalText;
