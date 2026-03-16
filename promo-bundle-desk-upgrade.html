@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Desk Upgrade Bundle</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff !important;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.canvas {
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+  background: #ffffff;
+}
+
+/* ═══════════════════════════════════════════
+   MODE SELECTOR
+   ═══════════════════════════════════════════ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3.5vh; z-index: 100;
+  background: #ffffff !important;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 0.5vh; }
+.mode-title {
+  font-size: clamp(13px, 2.8vw, 20px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
+}
+.mode-subtitle {
+  font-size: clamp(20px, 5vw, 34px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -0.5vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-subtitle-ar {
+  font-size: clamp(16px, 4vw, 26px); font-weight: 700;
+  color: rgba(44,74,92,0.5); direction: rtl; font-family: 'Almarai', sans-serif;
+  text-align: center; margin-top: -0.5vh;
+}
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 1.5vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
+
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  will-change: opacity, transform;
+  background: #ffffff !important;
+}
+
+/* ─── Scene 1: Logo Intro ─── */
+.scene-intro { background: #ffffff !important; }
+.intro-glow {
+  width: 36vw; height: 36vw; max-width: 220px; max-height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224,120,86,0.1) 0%, transparent 70%);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5);
+}
+.intro-glow img { width: 65%; }
+.intro-line {
+  width: 12vw; height: 2px; background: #e07856; margin-top: 3vh;
+  opacity: 0; transform: scaleX(0);
+}
+.intro-en {
+  margin-top: 2.5vh;
+  font-size: clamp(15px, 3.2vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.35em; text-transform: uppercase;
+  opacity: 0; transform: translateY(15px);
+}
+.intro-ar {
+  margin-top: 1.5vh;
+  font-size: clamp(16px, 3.5vw, 24px); font-weight: 500;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(15px);
+}
+
+/* ─── Scene 2: Product 1 Reveal ─── */
+.scene-prod1 { background: #ffffff !important; }
+.prod-header {
+  position: absolute; top: 5vh;
+  text-align: center; z-index: 5;
+}
+.prod-header-en {
+  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
+}
+.prod-header-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(-15px);
+}
+.prod-stage {
+  position: relative;
+  width: 60vw; height: 60vw; max-width: 380px; max-height: 380px;
+  margin-top: -1vh;
+}
+.prod-img {
+  width: 100%; height: 100%; object-fit: contain;
+  opacity: 0; transform: scale(0.75) translateY(20px);
+  mix-blend-mode: multiply;
+}
+@keyframes prodReveal {
+  0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
+  60%  { opacity: 1; transform: scale(1.03) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes prodFloat {
+  0%, 100% { transform: translateY(-4px); }
+  50%      { transform: translateY(4px); }
+}
+.prod-img.reveal { animation: prodReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.prod-img.float  { opacity: 1; animation: prodFloat 2.5s ease-in-out infinite; }
+
+.prod-price {
+  position: absolute; bottom: 12vh;
+  background: #e07856; color: #fff;
+  padding: 1.5vh 6vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
+  box-shadow: 0 4px 20px rgba(224,120,86,0.4);
+  opacity: 0; transform: scale(0.7);
+}
+
+/* ─── Scene 3: Product 2 Reveal ─── */
+.scene-prod2 { background: #ffffff !important; }
+
+/* ─── Scene 4: Bundle "Better Together" ─── */
+.scene-bundle { background: #ffffff !important; }
+.bundle-header {
+  text-align: center; margin-bottom: 2vh;
+}
+.bundle-header-en {
+  font-size: clamp(20px, 5.2vw, 34px); font-weight: 900; color: #2c4a5c;
+  opacity: 0; transform: translateY(-20px);
+}
+.bundle-header-en span { color: #e07856; }
+.bundle-header-ar {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 700;
+  color: rgba(44,74,92,0.5); direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh;
+  opacity: 0; transform: translateY(-15px);
+}
+
+.bundle-products {
+  display: flex; align-items: center; justify-content: center;
+  gap: 3vw; margin: 1vh 0;
+}
+.bundle-card {
+  width: 38vw; max-width: 200px;
+  background: #ffffff;
+  border-radius: 3vw;
+  border: 2px solid rgba(44,74,92,0.08);
+  padding: 2vh 2vw 1.5vh;
+  display: flex; flex-direction: column; align-items: center;
+  opacity: 0; transform: translateY(30px) scale(0.85);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+}
+.bundle-card img {
+  width: 85%; aspect-ratio: 1; object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.bundle-card-name {
+  font-size: clamp(10px, 2.5vw, 14px); font-weight: 700;
+  color: #2c4a5c; text-align: center; margin-top: 1vh; line-height: 1.3;
+}
+.bundle-card-name-ar {
+  font-size: clamp(9px, 2.2vw, 12px); font-weight: 600;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  text-align: center; margin-top: 0.3vh;
+}
+.bundle-card-price {
+  font-size: clamp(14px, 3.5vw, 20px); font-weight: 800;
+  color: #e07856; margin-top: 0.8vh;
+}
+
+.bundle-plus {
+  font-size: clamp(28px, 7vw, 48px); font-weight: 900;
+  color: #e07856; opacity: 0; transform: scale(0);
+}
+
+.bundle-total {
+  text-align: center; margin-top: 2vh;
+  opacity: 0; transform: translateY(20px);
+}
+.bundle-total-label {
+  font-size: clamp(11px, 2.6vw, 15px); font-weight: 600;
+  color: #7a8f9c; text-transform: uppercase; letter-spacing: 0.15em;
+}
+.bundle-total-price {
+  font-size: clamp(32px, 8vw, 52px); font-weight: 900;
+  color: #2c4a5c; line-height: 1.1;
+}
+.bundle-total-price span { color: #e07856; }
+.bundle-free-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #2c4a5c, #3a6b83);
+  color: #fff; padding: 1vh 5vw; border-radius: 50px;
+  font-size: clamp(12px, 3vw, 17px); font-weight: 700;
+  letter-spacing: 0.05em; margin-top: 1.5vh;
+  opacity: 0; transform: scale(0.7);
+  box-shadow: 0 4px 20px rgba(44,74,92,0.3);
+}
+.bundle-free-badge-ar {
+  display: block;
+  font-family: 'Almarai', sans-serif; font-weight: 600;
+  font-size: clamp(10px, 2.4vw, 13px);
+  margin-top: 0.3vh; opacity: 0.85;
+}
+
+/* ─── Scene 5: CTA Outro ─── */
+.scene-cta { background: #ffffff !important; gap: 2.5vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; text-align: center;
+  font-family: 'Almarai', sans-serif; margin-top: -1vh;
+  opacity: 0; transform: translateY(20px);
+}
+.cta-box {
+  background: rgba(224,120,86,0.08); border: 2px solid rgba(224,120,86,0.2);
+  border-radius: 4vw; padding: 2.5vh 8vw; text-align: center;
+  opacity: 0; transform: scale(0.85);
+}
+.cta-price {
+  font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856; line-height: 1;
+}
+.cta-price sub { font-size: 0.4em; font-weight: 400; color: #7a8f9c; vertical-align: baseline; }
+.cta-free {
+  font-size: clamp(12px, 3vw, 17px); font-weight: 700;
+  color: #2c4a5c; margin-top: 0.8vh;
+}
+.cta-free-ar {
+  font-size: clamp(11px, 2.6vw, 14px); font-weight: 600;
+  color: rgba(44,74,92,0.5); font-family: 'Almarai', sans-serif;
+  direction: rtl;
+}
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+.cta-badges { display: flex; gap: 5vw; opacity: 0; }
+.cta-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(10px, 2.5vw, 14px); color: #6a8090; font-weight: 500;
+  text-align: center;
+}
+.cta-badge-icon {
+  width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
+  border-radius: 50%; background: rgba(224,120,86,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
+}
+
+/* ─── Progress Bar ─── */
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+  z-index: 50;
+}
+
+/* ─── Floating Dots ─── */
+.dots { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.dot {
+  position: absolute; border-radius: 50%;
+  background: rgba(224,120,86,0.15);
+  animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* ─── Pulse animation for free delivery badge ─── */
+@keyframes pulseBadge {
+  0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(44,74,92,0.3); }
+  50%      { transform: scale(1.04); box-shadow: 0 6px 28px rgba(44,74,92,0.4); }
+}
+
+</style>
+</head>
+<body>
+
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="dots" id="dots"></div>
+
+  <!-- ── Mode Selector ── -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Bundle Deal</div>
+    <div class="mode-subtitle">Desk Upgrade <span>Bundle</span></div>
+    <div class="mode-subtitle-ar">باقة ترقية المكتب</div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">♪</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">◎</span> Instagram
+      </button>
+    </div>
+  </div>
+
+  <!-- Scene 1: Logo Intro -->
+  <div class="scene scene-intro" id="scene1">
+    <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
+    <div class="intro-line" id="introLine"></div>
+    <div class="intro-en" id="introEn">Upgrade Your Desk</div>
+    <div class="intro-ar" id="introAr">رقّي مكتبك</div>
+  </div>
+
+  <!-- Scene 2: Product 1 — First Product -->
+  <div class="scene scene-prod1" id="scene2">
+    <div class="prod-header">
+      <div class="prod-header-en" id="p1HeaderEn">ProDesk Cable Kit</div>
+      <div class="prod-header-ar" id="p1HeaderAr">أدوات تنظيم الكابلات</div>
+    </div>
+    <div class="prod-stage">
+      <img class="prod-img" id="prod1Img" src="https://lh3.googleusercontent.com/d/13OJ0O2zASz_NWE3gOfCMwYlIkKMjfzOc" alt="ProDesk Cable Kit">
+    </div>
+    <div class="prod-price" id="prod1Price">62 AED</div>
+  </div>
+
+  <!-- Scene 3: Product 2 — Second Product -->
+  <div class="scene scene-prod2" id="scene3">
+    <div class="prod-header">
+      <div class="prod-header-en" id="p2HeaderEn">Dangling Buddies</div>
+      <div class="prod-header-ar" id="p2HeaderAr">رفاق المكتب</div>
+    </div>
+    <div class="prod-stage">
+      <img class="prod-img" id="prod2Img" src="https://lh3.googleusercontent.com/d/1ezgzT9tKOlOievx9IonNSO_WEiJcWwsW" alt="Dangling Buddies">
+    </div>
+    <div class="prod-price" id="prod2Price">16 AED</div>
+  </div>
+
+  <!-- Scene 4: Bundle — Better Together -->
+  <div class="scene scene-bundle" id="scene4">
+    <div class="bundle-header">
+      <div class="bundle-header-en" id="bundleHeaderEn">Better <span>Together</span></div>
+      <div class="bundle-header-ar" id="bundleHeaderAr">أحلى مع بعض</div>
+    </div>
+    <div class="bundle-products">
+      <div class="bundle-card" id="bundleCard1">
+        <img src="https://lh3.googleusercontent.com/d/13OJ0O2zASz_NWE3gOfCMwYlIkKMjfzOc" alt="Cable Kit">
+        <div class="bundle-card-name">ProDesk Cable Kit</div>
+        <div class="bundle-card-name-ar">أدوات تنظيم الكابلات</div>
+        <div class="bundle-card-price">62 AED</div>
+      </div>
+      <div class="bundle-plus" id="bundlePlus">+</div>
+      <div class="bundle-card" id="bundleCard2">
+        <img src="https://lh3.googleusercontent.com/d/1ezgzT9tKOlOievx9IonNSO_WEiJcWwsW" alt="Dangling Buddies">
+        <div class="bundle-card-name">Dangling Buddies</div>
+        <div class="bundle-card-name-ar">رفاق المكتب</div>
+        <div class="bundle-card-price">16 AED</div>
+      </div>
+    </div>
+    <div class="bundle-total" id="bundleTotal">
+      <div class="bundle-total-label">Bundle Total</div>
+      <div class="bundle-total-price"><span>78</span> AED</div>
+    </div>
+    <div class="bundle-free-badge" id="bundleFreeBadge">
+      FREE Delivery Included
+      <div class="bundle-free-badge-ar">توصيل مجاني</div>
+    </div>
+  </div>
+
+  <!-- Scene 5: CTA Outro -->
+  <div class="scene scene-cta" id="scene5">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Upgrade Your<br><span>Workspace</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">رقّي مساحة عملك</div>
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-price">78 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-free">FREE Delivery</div>
+      <div class="cta-free-ar">توصيل مجاني</div>
+    </div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-badges" id="ctaBadges">
+      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">✅</div>Quality Guaranteed<br><span style="font-family:'Almarai',sans-serif">جودة مضمونة</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+function anim(el, props, ms, ease) {
+  ease = ease || 'ease';
+  return new Promise(function(resolve) {
+    el.style.transition = 'all ' + ms + 'ms ' + ease;
+    requestAnimationFrame(function() {
+      Object.assign(el.style, props);
+      setTimeout(resolve, ms);
+    });
+  });
+}
+function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+function createDots() {
+  var c = document.getElementById('dots');
+  for (var i = 0; i < 20; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDuration = (5 + Math.random() * 7) + 's';
+    d.style.animationDelay = Math.random() * 12 + 's';
+    var size = 3 + Math.random() * 5;
+    d.style.width = size + 'px';
+    d.style.height = size + 'px';
+    c.appendChild(d);
+  }
+}
+
+var T = {
+  tiktok: { intro: 1800, prod1: 2200, prod2: 2200, bundle: 3500, cta: 2800 },
+  insta:  { intro: 2500, prod1: 2800, prod2: 2800, bundle: 4200, cta: 3500 }
+};
+
+// Preload images
+(function() {
+  var urls = [
+    'https://lh3.googleusercontent.com/d/13OJ0O2zASz_NWE3gOfCMwYlIkKMjfzOc',
+    'https://lh3.googleusercontent.com/d/1ezgzT9tKOlOievx9IonNSO_WEiJcWwsW'
+  ];
+  urls.forEach(function(u) { var img = new Image(); img.src = u; });
+})();
+
+// ═══════════════════════════════════════════
+// MAIN ANIMATION — 5-SCENE BUNDLE REEL
+// ═══════════════════════════════════════════
+async function startPromo(mode) {
+  var t = T[mode];
+  var totalDuration = t.intro + t.prod1 + t.prod2 + t.bundle + t.cta + 2000;
+
+  // Hide mode selector
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  var bar = document.getElementById('progressBar');
+  var startTime = Date.now();
+  var progressTick = setInterval(function() {
+    var pct = Math.min(((Date.now() - startTime) / totalDuration) * 100, 100);
+    bar.style.width = pct + '%';
+    bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(progressTick);
+  }, 80);
+
+  // ── SCENE 1 — Logo Intro ──
+  var s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+  await anim(document.getElementById('introGlow'),
+    { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await anim(document.getElementById('introLine'),
+    { opacity: '1', transform: 'scaleX(1)' }, 400);
+  await wait(150);
+  await anim(document.getElementById('introEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('introAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.intro - 1700);
+  await anim(s1, { opacity: '0' }, 400);
+
+  // ── SCENE 2 — Product 1 (Cable Kit) ──
+  var s2 = document.getElementById('scene2');
+  await anim(s2, { opacity: '1' }, 300);
+  await anim(document.getElementById('p1HeaderEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('p1HeaderAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(200);
+
+  var prod1Img = document.getElementById('prod1Img');
+  prod1Img.classList.add('reveal');
+  await wait(800);
+  prod1Img.classList.remove('reveal');
+  prod1Img.classList.add('float');
+
+  anim(document.getElementById('prod1Price'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await wait(t.prod1 - 1300);
+  await anim(s2, { opacity: '0' }, 400);
+
+  // ── SCENE 3 — Product 2 (Dangling Buddies) ──
+  var s3 = document.getElementById('scene3');
+  await anim(s3, { opacity: '1' }, 300);
+  await anim(document.getElementById('p2HeaderEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('p2HeaderAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(200);
+
+  var prod2Img = document.getElementById('prod2Img');
+  prod2Img.classList.add('reveal');
+  await wait(800);
+  prod2Img.classList.remove('reveal');
+  prod2Img.classList.add('float');
+
+  anim(document.getElementById('prod2Price'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await wait(t.prod2 - 1300);
+  await anim(s3, { opacity: '0' }, 400);
+
+  // ── SCENE 4 — Bundle "Better Together" ──
+  var s4 = document.getElementById('scene4');
+  await anim(s4, { opacity: '1' }, 300);
+
+  // Header drops in
+  await anim(document.getElementById('bundleHeaderEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('bundleHeaderAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(300);
+
+  // Card 1 slides up
+  await anim(document.getElementById('bundleCard1'),
+    { opacity: '1', transform: 'translateY(0) scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  // Plus sign pops
+  await anim(document.getElementById('bundlePlus'),
+    { opacity: '1', transform: 'scale(1)' }, 350, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  // Card 2 slides up
+  await anim(document.getElementById('bundleCard2'),
+    { opacity: '1', transform: 'translateY(0) scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await wait(300);
+
+  // Total reveals
+  await anim(document.getElementById('bundleTotal'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  // FREE delivery badge bounces in
+  await wait(200);
+  var freeBadge = document.getElementById('bundleFreeBadge');
+  await anim(freeBadge,
+    { opacity: '1', transform: 'scale(1)' }, 550, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  freeBadge.style.animation = 'pulseBadge 1.5s ease-in-out infinite';
+
+  await wait(t.bundle - 3200);
+  await anim(s4, { opacity: '0' }, 400);
+
+  // ── SCENE 5 — CTA ──
+  var s5 = document.getElementById('scene5');
+  await anim(s5, { opacity: '1' }, 300);
+  await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
+  await anim(document.getElementById('ctaHead'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaHeadAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(150);
+  await anim(document.getElementById('ctaBox'),
+    { opacity: '1', transform: 'scale(1)' }, 550, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(200);
+  await anim(document.getElementById('ctaUrl'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaBadges'), { opacity: '1' }, 500);
+
+  clearInterval(progressTick);
+  bar.style.width = '100%';
+  bar.style.transition = 'width 300ms linear';
+}
+
+createDots();
+</script>
+</body>
+</html>
