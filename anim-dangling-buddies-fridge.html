@@ -2,20 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dangling Buddies – Fridge Animation</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>ORLO – Dangling Buddies Fridge Animation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* ─── Reset & Canvas ─── */
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#1a1a2e;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;font-family:'Segoe UI',sans-serif}
+body{background:#ffffff;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;user-select:none}
 
-.stage{position:relative;width:390px;height:690px;background:linear-gradient(180deg,#f5efe6 0%,#e8dfd3 40%,#d4c9b8 100%);border-radius:18px;overflow:hidden}
+.stage{position:relative;width:390px;height:690px;background:linear-gradient(180deg,#faf8f5 0%,#f0ebe4 40%,#e6ddd2 100%);border-radius:18px;overflow:hidden}
 
 /* ─── Warm Kitchen Background ─── */
 .wall-texture{position:absolute;top:0;left:0;right:0;bottom:0;
   background-image:
-    repeating-linear-gradient(90deg,transparent,transparent 64px,rgba(0,0,0,0.02) 64px,rgba(0,0,0,0.02) 65px),
-    repeating-linear-gradient(0deg,transparent,transparent 32px,rgba(0,0,0,0.015) 32px,rgba(0,0,0,0.015) 33px);
+    repeating-linear-gradient(90deg,transparent,transparent 64px,rgba(44,74,92,0.015) 64px,rgba(44,74,92,0.015) 65px),
+    repeating-linear-gradient(0deg,transparent,transparent 32px,rgba(44,74,92,0.01) 32px,rgba(44,74,92,0.01) 33px);
 }
 .counter{position:absolute;bottom:0;left:0;right:0;height:60px;
   background:linear-gradient(180deg,#8b7355 0%,#6d5a3f 100%);
@@ -30,9 +31,9 @@ body{background:#1a1a2e;display:flex;align-items:center;justify-content:center;h
   background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 30%,#dee2e6 100%);
   border-radius:12px 12px 6px 6px;
   box-shadow:
-    4px 0 12px rgba(0,0,0,0.1),
-    -2px 0 8px rgba(0,0,0,0.05),
-    0 4px 16px rgba(0,0,0,0.15);
+    4px 0 12px rgba(44,74,92,0.08),
+    -2px 0 8px rgba(44,74,92,0.04),
+    0 4px 16px rgba(44,74,92,0.1);
   border:1px solid #ced4da;
 }
 /* Top door */
@@ -63,37 +64,42 @@ body{background:#1a1a2e;display:flex;align-items:center;justify-content:center;h
 
 /* ─── Shadow under fridge ─── */
 .fridge-shadow{position:absolute;bottom:55px;left:50%;transform:translateX(-50%);
-  width:210px;height:14px;background:radial-gradient(ellipse,rgba(0,0,0,0.2),transparent);
+  width:210px;height:14px;background:radial-gradient(ellipse,rgba(44,74,92,0.15),transparent);
   border-radius:50%;z-index:0}
 
-/* ─── Buddy Characters (use real product photos) ─── */
+/* ─── Buddy Characters ─── */
 .buddy{
   position:absolute;bottom:70px;z-index:20;
   opacity:0;
-  filter:drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+  filter:drop-shadow(0 3px 6px rgba(44,74,92,0.2));
   will-change:transform,left,right,bottom,opacity;
 }
 .buddy img{
   width:80px;height:auto;
   display:block;
-  /* smooth out the product photo edges */
-  filter:drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+  filter:drop-shadow(0 1px 2px rgba(44,74,92,0.1));
 }
 .buddy.strawberry{left:-90px}
 .buddy.mushroom{right:-90px}
 
-/* ─── ANIMATIONS: JavaScript-driven for precise sequencing ─── */
-
-/* Magnetic snap ring */
+/* ─── Magnetic snap ring ─── */
 .snap-ring{
   position:absolute;border-radius:50%;pointer-events:none;z-index:25;
   width:20px;height:20px;opacity:0;
-  border:2px solid rgba(255,255,255,0.7);
-  box-shadow:0 0 8px rgba(255,255,255,0.3);
+  border:2px solid rgba(224,120,86,0.6);
+  box-shadow:0 0 8px rgba(224,120,86,0.3);
 }
 
-/* Sparkle */
+/* ─── Sparkle ─── */
 .sparkle{position:absolute;pointer-events:none;z-index:30;opacity:0;font-size:14px}
+
+/* ─── ORLO Logo ─── */
+.orlo-logo{
+  position:absolute;top:16px;left:50%;transform:translateX(-50%);
+  width:60px;opacity:0;z-index:30;
+  transition:all 0.6s ease-out 0.2s;
+}
+.orlo-logo.show{opacity:1}
 
 /* ─── Title ─── */
 .title-text{
@@ -103,21 +109,27 @@ body{background:#1a1a2e;display:flex;align-items:center;justify-content:center;h
 }
 .title-text.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .title-text h1{
-  font-size:20px;color:#4a3728;letter-spacing:3px;font-weight:700;
-  text-shadow:0 1px 2px rgba(255,255,255,0.5);
+  font-size:20px;color:#2c4a5c;letter-spacing:3px;font-weight:800;
+  font-family:'Inter',sans-serif;
 }
 .title-text h2{
-  font-size:11px;color:#8b7355;margin-top:5px;font-weight:400;letter-spacing:1.5px;
+  font-size:12px;color:#e07856;margin-top:5px;font-weight:400;letter-spacing:1.5px;
+  font-family:'Inter',sans-serif;
+}
+.title-text .title-ar{
+  font-size:14px;color:#e07856;margin-top:6px;font-weight:600;
+  font-family:'Almarai',sans-serif;direction:rtl;
 }
 
 /* ─── Price tag ─── */
 .price-tag{
   position:absolute;bottom:140px;left:50%;
   transform:translateX(-50%) scale(0);
-  background:linear-gradient(135deg,#e74c3c,#c0392b);
+  background:#e07856;
   color:#fff;padding:8px 20px;border-radius:20px;
   font-size:15px;font-weight:700;letter-spacing:1px;z-index:30;
-  box-shadow:0 4px 15px rgba(231,76,60,0.4);
+  font-family:'Inter',sans-serif;
+  box-shadow:0 4px 15px rgba(224,120,86,0.4);
   opacity:0;transition:all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
 }
 .price-tag.show{opacity:1;transform:translateX(-50%) scale(1)}
@@ -126,24 +138,40 @@ body{background:#1a1a2e;display:flex;align-items:center;justify-content:center;h
 .orlo-badge{
   position:absolute;bottom:100px;left:50%;transform:translateX(-50%);
   opacity:0;z-index:30;transition:all 0.5s ease-out 0.2s;
-  font-size:10px;color:#8b7355;letter-spacing:2px;
+  font-size:11px;color:#e07856;letter-spacing:2px;font-weight:700;
+  font-family:'Inter',sans-serif;
 }
 .orlo-badge.show{opacity:1}
 
 /* ─── Replay ─── */
 .replay-btn{
   position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
-  background:rgba(74,55,40,0.1);border:1px solid rgba(74,55,40,0.2);
-  color:#6d5a3f;padding:7px 20px;border-radius:16px;font-size:11px;
-  cursor:pointer;opacity:0;font-family:inherit;letter-spacing:1px;
+  background:rgba(224,120,86,0.08);border:1px solid rgba(224,120,86,0.2);
+  color:#e07856;padding:7px 20px;border-radius:16px;font-size:11px;
+  cursor:pointer;opacity:0;font-family:'Inter',sans-serif;letter-spacing:1px;font-weight:600;
   transition:all 0.3s;z-index:30;
 }
-.replay-btn:hover{background:rgba(74,55,40,0.2)}
+.replay-btn:hover{background:rgba(224,120,86,0.15)}
+.replay-btn:active{transform:translateX(-50%) scale(0.95)}
 .replay-btn.show{opacity:1}
 
 /* ─── Magnet emoji on fridge ─── */
 .fridge-magnet-deco{
   position:absolute;font-size:12px;z-index:5;opacity:0.4;
+}
+
+/* ─── Floating dots ─── */
+.dots{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.dot{
+  position:absolute;border-radius:50%;
+  background:rgba(224,120,86,0.12);
+  animation:floatDot linear infinite;
+}
+@keyframes floatDot{
+  0%{transform:translateY(100%) scale(0);opacity:0}
+  10%{opacity:0.5}
+  90%{opacity:0.5}
+  100%{transform:translateY(-690px) scale(1);opacity:0}
 }
 </style>
 </head>
@@ -152,6 +180,7 @@ body{background:#1a1a2e;display:flex;align-items:center;justify-content:center;h
 <div class="stage" id="stage">
   <div class="wall-texture"></div>
   <div class="counter"></div>
+  <div class="dots" id="dots"></div>
 
   <!-- Fridge -->
   <div class="fridge-shadow"></div>
@@ -169,36 +198,28 @@ body{background:#1a1a2e;display:flex;align-items:center;justify-content:center;h
     <div class="fridge-magnet-deco" style="top:160px;left:50px;font-size:10px">❤️</div>
   </div>
 
-  <!-- Strawberry Buddy (real product photo) -->
+  <!-- Strawberry Buddy -->
   <div class="buddy strawberry" id="buddyStrawberry">
     <img src="https://lh3.googleusercontent.com/d/1no16D1IhGLnZSJtryh4BGjr2lvoNYlQb" alt="Strawberry Dangling Buddy" crossorigin="anonymous">
   </div>
 
-  <!-- Mushroom Buddy (real product photo) -->
+  <!-- Mushroom Buddy -->
   <div class="buddy mushroom" id="buddyMushroom">
     <img src="https://lh3.googleusercontent.com/d/1-oSW_5Fa15HRvKUTQyoBba9ki9XeDebk" alt="Mushroom Dangling Buddy" crossorigin="anonymous">
   </div>
 
-  <!-- Snap rings (created dynamically) -->
-  <div class="snap-ring" id="snapStrawberry"></div>
-  <div class="snap-ring" id="snapMushroom"></div>
-
-  <!-- Sparkles -->
-  <div class="sparkle" id="sp1">✦</div>
-  <div class="sparkle" id="sp2">✦</div>
-  <div class="sparkle" id="sp3">✧</div>
-  <div class="sparkle" id="sp4">✦</div>
-  <div class="sparkle" id="sp5">✧</div>
-  <div class="sparkle" id="sp6">✦</div>
+  <!-- ORLO Logo -->
+  <img src="logo.png" class="orlo-logo" id="orloLogo" alt="ORLO">
 
   <!-- Title -->
   <div class="title-text" id="title">
     <h1>DANGLING BUDDIES</h1>
     <h2>Tiny Friends for Your Fridge</h2>
+    <div class="title-ar">أصدقاء صغار لثلاجتك</div>
   </div>
 
   <!-- Price -->
-  <div class="price-tag" id="price">16 AED each</div>
+  <div class="price-tag" id="price">16 AED each · للحبة</div>
 
   <!-- Orlo -->
   <div class="orlo-badge" id="orloBadge">orlostore.com</div>
@@ -226,7 +247,6 @@ function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
 /* Swing animation using JS for precise control */
 function swing(el, angle, duration, count=Infinity){
   let start = null, running = true;
-  const id = {};
   function step(ts){
     if(!start) start=ts;
     const elapsed = ts - start;
@@ -274,13 +294,28 @@ function sparklePop(x, y, delay=0){
   const ox = (Math.random()-0.5)*50;
   const oy = (Math.random()-0.5)*40;
   Object.assign(sp.style,{left:x+'px',top:y+'px',opacity:'0',fontSize:(10+Math.random()*10)+'px',
-    color:['#ffd32a','#ff6b6b','#fff','#74b9ff'][Math.floor(Math.random()*4)]});
+    color:['#e07856','#f4a261','#2c4a5c','#d4956b'][Math.floor(Math.random()*4)]});
   $('stage').appendChild(sp);
   setTimeout(()=>{
     anim(sp, {opacity:'1',transform:`translate(${ox}px,${oy}px) scale(1.3) rotate(${Math.random()*180}deg)`}, 300, 'ease-out')
     .then(()=>anim(sp, {opacity:'0',transform:`translate(${ox*1.5}px,${oy*1.5-20}px) scale(0.3)`}, 300))
     .then(()=>sp.remove());
   }, delay);
+}
+
+/* Create floating dots */
+function createDots(){
+  const c = document.getElementById('dots');
+  for(let i=0;i<12;i++){
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = Math.random()*100+'%';
+    d.style.animationDuration = (6+Math.random()*8)+'s';
+    d.style.animationDelay = Math.random()*14+'s';
+    const size = 2+Math.random()*4;
+    d.style.width = size+'px';d.style.height = size+'px';
+    c.appendChild(d);
+  }
 }
 
 /* ─── Main Sequence ─── */
@@ -370,8 +405,11 @@ async function run(){
   const idleStraw = swing(straw, 4, 2000);
   const idleMush  = swing(mush, 5, 2400);
 
-  // ── Phase 8: Title + price ──
-  await wait(500);
+  // ── Phase 8: Logo + Title + Price ──
+  await wait(400);
+  $('orloLogo').classList.add('show');
+
+  await wait(300);
   $('title').classList.add('show');
   $('title').style.transform = 'translateX(-50%) translateY(-10px)';
   await wait(100);
@@ -386,6 +424,9 @@ async function run(){
   await wait(500);
   $('replayBtn').classList.add('show');
 }
+
+// ── Init ──
+createDots();
 
 // Start after images load
 window.addEventListener('load', ()=>{
