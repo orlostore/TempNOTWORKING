@@ -7,412 +7,391 @@
 <style>
 /* ─── Reset & Canvas ─── */
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#1a1a2e;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;font-family:monospace}
-.stage{position:relative;width:390px;height:690px;background:#0f0f23;border-radius:18px;overflow:hidden}
+body{background:#1a1a2e;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;font-family:'Segoe UI',sans-serif}
 
-/* ─── Floor / Background ─── */
-.kitchen-bg{position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(0deg,#2a1f3d 0%,#1a1a2e 100%)}
-.floor{position:absolute;bottom:0;left:0;right:0;height:40px;background:#3d2c5e}
-.floor::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#5a3f8a}
+.stage{position:relative;width:390px;height:690px;background:linear-gradient(180deg,#f5efe6 0%,#e8dfd3 40%,#d4c9b8 100%);border-radius:18px;overflow:hidden}
+
+/* ─── Warm Kitchen Background ─── */
+.wall-texture{position:absolute;top:0;left:0;right:0;bottom:0;
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 64px,rgba(0,0,0,0.02) 64px,rgba(0,0,0,0.02) 65px),
+    repeating-linear-gradient(0deg,transparent,transparent 32px,rgba(0,0,0,0.015) 32px,rgba(0,0,0,0.015) 33px);
+}
+.counter{position:absolute;bottom:0;left:0;right:0;height:60px;
+  background:linear-gradient(180deg,#8b7355 0%,#6d5a3f 100%);
+  border-top:3px solid #a08665}
+.counter::before{content:'';position:absolute;top:-8px;left:0;right:0;height:8px;
+  background:linear-gradient(180deg,rgba(0,0,0,0.08),transparent)}
 
 /* ─── Fridge ─── */
-.fridge{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);width:180px;height:340px}
-.fridge-top{position:absolute;top:0;left:0;width:100%;height:200px;background:linear-gradient(135deg,#e8edf2 0%,#cdd5de 100%);border-radius:10px 10px 0 0;border:3px solid #b0bec5;border-bottom:2px solid #90a4ae}
-.fridge-bottom{position:absolute;top:202px;left:0;width:100%;height:138px;background:linear-gradient(135deg,#dde3e9 0%,#c0cad4 100%);border-radius:0 0 10px 10px;border:3px solid #b0bec5;border-top:none}
-.fridge-handle-top{position:absolute;top:70px;right:12px;width:6px;height:50px;background:#90a4ae;border-radius:3px}
-.fridge-handle-bottom{position:absolute;top:230px;right:12px;width:6px;height:40px;background:#90a4ae;border-radius:3px}
-.fridge-line{position:absolute;top:200px;left:3px;right:3px;height:2px;background:#90a4ae}
+.fridge{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);width:200px;height:380px;z-index:1}
 
-/* ─── Magnet landing spots on fridge ─── */
-.magnet-spot{position:absolute;z-index:10}
-.magnet-spot.spot-left{top:30px;left:20px}
-.magnet-spot.spot-right{top:50px;right:30px}
+.fridge-body{position:absolute;top:0;left:0;width:100%;height:100%;
+  background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 30%,#dee2e6 100%);
+  border-radius:12px 12px 6px 6px;
+  box-shadow:
+    4px 0 12px rgba(0,0,0,0.1),
+    -2px 0 8px rgba(0,0,0,0.05),
+    0 4px 16px rgba(0,0,0,0.15);
+  border:1px solid #ced4da;
+}
+/* Top door */
+.fridge-door-top{position:absolute;top:4px;left:4px;right:4px;height:220px;
+  background:linear-gradient(160deg,#ffffff 0%,#f1f3f5 50%,#e9ecef 100%);
+  border-radius:10px 10px 2px 2px;
+  border:1px solid #dee2e6;
+}
+/* Bottom door */
+.fridge-door-bottom{position:absolute;top:230px;left:4px;right:4px;height:146px;
+  background:linear-gradient(160deg,#ffffff 0%,#f1f3f5 50%,#e9ecef 100%);
+  border-radius:2px 2px 8px 8px;
+  border:1px solid #dee2e6;
+}
+/* Handles */
+.fridge-handle{position:absolute;right:14px;width:5px;background:linear-gradient(90deg,#adb5bd,#ced4da,#adb5bd);
+  border-radius:3px;box-shadow:1px 1px 3px rgba(0,0,0,0.1)}
+.fridge-handle.top{top:80px;height:60px}
+.fridge-handle.bottom{top:270px;height:45px}
+/* Gap line */
+.fridge-gap{position:absolute;top:226px;left:4px;right:4px;height:3px;
+  background:linear-gradient(90deg,#adb5bd,#868e96,#adb5bd);
+  border-radius:1px}
+/* Shine reflection */
+.fridge-shine{position:absolute;top:10px;left:10px;width:40px;height:80px;
+  background:linear-gradient(160deg,rgba(255,255,255,0.6),transparent);
+  border-radius:8px;pointer-events:none}
 
-/* ─── Pixel Buddy Base ─── */
-.buddy{position:absolute;bottom:50px;z-index:20;image-rendering:pixelated;opacity:0}
-.buddy.strawberry{left:-60px}
-.buddy.mushroom{right:-60px}
+/* ─── Shadow under fridge ─── */
+.fridge-shadow{position:absolute;bottom:55px;left:50%;transform:translateX(-50%);
+  width:210px;height:14px;background:radial-gradient(ellipse,rgba(0,0,0,0.2),transparent);
+  border-radius:50%;z-index:0}
 
-/* ─── Pixel Art Characters (CSS pixel art) ─── */
-.pixel-body{position:relative;display:flex;flex-direction:column;align-items:center}
+/* ─── Buddy Characters (use real product photos) ─── */
+.buddy{
+  position:absolute;bottom:70px;z-index:20;
+  opacity:0;
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+  will-change:transform,left,right,bottom,opacity;
+}
+.buddy img{
+  width:80px;height:auto;
+  display:block;
+  /* smooth out the product photo edges */
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+}
+.buddy.strawberry{left:-90px}
+.buddy.mushroom{right:-90px}
 
-/* ── Strawberry Body ── */
-.strawberry .pixel-body{width:36px}
-.strawberry .head{
-  width:32px;height:28px;
-  background:#ff4757;
-  border-radius:6px 6px 14px 14px;
-  position:relative;
-  border:2px solid #c0392b;
-}
-.strawberry .head::before{
-  content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);
-  width:16px;height:10px;
-  background:#2ed573;
-  border-radius:4px 4px 0 0;
-  border:2px solid #1e8449;
-  border-bottom:none;
-}
-/* seeds */
-.strawberry .head::after{
-  content:'';position:absolute;top:8px;left:8px;
-  width:3px;height:3px;
-  background:#ffd32a;
-  border-radius:50%;
-  box-shadow:10px 0 0 #ffd32a, 5px 8px 0 #ffd32a, -1px 12px 0 #ffd32a, 12px 10px 0 #ffd32a;
-}
-.strawberry .face{
-  position:absolute;top:10px;left:50%;transform:translateX(-50%);
-  width:20px;height:8px;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.strawberry .eye{width:5px;height:5px;background:#1a1a2e;border-radius:50%}
-.strawberry .mouth{
-  position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
-  width:8px;height:4px;
-  border-bottom:2px solid #1a1a2e;
-  border-radius:0 0 4px 4px;
-}
+/* ─── ANIMATIONS: JavaScript-driven for precise sequencing ─── */
 
-/* ── Mushroom Body ── */
-.mushroom .pixel-body{width:36px}
-.mushroom .cap{
-  width:36px;height:20px;
-  background:#ff6b6b;
-  border-radius:18px 18px 4px 4px;
-  position:relative;
-  border:2px solid #c0392b;
-}
-.mushroom .cap::after{
-  content:'';position:absolute;top:4px;left:6px;
-  width:6px;height:6px;background:#fff;border-radius:50%;
-  box-shadow:12px 2px 0 #fff, 6px 8px 0 4px #fff;
-}
-.mushroom .stem{
-  width:18px;height:14px;
-  background:#ffeaa7;
-  border-radius:0 0 6px 6px;
-  margin:0 auto;
-  position:relative;
-  border:2px solid #d4a017;
-  border-top:none;
-}
-.mushroom .face{
-  position:absolute;top:2px;left:50%;transform:translateX(-50%);
-  width:14px;height:8px;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.mushroom .eye{width:4px;height:4px;background:#1a1a2e;border-radius:50%}
-.mushroom .mouth{
-  position:absolute;bottom:1px;left:50%;transform:translateX(-50%);
-  width:6px;height:3px;
-  border-bottom:2px solid #1a1a2e;
-  border-radius:0 0 3px 3px;
-}
-
-/* ── Dangling Legs (shared) ── */
-.legs{
-  display:flex;justify-content:center;gap:6px;
-  margin-top:-1px;
-}
-.leg{
-  width:5px;height:14px;
-  background:#ffeaa7;
-  border-radius:0 0 3px 3px;
-  border:1.5px solid #d4a017;
-  border-top:none;
-  transform-origin:top center;
-}
-.shoe{
-  width:8px;height:5px;
-  background:#e74c3c;
-  border-radius:0 0 3px 3px;
-  margin-top:-1px;
-  border:1.5px solid #c0392b;
-  border-top:none;
-}
-.leg-group{display:flex;flex-direction:column;align-items:center;transform-origin:top center}
-
-.strawberry .leg{background:#ffeaa7;border-color:#d4a017}
-.strawberry .shoe{background:#2ed573;border-color:#1e8449}
-.mushroom .leg{background:#ffeaa7;border-color:#d4a017}
-.mushroom .shoe{background:#ff6b6b;border-color:#c0392b}
-
-/* ─── ANIMATION: Strawberry enters from left ─── */
-.buddy.strawberry{
-  animation:
-    strawberry-enter 0.8s 0.3s ease-out forwards,
-    strawberry-hop 0.4s 1.1s ease-in-out,
-    strawberry-jump 0.7s 1.8s cubic-bezier(0.2,0,0.3,1) forwards;
-}
-@keyframes strawberry-enter{
-  0%{left:-60px;opacity:0;bottom:50px}
-  30%{opacity:1}
-  100%{left:80px;opacity:1;bottom:50px}
-}
-@keyframes strawberry-hop{
-  0%,100%{bottom:50px;transform:scaleY(1)}
-  15%{bottom:48px;transform:scaleY(0.85) scaleX(1.1)}
-  50%{bottom:75px;transform:scaleY(1.1) scaleX(0.95)}
-}
-@keyframes strawberry-jump{
-  0%{left:80px;bottom:50px;transform:scale(1) rotate(0deg)}
-  30%{bottom:380px;left:100px;transform:scale(0.9) rotate(-10deg)}
-  60%{bottom:360px;left:108px;transform:scale(0.85) rotate(5deg)}
-  80%{bottom:355px;left:110px;transform:scale(0.82) rotate(-2deg)}
-  100%{bottom:348px;left:112px;transform:scale(0.8) rotate(0deg)}
-}
-
-/* ─── ANIMATION: Mushroom enters from right ─── */
-.buddy.mushroom{
-  animation:
-    mushroom-enter 0.8s 0.6s ease-out forwards,
-    mushroom-hop 0.4s 1.4s ease-in-out,
-    mushroom-jump 0.7s 2.2s cubic-bezier(0.2,0,0.3,1) forwards;
-}
-@keyframes mushroom-enter{
-  0%{right:-60px;opacity:0;bottom:50px}
-  30%{opacity:1}
-  100%{right:80px;opacity:1;bottom:50px}
-}
-@keyframes mushroom-hop{
-  0%,100%{bottom:50px;transform:scaleY(1)}
-  15%{bottom:48px;transform:scaleY(0.85) scaleX(1.1)}
-  50%{bottom:75px;transform:scaleY(1.1) scaleX(0.95)}
-}
-@keyframes mushroom-jump{
-  0%{right:80px;bottom:50px;transform:scale(1) rotate(0deg)}
-  30%{bottom:360px;right:95px;transform:scale(0.9) rotate(10deg)}
-  60%{bottom:335px;right:100px;transform:scale(0.85) rotate(-5deg)}
-  80%{bottom:328px;right:102px;transform:scale(0.82) rotate(2deg)}
-  100%{bottom:320px;right:105px;transform:scale(0.8) rotate(0deg)}
-}
-
-/* ─── Leg swing while walking ─── */
-.buddy.strawberry .leg-group.left{
-  animation:leg-swing-walk 0.2s 0.3s ease-in-out 4 alternate;
-}
-.buddy.strawberry .leg-group.right{
-  animation:leg-swing-walk 0.2s 0.4s ease-in-out 4 alternate;
-}
-.buddy.mushroom .leg-group.left{
-  animation:leg-swing-walk 0.2s 0.6s ease-in-out 4 alternate;
-}
-.buddy.mushroom .leg-group.right{
-  animation:leg-swing-walk 0.2s 0.7s ease-in-out 4 alternate;
-}
-@keyframes leg-swing-walk{
-  0%{transform:rotate(20deg)}
-  100%{transform:rotate(-20deg)}
-}
-
-/* ─── Leg dangle while jumping ─── */
-.buddy.strawberry .leg-group.left{
-  animation:
-    leg-swing-walk 0.2s 0.3s ease-in-out 4 alternate,
-    leg-dangle 0.35s 1.8s ease-in-out 3 alternate;
-}
-.buddy.strawberry .leg-group.right{
-  animation:
-    leg-swing-walk 0.2s 0.4s ease-in-out 4 alternate,
-    leg-dangle 0.35s 1.9s ease-in-out 3 alternate;
-}
-.buddy.mushroom .leg-group.left{
-  animation:
-    leg-swing-walk 0.2s 0.6s ease-in-out 4 alternate,
-    leg-dangle 0.35s 2.2s ease-in-out 3 alternate;
-}
-.buddy.mushroom .leg-group.right{
-  animation:
-    leg-swing-walk 0.2s 0.7s ease-in-out 4 alternate,
-    leg-dangle 0.35s 2.3s ease-in-out 3 alternate;
-}
-@keyframes leg-dangle{
-  0%{transform:rotate(25deg)}
-  100%{transform:rotate(-25deg)}
-}
-
-/* ─── Idle dangle after sticking ─── */
-.buddy.strawberry .leg-group{
-  animation:
-    leg-swing-walk 0.2s 0.3s ease-in-out 4 alternate,
-    leg-dangle 0.35s 1.8s ease-in-out 3 alternate,
-    idle-dangle 1.2s 3.2s ease-in-out infinite alternate;
-}
-.buddy.mushroom .leg-group{
-  animation:
-    leg-swing-walk 0.2s 0.6s ease-in-out 4 alternate,
-    leg-dangle 0.35s 2.2s ease-in-out 3 alternate,
-    idle-dangle 1.4s 3.6s ease-in-out infinite alternate;
-}
-@keyframes idle-dangle{
-  0%{transform:rotate(8deg)}
-  100%{transform:rotate(-8deg)}
-}
-
-/* ─── Magnetic snap effect ─── */
+/* Magnetic snap ring */
 .snap-ring{
-  position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,0.6);
-  width:10px;height:10px;opacity:0;pointer-events:none;
-}
-.snap-ring.sr-strawberry{top:330px;left:120px}
-.snap-ring.sr-mushroom{top:310px;right:112px}
-
-.snap-ring.sr-strawberry{
-  animation:snap-burst 0.4s 2.45s ease-out forwards;
-}
-.snap-ring.sr-mushroom{
-  animation:snap-burst 0.4s 2.85s ease-out forwards;
-}
-@keyframes snap-burst{
-  0%{transform:scale(0.5);opacity:0.9}
-  100%{transform:scale(4);opacity:0}
+  position:absolute;border-radius:50%;pointer-events:none;z-index:25;
+  width:20px;height:20px;opacity:0;
+  border:2px solid rgba(255,255,255,0.7);
+  box-shadow:0 0 8px rgba(255,255,255,0.3);
 }
 
-/* ─── Sparkle stars on snap ─── */
-.sparkle{position:absolute;font-size:10px;opacity:0;pointer-events:none;z-index:30}
-.sparkle.sp1{top:320px;left:105px;animation:sparkle-pop 0.5s 2.5s ease-out forwards}
-.sparkle.sp2{top:340px;left:140px;animation:sparkle-pop 0.5s 2.6s ease-out forwards}
-.sparkle.sp3{top:300px;right:100px;animation:sparkle-pop 0.5s 2.9s ease-out forwards}
-.sparkle.sp4{top:320px;right:130px;animation:sparkle-pop 0.5s 3.0s ease-out forwards}
-@keyframes sparkle-pop{
-  0%{opacity:0;transform:scale(0) rotate(0deg)}
-  50%{opacity:1;transform:scale(1.3) rotate(90deg)}
-  100%{opacity:0;transform:scale(0.5) rotate(180deg) translateY(-15px)}
-}
+/* Sparkle */
+.sparkle{position:absolute;pointer-events:none;z-index:30;opacity:0;font-size:14px}
 
-/* ─── Title text after stick ─── */
+/* ─── Title ─── */
 .title-text{
-  position:absolute;top:80px;left:50%;transform:translateX(-50%);
+  position:absolute;top:60px;left:50%;transform:translateX(-50%);
   text-align:center;opacity:0;z-index:30;
+  transition:all 0.6s ease-out;
 }
+.title-text.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .title-text h1{
-  font-size:18px;color:#fff;letter-spacing:2px;
-  text-shadow:0 0 20px rgba(255,107,107,0.5);
+  font-size:20px;color:#4a3728;letter-spacing:3px;font-weight:700;
+  text-shadow:0 1px 2px rgba(255,255,255,0.5);
 }
 .title-text h2{
-  font-size:11px;color:#90a4ae;margin-top:4px;font-weight:400;letter-spacing:1px;
-}
-.title-text{animation:title-in 0.6s 3.5s ease-out forwards}
-@keyframes title-in{
-  0%{opacity:0;transform:translateX(-50%) translateY(10px)}
-  100%{opacity:1;transform:translateX(-50%) translateY(0)}
+  font-size:11px;color:#8b7355;margin-top:5px;font-weight:400;letter-spacing:1.5px;
 }
 
 /* ─── Price tag ─── */
 .price-tag{
-  position:absolute;bottom:160px;left:50%;transform:translateX(-50%) scale(0);
-  background:#ff6b6b;color:#fff;padding:6px 16px;border-radius:20px;
-  font-size:14px;font-weight:bold;letter-spacing:1px;z-index:30;
-  box-shadow:0 4px 15px rgba(255,107,107,0.4);
-  opacity:0;
+  position:absolute;bottom:140px;left:50%;
+  transform:translateX(-50%) scale(0);
+  background:linear-gradient(135deg,#e74c3c,#c0392b);
+  color:#fff;padding:8px 20px;border-radius:20px;
+  font-size:15px;font-weight:700;letter-spacing:1px;z-index:30;
+  box-shadow:0 4px 15px rgba(231,76,60,0.4);
+  opacity:0;transition:all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
 }
-.price-tag{animation:price-pop 0.5s 4.0s cubic-bezier(0.175,0.885,0.32,1.275) forwards}
-@keyframes price-pop{
-  0%{opacity:0;transform:translateX(-50%) scale(0)}
-  100%{opacity:1;transform:translateX(-50%) scale(1)}
-}
+.price-tag.show{opacity:1;transform:translateX(-50%) scale(1)}
 
-/* ─── Replay button ─── */
-.replay-btn{
-  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
-  background:none;border:1px solid #5a3f8a;color:#90a4ae;
-  padding:6px 18px;border-radius:14px;font-size:11px;
-  cursor:pointer;opacity:0;font-family:monospace;letter-spacing:1px;
-  transition:all 0.2s;z-index:30;
+/* ─── Orlo badge ─── */
+.orlo-badge{
+  position:absolute;bottom:100px;left:50%;transform:translateX(-50%);
+  opacity:0;z-index:30;transition:all 0.5s ease-out 0.2s;
+  font-size:10px;color:#8b7355;letter-spacing:2px;
 }
-.replay-btn:hover{background:#5a3f8a;color:#fff}
-.replay-btn{animation:fade-in 0.4s 4.5s ease-out forwards}
-@keyframes fade-in{0%{opacity:0}100%{opacity:1}}
+.orlo-badge.show{opacity:1}
+
+/* ─── Replay ─── */
+.replay-btn{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  background:rgba(74,55,40,0.1);border:1px solid rgba(74,55,40,0.2);
+  color:#6d5a3f;padding:7px 20px;border-radius:16px;font-size:11px;
+  cursor:pointer;opacity:0;font-family:inherit;letter-spacing:1px;
+  transition:all 0.3s;z-index:30;
+}
+.replay-btn:hover{background:rgba(74,55,40,0.2)}
+.replay-btn.show{opacity:1}
+
+/* ─── Magnet emoji on fridge ─── */
+.fridge-magnet-deco{
+  position:absolute;font-size:12px;z-index:5;opacity:0.4;
+}
 </style>
 </head>
 <body>
 
 <div class="stage" id="stage">
-
-  <!-- Kitchen background -->
-  <div class="kitchen-bg"></div>
-  <div class="floor"></div>
+  <div class="wall-texture"></div>
+  <div class="counter"></div>
 
   <!-- Fridge -->
+  <div class="fridge-shadow"></div>
   <div class="fridge">
-    <div class="fridge-top"></div>
-    <div class="fridge-bottom"></div>
-    <div class="fridge-handle-top"></div>
-    <div class="fridge-handle-bottom"></div>
-    <div class="fridge-line"></div>
-  </div>
-
-  <!-- Strawberry Buddy -->
-  <div class="buddy strawberry" id="strawberry">
-    <div class="pixel-body">
-      <div class="head">
-        <div class="face">
-          <div class="eye"></div>
-          <div class="eye"></div>
-        </div>
-        <div class="mouth"></div>
-      </div>
-      <div class="legs">
-        <div class="leg-group left">
-          <div class="leg"></div>
-          <div class="shoe"></div>
-        </div>
-        <div class="leg-group right">
-          <div class="leg"></div>
-          <div class="shoe"></div>
-        </div>
-      </div>
+    <div class="fridge-body">
+      <div class="fridge-door-top"></div>
+      <div class="fridge-door-bottom"></div>
+      <div class="fridge-handle top"></div>
+      <div class="fridge-handle bottom"></div>
+      <div class="fridge-gap"></div>
+      <div class="fridge-shine"></div>
     </div>
+    <!-- Small decorative magnets already on fridge -->
+    <div class="fridge-magnet-deco" style="top:20px;left:25px">📝</div>
+    <div class="fridge-magnet-deco" style="top:160px;left:50px;font-size:10px">❤️</div>
   </div>
 
-  <!-- Mushroom Buddy -->
-  <div class="buddy mushroom" id="mushroom">
-    <div class="pixel-body">
-      <div class="cap"></div>
-      <div class="stem">
-        <div class="face">
-          <div class="eye"></div>
-          <div class="eye"></div>
-        </div>
-        <div class="mouth"></div>
-      </div>
-      <div class="legs">
-        <div class="leg-group left">
-          <div class="leg"></div>
-          <div class="shoe"></div>
-        </div>
-        <div class="leg-group right">
-          <div class="leg"></div>
-          <div class="shoe"></div>
-        </div>
-      </div>
-    </div>
+  <!-- Strawberry Buddy (real product photo) -->
+  <div class="buddy strawberry" id="buddyStrawberry">
+    <img src="https://lh3.googleusercontent.com/d/1no16D1IhGLnZSJtryh4BGjr2lvoNYlQb" alt="Strawberry Dangling Buddy" crossorigin="anonymous">
   </div>
 
-  <!-- Snap effects -->
-  <div class="snap-ring sr-strawberry"></div>
-  <div class="snap-ring sr-mushroom"></div>
+  <!-- Mushroom Buddy (real product photo) -->
+  <div class="buddy mushroom" id="buddyMushroom">
+    <img src="https://lh3.googleusercontent.com/d/1-oSW_5Fa15HRvKUTQyoBba9ki9XeDebk" alt="Mushroom Dangling Buddy" crossorigin="anonymous">
+  </div>
+
+  <!-- Snap rings (created dynamically) -->
+  <div class="snap-ring" id="snapStrawberry"></div>
+  <div class="snap-ring" id="snapMushroom"></div>
 
   <!-- Sparkles -->
-  <div class="sparkle sp1">&#10022;</div>
-  <div class="sparkle sp2">&#10022;</div>
-  <div class="sparkle sp3">&#10022;</div>
-  <div class="sparkle sp4">&#10022;</div>
+  <div class="sparkle" id="sp1">✦</div>
+  <div class="sparkle" id="sp2">✦</div>
+  <div class="sparkle" id="sp3">✧</div>
+  <div class="sparkle" id="sp4">✦</div>
+  <div class="sparkle" id="sp5">✧</div>
+  <div class="sparkle" id="sp6">✦</div>
 
   <!-- Title -->
-  <div class="title-text">
+  <div class="title-text" id="title">
     <h1>DANGLING BUDDIES</h1>
     <h2>Tiny Friends for Your Fridge</h2>
   </div>
 
   <!-- Price -->
-  <div class="price-tag">16 AED each</div>
+  <div class="price-tag" id="price">16 AED each</div>
+
+  <!-- Orlo -->
+  <div class="orlo-badge" id="orloBadge">orlostore.com</div>
 
   <!-- Replay -->
-  <button class="replay-btn" onclick="location.reload()">REPLAY &#x21bb;</button>
-
+  <button class="replay-btn" id="replayBtn" onclick="location.reload()">REPLAY ↻</button>
 </div>
+
+<script>
+/* ─── Animation Engine ─── */
+const $ = id => document.getElementById(id);
+
+function anim(el, props, ms, ease='ease'){
+  return new Promise(r=>{
+    el.style.transition = `all ${ms}ms ${ease}`;
+    requestAnimationFrame(()=>{
+      Object.assign(el.style, props);
+      setTimeout(r, ms);
+    });
+  });
+}
+
+function wait(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+/* Swing animation using JS for precise control */
+function swing(el, angle, duration, count=Infinity){
+  let start = null, running = true;
+  const id = {};
+  function step(ts){
+    if(!start) start=ts;
+    const elapsed = ts - start;
+    const cycle = (elapsed % duration) / duration;
+    const rot = Math.sin(cycle * Math.PI * 2) * angle;
+    el.style.transform = `rotate(${rot}deg)`;
+    if(running && (count===Infinity || elapsed < duration*count)){
+      requestAnimationFrame(step);
+    }
+  }
+  requestAnimationFrame(step);
+  return { stop(){ running=false; el.style.transform='rotate(0deg)'; }};
+}
+
+/* Bounce-walk effect */
+function bounceWalk(el, angle, duration){
+  let start = null, running = true;
+  function step(ts){
+    if(!start) start=ts;
+    const elapsed = ts - start;
+    const cycle = (elapsed % duration) / duration;
+    const bounce = Math.abs(Math.sin(cycle * Math.PI * 3)) * 6;
+    const tilt = Math.sin(cycle * Math.PI * 6) * angle;
+    el.style.transform = `translateY(${-bounce}px) rotate(${tilt}deg)`;
+    if(running) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+  return { stop(){ running=false; el.style.transform='none'; }};
+}
+
+/* Magnetic snap burst */
+function snapBurst(x, y){
+  const ring = document.createElement('div');
+  ring.className = 'snap-ring';
+  Object.assign(ring.style,{left:x+'px',top:y+'px',opacity:'0.8'});
+  $('stage').appendChild(ring);
+  anim(ring, {transform:'scale(5)',opacity:'0'}, 500, 'ease-out').then(()=>ring.remove());
+}
+
+/* Sparkle pop */
+function sparklePop(x, y, delay=0){
+  const sp = document.createElement('div');
+  sp.className = 'sparkle';
+  sp.textContent = ['✦','✧','⭑','·'][Math.floor(Math.random()*4)];
+  const ox = (Math.random()-0.5)*50;
+  const oy = (Math.random()-0.5)*40;
+  Object.assign(sp.style,{left:x+'px',top:y+'px',opacity:'0',fontSize:(10+Math.random()*10)+'px',
+    color:['#ffd32a','#ff6b6b','#fff','#74b9ff'][Math.floor(Math.random()*4)]});
+  $('stage').appendChild(sp);
+  setTimeout(()=>{
+    anim(sp, {opacity:'1',transform:`translate(${ox}px,${oy}px) scale(1.3) rotate(${Math.random()*180}deg)`}, 300, 'ease-out')
+    .then(()=>anim(sp, {opacity:'0',transform:`translate(${ox*1.5}px,${oy*1.5-20}px) scale(0.3)`}, 300))
+    .then(()=>sp.remove());
+  }, delay);
+}
+
+/* ─── Main Sequence ─── */
+async function run(){
+  const straw = $('buddyStrawberry');
+  const mush  = $('buddyMushroom');
+
+  // ── Phase 1: Strawberry walks in from left ──
+  straw.style.transition = 'none';
+  straw.style.opacity = '0';
+  straw.style.left = '-90px';
+  straw.style.bottom = '70px';
+  await wait(300);
+
+  // Fade in + walk to position
+  const walkStraw = bounceWalk(straw, 5, 600);
+  await anim(straw, {opacity:'1',left:'60px'}, 800, 'ease-out');
+  walkStraw.stop();
+  straw.style.transform = 'none';
+
+  // ── Phase 2: Mushroom walks in from right ──
+  await wait(100);
+  mush.style.transition = 'none';
+  mush.style.opacity = '0';
+  mush.style.right = '-90px';
+  mush.style.bottom = '70px';
+
+  const walkMush = bounceWalk(mush, 5, 600);
+  await anim(mush, {opacity:'1',right:'60px'}, 800, 'ease-out');
+  walkMush.stop();
+  mush.style.transform = 'none';
+
+  // ── Phase 3: Both look at fridge (slight pause + tilt) ──
+  await wait(200);
+  await Promise.all([
+    anim(straw, {transform:'rotate(5deg) translateY(-3px)'}, 300, 'ease-in-out'),
+    anim(mush, {transform:'rotate(-5deg) translateY(-3px)'}, 300, 'ease-in-out'),
+  ]);
+  await wait(300);
+
+  // ── Phase 4: Squat before jump ──
+  await Promise.all([
+    anim(straw, {transform:'scaleY(0.85) scaleX(1.1) translateY(4px)'}, 150, 'ease-in'),
+    anim(mush, {transform:'scaleY(0.85) scaleX(1.1) translateY(4px)'}, 150, 'ease-in'),
+  ]);
+
+  // ── Phase 5: JUMP! Strawberry arcs to upper-left of fridge ──
+  await Promise.all([
+    anim(straw, {
+      bottom:'360px', left:'105px',
+      transform:'scale(0.7) rotate(-15deg)'
+    }, 500, 'cubic-bezier(0.2,0,0.3,1)'),
+    // Mushroom jumps slightly later
+    (async ()=>{
+      await wait(80);
+      await anim(mush, {
+        bottom:'330px', right:'95px',
+        transform:'scale(0.7) rotate(12deg)'
+      }, 480, 'cubic-bezier(0.2,0,0.3,1)');
+    })()
+  ]);
+
+  // ── Phase 6: SNAP to fridge! ──
+  // Strawberry settles
+  await anim(straw, {
+    bottom:'350px', left:'110px',
+    transform:'scale(0.65) rotate(0deg)'
+  }, 200, 'cubic-bezier(0.4,0,0.2,1)');
+
+  // Snap effect for strawberry
+  snapBurst(135, 310);
+  for(let i=0;i<4;i++) sparklePop(120+Math.random()*40, 300+Math.random()*30, i*60);
+
+  await wait(100);
+
+  // Mushroom settles
+  await anim(mush, {
+    bottom:'310px', right:'100px',
+    transform:'scale(0.65) rotate(0deg)'
+  }, 200, 'cubic-bezier(0.4,0,0.2,1)');
+
+  // Snap effect for mushroom
+  snapBurst(235, 340);
+  for(let i=0;i<4;i++) sparklePop(220+Math.random()*40, 330+Math.random()*30, i*60);
+
+  // ── Phase 7: Idle swing (they're dangling on the fridge!) ──
+  const idleStraw = swing(straw, 4, 2000);
+  const idleMush  = swing(mush, 5, 2400);
+
+  // ── Phase 8: Title + price ──
+  await wait(500);
+  $('title').classList.add('show');
+  $('title').style.transform = 'translateX(-50%) translateY(-10px)';
+  await wait(100);
+  $('title').style.transform = 'translateX(-50%) translateY(0)';
+
+  await wait(600);
+  $('price').classList.add('show');
+
+  await wait(400);
+  $('orloBadge').classList.add('show');
+
+  await wait(500);
+  $('replayBtn').classList.add('show');
+}
+
+// Start after images load
+window.addEventListener('load', ()=>{
+  setTimeout(run, 400);
+});
+</script>
 
 </body>
 </html>
