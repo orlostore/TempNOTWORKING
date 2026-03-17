@@ -1620,9 +1620,6 @@ footer p {
   gap: 6px;
   flex-shrink: 1;
   min-width: 0;
-  background: #edf2fe;
-  padding: 6px 10px;
-  border-radius: 10px;
 }
 .early-price-desktop-bar .del-col .truck-icon {
   width: 18px;
@@ -1912,7 +1909,7 @@ footer p {
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
-  background: #edf2fe;
+  background: #f8fafb;
   border-radius: 12px;
 }
 
@@ -2886,9 +2883,6 @@ footer p {
   flex-shrink: 1;
   min-width: 0;
   overflow: hidden;
-  background: #edf2fe;
-  padding: 4px 8px;
-  border-radius: 8px;
 }
 .early-price-bottom .del-col .truck-icon {
   width: 14px;
@@ -5188,4 +5182,3 @@ footer p {
   color: #7f1d1d;
   line-height: 1.5;
 }
-
