@@ -1539,7 +1539,7 @@ footer p {
 
 .early-price-en,
 .early-price-ar {
-  font-size: 1.35rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: var(--primary);
   letter-spacing: -0.02em;
@@ -1603,7 +1603,7 @@ footer p {
   flex-shrink: 0;
 }
 .early-price-desktop-bar .price-col .early-price-en {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 800;
   color: #2c4a5c;
   letter-spacing: -0.02em;
@@ -1620,6 +1620,9 @@ footer p {
   gap: 6px;
   flex-shrink: 1;
   min-width: 0;
+  background: #fef0ed;
+  padding: 6px 10px;
+  border-radius: 10px;
 }
 .early-price-desktop-bar .del-col .truck-icon {
   width: 18px;
@@ -1858,7 +1861,7 @@ footer p {
 }
 
 .product-buybox .price {
-  font-size: 1.2rem;
+  font-size: 1.45rem;
   font-weight: 700;
   color: var(--accent);
   margin-bottom: 1.2rem;
@@ -1909,7 +1912,7 @@ footer p {
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
-  background: #f8fafb;
+  background: #fef0ed;
   border-radius: 12px;
 }
 
@@ -2827,7 +2830,7 @@ footer p {
   flex-shrink: 0;
 }
 .early-price-bottom .price-col .early-price-en {
-  font-size: 0.88rem;
+  font-size: 1.0rem;
   font-weight: 800;
   color: #2c4a5c;
   letter-spacing: -0.02em;
@@ -2883,6 +2886,9 @@ footer p {
   flex-shrink: 1;
   min-width: 0;
   overflow: hidden;
+  background: #fef0ed;
+  padding: 4px 8px;
+  border-radius: 8px;
 }
 .early-price-bottom .del-col .truck-icon {
   width: 14px;
