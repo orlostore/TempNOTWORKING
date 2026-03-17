@@ -74,6 +74,15 @@ html, body {
   will-change: opacity, transform;
 }
 
+/* ─── Scene 0: Intro Logo ─── */
+.scene-intro { background: #ffffff !important; }
+.intro-logo { width: 30vw; max-width: 180px; opacity: 0; transform: scale(0.8); }
+.intro-tagline {
+  font-size: clamp(12px, 2.8vw, 18px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
+  margin-top: 2vh; opacity: 0; transform: translateY(10px);
+}
+
 /* ─── Scene 1: Hero Product (Gramophone) ─── */
 .scene-hero { background: #ffffff !important; }
 .hero-header {
@@ -350,6 +359,12 @@ Shop the set at orlostore.com</div>
     </div>
   </div>
 
+  <!-- Scene 0: Intro Logo -->
+  <div class="scene scene-intro" id="scene0">
+    <img src="logo.png" class="intro-logo" id="introLogo" alt="ORLO">
+    <div class="intro-tagline" id="introTagline">orlostore.com</div>
+  </div>
+
   <!-- Scene 1: Hero Product (Gramophone) -->
   <div class="scene scene-hero" id="scene1">
     <div class="hero-header">
@@ -454,7 +469,7 @@ var T = {
 // ═══════════════════════════════════════════
 async function startPromo(mode) {
   var t = T[mode];
-  var totalDuration = t.hero + t.pair + t.cta + 1500;
+  var totalDuration = 1500 + t.hero + t.pair + t.cta + 1500;
 
   // Hide mode selector & toggle button
   document.getElementById('modeSelect').classList.add('gone');
@@ -469,6 +484,16 @@ async function startPromo(mode) {
     bar.style.transition = 'width 80ms linear';
     if (pct >= 100) clearInterval(progressTick);
   }, 80);
+
+  // ── SCENE 0 — Intro Logo ──
+  var s0 = document.getElementById('scene0');
+  s0.style.opacity = '1';
+  await anim(document.getElementById('introLogo'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('introTagline'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(600);
+  await anim(s0, { opacity: '0' }, 350);
 
   // ── SCENE 1 — Hero Product (Gramophone) ──
   var s1 = document.getElementById('scene1');
