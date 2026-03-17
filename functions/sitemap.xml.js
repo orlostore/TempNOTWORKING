@@ -30,7 +30,7 @@ export async function onRequestGet(context) {
         for (const row of results) {
             if (!row.slug) continue;
             xml += '  <url>\n';
-            xml += `    <loc>https://orlostore.com/product.html?product=${encodeURIComponent(row.slug)}</loc>\n`;
+            xml += `    <loc>https://orlostore.com/product?product=${encodeURIComponent(row.slug)}</loc>\n`;
             xml += `    <lastmod>${today}</lastmod>\n`;
             xml += '    <changefreq>weekly</changefreq>\n';
             xml += '    <priority>0.8</priority>\n';
