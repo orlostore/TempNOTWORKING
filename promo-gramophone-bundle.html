@@ -194,8 +194,8 @@ html, body {
   opacity: 0; transform: translateY(20px);
 }
 .cta-free-badge {
-  background: linear-gradient(135deg, rgba(56,161,105,0.1), rgba(56,161,105,0.05));
-  border: 2px solid rgba(56,161,105,0.3);
+  background: rgba(224,120,86,0.08);
+  border: 2px solid rgba(224,120,86,0.2);
   border-radius: 4vw; padding: 2.5vh 7vw; text-align: center;
   opacity: 0; transform: scale(0.85);
 }
@@ -203,10 +203,10 @@ html, body {
   font-size: clamp(28px, 7vw, 44px); margin-bottom: 0.5vh;
 }
 .cta-free-en {
-  font-size: clamp(16px, 4vw, 24px); font-weight: 800; color: #38a169;
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800; color: #e07856;
 }
 .cta-free-ar {
-  font-size: clamp(13px, 3.2vw, 18px); font-weight: 700; color: rgba(56,161,105,0.7);
+  font-size: clamp(13px, 3.2vw, 18px); font-weight: 700; color: rgba(224,120,86,0.6);
   direction: rtl; font-family: 'Almarai', sans-serif; margin-top: 0.3vh;
 }
 .cta-url {
@@ -238,6 +238,7 @@ html, body {
 }
 .caption-toggle:hover { transform: scale(1.1); }
 .caption-toggle:active { transform: scale(0.95); }
+.caption-toggle.hidden { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
 
 /* ─── Caption Section ─── */
 .caption-section {
@@ -393,8 +394,8 @@ Shop the set at orlostore.com</div>
     <div class="cta-head-ar" id="ctaHeadAr">قطعتين كلاسيكية. توصيل مجاني.</div>
     <div class="cta-free-badge" id="ctaFreeBadge">
       <div class="cta-free-icon">🚚</div>
-      <div class="cta-free-en">FREE Delivery Across UAE</div>
-      <div class="cta-free-ar">توصيل مجاني لكل الإمارات</div>
+      <div class="cta-free-en">Free Delivery Above 75 AED</div>
+      <div class="cta-free-ar">توصيل مجاني فوق 75 درهم</div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
@@ -455,8 +456,9 @@ async function startPromo(mode) {
   var t = T[mode];
   var totalDuration = t.hero + t.pair + t.cta + 1500;
 
-  // Hide mode selector
+  // Hide mode selector & toggle button
   document.getElementById('modeSelect').classList.add('gone');
+  document.getElementById('captionToggle').classList.add('hidden');
   await wait(400);
 
   var bar = document.getElementById('progressBar');
@@ -533,6 +535,10 @@ async function startPromo(mode) {
   clearInterval(progressTick);
   bar.style.width = '100%';
   bar.style.transition = 'width 300ms linear';
+
+  // Show toggle button again after playback
+  await wait(500);
+  document.getElementById('captionToggle').classList.remove('hidden');
 }
 
 createDots();
