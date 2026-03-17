@@ -2591,7 +2591,7 @@ footer p {
   right: 0;
   bottom: 0;
   background: rgba(0,0,0,0.5);
-  z-index: 2000;
+  z-index: 7000;
 }
 
 .mobile-menu-overlay.active {
@@ -2609,7 +2609,7 @@ footer p {
   background: white;
   border-radius: 14px;
   padding: 8px;
-  z-index: 2001;
+  z-index: 7001;
   box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
   overflow: hidden;
 }
