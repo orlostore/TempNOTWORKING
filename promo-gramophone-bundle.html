@@ -226,13 +226,29 @@ html, body {
   font-size: clamp(16px, 4vw, 24px);
 }
 
+/* ─── Caption Toggle ─── */
+.caption-toggle {
+  position: fixed; bottom: 2vh; right: 3vw;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #e07856; color: #fff; border: none;
+  font-size: 20px; cursor: pointer; z-index: 200;
+  box-shadow: 0 4px 16px rgba(224,120,86,0.4);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s, background 0.2s;
+}
+.caption-toggle:hover { transform: scale(1.1); }
+.caption-toggle:active { transform: scale(0.95); }
+
 /* ─── Caption Section ─── */
 .caption-section {
   position: relative;
   max-width: 500px; margin: 0 auto;
   padding: 4vh 5vw 6vh;
-  display: flex; flex-direction: column; gap: 2.5vh;
+  display: none; flex-direction: column; gap: 2.5vh;
   z-index: 90;
+}
+.caption-section.visible {
+  display: flex;
 }
 .caption-card {
   background: #f8f9fa; border: 1px solid #e2e8f0;
@@ -300,6 +316,9 @@ html, body {
       </button>
     </div>
   </div>
+
+  <!-- ── Caption Toggle Button ── -->
+  <button class="caption-toggle" id="captionToggle" onclick="toggleCaptions()" title="Show captions">✎</button>
 
   <!-- ── Social Caption & Hashtags ── -->
   <div class="caption-section" id="captionSection">
@@ -517,6 +536,21 @@ async function startPromo(mode) {
 }
 
 createDots();
+
+function toggleCaptions() {
+  var section = document.getElementById('captionSection');
+  var btn = document.getElementById('captionToggle');
+  section.classList.toggle('visible');
+  if (section.classList.contains('visible')) {
+    btn.textContent = '✕';
+    btn.title = 'Hide captions';
+    section.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    btn.textContent = '✎';
+    btn.title = 'Show captions';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
 
 function copyText(id) {
   var el = document.getElementById(id);
