@@ -2603,7 +2603,7 @@ footer p {
    ============================================ */
 .mobile-menu {
   position: fixed;
-  bottom: 120px;
+  bottom: 60px;
   left: 10px;
   right: 10px;
   background: white;
