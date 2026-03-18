@@ -1538,12 +1538,14 @@ window.onload = () => {
         hamburger.addEventListener('click', function() {
             hamburger.classList.toggle("active");
             navLinks.classList.toggle("active");
+            document.body.style.overflow = navLinks.classList.contains("active") ? "hidden" : "";
         });
         
         navLinks.querySelectorAll("a").forEach(link => {
             link.addEventListener("click", function(e) {
                 hamburger.classList.remove("active");
                 navLinks.classList.remove("active");
+                document.body.style.overflow = "";
                 // Scroll after menu closes so the transition doesn't block it
                 const href = this.getAttribute('href');
                 if (href && href.startsWith('#')) {
