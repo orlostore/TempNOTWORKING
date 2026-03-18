@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ORLO · Dangling Fridge Buddies</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -17,9 +17,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      width: 100vw;
+      height: 100vh;
       font-family: 'Inter', sans-serif;
       overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
     .stage {
@@ -27,9 +30,8 @@
       width: 420px;
       height: 700px;
       background: linear-gradient(180deg, #faf8f5 0%, #f0ebe4 100%);
-      border-radius: 36px;
-      box-shadow: 0 25px 35px -10px rgba(44,74,92,0.15), inset 0 0 0 1px rgba(44,74,92,0.08);
       overflow: hidden;
+      transform-origin: center center;
     }
 
     /* kitchen background */
@@ -57,10 +59,11 @@
       position: absolute;
       bottom: 45px;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) scale(1.2);
+      transform-origin: bottom center;
       width: 190px;
       height: 340px;
-      filter: drop-shadow(10px 15px 12px rgba(0,0,0,0.7));
+      filter: drop-shadow(10px 15px 12px rgba(0,0,0,0.3));
     }
 
     .fridge-top {
@@ -474,16 +477,16 @@
 
     @keyframes jumpStraw {
       0% { left: 70px; bottom: 52px; }
-      40% { bottom: 350px; left: 95px; transform: rotate(-8deg); }
-      80% { bottom: 320px; left: 112px; transform: rotate(3deg); }
-      100% { left: 118px; bottom: 300px; transform: rotate(0); }
+      40% { bottom: 418px; left: 95px; transform: rotate(-8deg); }
+      80% { bottom: 388px; left: 112px; transform: rotate(3deg); }
+      100% { left: 118px; bottom: 368px; transform: rotate(0); }
     }
 
     @keyframes jumpMush {
       0% { right: 70px; bottom: 52px; }
-      40% { bottom: 340px; right: 92px; transform: rotate(8deg); }
-      80% { bottom: 308px; right: 108px; transform: rotate(-3deg); }
-      100% { right: 114px; bottom: 288px; transform: rotate(0); }
+      40% { bottom: 408px; right: 92px; transform: rotate(8deg); }
+      80% { bottom: 376px; right: 108px; transform: rotate(-3deg); }
+      100% { right: 114px; bottom: 356px; transform: rotate(0); }
     }
 
     .strawberry .leg-group.left {
@@ -536,13 +539,13 @@
     }
 
     .sr-strawberry {
-      top: 285px;
+      top: 217px;
       left: 122px;
       animation: snapBurst 0.5s 2.6s ease-out forwards;
     }
 
     .sr-mushroom {
-      top: 265px;
+      top: 197px;
       right: 118px;
       animation: snapBurst 0.5s 3.1s ease-out forwards;
     }
@@ -561,10 +564,10 @@
       z-index: 45;
     }
 
-    .sp1 { top: 280px; left: 100px; animation: sparkle 0.6s 2.7s forwards; }
-    .sp2 { top: 310px; left: 140px; animation: sparkle 0.6s 2.8s forwards; }
-    .sp3 { top: 260px; right: 115px; animation: sparkle 0.6s 3.2s forwards; }
-    .sp4 { top: 300px; right: 140px; animation: sparkle 0.6s 3.3s forwards; }
+    .sp1 { top: 212px; left: 100px; animation: sparkle 0.6s 2.7s forwards; }
+    .sp2 { top: 242px; left: 140px; animation: sparkle 0.6s 2.8s forwards; }
+    .sp3 { top: 192px; right: 115px; animation: sparkle 0.6s 3.2s forwards; }
+    .sp4 { top: 232px; right: 140px; animation: sparkle 0.6s 3.3s forwards; }
 
     @keyframes sparkle {
       0% { opacity: 0; transform: scale(0) rotate(0); }
@@ -777,5 +780,16 @@
 
     <button class="replay-btn" onclick="location.reload()">↻ REPLAY</button>
   </div>
+
+<script>
+// Scale stage to fill viewport (for Instagram 9:16 recording)
+function fitStage() {
+  var s = document.querySelector('.stage');
+  var scale = Math.max(window.innerWidth / 420, window.innerHeight / 700);
+  s.style.transform = 'scale(' + scale + ')';
+}
+window.addEventListener('resize', fitStage);
+fitStage();
+</script>
 </body>
 </html>
