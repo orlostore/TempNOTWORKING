@@ -1,5 +1,19 @@
 const WHATSAPP_NUMBER = "971555477206";
 
+// Lock/unlock body scroll — bulletproof for iOS Safari
+const lockScroll = () => {
+    window._savedScroll = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${window._savedScroll}px`;
+    document.body.style.width = '100%';
+};
+const unlockScroll = () => {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, window._savedScroll || 0);
+};
+
 // HTML entity escaping to prevent XSS when inserting DB-sourced data via innerHTML
 function escapeHTML(str) {
     if (typeof str !== 'string') return str;
@@ -1211,11 +1225,11 @@ function toggleCart() {
     if (cartSidebar.classList.contains("active")) {
         if (bottomCartBtn) bottomCartBtn.classList.add("cart-active");
         if (bottomHomeBtn) bottomHomeBtn.classList.remove("home-active");
-        document.body.style.overflow = "hidden";
+        lockScroll();
     } else {
         if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
         if (bottomHomeBtn) bottomHomeBtn.classList.add("home-active");
-        document.body.style.overflow = "";
+        unlockScroll();
         upsellUsed = false;
         savedUpsellProducts = null;
     }
@@ -1234,12 +1248,12 @@ function addUpsellItem(id, event) {
 function openPolicy(type) { 
     document.getElementById("policyText").innerHTML = policies[type]; 
     document.getElementById("policyModal").style.display = "block"; 
-    document.body.style.overflow = "hidden"; 
+    lockScroll();
 }
 
-function closePolicy() { 
-    document.getElementById("policyModal").style.display = "none"; 
-    document.body.style.overflow = "auto"; 
+function closePolicy() {
+    document.getElementById("policyModal").style.display = "none";
+    unlockScroll();
 }
 
 function toggleAbout() {
@@ -1298,6 +1312,11 @@ function toggleMobileMenu() {
     }
     
     overlay.classList.toggle('active');
+    if (overlay.classList.contains('active')) {
+        lockScroll();
+    } else {
+        unlockScroll();
+    }
 }
 
 function closeMobileMenu() {
@@ -1305,6 +1324,7 @@ function closeMobileMenu() {
     if (overlay) {
         overlay.classList.remove('active');
     }
+    unlockScroll();
 }
 
 // === HOMEPAGE SECTIONS: Popular, Categories, New Arrivals ===
@@ -1538,14 +1558,14 @@ window.onload = () => {
         hamburger.addEventListener('click', function() {
             hamburger.classList.toggle("active");
             navLinks.classList.toggle("active");
-            document.body.style.overflow = navLinks.classList.contains("active") ? "hidden" : "";
+            if (navLinks.classList.contains("active")) { lockScroll(); } else { unlockScroll(); }
         });
         
         navLinks.querySelectorAll("a").forEach(link => {
             link.addEventListener("click", function(e) {
                 hamburger.classList.remove("active");
                 navLinks.classList.remove("active");
-                document.body.style.overflow = "";
+                unlockScroll();
                 // Scroll after menu closes so the transition doesn't block it
                 const href = this.getAttribute('href');
                 if (href && href.startsWith('#')) {
@@ -1653,7 +1673,7 @@ window.onload = () => {
                 if (cartSidebar && cartSidebar.classList.contains("active")) {
                     cartSidebar.classList.remove("active");
                     if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
-                    document.body.style.overflow = "";
+                    unlockScroll();
                     upsellUsed = false;
                     savedUpsellProducts = null;
                     return;
@@ -1669,7 +1689,7 @@ window.onload = () => {
                 if (cartSidebar && cartSidebar.classList.contains("active")) {
                     cartSidebar.classList.remove("active");
                     if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
-                    document.body.style.overflow = "";
+                    unlockScroll();
                     upsellUsed = false;
                     savedUpsellProducts = null;
                     return;
@@ -1689,7 +1709,7 @@ window.onload = () => {
             if (cartSidebar.classList.contains("active")) {
                 cartSidebar.classList.remove("active");
                 if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
-                document.body.style.overflow = "";
+                unlockScroll();
                 upsellUsed = false;
                 savedUpsellProducts = null;
             }
