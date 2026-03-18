@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Orlo Style · Dangling Fridge Buddies</title>
+  <title>ORLO · Dangling Fridge Buddies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -12,12 +13,12 @@
     }
 
     body {
-      background: #1a1730;
+      background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      font-family: 'Segoe UI', monospace;
+      font-family: 'Inter', sans-serif;
       overflow: hidden;
     }
 
@@ -25,9 +26,9 @@
       position: relative;
       width: 420px;
       height: 700px;
-      background: #1e1a36;
+      background: linear-gradient(180deg, #faf8f5 0%, #f0ebe4 100%);
       border-radius: 36px;
-      box-shadow: 0 25px 35px -10px black, inset 0 0 0 1px rgba(255,255,255,0.1);
+      box-shadow: 0 25px 35px -10px rgba(44,74,92,0.15), inset 0 0 0 1px rgba(44,74,92,0.08);
       overflow: hidden;
     }
 
@@ -38,7 +39,7 @@
       left: 0;
       right: 0;
       height: 180px;
-      background: linear-gradient(0deg, #2d2342 0%, #1e1a36 90%);
+      background: linear-gradient(0deg, #e6ddd2 0%, #f0ebe4 90%);
     }
 
     .floor {
@@ -47,8 +48,8 @@
       left: 0;
       right: 0;
       height: 45px;
-      background: #3f3157;
-      border-top: 3px solid #68558b;
+      background: #8b7355;
+      border-top: 3px solid #a08665;
     }
 
     /* fridge */
@@ -357,7 +358,7 @@
     .eye {
       width: 6px;
       height: 6px;
-      background: #1e1a2f;
+      background: #2c4a5c;
       border-radius: 50%;
     }
 
@@ -431,11 +432,11 @@
     .shoe {
       width: 16px;
       height: 10px;
-      background: #2d2d3a;
+      background: #3a5a6c;
       border-radius: 8px 8px 4px 4px;
-      border: 2px solid #14121e;
+      border: 2px solid #2c4a5c;
       margin-top: -3px;
-      box-shadow: 0 2px 0 #0f0d18;
+      box-shadow: 0 2px 0 #1e3a4c;
     }
 
     /* ===== ANIMATIONS ===== */
@@ -527,8 +528,8 @@
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      border: 3px solid #ffecaa;
-      filter: drop-shadow(0 0 10px gold);
+      border: 3px solid #e07856;
+      filter: drop-shadow(0 0 10px rgba(224,120,86,0.6));
       opacity: 0;
       pointer-events: none;
       z-index: 40;
@@ -554,8 +555,8 @@
     .sparkle {
       position: absolute;
       font-size: 16px;
-      color: #fffcd1;
-      text-shadow: 0 0 15px #ffd966;
+      color: #f4a261;
+      text-shadow: 0 0 15px #e07856;
       opacity: 0;
       z-index: 45;
     }
@@ -584,17 +585,27 @@
 
     .title-text h1 {
       font-size: 22px;
-      color: #fcf2d7;
-      text-shadow: 0 0 20px #ff9f7c, 0 4px 8px #231f3a;
+      color: #2c4a5c;
+      text-shadow: 0 2px 8px rgba(44,74,92,0.15);
       letter-spacing: 3px;
+      font-weight: 800;
     }
 
     .title-text h2 {
       font-size: 12px;
-      color: #cbd2e6;
+      color: #e07856;
       letter-spacing: 2px;
       font-weight: 400;
       margin-top: 5px;
+    }
+
+    .title-text .ar-subtitle {
+      font-size: 13px;
+      color: #e07856;
+      font-family: 'Almarai', sans-serif;
+      font-weight: 700;
+      margin-top: 4px;
+      direction: rtl;
     }
 
     .title-text {
@@ -611,13 +622,13 @@
       bottom: 170px;
       left: 50%;
       transform: translateX(-50%) scale(0);
-      background: #ffb082;
+      background: #e07856;
       padding: 8px 24px;
       border-radius: 40px;
-      color: #1f1935;
+      color: #ffffff;
       font-weight: 800;
       font-size: 18px;
-      box-shadow: 0 6px 0 #a1534a, 0 12px 25px #ffb082b3;
+      box-shadow: 0 6px 0 #c4613e, 0 12px 25px rgba(224,120,86,0.4);
       white-space: nowrap;
       opacity: 0;
       z-index: 55;
@@ -637,11 +648,12 @@
       bottom: 18px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(40, 30, 60, 0.7);
-      border: 2px solid #b19fdb;
-      color: #e8e2ff;
+      background: rgba(44, 74, 92, 0.8);
+      border: 2px solid #e07856;
+      color: #ffffff;
       padding: 8px 24px;
       border-radius: 40px;
+      font-family: 'Inter', sans-serif;
       font-size: 14px;
       font-weight: 600;
       letter-spacing: 2px;
@@ -653,9 +665,9 @@
     }
 
     .replay-btn:hover {
-      background: #6d55a3;
+      background: #e07856;
       color: white;
-      border-color: #ffd9a3;
+      border-color: #2c4a5c;
     }
 
     .replay-btn {
@@ -758,9 +770,10 @@
     <div class="title-text">
       <h1>DANGLING BUDDIES</h1>
       <h2>fridge magnet friends</h2>
+      <div class="ar-subtitle">أصدقاء الثلاجة المتدلّين</div>
     </div>
 
-    <div class="price-tag">16 AED each</div>
+    <div class="price-tag">16 AED each · <span style="font-family:'Almarai',sans-serif">١٦ درهم</span></div>
 
     <button class="replay-btn" onclick="location.reload()">↻ REPLAY</button>
   </div>
