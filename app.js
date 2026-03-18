@@ -1298,6 +1298,11 @@ function toggleMobileMenu() {
     }
     
     overlay.classList.toggle('active');
+    if (overlay.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+    }
 }
 
 function closeMobileMenu() {
@@ -1305,6 +1310,7 @@ function closeMobileMenu() {
     if (overlay) {
         overlay.classList.remove('active');
     }
+    document.body.style.overflow = '';
 }
 
 // === HOMEPAGE SECTIONS: Popular, Categories, New Arrivals ===
