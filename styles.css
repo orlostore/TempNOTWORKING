@@ -2596,6 +2596,8 @@ footer p {
 
 .mobile-menu-overlay.active {
   display: block;
+  touch-action: none;
+  overscroll-behavior: contain;
 }
 
 /* ============================================
