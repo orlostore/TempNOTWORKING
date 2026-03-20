@@ -2,608 +2,546 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ORLO – Desk Upgrade Bundle | 78 AED + Free Delivery</title>
-<meta name="description" content="ProDesk Cable Kit + Dangling Buddies = 78 AED with FREE delivery across UAE. Organize your desk and decorate your fridge!">
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Desk Upgrade Bundle</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-:root {
-  --primary: #2c4a5c;
-  --accent: #e07856;
-  --bg: #f8f9fa;
-  --white: #ffffff;
-}
-
 html, body {
-  width: 100%;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  color: #333;
-  line-height: 1.6;
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff !important;
   -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
-.arabic-text {
-  font-family: 'Almarai', sans-serif;
-  direction: rtl;
+.canvas {
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+  background: #ffffff;
 }
 
-/* ── TOP BAR ── */
-.top-bar {
-  background: var(--primary);
-  color: #fff;
-  text-align: center;
-  padding: 10px 16px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+/* ═══════════════════════════════════════════
+   MODE SELECTOR
+   ═══════════════════════════════════════════ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100;
+  background: #ffffff !important;
 }
-.top-bar span { color: var(--accent); }
-
-/* ── HEADER ── */
-.promo-header {
-  background: var(--white);
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
 }
-.promo-header img {
-  height: 32px;
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -1vh;
 }
-
-/* ── HERO ── */
-.hero-section {
-  background: var(--white);
-  padding: 32px 20px 24px;
-  text-align: center;
-}
-.hero-badge {
-  display: inline-block;
-  background: rgba(224,120,86,0.1);
-  color: var(--accent);
-  padding: 6px 18px;
-  border-radius: 50px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-}
-.hero-title {
-  font-size: clamp(26px, 6.5vw, 38px);
-  font-weight: 900;
-  color: var(--primary);
-  line-height: 1.2;
-  margin-bottom: 6px;
-}
-.hero-title span { color: var(--accent); }
-.hero-title-ar {
-  font-size: clamp(20px, 5vw, 28px);
-  font-weight: 700;
-  color: rgba(44,74,92,0.45);
-  margin-bottom: 16px;
-}
-.hero-price-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-.hero-price {
-  font-size: clamp(36px, 9vw, 52px);
-  font-weight: 900;
-  color: var(--accent);
-  line-height: 1;
-}
-.hero-price sub {
-  font-size: 0.38em;
-  font-weight: 400;
-  color: #7a8f9c;
-  vertical-align: baseline;
-}
-.hero-savings {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--primary);
-  opacity: 0.7;
-}
-
-/* ── PRODUCTS SECTION ── */
-.products-section {
-  padding: 28px 20px;
-}
-.section-label {
-  text-align: center;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-}
-.bundle-cards {
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.bundle-card {
-  flex: 1;
-  max-width: 180px;
-  background: var(--white);
-  border-radius: 16px;
-  border: 2px solid rgba(44,74,92,0.06);
-  padding: 16px 12px 14px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.bundle-card:active {
-  transform: scale(0.97);
-}
-.bundle-card img {
-  width: 90%;
-  aspect-ratio: 1;
-  object-fit: contain;
-  mix-blend-mode: multiply;
-  margin-bottom: 10px;
-}
-.card-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--primary);
-  text-align: center;
-  line-height: 1.3;
-}
-.card-name-ar {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--accent);
-  text-align: center;
-  margin-top: 2px;
-}
-.card-price {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--accent);
-  margin-top: 8px;
-}
-.bundle-plus {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--accent);
-  flex-shrink: 0;
-  width: 36px;
-}
-
-/* ── TOTAL BOX ── */
-.total-box {
-  background: var(--white);
-  border: 2px solid rgba(224,120,86,0.15);
-  border-radius: 20px;
-  padding: 20px 24px;
-  text-align: center;
-  margin: 0 auto 24px;
-  max-width: 360px;
-}
-.total-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: #7a8f9c;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-bottom: 4px;
-}
-.total-price {
-  font-size: 40px;
-  font-weight: 900;
-  color: var(--primary);
-  line-height: 1.1;
-}
-.total-price span { color: var(--accent); }
-.free-delivery-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: linear-gradient(135deg, var(--primary), #3a6b83);
-  color: #fff;
-  padding: 10px 22px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  margin-top: 14px;
-  box-shadow: 0 4px 16px rgba(44,74,92,0.25);
-}
-.free-delivery-badge svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-}
-
-/* ── CTA BUTTON ── */
-.cta-section {
-  padding: 0 20px 20px;
-  text-align: center;
-}
-.cta-btn {
-  display: block;
-  width: 100%;
-  max-width: 360px;
-  margin: 0 auto 12px;
-  padding: 16px 24px;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 14px;
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
   font-family: 'Inter', sans-serif;
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-  box-shadow: 0 6px 24px rgba(224,120,86,0.35);
-  transition: transform 0.15s, box-shadow 0.15s;
-  animation: ctaPulse 2s ease-in-out infinite;
-}
-.cta-btn:active {
-  transform: scale(0.96);
-  box-shadow: 0 3px 12px rgba(224,120,86,0.3);
-}
-.cta-btn .btn-ar {
-  display: block;
-  font-family: 'Almarai', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  opacity: 0.9;
-  margin-top: 3px;
-}
-@keyframes ctaPulse {
-  0%, 100% { box-shadow: 0 6px 24px rgba(224,120,86,0.35); }
-  50%      { box-shadow: 0 8px 32px rgba(224,120,86,0.5); }
-}
-
-/* ── TRUST BADGES ── */
-.trust-badges {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  padding: 24px 20px;
-  flex-wrap: wrap;
-}
-.trust-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  text-align: center;
-}
-.trust-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(224,120,86,0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-}
-.trust-text {
-  font-size: 11px;
-  font-weight: 600;
-  color: #6a8090;
-  line-height: 1.3;
-}
-
-/* ── WHY BUNDLE ── */
-.why-section {
-  padding: 28px 20px 32px;
-  background: var(--white);
-}
-.why-title {
-  text-align: center;
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--primary);
-  margin-bottom: 4px;
-}
-.why-title span { color: var(--accent); }
-.why-title-ar {
-  text-align: center;
-  font-size: 16px;
-  font-weight: 700;
-  color: rgba(44,74,92,0.4);
-  margin-bottom: 20px;
-}
-.why-points {
-  max-width: 360px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.why-point {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-.why-point-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(224,120,86,0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.why-point-text {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--primary);
-  line-height: 1.4;
-}
-.why-point-text small {
-  display: block;
-  font-size: 12px;
-  font-weight: 400;
-  color: #7a8f9c;
-  margin-top: 2px;
-}
-
-/* ── FOOTER ── */
-.promo-footer {
-  text-align: center;
-  padding: 24px 20px 40px;
-  background: var(--primary);
-  color: #fff;
-}
-.promo-footer img {
-  height: 28px;
-  margin-bottom: 10px;
-  filter: brightness(10);
-}
-.footer-text {
-  font-size: 12px;
-  opacity: 0.6;
-}
-
-/* ── STICKY CTA (mobile) ── */
-.sticky-cta {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--white);
-  padding: 12px 20px;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.sticky-info {
-  flex: 1;
-}
-.sticky-price {
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--accent);
-  line-height: 1;
-}
-.sticky-price sub {
-  font-size: 0.45em;
-  font-weight: 400;
-  color: #7a8f9c;
-}
-.sticky-free {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--primary);
-  opacity: 0.7;
-}
-.sticky-btn {
-  padding: 14px 28px;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-family: 'Inter', sans-serif;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-  white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(224,120,86,0.3);
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
   transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
 }
-.sticky-btn:active { transform: scale(0.95); }
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
 
-/* Hide sticky when CTA button is in view */
-.sticky-cta.hidden { transform: translateY(100%); transition: transform 0.3s ease; }
-.sticky-cta { transition: transform 0.3s ease; }
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  will-change: opacity, transform;
+}
 
-/* Extra bottom padding so content isn't hidden behind sticky bar */
-body { padding-bottom: 80px; }
+/* ─── Scene 1: Logo Intro ─── */
+.scene-intro { background: #ffffff !important; }
+.intro-glow {
+  width: 36vw; height: 36vw; max-width: 220px; max-height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224,120,86,0.1) 0%, transparent 70%);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5);
+}
+.intro-glow img { width: 65%; }
+.intro-line {
+  width: 12vw; height: 2px; background: #e07856; margin-top: 3vh;
+  opacity: 0; transform: scaleX(0);
+}
+.intro-en {
+  margin-top: 2.5vh;
+  font-size: clamp(15px, 3.2vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.35em; text-transform: uppercase;
+  opacity: 0; transform: translateY(15px);
+}
+.intro-ar {
+  margin-top: 1.5vh;
+  font-size: clamp(16px, 3.5vw, 24px); font-weight: 500;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(15px);
+}
 
+/* ─── Scene 2: Bundle Parade ─── */
+.scene-parade { background: #ffffff !important; }
+.parade-header {
+  position: absolute; top: 5vh;
+  text-align: center; z-index: 5;
+}
+.parade-en {
+  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
+}
+.parade-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(-15px);
+}
+.product-stage {
+  position: relative;
+  width: 60vw; height: 60vw; max-width: 380px; max-height: 380px;
+  margin-top: -2vh;
+}
+.product-stage img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: contain;
+  opacity: 0; mix-blend-mode: multiply;
+}
+@keyframes productIn {
+  0%   { opacity: 0; transform: scale(0.7) translateY(20px); }
+  60%  { opacity: 1; transform: scale(1.04) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes productFloat {
+  0%, 100% { transform: translateY(-4px); }
+  50%      { transform: translateY(4px); }
+}
+.product-stage img.show {
+  animation: productIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.product-stage img.float {
+  opacity: 1;
+  animation: productFloat 2.5s ease-in-out infinite;
+}
+.product-stage img.exit {
+  transition: all 0.35s ease-in;
+  opacity: 0; transform: scale(1.06) translateY(10px);
+}
+.item-label {
+  position: absolute; bottom: 16vh;
+  text-align: center; z-index: 5;
+  opacity: 0; transform: translateY(15px);
+}
+.item-label-en { font-size: clamp(18px, 4.5vw, 28px); font-weight: 700; color: #2c4a5c; }
+.item-label-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 500; color: #e07856;
+  direction: rtl; margin-top: 0.3vh; font-family: 'Almarai', sans-serif;
+}
+.item-price {
+  position: absolute; bottom: 7vh;
+  background: #e07856; color: #fff;
+  padding: 1.5vh 6vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
+  box-shadow: 0 4px 20px rgba(224,120,86,0.4);
+  opacity: 0; transform: scale(0.7);
+}
+
+/* ─── Scene 3: Bundle Combo ─── */
+.scene-combo { background: #ffffff !important; }
+.combo-header {
+  position: absolute; top: 6vh;
+  text-align: center; z-index: 5;
+}
+.combo-en {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
+}
+.combo-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(-15px);
+}
+.combo-row {
+  display: flex; align-items: center; gap: 4vw;
+  opacity: 0; transform: scale(0.85);
+}
+.combo-item {
+  width: 32vw; max-width: 180px;
+}
+.combo-item img {
+  width: 100%; aspect-ratio: 1; object-fit: contain; mix-blend-mode: multiply;
+}
+.combo-plus {
+  font-size: clamp(30px, 8vw, 50px); font-weight: 900; color: #e07856;
+}
+.combo-price {
+  margin-top: 3vh;
+  background: #e07856; color: #fff;
+  padding: 1.8vh 8vw; border-radius: 50px;
+  font-size: clamp(20px, 5vw, 32px); font-weight: 900;
+  box-shadow: 0 6px 24px rgba(224,120,86,0.4);
+  opacity: 0; transform: scale(0.7);
+}
+.combo-free {
+  margin-top: 1.5vh;
+  font-size: clamp(13px, 3vw, 18px); font-weight: 700;
+  color: #2c4a5c; opacity: 0; transform: translateY(10px);
+}
+
+/* ─── Scene 4: CTA Outro ─── */
+.scene-cta { background: #ffffff !important; gap: 2.5vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; text-align: center;
+  font-family: 'Almarai', sans-serif; margin-top: -1vh;
+  opacity: 0; transform: translateY(20px);
+}
+.cta-box {
+  background: rgba(224,120,86,0.08); border: 2px solid rgba(224,120,86,0.2);
+  border-radius: 4vw; padding: 3vh 8vw; text-align: center;
+  opacity: 0; transform: scale(0.85);
+}
+.cta-price {
+  font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856; line-height: 1;
+}
+.cta-price sub { font-size: 0.4em; font-weight: 400; color: #7a8f9c; vertical-align: baseline; }
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+.cta-badges { display: flex; gap: 5vw; opacity: 0; }
+.cta-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(10px, 2.5vw, 14px); color: #6a8090; font-weight: 500;
+}
+.cta-badge-icon {
+  width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
+  border-radius: 50%; background: rgba(224,120,86,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
+}
+
+/* ─── Progress Bar ─── */
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+  z-index: 50;
+}
+
+/* ─── Floating Dots ─── */
+.dots { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.dot {
+  position: absolute; border-radius: 50%;
+  background: rgba(224,120,86,0.15);
+  animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
 </style>
 </head>
 <body>
 
-<!-- Top announcement bar -->
-<div class="top-bar">
-  <span>LIMITED BUNDLE</span> — Free Delivery Across UAE
-  &nbsp;|&nbsp;
-  <span class="arabic-text" style="display:inline; font-size:12px;">باقة محدودة — توصيل مجاني لكل الإمارات</span>
-</div>
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="dots" id="dots"></div>
 
-<!-- Header -->
-<div class="promo-header">
-  <a href="index.html"><img src="logo.png" alt="ORLO"></a>
-</div>
-
-<!-- Hero -->
-<div class="hero-section">
-  <div class="hero-badge">Bundle Deal | باقة مميزة</div>
-  <div class="hero-title">Desk Upgrade<br><span>Bundle</span></div>
-  <div class="hero-title-ar arabic-text">باقة ترقية مساحاتك</div>
-  <div class="hero-price-row">
-    <div class="hero-price">78 <sub>AED / <span class="arabic-text" style="display:inline">درهم</span></sub></div>
-  </div>
-  <div class="hero-savings">FREE Delivery (Above 75 AED) | <span class="arabic-text" style="display:inline;font-size:12px;">توصيل مجاني</span></div>
-</div>
-
-<!-- Products -->
-<div class="products-section">
-  <div class="section-label">What's Inside | محتويات الباقة</div>
-  <div class="bundle-cards">
-    <div class="bundle-card">
-      <img src="https://lh3.googleusercontent.com/d/1ezgzT9tKOlOievx9IonNSO_WEiJcWwsW" alt="ProDesk Cable Kit">
-      <div class="card-name">ProDesk Cable Kit</div>
-      <div class="card-name-ar arabic-text">أدوات تنظيم الكابلات</div>
-      <div class="card-price">62 AED</div>
-    </div>
-    <div class="bundle-plus">+</div>
-    <div class="bundle-card">
-      <img src="https://lh3.googleusercontent.com/d/13OJ0O2zASz_NWE3gOfCMwYlIkKMjfzOc" alt="Dangling Buddies">
-      <div class="card-name">Dangling Buddies</div>
-      <div class="card-name-ar arabic-text">رفاق الثلاجة</div>
-      <div class="card-price">16 AED</div>
+  <!-- ── Mode Selector ── -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">Desk Upgrade <span>Bundle</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">&#9834;</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">&#9678;</span> Instagram
+      </button>
     </div>
   </div>
 
-  <!-- Total box -->
-  <div class="total-box">
-    <div class="total-label">Bundle Total | إجمالي الباقة</div>
-    <div class="total-price"><span>78</span> AED</div>
-    <div class="free-delivery-badge">
-      <svg viewBox="0 0 24 24"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 4v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-      FREE Delivery
-      &nbsp;|&nbsp;
-      <span class="arabic-text" style="display:inline;font-size:12px;">توصيل مجاني</span>
+  <!-- Scene 1: Logo Intro -->
+  <div class="scene scene-intro" id="scene1">
+    <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
+    <div class="intro-line" id="introLine"></div>
+    <div class="intro-en" id="introEn">Upgrade Your Desk</div>
+    <div class="intro-ar" id="introAr">رتّب مساحتك</div>
+  </div>
+
+  <!-- Scene 2: Product Parade -->
+  <div class="scene scene-parade" id="scene2">
+    <div class="parade-header">
+      <div class="parade-en" id="paradeEn">What's Inside</div>
+      <div class="parade-ar" id="paradeAr">محتويات الباقة</div>
+    </div>
+    <div class="product-stage" id="productStage"></div>
+    <div class="item-label" id="itemLabel">
+      <div class="item-label-en" id="itemLabelEn"></div>
+      <div class="item-label-ar" id="itemLabelAr"></div>
+    </div>
+    <div class="item-price" id="itemPrice"></div>
+  </div>
+
+  <!-- Scene 3: Bundle Combo -->
+  <div class="scene scene-combo" id="scene3">
+    <div class="combo-header">
+      <div class="combo-en" id="comboEn">Better Together</div>
+      <div class="combo-ar" id="comboAr">أحلى مع بعض</div>
+    </div>
+    <div class="combo-row" id="comboRow">
+      <div class="combo-item"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Cable Kit"></div>
+      <div class="combo-plus">+</div>
+      <div class="combo-item"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
+    </div>
+    <div class="combo-price" id="comboPrice">78 AED</div>
+    <div class="combo-free" id="comboFree">FREE Delivery 🚚 | <span style="font-family:'Almarai',sans-serif">توصيل مجاني</span></div>
+  </div>
+
+  <!-- Scene 4: CTA Outro -->
+  <div class="scene scene-cta" id="scene4">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Desk Upgrade<br><span>Bundle</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">باقة ترقية مساحتك</div>
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-price">78 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+    </div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-badges" id="ctaBadges">
+      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Ships from UAE<br><span style="font-family:'Almarai',sans-serif">شحن من الإمارات</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">✅</div>Quality<br><span style="font-family:'Almarai',sans-serif">جودة عالية</span></div>
     </div>
   </div>
-</div>
-
-<!-- CTA -->
-<div class="cta-section" id="ctaSection">
-  <a href="shop.html?bundle=desk-upgrade" class="cta-btn" id="ctaBtn">
-    Get This Bundle Now
-    <span class="btn-ar">احصل على الباقة الآن</span>
-  </a>
-</div>
-
-<!-- Trust badges -->
-<div class="trust-badges">
-  <div class="trust-badge">
-    <div class="trust-icon">🚚</div>
-    <div class="trust-text">Free Delivery<br><span class="arabic-text" style="display:inline;font-size:10px;">توصيل مجاني</span></div>
-  </div>
-  <div class="trust-badge">
-    <div class="trust-icon">🇦🇪</div>
-    <div class="trust-text">UAE Licensed<br><span class="arabic-text" style="display:inline;font-size:10px;">متجر مرخّص</span></div>
-  </div>
-  <div class="trust-badge">
-    <div class="trust-icon">✅</div>
-    <div class="trust-text">Quality<br><span class="arabic-text" style="display:inline;font-size:10px;">جودة عالية</span></div>
-  </div>
-  <div class="trust-badge">
-    <div class="trust-icon">💳</div>
-    <div class="trust-text">Secure Pay<br><span class="arabic-text" style="display:inline;font-size:10px;">دفع آمن</span></div>
-  </div>
-</div>
-
-<!-- Why this bundle -->
-<div class="why-section">
-  <div class="why-title">Why This <span>Bundle?</span></div>
-  <div class="why-title-ar arabic-text">ليش هالباقة؟</div>
-  <div class="why-points">
-    <div class="why-point">
-      <div class="why-point-icon">🔌</div>
-      <div class="why-point-text">
-        Tame the cable chaos
-        <small>ProDesk Cable Kit organizes all your desk cables in seconds</small>
-      </div>
-    </div>
-    <div class="why-point">
-      <div class="why-point-icon">🧲</div>
-      <div class="why-point-text">
-        Add personality to your fridge
-        <small>Dangling Buddies — handmade magnetic fridge characters</small>
-      </div>
-    </div>
-    <div class="why-point">
-      <div class="why-point-icon">🚚</div>
-      <div class="why-point-text">
-        FREE delivery across UAE
-        <small>78 AED total — above the 75 AED free delivery threshold</small>
-      </div>
-    </div>
-    <div class="why-point">
-      <div class="why-point-icon">🎁</div>
-      <div class="why-point-text">
-        Perfect gift combo
-        <small>One for the desk, one for the kitchen — covers two spaces</small>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Footer -->
-<div class="promo-footer">
-  <img src="logo.png" alt="ORLO"><br>
-  <div class="footer-text">orlostore.com &nbsp;|&nbsp; Licensed UAE Store</div>
-</div>
-
-<!-- Sticky bottom CTA -->
-<div class="sticky-cta" id="stickyCta">
-  <div class="sticky-info">
-    <div class="sticky-price">78 <sub>AED</sub></div>
-    <div class="sticky-free">FREE Delivery</div>
-  </div>
-  <a href="shop.html?bundle=desk-upgrade" class="sticky-btn">Get Bundle</a>
 </div>
 
 <script>
-// Hide/show sticky CTA based on main CTA visibility
-(function() {
-  var sticky = document.getElementById('stickyCta');
-  var ctaSection = document.getElementById('ctaSection');
-  if (!sticky || !ctaSection) return;
-
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        sticky.classList.add('hidden');
-      } else {
-        sticky.classList.remove('hidden');
-      }
+function anim(el, props, ms, ease) {
+  ease = ease || 'ease';
+  return new Promise(function(resolve) {
+    el.style.transition = 'all ' + ms + 'ms ' + ease;
+    requestAnimationFrame(function() {
+      Object.assign(el.style, props);
+      setTimeout(resolve, ms);
     });
-  }, { threshold: 0.3 });
+  });
+}
+function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
 
-  observer.observe(ctaSection);
+function createDots() {
+  var c = document.getElementById('dots');
+  for (var i = 0; i < 20; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDuration = (5 + Math.random() * 7) + 's';
+    d.style.animationDelay = Math.random() * 12 + 's';
+    var size = 3 + Math.random() * 5;
+    d.style.width = size + 'px';
+    d.style.height = size + 'px';
+    c.appendChild(d);
+  }
+}
+
+var T = {
+  tiktok: { intro: 1800, eachProduct: 2200, combo: 2400, cta: 2800 },
+  insta:  { intro: 2500, eachProduct: 3000, combo: 3200, cta: 3500 }
+};
+
+var ITEMS = [
+  {
+    en: 'ProDesk Cable Kit',
+    ar: 'أدوات تنظيم الكابلات',
+    price: '62 AED',
+    img: 'https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl'
+  },
+  {
+    en: 'Dangling Buddies',
+    ar: 'رفاق الثلاجة',
+    price: '16 AED',
+    img: 'https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj'
+  }
+];
+
+// Build product images
+function buildStage() {
+  var stage = document.getElementById('productStage');
+  ITEMS.forEach(function(item, i) {
+    var img = document.createElement('img');
+    img.src = item.img;
+    img.alt = item.en;
+    img.id = 'pImg' + i;
+    stage.appendChild(img);
+  });
+}
+
+// Preload images
+(function() {
+  var urls = ITEMS.map(function(item) { return item.img; });
+  urls.push('https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl');
+  urls.push('https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj');
+  urls.forEach(function(u) { var img = new Image(); img.src = u; });
 })();
+
+// ═══════════════════════════════════════════
+// MAIN ANIMATION
+// ═══════════════════════════════════════════
+async function startPromo(mode) {
+  var t = T[mode];
+  var paradeTime = ITEMS.length * t.eachProduct;
+  var totalDuration = t.intro + paradeTime + t.combo + t.cta + 2000;
+
+  // Hide mode selector
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  var bar = document.getElementById('progressBar');
+  var startTime = Date.now();
+  var progressTick = setInterval(function() {
+    var pct = Math.min(((Date.now() - startTime) / totalDuration) * 100, 100);
+    bar.style.width = pct + '%';
+    bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(progressTick);
+  }, 80);
+
+  // ── SCENE 1 — Logo Intro ──
+  var s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+  await anim(document.getElementById('introGlow'),
+    { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await anim(document.getElementById('introLine'),
+    { opacity: '1', transform: 'scaleX(1)' }, 400);
+  await wait(150);
+  await anim(document.getElementById('introEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('introAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.intro - 1700);
+  await anim(s1, { opacity: '0' }, 400);
+
+  // ── SCENE 2 — Product Parade ──
+  var s2 = document.getElementById('scene2');
+  await anim(s2, { opacity: '1' }, 300);
+  await anim(document.getElementById('paradeEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('paradeAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(200);
+
+  var itemLabel = document.getElementById('itemLabel');
+  var itemLabelEn = document.getElementById('itemLabelEn');
+  var itemLabelAr = document.getElementById('itemLabelAr');
+  var itemPrice = document.getElementById('itemPrice');
+
+  for (var i = 0; i < ITEMS.length; i++) {
+    var item = ITEMS[i];
+    var img = document.getElementById('pImg' + i);
+    itemLabelEn.textContent = item.en;
+    itemLabelAr.textContent = item.ar;
+    itemPrice.textContent = item.price;
+
+    img.classList.add('show');
+    anim(itemLabel, { opacity: '1', transform: 'translateY(0)' }, 300, 'cubic-bezier(0.16, 1, 0.3, 1)');
+    anim(itemPrice, { opacity: '1', transform: 'scale(1)' }, 400, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+    await wait(t.eachProduct - 800);
+
+    // Fade out label + price
+    itemLabel.style.transition = 'all 200ms ease';
+    itemLabel.style.opacity = '0';
+    itemLabel.style.transform = 'translateY(15px)';
+    itemPrice.style.transition = 'all 200ms ease';
+    itemPrice.style.opacity = '0';
+    itemPrice.style.transform = 'scale(0.7)';
+    await wait(200);
+
+    if (i < ITEMS.length - 1) {
+      img.classList.remove('show');
+      img.classList.add('exit');
+      await wait(300);
+      img.classList.remove('exit');
+      img.style.opacity = '0';
+    } else {
+      // Last product — brief float then exit
+      img.classList.remove('show');
+      img.classList.add('float');
+      await wait(400);
+      img.classList.remove('float');
+    }
+  }
+  await anim(s2, { opacity: '0' }, 400);
+
+  // ── SCENE 3 — Bundle Combo ──
+  var s3 = document.getElementById('scene3');
+  await anim(s3, { opacity: '1' }, 300);
+  await anim(document.getElementById('comboEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('comboAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(300);
+  await anim(document.getElementById('comboRow'),
+    { opacity: '1', transform: 'scale(1)' }, 700, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(300);
+  await anim(document.getElementById('comboPrice'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await anim(document.getElementById('comboFree'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.combo - 2200);
+  await anim(s3, { opacity: '0' }, 400);
+
+  // ── SCENE 4 — CTA ──
+  var s4 = document.getElementById('scene4');
+  await anim(s4, { opacity: '1' }, 300);
+  await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
+  await anim(document.getElementById('ctaHead'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaHeadAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(150);
+  await anim(document.getElementById('ctaBox'),
+    { opacity: '1', transform: 'scale(1)' }, 550, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(200);
+  await anim(document.getElementById('ctaUrl'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaBadges'), { opacity: '1' }, 500);
+
+  clearInterval(progressTick);
+  bar.style.width = '100%';
+  bar.style.transition = 'width 300ms linear';
+}
+
+createDots();
+buildStage();
 </script>
 </body>
 </html>
