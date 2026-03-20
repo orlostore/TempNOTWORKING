@@ -34,6 +34,64 @@
             window.history.replaceState({}, '', cleanUrl);
         }
 
+        // Handle bundle param — auto-add bundle products to cart
+        var bundleParam = urlParams.get('bundle');
+        if (bundleParam) {
+            var BUNDLES = {
+                'desk-upgrade': [
+                    { slug: 'prodesk-cable-kit', qty: 1 },
+                    { slug: 'dangling-buddies', qty: 1 }
+                ]
+            };
+            var bundleDef = BUNDLES[bundleParam];
+            function applyBundle(def) {
+                var added = false;
+                var hasVariantProduct = false;
+                def.forEach(function(item) {
+                    var product = products.find(function(p) { return p.slug === item.slug; });
+                    if (!product || product.quantity === 0) return;
+                    // Products with variants need user to pick — add non-variant ones, flag variant ones
+                    if (product.variants && product.variants.length > 0) {
+                        hasVariantProduct = true;
+                        return;
+                    }
+                    var existing = cart.find(function(c) { return c.id === product.id; });
+                    if (!existing) {
+                        cart.push(Object.assign({}, product, { quantity: item.qty }));
+                        added = true;
+                    }
+                });
+                if (added) {
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCart();
+                    updateCartCounts();
+                    if (!hasVariantProduct) {
+                        setTimeout(function() { toggleCart(); }, 400);
+                    }
+                }
+                if (hasVariantProduct && typeof orloToast === 'function') {
+                    orloToast('Pick your Dangling Buddy character to complete the bundle!', 'info');
+                }
+            }
+
+            if (bundleDef && products.length > 0) {
+                applyBundle(bundleDef);
+            } else if (bundleDef && products.length === 0) {
+                // Products not loaded from cache yet — wait for API
+                var bundleRetries = 0;
+                var bundleInterval = setInterval(function() {
+                    bundleRetries++;
+                    if (products.length > 0 || bundleRetries > 20) {
+                        clearInterval(bundleInterval);
+                        if (products.length > 0) applyBundle(bundleDef);
+                    }
+                }, 250);
+            }
+            // Clean URL
+            var cleanBundleUrl = window.location.pathname;
+            window.history.replaceState({}, '', cleanBundleUrl);
+        }
+
         // Handle search param
         var searchTerm = urlParams.get('search');
         if (searchTerm) {
