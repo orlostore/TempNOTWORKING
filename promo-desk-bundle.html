@@ -100,63 +100,129 @@ html, body {
   opacity: 0; transform: translateY(15px);
 }
 
-/* ─── Scene 2: Bundle Parade ─── */
-.scene-parade { background: #ffffff !important; }
-.parade-header {
+/* ─── Scene 2: Before → After Wipe ─── */
+.scene-transform { background: #ffffff !important; }
+.transform-container {
+  position: relative;
+  width: 92vw; max-width: 460px;
+  height: 60vh; max-height: 650px;
+  border-radius: 3vw;
+  overflow: hidden;
+  opacity: 0; transform: scale(0.92);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.transform-after {
+  position: absolute; inset: 0; z-index: 1;
+}
+.transform-after img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(1.15);
+}
+.transform-before {
+  position: absolute; inset: 0; z-index: 2;
+  clip-path: inset(0 0 0 0);
+}
+.transform-before img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(1.15);
+}
+.transform-slider {
+  position: absolute; top: 0; bottom: 0; left: 100%;
+  width: 4px; z-index: 10;
+  background: #e07856;
+  box-shadow: 0 0 15px rgba(224,120,86,0.6), 0 0 30px rgba(224,120,86,0.3);
+}
+.transform-slider::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: #e07856;
+  box-shadow: 0 2px 15px rgba(224,120,86,0.5);
+}
+.transform-slider::after {
+  content: '\25C2 \25B8';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff; font-size: 11px; font-weight: 900;
+  letter-spacing: 2px; white-space: nowrap;
+  z-index: 1;
+}
+.transform-label-before {
+  position: absolute; top: 3vh; left: 4vw;
+  z-index: 15; opacity: 0;
+  background: rgba(44,74,92,0.85); color: #fff;
+  padding: 0.8vh 3vw; border-radius: 50px;
+  font-size: clamp(11px, 2.8vw, 15px); font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+.transform-label-after {
+  position: absolute; top: 3vh; right: 4vw;
+  z-index: 15; opacity: 0;
+  background: rgba(224,120,86,0.9); color: #fff;
+  padding: 0.8vh 3vw; border-radius: 50px;
+  font-size: clamp(11px, 2.8vw, 15px); font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.transform-text {
+  margin-top: 3vh; text-align: center;
+  opacity: 0; transform: translateY(15px);
+}
+.transform-text-en {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 800; color: #2c4a5c;
+}
+.transform-text-en span { color: #e07856; }
+.transform-text-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh;
+}
+
+/* ─── Scene 3: Kit Price ─── */
+.scene-product { background: #ffffff !important; }
+.product-header {
   position: absolute; top: 5vh;
   text-align: center; z-index: 5;
 }
-.parade-en {
+.product-header-en {
   font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
   opacity: 0; transform: translateY(-15px);
 }
-.parade-ar {
+.product-header-ar {
   font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
   direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
   opacity: 0; transform: translateY(-15px);
 }
 .product-stage {
   position: relative;
-  width: 60vw; height: 60vw; max-width: 380px; max-height: 380px;
+  width: 65vw; height: 65vw; max-width: 400px; max-height: 400px;
   margin-top: -2vh;
 }
-.product-stage img {
-  position: absolute; inset: 0;
+.product-img {
   width: 100%; height: 100%; object-fit: contain;
-  opacity: 0; mix-blend-mode: multiply;
+  opacity: 0; transform: scale(0.75) translateY(20px);
+  mix-blend-mode: multiply;
 }
-@keyframes productIn {
-  0%   { opacity: 0; transform: scale(0.7) translateY(20px); }
-  60%  { opacity: 1; transform: scale(1.04) translateY(-5px); }
+@keyframes productReveal {
+  0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
+  60%  { opacity: 1; transform: scale(1.03) translateY(-5px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 @keyframes productFloat {
   0%, 100% { transform: translateY(-4px); }
   50%      { transform: translateY(4px); }
 }
-.product-stage img.show {
-  animation: productIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.product-img.reveal {
+  animation: productReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
-.product-stage img.float {
+.product-img.float {
   opacity: 1;
   animation: productFloat 2.5s ease-in-out infinite;
 }
-.product-stage img.exit {
-  transition: all 0.35s ease-in;
-  opacity: 0; transform: scale(1.06) translateY(10px);
-}
-.item-label {
-  position: absolute; bottom: 16vh;
-  text-align: center; z-index: 5;
-  opacity: 0; transform: translateY(15px);
-}
-.item-label-en { font-size: clamp(18px, 4.5vw, 28px); font-weight: 700; color: #2c4a5c; }
-.item-label-ar {
-  font-size: clamp(14px, 3.2vw, 20px); font-weight: 500; color: #e07856;
-  direction: rtl; margin-top: 0.3vh; font-family: 'Almarai', sans-serif;
-}
-.item-price {
-  position: absolute; bottom: 7vh;
+.product-price {
+  position: absolute; bottom: 12vh;
   background: #e07856; color: #fff;
   padding: 1.5vh 6vw; border-radius: 50px;
   font-size: clamp(16px, 4vw, 24px); font-weight: 800;
@@ -164,7 +230,7 @@ html, body {
   opacity: 0; transform: scale(0.7);
 }
 
-/* ─── Scene 3: Bundle Combo ─── */
+/* ─── Scene 4: Bundle Together ─── */
 .scene-combo { background: #ffffff !important; }
 .combo-header {
   position: absolute; top: 6vh;
@@ -185,14 +251,23 @@ html, body {
 }
 .combo-item {
   width: 32vw; max-width: 180px;
+  text-align: center;
 }
 .combo-item img {
   width: 100%; aspect-ratio: 1; object-fit: contain; mix-blend-mode: multiply;
 }
+.combo-item-label {
+  margin-top: 0.8vh;
+  font-size: clamp(11px, 2.8vw, 15px); font-weight: 600; color: #2c4a5c;
+}
+.combo-item-price {
+  font-size: clamp(10px, 2.5vw, 13px); font-weight: 700; color: #e07856;
+  margin-top: 0.3vh;
+}
 .combo-plus {
   font-size: clamp(30px, 8vw, 50px); font-weight: 900; color: #e07856;
 }
-.combo-price {
+.combo-total {
   margin-top: 3vh;
   background: #e07856; color: #fff;
   padding: 1.8vh 8vw; border-radius: 50px;
@@ -206,7 +281,7 @@ html, body {
   color: #2c4a5c; opacity: 0; transform: translateY(10px);
 }
 
-/* ─── Scene 4: CTA Outro ─── */
+/* ─── Scene 5: CTA Outro ─── */
 .scene-cta { background: #ffffff !important; gap: 2.5vh; }
 .cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
 .cta-head {
@@ -296,51 +371,76 @@ html, body {
     <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
     <div class="intro-line" id="introLine"></div>
     <div class="intro-en" id="introEn">Upgrade Your Desk</div>
-    <div class="intro-ar" id="introAr">رتّب مساحتك</div>
+    <div class="intro-ar" id="introAr">&#x631;&#x62A;&#x651;&#x628; &#x645;&#x633;&#x627;&#x62D;&#x62A;&#x643;</div>
   </div>
 
-  <!-- Scene 2: Product Parade -->
-  <div class="scene scene-parade" id="scene2">
-    <div class="parade-header">
-      <div class="parade-en" id="paradeEn">What's Inside</div>
-      <div class="parade-ar" id="paradeAr">محتويات الباقة</div>
+  <!-- Scene 2: Before → After Wipe -->
+  <div class="scene scene-transform" id="scene2">
+    <div class="transform-container" id="transformContainer">
+      <div class="transform-after">
+        <img src="https://lh3.googleusercontent.com/d/1sw890WLGDSGXxOvJj7FiWo9_qq3SAOWg" alt="Clean desk">
+      </div>
+      <div class="transform-before" id="transformBefore">
+        <img src="https://lh3.googleusercontent.com/d/1VMYbd1V_SjPgZhQW4QjrXgiQMs5ht_zK" alt="Messy desk">
+      </div>
+      <div class="transform-slider" id="transformSlider"></div>
+      <div class="transform-label-before" id="labelBefore">Before</div>
+      <div class="transform-label-after" id="labelAfter">After</div>
     </div>
-    <div class="product-stage" id="productStage"></div>
-    <div class="item-label" id="itemLabel">
-      <div class="item-label-en" id="itemLabelEn"></div>
-      <div class="item-label-ar" id="itemLabelAr"></div>
+    <div class="transform-text" id="transformText">
+      <div class="transform-text-en">Same Desk. <span>Zero Mess.</span></div>
+      <div class="transform-text-ar">&#x646;&#x641;&#x633; &#x627;&#x644;&#x645;&#x643;&#x62A;&#x628;. &#x635;&#x641;&#x631; &#x641;&#x648;&#x636;&#x649;.</div>
     </div>
-    <div class="item-price" id="itemPrice"></div>
   </div>
 
-  <!-- Scene 3: Bundle Combo -->
-  <div class="scene scene-combo" id="scene3">
+  <!-- Scene 3: Kit Price -->
+  <div class="scene scene-product" id="scene3">
+    <div class="product-header">
+      <div class="product-header-en" id="headerEn">ProDesk Cable Kit</div>
+      <div class="product-header-ar" id="headerAr">&#x623;&#x62F;&#x648;&#x627;&#x62A; &#x62A;&#x646;&#x638;&#x64A;&#x645; &#x627;&#x644;&#x643;&#x627;&#x628;&#x644;&#x627;&#x62A;</div>
+    </div>
+    <div class="product-stage">
+      <img class="product-img" id="productImg" src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Cable Kit">
+    </div>
+    <div class="product-price" id="productPrice">62 AED</div>
+  </div>
+
+  <!-- Scene 4: Bundle Together -->
+  <div class="scene scene-combo" id="scene4">
     <div class="combo-header">
       <div class="combo-en" id="comboEn">Better Together</div>
-      <div class="combo-ar" id="comboAr">أحلى مع بعض</div>
+      <div class="combo-ar" id="comboAr">&#x623;&#x62D;&#x644;&#x649; &#x645;&#x639; &#x628;&#x639;&#x636;</div>
     </div>
     <div class="combo-row" id="comboRow">
-      <div class="combo-item"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Cable Kit"></div>
+      <div class="combo-item">
+        <img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Cable Kit">
+        <div class="combo-item-label">ProDesk Cable Kit</div>
+        <div class="combo-item-price">62 AED</div>
+      </div>
       <div class="combo-plus">+</div>
-      <div class="combo-item"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
+      <div class="combo-item">
+        <img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies">
+        <div class="combo-item-label">Dangling Buddies</div>
+        <div class="combo-item-price">16 AED / piece</div>
+      </div>
     </div>
-    <div class="combo-price" id="comboPrice">78 AED</div>
-    <div class="combo-free" id="comboFree">FREE Delivery 🚚 | <span style="font-family:'Almarai',sans-serif">توصيل مجاني</span></div>
+    <div class="combo-total" id="comboTotal">78 AED</div>
+    <div class="combo-free" id="comboFree">FREE Delivery <span style="font-family:'Almarai',sans-serif">| &#x62A;&#x648;&#x635;&#x64A;&#x644; &#x645;&#x62C;&#x627;&#x646;&#x64A;</span></div>
   </div>
 
-  <!-- Scene 4: CTA Outro -->
-  <div class="scene scene-cta" id="scene4">
+  <!-- Scene 5: CTA Outro -->
+  <div class="scene scene-cta" id="scene5">
     <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
     <div class="cta-head" id="ctaHead">Desk Upgrade<br><span>Bundle</span></div>
-    <div class="cta-head-ar" id="ctaHeadAr">باقة ترقية مساحتك</div>
+    <div class="cta-head-ar" id="ctaHeadAr">&#x628;&#x627;&#x642;&#x629; &#x62A;&#x631;&#x642;&#x64A;&#x629; &#x645;&#x633;&#x627;&#x62D;&#x62A;&#x643;</div>
     <div class="cta-box" id="ctaBox">
-      <div class="cta-price">78 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-price">78 <sub>AED / <span style="font-family:'Almarai',sans-serif">&#x62F;&#x631;&#x647;&#x645;</span></sub></div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
-      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني</span></div>
-      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Ships from UAE<br><span style="font-family:'Almarai',sans-serif">شحن من الإمارات</span></div>
-      <div class="cta-badge"><div class="cta-badge-icon">✅</div>Quality<br><span style="font-family:'Almarai',sans-serif">جودة عالية</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#x1F69A;</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">&#x62A;&#x648;&#x635;&#x64A;&#x644; &#x645;&#x62C;&#x627;&#x646;&#x64A;</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#x1F1E6;&#x1F1EA;</div>Ships from UAE<br><span style="font-family:'Almarai',sans-serif">&#x634;&#x62D;&#x646; &#x645;&#x646; &#x627;&#x644;&#x625;&#x645;&#x627;&#x631;&#x627;&#x62A;</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#x2705;</div>Quality<br><span style="font-family:'Almarai',sans-serif">&#x62C;&#x648;&#x62F;&#x629; &#x639;&#x627;&#x644;&#x64A;&#x629;</span></div>
     </div>
   </div>
 </div>
@@ -374,52 +474,27 @@ function createDots() {
 }
 
 var T = {
-  tiktok: { intro: 1800, eachProduct: 2200, combo: 2400, cta: 2800 },
-  insta:  { intro: 2500, eachProduct: 3000, combo: 3200, cta: 3500 }
+  tiktok: { intro: 1800, transform: 3200, product: 2200, combo: 2800, cta: 2800 },
+  insta:  { intro: 2500, transform: 4000, product: 3000, combo: 3500, cta: 3500 }
 };
-
-var ITEMS = [
-  {
-    en: 'ProDesk Cable Kit',
-    ar: 'أدوات تنظيم الكابلات',
-    price: '62 AED',
-    img: 'https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl'
-  },
-  {
-    en: 'Dangling Buddies',
-    ar: 'رفاق الثلاجة',
-    price: '16 AED',
-    img: 'https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj'
-  }
-];
-
-// Build product images
-function buildStage() {
-  var stage = document.getElementById('productStage');
-  ITEMS.forEach(function(item, i) {
-    var img = document.createElement('img');
-    img.src = item.img;
-    img.alt = item.en;
-    img.id = 'pImg' + i;
-    stage.appendChild(img);
-  });
-}
 
 // Preload images
 (function() {
-  var urls = ITEMS.map(function(item) { return item.img; });
-  urls.push('https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl');
-  urls.push('https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj');
+  var urls = [
+    'https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl',
+    'https://lh3.googleusercontent.com/d/1VMYbd1V_SjPgZhQW4QjrXgiQMs5ht_zK',
+    'https://lh3.googleusercontent.com/d/1sw890WLGDSGXxOvJj7FiWo9_qq3SAOWg',
+    'https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj'
+  ];
   urls.forEach(function(u) { var img = new Image(); img.src = u; });
 })();
 
 // ═══════════════════════════════════════════
-// MAIN ANIMATION
+// MAIN ANIMATION — 5 SCENES
 // ═══════════════════════════════════════════
 async function startPromo(mode) {
   var t = T[mode];
-  var paradeTime = ITEMS.length * t.eachProduct;
-  var totalDuration = t.intro + paradeTime + t.combo + t.cta + 2000;
+  var totalDuration = t.intro + t.transform + t.product + t.combo + t.cta + 2000;
 
   // Hide mode selector
   document.getElementById('modeSelect').classList.add('gone');
@@ -449,61 +524,65 @@ async function startPromo(mode) {
   await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
-  // ── SCENE 2 — Product Parade ──
+  // ── SCENE 2 — Before → After Wipe ──
   var s2 = document.getElementById('scene2');
+  var transformBefore = document.getElementById('transformBefore');
+  var transformSlider = document.getElementById('transformSlider');
+
   await anim(s2, { opacity: '1' }, 300);
-  await anim(document.getElementById('paradeEn'),
+  await anim(document.getElementById('transformContainer'),
+    { opacity: '1', transform: 'scale(1)' }, 700, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  // Show "Before" label
+  await anim(document.getElementById('labelBefore'), { opacity: '1' }, 300);
+  await wait(600);
+
+  // Wipe animation
+  var wipeDuration = mode === 'tiktok' ? 1200 : 1600;
+  transformSlider.style.transition = 'left ' + wipeDuration + 'ms cubic-bezier(0.4, 0, 0.2, 1)';
+  transformBefore.style.transition = 'clip-path ' + wipeDuration + 'ms cubic-bezier(0.4, 0, 0.2, 1)';
+
+  requestAnimationFrame(function() {
+    transformSlider.style.left = '0%';
+    transformBefore.style.clipPath = 'inset(0 100% 0 0)';
+  });
+
+  await wait(wipeDuration * 0.3);
+  anim(document.getElementById('labelAfter'), { opacity: '1' }, 300);
+
+  await wait(wipeDuration * 0.7 + 200);
+
+  // Bottom text
+  await anim(document.getElementById('transformText'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  await wait(t.transform - wipeDuration - 1800);
+  await anim(s2, { opacity: '0' }, 400);
+
+  // ── SCENE 3 — Kit Price ──
+  var s3 = document.getElementById('scene3');
+  await anim(s3, { opacity: '1' }, 300);
+  await anim(document.getElementById('headerEn'),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  anim(document.getElementById('paradeAr'),
+  anim(document.getElementById('headerAr'),
     { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await wait(200);
 
-  var itemLabel = document.getElementById('itemLabel');
-  var itemLabelEn = document.getElementById('itemLabelEn');
-  var itemLabelAr = document.getElementById('itemLabelAr');
-  var itemPrice = document.getElementById('itemPrice');
+  var productImg = document.getElementById('productImg');
+  productImg.classList.add('reveal');
+  await wait(800);
+  productImg.classList.remove('reveal');
+  productImg.classList.add('float');
 
-  for (var i = 0; i < ITEMS.length; i++) {
-    var item = ITEMS[i];
-    var img = document.getElementById('pImg' + i);
-    itemLabelEn.textContent = item.en;
-    itemLabelAr.textContent = item.ar;
-    itemPrice.textContent = item.price;
+  anim(document.getElementById('productPrice'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
 
-    img.classList.add('show');
-    anim(itemLabel, { opacity: '1', transform: 'translateY(0)' }, 300, 'cubic-bezier(0.16, 1, 0.3, 1)');
-    anim(itemPrice, { opacity: '1', transform: 'scale(1)' }, 400, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(t.product - 1300);
+  await anim(s3, { opacity: '0' }, 400);
 
-    await wait(t.eachProduct - 800);
-
-    // Fade out label + price
-    itemLabel.style.transition = 'all 200ms ease';
-    itemLabel.style.opacity = '0';
-    itemLabel.style.transform = 'translateY(15px)';
-    itemPrice.style.transition = 'all 200ms ease';
-    itemPrice.style.opacity = '0';
-    itemPrice.style.transform = 'scale(0.7)';
-    await wait(200);
-
-    if (i < ITEMS.length - 1) {
-      img.classList.remove('show');
-      img.classList.add('exit');
-      await wait(300);
-      img.classList.remove('exit');
-      img.style.opacity = '0';
-    } else {
-      // Last product — brief float then exit
-      img.classList.remove('show');
-      img.classList.add('float');
-      await wait(400);
-      img.classList.remove('float');
-    }
-  }
-  await anim(s2, { opacity: '0' }, 400);
-
-  // ── SCENE 3 — Bundle Combo ──
-  var s3 = document.getElementById('scene3');
-  await anim(s3, { opacity: '1' }, 300);
+  // ── SCENE 4 — Bundle Together ──
+  var s4 = document.getElementById('scene4');
+  await anim(s4, { opacity: '1' }, 300);
   await anim(document.getElementById('comboEn'),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
   anim(document.getElementById('comboAr'),
@@ -512,16 +591,16 @@ async function startPromo(mode) {
   await anim(document.getElementById('comboRow'),
     { opacity: '1', transform: 'scale(1)' }, 700, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
   await wait(300);
-  await anim(document.getElementById('comboPrice'),
+  await anim(document.getElementById('comboTotal'),
     { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
   await anim(document.getElementById('comboFree'),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await wait(t.combo - 2200);
-  await anim(s3, { opacity: '0' }, 400);
+  await anim(s4, { opacity: '0' }, 400);
 
-  // ── SCENE 4 — CTA ──
-  var s4 = document.getElementById('scene4');
-  await anim(s4, { opacity: '1' }, 300);
+  // ── SCENE 5 — CTA ──
+  var s5 = document.getElementById('scene5');
+  await anim(s5, { opacity: '1' }, 300);
   await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
   await anim(document.getElementById('ctaHead'),
     { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
@@ -541,7 +620,6 @@ async function startPromo(mode) {
 }
 
 createDots();
-buildStage();
 </script>
 </body>
 </html>
