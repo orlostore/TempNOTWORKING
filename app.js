@@ -781,7 +781,7 @@ function addToCart(id, event) {
     // Meta Pixel: track AddToCart event
     if (typeof fbq === 'function') {
         fbq('track', 'AddToCart', {
-            content_ids: [String(product.id)],
+            content_ids: [product.slug],
             content_name: product.name,
             content_type: 'product',
             value: product.price,
@@ -1764,7 +1764,7 @@ async function checkout() {
             const cartWithPricingFb = calculateTierPricing(cart);
             const checkoutValueFb = cartWithPricingFb.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
             fbq('track', 'InitiateCheckout', {
-                content_ids: cart.map(i => String(i.id)),
+                content_ids: cart.map(i => i.slug),
                 content_type: 'product',
                 num_items: cart.reduce((s, i) => s + i.quantity, 0),
                 value: checkoutValueFb,

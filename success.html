@@ -554,10 +554,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         // Meta Pixel: track Purchase conversion — deduplicated with same key
-        if (sessionId && typeof fbq === 'function') {
+        if (sessionId && cartData.length > 0 && typeof fbq === 'function') {
             var fbFiredKey = 'orlo_fb_purchase_fired_' + sessionId;
             if (!sessionStorage.getItem(fbFiredKey)) {
-                var fbContentIds = cartData.map(function(item) { return String(item.id); });
+                var fbContentIds = cartData.map(function(item) { return item.slug; });
                 var fbSubtotal = cartData.reduce(function(sum, item) { return sum + (item.price * (item.quantity || 1)); }, 0);
                 var fbDelivery = fbSubtotal >= 75 ? 0 : 18;
                 fbq('track', 'Purchase', {

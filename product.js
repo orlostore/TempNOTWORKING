@@ -376,7 +376,7 @@ async function initProductPage() {
   // Meta Pixel: track ViewContent event
   if (typeof fbq === 'function') {
     fbq('track', 'ViewContent', {
-      content_ids: [String(product.id)],
+      content_ids: [product.slug],
       content_name: product.name,
       content_type: 'product',
       content_category: product.category,
@@ -938,7 +938,7 @@ async function initProductPage() {
     // Meta Pixel: track AddToCart event
     if (typeof fbq === 'function') {
         fbq('track', 'AddToCart', {
-            content_ids: [String(product.id)],
+            content_ids: [product.slug],
             content_name: product.name,
             content_type: 'product',
             value: product.price,
