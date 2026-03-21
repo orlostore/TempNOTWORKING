@@ -145,7 +145,7 @@ html, body {
 .prod-img.float  { opacity: 1; animation: prodFloat 2.5s ease-in-out infinite; }
 
 .prod-price {
-  position: absolute; bottom: 12vh;
+  position: absolute; bottom: 18vh;
   background: #e07856; color: #fff;
   padding: 1.5vh 6vw; border-radius: 50px;
   font-size: clamp(16px, 4vw, 24px); font-weight: 800;
@@ -217,6 +217,25 @@ html, body {
   color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
   margin-top: 0.5vh; text-align: center;
   opacity: 0; transform: translateY(10px);
+}
+.ba-prod-name {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800; color: #2c4a5c;
+  margin-top: 1.5vh; text-align: center;
+  opacity: 0; transform: translateY(10px);
+}
+.ba-prod-name-ar {
+  font-size: clamp(12px, 2.8vw, 16px); font-weight: 600;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.3vh; text-align: center;
+  opacity: 0; transform: translateY(10px);
+}
+.ba-prod-price {
+  background: #e07856; color: #fff;
+  padding: 1.2vh 6vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
+  box-shadow: 0 4px 20px rgba(224,120,86,0.4);
+  margin-top: 1.5vh;
+  opacity: 0; transform: scale(0.7);
 }
 
 /* ─── Scene 3: Product 2 Reveal (Lifestyle) ─── */
@@ -438,18 +457,9 @@ html, body {
     </div>
     <div class="ba-title" id="baTitle">From chaos to clean</div>
     <div class="ba-title-ar" id="baTitleAr">من الفوضى إلى النظام</div>
-  </div>
-
-  <!-- Scene 2b: Product 1 Reveal -->
-  <div class="scene scene-prod1" id="scene2b">
-    <div class="prod-header">
-      <div class="prod-header-en" id="p1HeaderEn">ProDesk Cable Kit</div>
-      <div class="prod-header-ar" id="p1HeaderAr">أدوات تنظيم الكابلات</div>
-    </div>
-    <div class="prod-stage">
-      <img class="prod-img" id="prod1Img" src="https://lh3.googleusercontent.com/d/1ezgzT9tKOlOievx9IonNSO_WEiJcWwsW" alt="ProDesk Cable Kit">
-    </div>
-    <div class="prod-price" id="prod1Price">62 AED</div>
+    <div class="ba-prod-name" id="baProdName">ProDesk Cable Kit</div>
+    <div class="ba-prod-name-ar" id="baProdNameAr">أدوات تنظيم الكابلات</div>
+    <div class="ba-prod-price" id="baProdPrice">62 AED</div>
   </div>
 
   <!-- Scene 3: Product 2 — Lifestyle Shot -->
@@ -617,29 +627,19 @@ async function startPromo(mode) {
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
   anim(document.getElementById('baTitleAr'),
     { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(slideDuration * 0.5);
-  await anim(s2a, { opacity: '0' }, 400);
+  await wait(400);
 
-  // ── SCENE 2b — Product 1 Reveal (Cable Kit) ──
-  var s2c = document.getElementById('scene2b');
-  await anim(s2c, { opacity: '1' }, 300);
-  await anim(document.getElementById('p1HeaderEn'),
+  // Product name and price below the slider
+  await anim(document.getElementById('baProdName'),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  anim(document.getElementById('p1HeaderAr'),
+  anim(document.getElementById('baProdNameAr'),
     { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await wait(200);
-
-  var prod1Img = document.getElementById('prod1Img');
-  prod1Img.classList.add('reveal');
-  await wait(800);
-  prod1Img.classList.remove('reveal');
-  prod1Img.classList.add('float');
-
-  anim(document.getElementById('prod1Price'),
+  anim(document.getElementById('baProdPrice'),
     { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
 
-  await wait(t.prod1 - 1300);
-  await anim(s2c, { opacity: '0' }, 400);
+  await wait(slideDuration * 0.4 + t.prod1 - 800);
+  await anim(s2a, { opacity: '0' }, 400);
 
   // ── SCENE 3 — Product 2 Lifestyle (Dangling Buddies) ──
   var s3 = document.getElementById('scene3');
