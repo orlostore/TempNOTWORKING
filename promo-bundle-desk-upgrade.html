@@ -153,8 +153,45 @@ html, body {
   opacity: 0; transform: scale(0.7);
 }
 
-/* ─── Scene 3: Product 2 Reveal ─── */
+/* ─── Before / After (Scene 2 sub-scenes) ─── */
+.ba-frame {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0;
+}
+.ba-label {
+  font-size: clamp(12px, 3vw, 17px); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.2em;
+  padding: 1vh 5vw; border-radius: 50px;
+  position: absolute; top: 6vh; z-index: 5;
+}
+.ba-label-before { background: #e8e8e8; color: #7a8f9c; }
+.ba-label-after  { background: #e07856; color: #fff; }
+.ba-img {
+  width: 75vw; max-width: 420px; aspect-ratio: 4/3;
+  object-fit: cover; border-radius: 3vw;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+}
+.ba-caption {
+  margin-top: 2vh; text-align: center;
+  font-size: clamp(13px, 3vw, 18px); font-weight: 600; color: #2c4a5c;
+}
+.ba-caption-ar {
+  font-size: clamp(11px, 2.6vw, 15px); font-weight: 600;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.3vh;
+}
+
+/* ─── Scene 3: Product 2 Reveal (Lifestyle) ─── */
 .scene-prod2 { background: #ffffff !important; }
+.lifestyle-img {
+  width: 75vw; max-width: 420px; aspect-ratio: 4/3;
+  object-fit: cover; border-radius: 3vw;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+  opacity: 0; transform: scale(0.85);
+  margin-top: -2vh;
+}
 
 /* ─── Scene 4: Bundle "Better Together" ─── */
 .scene-bundle { background: #ffffff !important; }
@@ -350,8 +387,28 @@ html, body {
     <div class="intro-ar" id="introAr">رقّي مساحاتك</div>
   </div>
 
-  <!-- Scene 2: Product 1 — First Product -->
-  <div class="scene scene-prod1" id="scene2">
+  <!-- Scene 2a: Before — messy desk -->
+  <div class="scene" id="scene2a">
+    <div class="ba-frame" id="baBefore" style="opacity:1">
+      <div class="ba-label ba-label-before">Before</div>
+      <img class="ba-img" src="BEFORE_IMAGE_URL" alt="Before — messy desk">
+      <div class="ba-caption">Messy cables everywhere</div>
+      <div class="ba-caption-ar">كابلات متشابكة في كل مكان</div>
+    </div>
+  </div>
+
+  <!-- Scene 2b: After — clean desk -->
+  <div class="scene" id="scene2b">
+    <div class="ba-frame" id="baAfter" style="opacity:1">
+      <div class="ba-label ba-label-after">After</div>
+      <img class="ba-img" src="AFTER_IMAGE_URL" alt="After — clean organized desk">
+      <div class="ba-caption">Clean & organized</div>
+      <div class="ba-caption-ar">مرتّب ومنظّم</div>
+    </div>
+  </div>
+
+  <!-- Scene 2c: Product 1 Reveal -->
+  <div class="scene scene-prod1" id="scene2c">
     <div class="prod-header">
       <div class="prod-header-en" id="p1HeaderEn">ProDesk Cable Kit</div>
       <div class="prod-header-ar" id="p1HeaderAr">أدوات تنظيم الكابلات</div>
@@ -362,15 +419,13 @@ html, body {
     <div class="prod-price" id="prod1Price">62 AED</div>
   </div>
 
-  <!-- Scene 3: Product 2 — Second Product -->
+  <!-- Scene 3: Product 2 — Lifestyle Shot -->
   <div class="scene scene-prod2" id="scene3">
     <div class="prod-header">
       <div class="prod-header-en" id="p2HeaderEn">Dangling Buddies</div>
       <div class="prod-header-ar" id="p2HeaderAr">رفاق الثلاجة</div>
     </div>
-    <div class="prod-stage">
-      <img class="prod-img" id="prod2Img" src="https://lh3.googleusercontent.com/d/13OJ0O2zASz_NWE3gOfCMwYlIkKMjfzOc" alt="Dangling Buddies">
-    </div>
+    <img class="lifestyle-img" id="prod2Lifestyle" src="LIFESTYLE_IMAGE_URL" alt="Dangling Buddies lifestyle">
     <div class="prod-price" id="prod2Price">16 AED / piece</div>
   </div>
 
@@ -454,15 +509,18 @@ function createDots() {
 }
 
 var T = {
-  tiktok: { intro: 1800, prod1: 2200, prod2: 2200, bundle: 3500, cta: 2800 },
-  insta:  { intro: 2500, prod1: 2800, prod2: 2800, bundle: 4200, cta: 3500 }
+  tiktok: { intro: 1800, before: 1500, after: 1500, prod1: 2200, prod2: 2200, bundle: 3500, cta: 2800 },
+  insta:  { intro: 2500, before: 2000, after: 2000, prod1: 2800, prod2: 2800, bundle: 4200, cta: 3500 }
 };
 
 // Preload images
 (function() {
   var urls = [
     'https://lh3.googleusercontent.com/d/1ezgzT9tKOlOievx9IonNSO_WEiJcWwsW',
-    'https://lh3.googleusercontent.com/d/13OJ0O2zASz_NWE3gOfCMwYlIkKMjfzOc'
+    'https://lh3.googleusercontent.com/d/13OJ0O2zASz_NWE3gOfCMwYlIkKMjfzOc',
+    'BEFORE_IMAGE_URL',
+    'AFTER_IMAGE_URL',
+    'LIFESTYLE_IMAGE_URL'
   ];
   urls.forEach(function(u) { var img = new Image(); img.src = u; });
 })();
@@ -472,7 +530,7 @@ var T = {
 // ═══════════════════════════════════════════
 async function startPromo(mode) {
   var t = T[mode];
-  var totalDuration = t.intro + t.prod1 + t.prod2 + t.bundle + t.cta + 2000;
+  var totalDuration = t.intro + t.before + t.after + t.prod1 + t.prod2 + t.bundle + t.cta + 2000;
 
   // Hide mode selector
   document.getElementById('modeSelect').classList.add('gone');
@@ -502,9 +560,25 @@ async function startPromo(mode) {
   await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
-  // ── SCENE 2 — Product 1 (Cable Kit) ──
-  var s2 = document.getElementById('scene2');
-  await anim(s2, { opacity: '1' }, 300);
+  // ── SCENE 2a — Before (messy desk) ──
+  var s2a = document.getElementById('scene2a');
+  await anim(s2a, { opacity: '1' }, 300);
+  var baBefore = document.getElementById('baBefore');
+  await anim(baBefore, { opacity: '1' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.before - 500);
+  await anim(s2a, { opacity: '0' }, 400);
+
+  // ── SCENE 2b — After (clean desk) ──
+  var s2b = document.getElementById('scene2b');
+  await anim(s2b, { opacity: '1' }, 300);
+  var baAfter = document.getElementById('baAfter');
+  await anim(baAfter, { opacity: '1' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.after - 500);
+  await anim(s2b, { opacity: '0' }, 400);
+
+  // ── SCENE 2c — Product 1 Reveal (Cable Kit) ──
+  var s2c = document.getElementById('scene2c');
+  await anim(s2c, { opacity: '1' }, 300);
   await anim(document.getElementById('p1HeaderEn'),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
   anim(document.getElementById('p1HeaderAr'),
@@ -521,9 +595,9 @@ async function startPromo(mode) {
     { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
 
   await wait(t.prod1 - 1300);
-  await anim(s2, { opacity: '0' }, 400);
+  await anim(s2c, { opacity: '0' }, 400);
 
-  // ── SCENE 3 — Product 2 (Dangling Buddies) ──
+  // ── SCENE 3 — Product 2 Lifestyle (Dangling Buddies) ──
   var s3 = document.getElementById('scene3');
   await anim(s3, { opacity: '1' }, 300);
   await anim(document.getElementById('p2HeaderEn'),
@@ -532,11 +606,9 @@ async function startPromo(mode) {
     { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await wait(200);
 
-  var prod2Img = document.getElementById('prod2Img');
-  prod2Img.classList.add('reveal');
-  await wait(800);
-  prod2Img.classList.remove('reveal');
-  prod2Img.classList.add('float');
+  var prod2Life = document.getElementById('prod2Lifestyle');
+  await anim(prod2Life,
+    { opacity: '1', transform: 'scale(1)' }, 700, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
 
   anim(document.getElementById('prod2Price'),
     { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
