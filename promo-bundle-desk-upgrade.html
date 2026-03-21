@@ -153,34 +153,70 @@ html, body {
   opacity: 0; transform: scale(0.7);
 }
 
-/* ─── Before / After (Scene 2 sub-scenes) ─── */
-.ba-frame {
+/* ─── Before / After Slider (Scene 2) ─── */
+.ba-container {
+  position: relative;
+  width: 78vw; max-width: 440px;
+  aspect-ratio: 4/3;
+  border-radius: 3vw;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  opacity: 0; transform: scale(0.9);
+}
+.ba-before, .ba-after {
   position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
+}
+.ba-before img, .ba-after img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.ba-after {
+  clip-path: inset(0 100% 0 0);
+}
+.ba-divider {
+  position: absolute; top: 0; bottom: 0;
+  width: 3px; background: #fff;
+  left: 0%; z-index: 5;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+.ba-divider::after {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px; height: 36px;
+  background: #fff; border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+}
+.ba-divider::before {
+  content: '◀ ▶';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px; color: #2c4a5c;
+  z-index: 1; white-space: nowrap; letter-spacing: 2px;
+}
+.ba-tag {
+  position: absolute; bottom: 10px;
+  padding: 4px 14px; border-radius: 50px;
+  font-size: clamp(10px, 2.2vw, 13px); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  z-index: 4;
+}
+.ba-tag-before {
+  left: 10px; background: rgba(0,0,0,0.5); color: #fff;
+}
+.ba-tag-after {
+  right: 10px; background: #e07856; color: #fff;
   opacity: 0;
 }
-.ba-label {
-  font-size: clamp(12px, 3vw, 17px); font-weight: 800;
-  text-transform: uppercase; letter-spacing: 0.2em;
-  padding: 1vh 5vw; border-radius: 50px;
-  position: absolute; top: 6vh; z-index: 5;
+.ba-title {
+  margin-top: 2.5vh; text-align: center;
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 700; color: #2c4a5c;
+  opacity: 0; transform: translateY(10px);
 }
-.ba-label-before { background: #e8e8e8; color: #7a8f9c; }
-.ba-label-after  { background: #e07856; color: #fff; }
-.ba-img {
-  width: 75vw; max-width: 420px; aspect-ratio: 4/3;
-  object-fit: cover; border-radius: 3vw;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
-}
-.ba-caption {
-  margin-top: 2vh; text-align: center;
-  font-size: clamp(13px, 3vw, 18px); font-weight: 600; color: #2c4a5c;
-}
-.ba-caption-ar {
-  font-size: clamp(11px, 2.6vw, 15px); font-weight: 600;
+.ba-title-ar {
+  font-size: clamp(12px, 2.8vw, 16px); font-weight: 600;
   color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
-  margin-top: 0.3vh;
+  margin-top: 0.5vh; text-align: center;
+  opacity: 0; transform: translateY(10px);
 }
 
 /* ─── Scene 3: Product 2 Reveal (Lifestyle) ─── */
@@ -387,28 +423,25 @@ html, body {
     <div class="intro-ar" id="introAr">رقّي مساحاتك</div>
   </div>
 
-  <!-- Scene 2a: Before — messy desk -->
+  <!-- Scene 2a: Before/After Slider -->
   <div class="scene" id="scene2a">
-    <div class="ba-frame" id="baBefore" style="opacity:1">
-      <div class="ba-label ba-label-before">Before</div>
-      <img class="ba-img" src="https://lh3.googleusercontent.com/d/1VMYbd1V_SjPgZhQW4QjrXgiQMs5ht_zK" alt="Before — messy desk">
-      <div class="ba-caption">Messy cables everywhere</div>
-      <div class="ba-caption-ar">كابلات متشابكة في كل مكان</div>
+    <div class="ba-container" id="baSlider">
+      <div class="ba-before">
+        <img src="https://lh3.googleusercontent.com/d/1VMYbd1V_SjPgZhQW4QjrXgiQMs5ht_zK" alt="Before — messy desk">
+      </div>
+      <div class="ba-after" id="baAfterClip">
+        <img src="https://lh3.googleusercontent.com/d/1sw890WLGDSGXxOvJj7FiWo9_qq3SAOWg" alt="After — clean desk">
+      </div>
+      <div class="ba-divider" id="baDivider"></div>
+      <div class="ba-tag ba-tag-before">Before</div>
+      <div class="ba-tag ba-tag-after" id="baTagAfter">After</div>
     </div>
+    <div class="ba-title" id="baTitle">From chaos to clean</div>
+    <div class="ba-title-ar" id="baTitleAr">من الفوضى إلى النظام</div>
   </div>
 
-  <!-- Scene 2b: After — clean desk -->
-  <div class="scene" id="scene2b">
-    <div class="ba-frame" id="baAfter" style="opacity:1">
-      <div class="ba-label ba-label-after">After</div>
-      <img class="ba-img" src="https://lh3.googleusercontent.com/d/1sw890WLGDSGXxOvJj7FiWo9_qq3SAOWg" alt="After — clean organized desk">
-      <div class="ba-caption">Clean & organized</div>
-      <div class="ba-caption-ar">مرتّب ومنظّم</div>
-    </div>
-  </div>
-
-  <!-- Scene 2c: Product 1 Reveal -->
-  <div class="scene scene-prod1" id="scene2c">
+  <!-- Scene 2b: Product 1 Reveal -->
+  <div class="scene scene-prod1" id="scene2b">
     <div class="prod-header">
       <div class="prod-header-en" id="p1HeaderEn">ProDesk Cable Kit</div>
       <div class="prod-header-ar" id="p1HeaderAr">أدوات تنظيم الكابلات</div>
@@ -509,8 +542,8 @@ function createDots() {
 }
 
 var T = {
-  tiktok: { intro: 1800, before: 1500, after: 1500, prod1: 2200, prod2: 2200, bundle: 3500, cta: 2800 },
-  insta:  { intro: 2500, before: 2000, after: 2000, prod1: 2800, prod2: 2800, bundle: 4200, cta: 3500 }
+  tiktok: { intro: 1800, slider: 3000, prod1: 2200, prod2: 2200, bundle: 3500, cta: 2800 },
+  insta:  { intro: 2500, slider: 4000, prod1: 2800, prod2: 2800, bundle: 4200, cta: 3500 }
 };
 
 // Preload images
@@ -530,7 +563,7 @@ var T = {
 // ═══════════════════════════════════════════
 async function startPromo(mode) {
   var t = T[mode];
-  var totalDuration = t.intro + t.before + t.after + t.prod1 + t.prod2 + t.bundle + t.cta + 2000;
+  var totalDuration = t.intro + t.slider + t.prod1 + t.prod2 + t.bundle + t.cta + 2000;
 
   // Hide mode selector
   document.getElementById('modeSelect').classList.add('gone');
@@ -560,24 +593,35 @@ async function startPromo(mode) {
   await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
-  // ── SCENE 2a — Before (messy desk) ──
+  // ── SCENE 2a — Before/After Slider ──
   var s2a = document.getElementById('scene2a');
+  var baSlider = document.getElementById('baSlider');
+  var baAfterClip = document.getElementById('baAfterClip');
+  var baDivider = document.getElementById('baDivider');
+  var baTagAfter = document.getElementById('baTagAfter');
+
   await anim(s2a, { opacity: '1' }, 300);
-  var baBefore = document.getElementById('baBefore');
-  await anim(baBefore, { opacity: '1' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(t.before - 500);
+  await anim(baSlider, { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(400);
+
+  // Animate slider bar from left (0%) to right (100%) — revealing "after" image
+  var slideDuration = t.slider - 1200;
+  baDivider.style.transition = 'left ' + slideDuration + 'ms cubic-bezier(0.25, 0.1, 0.25, 1)';
+  baAfterClip.style.transition = 'clip-path ' + slideDuration + 'ms cubic-bezier(0.25, 0.1, 0.25, 1)';
+  baDivider.style.left = '100%';
+  baAfterClip.style.clipPath = 'inset(0 0 0 0)';
+  await wait(slideDuration * 0.3);
+  baTagAfter.style.transition = 'opacity 0.4s ease';
+  baTagAfter.style.opacity = '1';
+  await anim(document.getElementById('baTitle'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('baTitleAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(slideDuration * 0.5);
   await anim(s2a, { opacity: '0' }, 400);
 
-  // ── SCENE 2b — After (clean desk) ──
-  var s2b = document.getElementById('scene2b');
-  await anim(s2b, { opacity: '1' }, 300);
-  var baAfter = document.getElementById('baAfter');
-  await anim(baAfter, { opacity: '1' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(t.after - 500);
-  await anim(s2b, { opacity: '0' }, 400);
-
-  // ── SCENE 2c — Product 1 Reveal (Cable Kit) ──
-  var s2c = document.getElementById('scene2c');
+  // ── SCENE 2b — Product 1 Reveal (Cable Kit) ──
+  var s2c = document.getElementById('scene2b');
   await anim(s2c, { opacity: '1' }, 300);
   await anim(document.getElementById('p1HeaderEn'),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
