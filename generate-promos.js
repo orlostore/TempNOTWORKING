@@ -165,7 +165,7 @@ const products = [
     lifetextEn: 'Professional cable control',
     lifetextAr: 'تحكّم احترافي بالكابلات',
     mainImage: 'https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG',
-    lifestyleImage: 'https://lh3.googleusercontent.com/d/1sBaS2Jzz52oBASRLgPv6PTRu7ymi6X0e',
+    lifestyleImage: 'https://lh3.googleusercontent.com/d/1xgdTYgAM7XgEogzkg0MqeGcKXxnGjitt',
     variants: []
   },
   {
