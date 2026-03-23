@@ -261,10 +261,10 @@ body {
 
 <script>
 // ── Config ──
-const TOTAL_DURATION = 15000; // 15 seconds
-const INTRO_DURATION = 3000;
-const OUTRO_DURATION = 3500;
-const MAX_PRODUCTS = 4;
+const TOTAL_DURATION = 7000; // 7 seconds
+const INTRO_DURATION = 1500;
+const OUTRO_DURATION = 2000;
+const MAX_PRODUCTS = 2;
 
 // ── Particles ──
 function createParticles() {
@@ -346,11 +346,11 @@ async function runAnimation(productCount) {
   const intro = document.getElementById('sceneIntro');
   const tagline = document.getElementById('tagline');
 
-  await animate(intro, { opacity: '1' }, 600);
-  await new Promise(r => setTimeout(r, 400));
-  await animate(tagline, { opacity: '1' }, 800, 'ease-out');
-  await new Promise(r => setTimeout(r, 1000));
-  await animate(intro, { opacity: '0' }, 500);
+  await animate(intro, { opacity: '1' }, 350);
+  await new Promise(r => setTimeout(r, 150));
+  await animate(tagline, { opacity: '1' }, 400, 'ease-out');
+  await new Promise(r => setTimeout(r, 300));
+  await animate(intro, { opacity: '0' }, 300);
 
   // ── Show top bar ──
   const topBar = document.getElementById('topBar');
@@ -369,46 +369,46 @@ async function runAnimation(productCount) {
     const shine = document.getElementById('shine' + i);
 
     // Enter
-    slide.style.transition = 'all 500ms cubic-bezier(0.16, 1, 0.3, 1)';
+    slide.style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
     slide.style.opacity = '1';
     slide.style.transform = 'scale(1)';
 
-    await new Promise(r => setTimeout(r, 300));
+    await new Promise(r => setTimeout(r, 200));
 
     // Info slide up
-    info.style.transition = 'all 500ms cubic-bezier(0.16, 1, 0.3, 1)';
+    info.style.transition = 'all 300ms cubic-bezier(0.16, 1, 0.3, 1)';
     info.style.opacity = '1';
     info.style.transform = 'translateY(0)';
 
     // Shine effect
-    shine.style.animation = 'shimmer 800ms ease-in-out forwards';
+    shine.style.animation = 'shimmer 500ms ease-in-out forwards';
 
     // Hold
-    await new Promise(r => setTimeout(r, perProduct - 800));
+    await new Promise(r => setTimeout(r, perProduct - 500));
 
     // Exit (except last one exits with scene)
     if (i < productCount - 1) {
-      slide.style.transition = 'all 400ms ease-in';
+      slide.style.transition = 'all 250ms ease-in';
       slide.style.opacity = '0';
       slide.style.transform = 'scale(1.05)';
-      await new Promise(r => setTimeout(r, 400));
+      await new Promise(r => setTimeout(r, 250));
     }
   }
 
   // ── Scene 3: Outro ──
-  await animate(sceneProducts, { opacity: '0' }, 400);
+  await animate(sceneProducts, { opacity: '0' }, 250);
 
   const outro = document.getElementById('sceneOutro');
   const ctaText = document.getElementById('ctaText');
   const ctaUrl = document.getElementById('ctaUrl');
   const badges = document.getElementById('trustBadges');
 
-  await animate(outro, { opacity: '1' }, 400);
-  await animate(ctaText, { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await new Promise(r => setTimeout(r, 200));
-  await animate(ctaUrl, { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await new Promise(r => setTimeout(r, 200));
-  await animate(badges, { opacity: '1' }, 500);
+  await animate(outro, { opacity: '1' }, 250);
+  await animate(ctaText, { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await new Promise(r => setTimeout(r, 100));
+  await animate(ctaUrl, { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await new Promise(r => setTimeout(r, 100));
+  await animate(badges, { opacity: '1' }, 350);
 
   // Hold outro until end
   clearInterval(progressInterval);
