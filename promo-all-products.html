@@ -224,7 +224,7 @@ html, body {
   opacity: 0; transform: scale(1.05) translateY(8px);
 }
 .item-label {
-  position: absolute; bottom: 14vh;
+  position: absolute; bottom: 19vh;
   text-align: center; z-index: 5;
   opacity: 0; transform: translateY(15px);
 }
@@ -234,7 +234,7 @@ html, body {
   direction: rtl; margin-top: 0.3vh; font-family: 'Almarai', sans-serif;
 }
 .item-price {
-  position: absolute; bottom: 7vh;
+  position: absolute; bottom: 12vh;
   background: #e07856; color: #fff;
   padding: 1.2vh 5vw; border-radius: 50px;
   font-size: clamp(14px, 3.5vw, 22px); font-weight: 800;
@@ -338,11 +338,36 @@ var T = {
   insta:  { intro: 2500, eachTime: 1600, cta: 3500 }
 };
 
-var ITEMS = [{"en":"Dangling Buddies","ar":"رفاق الثلاجة","price":16,"img":"https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj"},{"en":"Vintage Rotary Telephone","ar":"هاتف دوّار كلاسيكي","price":63,"img":"https://lh3.googleusercontent.com/d/1j7U1UnIqoWB5ceyd7sO_KXdqDn-YUhmD"},{"en":"Miniature Vintage Red TV","ar":"مجسم تلفزيون أحمر كلاسيكي","price":29,"img":"https://lh3.googleusercontent.com/d/1N1y_QydjwRI7iebdrL1ziRkQlIqJOJ7u"},{"en":"Vintage Upright Piano","ar":"بيانو مصغر أنتيك","price":29,"img":"https://lh3.googleusercontent.com/d/1qnGqruaDVnEBL9NwdfyghWw-FsphbfPg"},{"en":"Vintage Miniature Radio","ar":"راديو صغير كلاسيكي","price":27,"img":"https://lh3.googleusercontent.com/d/1fo5-3SD-z1vbGtwCr_PV4iRRdfayxJ3k"},{"en":"Miniature Vintage Gramophone","ar":"غرامافون مصغّر كلاسيكي","price":61,"img":"https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA"},{"en":"Dreamer Wall Hanging","ar":"لوحة أنتَ مميز المعلّقة","price":40,"img":"https://lh3.googleusercontent.com/d/1149qBolmVukonwQz_ne4tMfarNJcvsza"},{"en":"Vintage Rotary Phone","ar":"هاتف دوّار مصغّر","price":32,"img":"https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq"},{"en":"ProDesk Cable Kit","ar":"أدوات تنظيم الكابلات برو ديسك","price":62,"img":"https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl"},{"en":"FlexiWrap Velcro Straps","ar":"أشرطة فليكسي راب ملون","price":22,"img":"https://lh3.googleusercontent.com/d/1RNIMgIhDF2NBfM24NlsKuNF5RIHuM3jV"},{"en":"FlexiWrap Velcro Straps","ar":"أشرطة فليكسي راب أسود","price":22,"img":"https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG"},{"en":"SilkTie Cable Organizers","ar":"منظم كابلات سيلك تاي ملون","price":22,"img":"https://lh3.googleusercontent.com/d/14YlqqxameQDM_HzxIKwpQG4uYHmwv6ah"},{"en":"SilkTie Cable Organizers","ar":"منظم كابلات سيلك تاي أسود","price":24,"img":"https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ"}];
+var ITEMS = [];
+
+// Fetch products from API and use first image for each
+async function loadProducts() {
+  try {
+    var response = await fetch('/api/products');
+    var products = await response.json();
+    if (Array.isArray(products) && products.length > 0) {
+      ITEMS = products.map(function(p) {
+        return {
+          en: p.name,
+          ar: p.nameAr || p.name,
+          price: p.price,
+          img: (p.images && p.images.length > 0) ? p.images[0] : (p.image || '')
+        };
+      });
+    }
+  } catch (e) {
+    console.error('Failed to load products:', e);
+  }
+  // Fallback if API fails
+  if (ITEMS.length === 0) {
+    ITEMS = [{"en":"Dangling Buddies","ar":"رفاق الثلاجة","price":16,"img":"https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj"},{"en":"Vintage Rotary Telephone","ar":"هاتف دوّار كلاسيكي","price":63,"img":"https://lh3.googleusercontent.com/d/1j7U1UnIqoWB5ceyd7sO_KXdqDn-YUhmD"},{"en":"Miniature Vintage Red TV","ar":"مجسم تلفزيون أحمر كلاسيكي","price":29,"img":"https://lh3.googleusercontent.com/d/1N1y_QydjwRI7iebdrL1ziRkQlIqJOJ7u"},{"en":"Vintage Upright Piano","ar":"بيانو مصغر أنتيك","price":29,"img":"https://lh3.googleusercontent.com/d/1qnGqruaDVnEBL9NwdfyghWw-FsphbfPg"},{"en":"Vintage Miniature Radio","ar":"راديو صغير كلاسيكي","price":27,"img":"https://lh3.googleusercontent.com/d/1fo5-3SD-z1vbGtwCr_PV4iRRdfayxJ3k"},{"en":"Miniature Vintage Gramophone","ar":"غرامافون مصغّر كلاسيكي","price":61,"img":"https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA"},{"en":"Dreamer Wall Hanging","ar":"لوحة أنتَ مميز المعلّقة","price":40,"img":"https://lh3.googleusercontent.com/d/1149qBolmVukonwQz_ne4tMfarNJcvsza"},{"en":"Vintage Rotary Phone","ar":"هاتف دوّار مصغّر","price":32,"img":"https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq"},{"en":"ProDesk Cable Kit","ar":"أدوات تنظيم الكابلات برو ديسك","price":62,"img":"https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl"},{"en":"FlexiWrap Velcro Straps","ar":"أشرطة فليكسي راب ملون","price":22,"img":"https://lh3.googleusercontent.com/d/1RNIMgIhDF2NBfM24NlsKuNF5RIHuM3jV"},{"en":"FlexiWrap Velcro Straps","ar":"أشرطة فليكسي راب أسود","price":22,"img":"https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG"},{"en":"SilkTie Cable Organizers","ar":"منظم كابلات سيلك تاي ملون","price":22,"img":"https://lh3.googleusercontent.com/d/14YlqqxameQDM_HzxIKwpQG4uYHmwv6ah"},{"en":"SilkTie Cable Organizers","ar":"منظم كابلات سيلك تاي أسود","price":24,"img":"https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ"}];
+  }
+}
 
 // Build product images
 function buildStage() {
   var stage = document.getElementById('productStage');
+  stage.innerHTML = '';
   ITEMS.forEach(function(item, i) {
     var img = document.createElement('img');
     img.src = item.img;
@@ -352,10 +377,10 @@ function buildStage() {
   });
 }
 
-// Preload
-(function() {
+// Preload images
+function preloadImages() {
   ITEMS.forEach(function(item) { var img = new Image(); img.src = item.img; });
-})();
+}
 
 // ═══════════════════════════════════════════
 // MAIN ANIMATION
@@ -457,7 +482,19 @@ async function startPromo(mode) {
 }
 
 createDots();
-buildStage();
+
+// Load products from API, then build the stage
+(async function() {
+  await loadProducts();
+  preloadImages();
+  buildStage();
+  // Update the CTA "Starting from" price to the lowest actual price
+  var minPrice = Math.min.apply(null, ITEMS.map(function(item) { return item.price; }));
+  var ctaPriceEl = document.querySelector('.cta-price');
+  if (ctaPriceEl && minPrice > 0) {
+    ctaPriceEl.innerHTML = 'Starting from ' + minPrice + ' <sub>AED</sub>';
+  }
+})();
 </script>
 </body>
 </html>
