@@ -161,44 +161,38 @@ html, body {
   margin-top: 0.5vh; opacity: 0; transform: translateY(10px);
 }
 
-/* ─── Scene 3: Unique finds ─── */
-.scene-finds { background: #ffffff; }
-.finds-row {
-  display: flex; gap: 4vw; margin-bottom: 3vh;
-  opacity: 0;
-}
-.find-card {
-  width: 25vw; max-width: 120px;
-  background: #fff;
-  border-radius: 4vw;
-  padding: 2vh 2vw 1.5vh;
-  text-align: center;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-  transform: translateY(30px);
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.find-card-icon {
-  width: 14vw; height: 14vw; max-width: 65px; max-height: 65px;
-  border-radius: 2vw; overflow: hidden; margin: 0 auto 1vh;
-  background: #f5e6d3;
-}
-.find-card-icon img {
-  width: 100%; height: 100%; object-fit: cover;
-}
-.find-card-heart {
-  font-size: clamp(10px, 2.5vw, 14px); color: #e07856;
-  margin-top: 0.3vh;
+/* ─── Scene 3: Unique finds (warm lifestyle) ─── */
+.scene-finds { background: #faf8f5; }
+.finds-icon {
+  font-size: clamp(50px, 12vw, 80px);
+  opacity: 0; transform: scale(0.5);
 }
 .finds-text {
-  font-size: clamp(20px, 5vw, 32px); font-weight: 800;
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 900;
   color: #2c4a5c; text-align: center; line-height: 1.3;
-  opacity: 0; transform: translateY(15px);
+  margin-top: 2vh;
+  opacity: 0; transform: translateY(20px);
 }
 .finds-text span { color: #e07856; }
+.finds-sub {
+  font-size: clamp(13px, 3.2vw, 18px); font-weight: 400;
+  color: #7a8f9c; text-align: center; margin-top: 1vh;
+  opacity: 0; transform: translateY(10px);
+}
 .finds-text-ar {
   font-size: clamp(16px, 4vw, 24px); font-weight: 700;
   color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
-  margin-top: 0.5vh; opacity: 0; transform: translateY(10px);
+  margin-top: 1vh; opacity: 0; transform: translateY(10px);
+}
+.finds-accent {
+  display: flex; gap: 3vw; margin-top: 3vh; opacity: 0;
+}
+.finds-pill {
+  padding: 1.2vh 4vw; border-radius: 50px;
+  background: rgba(224,120,86,0.06);
+  border: 1px solid rgba(224,120,86,0.15);
+  font-size: clamp(11px, 2.8vw, 15px); font-weight: 600;
+  color: #e07856;
 }
 
 /* ─── Scene 4: CTA closeout ─── */
@@ -347,24 +341,17 @@ html, body {
     <div class="store-text-ar" id="storeTextAr">متجر إلكتروني من دبي</div>
   </div>
 
-  <!-- Scene 3: Unique finds -->
+  <!-- Scene 3: Unique finds (lifestyle feel) -->
   <div class="scene scene-finds" id="scene3">
-    <div class="finds-row" id="findsRow">
-      <div class="find-card" id="findCard1">
-        <div class="find-card-icon"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
-        <div class="find-card-heart">&#10084;</div>
-      </div>
-      <div class="find-card" id="findCard2">
-        <div class="find-card-icon"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
-        <div class="find-card-heart">&#10084;</div>
-      </div>
-      <div class="find-card" id="findCard3">
-        <div class="find-card-icon"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
-        <div class="find-card-heart">&#10084;</div>
-      </div>
-    </div>
-    <div class="finds-text" id="findsText">Unique finds you <span>actually</span><br>want to keep</div>
+    <div class="finds-icon" id="findsIcon">&#10024;</div>
+    <div class="finds-text" id="findsText">Unique finds you<br><span>actually</span> want to keep</div>
+    <div class="finds-sub" id="findsSub">Curated for people who love the little things</div>
     <div class="finds-text-ar" id="findsTextAr">منتجات فريدة تستاهل تقتنيها</div>
+    <div class="finds-accent" id="findsAccent">
+      <div class="finds-pill">&#10084; Curated</div>
+      <div class="finds-pill">&#9733; Unique</div>
+      <div class="finds-pill">&#10003; Quality</div>
+    </div>
   </div>
 
   <!-- Scene 4: CTA closeout -->
@@ -444,15 +431,6 @@ function burstConfetti() {
   }
 }
 
-// Preload images
-(function() {
-  var urls = [
-    'https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj',
-    'https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG',
-    'https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl'
-  ];
-  urls.forEach(function(u) { var img = new Image(); img.src = u; });
-})();
 
 var T = {
   tiktok: { intro: 2000, store: 2000, finds: 2000, close: 2200 },
@@ -515,26 +493,25 @@ async function startVideo(mode) {
   await wait(Math.max(t.store - 1700, 100));
   await anim(s2, { opacity: '0' }, 300);
 
-  // ── SCENE 3 — Unique finds ──
+  // ── SCENE 3 — Unique finds (warm lifestyle) ──
   var s3 = document.getElementById('scene3');
   s3.style.opacity = '1';
 
-  // Cards stagger in from below
-  var row = document.getElementById('findsRow');
-  await anim(row, { opacity: '1' }, 200);
+  // Sparkle icon bounces in
+  await anim(document.getElementById('findsIcon'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
 
-  var cards = ['findCard1', 'findCard2', 'findCard3'];
-  for (var i = 0; i < cards.length; i++) {
-    anim(document.getElementById(cards[i]),
-      { transform: 'translateY(0)' }, 450, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
-    await wait(120);
-  }
-  await wait(200);
-
+  // Main text
   await anim(document.getElementById('findsText'),
     { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await anim(document.getElementById('findsTextAr'),
+  await anim(document.getElementById('findsSub'),
     { opacity: '1', transform: 'translateY(0)' }, 350);
+  await anim(document.getElementById('findsTextAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 300);
+
+  // Accent pills
+  await anim(document.getElementById('findsAccent'),
+    { opacity: '1' }, 400);
 
   await wait(Math.max(t.finds - 1800, 100));
   await anim(s3, { opacity: '0' }, 300);
