@@ -243,6 +243,7 @@ html, body {
   margin-bottom: 1.5vh;
   opacity: 0; transform: translateX(40px);
 }
+.feature-bubble:nth-child(odd) { transform: translateX(-40px); }
 .feature-check {
   width: 7vw; height: 7vw; max-width: 36px; max-height: 36px;
   border-radius: 50%; background: #e07856;
@@ -323,6 +324,25 @@ html, body {
 @keyframes confettiFall {
   0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
   100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* ─── Enhanced middle scene effects ─── */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes subtlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+.fan-item.active {
+  box-shadow: 0 12px 40px rgba(224,120,86,0.18);
+}
+.feature-bubble.active .feature-check {
+  animation: subtlePulse 0.6s ease;
+}
+.box-body.revealed {
+  box-shadow: 0 0 40px rgba(255,215,0,0.25), 0 10px 30px rgba(0,0,0,0.08);
 }
 </style>
 </head>
@@ -501,8 +521,8 @@ function burstConfetti() {
 })();
 
 var T = {
-  tiktok: { arrive: 2000, open: 2500, fan: 2500, features: 3200, cta: 2300 },
-  insta:  { arrive: 2600, open: 3200, fan: 3200, features: 4000, cta: 3000 }
+  tiktok: { arrive: 2000, open: 1800, fan: 1800, features: 2200, cta: 2300 },
+  insta:  { arrive: 2600, open: 2400, fan: 2400, features: 2800, cta: 3000 }
 };
 
 async function startPromo(mode) {
@@ -536,66 +556,73 @@ async function startPromo(mode) {
   await wait(t.arrive - 2150);
   await anim(s1, { opacity: '0' }, 300);
 
-  // ── SCENE 2 — Box opens ──
+  // ── SCENE 2 — Box opens (snappy reveal) ──
   var s2 = document.getElementById('scene2');
   s2.style.opacity = '1';
-  await wait(400);
+  await wait(250);
 
-  // Lid opens
+  // Lid opens fast
   var lid = document.getElementById('lidTop');
-  await anim(lid, { transform: 'rotateX(-120deg)', opacity: '0.3' }, 800, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(lid, { transform: 'rotateX(-120deg)', opacity: '0.3' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
 
-  // Glow
-  await anim(document.getElementById('boxGlow'), { opacity: '1' }, 400);
-
-  // Product rises
+  // Glow + product rise together
+  document.getElementById('boxBody').classList.add('revealed');
   burstConfetti();
+  anim(document.getElementById('boxGlow'), { opacity: '1' }, 300);
   await anim(document.getElementById('boxProduct'),
-    { opacity: '1', transform: 'translateY(-40px)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+    { opacity: '1', transform: 'translateY(-40px) scale(1.05)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  // Settle scale
+  anim(document.getElementById('boxProduct'),
+    { transform: 'translateY(-40px) scale(1)' }, 300, 'ease');
 
-  await anim(document.getElementById('openText'),
-    { opacity: '1', transform: 'translateY(0)' }, 400);
+  // Text appears in parallel
+  anim(document.getElementById('openText'),
+    { opacity: '1', transform: 'translateY(0)' }, 300);
   await anim(document.getElementById('openTextAr'),
-    { opacity: '1', transform: 'translateY(0)' }, 350);
+    { opacity: '1', transform: 'translateY(0)' }, 300);
 
-  await wait(t.open - 2950);
-  await anim(s2, { opacity: '0' }, 300);
+  await wait(Math.max(t.open - 1850, 100));
+  await anim(s2, { opacity: '0' }, 250);
 
-  // ── SCENE 3 — Products fan out ──
+  // ── SCENE 3 — Products fan out (rapid stagger) ──
   var s3 = document.getElementById('scene3');
   s3.style.opacity = '1';
-  await anim(document.getElementById('fanTitle'),
-    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('fanTitle'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await anim(document.getElementById('fanTitleAr'),
-    { opacity: '1', transform: 'translateY(0)' }, 350);
+    { opacity: '1', transform: 'translateY(0)' }, 300);
 
   var fans = ['fan1', 'fan2', 'fan3', 'fan4'];
   for (var i = 0; i < fans.length; i++) {
-    await anim(document.getElementById(fans[i]),
-      { opacity: '1', transform: 'scale(1) rotate(0deg)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
-    await wait(100);
+    var el = document.getElementById(fans[i]);
+    el.classList.add('active');
+    anim(el,
+      { opacity: '1', transform: 'scale(1) rotate(0deg)' }, 400, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+    await wait(80);
   }
 
-  await wait(t.fan - 2700);
-  await anim(s3, { opacity: '0' }, 300);
+  await wait(Math.max(t.fan - 1700, 100));
+  await anim(s3, { opacity: '0' }, 250);
 
-  // ── SCENE 4 — What can I do ──
+  // ── SCENE 4 — What can I do (fast alternating slide-in) ──
   var s4 = document.getElementById('scene4');
   s4.style.opacity = '1';
-  await anim(document.getElementById('featuresTitle'),
-    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('featuresTitle'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
   await anim(document.getElementById('featuresTitleAr'),
-    { opacity: '1', transform: 'translateY(0)' }, 350);
+    { opacity: '1', transform: 'translateY(0)' }, 300);
 
   var feats = ['feat1', 'feat2', 'feat3', 'feat4', 'feat5'];
   for (var f = 0; f < feats.length; f++) {
-    await anim(document.getElementById(feats[f]),
-      { opacity: '1', transform: 'translateX(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
-    await wait(100);
+    var featEl = document.getElementById(feats[f]);
+    featEl.classList.add('active');
+    anim(featEl,
+      { opacity: '1', transform: 'translateX(0)' }, 280, 'cubic-bezier(0.16, 1, 0.3, 1)');
+    await wait(70);
   }
 
-  await wait(t.features - 2750);
-  await anim(s4, { opacity: '0' }, 300);
+  await wait(Math.max(t.features - 1800, 100));
+  await anim(s4, { opacity: '0' }, 250);
 
   // ── SCENE 5 — CTA ──
   var s5 = document.getElementById('scene5');
