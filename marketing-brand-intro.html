@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Brand Intro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.canvas {
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+  background: #ffffff;
+}
+
+/* ═══ MODE SELECTOR ═══ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100;
+  background: #ffffff;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
+}
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -1vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
+
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  will-change: opacity, transform;
+}
+
+/* ─── Scene 1: We're ORLO Store ─── */
+.scene-intro { background: #ffffff; }
+.intro-logo {
+  width: 28vw; max-width: 160px;
+  opacity: 0; transform: scale(0.6);
+  filter: drop-shadow(0 6px 20px rgba(224,120,86,0.15));
+}
+.intro-line {
+  width: 50vw; max-width: 200px; height: 2px;
+  background: linear-gradient(90deg, transparent, #e07856, transparent);
+  margin: 3vh 0; opacity: 0; transform: scaleX(0);
+}
+.intro-text {
+  font-size: clamp(26px, 6.5vw, 44px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.2;
+  opacity: 0; transform: translateY(20px);
+}
+.intro-text span { color: #e07856; }
+.intro-text-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(224,120,86,0.7); direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 1vh; opacity: 0; transform: translateY(10px);
+}
+
+/* ─── Scene 2: Dubai-based online store ─── */
+.scene-store { background: #faf8f5; }
+.store-card {
+  width: 75vw; max-width: 360px;
+  background: #fff;
+  border-radius: 5vw;
+  box-shadow: 0 15px 50px rgba(0,0,0,0.06);
+  overflow: hidden;
+  opacity: 0; transform: translateY(40px) scale(0.9);
+}
+.store-mockup {
+  width: 100%; aspect-ratio: 16/10;
+  background: linear-gradient(135deg, #f5e6d3, #e8d5c0);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.store-mockup-bar {
+  position: absolute; top: 0; left: 0; right: 0; height: 12%;
+  background: #2c4a5c;
+  display: flex; align-items: center; padding: 0 4%;
+  gap: 2%;
+}
+.store-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.store-dot:nth-child(1) { background: #e07856; }
+.store-dot:nth-child(2) { background: #f4a261; }
+.store-dot:nth-child(3) { background: #7a8f9c; }
+.store-mockup-url {
+  font-size: clamp(7px, 1.8vw, 10px); color: rgba(255,255,255,0.6);
+  margin-left: auto; font-weight: 500; letter-spacing: 0.05em;
+}
+.store-mockup-logo {
+  width: 20%; opacity: 0.4; margin-top: 4%;
+}
+.store-mockup-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 3%; width: 80%; margin-top: 3%;
+}
+.store-mockup-item {
+  aspect-ratio: 1; border-radius: 8px;
+  background: rgba(255,255,255,0.6);
+}
+.store-card-bottom {
+  padding: 3vh 4vw; text-align: center;
+}
+.store-card-flag {
+  font-size: clamp(22px, 5vw, 32px);
+}
+.store-card-text {
+  font-size: clamp(14px, 3.5vw, 20px); font-weight: 700;
+  color: #2c4a5c; margin-top: 0.5vh;
+}
+.store-card-text span { color: #e07856; }
+.store-text {
+  font-size: clamp(20px, 5vw, 32px); font-weight: 800;
+  color: #2c4a5c; text-align: center; margin-top: 3vh;
+  opacity: 0; transform: translateY(15px);
+}
+.store-text span { color: #e07856; }
+.store-text-ar {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh; opacity: 0; transform: translateY(10px);
+}
+
+/* ─── Scene 3: Unique finds ─── */
+.scene-finds { background: #ffffff; }
+.finds-row {
+  display: flex; gap: 4vw; margin-bottom: 3vh;
+  opacity: 0;
+}
+.find-card {
+  width: 25vw; max-width: 120px;
+  background: #fff;
+  border-radius: 4vw;
+  padding: 2vh 2vw 1.5vh;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  transform: translateY(30px);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.find-card-icon {
+  width: 14vw; height: 14vw; max-width: 65px; max-height: 65px;
+  border-radius: 2vw; overflow: hidden; margin: 0 auto 1vh;
+  background: #f5e6d3;
+}
+.find-card-icon img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.find-card-heart {
+  font-size: clamp(10px, 2.5vw, 14px); color: #e07856;
+  margin-top: 0.3vh;
+}
+.finds-text {
+  font-size: clamp(20px, 5vw, 32px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(15px);
+}
+.finds-text span { color: #e07856; }
+.finds-text-ar {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 700;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: 0.5vh; opacity: 0; transform: translateY(10px);
+}
+
+/* ─── Scene 4: CTA closeout ─── */
+.scene-close { background: #ffffff; gap: 2vh; }
+.close-logo {
+  width: 18vw; max-width: 100px;
+  opacity: 0; transform: scale(0.5);
+  filter: drop-shadow(0 4px 15px rgba(224,120,86,0.12));
+}
+.close-url {
+  font-size: clamp(24px, 6vw, 42px); font-weight: 900;
+  color: #e07856; letter-spacing: 0.06em;
+  opacity: 0; transform: translateY(20px);
+}
+.close-tagline {
+  font-size: clamp(16px, 4vw, 24px); font-weight: 600;
+  color: #2c4a5c; text-align: center;
+  opacity: 0; transform: translateY(15px);
+}
+.close-tagline span { color: #e07856; }
+.close-tagline-ar {
+  font-size: clamp(14px, 3.5vw, 20px); font-weight: 700;
+  color: rgba(224,120,86,0.7); direction: rtl; font-family: 'Almarai', sans-serif;
+  margin-top: -0.5vh; opacity: 0; transform: translateY(10px);
+}
+.close-badges {
+  display: flex; gap: 4vw; margin-top: 1.5vh;
+  opacity: 0; transform: translateY(10px);
+}
+.close-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(9px, 2.2vw, 12px); color: #6a8090; font-weight: 500;
+  text-align: center; line-height: 1.3;
+}
+.close-badge-icon {
+  width: 10vw; height: 10vw; max-width: 50px; max-height: 50px;
+  border-radius: 50%; background: rgba(224,120,86,0.06);
+  border: 1.5px solid rgba(224,120,86,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(18px, 4.5vw, 26px);
+}
+.close-divider {
+  width: 40vw; max-width: 180px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(224,120,86,0.25), transparent);
+  margin: 0.5vh 0; opacity: 0;
+}
+
+/* ─── Progress Bar ─── */
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+  z-index: 50;
+}
+
+/* ─── Floating Dots ─── */
+.dots { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.dot {
+  position: absolute; border-radius: 50%;
+  background: rgba(224,120,86,0.1);
+  animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.4; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+/* ─── Confetti ─── */
+.confetti-piece {
+  position: absolute; z-index: 30; pointer-events: none; border-radius: 2px;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* ─── Pulse glow for logo ─── */
+@keyframes logoGlow {
+  0%, 100% { filter: drop-shadow(0 6px 20px rgba(224,120,86,0.15)); }
+  50% { filter: drop-shadow(0 6px 30px rgba(224,120,86,0.3)); }
+}
+@keyframes subtleBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+</style>
+</head>
+<body>
+
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="dots" id="dots"></div>
+  <div id="confettiContainer"></div>
+
+  <!-- Mode Selector -->
+  <div class="mode-select" id="modeSelect">
+    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Brand Video</div>
+    <div class="mode-subtitle">Meet <span>ORLO</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startVideo('tiktok')">
+        <span class="btn-icon">&#9835;</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startVideo('insta')">
+        <span class="btn-icon">&#9678;</span> Instagram
+      </button>
+    </div>
+  </div>
+
+  <!-- Scene 1: We're ORLO Store -->
+  <div class="scene scene-intro" id="scene1">
+    <img src="logo.png" class="intro-logo" id="introLogo" alt="ORLO">
+    <div class="intro-line" id="introLine"></div>
+    <div class="intro-text" id="introText">We're <span>ORLO</span> Store</div>
+    <div class="intro-text-ar" id="introTextAr">نحن متجر أورلو</div>
+  </div>
+
+  <!-- Scene 2: A Dubai-based online store -->
+  <div class="scene scene-store" id="scene2">
+    <div class="store-card" id="storeCard">
+      <div class="store-mockup">
+        <div class="store-mockup-bar">
+          <div class="store-dot"></div>
+          <div class="store-dot"></div>
+          <div class="store-dot"></div>
+          <div class="store-mockup-url">orlostore.com</div>
+        </div>
+        <img src="logo.png" class="store-mockup-logo" alt="ORLO">
+        <div class="store-mockup-grid">
+          <div class="store-mockup-item"></div>
+          <div class="store-mockup-item"></div>
+          <div class="store-mockup-item"></div>
+          <div class="store-mockup-item"></div>
+          <div class="store-mockup-item"></div>
+          <div class="store-mockup-item"></div>
+        </div>
+      </div>
+      <div class="store-card-bottom">
+        <div class="store-card-flag">&#127462;&#127466;</div>
+        <div class="store-card-text">A <span>Dubai-based</span> online store</div>
+      </div>
+    </div>
+    <div class="store-text" id="storeText">A <span>Dubai-based</span> online store</div>
+    <div class="store-text-ar" id="storeTextAr">متجر إلكتروني من دبي</div>
+  </div>
+
+  <!-- Scene 3: Unique finds -->
+  <div class="scene scene-finds" id="scene3">
+    <div class="finds-row" id="findsRow">
+      <div class="find-card" id="findCard1">
+        <div class="find-card-icon"><img src="https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj" alt="Dangling Buddies"></div>
+        <div class="find-card-heart">&#10084;</div>
+      </div>
+      <div class="find-card" id="findCard2">
+        <div class="find-card-icon"><img src="https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG" alt="FlexiWrap"></div>
+        <div class="find-card-heart">&#10084;</div>
+      </div>
+      <div class="find-card" id="findCard3">
+        <div class="find-card-icon"><img src="https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl" alt="ProDesk Kit"></div>
+        <div class="find-card-heart">&#10084;</div>
+      </div>
+    </div>
+    <div class="finds-text" id="findsText">Unique finds you <span>actually</span><br>want to keep</div>
+    <div class="finds-text-ar" id="findsTextAr">منتجات فريدة تستاهل تقتنيها</div>
+  </div>
+
+  <!-- Scene 4: CTA closeout -->
+  <div class="scene scene-close" id="scene4">
+    <img src="logo.png" class="close-logo" id="closeLogo" alt="ORLO">
+    <div class="close-url" id="closeUrl">orlostore.com</div>
+    <div class="close-tagline" id="closeTagline">Go have a <span>look</span></div>
+    <div class="close-tagline-ar" id="closeTaglineAr">زوروا متجرنا</div>
+    <div class="close-divider" id="closeDivider"></div>
+    <div class="close-badges" id="closeBadges">
+      <div class="close-badge">
+        <div class="close-badge-icon">&#128274;</div>
+        Secure<br>Checkout
+        <span style="font-family:'Almarai',sans-serif; font-size:0.85em">دفع آمن</span>
+      </div>
+      <div class="close-badge">
+        <div class="close-badge-icon">&#128666;</div>
+        Free Delivery<br>Above 75 AED
+        <span style="font-family:'Almarai',sans-serif; font-size:0.85em">توصيل مجاني</span>
+      </div>
+      <div class="close-badge">
+        <div class="close-badge-icon">&#127462;&#127466;</div>
+        Licensed<br>UAE Store
+        <span style="font-family:'Almarai',sans-serif; font-size:0.85em">متجر مرخّص</span>
+      </div>
+      <div class="close-badge">
+        <div class="close-badge-icon">&#9989;</div>
+        Premium<br>Quality
+        <span style="font-family:'Almarai',sans-serif; font-size:0.85em">جودة عالية</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function anim(el, props, ms, ease) {
+  ease = ease || 'ease';
+  return new Promise(function(resolve) {
+    el.style.transition = 'all ' + ms + 'ms ' + ease;
+    requestAnimationFrame(function() {
+      Object.assign(el.style, props);
+      setTimeout(resolve, ms);
+    });
+  });
+}
+function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+function createDots() {
+  var c = document.getElementById('dots');
+  for (var i = 0; i < 15; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDuration = (6 + Math.random() * 8) + 's';
+    d.style.animationDelay = Math.random() * 10 + 's';
+    var size = 3 + Math.random() * 5;
+    d.style.width = size + 'px';
+    d.style.height = size + 'px';
+    c.appendChild(d);
+  }
+}
+
+function burstConfetti() {
+  var container = document.getElementById('confettiContainer');
+  var colors = ['#e07856', '#f4a261', '#2c4a5c', '#28a745', '#ffc107'];
+  for (var i = 0; i < 30; i++) {
+    var piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = (10 + Math.random() * 80) + '%';
+    piece.style.top = '-5%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.width = (5 + Math.random() * 8) + 'px';
+    piece.style.height = (5 + Math.random() * 8) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.animation = 'confettiFall ' + (1.5 + Math.random() * 2) + 's ease-out ' + (Math.random() * 0.5) + 's forwards';
+    container.appendChild(piece);
+  }
+}
+
+// Preload images
+(function() {
+  var urls = [
+    'https://lh3.googleusercontent.com/d/1qR0UfZ_kQh8CckPEVgvAwmxYSXiJOWmj',
+    'https://lh3.googleusercontent.com/d/1x0nZ9sqFPlw36mhBRbrwr0YM4Mx4T5MG',
+    'https://lh3.googleusercontent.com/d/1sBsD78oWUf6U1DYxCPbO1pxM3MPX0tLl'
+  ];
+  urls.forEach(function(u) { var img = new Image(); img.src = u; });
+})();
+
+var T = {
+  tiktok: { intro: 2000, store: 2000, finds: 2000, close: 2200 },
+  insta:  { intro: 2600, store: 2600, finds: 2600, close: 3000 }
+};
+
+async function startVideo(mode) {
+  var t = T[mode];
+  var totalDuration = t.intro + t.store + t.finds + t.close + 1500;
+
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  var bar = document.getElementById('progressBar');
+  var startTime = Date.now();
+  var progressTick = setInterval(function() {
+    var pct = Math.min(((Date.now() - startTime) / totalDuration) * 100, 100);
+    bar.style.width = pct + '%';
+    bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(progressTick);
+  }, 80);
+
+  // ── SCENE 1 — We're ORLO Store ──
+  var s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+
+  // Logo scales in with a satisfying bounce
+  await anim(document.getElementById('introLogo'),
+    { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  // Accent line sweeps open
+  await anim(document.getElementById('introLine'),
+    { opacity: '1', transform: 'scaleX(1)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  // Text rises in
+  await anim(document.getElementById('introText'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('introTextAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
+
+  // Logo subtle glow pulse
+  document.getElementById('introLogo').style.animation = 'logoGlow 1.5s ease infinite';
+
+  await wait(Math.max(t.intro - 1850, 100));
+  await anim(s1, { opacity: '0' }, 300);
+
+  // ── SCENE 2 — Dubai-based online store ──
+  var s2 = document.getElementById('scene2');
+  s2.style.opacity = '1';
+
+  // Store card lifts into frame
+  await anim(document.getElementById('storeCard'),
+    { opacity: '1', transform: 'translateY(0) scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await anim(document.getElementById('storeText'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('storeTextAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
+
+  await wait(Math.max(t.store - 1700, 100));
+  await anim(s2, { opacity: '0' }, 300);
+
+  // ── SCENE 3 — Unique finds ──
+  var s3 = document.getElementById('scene3');
+  s3.style.opacity = '1';
+
+  // Cards stagger in from below
+  var row = document.getElementById('findsRow');
+  await anim(row, { opacity: '1' }, 200);
+
+  var cards = ['findCard1', 'findCard2', 'findCard3'];
+  for (var i = 0; i < cards.length; i++) {
+    anim(document.getElementById(cards[i]),
+      { transform: 'translateY(0)' }, 450, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+    await wait(120);
+  }
+  await wait(200);
+
+  await anim(document.getElementById('findsText'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('findsTextAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350);
+
+  await wait(Math.max(t.finds - 1800, 100));
+  await anim(s3, { opacity: '0' }, 300);
+
+  // ── SCENE 4 — CTA closeout ──
+  var s4 = document.getElementById('scene4');
+  s4.style.opacity = '1';
+  burstConfetti();
+
+  // Logo pops in
+  await anim(document.getElementById('closeLogo'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  // URL punches in
+  await anim(document.getElementById('closeUrl'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  // Tagline
+  await anim(document.getElementById('closeTagline'),
+    { opacity: '1', transform: 'translateY(0)' }, 400);
+  await anim(document.getElementById('closeTaglineAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 300);
+
+  // Divider line
+  await anim(document.getElementById('closeDivider'),
+    { opacity: '1' }, 200);
+
+  // Trust badges fade in
+  await anim(document.getElementById('closeBadges'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+
+  // Gentle bounce on logo
+  document.getElementById('closeLogo').style.animation = 'subtleBounce 2s ease infinite';
+
+  clearInterval(progressTick);
+  bar.style.width = '100%';
+  bar.style.transition = 'width 300ms linear';
+}
+
+createDots();
+</script>
+</body>
+</html>
