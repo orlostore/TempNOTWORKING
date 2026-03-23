@@ -118,7 +118,7 @@ html, body {
 .scene-open { background: #ffffff !important; }
 .box-open-anim {
   width: 50vw; height: 50vw; max-width: 300px; max-height: 300px;
-  position: relative;
+  position: relative; overflow: visible;
 }
 .lid-top {
   position: absolute; top: 0; left: 5%; right: 5%;
@@ -206,11 +206,12 @@ html, body {
   width: 100%; height: 100%; object-fit: cover;
 }
 .box-product-img {
-  width: 60%; height: 60%; border-radius: 2vw; overflow: hidden;
-  opacity: 0; transform: translateY(20px); z-index: 4;
+  position: absolute; top: -30%; left: 15%; width: 70%;
+  opacity: 0; transform: translateY(40px); z-index: 5;
 }
 .box-product-img img {
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: auto; object-fit: contain;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.15));
 }
 .fan-item-name {
   font-size: clamp(11px, 2.8vw, 15px); font-weight: 700; color: #2c4a5c;
@@ -384,8 +385,8 @@ html, body {
       <div class="lid-top" id="lidTop"></div>
       <div class="box-body" id="boxBody">
         <div class="box-glow" id="boxGlow"></div>
-        <div class="box-product-img" id="boxProduct"><img src="https://lh3.googleusercontent.com/d/1no16D1IhGLnZSJtryh4BGjr2lvoNYlQb" alt="Dangling Buddy Strawberry"></div>
       </div>
+      <div class="box-product-img" id="boxProduct"><img src="https://lh3.googleusercontent.com/d/1no16D1IhGLnZSJtryh4BGjr2lvoNYlQb" alt="Dangling Buddy Strawberry"></div>
     </div>
     <div class="open-text" id="openText">What's <span>inside?</span></div>
     <div class="open-text-ar" id="openTextAr">شو بالداخل؟</div>
