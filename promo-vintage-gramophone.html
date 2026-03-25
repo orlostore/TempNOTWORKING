@@ -106,9 +106,8 @@ html, body {
   margin-top: -2vh;
 }
 .product-img {
-  width: 100%; height: 100%; object-fit: contain;
+  width: 100%; height: 100%; object-fit: cover; border-radius: 12px;
   opacity: 0; transform: scale(0.75) translateY(20px);
-  mix-blend-mode: multiply;
 }
 @keyframes productReveal {
   0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
@@ -278,7 +277,7 @@ html, body {
   <!-- Scene 2: Product Showcase — close-up reveal, no text -->
   <div class="scene scene-product" id="scene2">
     <div class="product-stage">
-      <img class="product-img" id="productImg" src="https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA" alt="Miniature Vintage Gramophone">
+      <img class="product-img" id="productImg" src="https://lh3.googleusercontent.com/d/1ka9M9rRgXLP3MS-46vMX_2NJJKZvrYRW" alt="Miniature Vintage Gramophone">
     </div>
   </div>
 
@@ -357,7 +356,7 @@ var T = {
 
 // Preload images
 (function() {
-  var urls = ['https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA', 'https://lh3.googleusercontent.com/d/1GK-0zparAlJTmJiC0YPQKvwhfTWrRo0u'];
+  var urls = ['https://lh3.googleusercontent.com/d/1ka9M9rRgXLP3MS-46vMX_2NJJKZvrYRW', 'https://lh3.googleusercontent.com/d/1GK-0zparAlJTmJiC0YPQKvwhfTWrRo0u', 'https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA'];
   urls.forEach(function(u) { var img = new Image(); img.src = u; });
 })();
 
