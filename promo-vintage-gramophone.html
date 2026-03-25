@@ -84,8 +84,24 @@ html, body {
   opacity: 0; transform: scale(0.5);
 }
 .intro-glow img { width: 65%; }
+.intro-line {
+  width: 12vw; height: 2px; background: #e07856; margin-top: 3vh;
+  opacity: 0; transform: scaleX(0);
+}
+.intro-en {
+  margin-top: 2.5vh;
+  font-size: clamp(15px, 3.2vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.35em; text-transform: uppercase;
+  opacity: 0; transform: translateY(15px);
+}
+.intro-ar {
+  margin-top: 1.5vh;
+  font-size: clamp(16px, 3.5vw, 24px); font-weight: 500;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(15px);
+}
 
-/* ─── Scene 2: Product Showcase (close-up reveal) ─── */
+/* ─── Scene 2: Product Showcase ─── */
 .scene-product { background: #ffffff !important; }
 .product-header {
   position: absolute; top: 5vh;
@@ -125,6 +141,14 @@ html, body {
   opacity: 1;
   animation: productFloat 2.5s ease-in-out infinite;
 }
+.product-price {
+  position: absolute; bottom: 14vh;
+  background: #e07856; color: #fff;
+  padding: 1.5vh 6vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
+  box-shadow: 0 4px 20px rgba(224,120,86,0.4);
+  opacity: 0; transform: scale(0.7);
+}
 
 /* ─── Scene 3: Lifestyle ─── */
 .scene-lifestyle { background: #ffffff !important; }
@@ -147,43 +171,7 @@ html, body {
   direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
 }
 
-/* ─── Scene 4: Detail + Price ─── */
-.scene-detail { background: #ffffff !important; }
-.detail-header {
-  position: absolute; top: 5vh;
-  text-align: center; z-index: 5;
-}
-.detail-header-en {
-  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
-  opacity: 0; transform: translateY(-15px);
-}
-.detail-stage {
-  position: relative;
-  width: 65vw; height: 65vw; max-width: 400px; max-height: 400px;
-  margin-top: -2vh;
-}
-.detail-img {
-  width: 100%; height: 100%; object-fit: contain;
-  opacity: 0; transform: scale(0.75) translateY(20px);
-  mix-blend-mode: multiply;
-}
-.detail-img.reveal {
-  animation: productReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-.detail-img.float {
-  opacity: 1;
-  animation: productFloat 2.5s ease-in-out infinite;
-}
-.detail-price {
-  position: absolute; bottom: 14vh;
-  background: #e07856; color: #fff;
-  padding: 1.5vh 6vw; border-radius: 50px;
-  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
-  box-shadow: 0 4px 20px rgba(224,120,86,0.4);
-  opacity: 0; transform: scale(0.7);
-}
-
-/* ─── Scene 5: CTA Outro ─── */
+/* ─── Scene 4: CTA Outro ─── */
 .scene-cta { background: #ffffff !important; gap: 2.5vh; }
 .cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
 .cta-head {
@@ -269,16 +257,24 @@ html, body {
     </div>
   </div>
 
-  <!-- Scene 1: Logo Intro — clean, no text -->
+  <!-- Scene 1: Logo + orange line + "A Piece of History" -->
   <div class="scene scene-intro" id="scene1">
     <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
+    <div class="intro-line" id="introLine"></div>
+    <div class="intro-en" id="introEn">A Piece of History</div>
+    <div class="intro-ar" id="introAr">قطعة من التاريخ</div>
   </div>
 
-  <!-- Scene 2: Product Showcase — close-up reveal, no text -->
+  <!-- Scene 2: Lifestyle image + header + price -->
   <div class="scene scene-product" id="scene2">
+    <div class="product-header">
+      <div class="product-header-en" id="headerEn">Miniature Vintage Gramophone</div>
+      <div class="product-header-ar" id="headerAr">غرامافون مصغّر كلاسيكي</div>
+    </div>
     <div class="product-stage">
       <img class="product-img" id="productImg" src="https://lh3.googleusercontent.com/d/1ka9M9rRgXLP3MS-46vMX_2NJJKZvrYRW" alt="Miniature Vintage Gramophone">
     </div>
+    <div class="product-price" id="productPrice">61 AED</div>
   </div>
 
   <!-- Scene 3: Lifestyle — lived-in setting -->
@@ -291,19 +287,8 @@ html, body {
     </div>
   </div>
 
-  <!-- Scene 4: Detail + Price -->
-  <div class="scene scene-detail" id="scene4">
-    <div class="detail-header">
-      <div class="detail-header-en" id="detailHeaderEn">Miniature Vintage Gramophone — AED 61 🛍️</div>
-    </div>
-    <div class="detail-stage">
-      <img class="detail-img" id="detailImg" src="https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA" alt="Miniature Vintage Gramophone">
-    </div>
-    <div class="detail-price" id="detailPrice">61 AED</div>
-  </div>
-
-  <!-- Scene 5: CTA Outro -->
-  <div class="scene scene-cta" id="scene5">
+  <!-- Scene 4: CTA Outro -->
+  <div class="scene scene-cta" id="scene4">
     <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
     <div class="cta-head" id="ctaHead">Music From<br>Another <span>Era</span></div>
     <div class="cta-head-ar" id="ctaHeadAr">موسيقى من زمن آخر</div>
@@ -350,13 +335,13 @@ function createDots() {
 
 
 var T = {
-  tiktok: { intro: 1000, product: 1800, lifestyle: 1800, detail: 1800, cta: 2400 },
-  insta:  { intro: 1200, product: 2200, lifestyle: 2200, detail: 2200, cta: 3000 }
+  tiktok: { intro: 1800, product: 3300, lifestyle: 2000, cta: 2800 },
+  insta:  { intro: 2500, product: 4000, lifestyle: 2800, cta: 3500 }
 };
 
 // Preload images
 (function() {
-  var urls = ['https://lh3.googleusercontent.com/d/1ka9M9rRgXLP3MS-46vMX_2NJJKZvrYRW', 'https://lh3.googleusercontent.com/d/1GK-0zparAlJTmJiC0YPQKvwhfTWrRo0u', 'https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA'];
+  var urls = ['https://lh3.googleusercontent.com/d/1ka9M9rRgXLP3MS-46vMX_2NJJKZvrYRW', 'https://lh3.googleusercontent.com/d/1GK-0zparAlJTmJiC0YPQKvwhfTWrRo0u'];
   urls.forEach(function(u) { var img = new Image(); img.src = u; });
 })();
 
@@ -365,7 +350,7 @@ var T = {
 // ═══════════════════════════════════════════
 async function startPromo(mode) {
   var t = T[mode];
-  var totalDuration = t.intro + t.product + t.lifestyle + t.detail + t.cta + 2000;
+  var totalDuration = t.intro + t.product + t.lifestyle + t.cta + 2000;
 
   // Hide mode selector
   document.getElementById('modeSelect').classList.add('gone');
@@ -385,18 +370,33 @@ async function startPromo(mode) {
   s1.style.opacity = '1';
   await anim(document.getElementById('introGlow'),
     { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
-  await wait(t.intro - 600);
+  await anim(document.getElementById('introLine'),
+    { opacity: '1', transform: 'scaleX(1)' }, 400);
+  await wait(150);
+  await anim(document.getElementById('introEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('introAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
-  // ── SCENE 2 — Product Showcase (close-up reveal) ──
+  // ── SCENE 2 — Product Showcase (lifestyle image + header + price) ──
   var s2 = document.getElementById('scene2');
   await anim(s2, { opacity: '1' }, 300);
+  await anim(document.getElementById('headerEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('headerAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(200);
 
   var productImg = document.getElementById('productImg');
   productImg.classList.add('reveal');
   await wait(800);
   productImg.classList.remove('reveal');
   productImg.classList.add('float');
+
+  anim(document.getElementById('productPrice'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
 
   await wait(t.product - 1300);
   await anim(s2, { opacity: '0' }, 400);
@@ -412,28 +412,9 @@ async function startPromo(mode) {
   await wait(t.lifestyle - 1750);
   await anim(s3, { opacity: '0' }, 400);
 
-  // ── SCENE 4 — Detail + Price ──
+  // ── SCENE 4 — CTA ──
   var s4 = document.getElementById('scene4');
   await anim(s4, { opacity: '1' }, 300);
-  await anim(document.getElementById('detailHeaderEn'),
-    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(200);
-
-  var detailImg = document.getElementById('detailImg');
-  detailImg.classList.add('reveal');
-  await wait(800);
-  detailImg.classList.remove('reveal');
-  detailImg.classList.add('float');
-
-  anim(document.getElementById('detailPrice'),
-    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
-
-  await wait(t.detail - 1300);
-  await anim(s4, { opacity: '0' }, 400);
-
-  // ── SCENE 5 — CTA ──
-  var s5 = document.getElementById('scene5');
-  await anim(s5, { opacity: '1' }, 300);
   await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
   await anim(document.getElementById('ctaHead'),
     { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
