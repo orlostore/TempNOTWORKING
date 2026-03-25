@@ -85,22 +85,46 @@ html, body {
 }
 .intro-glow img { width: 65%; }
 
-/* ─── Scene 2: Close-up Reveal ─── */
-.scene-closeup { background: #ffffff !important; }
-.closeup-frame {
-  width: 92vw; max-width: 460px;
-  height: 70vh; max-height: 700px;
-  border-radius: 4vw;
-  overflow: hidden;
-  opacity: 0; transform: scale(1.05);
+/* ─── Scene 2: Product Showcase (close-up reveal) ─── */
+.scene-product { background: #ffffff !important; }
+.product-header {
+  position: absolute; top: 5vh;
+  text-align: center; z-index: 5;
 }
-.closeup-frame img {
-  width: 100%; height: 100%; object-fit: cover;
-  transform: scale(1.4);
-  transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+.product-header-en {
+  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
 }
-.closeup-frame img.pulled-back {
-  transform: scale(1);
+.product-header-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(-15px);
+}
+.product-stage {
+  position: relative;
+  width: 65vw; height: 65vw; max-width: 400px; max-height: 400px;
+  margin-top: -2vh;
+}
+.product-img {
+  width: 100%; height: 100%; object-fit: contain;
+  opacity: 0; transform: scale(0.75) translateY(20px);
+  mix-blend-mode: multiply;
+}
+@keyframes productReveal {
+  0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
+  60%  { opacity: 1; transform: scale(1.03) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes productFloat {
+  0%, 100% { transform: translateY(-4px); }
+  50%      { transform: translateY(4px); }
+}
+.product-img.reveal {
+  animation: productReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.product-img.float {
+  opacity: 1;
+  animation: productFloat 2.5s ease-in-out infinite;
 }
 
 /* ─── Scene 3: Lifestyle ─── */
@@ -115,73 +139,90 @@ html, body {
 }
 .lifestyle-frame img { width: 100%; height: 100%; object-fit: cover; }
 .life-label {
-  margin-top: 3vh; text-align: center;
-  padding: 0 6vw;
+  margin-top: 4vh; text-align: center;
   opacity: 0; transform: translateY(15px);
 }
-.life-en {
-  font-size: clamp(16px, 4vw, 26px); font-weight: 700; color: #2c4a5c;
-  line-height: 1.4;
+.life-en { font-size: clamp(18px, 4.5vw, 28px); font-weight: 700; color: #2c4a5c; }
+.life-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 500; color: #e07856;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
 }
 
-/* ─── Scene 4: Detail Rotate ─── */
+/* ─── Scene 4: Detail + Price ─── */
 .scene-detail { background: #ffffff !important; }
+.detail-header {
+  position: absolute; top: 5vh;
+  text-align: center; z-index: 5;
+}
+.detail-header-en {
+  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
+}
 .detail-stage {
   position: relative;
-  width: 70vw; height: 70vw; max-width: 420px; max-height: 420px;
+  width: 65vw; height: 65vw; max-width: 400px; max-height: 400px;
+  margin-top: -2vh;
 }
 .detail-img {
   width: 100%; height: 100%; object-fit: contain;
-  opacity: 0; transform: scale(0.8);
+  opacity: 0; transform: scale(0.75) translateY(20px);
   mix-blend-mode: multiply;
 }
-@keyframes slowSpin {
-  0%   { transform: scale(1) rotateY(0deg); }
-  100% { transform: scale(1) rotateY(15deg); }
+.detail-img.reveal {
+  animation: productReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
-.detail-img.spin {
+.detail-img.float {
   opacity: 1;
-  animation: slowSpin 2s ease-in-out forwards;
-}
-.detail-label {
-  margin-top: 3vh; text-align: center;
-  padding: 0 6vw;
-  opacity: 0; transform: translateY(15px);
-}
-.detail-en {
-  font-size: clamp(15px, 3.8vw, 24px); font-weight: 700; color: #2c4a5c;
-  line-height: 1.4;
+  animation: productFloat 2.5s ease-in-out infinite;
 }
 .detail-price {
-  display: inline-block; margin-top: 1.5vh;
+  position: absolute; bottom: 14vh;
   background: #e07856; color: #fff;
-  padding: 1.2vh 5vw; border-radius: 50px;
+  padding: 1.5vh 6vw; border-radius: 50px;
   font-size: clamp(16px, 4vw, 24px); font-weight: 800;
   box-shadow: 0 4px 20px rgba(224,120,86,0.4);
+  opacity: 0; transform: scale(0.7);
 }
 
 /* ─── Scene 5: CTA Outro ─── */
 .scene-cta { background: #ffffff !important; gap: 2.5vh; }
-.cta-lifestyle {
-  width: 88vw; max-width: 440px;
-  height: 45vh; max-height: 500px;
-  border-radius: 4vw;
-  overflow: hidden;
-  box-shadow: 0 15px 50px rgba(44,74,92,0.12), 0 0 0 1px rgba(44,74,92,0.06);
-  opacity: 0; transform: scale(0.9);
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
 }
-.cta-lifestyle img { width: 100%; height: 100%; object-fit: cover; }
-.cta-text {
-  text-align: center; padding: 0 6vw;
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; text-align: center;
+  font-family: 'Almarai', sans-serif; margin-top: -1vh;
+  opacity: 0; transform: translateY(20px);
+}
+.cta-box {
+  background: rgba(224,120,86,0.08); border: 2px solid rgba(224,120,86,0.2);
+  border-radius: 4vw; padding: 3vh 8vw; text-align: center;
+  opacity: 0; transform: scale(0.85);
+}
+.cta-price {
+  font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856; line-height: 1;
+}
+.cta-price sub { font-size: 0.4em; font-weight: 400; color: #7a8f9c; vertical-align: baseline; }
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
   opacity: 0; transform: translateY(15px);
 }
-.cta-url {
-  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800;
-  color: #e07856; letter-spacing: 0.05em;
+.cta-badges { display: flex; gap: 5vw; opacity: 0; }
+.cta-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(10px, 2.5vw, 14px); color: #6a8090; font-weight: 500;
 }
-.cta-delivery {
-  font-size: clamp(13px, 3.2vw, 18px); font-weight: 500;
-  color: #6a8090; margin-top: 0.8vh;
+.cta-badge-icon {
+  width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
+  border-radius: 50%; background: rgba(224,120,86,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
 }
 
 /* ─── Progress Bar ─── */
@@ -229,19 +270,19 @@ html, body {
     </div>
   </div>
 
-  <!-- Scene 1: Logo Intro (0-1s) — Clean logo, no text -->
+  <!-- Scene 1: Logo Intro — clean, no text -->
   <div class="scene scene-intro" id="scene1">
     <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
   </div>
 
-  <!-- Scene 2: Close-up Slow Reveal (1-3s) — No text -->
-  <div class="scene scene-closeup" id="scene2">
-    <div class="closeup-frame" id="closeupFrame">
-      <img id="closeupImg" src="https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA" alt="Miniature Vintage Gramophone">
+  <!-- Scene 2: Product Showcase — close-up reveal, no text -->
+  <div class="scene scene-product" id="scene2">
+    <div class="product-stage">
+      <img class="product-img" id="productImg" src="https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA" alt="Miniature Vintage Gramophone">
     </div>
   </div>
 
-  <!-- Scene 3: Lifestyle (3-5s) — Lived-in setting with text -->
+  <!-- Scene 3: Lifestyle — lived-in setting -->
   <div class="scene scene-lifestyle" id="scene3">
     <div class="lifestyle-frame" id="lifeFrame">
       <img id="lifeImg" src="https://lh3.googleusercontent.com/d/1GK-0zparAlJTmJiC0YPQKvwhfTWrRo0u" alt="Miniature Vintage Gramophone">
@@ -251,24 +292,30 @@ html, body {
     </div>
   </div>
 
-  <!-- Scene 4: Detail Rotate (5-7s) — Product + price -->
+  <!-- Scene 4: Detail + Price -->
   <div class="scene scene-detail" id="scene4">
+    <div class="detail-header">
+      <div class="detail-header-en" id="detailHeaderEn">Miniature Vintage Gramophone — AED 61 🛍️</div>
+    </div>
     <div class="detail-stage">
       <img class="detail-img" id="detailImg" src="https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA" alt="Miniature Vintage Gramophone">
     </div>
-    <div class="detail-label" id="detailLabel">
-      <div class="detail-en">Miniature Vintage Gramophone — AED 61 🛍️</div>
-    </div>
+    <div class="detail-price" id="detailPrice">61 AED</div>
   </div>
 
-  <!-- Scene 5: CTA Outro (7-9s) — Warm lifestyle + URL -->
+  <!-- Scene 5: CTA Outro -->
   <div class="scene scene-cta" id="scene5">
-    <div class="cta-lifestyle" id="ctaLifestyle">
-      <img src="https://lh3.googleusercontent.com/d/1GK-0zparAlJTmJiC0YPQKvwhfTWrRo0u" alt="Miniature Vintage Gramophone">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Music From<br>Another <span>Era</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">موسيقى من زمن آخر</div>
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-price">61 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
     </div>
-    <div class="cta-text" id="ctaText">
-      <div class="cta-url">orlostore.com</div>
-      <div class="cta-delivery">delivered across the UAE 🚚</div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-badges" id="ctaBadges">
+      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Delivered Across the UAE<br><span style="font-family:'Almarai',sans-serif">توصيل في جميع أنحاء الإمارات</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🎨</div>Handmade<br><span style="font-family:'Almarai',sans-serif">صناعة يدوية</span></div>
     </div>
   </div>
 </div>
@@ -302,17 +349,15 @@ function createDots() {
   }
 }
 
+
 var T = {
-  tiktok: { s1: 1000, s2: 2000, s3: 2000, s4: 2000, s5: 2000 },
-  insta:  { s1: 1000, s2: 2000, s3: 2000, s4: 2000, s5: 2000 }
+  tiktok: { intro: 1000, product: 1800, lifestyle: 1800, detail: 1800, cta: 2400 },
+  insta:  { intro: 1200, product: 2200, lifestyle: 2200, detail: 2200, cta: 3000 }
 };
 
 // Preload images
 (function() {
-  var urls = [
-    'https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA',
-    'https://lh3.googleusercontent.com/d/1GK-0zparAlJTmJiC0YPQKvwhfTWrRo0u'
-  ];
+  var urls = ['https://lh3.googleusercontent.com/d/1djWzrv98v-ory6pxJ88iyACmlwEt74EA', 'https://lh3.googleusercontent.com/d/1GK-0zparAlJTmJiC0YPQKvwhfTWrRo0u'];
   urls.forEach(function(u) { var img = new Image(); img.src = u; });
 })();
 
@@ -321,7 +366,7 @@ var T = {
 // ═══════════════════════════════════════════
 async function startPromo(mode) {
   var t = T[mode];
-  var totalDuration = t.s1 + t.s2 + t.s3 + t.s4 + t.s5 + 2000;
+  var totalDuration = t.intro + t.product + t.lifestyle + t.detail + t.cta + 2000;
 
   // Hide mode selector
   document.getElementById('modeSelect').classList.add('gone');
@@ -336,55 +381,72 @@ async function startPromo(mode) {
     if (pct >= 100) clearInterval(progressTick);
   }, 80);
 
-  // ── SCENE 1 — Logo (0-1s) ──
+  // ── SCENE 1 — Logo Intro ──
   var s1 = document.getElementById('scene1');
   s1.style.opacity = '1';
   await anim(document.getElementById('introGlow'),
     { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
-  await wait(t.s1 - 600);
-  await anim(s1, { opacity: '0' }, 300);
+  await wait(t.intro - 600);
+  await anim(s1, { opacity: '0' }, 400);
 
-  // ── SCENE 2 — Close-up Reveal (1-3s) ──
+  // ── SCENE 2 — Product Showcase (close-up reveal) ──
   var s2 = document.getElementById('scene2');
-  var closeupFrame = document.getElementById('closeupFrame');
-  var closeupImg = document.getElementById('closeupImg');
-  await anim(s2, { opacity: '1' }, 200);
-  await anim(closeupFrame, { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  closeupImg.classList.add('pulled-back');
-  await wait(t.s2 - 600);
+  await anim(s2, { opacity: '1' }, 300);
+
+  var productImg = document.getElementById('productImg');
+  productImg.classList.add('reveal');
+  await wait(800);
+  productImg.classList.remove('reveal');
+  productImg.classList.add('float');
+
+  await wait(t.product - 1300);
   await anim(s2, { opacity: '0' }, 400);
 
-  // ── SCENE 3 — Lifestyle (3-5s) ──
+  // ── SCENE 3 — Lifestyle ──
   var s3 = document.getElementById('scene3');
   await anim(s3, { opacity: '1' }, 300);
   await anim(document.getElementById('lifeFrame'),
     { opacity: '1', transform: 'scale(1)' }, 800, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(300);
+  await wait(350);
   await anim(document.getElementById('lifeLabel'),
     { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(t.s3 - 1700);
+  await wait(t.lifestyle - 1750);
   await anim(s3, { opacity: '0' }, 400);
 
-  // ── SCENE 4 — Detail + Price (5-7s) ──
+  // ── SCENE 4 — Detail + Price ──
   var s4 = document.getElementById('scene4');
-  var detailImg = document.getElementById('detailImg');
   await anim(s4, { opacity: '1' }, 300);
-  await anim(detailImg, { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  detailImg.classList.add('spin');
-  await wait(400);
-  await anim(document.getElementById('detailLabel'),
-    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(t.s4 - 1500);
+  await anim(document.getElementById('detailHeaderEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(200);
+
+  var detailImg = document.getElementById('detailImg');
+  detailImg.classList.add('reveal');
+  await wait(800);
+  detailImg.classList.remove('reveal');
+  detailImg.classList.add('float');
+
+  anim(document.getElementById('detailPrice'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await wait(t.detail - 1300);
   await anim(s4, { opacity: '0' }, 400);
 
-  // ── SCENE 5 — CTA (7-9s) ──
+  // ── SCENE 5 — CTA ──
   var s5 = document.getElementById('scene5');
   await anim(s5, { opacity: '1' }, 300);
-  await anim(document.getElementById('ctaLifestyle'),
-    { opacity: '1', transform: 'scale(1)' }, 800, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await wait(300);
-  await anim(document.getElementById('ctaText'),
+  await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
+  await anim(document.getElementById('ctaHead'),
     { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaHeadAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(150);
+  await anim(document.getElementById('ctaBox'),
+    { opacity: '1', transform: 'scale(1)' }, 550, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(200);
+  await anim(document.getElementById('ctaUrl'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaBadges'), { opacity: '1' }, 500);
 
   clearInterval(progressTick);
   bar.style.width = '100%';
