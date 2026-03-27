@@ -140,6 +140,18 @@ html, body {
   color: #2c4a5c; letter-spacing: 0.06em;
   opacity: 0; transform: translateY(15px);
 }
+.outro-badges { display: flex; gap: 5vw; margin-top: 1vh; opacity: 0; }
+.outro-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(10px, 2.5vw, 14px); color: #6a8090; font-weight: 500;
+  text-align: center;
+}
+.outro-badge-icon {
+  width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
+  border-radius: 50%; background: rgba(224,120,86,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
+}
 
 /* ─── Progress Bar ─── */
 .progress-bar {
@@ -210,6 +222,11 @@ html, body {
   <div class="scene scene-outro" id="scene3">
     <img src="logo.png" class="outro-logo" id="outroLogo" alt="ORLO">
     <div class="outro-url" id="outroUrl">orlostore.com</div>
+    <div class="outro-badges" id="outroBadges">
+      <div class="outro-badge"><div class="outro-badge-icon">🔒</div>Secure Payment<br><span style="font-family:'Almarai',sans-serif">دفع آمن</span></div>
+      <div class="outro-badge"><div class="outro-badge-icon">🚚</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق ٧٥ درهم</span></div>
+      <div class="outro-badge"><div class="outro-badge-icon">🇦🇪</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
+    </div>
   </div>
 </div>
 
@@ -319,6 +336,7 @@ async function startPromo(mode) {
   await wait(200);
   await anim(document.getElementById('outroUrl'),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('outroBadges'), { opacity: '1' }, 500);
 
   clearInterval(progressTick);
   bar.style.width = '100%';
