@@ -189,7 +189,8 @@ html, body {
   <!-- Scene 1: Slow close-up push into the rotary dial -->
   <div class="scene scene-closeup" id="scene1">
     <div class="closeup-stage">
-      <img class="closeup-img" id="closeupImg" src="https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq" alt="Vintage Rotary Phone">
+      <img class="closeup-img" id="closeupImg1" src="https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq" alt="Antique Red & Gold">
+      <img class="closeup-img" id="closeupImg2" src="https://lh3.googleusercontent.com/d/1p73ZJtsihz1IQlBoKDwaxWqnAnNrp7nE" alt="Classic Green & Silver" style="position:absolute;inset:0;">
     </div>
     <div class="closeup-text" id="closeupText">They don't make things<br>like this anymore...</div>
   </div>
@@ -197,7 +198,7 @@ html, body {
   <!-- Scene 2: Styled on a desk, warm light, slow pan -->
   <div class="scene scene-desk" id="scene2">
     <div class="desk-frame" id="deskFrame">
-      <img id="deskImg" src="https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq" alt="Vintage Rotary Phone">
+      <img id="deskImg" src="https://lh3.googleusercontent.com/d/1AgOeq9HOr_tU3iZQGqVIMs4yM600FWyn" alt="Vintage Rotary Phone">
     </div>
     <div class="desk-label" id="deskLabel">
       <div class="desk-en">Hand-painted. <span>AED 32.</span></div>
@@ -248,7 +249,11 @@ var T = {
 
 // Preload images
 (function() {
-  var urls = ['https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq'];
+  var urls = [
+    'https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq',
+    'https://lh3.googleusercontent.com/d/1p73ZJtsihz1IQlBoKDwaxWqnAnNrp7nE',
+    'https://lh3.googleusercontent.com/d/1AgOeq9HOr_tU3iZQGqVIMs4yM600FWyn'
+  ];
   urls.forEach(function(u) { var img = new Image(); img.src = u; });
 })();
 
@@ -276,13 +281,18 @@ async function startPromo(mode) {
   var s1 = document.getElementById('scene1');
   s1.style.opacity = '1';
 
-  var closeupImg = document.getElementById('closeupImg');
-  closeupImg.classList.add('push');
+  var closeupImg1 = document.getElementById('closeupImg1');
+  var closeupImg2 = document.getElementById('closeupImg2');
+  closeupImg1.classList.add('push');
   await wait(800);
   await anim(document.getElementById('closeupText'),
     { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
 
-  await wait(t.closeup - 1800);
+  // Crossfade to second style midway
+  await wait((t.closeup - 1800) / 2);
+  anim(closeupImg1, { opacity: '0' }, 500);
+  closeupImg2.classList.add('push');
+  await wait((t.closeup - 1800) / 2);
   await anim(s1, { opacity: '0' }, 400);
 
   // ── SCENE 2 — Styled on desk, warm light, slow pan (0:04–0:09) ──
