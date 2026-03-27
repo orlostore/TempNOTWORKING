@@ -74,36 +74,85 @@ html, body {
   will-change: opacity, transform;
 }
 
-/* ─── Scene 1: Close-up Push ─── */
-.scene-closeup { background: #ffffff !important; }
-.closeup-stage {
-  position: relative;
-  width: 80vw; height: 80vw; max-width: 480px; max-height: 480px;
+/* ─── Scene 1: Logo Intro ─── */
+.scene-intro { background: #ffffff !important; }
+.intro-glow {
+  width: 36vw; height: 36vw; max-width: 220px; max-height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224,120,86,0.1) 0%, transparent 70%);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5);
 }
-.closeup-img {
-  width: 100%; height: 100%; object-fit: cover; border-radius: 12px;
-  opacity: 0; transform: scale(1.15);
+.intro-glow img { width: 65%; }
+.intro-line {
+  width: 12vw; height: 2px; background: #e07856; margin-top: 3vh;
+  opacity: 0; transform: scaleX(0);
 }
-@keyframes closeupPush {
-  0%   { opacity: 0; transform: scale(1.15); }
-  30%  { opacity: 1; }
-  100% { opacity: 1; transform: scale(1.35); }
-}
-.closeup-img.push {
-  animation: closeupPush 4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-.closeup-text {
-  position: absolute; bottom: 12vh;
-  font-size: clamp(16px, 4vw, 26px); font-weight: 300;
-  color: #2c4a5c; text-align: center;
-  letter-spacing: 0.05em; line-height: 1.5;
+.intro-en {
+  margin-top: 2.5vh;
+  font-size: clamp(15px, 3.2vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.35em; text-transform: uppercase;
   opacity: 0; transform: translateY(15px);
-  text-shadow: 0 1px 8px rgba(255,255,255,0.8);
+}
+.intro-ar {
+  margin-top: 1.5vh;
+  font-size: clamp(16px, 3.5vw, 24px); font-weight: 500;
+  color: #e07856; direction: rtl; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(15px);
 }
 
-/* ─── Scene 2: Styled on Desk ─── */
-.scene-desk { background: #ffffff !important; }
-.desk-frame {
+/* ─── Scene 2: Product Showcase ─── */
+.scene-product { background: #ffffff !important; }
+.product-header {
+  position: absolute; top: 5vh;
+  text-align: center; z-index: 5;
+}
+.product-header-en {
+  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
+}
+.product-header-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(-15px);
+}
+.product-stage {
+  position: relative;
+  width: 65vw; height: 65vw; max-width: 400px; max-height: 400px;
+  margin-top: -2vh;
+}
+.product-img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 12px;
+  opacity: 0; transform: scale(0.75) translateY(20px);
+}
+@keyframes productReveal {
+  0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
+  60%  { opacity: 1; transform: scale(1.03) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes productFloat {
+  0%, 100% { transform: translateY(-4px); }
+  50%      { transform: translateY(4px); }
+}
+.product-img.reveal {
+  animation: productReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.product-img.float {
+  opacity: 1;
+  animation: productFloat 2.5s ease-in-out infinite;
+}
+.product-price {
+  position: absolute; bottom: 14vh;
+  background: #e07856; color: #fff;
+  padding: 1.5vh 6vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
+  box-shadow: 0 4px 20px rgba(224,120,86,0.4);
+  opacity: 0; transform: scale(0.7);
+}
+
+/* ─── Scene 3: Lifestyle ─── */
+.scene-lifestyle { background: #ffffff !important; }
+.lifestyle-frame {
   width: 88vw; max-width: 440px;
   height: 55vh; max-height: 600px;
   border-radius: 4vw;
@@ -111,42 +160,53 @@ html, body {
   box-shadow: 0 15px 50px rgba(44,74,92,0.12), 0 0 0 1px rgba(44,74,92,0.06);
   opacity: 0; transform: scale(0.88);
 }
-.desk-frame img { width: 100%; height: 100%; object-fit: cover; }
-@keyframes deskPan {
-  0%   { transform: scale(1) translateX(0); }
-  100% { transform: scale(1.05) translateX(-3%); }
-}
-.desk-frame img.pan {
-  animation: deskPan 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-.desk-label {
+.lifestyle-frame img { width: 100%; height: 100%; object-fit: cover; }
+.life-label {
   margin-top: 4vh; text-align: center;
   opacity: 0; transform: translateY(15px);
 }
-.desk-en {
-  font-size: clamp(20px, 5vw, 32px); font-weight: 700; color: #2c4a5c;
-}
-.desk-en span { color: #e07856; font-weight: 800; }
-.desk-ar {
+.life-en { font-size: clamp(18px, 4.5vw, 28px); font-weight: 700; color: #2c4a5c; }
+.life-ar {
   font-size: clamp(14px, 3.2vw, 20px); font-weight: 500; color: #e07856;
   direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
 }
 
-/* ─── Scene 3: Logo Outro ─── */
-.scene-outro { background: #f5f5f5 !important; gap: 3vh; }
-.outro-logo { width: 18vw; max-width: 100px; opacity: 0; transform: scale(0.7); }
-.outro-url {
-  font-size: clamp(24px, 6vw, 40px); font-weight: 800;
-  color: #2c4a5c; letter-spacing: 0.06em;
+/* ─── Scene 4: CTA Outro ─── */
+.scene-cta { background: #f5f5f5 !important; gap: 2.5vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; text-align: center;
+  font-family: 'Almarai', sans-serif; margin-top: -1vh;
+  opacity: 0; transform: translateY(20px);
+}
+.cta-box {
+  background: rgba(224,120,86,0.08); border: 2px solid rgba(224,120,86,0.2);
+  border-radius: 4vw; padding: 3vh 8vw; text-align: center;
+  opacity: 0; transform: scale(0.85);
+}
+.cta-price {
+  font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856; line-height: 1;
+}
+.cta-price sub { font-size: 0.4em; font-weight: 400; color: #7a8f9c; vertical-align: baseline; }
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
   opacity: 0; transform: translateY(15px);
 }
-.outro-badges { display: flex; gap: 5vw; margin-top: 1vh; opacity: 0; }
-.outro-badge {
+.cta-badges { display: flex; gap: 5vw; opacity: 0; }
+.cta-badge {
   display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
   font-size: clamp(10px, 2.5vw, 14px); color: #6a8090; font-weight: 500;
   text-align: center;
 }
-.outro-badge-icon {
+.cta-badge-icon {
   width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
   border-radius: 50%; background: rgba(224,120,86,0.08);
   display: flex; align-items: center; justify-content: center;
@@ -198,34 +258,50 @@ html, body {
     </div>
   </div>
 
-  <!-- Scene 1: Slow close-up push into the rotary dial -->
-  <div class="scene scene-closeup" id="scene1">
-    <div class="closeup-stage">
-      <img class="closeup-img" id="closeupImg1" src="https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq" alt="Antique Red & Gold">
-      <img class="closeup-img" id="closeupImg2" src="https://lh3.googleusercontent.com/d/1p73ZJtsihz1IQlBoKDwaxWqnAnNrp7nE" alt="Classic Green & Silver" style="position:absolute;inset:0;">
-    </div>
-    <div class="closeup-text" id="closeupText">They don't make things<br>like this anymore...</div>
+  <!-- Scene 1: Logo + orange line + tagline -->
+  <div class="scene scene-intro" id="scene1">
+    <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
+    <div class="intro-line" id="introLine"></div>
+    <div class="intro-en" id="introEn">They Don't Make Things Like This Anymore</div>
+    <div class="intro-ar" id="introAr">ما عادوا يصنعون أشياء كهذه</div>
   </div>
 
-  <!-- Scene 2: Styled on a desk, warm light, slow pan -->
-  <div class="scene scene-desk" id="scene2">
-    <div class="desk-frame" id="deskFrame">
-      <img id="deskImg" src="https://lh3.googleusercontent.com/d/1AgOeq9HOr_tU3iZQGqVIMs4yM600FWyn" alt="Vintage Rotary Phone">
+  <!-- Scene 2: Product showcase + header + price -->
+  <div class="scene scene-product" id="scene2">
+    <div class="product-header">
+      <div class="product-header-en" id="headerEn">Vintage Rotary Phone</div>
+      <div class="product-header-ar" id="headerAr">هاتف دوّار مصغّر</div>
     </div>
-    <div class="desk-label" id="deskLabel">
-      <div class="desk-en">Hand-painted. <span>AED 32.</span></div>
-      <div class="desk-ar">مطلي يدوياً. ٣٢ درهم.</div>
+    <div class="product-stage">
+      <img class="product-img" id="productImg" src="https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq" alt="Vintage Rotary Phone">
+    </div>
+    <div class="product-price" id="productPrice">32 AED</div>
+  </div>
+
+  <!-- Scene 3: Lifestyle — styled on desk -->
+  <div class="scene scene-lifestyle" id="scene3">
+    <div class="lifestyle-frame" id="lifeFrame">
+      <img id="lifeImg" src="https://lh3.googleusercontent.com/d/1AgOeq9HOr_tU3iZQGqVIMs4yM600FWyn" alt="Vintage Rotary Phone">
+    </div>
+    <div class="life-label" id="lifeLabel">
+      <div class="life-en">Hand-painted. AED 32.</div>
+      <div class="life-ar">مطلي يدوياً. ٣٢ درهم.</div>
     </div>
   </div>
 
-  <!-- Scene 3: ORLO logo on grey -->
-  <div class="scene scene-outro" id="scene3">
-    <img src="logo.png" class="outro-logo" id="outroLogo" alt="ORLO">
-    <div class="outro-url" id="outroUrl">orlostore.com</div>
-    <div class="outro-badges" id="outroBadges">
-      <div class="outro-badge"><div class="outro-badge-icon">🔒</div>Secure Payment<br><span style="font-family:'Almarai',sans-serif">دفع آمن</span></div>
-      <div class="outro-badge"><div class="outro-badge-icon">🚚</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق ٧٥ درهم</span></div>
-      <div class="outro-badge"><div class="outro-badge-icon">🇦🇪</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
+  <!-- Scene 4: CTA Outro -->
+  <div class="scene scene-cta" id="scene4">
+    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Dial Back<br>In <span>Time</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">عُد بالزمن</div>
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-price">32 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+    </div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-badges" id="ctaBadges">
+      <div class="cta-badge"><div class="cta-badge-icon">🔒</div>Secure Payment<br><span style="font-family:'Almarai',sans-serif">دفع آمن</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🚚</div>Free Delivery Above 75 AED<br><span style="font-family:'Almarai',sans-serif">توصيل مجاني فوق ٧٥ درهم</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">🇦🇪</div>Licensed UAE Store<br><span style="font-family:'Almarai',sans-serif">متجر إماراتي مرخّص</span></div>
     </div>
   </div>
 </div>
@@ -259,18 +335,15 @@ function createDots() {
   }
 }
 
+
 var T = {
-  tiktok: { closeup: 4000, desk: 5000, outro: 3000 },
-  insta:  { closeup: 4000, desk: 5000, outro: 3000 }
+  tiktok: { intro: 1800, product: 3300, lifestyle: 2000, cta: 2800 },
+  insta:  { intro: 2500, product: 4000, lifestyle: 2800, cta: 3500 }
 };
 
 // Preload images
 (function() {
-  var urls = [
-    'https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq',
-    'https://lh3.googleusercontent.com/d/1p73ZJtsihz1IQlBoKDwaxWqnAnNrp7nE',
-    'https://lh3.googleusercontent.com/d/1AgOeq9HOr_tU3iZQGqVIMs4yM600FWyn'
-  ];
+  var urls = ['https://lh3.googleusercontent.com/d/1E_bPakA_j4RsyxDb3aXW_Nvu2yQUUYzq', 'https://lh3.googleusercontent.com/d/1AgOeq9HOr_tU3iZQGqVIMs4yM600FWyn'];
   urls.forEach(function(u) { var img = new Image(); img.src = u; });
 })();
 
@@ -279,7 +352,7 @@ var T = {
 // ═══════════════════════════════════════════
 async function startPromo(mode) {
   var t = T[mode];
-  var totalDuration = t.closeup + t.desk + t.outro + 1200;
+  var totalDuration = t.intro + t.product + t.lifestyle + t.cta + 2000;
 
   // Hide mode selector
   document.getElementById('modeSelect').classList.add('gone');
@@ -294,49 +367,68 @@ async function startPromo(mode) {
     if (pct >= 100) clearInterval(progressTick);
   }, 80);
 
-  // ── SCENE 1 — Close-up push into the rotary dial (0:00–0:04) ──
+  // ── SCENE 1 — Logo Intro ──
   var s1 = document.getElementById('scene1');
   s1.style.opacity = '1';
-
-  var closeupImg1 = document.getElementById('closeupImg1');
-  var closeupImg2 = document.getElementById('closeupImg2');
-  closeupImg1.classList.add('push');
-  await wait(800);
-  await anim(document.getElementById('closeupText'),
-    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
-
-  // Crossfade to second style midway
-  await wait((t.closeup - 1800) / 2);
-  anim(closeupImg1, { opacity: '0' }, 500);
-  closeupImg2.classList.add('push');
-  await wait((t.closeup - 1800) / 2);
+  await anim(document.getElementById('introGlow'),
+    { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await anim(document.getElementById('introLine'),
+    { opacity: '1', transform: 'scaleX(1)' }, 400);
+  await wait(150);
+  await anim(document.getElementById('introEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('introAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.intro - 1700);
   await anim(s1, { opacity: '0' }, 400);
 
-  // ── SCENE 2 — Styled on desk, warm light, slow pan (0:04–0:09) ──
+  // ── SCENE 2 — Product Showcase ──
   var s2 = document.getElementById('scene2');
   await anim(s2, { opacity: '1' }, 300);
-  await anim(document.getElementById('deskFrame'),
-    { opacity: '1', transform: 'scale(1)' }, 800, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('headerEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('headerAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(200);
 
-  var deskImg = document.getElementById('deskImg');
-  deskImg.classList.add('pan');
+  var productImg = document.getElementById('productImg');
+  productImg.classList.add('reveal');
+  await wait(800);
+  productImg.classList.remove('reveal');
+  productImg.classList.add('float');
 
-  await wait(600);
-  await anim(document.getElementById('deskLabel'),
-    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('productPrice'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
 
-  await wait(t.desk - 2300);
+  await wait(t.product - 1300);
   await anim(s2, { opacity: '0' }, 400);
 
-  // ── SCENE 3 — Logo on grey (0:09–0:12) ──
+  // ── SCENE 3 — Lifestyle ──
   var s3 = document.getElementById('scene3');
   await anim(s3, { opacity: '1' }, 300);
-  await anim(document.getElementById('outroLogo'),
-    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await anim(document.getElementById('lifeFrame'),
+    { opacity: '1', transform: 'scale(1)' }, 800, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(350);
+  await anim(document.getElementById('lifeLabel'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.lifestyle - 1750);
+  await anim(s3, { opacity: '0' }, 400);
+
+  // ── SCENE 4 — CTA ──
+  var s4 = document.getElementById('scene4');
+  await anim(s4, { opacity: '1' }, 300);
+  await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
+  await anim(document.getElementById('ctaHead'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaHeadAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(150);
+  await anim(document.getElementById('ctaBox'),
+    { opacity: '1', transform: 'scale(1)' }, 550, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
   await wait(200);
-  await anim(document.getElementById('outroUrl'),
+  await anim(document.getElementById('ctaUrl'),
     { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
-  await anim(document.getElementById('outroBadges'), { opacity: '1' }, 500);
+  await anim(document.getElementById('ctaBadges'), { opacity: '1' }, 500);
 
   clearInterval(progressTick);
   bar.style.width = '100%';
