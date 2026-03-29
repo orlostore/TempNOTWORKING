@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ORLO – SilkTie Promo Builder</title>
+<title>ORLO – Promo Builder</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
 <style>
 
@@ -25,76 +25,110 @@ html, body {
 }
 
 /* ═══════════════════════════════════════════
-   SETUP FORM
+   PRODUCT PICKER
    ═══════════════════════════════════════════ */
-.setup-screen {
+.picker-screen {
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
-  align-items: center;
-  overflow-y: auto;
-  padding: 5vh 6vw 8vh;
   background: #ffffff;
   z-index: 200;
-  gap: 2vh;
+  transition: opacity 0.35s ease;
 }
-.setup-screen.gone { display: none; }
+.picker-screen.gone { opacity: 0; pointer-events: none; }
 
-.setup-logo { width: 18vw; max-width: 100px; margin-bottom: 0.5vh; }
-.setup-title {
-  font-size: clamp(13px, 3vw, 18px); font-weight: 300;
+.picker-header {
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: 4vh 5vw 2vh;
+  border-bottom: 1px solid rgba(44,74,92,0.08);
+  flex-shrink: 0;
+}
+.picker-logo { width: 16vw; max-width: 80px; margin-bottom: 1vh; }
+.picker-title {
+  font-size: clamp(11px, 2.5vw, 15px); font-weight: 300;
   color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase;
 }
-.setup-subtitle {
+.picker-subtitle {
   font-size: clamp(18px, 4.5vw, 26px); font-weight: 800;
-  color: #2c4a5c; margin-top: -0.5vh;
+  color: #2c4a5c; margin-top: 0.3vh;
 }
-.setup-subtitle span { color: #e07856; }
+.picker-subtitle span { color: #e07856; }
 
-.setup-divider {
-  width: 100%; height: 1px;
-  background: rgba(44,74,92,0.1);
-  margin: 0.5vh 0;
-}
-
-.setup-section-label {
-  width: 100%;
-  font-size: clamp(10px, 2.4vw, 13px); font-weight: 700;
-  color: #e07856; letter-spacing: 0.2em; text-transform: uppercase;
-  margin-bottom: -0.5vh;
-}
-
-.field-row { display: flex; gap: 2vw; width: 100%; }
-.field { display: flex; flex-direction: column; gap: 0.6vh; flex: 1; }
-.field label {
-  font-size: clamp(10px, 2.3vw, 13px); font-weight: 600;
-  color: #6a8090; letter-spacing: 0.05em;
-}
-.field input {
-  width: 100%; padding: 1.4vh 3vw;
+.picker-search {
+  width: calc(100% - 10vw); margin: 2vh auto 0;
+  padding: 1.4vh 4vw;
   border: 1.5px solid rgba(44,74,92,0.15);
-  border-radius: 2vw;
+  border-radius: 50px;
   font-family: 'Inter', sans-serif;
   font-size: clamp(13px, 3.2vw, 16px); color: #2c4a5c;
-  background: #f9fafb;
-  outline: none;
+  background: #f9fafb; outline: none;
   transition: border-color 0.2s;
 }
-.field input:focus { border-color: #e07856; background: #fff; }
-.field input[dir="rtl"] { font-family: 'Almarai', sans-serif; text-align: right; }
-.field input.url-input { font-size: clamp(11px, 2.6vw, 13px); color: #7a8f9c; }
+.picker-search:focus { border-color: #e07856; background: #fff; }
 
-.generate-btn {
-  width: 100%; padding: 3vh 0;
-  border-radius: 3vw; border: none; cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(16px, 4vw, 22px); font-weight: 800;
-  color: #fff; letter-spacing: 0.05em;
-  background: linear-gradient(135deg, #e07856, #f4a261);
-  box-shadow: 0 6px 30px rgba(224,120,86,0.35);
-  margin-top: 1vh;
-  transition: transform 0.15s, box-shadow 0.15s;
+.picker-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2vh 4vw 4vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3vw;
+  align-content: start;
 }
-.generate-btn:active { transform: scale(0.97); box-shadow: 0 3px 15px rgba(224,120,86,0.3); }
+
+.product-card {
+  background: #f9fafb;
+  border-radius: 3vw;
+  overflow: hidden;
+  border: 1.5px solid rgba(44,74,92,0.07);
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.product-card:active { transform: scale(0.96); }
+.product-card:hover { border-color: rgba(224,120,86,0.4); box-shadow: 0 4px 20px rgba(224,120,86,0.12); }
+
+.card-img {
+  width: 100%; aspect-ratio: 1;
+  object-fit: contain;
+  background: #fff;
+  mix-blend-mode: multiply;
+  padding: 8%;
+}
+.card-info { padding: 2vw 3vw 3vw; }
+.card-name {
+  font-size: clamp(11px, 2.8vw, 15px); font-weight: 700;
+  color: #2c4a5c; line-height: 1.3;
+}
+.card-name-ar {
+  font-size: clamp(10px, 2.4vw, 13px); font-weight: 400;
+  color: #e07856; direction: rtl;
+  font-family: 'Almarai', sans-serif;
+  margin-top: 2px;
+}
+.card-price {
+  font-size: clamp(12px, 3vw, 16px); font-weight: 800;
+  color: #e07856; margin-top: 1vw;
+}
+
+.picker-loading {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2vh; background: #fff; z-index: 5;
+}
+.picker-loading.hidden { display: none; }
+.loader {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(224,120,86,0.2);
+  border-top-color: #e07856;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text {
+  font-size: clamp(13px, 3vw, 16px); color: #7a8f9c; font-weight: 400;
+}
 
 /* ═══════════════════════════════════════════
    MODE SELECTOR
@@ -109,7 +143,7 @@ html, body {
   transition: opacity 0.4s ease;
 }
 .mode-select.visible { opacity: 1; pointer-events: all; }
-.mode-select.gone { opacity: 0; pointer-events: none; }
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
 .mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
 .mode-title {
   font-size: clamp(14px, 3vw, 22px); font-weight: 300;
@@ -149,7 +183,7 @@ html, body {
   will-change: opacity, transform;
 }
 
-/* ─── Scene 1: Logo Intro ─── */
+/* ─── Scene 1 ─── */
 .scene-intro { background: #ffffff !important; }
 .intro-glow {
   width: 36vw; height: 36vw; max-width: 220px; max-height: 220px;
@@ -176,7 +210,7 @@ html, body {
   opacity: 0; transform: translateY(15px);
 }
 
-/* ─── Scene 2: Product Showcase ─── */
+/* ─── Scene 2 ─── */
 .scene-product { background: #ffffff !important; }
 .product-header {
   position: absolute; top: 5vh;
@@ -208,7 +242,7 @@ html, body {
 }
 @keyframes productFloat {
   0%, 100% { transform: translateY(-4px); }
-  50%      { transform: translateY(4px); }
+  50%       { transform: translateY(4px); }
 }
 .product-img.reveal {
   animation: productReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
@@ -226,7 +260,7 @@ html, body {
   opacity: 0; transform: scale(0.7);
 }
 
-/* ─── Scene 3: Lifestyle ─── */
+/* ─── Scene 3 ─── */
 .scene-lifestyle { background: #ffffff !important; }
 .lifestyle-frame {
   width: 88vw; max-width: 440px;
@@ -245,7 +279,7 @@ html, body {
   direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
 }
 
-/* ─── Scene 4: CTA Outro ─── */
+/* ─── Scene 4 ─── */
 .scene-cta { background: #ffffff !important; gap: 2.5vh; }
 .cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
 .cta-head {
@@ -318,101 +352,24 @@ html, body {
   <div class="dots" id="dots"></div>
 
   <!-- ══════════════════════════════════
-       SETUP FORM
+       PRODUCT PICKER
        ══════════════════════════════════ -->
-  <div class="setup-screen" id="setupScreen">
-    <img src="logo.png" class="setup-logo" alt="ORLO">
-    <div class="setup-title">Promo Builder</div>
-    <div class="setup-subtitle">SilkTie <span>Ad Generator</span></div>
+  <div class="picker-screen" id="pickerScreen">
 
-    <div class="setup-divider"></div>
-
-    <!-- Images -->
-    <div class="setup-section-label">Images</div>
-    <div class="field">
-      <label>Product Image URL</label>
-      <input type="url" id="f_productImg" class="url-input" placeholder="https://lh3.googleusercontent.com/d/…">
-    </div>
-    <div class="field">
-      <label>Lifestyle Image URL</label>
-      <input type="url" id="f_lifestyleImg" class="url-input" placeholder="https://lh3.googleusercontent.com/d/…">
+    <!-- Loading overlay -->
+    <div class="picker-loading" id="pickerLoading">
+      <div class="loader"></div>
+      <div class="loader-text">Loading products…</div>
     </div>
 
-    <div class="setup-divider"></div>
-
-    <!-- Product -->
-    <div class="setup-section-label">Product</div>
-    <div class="field-row">
-      <div class="field">
-        <label>Name (EN)</label>
-        <input type="text" id="f_productName" value="SilkTie Cable Organizers">
-      </div>
-      <div class="field">
-        <label>Name (AR)</label>
-        <input type="text" id="f_productNameAr" dir="rtl" value="منظم كابلات سيلك تاي">
-      </div>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label>Price (number)</label>
-        <input type="text" id="f_price" value="24">
-      </div>
-      <div class="field">
-        <label>Currency</label>
-        <input type="text" id="f_currency" value="AED">
-      </div>
+    <div class="picker-header">
+      <img src="logo.png" class="picker-logo" alt="ORLO">
+      <div class="picker-title">Promo Builder</div>
+      <div class="picker-subtitle">Pick a <span>Product</span></div>
+      <input class="picker-search" id="pickerSearch" type="text" placeholder="Search products…" oninput="filterCards()">
     </div>
 
-    <div class="setup-divider"></div>
-
-    <!-- Scene 1 tagline -->
-    <div class="setup-section-label">Scene 1 — Tagline</div>
-    <div class="field-row">
-      <div class="field">
-        <label>Tagline (EN)</label>
-        <input type="text" id="f_introTagline" value="Organize With Style">
-      </div>
-      <div class="field">
-        <label>Tagline (AR)</label>
-        <input type="text" id="f_introTaglineAr" dir="rtl" value="نظّم بأناقة">
-      </div>
-    </div>
-
-    <div class="setup-divider"></div>
-
-    <!-- Scene 3 caption -->
-    <div class="setup-section-label">Scene 3 — Lifestyle Caption</div>
-    <div class="field-row">
-      <div class="field">
-        <label>Caption (EN)</label>
-        <input type="text" id="f_lifeLabel" value="Premium black, zero compromise">
-      </div>
-      <div class="field">
-        <label>Caption (AR)</label>
-        <input type="text" id="f_lifeLabelAr" dir="rtl" value="أسود فاخر، بدون تنازل">
-      </div>
-    </div>
-
-    <div class="setup-divider"></div>
-
-    <!-- CTA -->
-    <div class="setup-section-label">Scene 4 — CTA Headline</div>
-    <div class="field-row">
-      <div class="field">
-        <label>Line 1</label>
-        <input type="text" id="f_ctaLine1" value="Sleek & Silent">
-      </div>
-      <div class="field">
-        <label>Line 2 (orange)</label>
-        <input type="text" id="f_ctaLine2" value="Organization">
-      </div>
-    </div>
-    <div class="field">
-      <label>CTA (AR)</label>
-      <input type="text" id="f_ctaLineAr" dir="rtl" value="ترتيب أنيق وهادئ">
-    </div>
-
-    <button class="generate-btn" onclick="generatePromo()">Generate Promo ▶</button>
+    <div class="picker-grid" id="pickerGrid"></div>
   </div>
 
   <!-- ══════════════════════════════════
@@ -482,53 +439,113 @@ html, body {
 
 <script>
 
-function g(id) { return document.getElementById(id); }
+var g = function(id) { return document.getElementById(id); };
+var allProducts = [];
 
-function generatePromo() {
-  var productName   = g('f_productName').value.trim()   || 'SilkTie Organizers';
-  var productNameAr = g('f_productNameAr').value.trim() || '';
-  var price         = g('f_price').value.trim()         || '0';
-  var currency      = g('f_currency').value.trim()      || 'AED';
-  var introTagline  = g('f_introTagline').value.trim()  || '';
-  var introTaglineAr= g('f_introTaglineAr').value.trim()|| '';
-  var lifeLabel     = g('f_lifeLabel').value.trim()     || '';
-  var lifeLabelAr   = g('f_lifeLabelAr').value.trim()   || '';
-  var ctaLine1      = g('f_ctaLine1').value.trim()      || '';
-  var ctaLine2      = g('f_ctaLine2').value.trim()      || '';
-  var ctaLineAr     = g('f_ctaLineAr').value.trim()     || '';
-  var productImg    = g('f_productImg').value.trim();
-  var lifestyleImg  = g('f_lifestyleImg').value.trim();
+/* ═══════════════════════════════════════════
+   LOAD PRODUCTS
+   ═══════════════════════════════════════════ */
+async function loadProducts() {
+  try {
+    var res = await fetch('/api/products?t=' + Date.now());
+    allProducts = await res.json();
+    g('pickerLoading').classList.add('hidden');
+    renderCards(allProducts);
+  } catch(e) {
+    g('pickerLoading').innerHTML = '<div style="color:#e07856;font-weight:600;text-align:center;padding:20px">Could not load products.<br><small style="color:#999;font-weight:400">Make sure you are on the orlostore server.</small></div>';
+  }
+}
 
-  // Populate scenes
-  var words = productName.split(' ');
-  var last = words.pop();
-  g('modeSubtitle').innerHTML = words.join(' ') + ' <span>' + last + '</span>';
+function renderCards(list) {
+  var grid = g('pickerGrid');
+  grid.innerHTML = list.map(function(p) {
+    var img = p.image || '';
+    return '<div class="product-card" onclick="selectProduct(' + JSON.stringify(JSON.stringify(p)) + ')">' +
+      (img ? '<img class="card-img" src="' + img + '" alt="' + p.name + '" loading="lazy">' :
+             '<div class="card-img" style="display:flex;align-items:center;justify-content:center;font-size:40px;">📦</div>') +
+      '<div class="card-info">' +
+        '<div class="card-name">' + p.name + '</div>' +
+        (p.nameAr ? '<div class="card-name-ar">' + p.nameAr + '</div>' : '') +
+        '<div class="card-price">AED ' + p.price + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
 
-  g('introEn').textContent   = introTagline;
-  g('introAr').textContent   = introTaglineAr;
-  g('headerEn').textContent  = productName;
-  g('headerAr').textContent  = productNameAr;
+function filterCards() {
+  var term = g('pickerSearch').value.toLowerCase();
+  if (!term) { renderCards(allProducts); return; }
+  renderCards(allProducts.filter(function(p) {
+    return (p.name && p.name.toLowerCase().includes(term)) ||
+           (p.nameAr && p.nameAr.includes(term)) ||
+           (p.category && p.category.toLowerCase().includes(term));
+  }));
+}
+
+/* ═══════════════════════════════════════════
+   SELECT PRODUCT → POPULATE PROMO
+   ═══════════════════════════════════════════ */
+function selectProduct(jsonStr) {
+  var p = JSON.parse(jsonStr);
+
+  var productImg   = p.image || '';
+  var lifestyleImg = (p.images && p.images[0]) ? p.images[0] :
+                     (p.images && p.images[1]) ? p.images[1] : productImg;
+
+  var description   = p.description   || 'Organize With Style';
+  var descriptionAr = p.descriptionAr || 'نظّم بأناقة';
+
+  // Tagline: first sentence of description (up to 30 chars), fallback default
+  var taglineEn = description.split(/[.،,]/)[0].trim().substring(0, 35) || 'Organize With Style';
+  var taglineAr = descriptionAr.split(/[.،,]/)[0].trim().substring(0, 30) || 'نظّم بأناقة';
+
+  // CTA: split product name — last word goes orange
+  var words = p.name.split(' ');
+  var ctaLine2 = words.pop();
+  var ctaLine1 = words.join(' ') || ctaLine2;
+
+  var ctaAr = p.nameAr || '';
+
+  // Populate mode selector subtitle
+  var subWords = p.name.split(' ');
+  var subLast = subWords.pop();
+  g('modeSubtitle').innerHTML = subWords.join(' ') + ' <span>' + subLast + '</span>';
+
+  // Scene 1
+  g('introEn').textContent = taglineEn;
+  g('introAr').textContent = taglineAr;
+
+  // Scene 2
+  g('headerEn').textContent  = p.name;
+  g('headerAr').textContent  = p.nameAr || '';
   g('productImg').src        = productImg;
-  g('productImg').alt        = productName;
-  g('productPrice').textContent = price + ' ' + currency;
-  g('lifeImg').src           = lifestyleImg;
-  g('lifeImg').alt           = productName;
-  g('lifeEn').textContent    = lifeLabel;
-  g('lifeAr').textContent    = lifeLabelAr;
-  g('ctaHead').innerHTML     = ctaLine1 + '<br><span>' + ctaLine2 + '</span>';
-  g('ctaHeadAr').textContent = ctaLineAr;
-  g('ctaPrice').innerHTML    = price + ' <sub>' + currency + ' / <span style="font-family:\'Almarai\',sans-serif">درهم</span></sub>';
+  g('productImg').alt        = p.name;
+  g('productPrice').textContent = p.price + ' AED';
 
-  // Preload images
+  // Scene 3
+  g('lifeImg').src  = lifestyleImg;
+  g('lifeImg').alt  = p.name;
+  g('lifeEn').textContent = description.split(/[.،,]/)[0].trim() || 'Premium quality';
+  g('lifeAr').textContent = descriptionAr.split(/[.،,]/)[0].trim() || '';
+
+  // Scene 4
+  g('ctaHead').innerHTML   = ctaLine1 + '<br><span>' + ctaLine2 + '</span>';
+  g('ctaHeadAr').textContent = ctaAr;
+  g('ctaPrice').innerHTML  = p.price + ' <sub>AED / <span style="font-family:\'Almarai\',sans-serif">درهم</span></sub>';
+
+  // Preload
   [productImg, lifestyleImg].forEach(function(u) {
     if (u) { var img = new Image(); img.src = u; }
   });
 
-  // Hide form, show mode selector
-  g('setupScreen').classList.add('gone');
+  // Show mode selector
+  g('pickerScreen').classList.add('gone');
   g('modeSelect').classList.add('visible');
 }
 
+/* ═══════════════════════════════════════════
+   ANIMATION HELPERS
+   ═══════════════════════════════════════════ */
 function anim(el, props, ms, ease) {
   ease = ease || 'ease';
   return new Promise(function(resolve) {
@@ -561,6 +578,9 @@ var T = {
   insta:  { intro: 2500, product: 4000, lifestyle: 2800, cta: 3500 }
 };
 
+/* ═══════════════════════════════════════════
+   MAIN ANIMATION
+   ═══════════════════════════════════════════ */
 async function startPromo(mode) {
   var t = T[mode];
   var totalDuration = t.intro + t.product + t.lifestyle + t.cta + 2000;
@@ -631,6 +651,7 @@ async function startPromo(mode) {
 }
 
 createDots();
+loadProducts();
 </script>
 </body>
 </html>
