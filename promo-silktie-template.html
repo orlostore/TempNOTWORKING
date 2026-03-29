@@ -3,8 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ORLO – SilkTie Black</title>
+<title>ORLO – SilkTie Promo</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+
+<script>
+/* ════════════════════════════════════════════════════════
+   PRODUCT CONFIG — edit ONLY this section for each ad
+   ════════════════════════════════════════════════════════ */
+var CONFIG = {
+
+  /* ── Product name (shown in Scene 2 header) ── */
+  productName:    'SilkTie Cable Organizers',
+  productNameAr:  'منظم كابلات سيلك تاي',
+
+  /* ── Scene 1 tagline ── */
+  introTagline:   'Organize With Style',
+  introTaglineAr: 'نظّم بأناقة',
+
+  /* ── Price (Scene 2 pill + Scene 4 box) ── */
+  price:     '24',           // number only
+  currency:  'AED',
+  priceAr:   '٢٤',          // Arabic numerals for the CTA box sub-label
+
+  /* ── Scene 4 CTA headline ── */
+  ctaLine1:   'Sleek & Silent',
+  ctaLine2:   'Organization',
+  ctaLineAr:  'ترتيب أنيق وهادئ',
+
+  /* ── Scene 3 lifestyle caption ── */
+  lifeLabel:   'Premium black, zero compromise',
+  lifeLabelAr: 'أسود فاخر، بدون تنازل',
+
+  /* ── Images — paste your Google Drive / CDN URLs here ── */
+  productImg:   'YOUR_PRODUCT_IMAGE_URL_HERE',
+  lifestyleImg: 'YOUR_LIFESTYLE_IMAGE_URL_HERE',
+
+};
+/* ═══════════════════════════════════════════════════════ */
+</script>
+
 <style>
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -246,7 +283,7 @@ html, body {
   <div class="mode-select" id="modeSelect">
     <img src="logo.png" class="mode-logo" alt="ORLO">
     <div class="mode-title">Promo Reel</div>
-    <div class="mode-subtitle">SilkTie <span>Black</span></div>
+    <div class="mode-subtitle" id="modeSubtitle">SilkTie <span>Organizers</span></div>
     <div class="mode-btns">
       <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
         <span class="btn-icon">♪</span> TikTok
@@ -261,40 +298,40 @@ html, body {
   <div class="scene scene-intro" id="scene1">
     <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
     <div class="intro-line" id="introLine"></div>
-    <div class="intro-en" id="introEn">Organize With Style</div>
-    <div class="intro-ar" id="introAr">نظّم بأناقة</div>
+    <div class="intro-en" id="introEn"></div>
+    <div class="intro-ar" id="introAr"></div>
   </div>
 
   <!-- Scene 2: Product showcase + header + price -->
   <div class="scene scene-product" id="scene2">
     <div class="product-header">
-      <div class="product-header-en" id="headerEn">SilkTie Cable Organizers</div>
-      <div class="product-header-ar" id="headerAr">منظم كابلات سيلك تاي أسود</div>
+      <div class="product-header-en" id="headerEn"></div>
+      <div class="product-header-ar" id="headerAr"></div>
     </div>
     <div class="product-stage">
-      <img class="product-img" id="productImg" src="https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ" alt="SilkTie Black">
+      <img class="product-img" id="productImg" src="" alt="">
     </div>
-    <div class="product-price" id="productPrice">24 AED</div>
+    <div class="product-price" id="productPrice"></div>
   </div>
 
   <!-- Scene 3: Lifestyle -->
   <div class="scene scene-lifestyle" id="scene3">
     <div class="lifestyle-frame" id="lifeFrame">
-      <img id="lifeImg" src="https://lh3.googleusercontent.com/d/1Ac4XQPFzwflc-fSp6FpRRWu40naxzGwa" alt="SilkTie Black">
+      <img id="lifeImg" src="" alt="">
     </div>
     <div class="life-label" id="lifeLabel">
-      <div class="life-en">Premium black, zero compromise</div>
-      <div class="life-ar">أسود فاخر، بدون تنازل</div>
+      <div class="life-en" id="lifeEn"></div>
+      <div class="life-ar" id="lifeAr"></div>
     </div>
   </div>
 
   <!-- Scene 4: CTA Outro -->
   <div class="scene scene-cta" id="scene4">
     <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
-    <div class="cta-head" id="ctaHead">Sleek &amp; Silent<br><span>Organization</span></div>
-    <div class="cta-head-ar" id="ctaHeadAr">ترتيب أنيق وهادئ</div>
+    <div class="cta-head" id="ctaHead"></div>
+    <div class="cta-head-ar" id="ctaHeadAr"></div>
     <div class="cta-box" id="ctaBox">
-      <div class="cta-price">24 <sub>AED / <span style="font-family:'Almarai',sans-serif">درهم</span></sub></div>
+      <div class="cta-price" id="ctaPrice"></div>
     </div>
     <div class="cta-url" id="ctaUrl">orlostore.com</div>
     <div class="cta-badges" id="ctaBadges">
@@ -307,6 +344,49 @@ html, body {
 
 <script>
 
+/* ── Populate HTML from CONFIG ── */
+(function() {
+  var c = CONFIG;
+  document.title = 'ORLO – ' + c.productName;
+
+  // Mode selector subtitle — wrap last word in <span> for orange colour
+  var words = c.productName.split(' ');
+  var last = words.pop();
+  document.getElementById('modeSubtitle').innerHTML = words.join(' ') + ' <span>' + last + '</span>';
+
+  // Scene 1
+  document.getElementById('introEn').textContent  = c.introTagline;
+  document.getElementById('introAr').textContent  = c.introTaglineAr;
+
+  // Scene 2
+  document.getElementById('headerEn').textContent  = c.productName;
+  document.getElementById('headerAr').textContent  = c.productNameAr;
+  document.getElementById('productImg').src        = c.productImg;
+  document.getElementById('productImg').alt        = c.productName;
+  document.getElementById('productPrice').textContent = c.price + ' ' + c.currency;
+
+  // Scene 3
+  document.getElementById('lifeImg').src    = c.lifestyleImg;
+  document.getElementById('lifeImg').alt    = c.productName;
+  document.getElementById('lifeEn').textContent = c.lifeLabel;
+  document.getElementById('lifeAr').textContent = c.lifeLabelAr;
+
+  // Scene 4
+  document.getElementById('ctaHead').innerHTML =
+    c.ctaLine1 + '<br><span>' + c.ctaLine2 + '</span>';
+  document.getElementById('ctaHeadAr').textContent = c.ctaLineAr;
+  document.getElementById('ctaPrice').innerHTML =
+    c.price + ' <sub>' + c.currency + ' / <span style="font-family:\'Almarai\',sans-serif">درهم</span></sub>';
+})();
+
+/* ── Preload images ── */
+(function() {
+  [CONFIG.productImg, CONFIG.lifestyleImg].forEach(function(u) {
+    var img = new Image(); img.src = u;
+  });
+})();
+
+/* ── Helpers ── */
 function anim(el, props, ms, ease) {
   ease = ease || 'ease';
   return new Promise(function(resolve) {
@@ -339,15 +419,9 @@ var T = {
   insta:  { intro: 2500, product: 4000, lifestyle: 2800, cta: 3500 }
 };
 
-// Preload images
-(function() {
-  var urls = ['https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ', 'https://lh3.googleusercontent.com/d/1Ac4XQPFzwflc-fSp6FpRRWu40naxzGwa'];
-  urls.forEach(function(u) { var img = new Image(); img.src = u; });
-})();
-
-// ═══════════════════════════════════════════
-// MAIN ANIMATION
-// ═══════════════════════════════════════════
+/* ════════════════════════════════════════
+   MAIN ANIMATION
+   ════════════════════════════════════════ */
 async function startPromo(mode) {
   var t = T[mode];
   var totalDuration = t.intro + t.product + t.lifestyle + t.cta + 2000;
