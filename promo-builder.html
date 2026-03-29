@@ -84,16 +84,16 @@ html, body {
   cursor: pointer;
   transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
   -webkit-tap-highlight-color: transparent;
+  display: flex; flex-direction: column;
 }
 .product-card:active { transform: scale(0.96); }
 .product-card:hover { border-color: rgba(224,120,86,0.4); box-shadow: 0 4px 20px rgba(224,120,86,0.12); }
 
 .card-img {
   width: 100%; aspect-ratio: 1;
-  object-fit: contain;
-  background: #fff;
-  mix-blend-mode: multiply;
-  padding: 8%;
+  object-fit: cover;
+  background: #eee;
+  flex-shrink: 0;
 }
 .card-info { padding: 2vw 3vw 3vw; }
 .card-name {
@@ -460,9 +460,10 @@ function renderCards(list) {
   var grid = g('pickerGrid');
   grid.innerHTML = list.map(function(p) {
     var img = p.image || '';
-    return '<div class="product-card" onclick="selectProduct(' + JSON.stringify(JSON.stringify(p)) + ')">' +
-      (img ? '<img class="card-img" src="' + img + '" alt="' + p.name + '" loading="lazy">' :
-             '<div class="card-img" style="display:flex;align-items:center;justify-content:center;font-size:40px;">📦</div>') +
+    var pid = p.id || p.slug;
+    return '<div class="product-card" data-pid="' + pid + '">' +
+      (img ? '<img class="card-img" src="' + img + '" alt="" loading="lazy">' :
+             '<div class="card-img" style="display:flex;align-items:center;justify-content:center;font-size:40px;background:#f0f0f0;">📦</div>') +
       '<div class="card-info">' +
         '<div class="card-name">' + p.name + '</div>' +
         (p.nameAr ? '<div class="card-name-ar">' + p.nameAr + '</div>' : '') +
@@ -471,6 +472,15 @@ function renderCards(list) {
     '</div>';
   }).join('');
 }
+
+// Single delegated click listener on the grid
+g('pickerGrid').addEventListener('click', function(e) {
+  var card = e.target.closest('.product-card');
+  if (!card) return;
+  var pid = card.getAttribute('data-pid');
+  var p = allProducts.find(function(x) { return String(x.id || x.slug) === String(pid); });
+  if (p) selectProduct(p);
+});
 
 function filterCards() {
   var term = g('pickerSearch').value.toLowerCase();
@@ -485,8 +495,7 @@ function filterCards() {
 /* ═══════════════════════════════════════════
    SELECT PRODUCT → POPULATE PROMO
    ═══════════════════════════════════════════ */
-function selectProduct(jsonStr) {
-  var p = JSON.parse(jsonStr);
+function selectProduct(p) {
 
   var productImg   = p.image || '';
   var lifestyleImg = (p.images && p.images[0]) ? p.images[0] :
