@@ -204,12 +204,14 @@ html, body {
   margin-top: 2.5vh;
   font-size: clamp(15px, 3.2vw, 22px); font-weight: 300;
   color: #2c4a5c; letter-spacing: 0.35em; text-transform: uppercase; text-align: center;
+  max-width: 80vw; word-break: break-word;
   opacity: 0; transform: translateY(15px);
 }
 .intro-ar {
   margin-top: 1.5vh;
   font-size: clamp(16px, 3.5vw, 24px); font-weight: 500;
-  color: #e07856; direction: rtl; text-align: center; font-family: 'Almarai', sans-serif;
+  color: #e07856; text-align: center; font-family: 'Almarai', sans-serif;
+  max-width: 80vw; word-break: break-word;
   opacity: 0; transform: translateY(15px);
 }
 
@@ -504,17 +506,21 @@ function selectProduct(p) {
   var lifestyleImg = (p.images && p.images[0]) ? p.images[0] :
                      (p.images && p.images[1]) ? p.images[1] : productImg;
 
-  var description   = p.description   || 'Organize With Style';
-  var descriptionAr = p.descriptionAr || 'نظّم بأناقة';
+  var description   = p.description   || '';
+  var descriptionAr = p.descriptionAr || '';
 
-  // Tagline: first sentence of description (up to 30 chars), fallback default
-  var taglineEn = description.split(/[.،,]/)[0].trim().substring(0, 35) || 'Organize With Style';
-  var taglineAr = descriptionAr.split(/[.،,]/)[0].trim().substring(0, 30) || 'نظّم بأناقة';
+  // Intro tagline: fixed — never pulled from description (too unpredictable)
+  var taglineEn = 'Organize With Style';
+  var taglineAr = 'نظّم بأناقة';
 
-  // CTA: split product name — last word goes orange
-  var words = p.name.split(' ');
+  // Lifestyle caption: first sentence only (split on period), capped
+  var lifeEn = (description.split('.')[0].trim()   || p.name).substring(0, 45);
+  var lifeAr = (descriptionAr.split('.')[0].trim() || '').substring(0, 40);
+
+  // CTA: last word goes orange, up to 3 preceding words on line 1
+  var words    = p.name.trim().split(/\s+/);
   var ctaLine2 = words.pop();
-  var ctaLine1 = words.join(' ') || ctaLine2;
+  var ctaLine1 = words.slice(-3).join(' ') || ctaLine2;
 
   var ctaAr = p.nameAr || '';
 
@@ -537,8 +543,8 @@ function selectProduct(p) {
   // Scene 3
   g('lifeImg').src  = lifestyleImg;
   g('lifeImg').alt  = p.name;
-  g('lifeEn').textContent = description.split(/[.،,]/)[0].trim() || 'Premium quality';
-  g('lifeAr').textContent = descriptionAr.split(/[.،,]/)[0].trim() || '';
+  g('lifeEn').textContent = lifeEn;
+  g('lifeAr').textContent = lifeAr;
 
   // Scene 4
   g('ctaHead').innerHTML   = ctaLine1 + '<br><span>' + ctaLine2 + '</span>';
