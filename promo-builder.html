@@ -77,41 +77,45 @@ html, body {
 }
 
 .product-card {
-  background: #f9fafb;
+  position: relative;
   border-radius: 3vw;
   overflow: hidden;
-  border: 1.5px solid rgba(44,74,92,0.07);
+  border: 1.5px solid rgba(44,74,92,0.08);
   cursor: pointer;
-  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  aspect-ratio: 1;
+  transition: transform 0.15s, box-shadow 0.15s;
   -webkit-tap-highlight-color: transparent;
-  display: flex; flex-direction: column;
+  background: #eee;
 }
 .product-card:active { transform: scale(0.96); }
-.product-card:hover { border-color: rgba(224,120,86,0.4); box-shadow: 0 4px 20px rgba(224,120,86,0.12); }
+.product-card:hover { box-shadow: 0 4px 20px rgba(224,120,86,0.2); }
 
 .card-img {
-  width: 100%; aspect-ratio: 1;
+  width: 100%; height: 100%;
   object-fit: cover;
-  background: #eee;
-  flex-shrink: 0;
+  display: block;
 }
-.card-info { padding: 2.5vw 3vw 3.5vw; }
+.card-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 18px 10px 10px;
+  background: linear-gradient(transparent, rgba(20,30,40,0.82));
+}
 .card-name {
-  font-size: clamp(11px, 2.8vw, 15px); font-weight: 700;
-  color: #2c4a5c; line-height: 1.3;
+  font-size: clamp(11px, 2.8vw, 14px); font-weight: 700;
+  color: #ffffff; line-height: 1.3;
   text-align: left;
 }
 .card-name-ar {
-  font-size: clamp(10px, 2.4vw, 13px); font-weight: 400;
-  color: #e07856;
+  font-size: clamp(9px, 2.2vw, 12px); font-weight: 400;
+  color: rgba(255,255,255,0.7);
   font-family: 'Almarai', sans-serif;
-  margin-top: 2px;
+  margin-top: 1px;
   text-align: left;
   direction: ltr;
 }
 .card-price {
-  font-size: clamp(12px, 3vw, 16px); font-weight: 800;
-  color: #e07856; margin-top: 1.5vw;
+  font-size: clamp(11px, 2.8vw, 14px); font-weight: 800;
+  color: #f4a261; margin-top: 3px;
 }
 
 .picker-loading {
@@ -468,8 +472,8 @@ function renderCards(list) {
     var pid = p.id || p.slug;
     return '<div class="product-card" data-pid="' + pid + '">' +
       (img ? '<img class="card-img" src="' + img + '" alt="" loading="lazy">' :
-             '<div class="card-img" style="display:flex;align-items:center;justify-content:center;font-size:40px;background:#f0f0f0;">📦</div>') +
-      '<div class="card-info">' +
+             '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;">📦</div>') +
+      '<div class="card-overlay">' +
         '<div class="card-name">' + p.name + '</div>' +
         (p.nameAr ? '<div class="card-name-ar">' + p.nameAr + '</div>' : '') +
         '<div class="card-price">AED ' + p.price + '</div>' +
