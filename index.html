@@ -65,8 +65,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="styles.css?v=10">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
-    <style>html{opacity:0;transition:opacity .15s}</style>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html{opacity:0;transition:opacity .15s}
+        :root { --orlo-bg: #f8f6f2; --orlo-orange: #e07856; }
+        body { background-color: var(--orlo-bg); }
+        h1, h2, .section-title, .homepage-section-title { font-family: 'Cormorant Garamond', serif !important; font-weight: 600 !important; }
+        header { background: rgba(255,255,255,0.75) !important; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .editorial-teaser-section { padding: 60px 0; background: #fff; margin: 40px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+        .editorial-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-top: 30px; }
+        .ed-card { position: relative; border-radius: 12px; overflow: hidden; background: var(--orlo-bg); transition: transform 0.3s ease; text-decoration: none; color: inherit; display: block; }
+        .ed-card:hover { transform: translateY(-5px); }
+        .ed-img { width: 100%; height: 350px; object-fit: cover; }
+        .ed-content { padding: 25px; }
+        .ed-label { font-family: 'Inter', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--orlo-orange); font-weight: 700; margin-bottom: 10px; display: block; }
+        .ed-card h3 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 15px; font-family: 'Cormorant Garamond', serif; }
+        .read-more-btn { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; border-bottom: 2px solid var(--orlo-orange); padding-bottom: 2px; }
+        @media (max-width: 768px) { .editorial-grid { grid-template-columns: 1fr; } .ed-img { height: 250px; } }
+    </style>
     <script>
     if(sessionStorage.getItem('orlo_checkout_pending')){sessionStorage.removeItem('orlo_checkout_pending');window.location.replace('cancel.html');}
     else{Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})}
@@ -361,6 +377,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="products-grid" id="productsGrid"></div>
 </div>
+
+<section class="editorial-teaser-section">
+    <div class="homepage-section-inner">
+        <h2 class="homepage-section-title">The Edit <span class="arabic-inline">المجلة</span></h2>
+        <div class="editorial-grid">
+            <a href="/orlo-the-edit.html" class="ed-card">
+                <img src="https://orlostore.com/blog-image-1.jpg" class="ed-img" alt="Dubai Game Night">
+                <div class="ed-content">
+                    <span class="ed-label">Lifestyle</span>
+                    <h3>The Art of the Shuffle: Hosting the Perfect Dubai Game Night</h3>
+                    <span class="read-more-btn">Read Story</span>
+                </div>
+            </a>
+            <a href="/orlo-the-edit.html" class="ed-card">
+                <img src="https://orlostore.com/blog-image-2.jpg" class="ed-img" alt="Desk Reset">
+                <div class="ed-content">
+                    <span class="ed-label">Workspace</span>
+                    <h3>The 5-Minute Desk Reset for Maximum Focus</h3>
+                    <span class="read-more-btn">Read Story</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
 
 <section class="about-section" id="about">
     <div class="contact-container">
