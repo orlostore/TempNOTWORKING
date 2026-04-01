@@ -494,13 +494,17 @@ function renderProducts(list, arabicMode) {
     // Get current cart state
     const localCart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    grid.innerHTML = list.map(p => {
+    grid.innerHTML = list.map((p, index) => {
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const safeSlug = encodeURIComponent(p.slug);
         const isUrl = p.image && p.image.startsWith('http');
+        // First 4 images are above the fold — load eagerly to improve LCP
+        const imgAttrs = index < 4
+            ? `fetchpriority="${index === 0 ? 'high' : 'auto'}" style="max-width:100%; max-height:100%; object-fit:contain;"`
+            : `loading="lazy" style="max-width:100%; max-height:100%; object-fit:contain;"`;
         const imageHTML = isUrl
-            ? `<img src="${escapeHTML(p.image)}" alt="${safeName}" loading="lazy" style="max-width:100%; max-height:100%; object-fit:contain;">`
+            ? `<img src="${escapeHTML(p.image)}" alt="${safeName}" ${imgAttrs}>`
             : escapeHTML(p.image);
 
         // Check if out of stock (use totalStock for variant products)
