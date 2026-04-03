@@ -523,12 +523,12 @@ function selectProduct(p) {
   var taglineAr = 'نظّم بأناقة';
 
   // Lifestyle caption: first sentence only, trimmed at last word boundary, trailing prepositions stripped
-  var AR_PREPS = /[\s]+(مع|من|في|على|إلى|عن|عند|أو|و|هذا|هذه|ذلك|تلك|كل|كما|بـ|لـ)$/;
+  var AR_PREPS = /\s+(مع|من|في|على|إلى|عن|عند|أو|و|هذا|هذه|ذلك|تلك|كل|كما|بـ|لـ)+$/;
   function trimWords(str, max) {
     str = str.substring(0, max);
     if (str.length === max) { var cut = str.lastIndexOf(' '); if (cut > 0) str = str.substring(0, cut); }
-    str = str.replace(AR_PREPS, '').trim();
-    return str;
+    while (AR_PREPS.test(str)) { str = str.replace(AR_PREPS, ''); }
+    return str.trim();
   }
   var lifeEn = trimWords(description.split('.')[0].trim()   || p.name, 45);
   var lifeAr = trimWords(descriptionAr.split('.')[0].trim() || '', 38);
