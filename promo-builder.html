@@ -372,7 +372,7 @@ html, body {
     </div>
 
     <div class="picker-header">
-      <img src="logo.png" class="picker-logo" alt="ORLO">
+      <img src="lv_0_20260331011714.jpg" class="picker-logo" alt="ORLO">
       <div class="picker-title">Promo Builder</div>
       <div class="picker-subtitle">Pick a <span>Product</span></div>
       <input class="picker-search" id="pickerSearch" type="text" placeholder="Search products…" oninput="filterCards()">
@@ -385,7 +385,7 @@ html, body {
        MODE SELECTOR
        ══════════════════════════════════ -->
   <div class="mode-select" id="modeSelect">
-    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <img src="lv_0_20260331011714.jpg" class="mode-logo" alt="ORLO">
     <div class="mode-title">Promo Reel</div>
     <div class="mode-subtitle" id="modeSubtitle"></div>
     <div class="mode-btns">
@@ -400,7 +400,7 @@ html, body {
 
   <!-- Scene 1 -->
   <div class="scene scene-intro" id="scene1">
-    <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
+    <div class="intro-glow" id="introGlow"><img src="lv_0_20260331011714.jpg" alt="ORLO"></div>
     <div class="intro-line" id="introLine"></div>
     <div class="intro-en" id="introEn"></div>
     <div class="intro-ar" id="introAr"></div>
@@ -431,7 +431,7 @@ html, body {
 
   <!-- Scene 4 -->
   <div class="scene scene-cta" id="scene4">
-    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <img src="lv_0_20260331011714.jpg" class="cta-logo" id="ctaLogo" alt="ORLO">
     <div class="cta-head" id="ctaHead"></div>
     <div class="cta-head-ar" id="ctaHeadAr"></div>
     <div class="cta-box" id="ctaBox">
@@ -507,8 +507,9 @@ function filterCards() {
 function selectProduct(p) {
 
   var productImg   = p.image || '';
-  var lifestyleImg = (p.images && p.images[0]) ? p.images[0] :
-                     (p.images && p.images[1]) ? p.images[1] : productImg;
+  var lifestyleImg = (p.images && p.images[2]) ? p.images[2] :
+                     (p.images && p.images[1]) ? p.images[1] :
+                     (p.images && p.images[0]) ? p.images[0] : productImg;
 
   var description   = p.description   || '';
   var descriptionAr = p.descriptionAr || '';
