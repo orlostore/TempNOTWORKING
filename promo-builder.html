@@ -522,16 +522,14 @@ function selectProduct(p) {
   var taglineEn = 'Organize With Style';
   var taglineAr = 'نظّم بأناقة';
 
-  // Lifestyle caption: first sentence only, trimmed at last word boundary, trailing prepositions stripped
+  // Lifestyle caption: first sentence only, trimmed at last word boundary, trailing Arabic prepositions stripped
   var AR_PREPS = /[\s]+(مع|من|في|على|إلى|عن|عند|أو|و|هذا|هذه|ذلك|تلك|كل|كما|بـ|لـ)$/;
   function trimWords(str, max) {
-    str = str.substring(0, max);
-    if (str.length === max) { var cut = str.lastIndexOf(' '); if (cut > 0) str = str.substring(0, cut); }
-    str = str.replace(AR_PREPS, '').trim();
-    return str;
+    if (str.length <= max) return str;
+    return str.substring(0, max).replace(/\s+\S*$/, '').replace(AR_PREPS, '').trim();
   }
   var lifeEn = trimWords(description.split('.')[0].trim()   || p.name, 45);
-  var lifeAr = trimWords(descriptionAr.split('.')[0].trim() || '', 38);
+  var lifeAr = trimWords(descriptionAr.split('.')[0].trim() || '',     38);
 
   // CTA: last word goes orange, up to 3 preceding words on line 1
   var words    = p.name.trim().split(/\s+/);
