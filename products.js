@@ -5,7 +5,7 @@ let products = [];
 // Cache settings
 const CACHE_KEY = 'orlo_products_cache';
 const CACHE_TIME_KEY = 'orlo_products_cache_time';
-const CACHE_DURATION = 60 * 1000; // 1 minute (shorter since D1 is fast)
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
 
 // Load from cache (instant)
 function loadFromCache() {

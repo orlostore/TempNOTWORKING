@@ -82,7 +82,6 @@ html, body {
   overflow: hidden;
   border: 1.5px solid rgba(44,74,92,0.08);
   cursor: pointer;
-  aspect-ratio: 1;
   transition: transform 0.15s, box-shadow 0.15s;
   -webkit-tap-highlight-color: transparent;
   background: #eee;
@@ -91,8 +90,8 @@ html, body {
 .product-card:hover { box-shadow: 0 4px 20px rgba(224,120,86,0.2); }
 
 .card-img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
+  width: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
   display: block;
 }
@@ -283,10 +282,14 @@ html, body {
   margin-top: 4vh; text-align: center;
   opacity: 0; transform: translateY(15px);
 }
-.life-en { font-size: clamp(18px, 4.5vw, 28px); font-weight: 700; color: #2c4a5c; }
+.life-en {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700; color: #2c4a5c;
+  max-width: 84vw; word-break: break-word; white-space: normal;
+}
 .life-ar {
   font-size: clamp(14px, 3.2vw, 20px); font-weight: 500; color: #e07856;
   direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
+  max-width: 84vw; word-break: break-word; white-space: normal;
 }
 
 /* ─── Scene 4 ─── */
@@ -373,7 +376,7 @@ html, body {
     </div>
 
     <div class="picker-header">
-      <img src="logo.png" class="picker-logo" alt="ORLO">
+      <img src="lv_0_20260331011714.jpg" class="picker-logo" alt="ORLO">
       <div class="picker-title">Promo Builder</div>
       <div class="picker-subtitle">Pick a <span>Product</span></div>
       <input class="picker-search" id="pickerSearch" type="text" placeholder="Search products…" oninput="filterCards()">
@@ -386,7 +389,7 @@ html, body {
        MODE SELECTOR
        ══════════════════════════════════ -->
   <div class="mode-select" id="modeSelect">
-    <img src="logo.png" class="mode-logo" alt="ORLO">
+    <img src="lv_0_20260331011714.jpg" class="mode-logo" alt="ORLO">
     <div class="mode-title">Promo Reel</div>
     <div class="mode-subtitle" id="modeSubtitle"></div>
     <div class="mode-btns">
@@ -401,7 +404,7 @@ html, body {
 
   <!-- Scene 1 -->
   <div class="scene scene-intro" id="scene1">
-    <div class="intro-glow" id="introGlow"><img src="logo.png" alt="ORLO"></div>
+    <div class="intro-glow" id="introGlow"><img src="lv_0_20260331011714.jpg" alt="ORLO"></div>
     <div class="intro-line" id="introLine"></div>
     <div class="intro-en" id="introEn"></div>
     <div class="intro-ar" id="introAr"></div>
@@ -432,7 +435,7 @@ html, body {
 
   <!-- Scene 4 -->
   <div class="scene scene-cta" id="scene4">
-    <img src="logo.png" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <img src="lv_0_20260331011714.jpg" class="cta-logo" id="ctaLogo" alt="ORLO">
     <div class="cta-head" id="ctaHead"></div>
     <div class="cta-head-ar" id="ctaHeadAr"></div>
     <div class="cta-box" id="ctaBox">
@@ -508,8 +511,9 @@ function filterCards() {
 function selectProduct(p) {
 
   var productImg   = p.image || '';
-  var lifestyleImg = (p.images && p.images[0]) ? p.images[0] :
-                     (p.images && p.images[1]) ? p.images[1] : productImg;
+  var lifestyleImg = (p.images && p.images[2]) ? p.images[2] :
+                     (p.images && p.images[1]) ? p.images[1] :
+                     (p.images && p.images[0]) ? p.images[0] : productImg;
 
   var description   = p.description   || '';
   var descriptionAr = p.descriptionAr || '';
@@ -518,13 +522,14 @@ function selectProduct(p) {
   var taglineEn = 'Organize With Style';
   var taglineAr = 'نظّم بأناقة';
 
-  // Lifestyle caption: first sentence only (split on period), trimmed to last complete word
+  // Lifestyle caption: first sentence only, trimmed at last word boundary, trailing Arabic prepositions stripped
+  var AR_PREPS = /[\s]+(مع|من|في|على|إلى|عن|عند|أو|و|هذا|هذه|ذلك|تلك|كل|كما|بـ|لـ)$/;
   function trimWords(str, max) {
     if (str.length <= max) return str;
-    return str.substring(0, max).replace(/\s+\S*$/, '');
+    return str.substring(0, max).replace(/\s+\S*$/, '').replace(AR_PREPS, '').trim();
   }
-  var lifeEn = trimWords(description.split('.')[0].trim()   || p.name, 55);
-  var lifeAr = trimWords(descriptionAr.split('.')[0].trim() || '',     50);
+  var lifeEn = trimWords(description.split('.')[0].trim()   || p.name, 45);
+  var lifeAr = trimWords(descriptionAr.split('.')[0].trim() || '',     38);
 
   // CTA: last word goes orange, up to 3 preceding words on line 1
   var words    = p.name.trim().split(/\s+/);

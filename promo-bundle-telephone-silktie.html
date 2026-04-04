@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORLO – Telephone + SilkTie Bundle</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100vw; height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff !important;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.canvas {
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+  background: #ffffff;
+}
+
+/* ═══════════════════════════════════════════
+   MODE SELECTOR
+   ═══════════════════════════════════════════ */
+.mode-select {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4vh; z-index: 100;
+  background: #ffffff !important;
+}
+.mode-select.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+.mode-logo { width: 22vw; max-width: 130px; margin-bottom: 1vh; }
+.mode-title {
+  font-size: clamp(14px, 3vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.4em; text-transform: uppercase; text-align: center;
+}
+.mode-subtitle {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #2c4a5c; text-align: center; line-height: 1.3; margin-top: -1vh;
+}
+.mode-subtitle span { color: #e07856; }
+.mode-btns { display: flex; flex-direction: column; gap: 2.5vh; margin-top: 2vh; }
+.mode-btn {
+  width: 72vw; max-width: 340px; padding: 3.5vh 0;
+  border-radius: 2.5vw; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(17px, 4.2vw, 24px); font-weight: 700;
+  letter-spacing: 0.05em; color: #fff;
+  transition: transform 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 3vw;
+}
+.mode-btn:active { transform: scale(0.95); }
+.btn-tiktok {
+  background: linear-gradient(135deg, #010101 0%, #1a1a1a 100%);
+  border: 2px solid #333;
+}
+.btn-insta {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  box-shadow: 0 4px 30px rgba(225,48,108,0.25);
+}
+.btn-icon { font-size: clamp(22px, 5vw, 30px); }
+
+.scene {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  will-change: opacity, transform;
+}
+
+/* ─── Scene 1: Logo Intro ─── */
+.scene-intro { background: #ffffff !important; }
+.intro-glow {
+  width: 36vw; height: 36vw; max-width: 220px; max-height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224,120,86,0.1) 0%, transparent 70%);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5);
+}
+.intro-glow img { width: 65%; }
+.intro-line {
+  width: 12vw; height: 2px; background: #e07856; margin-top: 3vh;
+  opacity: 0; transform: scaleX(0);
+}
+.intro-en {
+  margin-top: 2.5vh;
+  font-size: clamp(15px, 3.2vw, 22px); font-weight: 300;
+  color: #2c4a5c; letter-spacing: 0.35em; text-transform: uppercase; text-align: center;
+  opacity: 0; transform: translateY(15px);
+  max-width: 80vw;
+}
+.intro-ar {
+  margin-top: 1.5vh;
+  font-size: clamp(16px, 3.5vw, 24px); font-weight: 500;
+  color: #e07856; text-align: center; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(15px);
+  max-width: 80vw;
+}
+
+/* ─── Scene 2 & 3: Product Showcase ─── */
+.scene-product { background: #ffffff !important; }
+.product-header {
+  position: absolute; top: 5vh;
+  text-align: center; z-index: 5;
+}
+.product-header-en {
+  font-size: clamp(18px, 4.5vw, 30px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
+}
+.product-header-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(-15px);
+}
+.product-stage {
+  position: relative;
+  width: 65vw; height: 65vw; max-width: 400px; max-height: 400px;
+  margin-top: -2vh;
+}
+.product-img {
+  width: 100%; height: 100%; object-fit: contain;
+  opacity: 0; transform: scale(0.75) translateY(20px);
+  mix-blend-mode: multiply;
+}
+@keyframes productReveal {
+  0%   { opacity: 0; transform: scale(0.75) translateY(20px); }
+  60%  { opacity: 1; transform: scale(1.03) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes productFloat {
+  0%, 100% { transform: translateY(-4px); }
+  50%      { transform: translateY(4px); }
+}
+.product-img.reveal {
+  animation: productReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.product-img.float {
+  opacity: 1;
+  animation: productFloat 2.5s ease-in-out infinite;
+}
+.product-price {
+  position: absolute; bottom: 22vh;
+  background: #e07856; color: #fff;
+  padding: 1.5vh 6vw; border-radius: 50px;
+  font-size: clamp(16px, 4vw, 24px); font-weight: 800;
+  box-shadow: 0 4px 20px rgba(224,120,86,0.4);
+  opacity: 0; transform: scale(0.7);
+}
+
+/* ─── Scene 4: Bundle Together ─── */
+.scene-combo { background: #ffffff !important; }
+.combo-header {
+  position: absolute; top: 6vh;
+  text-align: center; z-index: 5;
+}
+.combo-en {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 800; color: #2c4a5c;
+  opacity: 0; transform: translateY(-15px);
+}
+.combo-ar {
+  font-size: clamp(14px, 3.2vw, 20px); font-weight: 600; color: #e07856;
+  direction: rtl; margin-top: 0.5vh; font-family: 'Almarai', sans-serif;
+  opacity: 0; transform: translateY(-15px);
+}
+.combo-row {
+  display: flex; align-items: center; gap: 4vw;
+  opacity: 0; transform: scale(0.85);
+}
+.combo-item {
+  width: 32vw; max-width: 180px;
+  text-align: center;
+}
+.combo-item img {
+  width: 100%; aspect-ratio: 1; object-fit: contain; mix-blend-mode: multiply;
+}
+.combo-item-label {
+  margin-top: 0.8vh;
+  font-size: clamp(11px, 2.8vw, 15px); font-weight: 600; color: #2c4a5c;
+}
+.combo-item-price {
+  font-size: clamp(10px, 2.5vw, 13px); font-weight: 700; color: #e07856;
+  margin-top: 0.3vh;
+}
+.combo-plus {
+  font-size: clamp(30px, 8vw, 50px); font-weight: 900; color: #e07856;
+}
+.combo-total {
+  margin-top: 3vh;
+  background: #e07856; color: #fff;
+  padding: 1.8vh 8vw; border-radius: 50px;
+  font-size: clamp(20px, 5vw, 32px); font-weight: 900;
+  box-shadow: 0 6px 24px rgba(224,120,86,0.4);
+  opacity: 0; transform: scale(0.7);
+}
+.combo-free {
+  margin-top: 1.5vh;
+  font-size: clamp(13px, 3vw, 18px); font-weight: 700;
+  color: #2c4a5c; opacity: 0; transform: translateY(10px);
+}
+
+/* ─── Scene 5: CTA Outro ─── */
+.scene-cta { background: #ffffff !important; gap: 2.5vh; }
+.cta-logo { width: 14vw; max-width: 80px; opacity: 0; }
+.cta-head {
+  font-size: clamp(22px, 5.5vw, 38px); font-weight: 900;
+  color: #2c4a5c; text-align: center; line-height: 1.3;
+  opacity: 0; transform: translateY(25px);
+}
+.cta-head span { color: #e07856; }
+.cta-head-ar {
+  font-size: clamp(18px, 4.5vw, 28px); font-weight: 700;
+  color: rgba(44,74,92,0.6); direction: rtl; text-align: center;
+  font-family: 'Almarai', sans-serif; margin-top: -1vh;
+  opacity: 0; transform: translateY(20px);
+}
+.cta-box {
+  background: rgba(224,120,86,0.08); border: 2px solid rgba(224,120,86,0.2);
+  border-radius: 4vw; padding: 3vh 8vw; text-align: center;
+  opacity: 0; transform: scale(0.85);
+}
+.cta-price {
+  font-size: clamp(36px, 9vw, 60px); font-weight: 900; color: #e07856; line-height: 1;
+}
+.cta-price sub { font-size: 0.4em; font-weight: 400; color: #7a8f9c; vertical-align: baseline; }
+.cta-url {
+  font-size: clamp(22px, 5.5vw, 36px); font-weight: 800;
+  color: #e07856; letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(15px);
+}
+.cta-badges { display: flex; gap: 5vw; opacity: 0; }
+.cta-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5vh;
+  font-size: clamp(10px, 2.5vw, 14px); color: #6a8090; font-weight: 500;
+}
+.cta-badge-icon {
+  width: 8vw; height: 8vw; max-width: 44px; max-height: 44px;
+  border-radius: 50%; background: rgba(224,120,86,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(16px, 4vw, 24px);
+}
+
+/* ─── Progress Bar ─── */
+.progress-bar {
+  position: absolute; bottom: 0; left: 0;
+  height: 4px; width: 0%;
+  background: linear-gradient(90deg, #e07856, #f4a261);
+  z-index: 50;
+}
+
+/* ─── Floating Dots ─── */
+.dots { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.dot {
+  position: absolute; border-radius: 50%;
+  background: rgba(224,120,86,0.15);
+  animation: floatDot linear infinite;
+}
+@keyframes floatDot {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="canvas" id="canvas">
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="dots" id="dots"></div>
+
+  <!-- ── Mode Selector ── -->
+  <div class="mode-select" id="modeSelect">
+    <img src="lv_0_20260331011714.jpg" class="mode-logo" alt="ORLO">
+    <div class="mode-title">Promo Reel</div>
+    <div class="mode-subtitle">Desk Style <span>Bundle</span></div>
+    <div class="mode-btns">
+      <button class="mode-btn btn-tiktok" onclick="startPromo('tiktok')">
+        <span class="btn-icon">&#9834;</span> TikTok
+      </button>
+      <button class="mode-btn btn-insta" onclick="startPromo('insta')">
+        <span class="btn-icon">&#9678;</span> Instagram
+      </button>
+    </div>
+  </div>
+
+  <!-- Scene 1: Logo Intro -->
+  <div class="scene scene-intro" id="scene1">
+    <div class="intro-glow" id="introGlow"><img src="lv_0_20260331011714.jpg" alt="ORLO"></div>
+    <div class="intro-line" id="introLine"></div>
+    <div class="intro-en" id="introEn">Desk Goals</div>
+    <div class="intro-ar" id="introAr">&#x623;&#x646;&#x627;&#x642;&#x629; &#x627;&#x644;&#x645;&#x643;&#x62A;&#x628;</div>
+  </div>
+
+  <!-- Scene 2: Product 1 — Vintage Rotary Telephone -->
+  <div class="scene scene-product" id="scene2">
+    <div class="product-header">
+      <div class="product-header-en" id="header1En">Vintage Rotary Telephone</div>
+      <div class="product-header-ar" id="header1Ar">&#x647;&#x627;&#x62A;&#x641; &#x62F;&#x648;&#x651;&#x627;&#x631; &#x643;&#x644;&#x627;&#x633;&#x64A;&#x643;&#x64A;</div>
+    </div>
+    <div class="product-stage">
+      <img class="product-img" id="productImg1" src="https://lh3.googleusercontent.com/d/1j7U1UnIqoWB5ceyd7sO_KXdqDn-YUhmD" alt="Vintage Rotary Telephone">
+    </div>
+    <div class="product-price" id="productPrice1">63 AED</div>
+  </div>
+
+  <!-- Scene 3: Product 2 — SilkTie Black -->
+  <div class="scene scene-product" id="scene3">
+    <div class="product-header">
+      <div class="product-header-en" id="header2En">SilkTie Cable Ties</div>
+      <div class="product-header-ar" id="header2Ar">&#x631;&#x628;&#x637;&#x627;&#x62A; &#x643;&#x627;&#x628;&#x644; &#x62D;&#x631;&#x64A;&#x631;&#x64A;&#x629;</div>
+    </div>
+    <div class="product-stage">
+      <img class="product-img" id="productImg2" src="https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ" alt="SilkTie Black">
+    </div>
+    <div class="product-price" id="productPrice2">24 AED</div>
+  </div>
+
+  <!-- Scene 4: Bundle Together -->
+  <div class="scene scene-combo" id="scene4">
+    <div class="combo-header">
+      <div class="combo-en" id="comboEn">Better Together</div>
+      <div class="combo-ar" id="comboAr">&#x623;&#x62D;&#x644;&#x649; &#x645;&#x639; &#x628;&#x639;&#x636;</div>
+    </div>
+    <div class="combo-row" id="comboRow">
+      <div class="combo-item">
+        <img src="https://lh3.googleusercontent.com/d/1j7U1UnIqoWB5ceyd7sO_KXdqDn-YUhmD" alt="Vintage Rotary Telephone">
+        <div class="combo-item-label">Rotary Telephone</div>
+        <div class="combo-item-price">63 AED</div>
+      </div>
+      <div class="combo-plus">+</div>
+      <div class="combo-item">
+        <img src="https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ" alt="SilkTie Black">
+        <div class="combo-item-label">SilkTie Cable Ties</div>
+        <div class="combo-item-price">24 AED</div>
+      </div>
+    </div>
+    <div class="combo-total" id="comboTotal">87 AED</div>
+    <div class="combo-free" id="comboFree">&#x1F69A; FREE Delivery <span style="font-family:'Almarai',sans-serif">| &#x62A;&#x648;&#x635;&#x64A;&#x644; &#x645;&#x62C;&#x627;&#x646;&#x64A;</span></div>
+  </div>
+
+  <!-- Scene 5: CTA Outro -->
+  <div class="scene scene-cta" id="scene5">
+    <img src="lv_0_20260331011714.jpg" class="cta-logo" id="ctaLogo" alt="ORLO">
+    <div class="cta-head" id="ctaHead">Desk Style<br><span>Bundle</span></div>
+    <div class="cta-head-ar" id="ctaHeadAr">&#x628;&#x627;&#x642;&#x629; &#x62F;&#x64A;&#x643;&#x648;&#x631; &#x627;&#x644;&#x645;&#x643;&#x62A;&#x628;</div>
+    <div class="cta-box" id="ctaBox">
+      <div class="cta-price">87 <sub>AED / <span style="font-family:'Almarai',sans-serif">&#x62F;&#x631;&#x647;&#x645;</span></sub></div>
+    </div>
+    <div class="cta-url" id="ctaUrl">orlostore.com</div>
+    <div class="cta-badges" id="ctaBadges">
+      <div class="cta-badge"><div class="cta-badge-icon">&#x1F69A;</div>Free Delivery<br><span style="font-family:'Almarai',sans-serif">&#x62A;&#x648;&#x635;&#x64A;&#x644; &#x645;&#x62C;&#x627;&#x646;&#x64A;</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#x1F1E6;&#x1F1EA;</div>Ships from UAE<br><span style="font-family:'Almarai',sans-serif">&#x634;&#x62D;&#x646; &#x645;&#x646; &#x627;&#x644;&#x625;&#x645;&#x627;&#x631;&#x627;&#x62A;</span></div>
+      <div class="cta-badge"><div class="cta-badge-icon">&#x2705;</div>Quality<br><span style="font-family:'Almarai',sans-serif">&#x62C;&#x648;&#x62F;&#x629; &#x639;&#x627;&#x644;&#x64A;&#x629;</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function anim(el, props, ms, ease) {
+  ease = ease || 'ease';
+  return new Promise(function(resolve) {
+    el.style.transition = 'all ' + ms + 'ms ' + ease;
+    requestAnimationFrame(function() {
+      Object.assign(el.style, props);
+      setTimeout(resolve, ms);
+    });
+  });
+}
+function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+function createDots() {
+  var c = document.getElementById('dots');
+  for (var i = 0; i < 20; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = Math.random() * 100 + '%';
+    d.style.animationDuration = (5 + Math.random() * 7) + 's';
+    d.style.animationDelay = Math.random() * 12 + 's';
+    var size = 3 + Math.random() * 5;
+    d.style.width = size + 'px';
+    d.style.height = size + 'px';
+    c.appendChild(d);
+  }
+}
+
+var T = {
+  tiktok: { intro: 1800, prod1: 2200, prod2: 2200, combo: 2800, cta: 2800 },
+  insta:  { intro: 2500, prod1: 3000, prod2: 3000, combo: 3500, cta: 3500 }
+};
+
+// Preload images
+(function() {
+  var urls = [
+    'https://lh3.googleusercontent.com/d/1j7U1UnIqoWB5ceyd7sO_KXdqDn-YUhmD',
+    'https://lh3.googleusercontent.com/d/1tV-454eA8MxLNe9PDUlvSV3yzaeLqusJ'
+  ];
+  urls.forEach(function(u) { var img = new Image(); img.src = u; });
+})();
+
+// ═══════════════════════════════════════════
+// MAIN ANIMATION — 5 SCENES
+// ═══════════════════════════════════════════
+async function startPromo(mode) {
+  var t = T[mode];
+  var totalDuration = t.intro + t.prod1 + t.prod2 + t.combo + t.cta + 2000;
+
+  document.getElementById('modeSelect').classList.add('gone');
+  await wait(400);
+
+  var bar = document.getElementById('progressBar');
+  var startTime = Date.now();
+  var progressTick = setInterval(function() {
+    var pct = Math.min(((Date.now() - startTime) / totalDuration) * 100, 100);
+    bar.style.width = pct + '%';
+    bar.style.transition = 'width 80ms linear';
+    if (pct >= 100) clearInterval(progressTick);
+  }, 80);
+
+  // ── SCENE 1 — Logo Intro ──
+  var s1 = document.getElementById('scene1');
+  s1.style.opacity = '1';
+  await anim(document.getElementById('introGlow'),
+    { opacity: '1', transform: 'scale(1)' }, 600, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await anim(document.getElementById('introLine'),
+    { opacity: '1', transform: 'scaleX(1)' }, 400);
+  await wait(150);
+  await anim(document.getElementById('introEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 500, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('introAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.intro - 1700);
+  await anim(s1, { opacity: '0' }, 400);
+
+  // ── SCENE 2 — Product 1: Rotary Telephone ──
+  var s2 = document.getElementById('scene2');
+  await anim(s2, { opacity: '1' }, 300);
+  await anim(document.getElementById('header1En'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('header1Ar'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(200);
+
+  var img1 = document.getElementById('productImg1');
+  img1.classList.add('reveal');
+  await wait(800);
+  img1.classList.remove('reveal');
+  img1.classList.add('float');
+
+  anim(document.getElementById('productPrice1'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await wait(t.prod1 - 1300);
+  await anim(s2, { opacity: '0' }, 400);
+
+  // ── SCENE 3 — Product 2: SilkTie ──
+  var s3 = document.getElementById('scene3');
+  await anim(s3, { opacity: '1' }, 300);
+  await anim(document.getElementById('header2En'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('header2Ar'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(200);
+
+  var img2 = document.getElementById('productImg2');
+  img2.classList.add('reveal');
+  await wait(800);
+  img2.classList.remove('reveal');
+  img2.classList.add('float');
+
+  anim(document.getElementById('productPrice2'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+
+  await wait(t.prod2 - 1300);
+  await anim(s3, { opacity: '0' }, 400);
+
+  // ── SCENE 4 — Bundle Together ──
+  var s4 = document.getElementById('scene4');
+  await anim(s4, { opacity: '1' }, 300);
+  await anim(document.getElementById('comboEn'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  anim(document.getElementById('comboAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 350, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(300);
+  await anim(document.getElementById('comboRow'),
+    { opacity: '1', transform: 'scale(1)' }, 700, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(300);
+  await anim(document.getElementById('comboTotal'),
+    { opacity: '1', transform: 'scale(1)' }, 500, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await anim(document.getElementById('comboFree'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(t.combo - 2200);
+  await anim(s4, { opacity: '0' }, 400);
+
+  // ── SCENE 5 — CTA ──
+  var s5 = document.getElementById('scene5');
+  await anim(s5, { opacity: '1' }, 300);
+  await anim(document.getElementById('ctaLogo'), { opacity: '1' }, 350);
+  await anim(document.getElementById('ctaHead'),
+    { opacity: '1', transform: 'translateY(0)' }, 600, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaHeadAr'),
+    { opacity: '1', transform: 'translateY(0)' }, 450, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await wait(150);
+  await anim(document.getElementById('ctaBox'),
+    { opacity: '1', transform: 'scale(1)' }, 550, 'cubic-bezier(0.34, 1.56, 0.64, 1)');
+  await wait(200);
+  await anim(document.getElementById('ctaUrl'),
+    { opacity: '1', transform: 'translateY(0)' }, 400, 'cubic-bezier(0.16, 1, 0.3, 1)');
+  await anim(document.getElementById('ctaBadges'), { opacity: '1' }, 500);
+
+  clearInterval(progressTick);
+  bar.style.width = '100%';
+  bar.style.transition = 'width 300ms linear';
+}
+
+createDots();
+</script>
+</body>
+</html>
