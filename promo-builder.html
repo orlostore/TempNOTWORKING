@@ -518,9 +518,13 @@ function selectProduct(p) {
   var taglineEn = 'Organize With Style';
   var taglineAr = 'نظّم بأناقة';
 
-  // Lifestyle caption: first sentence only (split on period), capped
-  var lifeEn = (description.split('.')[0].trim()   || p.name).substring(0, 45);
-  var lifeAr = (descriptionAr.split('.')[0].trim() || '').substring(0, 40);
+  // Lifestyle caption: first sentence only (split on period), trimmed to last complete word
+  function trimWords(str, max) {
+    if (str.length <= max) return str;
+    return str.substring(0, max).replace(/\s+\S*$/, '');
+  }
+  var lifeEn = trimWords(description.split('.')[0].trim()   || p.name, 55);
+  var lifeAr = trimWords(descriptionAr.split('.')[0].trim() || '',     50);
 
   // CTA: last word goes orange, up to 3 preceding words on line 1
   var words    = p.name.trim().split(/\s+/);
