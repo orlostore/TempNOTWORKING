@@ -528,8 +528,8 @@ function selectProduct(p) {
     if (str.length <= max) return str;
     return str.substring(0, max).replace(/\s+\S*$/, '').replace(AR_PREPS, '').trim();
   }
-  var lifeEn = trimWords(description.split('.')[0].trim()   || p.name, 45);
-  var lifeAr = trimWords(descriptionAr.split('.')[0].trim() || '',     38);
+  var lifeEn = trimWords(description.split('.')[0].trim()   || p.name, 65);
+  var lifeAr = trimWords(descriptionAr.split('.')[0].trim() || '',     55);
 
   // CTA: last word goes orange, up to 3 preceding words on line 1
   var words    = p.name.trim().split(/\s+/);
