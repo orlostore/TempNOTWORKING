@@ -3,65 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ORLO · Dangling Fridge Buddies</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+  <title>ORLO · Dangling Buddies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=Almarai:wght@700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #fff; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; font-family: 'Inter', sans-serif; overflow: hidden; user-select: none; }
-    .stage { position: relative; width: 420px; height: 700px; background: linear-gradient(180deg, #faf8f5 0%, #f0ebe4 100%); overflow: hidden; transform-origin: center center; }
+    body { background: #fff; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; font-family: 'Inter', sans-serif; overflow: hidden; }
+    .stage { position: relative; width: 420px; height: 700px; background: #faf8f5; overflow: hidden; }
 
-    /* Overlays */
-    .intro-overlay { position: absolute; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; transition: opacity 0.5s ease; }
-    .intro-overlay.fade-out { opacity: 0; pointer-events: none; }
-    .outro-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
-    .outro-overlay.show { opacity: 1; pointer-events: auto; }
-
-    /* Characters & Animation */
-    .buddy { position: absolute; bottom: 52px; z-index: 25; opacity: 0; width: 65px; will-change: transform, bottom; }
-    .strawberry { animation: jumpStraw 1.5s 1.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-    .mushroom { animation: jumpMush 1.5s 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-
-    @keyframes jumpStraw {
-      0% { left: -80px; bottom: 52px; transform: scale(1,1); opacity: 0; }
-      20% { left: 70px; opacity: 1; transform: scale(1.2, 0.8); }
-      50% { bottom: 418px; left: 95px; transform: rotate(-8deg) scale(0.9, 1.1); }
-      100% { left: 118px; bottom: 368px; transform: rotate(0) scale(1,1); opacity: 1; }
-    }
-    @keyframes jumpMush {
-      0% { right: -80px; bottom: 52px; transform: scale(1,1); opacity: 0; }
-      20% { right: 70px; opacity: 1; transform: scale(1.2, 0.8); }
-      50% { bottom: 408px; right: 92px; transform: rotate(8deg) scale(0.9, 1.1); }
-      100% { right: 114px; bottom: 356px; transform: rotate(0) scale(1,1); opacity: 1; }
-    }
-
-    /* Fridge & Background */
+    /* The Fridge */
     .fridge { position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%) scale(1.2); width: 190px; height: 340px; }
-    .fridge-top { height: 210px; background: #d5e0ec; border: 3px solid #b8c7d8; border-radius: 18px 18px 8px 8px; }
-    .fridge-bottom { margin-top: 4px; height: 126px; background: #c8d5e5; border: 3px solid #b8c7d8; border-radius: 8px 8px 18px 18px; }
+    .f-top { height: 210px; background: #d5e0ec; border: 3px solid #b8c7d8; border-radius: 18px 18px 8px 8px; }
+    .f-bot { margin-top: 4px; height: 126px; background: #c8d5e5; border: 3px solid #b8c7d8; border-radius: 8px 8px 18px 18px; }
 
-    /* Price & UI */
-    .price-tag { position: absolute; bottom: 170px; left: 50%; transform: translateX(-50%) scale(0); background: #e07856; color: #fff; padding: 10px 25px; border-radius: 40px; font-weight: 800; transition: 0.5s; opacity: 0; z-index: 55; }
-    .show-price { opacity: 1; transform: translateX(-50%) scale(1); }
-    .replay-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #2c4a5c; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; opacity: 0; transition: 0.5s; z-index: 60; }
+    /* Character Body Styling (No more squares!) */
+    .buddy { position: absolute; bottom: 52px; z-index: 25; width: 65px; opacity: 0; }
+    .head { width: 52px; height: 48px; border-radius: 30px; position: relative; border: 2px solid rgba(0,0,0,0.1); }
+    .face { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 30px; text-align: center; }
+    .eyes { display: flex; justify-content: space-around; }
+    .eye { width: 5px; height: 5px; background: #2c4a5c; border-radius: 50%; }
+    .mouth { width: 12px; height: 6px; border-bottom: 2px solid #cc6b6b; border-radius: 50%; margin: 2px auto; }
+
+    /* Strawberry Details */
+    .strawberry .head { background: #ffcd94; }
+    .strawberry .hat { position: absolute; top: -18px; width: 44px; height: 30px; background: #e34a4a; border-radius: 50% 50% 20% 20%; left: 4px; border: 2px solid #aa2b2b; }
+    .strawberry .hat::after { content: '..'; color: #f5e56b; font-size: 10px; position: absolute; top: 5px; left: 10px; }
+
+    /* Mushroom Details */
+    .mushroom .head { background: #f0dbb4; }
+    .mushroom .hat { position: absolute; top: -20px; width: 48px; height: 32px; background: #7d9b4c; border-radius: 40% 40% 10% 10%; left: 2px; border: 2px solid #4f6a2e; }
+
+    /* Dangling Legs */
+    .legs { display: flex; justify-content: center; gap: 8px; margin-top: -5px; }
+    .leg { width: 8px; height: 35px; border-radius: 4px; border: 1.5px solid #555; }
+    .strawberry .leg { background: repeating-linear-gradient(45deg, #e34a4a, #e34a4a 5px, #fff 5px, #fff 10px); }
+    .mushroom .leg { background: repeating-linear-gradient(45deg, #aa7c4a, #aa7c4a 5px, #f0e6d2 5px, #f0e6d2 10px); }
+    .shoe { width: 14px; height: 8px; background: #333; border-radius: 4px 4px 2px 2px; margin-top: -2px; }
+
+    /* Animations */
+    .strawberry { animation: jumpS 1.5s 1s forwards; }
+    .mushroom { animation: jumpM 1.5s 1.5s forwards; }
+    @keyframes jumpS { 0% { left: -50px; opacity: 0; } 100% { left: 118px; bottom: 368px; opacity: 1; } }
+    @keyframes jumpM { 0% { right: -50px; opacity: 0; } 100% { right: 114px; bottom: 356px; opacity: 1; } }
+
+    /* UI */
+    .price { position: absolute; bottom: 180px; left: 50%; transform: translateX(-50%); background: #e07856; color: #fff; padding: 10px 20px; border-radius: 30px; font-weight: 900; }
   </style>
 </head>
 <body>
   <div class="stage">
-    <div class="intro-overlay" id="intro"><h2>ORLO</h2></div>
-    <div class="outro-overlay" id="outro"><h2>Check them out at orlostore.com</h2></div>
-    <div class="fridge"><div class="fridge-top"></div><div class="fridge-bottom"></div></div>
-    <div class="buddy strawberry" style="background:red; height:50px; border-radius:10px;"></div>
-    <div class="buddy mushroom" style="background:brown; height:40px; border-radius:10px;"></div>
-    <div class="price-tag" id="price">16 AED</div>
-    <button class="replay-btn" id="btn" onclick="location.reload()">REPLAY</button>
+    <div class="fridge"><div class="f-top"></div><div class="f-bot"></div></div>
+
+    <div class="buddy strawberry">
+      <div class="head"><div class="hat"></div><div class="face"><div class="eyes"><div class="eye"></div><div class="eye"></div></div><div class="mouth"></div></div></div>
+      <div class="legs"><div class="l"><div class="leg"></div><div class="shoe"></div></div><div class="l"><div class="leg"></div><div class="shoe"></div></div></div>
+    </div>
+
+    <div class="buddy mushroom">
+      <div class="head"><div class="hat"></div><div class="face"><div class="eyes"><div class="eye"></div><div class="eye"></div></div><div class="mouth"></div></div></div>
+      <div class="legs"><div class="l"><div class="leg"></div><div class="shoe"></div></div><div class="l"><div class="leg"></div><div class="shoe"></div></div></div>
+    </div>
+
+    <div class="price">16 AED</div>
   </div>
-  <script>
-    setTimeout(() => document.getElementById('intro').classList.add('fade-out'), 1000);
-    setTimeout(() => {
-      document.getElementById('price').classList.add('show-price');
-      document.getElementById('btn').style.opacity = "1";
-    }, 4500);
-    setTimeout(() => document.getElementById('outro').classList.add('show'), 7000);
-  </script>
 </body>
 </html>
