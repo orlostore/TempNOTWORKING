@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ORLO · Dangling Fridge Buddies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #fff; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; font-family: 'Inter', sans-serif; overflow: hidden; user-select: none; }
+    .stage { position: relative; width: 420px; height: 700px; background: linear-gradient(180deg, #faf8f5 0%, #f0ebe4 100%); overflow: hidden; transform-origin: center center; }
+
+    /* Overlays */
+    .intro-overlay { position: absolute; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; transition: opacity 0.5s ease; }
+    .intro-overlay.fade-out { opacity: 0; pointer-events: none; }
+    .outro-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+    .outro-overlay.show { opacity: 1; pointer-events: auto; }
+
+    /* Characters & Animation */
+    .buddy { position: absolute; bottom: 52px; z-index: 25; opacity: 0; width: 65px; will-change: transform, bottom; }
+    .strawberry { animation: jumpStraw 1.5s 1.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .mushroom { animation: jumpMush 1.5s 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+    @keyframes jumpStraw {
+      0% { left: -80px; bottom: 52px; transform: scale(1,1); opacity: 0; }
+      20% { left: 70px; opacity: 1; transform: scale(1.2, 0.8); }
+      50% { bottom: 418px; left: 95px; transform: rotate(-8deg) scale(0.9, 1.1); }
+      100% { left: 118px; bottom: 368px; transform: rotate(0) scale(1,1); opacity: 1; }
+    }
+    @keyframes jumpMush {
+      0% { right: -80px; bottom: 52px; transform: scale(1,1); opacity: 0; }
+      20% { right: 70px; opacity: 1; transform: scale(1.2, 0.8); }
+      50% { bottom: 408px; right: 92px; transform: rotate(8deg) scale(0.9, 1.1); }
+      100% { right: 114px; bottom: 356px; transform: rotate(0) scale(1,1); opacity: 1; }
+    }
+
+    /* Fridge & Background */
+    .fridge { position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%) scale(1.2); width: 190px; height: 340px; }
+    .fridge-top { height: 210px; background: #d5e0ec; border: 3px solid #b8c7d8; border-radius: 18px 18px 8px 8px; }
+    .fridge-bottom { margin-top: 4px; height: 126px; background: #c8d5e5; border: 3px solid #b8c7d8; border-radius: 8px 8px 18px 18px; }
+
+    /* Price & UI */
+    .price-tag { position: absolute; bottom: 170px; left: 50%; transform: translateX(-50%) scale(0); background: #e07856; color: #fff; padding: 10px 25px; border-radius: 40px; font-weight: 800; transition: 0.5s; opacity: 0; z-index: 55; }
+    .show-price { opacity: 1; transform: translateX(-50%) scale(1); }
+    .replay-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #2c4a5c; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; opacity: 0; transition: 0.5s; z-index: 60; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="intro-overlay" id="intro"><h2>ORLO</h2></div>
+    <div class="outro-overlay" id="outro"><h2>Check them out at orlostore.com</h2></div>
+    <div class="fridge"><div class="fridge-top"></div><div class="fridge-bottom"></div></div>
+    <div class="buddy strawberry" style="background:red; height:50px; border-radius:10px;"></div>
+    <div class="buddy mushroom" style="background:brown; height:40px; border-radius:10px;"></div>
+    <div class="price-tag" id="price">16 AED</div>
+    <button class="replay-btn" id="btn" onclick="location.reload()">REPLAY</button>
+  </div>
+  <script>
+    setTimeout(() => document.getElementById('intro').classList.add('fade-out'), 1000);
+    setTimeout(() => {
+      document.getElementById('price').classList.add('show-price');
+      document.getElementById('btn').style.opacity = "1";
+    }, 4500);
+    setTimeout(() => document.getElementById('outro').classList.add('show'), 7000);
+  </script>
+</body>
+</html>
