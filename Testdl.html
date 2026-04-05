@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ORLO · Dangling Fridge Buddies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #ffffff; display: flex; align-items: center; justify-content: center;
+      width: 100vw; height: 100vh; font-family: 'Inter', sans-serif; overflow: hidden;
+      -webkit-tap-highlight-color: transparent; user-select: none;
+    }
+    .stage {
+      position: relative; width: 420px; height: 700px;
+      background: linear-gradient(180deg, #faf8f5 0%, #f0ebe4 100%);
+      overflow: hidden; transform-origin: center center;
+    }
+
+    /* ===== INTRO/OUTRO OVERLAYS ===== */
+    .intro-overlay {
+      position: absolute; inset: 0; background: #ffffff; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; z-index: 100; transition: opacity 0.5s ease;
+    }
+    .intro-overlay.fade-out { opacity: 0; pointer-events: none; }
+    .intro-logo {
+      width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle, rgba(224,120,86,0.12) 0%, transparent 70%);
+      opacity: 0; transform: scale(0.5); animation: introLogoIn 0.6s 0.2s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    .intro-logo-text { font-size: 28px; font-weight: 900; color: #2c4a5c; letter-spacing: 4px; }
+    @keyframes introLogoIn { 100% { opacity: 1; transform: scale(1); } }
+
+    .outro-overlay {
+      position: absolute; inset: 0; background: rgba(255,255,255,0.95); display: flex;
+      flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.6s ease;
+    }
+    .outro-overlay.show { opacity: 1; pointer-events: auto; }
+    .outro-price {
+      background: #e07856; color: #fff; padding: 10px 30px; border-radius: 50px;
+      font-size: 20px; font-weight: 800; box-shadow: 0 4px 20px rgba(224,120,86,0.4);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+    /* ===== KITCHEN & FRIDGE ===== */
+    .kitchen-bg { position: absolute; bottom: 0; width: 100%; height: 180px; background: linear-gradient(0deg, #e6ddd2 0%, #f0ebe4 90%); }
+    .floor { position: absolute; bottom: 0; width: 100%; height: 45px; background: #8b7355; border-top: 3px solid #a08665; }
+    .fridge {
+      position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%) scale(1.2);
+      width: 190px; height: 340px; filter: drop-shadow(10px 15px 12px rgba(0,0,0,0.2));
+    }
+    .fridge-top { width: 100%; height: 210px; background: linear-gradient(145deg, #f5faff, #d5e0ec); border-radius: 18px 18px 8px 8px; border: 3px solid #b8c7d8; position: relative; }
+    .fridge-top::after { content: ''; position: absolute; top: 10px; left: 10px; width: 30px; height: 100px; background: rgba(255,255,255,0.3); filter: blur(5px); border-radius: 20px; }
+    .fridge-bottom { margin-top: 4px; width: 100%; height: 126px; background: linear-gradient(145deg, #e0e9f5, #c8d5e5); border-radius: 8px 8px 18px 18px; border: 3px solid #b8c7d8; }
+    .handle { position: absolute; right: 18px; width: 8px; background: #9aafc2; border-radius: 6px; }
+    .handle-top { top: 75px; height: 50px; }
+    .handle-bottom { top: 245px; height: 40px; }
+
+    /* ===== BUDDIES ===== */
+    .buddy { position: absolute; bottom: 52px; z-index: 25; opacity: 0; width: 65px; will-change: transform, bottom, left, right; }
+    .head { position: relative; width: 52px; height: 48px; border-radius: 30px; }
+    .head::after { content: ''; position: absolute; inset: 2px; border-radius: inherit; border-top: 2px solid rgba(255,255,255,0.4); pointer-events: none; }
+
+    /* ENHANCEMENT: Squash & Stretch Keyframes */
+    @keyframes jumpStraw {
+      0% { left: -80px; bottom: 52px; transform: scale(1, 1); opacity: 0; }
+      20% { left: 70px; opacity: 1; transform: scale(1.2, 0.8); } /* Squash */
+      50% { bottom: 418px; left: 95px; transform: rotate(-8deg) scale(0.9, 1.1); } /* Stretch */
+      100% { left: 118px; bottom: 368px; transform: rotate(0) scale(1, 1); opacity: 1; }
+    }
+    @keyframes jumpMush {
+      0% { right: -80px; bottom: 52px; transform: scale(1, 1); opacity: 0; }
+      20% { right: 70px; opacity: 1; transform: scale(1.2, 0.8); }
+      50% { bottom: 408px; right: 92px; transform: rotate(8deg) scale(0.9, 1.1); }
+      100% { right: 114px; bottom: 356px; transform: rotate(0) scale(1, 1); opacity: 1; }
+    }
+    @keyframes magnetVibrate {
+      0% { transform: scale(1); }
+      20% { transform: scale(1.05) translateX(2px); }
+      40% { transform: scale(0.95) translateX(-2px); }
+      100% { transform: scale(1); }
+    }
+
+    .strawberry { animation: jumpStraw 1.5s 1.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .mushroom { animation: jumpMush 1.5s 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .snapped { animation: magnetVibrate 0.3s ease-out !important; }
+
+    /* Character Visuals */
+    .strawberry .head { background: #ffcd94; }
+    .strawberry .hat { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 44px; height: 32px; background: #e34a4a; border-radius: 30px; border: 2px solid #aa2b2b; }
+    .mushroom .head { background: #f0dbb4; }
+    .mushroom .hat { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); width: 48px; height: 32px; background: #7d9b4c; border-radius: 40%; border: 2px solid #4f6a2e; }
+    
+    .legs { display: flex; justify-content: center; gap: 10px; margin-top: -4px; }
+    .leg { width: 10px; height: 38px; border: 2px solid #725432; border-radius: 0 0 6px 6px; }
+    .strawberry .leg { background: repeating-linear-gradient(45deg, #e34a4a 0px, #e34a4a 6px, #fff 6px, #fff 12px); }
+    .mushroom .leg { background: repeating-linear-gradient(45deg, #aa7c4a 0px, #aa7c4a 6px, #f0e6d2 6px, #f0e6d2 12px); }
+
+    /* Effects & UI */
+    .snap-ring { position: absolute; width: 24px; height: 24px; border-radius: 50%; border: 3px solid #e07856; opacity: 0; pointer-events: none; z-index: 40; }
+    .sr-strawberry { top: 217px; left: 122px; } .sr-mushroom { top: 197px; right: 118px; }
+    .trigger-snap { animation: snapBurst 0.5s ease-out forwards; }
+    @keyframes snapBurst { 0% { transform: scale(0.3); opacity: 0.9; } 100% { transform: scale(3.5); opacity: 0; } }
+
+    .price-tag { position: absolute; bottom: 170px; left: 50%; transform: translateX(-50%) scale(0); background: #e07856; padding: 8px 24px; border-radius: 40px; color: #fff; font-weight: 800; opacity: 0; z-index: 55; transition: 0.5s; }
+    .show-price { opacity: 1; transform: translateX(-50%) scale(1); }
+    .replay-btn { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); background: rgba(44, 74, 92, 0.8); border: 2px solid #e07856; color: #fff; padding: 8px 24px; border-radius: 40px; cursor: pointer; opacity: 0; transition: 0.5s; z-index: 60; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="intro-overlay" id="introOverlay">
+      <div class="intro-logo"><div class="intro-logo-text">ORLO</div></div>
+    </div>
+
+    <div class="outro-overlay" id="outroOverlay">
+      <div class="outro-price">16 AED · ١٦ درهم</div>
+      <div style="color:#2c4a5c; font-weight:900; margin-top:10px">ORLOSTORE.COM</div>
+    </div>
+
+    <div class="kitchen-bg"></div><div class="floor"></div>
+    <div class="fridge"><div class="fridge-top"></div><div class="fridge-bottom"></div><div class="handle handle-top"></div><div class="handle handle-bottom"></div></div>
+
+    <div class="buddy strawberry"><div class="head"><div class="hat"></div></div><div class="legs"><div class="leg"></div><div class="leg"></div></div></div>
+    <div class="buddy mushroom"><div class="head"><div class="hat"></div></div><div class="legs"><div class="leg"></div><div class="leg"></div></div></div>
+
+    <div class="snap-ring sr-strawberry" id="snapS"></div>
+    <div class="snap-ring sr-mushroom" id="snapM"></div>
+    <div class="price-tag" id="priceTag">16 AED each</div>
+    <button class="replay-btn" id="replayBtn" onclick="location.reload()">↻ REPLAY</button>
+  </div>
+
+<script>
+function fitStage() {
+  var s = document.querySelector('.stage');
+  var scale = Math.min(window.innerWidth / 420, window.innerHeight / 700);
+  s.style.transform = 'scale(' + scale + ')';
+}
+window.addEventListener('resize', fitStage); fitStage();
+
+setTimeout(() => document.getElementById('introOverlay').classList.add('fade-out'), 1200);
+
+// Animation triggers
+setTimeout(() => {
+    document.getElementById('snapS').classList.add('trigger-snap');
+    document.querySelector('.strawberry').classList.add('snapped');
+}, 3200);
+
+setTimeout(() => {
+    document.getElementById('snapM').classList.add('trigger-snap');
+    document.querySelector('.mushroom').classList.add('snapped');
+}, 3700);
+
+setTimeout(() => {
+    document.getElementById('priceTag').classList.add('show-price');
+    document.getElementById('replayBtn').style.opacity = "1";
+}, 4500);
+
+setTimeout(() => document.getElementById('outroOverlay').classList.add('show'), 7000);
+</script>
+</body>
+</html>
