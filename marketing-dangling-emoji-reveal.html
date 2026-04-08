@@ -261,9 +261,14 @@ async function startPromo(mode) {
   const revNameAr = document.getElementById('revNameAr');
   const butWait = document.getElementById('butWait');
 
+  const revealBox = document.getElementById('revealBox');
+
   for (let i = 0; i < CHARS.length; i++) {
     const c = CHARS[i];
-    // Reset
+
+    // Reset children instantly (transition: none) while revealBox is still hidden,
+    // so no old character flashes visible when revealBox becomes opacity 1 again.
+    [revEmoji, revArrow, revReal, revName, revNameAr, butWait].forEach(el => el.style.transition = 'none');
     revEmoji.style.opacity = '0'; revEmoji.style.transform = 'scale(0.5)';
     revArrow.style.opacity = '0'; revArrow.style.transform = 'rotate(-90deg)';
     revReal.style.opacity = '0'; revReal.style.transform = 'scale(0.3) rotate(15deg)';
@@ -276,6 +281,13 @@ async function startPromo(mode) {
     revName.textContent = c.en;
     revNameAr.textContent = c.ar;
 
+    // Restore revealBox visibility after reset — children are already hidden, no flash
+    revealBox.style.transition = 'none';
+    revealBox.style.opacity = '1';
+
+    // Let browser paint the reset state before starting enter animations
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
     // Emoji pops in
     await anim(revEmoji, {opacity:'1', transform:'scale(1)'}, 300, 'cubic-bezier(0.34,1.56,0.64,1)');
     await wait(200);
@@ -285,7 +297,7 @@ async function startPromo(mode) {
 
     // Real product reveals — emoji shrinks while product grows
     anim(revEmoji, {opacity:'0.3', transform:'scale(0.6)'}, 300);
-    spawnRing(document.getElementById('revealBox'));
+    spawnRing(revealBox);
     await anim(revReal, {opacity:'1', transform:'scale(1) rotate(0deg)'}, 450, 'cubic-bezier(0.34,1.56,0.64,1)');
 
     // Name
@@ -300,10 +312,9 @@ async function startPromo(mode) {
       await wait(300);
     }
 
-    // Fade out for next
-    await anim(document.getElementById('revealBox'), {opacity:'0'}, 200);
-    await wait(100);
-    document.getElementById('revealBox').style.opacity = '1';
+    // Fade out — next iteration will reset children while hidden
+    await anim(revealBox, {opacity:'0'}, 200);
+    await wait(50);
   }
 
   await anim(s2, {opacity:'0'}, 300);
