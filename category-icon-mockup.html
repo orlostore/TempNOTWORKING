@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORLO — Category Cards Icon Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #2c4a5c;
+    --accent:  #e07856;
+    --bg:      #f8f9fa;
+  }
+
+  body {
+    background: #dde0e4;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 20px 64px;
+    gap: 52px;
+  }
+
+  /* ── page header ── */
+  .page-header { text-align: center; }
+  .page-header h1 {
+    font-size: 11px; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--primary);
+  }
+  .page-header p { font-size: 11px; color: #999; margin-top: 3px; }
+
+  /* ── section label ── */
+  .section-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: #aaa; text-align: center;
+    margin-bottom: -36px;
+  }
+
+  /* ── phone frame ── */
+  .phone {
+    width: 360px;
+    background: var(--bg);
+    border-radius: 42px;
+    padding: 44px 18px 28px;
+    box-shadow:
+      0 0 0 9px #111,
+      0 0 0 12px #2a2a2a,
+      0 36px 90px rgba(0,0,0,.28);
+    position: relative;
+  }
+  .phone::before { /* notch */
+    content: '';
+    position: absolute; top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 110px; height: 26px;
+    background: #111;
+    border-radius: 0 0 18px 18px;
+  }
+
+  /* ── section title inside phone ── */
+  .shop-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .shop-header .en {
+    font-size: 16px; font-weight: 700; color: var(--primary); letter-spacing: -.3px;
+  }
+  .shop-header .ar {
+    font-family: 'Almarai', sans-serif; font-size: 12px;
+    font-weight: 700; color: #999; direction: rtl;
+  }
+
+  /* ── grid ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* ────────────────────────────────
+     BEFORE — current style
+  ──────────────────────────────── */
+  .card-before {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    padding: 16px 12px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .card-before .emoji {
+    display: block;
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .card-before .name    { font-size: .78rem; font-weight: 600; color: var(--primary); }
+  .card-before .name-ar { font-family: 'Almarai',sans-serif; font-size: .65rem; color: #999; direction: rtl; margin-top: 2px; }
+  .card-before .count   { font-size: .62rem; color: #bbb; margin-top: 4px; }
+
+  /* ────────────────────────────────
+     AFTER — new style
+  ──────────────────────────────── */
+  .card-after {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card-after:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.13);
+  }
+
+  /* coloured icon band — fills the space the emoji left empty */
+  .icon-band {
+    height: 78px;
+    background: linear-gradient(145deg, #34566a 0%, var(--primary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* subtle inner glow accent at bottom-right corner */
+  .icon-band::after {
+    content: '';
+    position: absolute; bottom: -20px; right: -20px;
+    width: 70px; height: 70px;
+    background: radial-gradient(circle, rgba(224,120,86,.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .icon-band svg {
+    width: 32px; height: 32px;
+    stroke: rgba(255,255,255,.9);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    position: relative; z-index: 1;
+  }
+
+  .card-after .text-area {
+    padding: 10px 12px 13px;
+  }
+  .card-after .name    { font-size: .78rem; font-weight: 600; color: var(--primary); }
+  .card-after .name-ar { font-family: 'Almarai',sans-serif; font-size: .65rem; color: #999; direction: rtl; margin-top: 2px; }
+  .card-after .count   { font-size: .62rem; color: #bbb; margin-top: 5px; }
+
+  /* ── divider between before/after inside phone ── */
+  .inline-label {
+    font-size: 9px; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: #bbb;
+    text-align: center; margin: 14px 0 10px;
+  }
+  .inline-label span {
+    background: var(--bg);
+    padding: 0 8px;
+    position: relative; z-index: 1;
+  }
+  .inline-label::before {
+    content: '';
+    display: block;
+    height: 1px; background: #e0e0e0;
+    margin-top: 7px; margin-bottom: -7px;
+  }
+
+  /* ────────────────────────────────
+     DESKTOP STRIP
+  ──────────────────────────────── */
+  .desktop-wrap {
+    width: 100%; max-width: 760px;
+  }
+  .desktop-section-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 16px;
+  }
+  .desktop-section-header .en {
+    font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: -.3px;
+  }
+  .desktop-section-header .ar {
+    font-family: 'Almarai',sans-serif; font-size: 14px;
+    font-weight: 700; color: #999; direction: rtl;
+  }
+
+  .desktop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .desktop-grid .card-after { border-radius: 12px; }
+  .desktop-grid .icon-band  { height: 110px; }
+  .desktop-grid .icon-band svg { width: 42px; height: 42px; stroke-width: 1.4; }
+  .desktop-grid .text-area  { padding: 14px 18px 18px; }
+  .desktop-grid .name       { font-size: .92rem; }
+  .desktop-grid .name-ar    { font-size: .75rem; }
+  .desktop-grid .count      { font-size: .7rem; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>ORLO Store · Category Cards</h1>
+  <p>Before → After: SVG icon band replaces floating emoji</p>
+</div>
+
+<!-- ═══════════ MOBILE ═══════════ -->
+<p class="section-label">Mobile</p>
+<div class="phone">
+
+  <div class="shop-header">
+    <span class="en">Shop by Category</span>
+    <span class="ar">تسوق حسب الفئة</span>
+  </div>
+
+  <!-- BEFORE -->
+  <div class="inline-label"><span>Before</span></div>
+  <div class="cards-grid">
+
+    <div class="card-before">
+      <span class="emoji">🏠</span>
+      <div class="name">Home &amp; Living</div>
+      <div class="name-ar">المنزل والمعيشة</div>
+      <div class="count">7 Products | 7 منتجات</div>
+    </div>
+
+    <div class="card-before">
+      <span class="emoji">🖥️</span>
+      <div class="name">Workspace</div>
+      <div class="name-ar">مساحة العمل</div>
+      <div class="count">6 Products | 6 منتجات</div>
+    </div>
+
+  </div>
+
+  <!-- AFTER -->
+  <div class="inline-label" style="margin-top:18px;"><span>After</span></div>
+  <div class="cards-grid">
+
+    <!-- HOME & LIVING -->
+    <div class="card-after">
+      <div class="icon-band">
+        <!-- House icon -->
+        <svg viewBox="0 0 24 24">
+          <path d="M3 12L12 3l9 9"/>
+          <path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9"/>
+          <rect x="9.5" y="13.5" width="5" height="5" rx=".5" opacity=".4"/>
+        </svg>
+      </div>
+      <div class="text-area">
+        <div class="name">Home &amp; Living</div>
+        <div class="name-ar">المنزل والمعيشة</div>
+        <div class="count">7 Products | 7 منتجات</div>
+      </div>
+    </div>
+
+    <!-- WORKSPACE -->
+    <div class="card-after">
+      <div class="icon-band">
+        <!-- Monitor icon -->
+        <svg viewBox="0 0 24 24">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+          <line x1="6" y1="9" x2="10" y2="9" opacity=".35"/>
+          <line x1="6" y1="12" x2="9"  y2="12" opacity=".35"/>
+        </svg>
+      </div>
+      <div class="text-area">
+        <div class="name">Workspace</div>
+        <div class="name-ar">مساحة العمل</div>
+        <div class="count">6 Products | 6 منتجات</div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /phone -->
+
+
+<!-- ═══════════ DESKTOP ═══════════ -->
+<p class="section-label">Desktop</p>
+<div class="desktop-wrap">
+  <div class="desktop-section-header">
+    <span class="en">Shop by Category</span>
+    <span class="ar">تسوق حسب الفئة</span>
+  </div>
+
+  <div class="desktop-grid">
+
+    <div class="card-after">
+      <div class="icon-band">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 12L12 3l9 9"/>
+          <path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9"/>
+          <rect x="9.5" y="13.5" width="5" height="5" rx=".5" opacity=".4"/>
+        </svg>
+      </div>
+      <div class="text-area">
+        <div class="name">Home &amp; Living</div>
+        <div class="name-ar">المنزل والمعيشة</div>
+        <div class="count">7 Products | 7 منتجات</div>
+      </div>
+    </div>
+
+    <div class="card-after">
+      <div class="icon-band">
+        <svg viewBox="0 0 24 24">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+          <line x1="6" y1="9" x2="10" y2="9" opacity=".35"/>
+          <line x1="6" y1="12" x2="9"  y2="12" opacity=".35"/>
+        </svg>
+      </div>
+      <div class="text-area">
+        <div class="name">Workspace</div>
+        <div class="name-ar">مساحة العمل</div>
+        <div class="count">6 Products | 6 منتجات</div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /desktop-wrap -->
+
+</body>
+</html>
