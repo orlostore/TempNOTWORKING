@@ -1334,6 +1334,44 @@ function closeMobileMenu() {
 // === HOMEPAGE SECTIONS: Popular, Categories, New Arrivals ===
 
 // Emoji icons for category cards — colorful, zero-dependency
+const CATEGORY_SVG = {
+    'Kitchen':      '<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
+    'Home':         '<path d="M3 12L12 3l9 9"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9"/>',
+    'Lifestyle':    '<polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>',
+    'Bathroom':     '<circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>',
+    'Organization': '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+    'Storage':      '<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+    'Cleaning':     '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+    'Bedroom':      '<path d="M2 4v16M22 4v16"/><rect x="2" y="10" width="20" height="8" rx="2"/><path d="M7 10V7a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3"/>',
+    'Garden':       '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>',
+    'Office':       '<rect x="2" y="3" width="20" height="13" rx="2"/><polyline points="8,21 12,17 16,21"/><line x1="12" y1="17" x2="12" y2="16"/>',
+    'Laundry':      '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/>',
+    'Dining':       '<line x1="18" y1="2" x2="18" y2="22"/><path d="M14 2v4a4 4 0 0 0 8 0V2"/><line x1="6" y1="2" x2="6" y2="8"/><path d="M2 8h8"/><line x1="6" y1="8" x2="6" y2="22"/>',
+    'Travel':       '<rect x="1" y="6" width="22" height="16" rx="3"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+    'Kids':         '<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>',
+    'Pets':         '<circle cx="7.5" cy="5.5" r="1.5"/><circle cx="17.5" cy="5.5" r="1.5"/><circle cx="5.5" cy="10.5" r="1.5"/><circle cx="19.5" cy="10.5" r="1.5"/><path d="M12 20c-2 2-6.5 1-7-3 0-4 3-6 7-6s7 2 7 6c-.5 4-5 5-7 3z"/>',
+    'Workspace':    '<rect x="2" y="3" width="20" height="13" rx="2"/><polyline points="8,21 12,17 16,21"/><line x1="12" y1="17" x2="12" y2="16"/>',
+    'Home Office':  '<rect x="2" y="3" width="20" height="13" rx="2"/><polyline points="8,21 12,17 16,21"/><line x1="12" y1="17" x2="12" y2="16"/>',
+    'Work Space':   '<rect x="2" y="3" width="20" height="13" rx="2"/><polyline points="8,21 12,17 16,21"/><line x1="12" y1="17" x2="12" y2="16"/>',
+    'Fitness':      '<line x1="6" y1="12" x2="18" y2="12"/><line x1="6" y1="8" x2="6" y2="16"/><line x1="18" y1="8" x2="18" y2="16"/><line x1="4" y1="9" x2="4" y2="15"/><line x1="20" y1="9" x2="20" y2="15"/>',
+    'Beauty':       '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+    'Electronics':  '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+    'Tools':        '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+    'Baby':         '<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="9" r="1"/>',
+    'Car':          '<rect x="1" y="11" width="22" height="9" rx="2"/><path d="M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4"/><circle cx="7" cy="20" r="1"/><circle cx="17" cy="20" r="1"/>',
+    'Outdoor':      '<path d="M3 17l4.5-9 4.5 4.5 3-4.5 5 9H3z"/><circle cx="18" cy="6" r="2"/>',
+};
+
+function getCategorySVG(categoryName) {
+    if (CATEGORY_SVG[categoryName]) return CATEGORY_SVG[categoryName];
+    const sorted = Object.keys(CATEGORY_SVG).sort((a, b) => b.length - a.length);
+    for (const key of sorted) {
+        if (categoryName.toLowerCase().includes(key.toLowerCase())) return CATEGORY_SVG[key];
+    }
+    // default: tag/label icon
+    return '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>';
+}
+
 const CATEGORY_EMOJI = {
     'Kitchen': '🍳',
     'Home': '🏠',
@@ -1409,16 +1447,24 @@ function populateCategories() {
     if (!container || !products.length) return;
     const cats = getCategories().filter(c => c !== 'All Products');
 
-    container.innerHTML = cats.map(cat => {
+    // 3+ categories → 3-column grid; 2 → 2-column
+    container.classList.toggle('three-plus', cats.length >= 3);
+
+    container.innerHTML = cats.map((cat, i) => {
         const count = products.filter(p => p.category === cat).length;
         const catAr = getCategoryArabic(cat);
-        const emoji = getCategoryEmoji(cat);
+        const svg = getCategorySVG(cat);
+        const bandClass = 'band-col-' + (i % 4);
         return `
         <div class="category-card" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'}); setTimeout(function(){ loadProducts('${cat.replace(/'/g, "\\'")}'); }, 300);">
-            <span class="category-card-emoji">${emoji}</span>
-            <div class="category-card-name">${cat}</div>
-            ${catAr ? `<div class="category-card-name-ar">${catAr}</div>` : ''}
-            <div class="category-card-count">${count} ${count !== 1 ? 'Products' : 'Product'} | <span dir="ltr">${count === 1 ? 'منتج' : count === 2 ? 'منتجين' : 'منتجات'} ${count}</span></div>
+            <div class="category-card-band ${bandClass}">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">${svg}</svg>
+            </div>
+            <div class="category-card-text">
+                <div class="category-card-name">${cat}</div>
+                ${catAr ? `<div class="category-card-name-ar">${catAr}</div>` : ''}
+                <div class="category-card-count">${count} ${count !== 1 ? 'Products' : 'Product'} &nbsp;·&nbsp; <span dir="ltr">${count === 1 ? 'منتج' : count === 2 ? 'منتجين' : 'منتجات'} ${count}</span></div>
+            </div>
         </div>`;
     }).join('');
 }
