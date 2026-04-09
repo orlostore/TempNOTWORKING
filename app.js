@@ -465,8 +465,39 @@ function calculateDeliveryFee(subtotal) { const zone = deliveryZones[selectedDel
 function getAmountUntilFreeDelivery(subtotal) { const zone = deliveryZones[selectedDeliveryZone]; if (subtotal >= zone.freeThreshold) { return 0; } return zone.freeThreshold - subtotal; }
 function generateOrderNumber() { const date = new Date(); const year = date.getFullYear().toString().slice(-2); const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const random = (crypto.getRandomValues(new Uint16Array(1))[0] % 9000) + 1000; return `ORLO-${year}${month}${day}-${random}`; }
 
+const CATEGORY_ARABIC = {
+    'All Products':   'جميع المنتجات',
+    'Home & Living':  'المنزل والمعيشة',
+    'Home':           'المنزل',
+    'Workspace':      'مساحة العمل',
+    'Home Office':    'مكتب المنزل',
+    'Work Space':     'مساحة العمل',
+    'Kitchen':        'المطبخ',
+    'Bathroom':       'الحمام',
+    'Bedroom':        'غرفة النوم',
+    'Dining':         'غرفة الطعام',
+    'Living Room':    'غرفة المعيشة',
+    'Garden':         'الحديقة',
+    'Outdoor':        'الخارج',
+    'Organization':   'التنظيم',
+    'Storage':        'التخزين',
+    'Cleaning':       'التنظيف',
+    'Laundry':        'الغسيل',
+    'Lifestyle':      'أسلوب الحياة',
+    'Travel':         'السفر',
+    'Fitness':        'اللياقة',
+    'Beauty':         'الجمال',
+    'Electronics':    'الإلكترونيات',
+    'Tools':          'الأدوات',
+    'Kids':           'الأطفال',
+    'Baby':           'الرضع',
+    'Pets':           'الحيوانات الأليفة',
+    'Car':            'السيارة',
+    'Office':         'المكتب',
+};
+
 function getCategoryArabic(category) {
-    if (category === "All Products") return "جميع المنتجات";
+    if (CATEGORY_ARABIC[category]) return CATEGORY_ARABIC[category];
     const product = products.find(p => p.category === category);
     return product && product.categoryAr ? product.categoryAr : '';
 }
