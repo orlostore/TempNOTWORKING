@@ -288,7 +288,7 @@ nav {
    HERO SECTION - OPTION C COMPACT DESIGN
    ============================================ */
 .hero {
-  background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
+  background: linear-gradient(140deg, #3e6070 0%, #2c4a5c 50%, #1a3342 100%);
   color: #fff;
   padding: 12px 1.34rem;
   max-width: calc(1180px - 2 * 1.34rem);
@@ -367,7 +367,7 @@ nav {
 
 /* Hero CTA Button */
 .hero-cta {
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: white;
   padding: 10px 22px;
   border-radius: 6px;
@@ -4519,7 +4519,7 @@ footer p {
 @media (max-width: 768px) {
     .mobile-hero {
         display: block;
-        background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
+        background: linear-gradient(140deg, #3e6070 0%, #2c4a5c 50%, #1a3342 100%);
         color: #fff;
         padding: 18px 16px;
         margin: 8px 12px;
@@ -4546,7 +4546,7 @@ footer p {
         flex-direction: column;
         align-items: center;
         gap: 2px;
-        background: var(--accent);
+        background: var(--accent-gradient);
         color: #fff;
         padding: 10px 28px;
         border-radius: 6px;
