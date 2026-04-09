@@ -813,7 +813,8 @@ function addToCart(id, event) {
         }
     });
 
-    // Meta Pixel: track AddToCart event
+    // Meta Pixel + CAPI relay: AddToCart
+    const atcEventId = `atc_${product.slug}_${Date.now()}`;
     if (typeof fbq === 'function') {
         fbq('track', 'AddToCart', {
             content_ids: [product.slug],
@@ -821,8 +822,24 @@ function addToCart(id, event) {
             content_type: 'product',
             value: product.price,
             currency: 'AED'
-        });
+        }, { eventID: atcEventId });
     }
+    fetch('/api/capi-event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            event_name: 'AddToCart',
+            event_id: atcEventId,
+            event_source_url: window.location.href,
+            custom_data: {
+                content_ids: [product.slug],
+                content_name: product.name,
+                content_type: 'product',
+                value: product.price,
+                currency: 'AED'
+            }
+        })
+    }).catch(() => {});
 
     // TikTok Pixel: track AddToCart event
     if (typeof ttq !== 'undefined') {
@@ -1840,18 +1857,35 @@ async function checkout() {
             });
         });
 
-        // Meta Pixel: track InitiateCheckout event
+        // Meta Pixel + CAPI relay: InitiateCheckout
+        const icEventId = `ic_${Date.now()}`;
+        const cartWithPricingFb = calculateTierPricing(cart);
+        const checkoutValueFb = cartWithPricingFb.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
         if (typeof fbq === 'function') {
-            const cartWithPricingFb = calculateTierPricing(cart);
-            const checkoutValueFb = cartWithPricingFb.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
             fbq('track', 'InitiateCheckout', {
                 content_ids: cart.map(i => i.slug),
                 content_type: 'product',
                 num_items: cart.reduce((s, i) => s + i.quantity, 0),
                 value: checkoutValueFb,
                 currency: 'AED'
-            });
+            }, { eventID: icEventId });
         }
+        fetch('/api/capi-event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                event_name: 'InitiateCheckout',
+                event_id: icEventId,
+                event_source_url: window.location.href,
+                custom_data: {
+                    content_ids: cart.map(i => i.slug),
+                    content_type: 'product',
+                    num_items: cart.reduce((s, i) => s + i.quantity, 0),
+                    value: checkoutValueFb,
+                    currency: 'AED'
+                }
+            })
+        }).catch(() => {});
 
         // TikTok Pixel: track InitiateCheckout event
         if (typeof ttq !== 'undefined') {
