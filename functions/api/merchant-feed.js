@@ -144,7 +144,7 @@ export async function onRequestGet(context) {
             // Shipping to UAE
             xml += `  <g:shipping>
     <g:country>AE</g:country>
-    <g:price>0.00 AED</g:price>
+    <g:price>18.00 AED</g:price>
   </g:shipping>
 `;
 
