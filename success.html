@@ -566,7 +566,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     num_items: cartData.reduce(function(sum, item) { return sum + (item.quantity || 1); }, 0),
                     value: fbSubtotal + fbDelivery,
                     currency: 'AED'
-                });
+                }, { eventID: sessionId });
                 sessionStorage.setItem(fbFiredKey, '1');
             }
         }

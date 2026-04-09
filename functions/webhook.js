@@ -328,6 +328,60 @@ export async function onRequestPost(context) {
                     console.error('Activity log error:', e);
                 }
             }
+
+            // === META CONVERSIONS API (CAPI) — SERVER-SIDE PURCHASE ===
+            if (env.META_CAPI_TOKEN) {
+                try {
+                    const META_PIXEL_ID = '4275846289322000';
+                    const siteUrl = env.SITE_URL || 'https://orlostore.com';
+                    const productItems = cartItems.filter(i => !(i.name || '').toLowerCase().includes('delivery'));
+
+                    // Hashed PII for better audience match rates
+                    const userData = {};
+                    if (customerEmail) userData.em = [await hashSHA256(customerEmail.toLowerCase().trim())];
+                    const phone = session.customer_details?.phone;
+                    if (phone) userData.ph = [await hashSHA256(phone.replace(/\D/g, ''))];
+                    const nameParts = (session.customer_details?.name || '').trim().split(/\s+/);
+                    if (nameParts[0]) userData.fn = [await hashSHA256(nameParts[0].toLowerCase())];
+                    if (nameParts.length > 1) userData.ln = [await hashSHA256(nameParts[nameParts.length - 1].toLowerCase())];
+                    const address = session.customer_details?.address || session.shipping_details?.address || {};
+                    if (address.city) userData.ct = [await hashSHA256(address.city.toLowerCase().replace(/\s/g, ''))];
+                    if (address.country) userData.country = [await hashSHA256(address.country.toLowerCase())];
+
+                    const capiPayload = {
+                        data: [{
+                            event_name: 'Purchase',
+                            event_time: Math.floor(Date.now() / 1000),
+                            event_id: session.id,
+                            action_source: 'website',
+                            event_source_url: `${siteUrl}/success.html`,
+                            user_data: userData,
+                            custom_data: {
+                                value: session.amount_total / 100,
+                                currency: (session.currency || 'aed').toUpperCase(),
+                                content_ids: productItems.map(i => i.slug),
+                                content_type: 'product',
+                                num_items: productItems.reduce((s, i) => s + i.quantity, 0),
+                            },
+                        }]
+                    };
+
+                    const capiRes = await fetch(`https://graph.facebook.com/v19.0/${META_PIXEL_ID}/events?access_token=${env.META_CAPI_TOKEN}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(capiPayload),
+                    });
+
+                    if (!capiRes.ok) {
+                        const capiErr = await capiRes.text();
+                        console.error('Meta CAPI error:', capiErr);
+                    } else {
+                        console.log('Meta CAPI Purchase sent, session:', session.id);
+                    }
+                } catch (e) {
+                    console.error('Meta CAPI error (non-blocking):', e);
+                }
+            }
         }
 
         return new Response(JSON.stringify({ received: true }), {
@@ -342,6 +396,14 @@ export async function onRequestPost(context) {
             headers: { 'Content-Type': 'application/json' }
         });
     }
+}
+
+async function hashSHA256(value) {
+    const data = new TextEncoder().encode(value);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
 }
 
 function safeCompareHex(a, b) {
