@@ -78,6 +78,8 @@ nav {
 :root {
   --primary: #2c4a5c;
   --accent: #e07856;
+  --accent-gradient: linear-gradient(145deg, #eb8a65 0%, #c9603e 100%);
+  --accent-gradient-hover: linear-gradient(145deg, #d97a57 0%, #b55035 100%);
   --category-band: #3d6278;
   --text: #333;
   --bg: #f8f9fa;
@@ -206,7 +208,7 @@ nav {
   padding: 0.67rem 1.34rem;
   border-radius: 0 18.76px 18.76px 0;
   border: none;
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: #fff;
   cursor: pointer;
   font-size: 0.94rem;
@@ -714,7 +716,7 @@ nav {
   position: absolute;
   top: 10.05px;
   right: 10.05px;
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: white;
   padding: 0.34rem 0.84rem;
   border-radius: 13.4px;
@@ -802,9 +804,9 @@ nav {
   align-items: center;
   justify-content: center;
   padding: 6px 0.67rem;
-  background: #e07856;
+  background: var(--accent-gradient);
   color: white;
-  border: 1.5px solid #e07856;
+  border: 1.5px solid #c9603e;
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
@@ -831,7 +833,7 @@ nav {
 }
 
 .add-to-cart:hover {
-  background: #c9634a;
+  background: var(--accent-gradient-hover);
   transform: translateY(-1px);
 }
 
@@ -1689,7 +1691,7 @@ footer p {
   height: 48px;
   min-width: 175px;
   padding: 0 1rem;
-  background: #e07856;
+  background: var(--accent-gradient);
   color: white;
   border: none;
   border-radius: 12px;
@@ -1713,7 +1715,7 @@ footer p {
 }
 
 .inline-add-to-cart:hover {
-  background: #c9634a;
+  background: var(--accent-gradient-hover);
 }
 
 /* Qty stepper in desktop bar — exactly matches the cart button */
@@ -1910,7 +1912,7 @@ footer p {
   min-height: var(--card-btn-min-h);
   width: fit-content;
   padding: 6px 1.2rem;
-  background: #e07856;
+  background: var(--accent-gradient);
   color: white;
   border: none;
   border-radius: 12px;
@@ -1925,7 +1927,7 @@ footer p {
 }
 
 .add-to-cart-btn:hover {
-  background: #c9634a;
+  background: var(--accent-gradient-hover);
   transform: translateY(-1px);
 }
 
@@ -3085,7 +3087,7 @@ footer p {
   height: var(--card-btn-min-h);
   width: 100%;
   padding: 0 0.67rem;
-  background: #e07856;
+  background: var(--accent-gradient);
   color: white;
   border: none;
   border-radius: 12px;
@@ -3099,7 +3101,7 @@ footer p {
 }
 
 .mobile-add-to-cart:hover {
-  background: #c9634a;
+  background: var(--accent-gradient-hover);
 }
 
 /* Mobile Delivery Info */
@@ -3693,7 +3695,7 @@ footer p {
 
 .popup-btn-view-cart {
     padding: 12px 15px;
-    background: #e07856;
+    background: var(--accent-gradient);
     color: white;
     border: none;
     border-radius: 9px;
@@ -4389,8 +4391,8 @@ footer p {
     justify-content: center;
     width: 100%;
     min-height: var(--card-btn-min-h);
-    background: #e07856;
-    border: 1.5px solid #e07856;
+    background: var(--accent-gradient);
+    border: 1.5px solid #c9603e;
     border-radius: 12px;
     overflow: hidden;
 }
