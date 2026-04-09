@@ -437,11 +437,45 @@
     color:var(--gold);
     border-color:rgba(212,165,116,0.25);
   }
+
+  /* ── TAP TO PLAY OVERLAY ── */
+  #tap-overlay{
+    position:absolute;inset:0;z-index:200;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    background:rgba(26,58,82,0.88);
+    backdrop-filter:blur(6px);
+    cursor:pointer;
+    transition:opacity 0.4s ease;
+  }
+  .tap-icon{
+    width:min(18vw,10vh);height:min(18vw,10vh);
+    border-radius:50%;
+    border:1px solid rgba(212,165,116,0.35);
+    background:rgba(44,74,92,0.5);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:4%;
+  }
+  .tap-icon svg{width:36%;height:36%;fill:var(--gold);}
+  .tap-label{
+    font-family:'Inter',sans-serif;
+    font-size:clamp(7px,2vw,10px);
+    letter-spacing:0.3em;text-transform:uppercase;
+    color:rgba(212,165,116,0.6);
+  }
 </style>
 </head>
 <body>
 
 <div class="reel">
+
+  <!-- Tap to Play -->
+  <div id="tap-overlay">
+    <div class="tap-icon">
+      <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+    </div>
+    <div class="tap-label">Tap to Play</div>
+  </div>
 
   <!-- Background -->
   <div class="bg"></div>
@@ -478,7 +512,7 @@
     <!-- Phase 3 + 4: Logo reveal & settle -->
     <div class="logo-wrap">
       <div class="logo-glow"></div>
-      <img class="logo-img" src="lv_0_20260331011714.jpg" alt="ORLO">
+      <img class="logo-img" src="logo.png" alt="ORLO">
     </div>
 
     <!-- Phase 5: Text reveals -->
@@ -528,11 +562,79 @@
 
   </div>
 
-  <button class="replay" onclick="replay()">&#x21BA; Replay</button>
+  <button class="replay" onclick="replayAll()">&#x21BA; Replay</button>
 </div>
 
 <script>
-function replay(){
+/* ── Audio Engine ── */
+var _ctx=null;
+function getCtx(){
+  if(!_ctx)_ctx=new(window.AudioContext||window.webkitAudioContext)();
+  if(_ctx.state==='suspended')_ctx.resume();
+  return _ctx;
+}
+
+/* Whoosh — spark flying in (filtered noise sweep) */
+function playWhoosh(ctx,t){
+  var n=ctx.sampleRate*0.6|0,buf=ctx.createBuffer(1,n,ctx.sampleRate),d=buf.getChannelData(0);
+  for(var i=0;i<n;i++)d[i]=Math.random()*2-1;
+  var src=ctx.createBufferSource();src.buffer=buf;
+  var f=ctx.createBiquadFilter();f.type='bandpass';f.Q.value=2;
+  f.frequency.setValueAtTime(3200,t);f.frequency.exponentialRampToValueAtTime(220,t+0.55);
+  var g=ctx.createGain();
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.3,t+0.04);
+  g.gain.exponentialRampToValueAtTime(0.001,t+0.55);
+  src.connect(f);f.connect(g);g.connect(ctx.destination);
+  src.start(t);
+}
+
+/* Chime — logo reveal (ascending arpeggio C6-E6-G6-C7) */
+function playChime(ctx,t){
+  [1047,1319,1568,2093].forEach(function(freq,i){
+    var osc=ctx.createOscillator(),g=ctx.createGain(),s=t+i*0.07;
+    osc.frequency.value=freq;
+    g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(0.055,s+0.01);
+    g.gain.exponentialRampToValueAtTime(0.001,s+2);
+    osc.connect(g);g.connect(ctx.destination);
+    osc.start(s);osc.stop(s+2);
+  });
+}
+
+/* Thud — logo settles with weight (two-layer sine sub) */
+function playThud(ctx,t){
+  [{f0:90,f1:32,g0:0.45,d:0.45},{f0:44,f1:16,g0:0.28,d:0.55}].forEach(function(p){
+    var osc=ctx.createOscillator(),g=ctx.createGain();
+    osc.type='sine';
+    osc.frequency.setValueAtTime(p.f0,t);osc.frequency.exponentialRampToValueAtTime(p.f1,t+p.d);
+    g.gain.setValueAtTime(p.g0,t);g.gain.exponentialRampToValueAtTime(0.001,t+p.d);
+    osc.connect(g);g.connect(ctx.destination);
+    osc.start(t);osc.stop(t+p.d);
+  });
+}
+
+/* Pad — soft ambient chord swell as text reveals (C4 maj) */
+function playPad(ctx,t){
+  [261.63,329.63,392,523.25].forEach(function(freq){
+    var osc=ctx.createOscillator(),lp=ctx.createBiquadFilter(),g=ctx.createGain();
+    lp.type='lowpass';lp.frequency.value=650;
+    osc.frequency.value=freq;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.017,t+1.4);
+    g.gain.setValueAtTime(0.017,t+2.5);g.gain.linearRampToValueAtTime(0,t+5.2);
+    osc.connect(lp);lp.connect(g);g.connect(ctx.destination);
+    osc.start(t);osc.stop(t+5.2);
+  });
+}
+
+function playSounds(){
+  var ctx=getCtx(),now=ctx.currentTime+0.05;
+  playWhoosh(ctx,now+0.2);
+  playChime(ctx,now+1.2);
+  playThud(ctx,now+2.4);
+  playPad(ctx,now+3.0);
+}
+
+/* ── Replay (animation + sound) ── */
+function replayAll(){
   document.querySelectorAll(
     '.spark,.ring,.logo-img,.logo-glow,.brand-name,.tagline-en,.tagline-ar,' +
     '.url,.divider,.badges,.cta,.line,.corner,.ambient,.dot,.replay'
@@ -541,7 +643,16 @@ function replay(){
     void el.offsetHeight;
     el.style.animation='';
   });
+  playSounds();
 }
+
+/* ── Tap to Play ── */
+var overlay=document.getElementById('tap-overlay');
+overlay.addEventListener('click',function(){
+  overlay.style.opacity='0';overlay.style.pointerEvents='none';
+  setTimeout(function(){overlay.remove();},400);
+  playSounds();
+});
 </script>
 
 </body>
