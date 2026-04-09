@@ -78,6 +78,7 @@ nav {
 :root {
   --primary: #2c4a5c;
   --accent: #e07856;
+  --category-band: #3d6278;
   --text: #333;
   --bg: #f8f9fa;
   --white: #ffffff;
@@ -4776,11 +4777,11 @@ footer p {
     position: relative; z-index: 1;
 }
 
-/* tonal blue palette — each category gets a distinct shade */
-.band-col-0 { background: linear-gradient(140deg, #2c4a5c 0%, #1e3845 100%); }
-.band-col-1 { background: linear-gradient(140deg, #3d6278 0%, #2c4e62 100%); }
-.band-col-2 { background: linear-gradient(140deg, #4a7a94 0%, #3a6278 100%); }
-.band-col-3 { background: linear-gradient(140deg, #355a6e 0%, #243e4e 100%); }
+/* single band colour for all categories */
+.band-col-0,
+.band-col-1,
+.band-col-2,
+.band-col-3 { background: linear-gradient(140deg, var(--category-band) 0%, #2c4e62 100%); }
 
 /* text section */
 .category-card-text {
