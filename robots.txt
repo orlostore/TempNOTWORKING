@@ -19,8 +19,6 @@ Disallow: /mockups-buybox.html
 Disallow: /pricing-preview.html
 Disallow: /color-preview.html
 
-Sitemap: https://orlostore.com/sitemap.xml
-
 User-agent: GPTBot
 Disallow: /
 
@@ -32,3 +30,5 @@ Disallow: /
 
 User-agent: anthropic-ai
 Disallow: /
+
+Sitemap: https://orlostore.com/sitemap.xml
