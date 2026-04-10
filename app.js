@@ -1527,12 +1527,12 @@ function populateNewArrivals() {
         ? nonFeatured.slice(0, 4)
         : sorted.slice(0, 4);
 
-    container.innerHTML = arrivals.map(p => {
+    container.innerHTML = arrivals.map((p, index) => {
         const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
-            ? `<img src="${imgSrc}" alt="${safeName}" loading="lazy">`
+            ? `<img src="${imgSrc}" alt="${safeName}" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
             : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
         return `
         <a href="product.html?product=${encodeURIComponent(p.slug)}" class="arrival-card">
