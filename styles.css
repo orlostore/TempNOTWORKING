@@ -1299,7 +1299,7 @@ nav {
 }
 
 footer {
-  background: var(--primary);
+  background: var(--category-band);
   color: white;
   text-align: center;
   font-size: 0.6rem;
