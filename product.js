@@ -352,7 +352,33 @@ async function initProductPage() {
       'price': product.price,
       'priceCurrency': 'AED',
       'availability': isOutOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
-      'url': productUrl
+      'url': productUrl,
+      'seller': { '@type': 'Organization', 'name': 'ORLO Store' },
+      'hasMerchantReturnPolicy': {
+        '@type': 'MerchantReturnPolicy',
+        'applicableCountry': 'AE',
+        'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        'merchantReturnDays': 7,
+        'returnMethod': 'https://schema.org/ReturnByMail',
+        'returnFees': 'https://schema.org/ReturnShippingFees'
+      },
+      'shippingDetails': {
+        '@type': 'OfferShippingDetails',
+        'shippingRate': {
+          '@type': 'MonetaryAmount',
+          'value': '0',
+          'currency': 'AED'
+        },
+        'shippingDestination': {
+          '@type': 'DefinedRegion',
+          'addressCountry': 'AE'
+        },
+        'deliveryTime': {
+          '@type': 'ShippingDeliveryTime',
+          'handlingTime': { '@type': 'QuantitativeValue', 'minValue': 0, 'maxValue': 1, 'unitCode': 'DAY' },
+          'transitTime': { '@type': 'QuantitativeValue', 'minValue': 1, 'maxValue': 3, 'unitCode': 'DAY' }
+        }
+      }
     }
   };
   if (product.category) jsonLd.category = product.category;
