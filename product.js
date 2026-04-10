@@ -360,7 +360,7 @@ async function initProductPage() {
         'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow',
         'merchantReturnDays': 7,
         'returnMethod': 'https://schema.org/ReturnByMail',
-        'returnFees': 'https://schema.org/FreeReturn'
+        'returnFees': 'https://schema.org/ReturnShippingFees'
       },
       'shippingDetails': {
         '@type': 'OfferShippingDetails',
