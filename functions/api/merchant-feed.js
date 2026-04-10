@@ -146,6 +146,11 @@ export async function onRequestGet(context) {
     <g:country>AE</g:country>
     <g:price>0.00 AED</g:price>
   </g:shipping>
+  <g:return_policy_label>default</g:return_policy_label>
+  <g:return_policy_country>AE</g:return_policy_country>
+  <g:return_method>by_mail</g:return_method>
+  <g:return_days>7</g:return_days>
+  <g:return_shipping_fee_type>customer</g:return_shipping_fee_type>
 `;
 
             xml += `</item>\n`;
