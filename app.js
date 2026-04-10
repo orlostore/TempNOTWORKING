@@ -1471,12 +1471,12 @@ function populatePopularNow() {
         list = list.concat(filler.slice(0, 6 - list.length));
     }
 
-    container.innerHTML = list.map(p => {
+    container.innerHTML = list.map((p, index) => {
         const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
-            ? `<img src="${imgSrc}" alt="${safeName}" loading="lazy">`
+            ? `<img src="${imgSrc}" alt="${safeName}" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
             : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
         return `
         <a href="product.html?product=${encodeURIComponent(p.slug)}" class="popular-card">
