@@ -686,7 +686,7 @@ async function initProductPage() {
       const thumbnailsHTML = product.images.length > 1 ? `
         <div class="thumbnail-strip">
           ${product.images.map((img, index) => `
-            <img src="${img}" alt="${product.name} ${index + 1}" loading="lazy" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}" onclick="changeMainImage('${img}', ${index})" style="object-fit:contain;">
+            <img src="${img}" alt="${product.name} ${index + 1}" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}" onclick="changeMainImage('${img}', ${index})" style="object-fit:contain;">
           `).join('')}
         </div>
       ` : '';
@@ -694,7 +694,7 @@ async function initProductPage() {
       gallery.innerHTML = `
         <div class="image-gallery">
           <div class="main-image-container">
-            <img id="mainImage" src="${product.images[0]}" alt="${product.name}" class="main-product-image">
+            <img id="mainImage" src="${product.images[0]}" alt="${product.name}" class="main-product-image" fetchpriority="high">
             <div class="zoom-hint">🔍 Click to zoom</div>
           </div>
           ${thumbnailsHTML}
@@ -752,7 +752,7 @@ async function initProductPage() {
     } else {
       mobileCarousel.innerHTML = product.images.map((img, index) => `
         <div class="mobile-carousel-slide" data-index="${index}">
-          <img src="${img}" alt="${product.name} ${index + 1}" loading="lazy">
+          <img src="${img}" alt="${product.name} ${index + 1}" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
         </div>
       `).join('');
       
