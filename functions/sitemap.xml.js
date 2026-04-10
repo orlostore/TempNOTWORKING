@@ -26,6 +26,22 @@ export async function onRequestGet(context) {
         xml += '    <priority>1.0</priority>\n';
         xml += '  </url>\n';
 
+        // Shop page
+        xml += '  <url>\n';
+        xml += '    <loc>https://orlostore.com/shop.html</loc>\n';
+        xml += `    <lastmod>${today}</lastmod>\n`;
+        xml += '    <changefreq>weekly</changefreq>\n';
+        xml += '    <priority>0.9</priority>\n';
+        xml += '  </url>\n';
+
+        // Terms & Conditions
+        xml += '  <url>\n';
+        xml += '    <loc>https://orlostore.com/terms-and-conditions.html</loc>\n';
+        xml += `    <lastmod>${today}</lastmod>\n`;
+        xml += '    <changefreq>monthly</changefreq>\n';
+        xml += '    <priority>0.3</priority>\n';
+        xml += '  </url>\n';
+
         // Individual product pages
         for (const row of results) {
             if (!row.slug) continue;
@@ -54,6 +70,16 @@ export async function onRequestGet(context) {
     <loc>https://orlostore.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://orlostore.com/shop.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://orlostore.com/terms-and-conditions.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>`;
 
