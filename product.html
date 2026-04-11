@@ -64,10 +64,8 @@
   <link rel="preload" href="/fonts/almarai-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
-  <style>html{opacity:0;transition:opacity .15s}</style>
   <script>
   if(sessionStorage.getItem('orlo_checkout_pending')){sessionStorage.removeItem('orlo_checkout_pending');window.location.replace('cancel.html');}
-  else{Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})}
   </script>
   <!-- UTM Parameter Tracking for Social Media Campaigns -->
   <script>
