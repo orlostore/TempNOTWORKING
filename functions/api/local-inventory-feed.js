@@ -2,7 +2,7 @@
 // Location: /functions/api/local-inventory-feed.js
 // Serves /api/local-inventory-feed as RSS 2.0 XML for Google Local Inventory
 
-const STORE_CODE = '1625-8301-2758-8057-5378';
+const STORE_CODE = '03070473316340371761';
 
 export async function onRequestGet(context) {
     const { env } = context;
