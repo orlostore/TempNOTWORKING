@@ -1,14 +1,5 @@
 const WHATSAPP_NUMBER = "971555477206";
 
-// Resize product card images via Cloudflare Image Resizing (index/shop only).
-// Product detail page (product.js) uses full-size images — untouched.
-function cardImageUrl(src, width) {
-    width = width || 400;
-    if (!src || !src.startsWith('https://images.orlostore.com/')) return src;
-    var path = src.replace('https://images.orlostore.com/', '');
-    return 'https://images.orlostore.com/cdn-cgi/image/width=' + width + ',quality=80,format=webp/' + path;
-}
-
 // Lock/unlock body scroll — bulletproof for iOS Safari
 const lockScroll = () => {
     window._savedScroll = window.scrollY;
@@ -544,7 +535,7 @@ function renderProducts(list, arabicMode) {
             ? `fetchpriority="${index === 0 ? 'high' : 'auto'}" style="max-width:100%; max-height:100%; object-fit:contain;"`
             : `loading="lazy" style="max-width:100%; max-height:100%; object-fit:contain;"`;
         const imageHTML = isUrl
-            ? `<img src="${escapeHTML(cardImageUrl(p.image, 400))}" alt="${safeName}" ${imgAttrs}>`
+            ? `<img src="${escapeHTML(p.image)}" alt="${safeName}" ${imgAttrs}>`
             : escapeHTML(p.image);
 
         // Check if out of stock (use totalStock for variant products)
@@ -1481,7 +1472,7 @@ function populatePopularNow() {
     }
 
     container.innerHTML = list.map((p, index) => {
-        const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(cardImageUrl(p.image, 400)) : '';
+        const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
@@ -1537,7 +1528,7 @@ function populateNewArrivals() {
         : sorted.slice(0, 4);
 
     container.innerHTML = arrivals.map((p, index) => {
-        const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(cardImageUrl(p.image, 400)) : '';
+        const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
