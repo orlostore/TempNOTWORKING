@@ -126,6 +126,7 @@ export async function onRequestGet(context) {
             }
 
             xml += `  <g:price>${row.price.toFixed(2)} AED</g:price>
+  <g:quantity>${totalStock}</g:quantity>
   <g:availability>${availability}</g:availability>
   <g:condition>new</g:condition>
   <g:brand>${escapeXml(row.brand || 'ORLO')}</g:brand>
