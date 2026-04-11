@@ -42,7 +42,8 @@ function isCacheExpired() {
 // Fetch products from D1 API
 async function fetchProducts() {
     try {
-        const response = await fetch('/api/products');
+        const response = await (window._productsFetch || fetch('/api/products'));
+        window._productsFetch = null;
         const data = await response.json();
         
         if (Array.isArray(data)) {

@@ -8,6 +8,8 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-TN2L38GM');</script>
     <!-- End Google Tag Manager -->
+    <!-- Early product fetch: starts API call before app.js loads to reduce LCP -->
+    <script>window._productsFetch = fetch('/api/products');</script>
     <!-- TikTok Pixel Code Start -->
     <script>
     !function (w, d, t) {
