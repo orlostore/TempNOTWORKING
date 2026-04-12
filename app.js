@@ -535,7 +535,7 @@ function renderProducts(list, arabicMode) {
             ? `fetchpriority="${index === 0 ? 'high' : 'auto'}" style="max-width:100%; max-height:100%; object-fit:contain;"`
             : `loading="lazy" style="max-width:100%; max-height:100%; object-fit:contain;"`;
         const imageHTML = isUrl
-            ? `<img src="${escapeHTML(p.image)}" alt="${safeName}" ${imgAttrs}>`
+            ? `<img src="${escapeHTML(p.image)}" alt="${safeName}" width="400" height="400" ${imgAttrs}>`
             : escapeHTML(p.image);
 
         // Check if out of stock (use totalStock for variant products)
@@ -1476,7 +1476,7 @@ function populatePopularNow() {
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
-            ? `<img src="${imgSrc}" alt="${safeName}" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
+            ? `<img src="${imgSrc}" alt="${safeName}" width="200" height="200" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
             : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
         return `
         <a href="product.html?product=${encodeURIComponent(p.slug)}" class="popular-card">
@@ -1532,7 +1532,7 @@ function populateNewArrivals() {
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
-            ? `<img src="${imgSrc}" alt="${safeName}" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
+            ? `<img src="${imgSrc}" alt="${safeName}" width="200" height="200" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
             : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
         return `
         <a href="product.html?product=${encodeURIComponent(p.slug)}" class="arrival-card">
