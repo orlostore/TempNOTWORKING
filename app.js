@@ -534,8 +534,10 @@ function renderProducts(list, arabicMode) {
         const imgAttrs = index < 4
             ? `fetchpriority="${index === 0 ? 'high' : 'auto'}" style="max-width:100%; max-height:100%; object-fit:contain;"`
             : `loading="lazy" style="max-width:100%; max-height:100%; object-fit:contain;"`;
+        const rawImgSrc = isUrl ? escapeHTML(p.image) : '';
+        const cdnImgSrc = rawImgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/w_400,c_limit,f_auto,q_auto/${rawImgSrc}` : '';
         const imageHTML = isUrl
-            ? `<img src="${escapeHTML(p.image)}" alt="${safeName}" width="400" height="400" ${imgAttrs}>`
+            ? `<img src="${cdnImgSrc}" alt="${safeName}" width="400" height="400" onerror="this.onerror=null;this.src='${rawImgSrc}'" ${imgAttrs}>`
             : escapeHTML(p.image);
 
         // Check if out of stock (use totalStock for variant products)
@@ -1473,10 +1475,11 @@ function populatePopularNow() {
 
     container.innerHTML = list.map((p, index) => {
         const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
+        const cdnSrc200pop = imgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/w_200,c_limit,f_auto,q_auto/${imgSrc}` : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
-            ? `<img src="${imgSrc}" alt="${safeName}" width="200" height="200" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
+            ? `<img src="${cdnSrc200pop}" alt="${safeName}" width="200" height="200" onerror="this.onerror=null;this.src='${imgSrc}'" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
             : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
         return `
         <a href="product.html?product=${encodeURIComponent(p.slug)}" class="popular-card">
@@ -1529,10 +1532,11 @@ function populateNewArrivals() {
 
     container.innerHTML = arrivals.map((p, index) => {
         const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
+        const cdnSrc200arr = imgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/w_200,c_limit,f_auto,q_auto/${imgSrc}` : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
-            ? `<img src="${imgSrc}" alt="${safeName}" width="200" height="200" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
+            ? `<img src="${cdnSrc200arr}" alt="${safeName}" width="200" height="200" onerror="this.onerror=null;this.src='${imgSrc}'" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
             : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
         return `
         <a href="product.html?product=${encodeURIComponent(p.slug)}" class="arrival-card">
