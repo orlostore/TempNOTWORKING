@@ -6,9 +6,11 @@ export async function onRequestGet(context) {
     const DB = env.DB;
 
     try {
-        let results;
-        try {
-            ({ results } = await DB.prepare(`
+        // Run all three queries in parallel instead of sequentially
+        const [productsResult, variantsResult, tiersResult] = await Promise.all([
+
+            // Query 1: Products (with sort_order fallback)
+            DB.prepare(`
                 SELECT id, slug, name, nameAr, category, categoryAr, price, cost, quantity,
                        description, descriptionAr, mainImage, image2, image3, image4, image5,
                        image6, image7, image8, colors, colorsAr, packaging, packagingAr,
@@ -17,65 +19,66 @@ export async function onRequestGet(context) {
                        material, materialAr, sort_order
                 FROM products
                 ORDER BY sort_order ASC, id DESC
-            `).all());
-        } catch (e) {
-            // sort_order column may not exist yet - fallback
-            ({ results } = await DB.prepare(`
-                SELECT id, slug, name, nameAr, category, categoryAr, price, cost, quantity,
-                       description, descriptionAr, mainImage, image2, image3, image4, image5,
-                       image6, image7, image8, colors, colorsAr, packaging, packagingAr,
-                       specifications, specificationsAr, featured,
-                       wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
-                       material, materialAr, 0 as sort_order
-                FROM products
-                ORDER BY id DESC
-            `).all());
-        }
+            `).all().catch(() =>
+                DB.prepare(`
+                    SELECT id, slug, name, nameAr, category, categoryAr, price, cost, quantity,
+                           description, descriptionAr, mainImage, image2, image3, image4, image5,
+                           image6, image7, image8, colors, colorsAr, packaging, packagingAr,
+                           specifications, specificationsAr, featured,
+                           wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
+                           material, materialAr, 0 as sort_order
+                    FROM products
+                    ORDER BY id DESC
+                `).all()
+            ),
 
-        // Fetch all variants grouped by product
-        let variantsMap = {};
-        try {
-            const { results: variantRows } = await DB.prepare(`
+            // Query 2: Variants
+            DB.prepare(`
                 SELECT id, product_id, name, nameAr, image, quantity, price, sort_order
                 FROM product_variants
                 ORDER BY sort_order ASC, id ASC
-            `).all();
-            for (const v of variantRows) {
-                if (!variantsMap[v.product_id]) variantsMap[v.product_id] = [];
-                variantsMap[v.product_id].push({
-                    id: v.id,
-                    name: v.name,
-                    nameAr: v.nameAr || '',
-                    image: v.image || '',
-                    quantity: v.quantity,
-                    price: v.price || 0,
-                    sortOrder: v.sort_order
-                });
-            }
-        } catch (e) {
-            // Table may not exist yet - graceful fallback
-            console.log('Variants table not ready:', e.message);
-        }
+            `).all().catch(e => {
+                console.log('Variants table not ready:', e.message);
+                return { results: [] };
+            }),
 
-        // Fetch all pricing tiers grouped by product
-        let tiersMap = {};
-        try {
-            const { results: tierRows } = await DB.prepare(`
+            // Query 3: Pricing tiers
+            DB.prepare(`
                 SELECT id, product_id, min_qty, discount_percent
                 FROM product_pricing_tiers
                 ORDER BY min_qty ASC
-            `).all();
-            for (const t of tierRows) {
-                if (!tiersMap[t.product_id]) tiersMap[t.product_id] = [];
-                tiersMap[t.product_id].push({
-                    id: t.id,
-                    minQty: t.min_qty,
-                    discountPercent: t.discount_percent
-                });
-            }
-        } catch (e) {
-            // Table may not exist yet - graceful fallback
-            console.log('Pricing tiers table not ready:', e.message);
+            `).all().catch(e => {
+                console.log('Pricing tiers table not ready:', e.message);
+                return { results: [] };
+            })
+        ]);
+
+        const { results } = productsResult;
+
+        // Build variants map
+        let variantsMap = {};
+        for (const v of variantsResult.results) {
+            if (!variantsMap[v.product_id]) variantsMap[v.product_id] = [];
+            variantsMap[v.product_id].push({
+                id: v.id,
+                name: v.name,
+                nameAr: v.nameAr || '',
+                image: v.image || '',
+                quantity: v.quantity,
+                price: v.price || 0,
+                sortOrder: v.sort_order
+            });
+        }
+
+        // Build pricing tiers map
+        let tiersMap = {};
+        for (const t of tiersResult.results) {
+            if (!tiersMap[t.product_id]) tiersMap[t.product_id] = [];
+            tiersMap[t.product_id].push({
+                id: t.id,
+                minQty: t.min_qty,
+                discountPercent: t.discount_percent
+            });
         }
 
         const products = results.map(row => {
