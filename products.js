@@ -41,6 +41,13 @@ function isCacheExpired() {
 
 // Fetch products from D1 API
 async function fetchProducts() {
+    // Use server-injected bootstrap data if available — no API call needed
+    if (window.__BOOTSTRAP_DATA__) {
+        const data = window.__BOOTSTRAP_DATA__;
+        window.__BOOTSTRAP_DATA__ = null;
+        console.log('🚀 Loaded', data.length, 'products from bootstrap');
+        return data;
+    }
     try {
         const response = await (window._productsFetch || fetch('/api/products'));
         window._productsFetch = null;
