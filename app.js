@@ -1551,7 +1551,7 @@ function populateHomepageSections() {
     populatePopularNow();
     populateCategories();
     populateNewArrivals();
-    initScrollArrows();
+    requestAnimationFrame(() => { initScrollArrows(); });
 }
 
 function initScrollArrows() {
@@ -1574,12 +1574,16 @@ function initScrollArrows() {
             rightBtn.classList.toggle('visible', scrollEl.scrollLeft < maxScroll - 2);
         }
 
-        // Scroll by roughly one card width on click
+        // Scroll by roughly one card width on click (cached to avoid offsetWidth read on every click)
+        let cachedCardWidth = 0;
         function scrollBy(dir) {
-            const card = scrollEl.querySelector('.popular-card, .arrival-card');
-            const distance = card ? card.offsetWidth + 14 : 180;
-            scrollEl.scrollBy({ left: dir * distance, behavior: 'smooth' });
+            if (!cachedCardWidth) {
+                const card = scrollEl.querySelector('.popular-card, .arrival-card');
+                cachedCardWidth = card ? card.offsetWidth + 14 : 180;
+            }
+            scrollEl.scrollBy({ left: dir * cachedCardWidth, behavior: 'smooth' });
         }
+        window.addEventListener('resize', () => { cachedCardWidth = 0; });
 
         leftBtn.addEventListener('click', () => scrollBy(-1));
         rightBtn.addEventListener('click', () => scrollBy(1));
