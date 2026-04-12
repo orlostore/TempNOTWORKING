@@ -532,10 +532,10 @@ function renderProducts(list, arabicMode) {
         const isUrl = p.image && p.image.startsWith('http');
         // First 4 images are above the fold — load eagerly to improve LCP
         const imgAttrs = index < 4
-            ? `fetchpriority="${index === 0 ? 'high' : 'auto'}" style="max-width:100%; max-height:100%; object-fit:contain;"`
-            : `loading="lazy" style="max-width:100%; max-height:100%; object-fit:contain;"`;
+            ? `fetchpriority="${index === 0 ? 'high' : 'auto'}" style="width:100%; height:100%; object-fit:cover;"`
+            : `loading="lazy" style="width:100%; height:100%; object-fit:cover;"`;
         const rawImgSrc = isUrl ? escapeHTML(p.image) : '';
-        const cdnImgSrc = rawImgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/w_400,c_limit,f_auto,q_auto/${rawImgSrc}` : '';
+        const cdnImgSrc = rawImgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/${rawImgSrc}` : '';
         const imageHTML = isUrl
             ? `<img src="${cdnImgSrc}" alt="${safeName}" width="400" height="400" onerror="this.onerror=null;this.src='${rawImgSrc}'" ${imgAttrs}>`
             : escapeHTML(p.image);
@@ -1475,7 +1475,7 @@ function populatePopularNow() {
 
     container.innerHTML = list.map((p, index) => {
         const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
-        const cdnSrc200pop = imgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/w_200,c_limit,f_auto,q_auto/${imgSrc}` : '';
+        const cdnSrc200pop = imgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/${imgSrc}` : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
@@ -1532,7 +1532,7 @@ function populateNewArrivals() {
 
     container.innerHTML = arrivals.map((p, index) => {
         const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
-        const cdnSrc200arr = imgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/w_200,c_limit,f_auto,q_auto/${imgSrc}` : '';
+        const cdnSrc200arr = imgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/${imgSrc}` : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
