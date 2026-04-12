@@ -19,6 +19,9 @@ Disallow: /mockups-buybox.html
 Disallow: /pricing-preview.html
 Disallow: /color-preview.html
 
+User-agent: Amazonbot
+Disallow: /
+
 User-agent: GPTBot
 Disallow: /
 
