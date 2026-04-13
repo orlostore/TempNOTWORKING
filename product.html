@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-TN2L38GM');</script>
-  <!-- End Google Tag Manager -->
   <!-- TikTok Pixel Code Start -->
   <script>
   !function (w, d, t) {
@@ -84,15 +77,8 @@
       });
       if(hasUtm){
         sessionStorage.setItem('orlo_utm', JSON.stringify(utmData));
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push(Object.assign({event: 'utm_captured'}, utmData));
       } else {
         var stored = sessionStorage.getItem('orlo_utm');
-        if(stored){
-          var d = JSON.parse(stored);
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push(Object.assign({event: 'utm_restored'}, d));
-        }
       }
     } catch(e){}
   })();
@@ -137,10 +123,6 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   </style>
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TN2L38GM"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 <header>
     <nav>
         <div class="logo-container">
