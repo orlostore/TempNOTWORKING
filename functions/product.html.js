@@ -46,7 +46,9 @@ export async function onRequest(context) {
       price: product.price,
       priceCurrency: 'AED',
       availability: availability,
-      url: productUrl
+      url: productUrl,
+      itemCondition: 'https://schema.org/NewCondition',
+      seller: { '@type': 'Organization', name: 'ORLO' }
     }
   });
 
