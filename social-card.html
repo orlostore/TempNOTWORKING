@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ORLO Social Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      background: #1a3242;
+    }
+
+    .card {
+      width: 1200px;
+      height: 630px;
+      background: linear-gradient(140deg, #243f52 0%, #1a3242 40%, #12232f 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 90px;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    /* top-right orange glow */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -160px;
+      right: -160px;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(224,120,86,0.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* bottom-left soft glow */
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: -180px;
+      left: -120px;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* subtle grid lines for texture */
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* LEFT SIDE */
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      z-index: 1;
+      max-width: 560px;
+    }
+
+    .logo {
+      width: 180px;
+      height: auto;
+    }
+
+    .headline {
+      font-size: 48px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+    }
+
+    .headline span {
+      color: #e07856;
+    }
+
+    .subline {
+      font-size: 22px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.2px;
+    }
+
+    /* RIGHT SIDE */
+    .right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 20px;
+      z-index: 1;
+    }
+
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      padding: 12px 26px;
+      color: rgba(255,255,255,0.9);
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .pill .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e07856;
+    }
+
+    .divider {
+      width: 1px;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent);
+    }
+
+    .url {
+      font-size: 17px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* bottom bar */
+    .bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #e07856 0%, #c45e3e 50%, transparent 100%);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="grid"></div>
+
+    <div class="left">
+      <!-- Replace "colored-logo.png" with the actual logo filename -->
+      <img class="logo" src="colored-logo.png" alt="ORLO">
+      <div class="headline">Desk Accessories &<br>Office Decor <span>UAE</span></div>
+      <div class="subline">Free delivery over 75 AED · Shop online</div>
+    </div>
+
+    <div class="right">
+      <div class="pill"><span class="dot"></span> Dubai & UAE</div>
+      <div class="pill"><span class="dot"></span> Free Delivery</div>
+      <div class="pill"><span class="dot"></span> Quality Guaranteed</div>
+      <div class="divider"></div>
+      <div class="url">orlostore.com</div>
+    </div>
+
+    <div class="bar"></div>
+  </div>
+</body>
+</html>
