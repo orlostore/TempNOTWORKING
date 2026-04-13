@@ -31,10 +31,29 @@ export async function onRequestGet(context) {
     const safeJson = JSON.stringify(productsData)
         .replace(/<\/script>/gi, '<\\/script>');
 
-    // Inject bootstrap data into <head> before it reaches the browser
+    // Find first Popular Now product (mirrors populatePopularNow logic in app.js)
+    const featured = productsData.filter(p => p.featured);
+    let popularList = [...featured];
+    if (popularList.length < 6) {
+        const arrivalIds = new Set([...productsData].sort((a, b) => b.id - a.id).slice(0, 4).map(p => p.id));
+        const filler = productsData.filter(p => !p.featured && !arrivalIds.has(p.id));
+        popularList = popularList.concat(filler.slice(0, 6 - popularList.length));
+    }
+    const lcpProduct = popularList[0];
+    const lcpImageUrl = lcpProduct && lcpProduct.image && lcpProduct.image.startsWith('http')
+        ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/${lcpProduct.image}`
+        : null;
+
+    // Inject bootstrap data + LCP preload into <head>
     return new HTMLRewriter()
         .on('head', {
             element(element) {
+                if (lcpImageUrl) {
+                    element.append(
+                        `<link rel="preload" as="image" fetchpriority="high" href="${lcpImageUrl}">`,
+                        { html: true }
+                    );
+                }
                 element.append(
                     `<script>window.__BOOTSTRAP_DATA__=${safeJson}</script>`,
                     { html: true }
