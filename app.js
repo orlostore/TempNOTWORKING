@@ -804,16 +804,15 @@ function addToCart(id, event) {
     saveCart();
 
     // GA4: track add_to_cart event
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ ecommerce: null });
-    window.dataLayer.push({
-        event: 'add_to_cart',
-        ecommerce: {
-            currency: 'AED',
-            value: product.price,
-            items: [{ item_id: product.id, item_name: product.name, price: product.price, quantity: 1 }]
-        }
-    });
+    if (typeof zaraz !== 'undefined') {
+        zaraz.ecommerce('Product Added', {
+            product_id: product.id,
+            name: product.name,
+            price: product.price,
+            quantity: 1,
+            currency: 'AED'
+        });
+    }
 
     // Meta Pixel + CAPI relay: AddToCart
     const atcEventId = `atc_${product.slug}_${Date.now()}`;
@@ -1847,23 +1846,17 @@ async function checkout() {
             btn.innerHTML = "Checking stock...";
         }
 
-        // GA4: track begin_checkout event with eventCallback to ensure tag fires
+        // GA4: track begin_checkout event
         const cartWithPricing = calculateTierPricing(cart);
         const checkoutValue = cartWithPricing.reduce((s, i) => s + (i._tierPrice || i.price) * i.quantity, 0);
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ ecommerce: null });
-        const gtmDone = new Promise(resolve => {
-            window.dataLayer.push({
-                event: 'begin_checkout',
-                ecommerce: {
-                    currency: 'AED',
-                    value: checkoutValue,
-                    items: cart.map(i => ({ item_id: i.id, item_name: i.name, price: i._tierPrice || i.price, quantity: i.quantity }))
-                },
-                eventCallback: resolve,
-                eventTimeout: 2000
+        if (typeof zaraz !== 'undefined') {
+            zaraz.ecommerce('Checkout Started', {
+                revenue: checkoutValue,
+                currency: 'AED',
+                products: cart.map(i => ({ product_id: i.id, name: i.name, price: i._tierPrice || i.price, quantity: i.quantity }))
             });
-        });
+        }
+        const gtmDone = Promise.resolve();
 
         // Meta Pixel + CAPI relay: InitiateCheckout
         const icEventId = `ic_${Date.now()}`;
