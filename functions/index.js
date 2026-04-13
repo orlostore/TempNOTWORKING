@@ -54,7 +54,7 @@ export async function onRequestGet(context) {
                         { html: true }
                     );
                 }
-                element.append(
+                element.prepend(
                     `<script>window.__BOOTSTRAP_DATA__=${safeJson}</script>`,
                     { html: true }
                 );
