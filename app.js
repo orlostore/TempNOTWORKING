@@ -1478,7 +1478,7 @@ function populatePopularNow() {
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const imgHTML = imgSrc
-            ? `<img src="${cdnSrc200pop}" alt="${safeName}" width="200" height="200" onerror="this.onerror=null;this.src='${imgSrc}'" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
+            ? `<img src="${cdnSrc200pop}" alt="${safeName}" width="200" height="200" onerror="this.onerror=null;this.src='${imgSrc}'" ${index === 0 ? 'fetchpriority="high"' : index < 3 ? '' : 'loading="lazy"'}>`
             : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
         return `
         <a href="product.html?product=${encodeURIComponent(p.slug)}" class="popular-card">
