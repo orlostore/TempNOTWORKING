@@ -62,13 +62,8 @@ export async function onRequestGet(context) {
         })
         .transform(htmlResponse);
 
-    const newHeaders = new Headers(transformedResponse.headers);
-    newHeaders.set('Cache-Control', 'no-store, no-cache, must-revalidate');
-    newHeaders.set('Pragma', 'no-cache');
+    transformedResponse.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    transformedResponse.headers.set('Pragma', 'no-cache');
 
-    return new Response(transformedResponse.body, {
-        status: transformedResponse.status,
-        statusText: transformedResponse.statusText,
-        headers: newHeaders
-    });
+    return transformedResponse;
 }
