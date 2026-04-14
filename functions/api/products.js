@@ -17,7 +17,7 @@ export async function onRequestGet(context) {
             return new Response(cached, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Cache-Control': 'public, s-maxage=300',
+                    'Cache-Control': 'no-store',
                     'X-Cache': 'KV-HIT'
                 }
             });
@@ -38,7 +38,7 @@ export async function onRequestGet(context) {
         return new Response(json, {
             headers: {
                 'Content-Type': 'application/json',
-                'Cache-Control': 'public, s-maxage=300',
+                'Cache-Control': 'no-store',
                 'X-Cache': 'KV-MISS'
             }
         });

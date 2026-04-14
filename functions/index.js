@@ -45,7 +45,7 @@ export async function onRequestGet(context) {
         : null;
 
     // Inject bootstrap data + LCP preload into <head>
-    return new HTMLRewriter()
+    const transformedResponse = new HTMLRewriter()
         .on('head', {
             element(element) {
                 if (lcpImageUrl) {
@@ -61,4 +61,14 @@ export async function onRequestGet(context) {
             }
         })
         .transform(htmlResponse);
+
+    const newHeaders = new Headers(transformedResponse.headers);
+    newHeaders.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    newHeaders.set('Pragma', 'no-cache');
+
+    return new Response(transformedResponse.body, {
+        status: transformedResponse.status,
+        statusText: transformedResponse.statusText,
+        headers: newHeaders
+    });
 }

@@ -60,6 +60,8 @@ export async function onRequestPost(context) {
 
             await logActivity(env, user.name, 'add_product', data.slug, data.name);
 
+            if (env.PRODUCTS_CACHE) await env.PRODUCTS_CACHE.delete('all_products_data');
+
             return Response.json({ success: true, id: productId });
         }
 
@@ -68,6 +70,8 @@ export async function onRequestPost(context) {
                 .bind(data.featured ? 1 : 0, id).run();
 
             await logActivity(env, user.name, 'toggle_featured', `product:${id}`, data.featured ? 'Featured' : 'Unfeatured');
+
+            if (env.PRODUCTS_CACHE) await env.PRODUCTS_CACHE.delete('all_products_data');
 
             return Response.json({ success: true });
         }
@@ -111,6 +115,8 @@ export async function onRequestPost(context) {
             }
 
             await logActivity(env, user.name, 'update_product', data.slug, data.name);
+
+            if (env.PRODUCTS_CACHE) await env.PRODUCTS_CACHE.delete('all_products_data');
 
             return Response.json({ success: true });
         }
@@ -169,6 +175,8 @@ export async function onRequestGet(context) {
             await DB.prepare('DELETE FROM products WHERE id = ?').bind(id).run();
 
             await logActivity(env, user.name, 'delete_product', product?.slug || id, product?.name || 'Unknown');
+
+            if (env.PRODUCTS_CACHE) await env.PRODUCTS_CACHE.delete('all_products_data');
 
             return Response.json({ success: true });
         } catch (error) {
