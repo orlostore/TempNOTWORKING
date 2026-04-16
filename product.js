@@ -390,7 +390,7 @@ async function initProductPage() {
   // GA4: track view_item event
   if (typeof zaraz !== 'undefined') {
     zaraz.ecommerce('Product Viewed', {
-      product_id: product.id,
+      product_id: product.slug,
       name: product.name,
       price: product.price,
       category: product.category,
@@ -951,7 +951,7 @@ async function initProductPage() {
     // GA4: track add_to_cart event
     if (typeof zaraz !== 'undefined') {
         zaraz.ecommerce('Product Added', {
-            product_id: product.id,
+            product_id: product.slug,
             name: product.name,
             price: product.price,
             quantity: 1,
