@@ -806,7 +806,7 @@ function addToCart(id, event) {
     // GA4: track add_to_cart event
     if (typeof zaraz !== 'undefined') {
         zaraz.ecommerce('Product Added', {
-            product_id: product.id,
+            product_id: product.slug,
             name: product.name,
             price: product.price,
             quantity: 1,
@@ -1853,7 +1853,7 @@ async function checkout() {
             zaraz.ecommerce('Checkout Started', {
                 revenue: checkoutValue,
                 currency: 'AED',
-                products: cart.map(i => ({ product_id: i.id, name: i.name, price: i._tierPrice || i.price, quantity: i.quantity }))
+                products: cart.map(i => ({ product_id: i.slug, name: i.name, price: i._tierPrice || i.price, quantity: i.quantity }))
             });
         }
         const gtmDone = Promise.resolve();
