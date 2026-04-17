@@ -8,7 +8,7 @@ export async function onRequestGet(context) {
     // Fetch static HTML and products API in parallel
     const [htmlResponse, productsResponse] = await Promise.all([
         env.ASSETS.fetch(request),
-        fetch(new URL('/api/products', request.url).toString()).catch(() => null)
+        fetch(new URL('/api/products', request.url).toString(), { cf: { cacheEverything: false } }).catch(() => null)
     ]);
 
     // If products failed for any reason, return plain HTML (existing behaviour)
