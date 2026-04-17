@@ -62,8 +62,14 @@ export async function onRequestGet(context) {
         })
         .transform(htmlResponse);
 
-    transformedResponse.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    transformedResponse.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     transformedResponse.headers.set('Pragma', 'no-cache');
+    transformedResponse.headers.set('Expires', '0');
+    transformedResponse.headers.set('Vary', '*');
+    transformedResponse.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
+    transformedResponse.headers.set('CDN-Cache-Control', 'no-store');
+    transformedResponse.headers.delete('ETag');
+    transformedResponse.headers.delete('Last-Modified');
 
     return transformedResponse;
 }
