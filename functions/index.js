@@ -7,7 +7,7 @@ export async function onRequestGet(context) {
 
     // Fetch static HTML and products API in parallel
     const [htmlResponse, productsResponse] = await Promise.all([
-        env.ASSETS.fetch(request),
+        env.ASSETS.fetch(new Request(request.url, { method: 'GET' })),
         fetch(new URL('/api/products', request.url).toString(), { cf: { cacheTtl: -1 } }).catch(() => null)
     ]);
 
