@@ -74,5 +74,29 @@ async function initProducts() {
     }
 }
 
+// Background sync — bypasses browser/proxy cache, updates UI if product list changed
+async function syncProductState() {
+    try {
+        const response = await fetch('/api/products', { cache: 'no-store' });
+        if (!response.ok) return;
+        const fresh = await response.json();
+        if (!Array.isArray(fresh)) return;
+        const isDifferent =
+            products &&
+            (fresh.length !== products.length ||
+            (fresh.length > 0 && products.length > 0 && fresh[0].id !== products[0].id));
+        if (isDifferent) {
+            console.log('🔄 Stale cache detected. Syncing...');
+            updateUIIfNeeded(fresh);
+        }
+    } catch (e) {}
+}
+
 // Auto-init
 initProducts();
+
+if (document.readyState === 'complete') {
+    syncProductState();
+} else {
+    window.addEventListener('load', syncProductState);
+}
