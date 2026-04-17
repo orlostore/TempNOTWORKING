@@ -18,6 +18,7 @@ export async function onRequestGet(context) {
                 headers: {
                     'Content-Type': 'application/json',
                     'Cache-Control': 'no-store',
+                    'Cloudflare-CDN-Cache-Control': 'no-store',
                     'X-Cache': 'KV-HIT'
                 }
             });
@@ -39,6 +40,7 @@ export async function onRequestGet(context) {
             headers: {
                 'Content-Type': 'application/json',
                 'Cache-Control': 'no-store',
+                'Cloudflare-CDN-Cache-Control': 'no-store',
                 'X-Cache': 'KV-MISS'
             }
         });
