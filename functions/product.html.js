@@ -3,12 +3,22 @@
 // so Google's crawler sees unique title/description/canonical per product
 
 export async function onRequest(context) {
-  const { request, env, next } = context;
+  const { request, env } = context;
   const url = new URL(request.url);
   const slug = url.searchParams.get('product');
 
-  // No slug = just serve the static page as-is
-  if (!slug) return next();
+  // Strip If-None-Match/If-Modified-Since so ASSETS never returns a 304
+  const cleanHeaders = new Headers(request.headers);
+  cleanHeaders.delete('If-None-Match');
+  cleanHeaders.delete('If-Modified-Since');
+  const cleanRequest = new Request(url.href, { method: 'GET', headers: cleanHeaders });
+
+  // No slug = serve the static page with no-cache headers
+  if (!slug) {
+    const response = await env.ASSETS.fetch(cleanRequest);
+    applyNoCacheHeaders(response);
+    return response;
+  }
 
   // Fetch product from D1
   let product;
@@ -17,12 +27,17 @@ export async function onRequest(context) {
       'SELECT name, slug, description, price, quantity, mainImage, category FROM products WHERE slug = ? LIMIT 1'
     ).bind(slug).first();
   } catch (e) {
-    // DB error - fall through to static page
-    return next();
+    const response = await env.ASSETS.fetch(cleanRequest);
+    applyNoCacheHeaders(response);
+    return response;
   }
 
-  // Product not found - serve static page as-is
-  if (!product) return next();
+  // Product not found - serve static page with no-cache headers
+  if (!product) {
+    const response = await env.ASSETS.fetch(cleanRequest);
+    applyNoCacheHeaders(response);
+    return response;
+  }
 
   // Build SEO values
   const productUrl = 'https://orlostore.com/product.html?product=' + encodeURIComponent(product.slug);
@@ -52,25 +67,21 @@ export async function onRequest(context) {
     }
   });
 
-  // Fetch the original static product.html and rewrite it
-  const response = await next();
+  // Fetch the static product.html with clean request (no conditional headers)
+  const response = await env.ASSETS.fetch(cleanRequest);
 
-  return new HTMLRewriter()
-    // Rewrite <title>
+  const transformedResponse = new HTMLRewriter()
     .on('title', {
       text(text) {
         if (text.text.trim()) text.replace(seoTitle);
       }
     })
-    // Rewrite <meta name="description">
     .on('meta[name="description"]', {
       element(el) { el.setAttribute('content', seoDesc); }
     })
-    // Rewrite <link rel="canonical">
     .on('link[rel="canonical"]', {
       element(el) { el.setAttribute('href', productUrl); }
     })
-    // Rewrite Open Graph tags
     .on('meta[property="og:title"]', {
       element(el) { el.setAttribute('content', seoTitle); }
     })
@@ -86,7 +97,6 @@ export async function onRequest(context) {
     .on('meta[property="og:image:alt"]', {
       element(el) { el.setAttribute('content', product.name + ' - ORLO Store Dubai UAE'); }
     })
-    // Rewrite Twitter tags
     .on('meta[name="twitter:title"]', {
       element(el) { el.setAttribute('content', seoTitle); }
     })
@@ -96,11 +106,21 @@ export async function onRequest(context) {
     .on('meta[name="twitter:image"]', {
       element(el) { el.setAttribute('content', productImage); }
     })
-    // Inject Product JSON-LD into <head>
     .on('head', {
       element(el) {
         el.append('<script type="application/ld+json">' + jsonLd + '</script>', { html: true });
       }
     })
     .transform(response);
+
+  applyNoCacheHeaders(transformedResponse);
+  return transformedResponse;
+}
+
+function applyNoCacheHeaders(response) {
+  response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  response.headers.set('Pragma', 'no-cache');
+  response.headers.set('Expires', '0');
+  response.headers.delete('ETag');
+  response.headers.delete('Last-Modified');
 }
