@@ -110,10 +110,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       }
       [data-theme="dark"]{
         --bg: #0d1f2d;
-        --surface: #132435;
+        --surface: #15293d;
         --draft-text: #f0ece4;
         --draft-muted: #8a9baa;
-        --draft-border: rgba(255,255,255,0.08);
+        --draft-border: rgba(255,255,255,0.10);
         --primary: #f0ece4;
       }
 
@@ -396,6 +396,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 
       /* Dark mode surface overrides for cards */
       [data-theme="dark"] .product-card,
+      [data-theme="dark"] .popular-card,
       [data-theme="dark"] .term-card,
       [data-theme="dark"] .contact-box,
       [data-theme="dark"] .mobile-carousel-box,
@@ -405,9 +406,17 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       [data-theme="dark"] .sort-arrow-btn {
         background: var(--surface) !important;
         color: var(--draft-text) !important;
-        border-color: var(--draft-border) !important;
-        box-shadow: 0 6px 24px rgba(0,0,0,0.3) !important;
+        border: 1px solid var(--draft-border) !important;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.35) !important;
       }
+      /* Carousel cards (Popular Now + New Arrivals share .popular-card) */
+      [data-theme="dark"] .popular-card-img { background: var(--surface) !important; }
+      [data-theme="dark"] .popular-card-name { color: var(--draft-text) !important; }
+      [data-theme="dark"] .popular-card-name-ar { color: var(--draft-muted) !important; }
+      [data-theme="dark"] .popular-card-price { color: var(--draft-text) !important; }
+      /* All Products card text in dark mode */
+      [data-theme="dark"] .product-title-ar { color: var(--draft-muted) !important; }
+      [data-theme="dark"] .product-price { color: var(--draft-text) !important; }
       [data-theme="dark"] .contact-text-en,
       [data-theme="dark"] .contact-text-ar,
       [data-theme="dark"] .contact-detail,
