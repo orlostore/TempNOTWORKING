@@ -221,7 +221,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       }
       .sort-arrow-btn:hover { background: var(--primary) !important; color: #fff !important; border-color: var(--primary) !important; }
 
-      /* Shop by Category → editorial pill filters */
+      /* Shop by Category → editorial pill filters (exact Edit match) */
       #categoryCards { min-height: 0 !important; }
       .category-cards {
         display: flex !important;
@@ -232,30 +232,50 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         padding: 4px 0 !important;
         grid-template-columns: none !important;
       }
-      .category-card {
+      .category-card,
+      .draft-cat-all {
         flex: 0 0 auto !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
         gap: 0 !important;
-        padding: 12px 22px !important;
+        padding: 8px 18px !important;
         min-height: 0 !important;
         height: auto !important;
         width: auto !important;
-        background: var(--surface) !important;
+        background: transparent !important;
         border: 1px solid var(--draft-border) !important;
         border-radius: 999px !important;
         box-shadow: none !important;
         cursor: pointer !important;
         transition: all .2s ease !important;
         overflow: visible !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 11px !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.1em !important;
+        text-transform: uppercase !important;
+        color: var(--draft-muted) !important;
+        line-height: 1 !important;
       }
-      .category-card:hover {
+      .category-card:hover,
+      .draft-cat-all:hover,
+      .draft-cat-all.active,
+      .category-card.active {
         background: var(--primary) !important;
         border-color: var(--primary) !important;
+        color: #ffffff !important;
       }
-      [data-theme="dark"] .category-card:hover { background: var(--accent) !important; border-color: var(--accent) !important; }
-      .category-card:hover .category-card-name { color: #fff !important; }
+      [data-theme="dark"] .category-card:hover,
+      [data-theme="dark"] .draft-cat-all:hover,
+      [data-theme="dark"] .draft-cat-all.active,
+      [data-theme="dark"] .category-card.active {
+        background: var(--accent) !important;
+        border-color: var(--accent) !important;
+        color: #ffffff !important;
+      }
+      .category-card:hover .category-card-name,
+      .category-card.active .category-card-name { color: #ffffff !important; }
       .category-card-band,
       .category-card svg.category-icon,
       .category-card .category-card-icon,
@@ -268,16 +288,16 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         margin: 0 !important;
       }
       .category-card-name {
-        font-size: 12px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.14em !important;
+        font-size: 11px !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.1em !important;
         text-transform: uppercase !important;
-        color: var(--primary) !important;
+        color: inherit !important;
         line-height: 1 !important;
         margin: 0 !important;
         white-space: nowrap !important;
+        font-family: 'Inter', sans-serif !important;
       }
-      [data-theme="dark"] .category-card-name { color: var(--draft-text) !important; }
 
       /* Term cards — calmer */
       .term-card {
@@ -331,12 +351,26 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         letter-spacing: 0 !important;
       }
 
-      /* Mobile trust strip (not on gradient) — warm surface */
-      .mobile-trust-section {
+      /* Mobile promo banner (top sticky) — white not warm ivory */
+      .mobile-promo-banner {
+        background: #ffffff !important;
+        color: var(--primary) !important;
+        border-bottom: 1px solid var(--draft-border) !important;
+      }
+      [data-theme="dark"] .mobile-promo-banner {
         background: var(--surface) !important;
+        color: var(--draft-text) !important;
+      }
+
+      /* Mobile trust strip — clean white card */
+      .mobile-trust-section {
+        background: #ffffff !important;
         border: 1px solid var(--draft-border) !important;
         border-radius: 16px !important;
         box-shadow: none !important;
+      }
+      [data-theme="dark"] .mobile-trust-section {
+        background: var(--surface) !important;
       }
       .mobile-trust-section .trust-item { color: var(--primary) !important; }
       .mobile-trust-section .trust-item .arabic-text { color: var(--draft-muted) !important; }
@@ -1021,6 +1055,51 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
         item.addEventListener('click', function() { moveIndicator(i); });
     });
     moveIndicator(0);
+})();
+</script>
+
+<!-- Draft: inject "ALL" pill at the start of category filters -->
+<script>
+(function(){
+  var container = document.getElementById('categoryCards');
+  if (!container) return;
+
+  function buildAllPill(){
+    if (container.querySelector('.draft-cat-all')) return;
+    var all = document.createElement('button');
+    all.type = 'button';
+    all.className = 'draft-cat-all active';
+    all.textContent = 'All';
+    all.addEventListener('click', function(){
+      setActive(all);
+      var products = document.getElementById('products');
+      if (products) products.scrollIntoView({behavior:'smooth'});
+      setTimeout(function(){
+        try { if (typeof loadProducts === 'function') loadProducts(); } catch(e){}
+      }, 300);
+    });
+    container.insertBefore(all, container.firstChild);
+    container.querySelectorAll('.category-card').forEach(function(card){
+      card.addEventListener('click', function(){ setActive(card); });
+    });
+  }
+
+  function setActive(el){
+    container.querySelectorAll('.draft-cat-all, .category-card').forEach(function(n){
+      n.classList.remove('active');
+    });
+    el.classList.add('active');
+  }
+
+  var obs = new MutationObserver(function(){
+    if (container.querySelector('.category-card')) {
+      buildAllPill();
+      obs.disconnect();
+    }
+  });
+  obs.observe(container, { childList: true });
+
+  if (container.querySelector('.category-card')) buildAllPill();
 })();
 </script>
 </body>
