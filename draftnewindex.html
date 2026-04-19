@@ -351,27 +351,26 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         letter-spacing: 0 !important;
       }
 
-      /* Mobile promo banner (top sticky) — white not warm ivory */
+      /* Mobile promo banner (sticky, mobile-only, just below header) — warm ivory */
       .mobile-promo-banner {
-        background: #ffffff !important;
+        background: var(--bg) !important;
         color: var(--primary) !important;
         border-bottom: 1px solid var(--draft-border) !important;
       }
       [data-theme="dark"] .mobile-promo-banner {
-        background: var(--surface) !important;
+        background: var(--bg) !important;
         color: var(--draft-text) !important;
       }
 
-      /* Mobile trust strip — clean white card */
+      /* Mobile trust strip — blend into the page, no white card */
       .mobile-trust-section {
-        background: #ffffff !important;
-        border: 1px solid var(--draft-border) !important;
-        border-radius: 16px !important;
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
         box-shadow: none !important;
+        margin: 4px 12px 8px !important;
       }
-      [data-theme="dark"] .mobile-trust-section {
-        background: var(--surface) !important;
-      }
+      [data-theme="dark"] .mobile-trust-section { background: transparent !important; }
       .mobile-trust-section .trust-item { color: var(--primary) !important; }
       .mobile-trust-section .trust-item .arabic-text { color: var(--draft-muted) !important; }
       .mobile-trust-section .trust-icon { stroke: var(--primary) !important; }
