@@ -136,8 +136,11 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       }
 
       .hero-headline h1 {
-        font-size: clamp(36px, 5vw, 68px) !important;
+        font-size: clamp(28px, 3.2vw, 42px) !important;
+        font-weight: 400 !important;
+        line-height: 1.15 !important;
         color: #ffffff !important;
+        max-width: 520px !important;
       }
       .mobile-hero-heading {
         font-size: clamp(28px, 8vw, 40px) !important;
@@ -169,6 +172,12 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .hero, #heroSection {
         background: linear-gradient(135deg, #1a3a52 0%, #2d5a7a 45%, #e76f51 100%) !important;
         border-radius: 20px !important;
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+        align-items: center !important;
+      }
+      @media (max-width: 768px) {
+        .hero, #heroSection { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
       }
       .mobile-hero {
         background: linear-gradient(135deg, #1a3a52 0%, #2d5a7a 55%, #e76f51 100%) !important;
@@ -225,13 +234,15 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         display: inline-flex !important;
         align-items: center !important;
         gap: 10px !important;
-        padding: 10px 18px !important;
+        padding: 8px 18px !important;
         min-height: 0 !important;
         height: auto !important;
+        width: auto !important;
         background: var(--surface) !important;
         border: 1px solid var(--draft-border) !important;
-        border-radius: 999px !important;
+        border-radius: 20px !important;
         box-shadow: none !important;
+        cursor: pointer !important;
         transition: all .2s ease !important;
         overflow: visible !important;
       }
@@ -247,9 +258,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .category-card svg.category-icon,
       .category-card .category-card-icon { display: none !important; }
       .category-card-text {
-        display: inline-flex !important;
-        align-items: baseline !important;
-        gap: 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1px !important;
         padding: 0 !important;
       }
       .category-card-name {
@@ -258,22 +270,20 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         letter-spacing: 0.14em !important;
         text-transform: uppercase !important;
         color: var(--primary) !important;
+        line-height: 1.2 !important;
         margin: 0 !important;
       }
       [data-theme="dark"] .category-card-name { color: var(--draft-text) !important; }
       .category-card-name-ar {
         font-family: 'Almarai', sans-serif !important;
-        font-size: 11px !important;
-        color: var(--draft-muted) !important;
-        margin: 0 !important;
-      }
-      .category-card-count {
         font-size: 10px !important;
         color: var(--draft-muted) !important;
         opacity: 0.75 !important;
-        margin: 0 !important;
+        line-height: 1.2 !important;
         font-weight: 400 !important;
+        margin: 0 !important;
       }
+      .category-card-count { display: none !important; }
 
       /* Term cards — calmer */
       .term-card {
@@ -292,15 +302,40 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       }
       [data-theme="dark"] .term-title { color: var(--draft-text) !important; }
 
-      /* Trust strip: warmer */
-      .hero-trust-badges, .trust-badges-row {
+      /* Trust strip on dark gradient hero: translucent glass, white text */
+      .hero-trust-badges {
+        background: rgba(255,255,255,0.08) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(255,255,255,0.18) !important;
+        border-radius: 16px !important;
+      }
+      .hero-trust-badges .trust-badge-item,
+      .hero-trust-badges .badge-text,
+      .hero-trust-badges .badge-text-ar {
+        color: rgba(255,255,255,0.95) !important;
+      }
+      .hero-trust-badges .badge-text-ar { color: rgba(255,255,255,0.75) !important; }
+      .hero-trust-badges svg { stroke: #ffffff !important; }
+
+      /* Mobile trust strip (not on gradient) — warm surface */
+      .trust-badges-row {
         background: var(--surface) !important;
         border: 1px solid var(--draft-border) !important;
+        border-radius: 16px !important;
       }
+
+      /* Free Delivery box — solid white, readable colors on gradient */
       .hero-delivery-box {
-        background: rgba(255,255,255,0.92) !important;
+        background: #ffffff !important;
         border: 1px solid var(--draft-border) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 10px 30px rgba(26,58,82,0.15) !important;
       }
+      .hero-delivery-box .delivery-title { color: var(--primary) !important; font-weight: 600 !important; }
+      .hero-delivery-box .delivery-highlight { color: var(--accent) !important; font-weight: 700 !important; }
+      .hero-delivery-box .delivery-ar { color: var(--draft-muted) !important; }
+      .hero-delivery-box .delivery-icon svg { stroke: var(--primary) !important; }
 
       /* Sections — slightly more breathing room */
       .homepage-section { padding: 3.5rem 0 1rem !important; }
