@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Edit — ORLO Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a3a52;
+    --orange: #e76f51;
+    --grey: #ececec;
+    --bg: #f8f6f2;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #6b6b6b;
+    --border: rgba(26,58,82,0.10);
+    --card-hover: rgba(26,58,82,0.04);
+    --tag-bg: rgba(26,58,82,0.07);
+  }
+  [data-theme="dark"] {
+    --bg: #0d1f2d;
+    --surface: #132435;
+    --text: #f0ece4;
+    --text-muted: #8a9baa;
+    --border: rgba(255,255,255,0.08);
+    --card-hover: rgba(255,255,255,0.04);
+    --tag-bg: rgba(231,111,81,0.15);
+    --grey: #1e3347;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.4s ease, color 0.4s ease;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+    transition: background 0.4s ease;
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 600; letter-spacing: 0.08em;
+    color: var(--navy); text-decoration: none;
+  }
+  [data-theme="dark"] .nav-logo { color: #f0ece4; }
+  .nav-logo span { color: var(--orange); }
+  .nav-center {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-link {
+    font-size: 13px; color: var(--text-muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--orange); }
+
+  /* Dark mode toggle */
+  .theme-toggle {
+    width: 44px; height: 24px; border-radius: 12px;
+    background: var(--navy); border: none; cursor: pointer;
+    position: relative; transition: background 0.3s;
+    flex-shrink: 0;
+  }
+  [data-theme="dark"] .theme-toggle { background: var(--orange); }
+  .theme-toggle::after {
+    content: ''; position: absolute;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: white; transition: transform 0.3s ease;
+  }
+  [data-theme="dark"] .theme-toggle::after { transform: translateX(20px); }
+
+  /* ── VIEW SWITCHER ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ══════════════════════════════════
+     BLOG INDEX
+  ══════════════════════════════════ */
+  .index-hero {
+    padding: 72px 32px 48px;
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 1px solid var(--border);
+  }
+  .index-hero-text h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 300; line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--navy);
+  }
+  [data-theme="dark"] .index-hero-text h1 { color: #f0ece4; }
+  .index-hero-text h1 em { color: var(--orange); font-style: italic; }
+  .index-hero-sub {
+    margin-top: 16px; font-size: 14px; color: var(--text-muted);
+    max-width: 340px; line-height: 1.7;
+  }
+  .issue-badge {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-muted); text-align: right;
+  }
+  .issue-badge strong { display: block; font-size: 32px; font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; color: var(--orange); letter-spacing: 0; }
+
+  /* Filter tags */
+  .filter-bar {
+    max-width: 1200px; margin: 0 auto;
+    padding: 24px 32px;
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 7px 16px; border-radius: 20px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--navy); color: white; border-color: var(--navy);
+  }
+  [data-theme="dark"] .filter-btn:hover, [data-theme="dark"] .filter-btn.active {
+    background: var(--orange); border-color: var(--orange);
+  }
+
+  /* Bento Grid */
+  .bento-grid {
+    max-width: 1200px; margin: 0 auto;
+    padding: 8px 32px 80px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 280px;
+    gap: 16px;
+  }
+
+  .bento-card {
+    border-radius: 16px; overflow: hidden;
+    position: relative; cursor: pointer;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .bento-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(26,58,82,0.12); }
+  [data-theme="dark"] .bento-card:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+
+  /* Grid placements */
+  .card-hero   { grid-column: span 8; grid-row: span 2; }
+  .card-tall   { grid-column: span 4; grid-row: span 2; }
+  .card-wide   { grid-column: span 6; }
+  .card-small  { grid-column: span 4; }
+  .card-medium { grid-column: span 6; }
+
+  .bento-card .card-img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .bento-card:hover .card-img { transform: scale(1.04); }
+
+  /* Gradient placeholder images using CSS */
+  .img-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: flex-end;
+  }
+  .grad-1 { background: linear-gradient(135deg, #1a3a52 0%, #2d6a9f 50%, #e76f51 100%); }
+  .grad-2 { background: linear-gradient(135deg, #2c5f2e 0%, #5a9e3d 60%, #e8d5a3 100%); }
+  .grad-3 { background: linear-gradient(135deg, #4a1942 0%, #9b2335 50%, #e76f51 100%); }
+  .grad-4 { background: linear-gradient(160deg, #1a3a52 0%, #0d2233 100%); }
+  .grad-5 { background: linear-gradient(135deg, #8B6914 0%, #d4a853 50%, #f5e6c8 100%); }
+  .grad-6 { background: linear-gradient(160deg, #2d1b4e 0%, #6b3fa0 60%, #c77dff 100%); }
+
+  /* Decorative content inside placeholders */
+  .img-deco {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px; opacity: 0.25;
+    pointer-events: none;
+  }
+
+  .card-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 24px;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+  }
+  .card-tag {
+    display: inline-block; margin-bottom: 8px;
+    padding: 4px 10px; border-radius: 4px;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    background: var(--orange); color: white;
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 400; line-height: 1.25;
+    color: white;
+  }
+  .card-hero .card-title { font-size: clamp(26px, 3vw, 38px); }
+  .card-meta {
+    margin-top: 8px; font-size: 11px; color: rgba(255,255,255,0.65);
+    display: flex; gap: 12px;
+  }
+
+  /* Light card variant (no image) */
+  .card-light {
+    background: var(--grey);
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 28px;
+  }
+  .card-light .card-tag-light {
+    display: inline-block; margin-bottom: 12px;
+    padding: 4px 10px; border-radius: 4px;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    background: var(--tag-bg); color: var(--navy);
+  }
+  [data-theme="dark"] .card-light .card-tag-light { color: var(--orange); }
+  .card-light .card-title-light {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 400; line-height: 1.3;
+    color: var(--text);
+  }
+  .card-light .card-meta-light {
+    margin-top: 10px; font-size: 11px; color: var(--text-muted);
+    display: flex; gap: 12px;
+  }
+  .card-light .card-accent {
+    font-size: 72px; line-height: 1; font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; color: var(--orange); opacity: 0.3; margin-bottom: 8px;
+  }
+
+  /* ══════════════════════════════════
+     SINGLE POST PAGE
+  ══════════════════════════════════ */
+  .post-page { max-width: 100%; }
+
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 32px;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted); cursor: pointer; border: none; background: none;
+    transition: color 0.2s;
+  }
+  .back-btn:hover { color: var(--orange); }
+  .back-btn svg { width: 16px; height: 16px; }
+
+  /* Post hero */
+  .post-hero {
+    position: relative; height: clamp(380px, 55vw, 600px);
+    overflow: hidden;
+  }
+  .post-hero-bg {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a3a52 0%, #2d5a7a 40%, #e76f51 100%);
+  }
+  .post-hero-deco {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 220px; opacity: 0.08; color: white;
+    pointer-events: none; user-select: none;
+  }
+  .post-hero-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: clamp(32px, 5vw, 80px);
+    background: linear-gradient(to top, rgba(10,25,40,0.85) 0%, transparent 100%);
+  }
+  .post-category {
+    display: inline-block; margin-bottom: 16px;
+    padding: 5px 12px; border-radius: 4px;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+    background: var(--orange); color: white;
+  }
+  .post-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 72px);
+    font-weight: 300; line-height: 1.05; letter-spacing: -0.01em;
+    color: white; max-width: 800px;
+  }
+  .post-hero-meta {
+    margin-top: 20px; display: flex; gap: 20px;
+    font-size: 12px; color: rgba(255,255,255,0.6);
+  }
+  .post-hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* Post layout */
+  .post-layout {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 32px 80px;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 64px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .post-layout { grid-template-columns: 1fr; }
+    .post-toc { display: none; }
+  }
+
+  /* Article body */
+  .post-body { padding-top: 56px; }
+  .post-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(20px, 2.5vw, 26px); font-weight: 300;
+    line-height: 1.7; color: var(--text);
+    margin-bottom: 40px; padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .post-body p {
+    font-size: 16px; line-height: 1.85;
+    color: var(--text); margin-bottom: 24px;
+    max-width: 660px;
+  }
+  .post-body h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 3vw, 34px); font-weight: 400;
+    color: var(--navy); margin: 48px 0 20px;
+    line-height: 1.2;
+  }
+  [data-theme="dark"] .post-body h2 { color: #f0ece4; }
+
+  /* Callout box */
+  .callout {
+    margin: 36px 0; padding: 28px 32px;
+    border-left: 3px solid var(--orange);
+    background: var(--card-hover);
+    border-radius: 0 12px 12px 0;
+  }
+  .callout-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--orange); margin-bottom: 10px;
+  }
+  .callout p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px !important; font-weight: 300; line-height: 1.6;
+    color: var(--text) !important; margin: 0 !important;
+  }
+
+  /* Product interruption block */
+  .product-block {
+    margin: 48px 0; border-radius: 16px; overflow: hidden;
+    display: grid; grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: 0 8px 40px rgba(26,58,82,0.08);
+  }
+  [data-theme="dark"] .product-block { box-shadow: 0 8px 40px rgba(0,0,0,0.3); }
+  .product-block-img {
+    background: linear-gradient(135deg, #1a3a52, #2d6a9f);
+    min-height: 220px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px;
+  }
+  .product-block-info {
+    padding: 32px 28px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .product-block-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--orange); margin-bottom: 8px;
+  }
+  .product-block-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 400; line-height: 1.25;
+    color: var(--text); margin-bottom: 12px;
+  }
+  .product-block-desc {
+    font-size: 13px !important; color: var(--text-muted) !important;
+    line-height: 1.6 !important; margin-bottom: 20px !important;
+  }
+  .btn-buy {
+    display: inline-block; align-self: flex-start;
+    padding: 12px 24px; border-radius: 8px;
+    background: var(--navy); color: white;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    border: none; cursor: pointer; transition: background 0.2s, transform 0.2s;
+    text-decoration: none;
+  }
+  .btn-buy:hover { background: var(--orange); transform: translateY(-1px); }
+
+  /* Bento list */
+  .bento-list {
+    margin: 32px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .bento-list-item {
+    padding: 20px; border-radius: 12px;
+    background: var(--grey); border: 1px solid var(--border);
+  }
+  .bento-list-item .item-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 300; color: var(--orange); line-height: 1;
+    margin-bottom: 8px;
+  }
+  .bento-list-item p {
+    font-size: 14px !important; margin-bottom: 0 !important; color: var(--text) !important;
+  }
+
+  /* Sticky TOC */
+  .post-toc {
+    position: sticky; top: 80px;
+    padding-top: 56px;
+  }
+  .toc-inner {
+    padding: 24px; border-radius: 12px;
+    background: var(--surface); border: 1px solid var(--border);
+  }
+  .toc-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 16px;
+  }
+  .toc-list { list-style: none; }
+  .toc-list li { margin-bottom: 10px; }
+  .toc-list a {
+    font-size: 13px; color: var(--text-muted); text-decoration: none;
+    transition: color 0.2s; display: flex; gap: 10px; align-items: flex-start;
+    line-height: 1.5;
+  }
+  .toc-list a::before {
+    content: '–'; color: var(--orange); flex-shrink: 0;
+  }
+  .toc-list a:hover { color: var(--text); }
+
+  /* Newsletter */
+  .newsletter-block {
+    margin: 48px 0; padding: 40px 36px; border-radius: 16px;
+    background: var(--navy);
+    background-image: radial-gradient(ellipse at top right, rgba(231,111,81,0.25) 0%, transparent 60%);
+    color: white;
+  }
+  .newsletter-block h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; margin-bottom: 8px;
+  }
+  .newsletter-block p {
+    font-size: 14px; color: rgba(255,255,255,0.65);
+    margin-bottom: 20px !important; max-width: 100% !important;
+  }
+  .newsletter-input-row { display: flex; gap: 10px; }
+  .newsletter-input {
+    flex: 1; padding: 12px 16px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1); color: white;
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    outline: none;
+  }
+  .newsletter-input::placeholder { color: rgba(255,255,255,0.4); }
+  .newsletter-input:focus { border-color: var(--orange); }
+  .btn-subscribe {
+    padding: 12px 20px; border-radius: 8px;
+    background: var(--orange); color: white; border: none;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; transition: opacity 0.2s; white-space: nowrap;
+  }
+  .btn-subscribe:hover { opacity: 0.85; }
+
+  /* Related posts */
+  .related-section { margin-top: 64px; }
+  .related-section h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; margin-bottom: 24px;
+    color: var(--text);
+  }
+  .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 700px) { .related-grid { grid-template-columns: 1fr; } }
+  .related-card {
+    border-radius: 12px; overflow: hidden; cursor: pointer;
+    border: 1px solid var(--border);
+    transition: transform 0.3s ease;
+  }
+  .related-card:hover { transform: translateY(-3px); }
+  .related-card-img {
+    height: 140px;
+  }
+  .related-card-info { padding: 16px; background: var(--surface); }
+  .related-card-tag {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--orange); margin-bottom: 6px;
+  }
+  .related-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 400; line-height: 1.3;
+    color: var(--text);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy); color: rgba(255,255,255,0.6);
+    padding: 40px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 600; color: white; letter-spacing: 0.08em;
+  }
+  .footer-logo span { color: var(--orange); }
+  footer p { font-size: 12px; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .bento-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 220px; gap: 12px; padding: 8px 16px 60px; }
+    .card-hero { grid-column: span 2; grid-row: span 1; }
+    .card-tall { grid-column: span 2; }
+    .card-wide { grid-column: span 2; }
+    .card-small { grid-column: span 1; }
+    .card-medium { grid-column: span 2; }
+    .index-hero, .filter-bar { padding-left: 16px; padding-right: 16px; }
+    .index-hero { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .post-layout { padding: 0 16px 60px; }
+    .product-block { grid-template-columns: 1fr; }
+    .bento-list { grid-template-columns: 1fr; }
+    .newsletter-input-row { flex-direction: column; }
+    .related-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#" onclick="showIndex()">ORL<span>O</span></a>
+  <div class="nav-center">The Edit</div>
+  <div class="nav-right">
+    <a class="nav-link" href="#">Shop</a>
+    <a class="nav-link" href="#">About</a>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"></button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════ -->
+<!-- PAGE: BLOG INDEX                    -->
+<!-- ═══════════════════════════════════ -->
+<div id="page-index" class="page active">
+
+  <div class="index-hero">
+    <div class="index-hero-text">
+      <h1>The<br><em>Edit.</em></h1>
+      <p class="index-hero-sub">Stories, guides, and ideas from the world of thoughtful gifting, game nights, and home character.</p>
+    </div>
+    <div class="issue-badge">
+      <strong>09</strong>
+      Spring 2026
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active">All</button>
+    <button class="filter-btn">Lifestyle</button>
+    <button class="filter-btn">Gift Guides</button>
+    <button class="filter-btn">Game Night</button>
+    <button class="filter-btn">Home Décor</button>
+    <button class="filter-btn">Behind ORLO</button>
+  </div>
+
+  <div class="bento-grid">
+
+    <!-- CARD 1: HERO (8-col × 2-row) -->
+    <div class="bento-card card-hero" onclick="showPost()">
+      <div class="img-placeholder grad-1" style="height:100%">
+        <div class="img-deco">🃏</div>
+      </div>
+      <div class="card-overlay">
+        <span class="card-tag">Game Night</span>
+        <div class="card-title">The Art of the Shuffle: Why Premium Card Stock Changes Everything</div>
+        <div class="card-meta">
+          <span>6 min read</span>
+          <span>March 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2: TALL (4-col × 2-row) -->
+    <div class="bento-card card-tall" onclick="showPost()">
+      <div class="img-placeholder grad-3" style="height:100%">
+        <div class="img-deco">🎁</div>
+      </div>
+      <div class="card-overlay">
+        <span class="card-tag">Gift Guides</span>
+        <div class="card-title">The Ultimate Gift for the Person Who Has Everything</div>
+        <div class="card-meta">
+          <span>4 min read</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3: Light text card -->
+    <div class="bento-card card-small card-light" onclick="showPost()">
+      <div class="card-accent">01</div>
+      <span class="card-tag-light">Home Décor</span>
+      <div class="card-title-light">How a Single Shelf Can Change a Room's Story</div>
+      <div class="card-meta-light">
+        <span>3 min read</span>
+      </div>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="bento-card card-medium" onclick="showPost()">
+      <div class="img-placeholder grad-2" style="height:100%">
+        <div class="img-deco">🏠</div>
+      </div>
+      <div class="card-overlay">
+        <span class="card-tag">Lifestyle</span>
+        <div class="card-title">The Dubai Home: Decorating Between Cultures</div>
+        <div class="card-meta"><span>5 min read</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="bento-card card-small" onclick="showPost()">
+      <div class="img-placeholder grad-5" style="height:100%">
+        <div class="img-deco">🐾</div>
+      </div>
+      <div class="card-overlay">
+        <span class="card-tag">Behind ORLO</span>
+        <div class="card-title">Meet the Bobbleheads: How We Found Them in Guangzhou</div>
+        <div class="card-meta"><span>4 min read</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 6 -->
+    <div class="bento-card card-wide" onclick="showPost()">
+      <div class="img-placeholder grad-4" style="height:100%">
+        <div class="img-deco">🌙</div>
+      </div>
+      <div class="card-overlay">
+        <span class="card-tag">Lifestyle</span>
+        <div class="card-title">How to Host a Game Night in a Studio Apartment</div>
+        <div class="card-meta"><span>7 min read</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 7: Light -->
+    <div class="bento-card card-medium card-light" onclick="showPost()">
+      <div class="card-accent">✦</div>
+      <span class="card-tag-light">Gift Guides</span>
+      <div class="card-title-light">10 Gifts Under AED 150 That Feel Like You Spent More</div>
+      <div class="card-meta-light"><span>5 min read</span></div>
+    </div>
+
+    <!-- CARD 8 -->
+    <div class="bento-card card-small" onclick="showPost()">
+      <div class="img-placeholder grad-6" style="height:100%">
+        <div class="img-deco">📞</div>
+      </div>
+      <div class="card-overlay">
+        <span class="card-tag">Home Décor</span>
+        <div class="card-title">The Rotary Phone Is Back — And It's Not Kitsch</div>
+        <div class="card-meta"><span>3 min read</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- PAGE: SINGLE POST                   -->
+<!-- ═══════════════════════════════════ -->
+<div id="page-post" class="page">
+
+  <button class="back-btn" onclick="showIndex()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to The Edit
+  </button>
+
+  <!-- Hero -->
+  <div class="post-hero">
+    <div class="post-hero-bg"></div>
+    <div class="post-hero-deco">🃏</div>
+    <div class="post-hero-overlay">
+      <span class="post-category">Game Night</span>
+      <h1 class="post-headline">The Art of the Shuffle: Why Premium Card Stock Changes Everything</h1>
+      <div class="post-hero-meta">
+        <span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          6 min read
+        </span>
+        <span>March 28, 2026</span>
+        <span>By ORLO</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body + TOC -->
+  <div class="post-layout">
+
+    <article class="post-body">
+
+      <p class="post-intro">
+        There is a moment, mid-shuffle, when you know. The cards arc cleanly, fall in a whisper, and re-stack with a satisfying weight. That moment — barely two seconds — is what separates a memorable game night from a forgettable one.
+      </p>
+
+      <p>Most people don't think about their playing cards. They buy a pack from a petrol station, shove it in a drawer, and pull it out three years later when the jokers are bent and the queens have lost their gloss. This is a mistake. Not a moral one. But a missed opportunity.</p>
+
+      <p>In 2026, the game night renaissance is real. Dinner parties in Dubai have started replacing the post-dessert scroll with an actual deck of cards. Rummy on the terrace. Poker with people who've never played poker. Saboteur. Exploding Kittens. The card game doesn't matter as much as the ritual around it.</p>
+
+      <h2 id="s1">What actually makes card stock "premium"?</h2>
+
+      <p>The weight is the first thing — typically measured in GSM (grams per square metre). Most cheap decks use 280–300 GSM. Premium card stock starts at 310 GSM and up, with linen or plastic coating to reduce moisture transfer from your hands.</p>
+
+      <div class="callout">
+        <div class="callout-label">Did you know?</div>
+        <p>"Linen finish" doesn't mean actual fabric. It refers to a micro-embossed texture pressed into the card surface — the same technique used in casino decks since the 1950s.</p>
+      </div>
+
+      <p>The second element is the finish. Matte cards photograph beautifully and feel refined in the hand. Gloss cards last longer and slide more easily. The best decks do both — matte face, gloss back. It's a small detail that signals someone thought carefully about the product.</p>
+
+      <h2 id="s2">The four things that matter most</h2>
+
+      <div class="bento-list">
+        <div class="bento-list-item">
+          <div class="item-num">01</div>
+          <p><strong>Paper weight</strong> — 310 GSM minimum. Anything less and the cards fatigue after ten games.</p>
+        </div>
+        <div class="bento-list-item">
+          <div class="item-num">02</div>
+          <p><strong>Cut precision</strong> — Consistent corners mean consistent shuffles. Cheap presses leave micro-burrs.</p>
+        </div>
+        <div class="bento-list-item">
+          <div class="item-num">03</div>
+          <p><strong>Ink depth</strong> — Deep ink resists fading from finger oils over hundreds of rounds.</p>
+        </div>
+        <div class="bento-list-item">
+          <div class="item-num">04</div>
+          <p><strong>The box</strong> — A deck that lives in a premium box signals something to whoever opens it.</p>
+        </div>
+      </div>
+
+      <!-- Product interruption -->
+      <div class="product-block">
+        <div class="product-block-img">🃏</div>
+        <div class="product-block-info">
+          <div class="product-block-label">Featured in this story</div>
+          <div class="product-block-title">ORLO Playing Cards — Classic Edition</div>
+          <p class="product-block-desc">310 GSM linen finish. Matte face, gloss back. Designed for game nights that deserve to be remembered.</p>
+          <a href="#" class="btn-buy">Shop Now — AED 89</a>
+        </div>
+      </div>
+
+      <h2 id="s3">Setting up the perfect game night</h2>
+
+      <p>The cards are only one element. The space matters. The lighting matters — warmer is always better; overhead fluorescents are game-night killers. A decent background soundtrack, something without lyrics, gives just enough atmosphere without demanding attention.</p>
+
+      <p>Snacks that don't leave residue on your hands. This is non-negotiable. No chips, no dips, no sauces during the game. Dates, nuts, chocolate — anything dry. You're protecting your investment.</p>
+
+      <p>And finally: the ritual of unboxing. There is real theatre in presenting a beautiful deck of cards to a group of friends. Pull it out of the box slowly. Let someone cut it. Pass it around. It sounds excessive until you do it once and watch people immediately pay attention.</p>
+
+      <div class="callout">
+        <div class="callout-label">ORLO Note</div>
+        <p>Every deck we stock is chosen the way we'd choose a gift — with someone specific in mind. Someone who notices quality. Someone who keeps the nice things.</p>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="newsletter-block">
+        <h3>Join the ORLO Club</h3>
+        <p>Exclusive first looks, game night guides, and new arrivals before anyone else.</p>
+        <div class="newsletter-input-row">
+          <input class="newsletter-input" type="email" placeholder="your@email.com">
+          <button class="btn-subscribe">Subscribe</button>
+        </div>
+      </div>
+
+      <!-- Related -->
+      <div class="related-section">
+        <h3>You might also like</h3>
+        <div class="related-grid">
+          <div class="related-card" onclick="showPost()">
+            <div class="related-card-img" style="background: linear-gradient(135deg,#1a3a52,#2d5a7a);display:flex;align-items:center;justify-content:center;font-size:48px;">🌙</div>
+            <div class="related-card-info">
+              <div class="related-card-tag">Lifestyle</div>
+              <div class="related-card-title">How to Host a Game Night in a Studio Apartment</div>
+            </div>
+          </div>
+          <div class="related-card" onclick="showPost()">
+            <div class="related-card-img" style="background: linear-gradient(135deg,#4a1942,#9b2335);display:flex;align-items:center;justify-content:center;font-size:48px;">🎁</div>
+            <div class="related-card-info">
+              <div class="related-card-tag">Gift Guides</div>
+              <div class="related-card-title">The Ultimate Gift for the Person Who Has Everything</div>
+            </div>
+          </div>
+          <div class="related-card" onclick="showPost()">
+            <div class="related-card-img" style="background: linear-gradient(135deg,#8B6914,#d4a853);display:flex;align-items:center;justify-content:center;font-size:48px;">🐾</div>
+            <div class="related-card-info">
+              <div class="related-card-tag">Behind ORLO</div>
+              <div class="related-card-title">Meet the Bobbleheads: Found in Guangzhou</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </article>
+
+    <!-- Sticky TOC -->
+    <aside class="post-toc">
+      <div class="toc-inner">
+        <div class="toc-label">In this article</div>
+        <ul class="toc-list">
+          <li><a href="#s1">What makes card stock premium?</a></li>
+          <li><a href="#s2">The four things that matter</a></li>
+          <li><a href="#s3">Setting up the perfect game night</a></li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ORL<span>O</span> Store</div>
+  <p>© 2026 ORLO Store, Dubai UAE · The Edit Issue 09</p>
+</footer>
+
+<script>
+  function showPost() {
+    document.getElementById('page-index').classList.remove('active');
+    document.getElementById('page-post').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function showIndex() {
+    document.getElementById('page-post').classList.remove('active');
+    document.getElementById('page-index').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function toggleTheme() {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
