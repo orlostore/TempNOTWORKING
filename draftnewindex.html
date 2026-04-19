@@ -222,25 +222,29 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .sort-arrow-btn:hover { background: var(--primary) !important; color: #fff !important; border-color: var(--primary) !important; }
 
       /* Shop by Category → editorial pill filters */
+      #categoryCards { min-height: 0 !important; }
       .category-cards {
         display: flex !important;
         flex-wrap: wrap !important;
+        align-items: flex-start !important;
         gap: 10px !important;
         justify-content: flex-start !important;
         padding: 4px 0 !important;
+        grid-template-columns: none !important;
       }
       .category-card {
         flex: 0 0 auto !important;
         display: inline-flex !important;
         align-items: center !important;
-        gap: 10px !important;
-        padding: 8px 18px !important;
+        justify-content: center !important;
+        gap: 0 !important;
+        padding: 12px 22px !important;
         min-height: 0 !important;
         height: auto !important;
         width: auto !important;
         background: var(--surface) !important;
         border: 1px solid var(--draft-border) !important;
-        border-radius: 20px !important;
+        border-radius: 999px !important;
         box-shadow: none !important;
         cursor: pointer !important;
         transition: all .2s ease !important;
@@ -251,39 +255,29 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         border-color: var(--primary) !important;
       }
       [data-theme="dark"] .category-card:hover { background: var(--accent) !important; border-color: var(--accent) !important; }
-      .category-card:hover .category-card-name,
-      .category-card:hover .category-card-name-ar,
-      .category-card:hover .category-card-count { color: #fff !important; }
+      .category-card:hover .category-card-name { color: #fff !important; }
       .category-card-band,
       .category-card svg.category-icon,
-      .category-card .category-card-icon { display: none !important; }
+      .category-card .category-card-icon,
+      .category-card-name-ar,
+      .category-card-count { display: none !important; }
       .category-card-text {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 1px !important;
+        display: inline-flex !important;
+        align-items: center !important;
         padding: 0 !important;
+        margin: 0 !important;
       }
       .category-card-name {
-        font-size: 11px !important;
+        font-size: 12px !important;
         font-weight: 600 !important;
         letter-spacing: 0.14em !important;
         text-transform: uppercase !important;
         color: var(--primary) !important;
-        line-height: 1.2 !important;
+        line-height: 1 !important;
         margin: 0 !important;
+        white-space: nowrap !important;
       }
       [data-theme="dark"] .category-card-name { color: var(--draft-text) !important; }
-      .category-card-name-ar {
-        font-family: 'Almarai', sans-serif !important;
-        font-size: 10px !important;
-        color: var(--draft-muted) !important;
-        opacity: 0.75 !important;
-        line-height: 1.2 !important;
-        font-weight: 400 !important;
-        margin: 0 !important;
-      }
-      .category-card-count { display: none !important; }
 
       /* Term cards — calmer */
       .term-card {
@@ -302,28 +296,53 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       }
       [data-theme="dark"] .term-title { color: var(--draft-text) !important; }
 
-      /* Trust strip on dark gradient hero: translucent glass, white text */
+      /* Trust strip on dark gradient hero: NO bar — items float on gradient */
       .hero-trust-badges {
-        background: rgba(255,255,255,0.08) !important;
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
-        border: 1px solid rgba(255,255,255,0.18) !important;
-        border-radius: 16px !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        gap: 28px !important;
+        flex-wrap: wrap !important;
       }
-      .hero-trust-badges .trust-badge-item,
-      .hero-trust-badges .badge-text,
+      .hero-trust-badges .trust-badge-item {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        min-width: 0 !important;
+        gap: 6px !important;
+      }
+      .hero-trust-badges .badge-icon,
+      .hero-trust-badges svg { stroke: #ffffff !important; color: #ffffff !important; }
+      .hero-trust-badges .badge-text {
+        color: #ffffff !important;
+        font-size: 10.5px !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.12em !important;
+        text-transform: uppercase !important;
+        opacity: 0.95 !important;
+      }
       .hero-trust-badges .badge-text-ar {
-        color: rgba(255,255,255,0.95) !important;
+        color: rgba(255,255,255,0.7) !important;
+        font-family: 'Almarai', sans-serif !important;
+        font-size: 10px !important;
+        letter-spacing: 0 !important;
       }
-      .hero-trust-badges .badge-text-ar { color: rgba(255,255,255,0.75) !important; }
-      .hero-trust-badges svg { stroke: #ffffff !important; }
 
       /* Mobile trust strip (not on gradient) — warm surface */
-      .trust-badges-row {
+      .mobile-trust-section {
         background: var(--surface) !important;
         border: 1px solid var(--draft-border) !important;
         border-radius: 16px !important;
+        box-shadow: none !important;
       }
+      .mobile-trust-section .trust-item { color: var(--primary) !important; }
+      .mobile-trust-section .trust-item .arabic-text { color: var(--draft-muted) !important; }
+      .mobile-trust-section .trust-icon { stroke: var(--primary) !important; }
+      [data-theme="dark"] .mobile-trust-section .trust-item { color: var(--draft-text) !important; }
+      [data-theme="dark"] .mobile-trust-section .trust-icon { stroke: var(--draft-text) !important; }
 
       /* Free Delivery box — solid white, readable colors on gradient */
       .hero-delivery-box {
