@@ -1,0 +1,34 @@
+#!/bin/sh
+# Auto-bump ?v=N cache-busters in HTML when referenced assets are staged.
+# Keeps all HTML files in sync at max(existing)+1 for each asset.
+
+set -e
+
+ASSETS="styles.css app.min.js products.min.js product.min.js shop.min.js app.js products.js product.js"
+SKIP_HTML="indexbeforetagsremoval.html"
+
+staged() { git diff --cached --name-only --diff-filter=ACMR; }
+
+for asset in $ASSETS; do
+  staged | grep -qx "$asset" || continue
+
+  max=0
+  files=""
+  for html in $(git ls-files '*.html'); do
+    case " $SKIP_HTML " in *" $html "*) continue ;; esac
+    v=$(grep -oE "${asset}\?v=[0-9]+" "$html" 2>/dev/null | head -1 | grep -oE '[0-9]+$' || true)
+    [ -z "$v" ] && continue
+    files="$files $html"
+    [ "$v" -gt "$max" ] && max="$v"
+  done
+
+  [ -z "$files" ] && continue
+  next=$((max + 1))
+
+  for html in $files; do
+    A="$asset" N="$next" perl -i -pe 's{(\Q$ENV{A}\E\?v=)\d+}{$1 . $ENV{N}}ge' "$html"
+    git add "$html"
+  done
+
+  echo "pre-commit: bumped ${asset} → v=${next}" >&2
+done
