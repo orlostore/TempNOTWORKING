@@ -590,7 +590,10 @@ async function initProductPage() {
         </div>`;
     }
     if (earlyPriceMobile) {
-      // Three-column bottom bar: Price | Cart button | Delivery
+      // Remove static duplicate so the id below is unique
+      const staticBtn = document.querySelector('.mobile-cart-section > #mobileAddToCartBtn');
+      if (staticBtn) staticBtn.remove();
+      // Three-column bottom bar: Delivery | Price | Cart button (rendered inline)
       earlyPriceMobile.innerHTML = `
         <div class="early-price-row bottom-bar-row">
           <div class="del-col">
@@ -604,14 +607,8 @@ async function initProductPage() {
             <span class="early-price-en">${priceEn}</span>
             <span class="early-price-ar arabic-text">${priceAr}</span>
           </div>
+          <button class="mobile-add-to-cart" id="mobileAddToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
         </div>`;
-      // Move cart button into the row (after delivery, on the right)
-      const bottomBarRow = earlyPriceMobile.querySelector('.bottom-bar-row');
-      const mobileCartBtn = document.getElementById('mobileAddToCartBtn');
-      if (bottomBarRow && mobileCartBtn) {
-        mobileCartBtn.innerHTML = `<span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span>`;
-        bottomBarRow.appendChild(mobileCartBtn);
-      }
     }
   } else if (product.price) {
     // Non-variant products: desktop three-column bar (Cart | Price | Delivery)
