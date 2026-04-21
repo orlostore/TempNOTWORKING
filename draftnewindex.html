@@ -439,6 +439,47 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       /* Terms section inherits page background (was hardcoded grey) */
       .terms-section { background: transparent !important; }
 
+      /* New Arrivals bento — break the uniform horizontal scroll into an
+         editorial grid: hero card + two mid + banner. Draft-only. */
+      #newArrivalsGrid {
+        display: grid !important;
+        grid-template-columns: 2fr 1fr !important;
+        grid-template-rows: 1fr 1fr auto !important;
+        gap: 14px !important;
+        overflow: visible !important;
+        padding-bottom: 0 !important;
+      }
+      #newArrivalsGrid .arrival-card { flex: none !important; }
+      #newArrivalsGrid .arrival-card:nth-child(1) {
+        grid-column: 1 / 2; grid-row: 1 / 3;
+      }
+      #newArrivalsGrid .arrival-card:nth-child(1) .arrival-card-name {
+        font-size: 1.05rem;
+      }
+      #newArrivalsGrid .arrival-card:nth-child(1) .arrival-card-price {
+        font-size: 1.1rem;
+      }
+      #newArrivalsGrid .arrival-card:nth-child(2) { grid-column: 2 / 3; grid-row: 1 / 2; }
+      #newArrivalsGrid .arrival-card:nth-child(3) { grid-column: 2 / 3; grid-row: 2 / 3; }
+      #newArrivalsGrid .arrival-card:nth-child(4) { grid-column: 1 / -1; grid-row: 3 / 4; }
+      #newArrivalsGrid .arrival-card:nth-child(4) .arrival-card-img {
+        aspect-ratio: 21 / 9;
+      }
+      /* Scroll arrows no longer needed in bento mode */
+      .scroll-wrapper:has(#newArrivalsGrid) .scroll-arrow { display: none !important; }
+
+      @media (max-width: 768px) {
+        #newArrivalsGrid {
+          grid-template-columns: 1fr 1fr !important;
+          grid-template-rows: auto auto auto !important;
+        }
+        #newArrivalsGrid .arrival-card:nth-child(1) { grid-column: 1 / -1; grid-row: 1 / 2; }
+        #newArrivalsGrid .arrival-card:nth-child(1) .arrival-card-img { aspect-ratio: 16 / 9; }
+        #newArrivalsGrid .arrival-card:nth-child(2) { grid-column: 1 / 2; grid-row: 2 / 3; }
+        #newArrivalsGrid .arrival-card:nth-child(3) { grid-column: 2 / 3; grid-row: 2 / 3; }
+        #newArrivalsGrid .arrival-card:nth-child(4) { grid-column: 1 / -1; grid-row: 3 / 4; }
+      }
+
       /* Shared content rail — all major sections snap to the same side padding
          on mobile so product grid, journal teaser, contact etc. line up visually */
       @media (max-width: 768px) {
