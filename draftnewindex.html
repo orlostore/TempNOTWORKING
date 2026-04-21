@@ -436,6 +436,21 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       [data-theme="dark"] .search-input { background: var(--surface) !important; color: var(--draft-text) !important; border-color: var(--draft-border) !important; }
       [data-theme="dark"] .nav-links a { color: var(--draft-text) !important; }
 
+      /* Terms section inherits page background (was hardcoded grey) */
+      .terms-section { background: transparent !important; }
+
+      /* Shared content rail — all major sections snap to the same side padding
+         on mobile so product grid, journal teaser, contact etc. line up visually */
+      @media (max-width: 768px) {
+        .container,
+        .contact-container,
+        .homepage-section-inner,
+        .edit-teaser {
+          padding-left: 0.75rem !important;
+          padding-right: 0.75rem !important;
+        }
+      }
+
       /* Theme toggle floating button */
       .draft-theme-toggle {
         position: fixed; top: 14px; right: 14px;
