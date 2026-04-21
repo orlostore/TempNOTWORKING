@@ -397,6 +397,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       /* Dark mode surface overrides for cards */
       [data-theme="dark"] .product-card,
       [data-theme="dark"] .popular-card,
+      [data-theme="dark"] .arrival-card,
       [data-theme="dark"] .term-card,
       [data-theme="dark"] .contact-box,
       [data-theme="dark"] .mobile-carousel-box,
@@ -409,11 +410,15 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         border: 1px solid var(--draft-border) !important;
         box-shadow: 0 6px 24px rgba(0,0,0,0.35) !important;
       }
-      /* Carousel cards (Popular Now + New Arrivals share .popular-card) */
-      [data-theme="dark"] .popular-card-img { background: var(--surface) !important; }
-      [data-theme="dark"] .popular-card-name { color: var(--draft-text) !important; }
-      [data-theme="dark"] .popular-card-name-ar { color: var(--draft-muted) !important; }
-      [data-theme="dark"] .popular-card-price { color: var(--draft-text) !important; }
+      /* Carousel cards — Popular Now uses .popular-card, New Arrivals uses .arrival-card */
+      [data-theme="dark"] .popular-card-img,
+      [data-theme="dark"] .arrival-card-img { background: var(--surface) !important; }
+      [data-theme="dark"] .popular-card-name,
+      [data-theme="dark"] .arrival-card-name { color: var(--draft-text) !important; }
+      [data-theme="dark"] .popular-card-name-ar,
+      [data-theme="dark"] .arrival-card-name-ar { color: var(--draft-muted) !important; }
+      [data-theme="dark"] .popular-card-price,
+      [data-theme="dark"] .arrival-card-price { color: var(--draft-text) !important; }
       /* All Products card text in dark mode */
       [data-theme="dark"] .product-title-ar { color: var(--draft-muted) !important; }
       [data-theme="dark"] .product-price { color: var(--draft-text) !important; }
