@@ -490,6 +490,20 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           padding-left: 0.75rem !important;
           padding-right: 0.75rem !important;
         }
+        /* Outer section wrappers: zero side padding so only the inner
+           container above controls the inset (prevents double-padding) */
+        .about-section,
+        .contact-section,
+        .terms-section {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+        /* Contact/Our Story card: tighten internal padding so its edges
+           don't sit inside the shared rail */
+        .contact-box {
+          padding-left: 1rem !important;
+          padding-right: 1rem !important;
+        }
       }
 
       /* Theme toggle floating button */
