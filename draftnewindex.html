@@ -42,7 +42,7 @@
     <!-- Draft: Cormorant Garamond for editorial headings (matches orlo-the-edit.html) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
     <style>
 @font-face{font-family:'Inter';src:url('/fonts/inter-latin-variable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
 @font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
@@ -595,6 +595,120 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         .edit-teaser-issue { position: static; text-align: left; margin-bottom: 8px; }
       }
 
+      /* ══════════════════════════════════════════════════════════════
+         Editorial rhythm — kill card fatigue + shift body to Spectral
+         ══════════════════════════════════════════════════════════════ */
+
+      /* Our Story — full-bleed clay tint, no card, left-aligned prose */
+      .about-section {
+        background: #E3DDD1 !important;
+        padding: 4rem 0 !important;
+        margin-top: 3rem !important;
+      }
+      [data-theme="dark"] .about-section {
+        background: #1a2a38 !important;
+      }
+      .about-section .section-title { text-align: left !important; }
+      .about-section .story-prose {
+        max-width: 680px;
+        margin: 1.5rem 0 0 0;
+      }
+      .about-section .contact-text-en,
+      .about-section .contact-text-ar {
+        font-family: 'Spectral', 'Source Serif Pro', Georgia, serif !important;
+        font-weight: 400 !important;
+        font-size: clamp(16px, 1.6vw, 19px) !important;
+        line-height: 1.75 !important;
+        color: var(--primary) !important;
+        text-align: left;
+        max-width: 100%;
+        margin: 0 0 1.2rem 0 !important;
+      }
+      .about-section .contact-text-ar {
+        text-align: right !important;
+        direction: rtl;
+        font-family: 'Almarai', system-ui, sans-serif !important;
+      }
+      [data-theme="dark"] .about-section .contact-text-en,
+      [data-theme="dark"] .about-section .contact-text-ar {
+        color: var(--draft-text) !important;
+      }
+
+      /* Contact — no card, hairline divider on top */
+      .contact-section {
+        background: transparent !important;
+        padding: 3rem 0 !important;
+        border-top: 1px solid var(--draft-border) !important;
+        margin-top: 3rem !important;
+      }
+      .contact-section .section-title { text-align: left !important; }
+      .contact-section .contact-plain {
+        margin-top: 1.5rem;
+      }
+      .contact-section .contact-details-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+      .contact-section .contact-detail {
+        background: transparent !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 0.95rem;
+        color: var(--draft-text) !important;
+        text-align: left !important;
+      }
+      [data-theme="dark"] .contact-section .contact-detail { color: var(--draft-text) !important; }
+
+      /* SEO block — keep the white card, but upgrade typography to Spectral */
+      #seo-content .contact-box {
+        text-align: left !important;
+      }
+      #seo-content .contact-text-en {
+        font-family: 'Spectral', 'Source Serif Pro', Georgia, serif !important;
+        font-size: clamp(16px, 1.6vw, 18px) !important;
+        font-weight: 400 !important;
+        line-height: 1.75 !important;
+        text-align: left !important;
+        color: var(--primary) !important;
+        margin: 0 0 1.2rem 0 !important;
+      }
+      #seo-content .contact-text-ar {
+        font-family: 'Almarai', system-ui, sans-serif !important;
+        font-size: 0.95rem !important;
+        line-height: 1.9 !important;
+        text-align: right !important;
+        direction: rtl;
+        color: var(--primary) !important;
+      }
+      [data-theme="dark"] #seo-content .contact-text-en,
+      [data-theme="dark"] #seo-content .contact-text-ar {
+        color: var(--draft-text) !important;
+      }
+
+      /* Footer terms strip — compact horizontal list */
+      .footer-terms-strip {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.9rem;
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+      }
+      .footer-terms-strip a {
+        color: inherit;
+        text-decoration: none;
+        opacity: 0.75;
+        transition: opacity .2s ease;
+      }
+      .footer-terms-strip a:hover { opacity: 1; text-decoration: underline; }
+      .footer-terms-strip span { opacity: 0.4; }
+
       /* Small draft marker — so you know what page you're on */
       .draft-marker {
         position: fixed; bottom: 10px; left: 10px;
@@ -751,7 +865,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
             <li><a href="#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
             <li><a href="#about">About<br><span class="arabic-text">من نحن</span></a></li>
             <li><a href="#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
-            <li><a href="#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
+            <li><a href="#" onclick="openPolicy('terms');return false;">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
             <li><a href="login.html" id="accountLink" class="account-nav-link">Login<br><span class="arabic-text">دخول</span></a></li>
             <li>
                 <div class="cart-icon" id="cartIcon">
@@ -942,13 +1056,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 <section class="about-section" id="about">
     <div class="contact-container">
         <h2 class="section-title">Our Story <span class="arabic-inline">قصتنا</span></h2>
-        <div class="contact-box">
-            <p class="contact-text-en">ORLO is a family-owned Dubai brand built around practical essentials we genuinely use every day.
-We curate products that simplify your space and your routine — thoughtfully chosen for quality, usefulness, and clean design. No clutter. No gimmicks.
-Every order supports a local UAE business built on trust, simplicity, and fair pricing <svg class="inline-heart" viewBox="0 0 24 24" width="18" height="18"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#e07856"/></svg></p>
-            <p class="contact-text-ar">اورلو علامة تجارية عائلية من دبي، نختار فيها أدوات أساسية نستخدمها فعلاً في حياتنا اليومية.
-نؤمن بالبساطة، والجودة العملية، والاختيارات الذكية التي ترتّب مساحتك وتسهّل يومك — بدون تعقيد أو إضافات غير ضرورية.
-كل طلب منك يدعم مشروعاً إماراتياً محلياً مبنياً على الثقة، والبساطة، والتسعير العادل <svg class="inline-heart" viewBox="0 0 24 24" width="18" height="18"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#e07856"/></svg></p>
+        <div class="story-prose">
+            <p class="contact-text-en">ORLO is a family-owned Dubai brand built around practical essentials we genuinely use every day. We curate products that simplify your space and your routine — thoughtfully chosen for quality, usefulness, and clean design. No clutter. No gimmicks. Every order supports a local UAE business built on trust, simplicity, and fair pricing.</p>
+            <p class="contact-text-ar">اورلو علامة تجارية عائلية من دبي، نختار فيها أدوات أساسية نستخدمها فعلاً في حياتنا اليومية. نؤمن بالبساطة، والجودة العملية، والاختيارات الذكية التي ترتّب مساحتك وتسهّل يومك — بدون تعقيد أو إضافات غير ضرورية. كل طلب منك يدعم مشروعاً إماراتياً محلياً مبنياً على الثقة، والبساطة، والتسعير العادل.</p>
         </div>
     </div>
 </section>
@@ -956,7 +1066,7 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
 <section class="contact-section" id="contact">
     <div class="contact-container">
         <h2 class="section-title">Contact Us <span class="arabic-inline">اتصل بنا</span></h2>
-        <div class="contact-box">
+        <div class="contact-plain">
             <div class="contact-details-row">
                 <div class="contact-detail"><strong>Location: <span class="arabic-text">الموقع</span></strong> Dubai, UAE <span class="arabic-text">دبي، الإمارات العربية المتحدة</span></div>
                 <div class="contact-detail"><strong>Email: <span class="arabic-text">البريد</span></strong> <a href="mailto:info@orlostore.com">info@orlostore.com</a></div>
@@ -966,18 +1076,7 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
     </div>
 </section>
 
-<section class="terms-section" id="terms">
-    <div class="container">
-        <h2 class="section-title">Terms & Conditions <span class="arabic-inline">الشروط والأحكام</span></h2>
-        <div class="terms-grid">
-            <div class="term-card" onclick="openPolicy('shipping')"><h3><span class="term-title">Shipping</span><span class="term-title-ar arabic-text">الشحن</span></h3></div>
-            <div class="term-card" onclick="openPolicy('returns')"><h3><span class="term-title">Returns</span><span class="term-title-ar arabic-text">الإرجاع</span></h3></div>
-            <div class="term-card" onclick="openPolicy('privacy')"><h3><span class="term-title">Privacy</span><span class="term-title-ar arabic-text">الخصوصية</span></h3></div>
-            <div class="term-card" onclick="openPolicy('terms')"><h3><span class="term-title">Terms</span><span class="term-title-ar arabic-text">الشروط</span></h3></div>
-            <div class="term-card" onclick="openPolicy('exchange')"><h3><span class="term-title">Exchange</span><span class="term-title-ar arabic-text">الاستبدال</span></h3></div>
-        </div>
-    </div>
-</section>
+<!-- Terms section collapsed into footer strip below (draft) -->
 
 <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-checkout-fixed" id="cartCheckoutFixed"></div>
@@ -1002,23 +1101,8 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
     <div class="contact-container">
         <h2 class="section-title">ORLO Store <span class="arabic-inline">متجر أورلو</span></h2>
         <div class="contact-box">
-            <p class="contact-text-en">ORLO Store is a Dubai-based online shop offering a carefully curated mix of <strong>unique home décor</strong>, <strong>handmade gifts</strong>, and <strong>practical everyday essentials</strong> — all delivered across the UAE.</p>
-            <p class="contact-text-en">Our collection includes <strong>handcrafted fridge magnets</strong>, <strong>miniature vintage figurines</strong> (rotary phones, radios, gramophones, TVs), <strong>motivational wall hangings</strong>, and <strong>cable management solutions</strong> — something for every home and every occasion.</p>
-            <p class="contact-text-en">We ship across all Emirates with <strong>free delivery on orders over AED 75</strong>. Bilingual support in English and Arabic via WhatsApp.</p>
-            <p class="contact-text-en" style="margin-top:1.2rem;"><strong>Why Shop at ORLO?</strong></p>
-            <p class="contact-text-en">• <strong>Free delivery</strong> on orders over AED 75 across all UAE<br>
-            • <strong>Unique handmade and decorative items</strong> you won't find elsewhere<br>
-            • <strong>Fast shipping from Dubai</strong> with WhatsApp support<br>
-            • <strong>Bilingual service</strong> in English and Arabic</p>
-
-            <p class="contact-text-ar" style="margin-top:1.5rem;">متجر أورلو الإلكتروني مقره دبي، يقدم مجموعة مختارة بعناية من الديكورات المنزلية الفريدة والهدايا اليدوية والأساسيات اليومية العملية — مع توصيل إلى جميع أنحاء الإمارات.</p>
-            <p class="contact-text-ar">تشمل مجموعتنا مغناطيس الثلاجة المصنوعة يدوياً، والمجسمات الكلاسيكية المصغّرة (هواتف دوّارة، راديو، غراموفون، تلفزيونات)، ولوحات الحائط التحفيزية، وأدوات تنظيم الكابلات — شيء لكل بيت ولكل مناسبة.</p>
-            <p class="contact-text-ar">نوصّل إلى جميع الإمارات مع توصيل مجاني للطلبات التي تتجاوز 75 درهماً، مع دعم ثنائي اللغة بالعربية والإنجليزية عبر واتساب.</p>
-            <p class="contact-text-ar" style="margin-top:1.2rem;"><strong>لماذا تتسوق من أورلو؟</strong></p>
-            <p class="contact-text-ar">• توصيل مجاني للطلبات فوق 75 درهم لجميع الإمارات<br>
-            • منتجات فريدة يدوية وديكورية لن تجدها في مكان آخر<br>
-            • شحن سريع من دبي مع دعم عبر واتساب<br>
-            • خدمة ثنائية اللغة بالعربية والإنجليزية</p>
+            <p class="contact-text-en">Based in Dubai, ORLO Store curates miniature vintage figurines — rotary phones, radios, gramophones, retro TVs — alongside functional home essentials like cable organisers, wall hangings, and handmade fridge magnets. Free UAE shipping over AED 75. Reach out via WhatsApp.</p>
+            <p class="contact-text-ar">يقع متجر أورلو في دبي، حيث ننسق مجموعة مختارة من المجسمات الكلاسيكية المصغرة — من الهواتف الدوارة وأجهزة الراديو إلى الغراموفون وأجهزة التلفاز القديمة — إلى جانب مستلزمات المنزل العملية مثل منظمات الكابلات، واللوحات الجدارية، ومغانط الثلاجة المصنوعة يدوياً. توصيل مجاني في الإمارات للطلبات فوق 75 درهم. تواصلوا معنا عبر الواتساب.</p>
         </div>
     </div>
 </section>
@@ -1067,6 +1151,17 @@ Every order supports a local UAE business built on trust, simplicity, and fair p
 
 </main>
 <footer>
+    <nav class="footer-terms-strip" aria-label="Policies">
+        <a href="#" onclick="openPolicy('shipping');return false;">Shipping</a>
+        <span aria-hidden="true">·</span>
+        <a href="#" onclick="openPolicy('returns');return false;">Returns</a>
+        <span aria-hidden="true">·</span>
+        <a href="#" onclick="openPolicy('privacy');return false;">Privacy</a>
+        <span aria-hidden="true">·</span>
+        <a href="#" onclick="openPolicy('terms');return false;">Terms</a>
+        <span aria-hidden="true">·</span>
+        <a href="#" onclick="openPolicy('exchange');return false;">Exchange</a>
+    </nav>
     <div style="margin-bottom:0.6rem;display:flex;justify-content:center;gap:1rem;">
         <a href="https://www.instagram.com/orlostore" target="_blank" rel="noopener" aria-label="ORLO on Instagram" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="white" stroke="none"/></svg></a>
         <a href="https://www.tiktok.com/@shoporlo" target="_blank" rel="noopener" aria-label="ORLO on TikTok" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:#000;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"><svg width="17" height="17" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="#69C9D0" transform="translate(0.5,0.5)"/><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="#EE1D52" transform="translate(-0.5,-0.5)"/><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="white"/></svg></a>
