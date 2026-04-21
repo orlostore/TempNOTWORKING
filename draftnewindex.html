@@ -596,30 +596,33 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       }
 
       /* ══════════════════════════════════════════════════════════════
-         Editorial rhythm — kill card fatigue + shift body to Spectral
+         Editorial rhythm — palette pulled directly from Edit teaser:
+         navy #1a3a52, mid-navy #2d5a7a, terracotta #e76f51, warm cream #ffd9cb
          ══════════════════════════════════════════════════════════════ */
 
-      /* Our Story — full-bleed clay tint, no card, left-aligned prose */
+      /* Our Story — inverted navy panel (echoes Edit without the gradient) */
       .about-section {
-        background: #E3DDD1 !important;
+        background: #1a3a52 !important;
         padding: 4rem 0 !important;
         margin-top: 3rem !important;
+        color: #ffd9cb !important;
       }
-      [data-theme="dark"] .about-section {
-        background: #1a2a38 !important;
+      [data-theme="dark"] .about-section { background: #0f2435 !important; }
+      .about-section .section-title {
+        text-align: left !important;
+        color: #ffffff !important;
       }
-      .about-section .section-title { text-align: left !important; }
-      .about-section .story-prose {
-        max-width: 680px;
-        margin: 1.5rem 0 0 0;
+      .about-section .section-title .arabic-inline {
+        color: rgba(255, 217, 203, 0.7) !important;
       }
+      .about-section .story-prose { max-width: 680px; margin: 1.5rem 0 0 0; }
       .about-section .contact-text-en,
       .about-section .contact-text-ar {
         font-family: 'Spectral', 'Source Serif Pro', Georgia, serif !important;
         font-weight: 400 !important;
         font-size: clamp(16px, 1.6vw, 19px) !important;
         line-height: 1.75 !important;
-        color: var(--primary) !important;
+        color: #f0ece4 !important;
         text-align: left;
         max-width: 100%;
         margin: 0 0 1.2rem 0 !important;
@@ -628,23 +631,18 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         text-align: right !important;
         direction: rtl;
         font-family: 'Almarai', system-ui, sans-serif !important;
-      }
-      [data-theme="dark"] .about-section .contact-text-en,
-      [data-theme="dark"] .about-section .contact-text-ar {
-        color: var(--draft-text) !important;
+        color: rgba(240, 236, 228, 0.88) !important;
       }
 
-      /* Contact — no card, hairline divider on top */
+      /* Contact — no card, cream bg with hairline divider */
       .contact-section {
         background: transparent !important;
         padding: 3rem 0 !important;
         border-top: 1px solid var(--draft-border) !important;
-        margin-top: 3rem !important;
+        margin-top: 0 !important;
       }
       .contact-section .section-title { text-align: left !important; }
-      .contact-section .contact-plain {
-        margin-top: 1.5rem;
-      }
+      .contact-section .contact-plain { margin-top: 1.5rem; }
       .contact-section .contact-details-row {
         display: flex;
         flex-direction: column;
@@ -660,12 +658,18 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         color: var(--draft-text) !important;
         text-align: left !important;
       }
-      [data-theme="dark"] .contact-section .contact-detail { color: var(--draft-text) !important; }
 
-      /* SEO block — keep the white card, but upgrade typography to Spectral */
+      /* SEO block — kill the white card, sit on cream page bg */
+      #seo-content { background: transparent !important; }
       #seo-content .contact-box {
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 0 !important;
         text-align: left !important;
+        max-width: 680px;
+        margin: 1.5rem 0 0 0;
       }
+      #seo-content .section-title { text-align: left !important; }
       #seo-content .contact-text-en {
         font-family: 'Spectral', 'Source Serif Pro', Georgia, serif !important;
         font-size: clamp(16px, 1.6vw, 18px) !important;
