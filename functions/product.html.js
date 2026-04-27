@@ -32,11 +32,15 @@ export async function onRequest(context) {
     return response;
   }
 
-  // Product not found - serve static page with no-cache headers
+  // Product not found — return real 404 so Google deindexes dead slugs
+  // (was 200 + JS-rendered "Product not found", which Google flagged as a
+  // soft 404 / redirect error). Body is still the static page so users
+  // landing on a stale link see the friendly message.
   if (!product) {
     const response = await env.ASSETS.fetch(cleanRequest);
-    applyNoCacheHeaders(response);
-    return response;
+    const r = new Response(response.body, { status: 404, statusText: 'Not Found', headers: response.headers });
+    applyNoCacheHeaders(r);
+    return r;
   }
 
   // Build SEO values

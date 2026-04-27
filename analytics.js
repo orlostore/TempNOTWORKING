@@ -7,31 +7,88 @@
 
   var META_PIXEL_ID = '4275846289322000';
   var TIKTOK_PIXEL_ID = 'D6LC3SJC77UFDH5VO920';
+  var COOKIE_MAX_AGE = 90 * 24 * 60 * 60; // Meta default
+
+  // ---- Cookie helpers ----
+  function readCookie(name) {
+    try {
+      var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]+)'));
+      return m ? decodeURIComponent(m[1]) : null;
+    } catch (e) { return null; }
+  }
+  function writeCookie(name, value) {
+    try {
+      document.cookie = name + '=' + encodeURIComponent(value) +
+        '; max-age=' + COOKIE_MAX_AGE + '; path=/; SameSite=Lax';
+    } catch (e) {}
+  }
+
+  // Seed _fbp before the Pixel snippet runs so the very first PageView CAPI
+  // ping (which fires inside loadMetaPixel before fbevents.js lands) carries it.
+  // Format matches Meta's spec exactly: fb.<subdomain>.<ts_ms>.<random10>.
+  // Pixel preserves an existing _fbp instead of overwriting, so values stay aligned.
+  function ensureFbp() {
+    if (readCookie('_fbp')) return;
+    var rand = Math.floor(1000000000 + Math.random() * 9000000000);
+    writeCookie('_fbp', 'fb.1.' + Date.now() + '.' + rand);
+  }
+  // Capture click-id from ?fbclid= even if the user lands before Pixel loads.
+  function syncFbcFromUrl() {
+    try {
+      var m = (window.location.search || '').match(/[?&]fbclid=([^&#]+)/);
+      if (!m || readCookie('_fbc')) return;
+      writeCookie('_fbc', 'fb.1.' + Date.now() + '.' + decodeURIComponent(m[1]));
+    } catch (e) {}
+  }
+  ensureFbp();
+  syncFbcFromUrl();
+
+  // ---- Stable anonymous device id, used as external_id when logged-out ----
+  // Persists across visits so Meta can stitch sessions for the same device.
+  // Logged-in users still send email-as-external_id (matches webhook.js Purchase).
+  function getOrCreateAnonId() {
+    try {
+      var id = localStorage.getItem('orlo_anon_id');
+      if (id) return id;
+      if (window.crypto && typeof crypto.randomUUID === 'function') {
+        id = crypto.randomUUID();
+      } else {
+        id = 'anon_' + Date.now() + '_' + Math.random().toString(36).slice(2, 14);
+      }
+      localStorage.setItem('orlo_anon_id', id);
+      return id;
+    } catch (e) { return null; }
+  }
 
   // ---- Advanced Matching: pull logged-in user from localStorage if present ----
   // Pixel hashes plain values automatically. external_id MUST equal the value
   // webhook.js uses (sha256 of lowercased email) so server↔browser dedup matches.
   function getAdvancedMatching() {
+    var am = {};
     try {
       var raw = localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer');
-      if (!raw) return {};
-      var u = JSON.parse(raw);
-      var am = {};
-      if (u.email) {
-        var em = String(u.email).toLowerCase().trim();
-        am.em = em;
-        am.external_id = em; // server side hashes the same email — matches in Meta
+      if (raw) {
+        var u = JSON.parse(raw);
+        if (u.email) {
+          var em = String(u.email).toLowerCase().trim();
+          am.em = em;
+          am.external_id = em; // server side hashes the same email — matches in Meta
+        }
+        if (u.phone) am.ph = String(u.phone).replace(/\D/g, '');
+        if (u.name) {
+          var parts = String(u.name).trim().toLowerCase().split(/\s+/);
+          if (parts[0]) am.fn = parts[0];
+          if (parts.length > 1) am.ln = parts[parts.length - 1];
+        }
+        if (u.city) am.ct = String(u.city).toLowerCase().replace(/\s+/g, '');
+        if (u.country) am.country = String(u.country).toLowerCase();
       }
-      if (u.phone) am.ph = String(u.phone).replace(/\D/g, '');
-      if (u.name) {
-        var parts = String(u.name).trim().toLowerCase().split(/\s+/);
-        if (parts[0]) am.fn = parts[0];
-        if (parts.length > 1) am.ln = parts[parts.length - 1];
-      }
-      if (u.city) am.ct = String(u.city).toLowerCase().replace(/\s+/g, '');
-      if (u.country) am.country = String(u.country).toLowerCase();
-      return am;
-    } catch (e) { return {}; }
+    } catch (e) {}
+    if (!am.external_id) {
+      var anon = getOrCreateAnonId();
+      if (anon) am.external_id = anon;
+    }
+    return am;
   }
 
   function makeEventId(prefix) {
@@ -66,6 +123,18 @@
     } catch (e) {}
   }
 
+  // Pixel snippet may not be on the page yet when orloTrack is called (we lazy-load
+  // it on idle). Queue Pixel-side calls and replay after loadMetaPixel() runs.
+  // CAPI is independent and always fires immediately.
+  var pendingFbq = [];
+  function flushPendingFbq() {
+    if (typeof window.fbq !== 'function') return;
+    while (pendingFbq.length) {
+      var c = pendingFbq.shift();
+      try { window.fbq('track', c.eventName, c.params, { eventID: c.eventId }); } catch (e) {}
+    }
+  }
+
   // ---- Public helper: fires Pixel + CAPI with shared event_id ----
   // Usage: orloTrack('ViewContent', { content_ids:['slug'], value:99, currency:'AED' });
   window.orloTrack = function (eventName, params) {
@@ -73,6 +142,8 @@
     var eventId = makeEventId(eventName);
     if (typeof window.fbq === 'function') {
       window.fbq('track', eventName, params, { eventID: eventId });
+    } else {
+      pendingFbq.push({ eventName: eventName, params: params, eventId: eventId });
     }
     capi(eventName, eventId, params);
     return eventId;
@@ -92,6 +163,9 @@
     var am = getAdvancedMatching();
     if (Object.keys(am).length) window.fbq('init', META_PIXEL_ID, am);
     else window.fbq('init', META_PIXEL_ID);
+
+    // Replay any orloTrack calls that landed before the snippet ran.
+    flushPendingFbq();
 
     // PageView with shared event_id so CAPI dedups it
     var pvId = makeEventId('pv');

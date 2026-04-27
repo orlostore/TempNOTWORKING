@@ -3,7 +3,7 @@
 <head>
   <script>window._productsFetch = fetch('/api/products', { cache: 'no-store' });</script>
   <!-- ORLO unified analytics: Meta Pixel + TikTok Pixel + CAPI (deferred) -->
-  <script src="/analytics.js?v=1" defer></script>
+  <script src="/analytics.js?v=2" defer></script>
   <!-- Instant hide if returning from Stripe checkout (prevents flash) -->
   <script>if(sessionStorage.getItem('orlo_checkout_pending'))document.documentElement.style.visibility='hidden';</script>
   <meta charset="UTF-8">
@@ -28,6 +28,8 @@
   <meta name="twitter:description" content="Aesthetic desk accessories & office decor. Unique gifts & workspace essentials delivered across the UAE. Free delivery over 75 AED.">
   <meta name="twitter:image" content="https://orlostore.com/1776101829384.png">
   <meta name="theme-color" content="#000000">
+  <!-- Per-product href is rewritten by functions/product.html.js HTMLRewriter -->
+  <link rel="canonical" href="https://orlostore.com/product.html">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="preconnect" href="https://images.orlostore.com">
   <link rel="preload" href="/fonts/inter-latin-variable.woff2" as="font" type="font/woff2" crossorigin>

@@ -4,7 +4,7 @@
 
 set -e
 
-ASSETS="styles.css app.min.js products.min.js product.min.js shop.min.js app.js products.js product.js"
+ASSETS="styles.css app.min.js products.min.js product.min.js shop.min.js app.js products.js product.js analytics.js"
 SKIP_HTML="indexbeforetagsremoval.html"
 
 staged() { git diff --cached --name-only --diff-filter=ACMR; }
