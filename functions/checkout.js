@@ -24,7 +24,17 @@ export async function onRequestPost(context) {
 
     try {
         const body = await request.json();
-        const { cart, deliveryZoneKey } = body;
+        const { cart, deliveryZoneKey, fbp: bodyFbp, fbc: bodyFbc } = body;
+
+        // Capture Meta tracking attributes at checkout time so the Stripe
+        // webhook can attach them to the server-side Purchase CAPI event.
+        const cookieHeader = request.headers.get('Cookie') || '';
+        const fbpFromCookie = (cookieHeader.match(/(?:^|;\s*)_fbp=([^;]+)/) || [])[1];
+        const fbcFromCookie = (cookieHeader.match(/(?:^|;\s*)_fbc=([^;]+)/) || [])[1];
+        const fbp = bodyFbp || fbpFromCookie || null;
+        const fbc = bodyFbc || fbcFromCookie || null;
+        const clientUserAgent = (request.headers.get('User-Agent') || '').slice(0, 500);
+        const clientIpAddress = request.headers.get('CF-Connecting-IP') || null;
 
         if (!cart || !Array.isArray(cart) || cart.length === 0) {
             return new Response(JSON.stringify({ error: 'Cart is empty' }), {
@@ -312,7 +322,7 @@ export async function onRequestPost(context) {
                 'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, customerEmail, stripeCustomerId)
+            body: buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, customerEmail, stripeCustomerId, { fbp, fbc, clientUserAgent, clientIpAddress })
         });
 
         const session = await stripeResponse.json();
@@ -354,7 +364,7 @@ export async function onRequestOptions() {
     });
 }
 
-function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, customerEmail, stripeCustomerId) {
+function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, customerEmail, stripeCustomerId, meta) {
     const params = new URLSearchParams();
 
     params.append('mode', 'payment');
@@ -369,6 +379,10 @@ function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, 
     params.append('metadata[delivery_zone]', zone.name);
     params.append('metadata[order_subtotal]', subtotal.toFixed(2));
     params.append('metadata[delivery_fee]', deliveryFee.toFixed(2));
+    if (meta && meta.fbp) params.append('metadata[fbp]', meta.fbp);
+    if (meta && meta.fbc) params.append('metadata[fbc]', meta.fbc);
+    if (meta && meta.clientUserAgent) params.append('metadata[client_user_agent]', meta.clientUserAgent.slice(0, 500));
+    if (meta && meta.clientIpAddress) params.append('metadata[client_ip_address]', meta.clientIpAddress);
 
     // Pre-fill customer info
     if (stripeCustomerId) {

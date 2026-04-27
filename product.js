@@ -398,9 +398,9 @@ async function initProductPage() {
     });
   }
 
-  // Meta Pixel: track ViewContent event
-  if (typeof fbq === 'function') {
-    fbq('track', 'ViewContent', {
+  // Meta Pixel + CAPI: ViewContent (deduplicated via shared event_id)
+  if (typeof window.orloTrack === 'function') {
+    window.orloTrack('ViewContent', {
       content_ids: [product.slug],
       content_name: product.name,
       content_type: 'product',
