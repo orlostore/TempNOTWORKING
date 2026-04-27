@@ -336,9 +336,15 @@ export async function onRequestPost(context) {
                     const siteUrl = env.SITE_URL || 'https://orlostore.com';
                     const productItems = cartItems.filter(i => !(i.name || '').toLowerCase().includes('delivery'));
 
-                    // Hashed PII for better audience match rates
+                    // Hashed PII for higher Event Match Quality
                     const userData = {};
-                    if (customerEmail) userData.em = [await hashSHA256(customerEmail.toLowerCase().trim())];
+                    if (customerEmail) {
+                        const emHash = await hashSHA256(customerEmail.toLowerCase().trim());
+                        userData.em = [emHash];
+                        // external_id MUST equal what the browser Pixel sends so dedup works.
+                        // analytics.js sends raw email as external_id; Meta hashes both — they match.
+                        userData.external_id = [emHash];
+                    }
                     const phone = session.customer_details?.phone;
                     if (phone) userData.ph = [await hashSHA256(phone.replace(/\D/g, ''))];
                     const nameParts = (session.customer_details?.name || '').trim().split(/\s+/);
@@ -347,6 +353,13 @@ export async function onRequestPost(context) {
                     const address = session.customer_details?.address || session.shipping_details?.address || {};
                     if (address.city) userData.ct = [await hashSHA256(address.city.toLowerCase().replace(/\s/g, ''))];
                     if (address.country) userData.country = [await hashSHA256(address.country.toLowerCase())];
+                    if (address.postal_code) userData.zp = [await hashSHA256(String(address.postal_code).toLowerCase())];
+
+                    // Browser-tracking attributes captured at checkout time
+                    if (session.metadata?.fbp) userData.fbp = session.metadata.fbp;
+                    if (session.metadata?.fbc) userData.fbc = session.metadata.fbc;
+                    if (session.metadata?.client_user_agent) userData.client_user_agent = session.metadata.client_user_agent;
+                    if (session.metadata?.client_ip_address) userData.client_ip_address = session.metadata.client_ip_address;
 
                     const capiPayload = {
                         data: [{
@@ -362,6 +375,7 @@ export async function onRequestPost(context) {
                                 content_ids: productItems.map(i => i.slug),
                                 content_type: 'product',
                                 num_items: productItems.reduce((s, i) => s + i.quantity, 0),
+                                order_id: session.id,
                             },
                         }]
                     };
