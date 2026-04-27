@@ -4,7 +4,7 @@
     <!-- Early product fetch: starts API call before app.js loads to reduce LCP -->
     <script>window._productsFetch = fetch('/api/products');</script>
     <!-- ORLO unified analytics: Meta Pixel + TikTok Pixel + CAPI (deferred) -->
-    <script src="/analytics.js?v=1" defer></script>
+    <script src="/analytics.js?v=2" defer></script>
   
     <!-- Instant hide if returning from Stripe checkout (prevents flash) -->
     <script>if(sessionStorage.getItem('orlo_checkout_pending'))document.documentElement.style.visibility='hidden';</script>
