@@ -957,9 +957,11 @@ async function initProductPage() {
         });
     }
 
-    // Meta Pixel: track AddToCart event
-    if (typeof fbq === 'function') {
-        fbq('track', 'AddToCart', {
+    // Meta Pixel + CAPI: AddToCart (deduplicated via shared event_id).
+    // Goes through orloTrack so it queues if fbq hasn't loaded yet — the Pixel
+    // is lazy-loaded on idle and a fast clicker can fire AddToCart before it lands.
+    if (typeof window.orloTrack === 'function') {
+        window.orloTrack('AddToCart', {
             content_ids: [product.slug],
             content_name: product.name,
             content_type: 'product',
