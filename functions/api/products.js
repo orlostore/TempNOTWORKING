@@ -9,11 +9,11 @@ export async function onRequestGet(context) {
     const DB = env.DB;
 
     // 1. Check KV cache first — instant response
+    // Admin actions explicitly invalidate this cache (functions/api/admin/product.js),
+    // so a hit means the data is current. No background refresh needed.
     if (env.PRODUCTS_CACHE) {
         const cached = await env.PRODUCTS_CACHE.get(CACHE_KEY);
         if (cached) {
-            // Return cached data immediately, refresh D1 in background
-            context.waitUntil(refreshCache(env, DB));
             return new Response(cached, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,16 +50,6 @@ export async function onRequestGet(context) {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         });
-    }
-}
-
-// Background KV refresh — runs after response is sent to user
-async function refreshCache(env, DB) {
-    try {
-        const products = await fetchFromD1(DB);
-        await env.PRODUCTS_CACHE.put(CACHE_KEY, JSON.stringify(products), { expirationTtl: CACHE_TTL });
-    } catch (e) {
-        console.log('KV refresh failed:', e.message);
     }
 }
 
