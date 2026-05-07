@@ -110,6 +110,18 @@ export async function onRequest(context) {
     .on('meta[name="twitter:image"]', {
       element(el) { el.setAttribute('content', productImage); }
     })
+    .on('#mobileProductTitle', {
+      element(el) { el.setInnerContent(product.name); }
+    })
+    .on('#productTitle', {
+      element(el) { el.setInnerContent(product.name); }
+    })
+    .on('#mobileProductCategory', {
+      element(el) { el.setInnerContent(product.category || ''); }
+    })
+    .on('#productCategory', {
+      element(el) { el.setInnerContent(product.category || ''); }
+    })
     .on('head', {
       element(el) {
         if (productImage && productImage.startsWith('http')) {
