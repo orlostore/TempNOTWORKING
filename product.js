@@ -690,7 +690,7 @@ async function initProductPage() {
       gallery.innerHTML = `
         <div class="image-gallery">
           <div class="main-image-container">
-            <img id="mainImage" src="${product.images[0]}" alt="${product.name}" class="main-product-image" fetchpriority="high">
+            <img id="mainImage" src="${product.images[0]}" alt="${product.name}" class="main-product-image" fetchpriority="high" width="600" height="600">
             <div class="zoom-hint">🔍 Click to zoom</div>
           </div>
           ${thumbnailsHTML}
@@ -748,7 +748,7 @@ async function initProductPage() {
     } else {
       mobileCarousel.innerHTML = product.images.map((img, index) => `
         <div class="mobile-carousel-slide" data-index="${index}">
-          <img src="${img}" alt="${product.name} ${index + 1}" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
+          <img src="${img}" alt="${product.name} ${index + 1}" width="400" height="400" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
         </div>
       `).join('');
       
