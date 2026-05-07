@@ -112,6 +112,10 @@ export async function onRequest(context) {
     })
     .on('head', {
       element(el) {
+        if (productImage && productImage.startsWith('http')) {
+          const cdnImg = `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_600,h_600,f_auto,q_auto/${productImage}`;
+          el.append('<link rel="preload" as="image" fetchpriority="high" href="' + cdnImg + '">', { html: true });
+        }
         el.append('<script type="application/ld+json">' + jsonLd + '</script>', { html: true });
       }
     })
