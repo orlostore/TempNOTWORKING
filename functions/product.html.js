@@ -136,7 +136,7 @@ export async function onRequest(context) {
     .on('head', {
       element(el) {
         if (lcpImage && lcpImage.startsWith('http')) {
-          const cdnImg = `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_500,h_500,f_auto,q_auto/${lcpImage}`;
+          const cdnImg = `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_800,h_800,f_auto,q_auto/${lcpImage}`;
           el.append('<link rel="preload" as="image" fetchpriority="high" href="' + cdnImg + '">', { html: true });
         }
         el.append('<script type="application/ld+json">' + jsonLd + '</script>', { html: true });
