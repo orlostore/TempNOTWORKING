@@ -24,6 +24,16 @@ function sanitizeHTML(html) {
   return div.innerHTML;
 }
 
+// === CLOUDINARY URL HELPER ===
+// Must produce a string identical to the preload in functions/product.html.js
+// so the browser reuses the preloaded LCP image instead of fetching twice.
+function cdnUrl(rawUrl, w, h) {
+  if (!rawUrl || typeof rawUrl !== 'string' || !rawUrl.startsWith('http')) return rawUrl;
+  w = w || 600;
+  h = h || 600;
+  return 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_' + w + ',h_' + h + ',f_auto,q_auto/' + rawUrl;
+}
+
 // === MAX QUANTITY PER PRODUCT ===
 var MAX_QTY_PER_PRODUCT = 10;
 
@@ -690,7 +700,7 @@ async function initProductPage() {
       gallery.innerHTML = `
         <div class="image-gallery">
           <div class="main-image-container">
-            <img id="mainImage" src="${product.images[0]}" alt="${product.name}" class="main-product-image" fetchpriority="high" width="600" height="600">
+            <img id="mainImage" src="${cdnUrl(product.images[0])}" alt="${product.name}" class="main-product-image" fetchpriority="high" width="600" height="600">
             <div class="zoom-hint">🔍 Click to zoom</div>
           </div>
           ${thumbnailsHTML}
@@ -748,7 +758,7 @@ async function initProductPage() {
     } else {
       mobileCarousel.innerHTML = product.images.map((img, index) => `
         <div class="mobile-carousel-slide" data-index="${index}">
-          <img src="${img}" alt="${product.name} ${index + 1}" width="400" height="400" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
+          <img src="${index === 0 ? cdnUrl(img) : img}" alt="${product.name} ${index + 1}" width="400" height="400" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
         </div>
       `).join('');
       

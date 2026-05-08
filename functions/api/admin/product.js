@@ -3,6 +3,16 @@
 
 import { getKey, getAdminUser, logActivity } from './_helpers.js';
 
+// Append a fresh ?v=<timestamp> to image URLs on save so browsers and
+// Cloudinary's image/fetch derivative cache pick up the new file even if
+// the underlying R2 filename was reused. Strips any prior ?v= first.
+function bumpImageUrl(url) {
+    if (!url || typeof url !== 'string' || !url.startsWith('http')) return url || '';
+    const i = url.indexOf('?v=');
+    const base = i >= 0 ? url.substring(0, i) : url;
+    return base + '?v=' + Date.now();
+}
+
 export async function onRequestPost(context) {
     const { request, env } = context;
     const url = new URL(request.url);
@@ -35,9 +45,9 @@ export async function onRequestPost(context) {
                 data.category || '', data.categoryAr || '',
                 data.price, data.cost || 0, data.quantity || 0,
                 data.description || '', data.descriptionAr || '',
-                data.mainImage || '', data.image2 || '', data.image3 || '',
-                data.image4 || '', data.image5 || '', data.image6 || '',
-                data.image7 || '', data.image8 || '',
+                bumpImageUrl(data.mainImage), bumpImageUrl(data.image2), bumpImageUrl(data.image3),
+                bumpImageUrl(data.image4), bumpImageUrl(data.image5), bumpImageUrl(data.image6),
+                bumpImageUrl(data.image7), bumpImageUrl(data.image8),
                 data.colors || '', data.colorsAr || '',
                 data.packaging || '', data.packagingAr || '',
                 data.specifications || '', data.specificationsAr || '',
@@ -93,9 +103,9 @@ export async function onRequestPost(context) {
                 data.category || '', data.categoryAr || '',
                 data.price, data.cost || 0, data.quantity,
                 data.description || '', data.descriptionAr || '',
-                data.mainImage || '', data.image2 || '', data.image3 || '',
-                data.image4 || '', data.image5 || '', data.image6 || '',
-                data.image7 || '', data.image8 || '',
+                bumpImageUrl(data.mainImage), bumpImageUrl(data.image2), bumpImageUrl(data.image3),
+                bumpImageUrl(data.image4), bumpImageUrl(data.image5), bumpImageUrl(data.image6),
+                bumpImageUrl(data.image7), bumpImageUrl(data.image8),
                 data.colors || '', data.colorsAr || '',
                 data.packaging || '', data.packagingAr || '',
                 data.specifications || '', data.specificationsAr || '',
@@ -136,7 +146,7 @@ async function saveVariants(DB, productId, variants) {
         await DB.prepare(`
             INSERT INTO product_variants (product_id, name, nameAr, image, quantity, price, sort_order)
             VALUES (?, ?, ?, ?, ?, ?, ?)
-        `).bind(productId, v.name, v.nameAr || '', v.image || '', v.quantity || 0, v.price || 0, i).run();
+        `).bind(productId, v.name, v.nameAr || '', bumpImageUrl(v.image), v.quantity || 0, v.price || 0, i).run();
     }
 }
 
