@@ -27,11 +27,12 @@ function sanitizeHTML(html) {
 // === CLOUDINARY URL HELPER ===
 // Must produce a string identical to the preload in functions/product.html.js
 // so the browser reuses the preloaded LCP image instead of fetching twice.
-// Defaults to 500x500 (matches .main-image-container CSS box).
+// Defaults to 800x800 — covers DPR 2 mobile retina and DPR 1 desktop in
+// one URL so we don't need viewport-aware preloads.
 function cdnUrl(rawUrl, w, h) {
   if (!rawUrl || typeof rawUrl !== 'string' || !rawUrl.startsWith('http')) return rawUrl;
-  w = w || 500;
-  h = h || 500;
+  w = w || 800;
+  h = h || 800;
   return 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_' + w + ',h_' + h + ',f_auto,q_auto/' + rawUrl;
 }
 
@@ -1992,7 +1993,7 @@ function selectVariant(variantId, productId, prefix) {
     const mobileCarousel = document.getElementById('mobileCarousel');
     if (mobileCarousel) {
       const firstSlideImg = mobileCarousel.querySelector('.mobile-carousel-slide img');
-      if (firstSlideImg) firstSlideImg.src = cdnUrl(variant.image, 400, 400);
+      if (firstSlideImg) firstSlideImg.src = cdnUrl(variant.image);
       mobileCarousel.scrollTo({ left: 0, behavior: 'smooth' });
     }
   }
