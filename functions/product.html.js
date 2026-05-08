@@ -51,6 +51,17 @@ export async function onRequest(context) {
   const productImage = (product.mainImage && product.mainImage.startsWith('http')) ? product.mainImage : 'https://orlostore.com/logo.png';
   const availability = (product.quantity != null && product.quantity <= 0) ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock';
 
+  // product.js auto-selects the first in-stock variant on load and swaps the
+  // main <img> src to that variant's image. Preload THAT image so the LCP
+  // request matches the rendered URL after auto-select. Falls back to mainImage.
+  let lcpImage = productImage;
+  try {
+    const v = await env.DB.prepare(
+      "SELECT image FROM product_variants WHERE product_id = (SELECT id FROM products WHERE slug = ?) AND quantity > 0 AND image IS NOT NULL AND image != '' ORDER BY sort_order ASC, id ASC LIMIT 1"
+    ).bind(slug).first();
+    if (v && v.image && v.image.startsWith('http')) lcpImage = v.image;
+  } catch (e) { /* fall through to mainImage */ }
+
   // Product JSON-LD for rich results
   const jsonLd = JSON.stringify({
     '@context': 'https://schema.org',
@@ -124,8 +135,8 @@ export async function onRequest(context) {
     })
     .on('head', {
       element(el) {
-        if (productImage && productImage.startsWith('http')) {
-          const cdnImg = `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_600,h_600,f_auto,q_auto/${productImage}`;
+        if (lcpImage && lcpImage.startsWith('http')) {
+          const cdnImg = `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_500,h_500,f_auto,q_auto/${lcpImage}`;
           el.append('<link rel="preload" as="image" fetchpriority="high" href="' + cdnImg + '">', { html: true });
         }
         el.append('<script type="application/ld+json">' + jsonLd + '</script>', { html: true });
