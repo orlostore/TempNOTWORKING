@@ -27,11 +27,23 @@ function sanitizeHTML(html) {
 // === CLOUDINARY URL HELPER ===
 // Must produce a string identical to the preload in functions/product.html.js
 // so the browser reuses the preloaded LCP image instead of fetching twice.
+// Defaults to 500x500 (matches .main-image-container CSS box).
 function cdnUrl(rawUrl, w, h) {
   if (!rawUrl || typeof rawUrl !== 'string' || !rawUrl.startsWith('http')) return rawUrl;
-  w = w || 600;
-  h = h || 600;
+  w = w || 500;
+  h = h || 500;
   return 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_' + w + ',h_' + h + ',f_auto,q_auto/' + rawUrl;
+}
+
+// Pick the image that will end up in the main <img> after auto-select. If
+// any in-stock variant has its own image, that's what HTMLRewriter preloads
+// and what the auto-select will swap to — return that to keep URLs in sync.
+function pickInitialImage(product) {
+  if (product && product.variants && product.variants.length) {
+    const v = product.variants.find(x => x && x.image && x.quantity > 0);
+    if (v && v.image) return v.image;
+  }
+  return (product && product.images && product.images[0]) || '';
 }
 
 // === MAX QUANTITY PER PRODUCT ===
@@ -692,7 +704,7 @@ async function initProductPage() {
       const thumbnailsHTML = product.images.length > 1 ? `
         <div class="thumbnail-strip">
           ${product.images.map((img, index) => `
-            <img src="${img}" alt="${product.name} ${index + 1}" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}" onclick="changeMainImage('${img}', ${index})" style="object-fit:contain;">
+            <img src="${cdnUrl(img, 80, 80)}" alt="${product.name} ${index + 1}" loading="lazy" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}" onclick="changeMainImage('${img}', ${index})" style="object-fit:contain;">
           `).join('')}
         </div>
       ` : '';
@@ -700,7 +712,7 @@ async function initProductPage() {
       gallery.innerHTML = `
         <div class="image-gallery">
           <div class="main-image-container">
-            <img id="mainImage" src="${cdnUrl(product.images[0])}" alt="${product.name}" class="main-product-image" fetchpriority="high" width="600" height="600">
+            <img id="mainImage" src="${cdnUrl(pickInitialImage(product))}" alt="${product.name}" class="main-product-image" fetchpriority="high" width="500" height="500">
             <div class="zoom-hint">🔍 Click to zoom</div>
           </div>
           ${thumbnailsHTML}
@@ -756,9 +768,10 @@ async function initProductPage() {
       mobileCarousel.innerHTML = `<div class="mobile-carousel-slide"><div style="font-size: 80px;">${product.images[0]}</div></div>`;
       mobileDots.innerHTML = '<div class="mobile-dot active"></div>';
     } else {
+      const initial = pickInitialImage(product);
       mobileCarousel.innerHTML = product.images.map((img, index) => `
         <div class="mobile-carousel-slide" data-index="${index}">
-          <img src="${index === 0 ? cdnUrl(img) : img}" alt="${product.name} ${index + 1}" width="400" height="400" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
+          <img src="${index === 0 ? cdnUrl(initial) : img}" alt="${product.name} ${index + 1}" width="400" height="400" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
         </div>
       `).join('');
       
@@ -1972,13 +1985,14 @@ function selectVariant(variantId, productId, prefix) {
 
   // Swap main image to variant image
   if (variant.image) {
+    const variantSrc = cdnUrl(variant.image);
     const mainImg = document.getElementById('mainImage');
-    if (mainImg) mainImg.src = variant.image;
+    if (mainImg) mainImg.src = variantSrc;
     // Mobile carousel — swap first image and scroll page up to show it
     const mobileCarousel = document.getElementById('mobileCarousel');
     if (mobileCarousel) {
       const firstSlideImg = mobileCarousel.querySelector('.mobile-carousel-slide img');
-      if (firstSlideImg) firstSlideImg.src = variant.image;
+      if (firstSlideImg) firstSlideImg.src = cdnUrl(variant.image, 400, 400);
       mobileCarousel.scrollTo({ left: 0, behavior: 'smooth' });
     }
   }
@@ -2185,7 +2199,7 @@ var addToCartHandlerRef = function() { return false; };
 
 window.changeMainImage = function(imgSrc, index) {
   const mainImg = document.getElementById('mainImage');
-  if (mainImg) mainImg.src = imgSrc;
+  if (mainImg) mainImg.src = cdnUrl(imgSrc);
   document.querySelectorAll('.thumbnail').forEach((thumb, i) => thumb.classList.toggle('active', i === index));
 };
 
