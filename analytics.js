@@ -135,7 +135,55 @@
     }
   }
 
-  // ---- Public helper: fires Pixel + CAPI with shared event_id ----
+  // ---- Meta → GA4 event mapping (forwarded via Cloudflare Zaraz) ----
+  // Zaraz's GA4 destination fires page_view automatically on each page load, so
+  // PageView is intentionally not forwarded here to avoid duplicates.
+  var GA4_EVENT_MAP = {
+    ViewContent: 'view_item',
+    AddToCart: 'add_to_cart',
+    InitiateCheckout: 'begin_checkout',
+    AddPaymentInfo: 'add_payment_info',
+    Purchase: 'purchase',
+    Search: 'search',
+    Lead: 'generate_lead',
+    CompleteRegistration: 'sign_up'
+  };
+
+  function toGa4Params(metaParams) {
+    var p = metaParams || {};
+    var ids = p.content_ids || (p.content_id ? [p.content_id] : []);
+    var names = Array.isArray(p.content_name) ? p.content_name : (p.content_name ? [p.content_name] : []);
+    var items = ids.map(function (id, i) {
+      var item = { item_id: String(id) };
+      if (names[i]) item.item_name = String(names[i]);
+      else if (names[0]) item.item_name = String(names[0]);
+      if (typeof p.value === 'number' && ids.length === 1) item.price = p.value;
+      return item;
+    });
+    var out = {};
+    if (items.length) out.items = items;
+    if (typeof p.value !== 'undefined') out.value = p.value;
+    if (p.currency) out.currency = p.currency;
+    if (typeof p.num_items !== 'undefined') out.quantity = p.num_items;
+    if (p.order_id) out.transaction_id = String(p.order_id);
+    if (p.search_string) out.search_term = String(p.search_string);
+    return out;
+  }
+
+  function forwardToZaraz(eventName, params) {
+    var ga4Name = GA4_EVENT_MAP[eventName];
+    if (!ga4Name) return;
+    try {
+      if (window.zaraz && typeof window.zaraz.track === 'function') {
+        window.zaraz.track(ga4Name, toGa4Params(params));
+      } else {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(Object.assign({ event: ga4Name }, toGa4Params(params)));
+      }
+    } catch (e) {}
+  }
+
+  // ---- Public helper: fires Pixel + CAPI + GA4 (via Zaraz) with shared event_id ----
   // Usage: orloTrack('ViewContent', { content_ids:['slug'], value:99, currency:'AED' });
   window.orloTrack = function (eventName, params) {
     params = params || {};
@@ -146,6 +194,7 @@
       pendingFbq.push({ eventName: eventName, params: params, eventId: eventId });
     }
     capi(eventName, eventId, params);
+    forwardToZaraz(eventName, params);
     return eventId;
   };
 
