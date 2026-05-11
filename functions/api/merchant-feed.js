@@ -17,6 +17,26 @@ function stripHtml(html) {
     return html.replace(/<[^>]*>/g, '').trim();
 }
 
+function extractHighlights(html) {
+    if (!html) return [];
+    const liMatches = html.match(/<li[^>]*>([\s\S]*?)<\/li>/gi) || [];
+    const fromLi = liMatches
+        .map(m => m.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim())
+        .filter(Boolean);
+    if (fromLi.length) return fromLi.slice(0, 10);
+    const plain = stripHtml(html).replace(/\s+/g, ' ');
+    const sentences = plain.split(/(?<=[.!?])\s+/).filter(s => s.length > 15 && s.length < 150);
+    return sentences.slice(0, 5);
+}
+
+function priceTierLabel(price) {
+    const p = Number(price) || 0;
+    if (p < 25) return 'tier_under_25';
+    if (p < 50) return 'tier_25_50';
+    if (p < 100) return 'tier_50_100';
+    return 'tier_over_100';
+}
+
 const GOOGLE_CATEGORY_MAP = {
     'Kitchen': 'Home & Garden > Kitchen & Dining',
     'Home Accessories': 'Home & Garden > Home Decor',
@@ -141,6 +161,15 @@ export async function onRequestGet(context) {
             if (row.material) {
                 xml += `  <g:material>${escapeXml(row.material)}</g:material>\n`;
             }
+
+            const highlights = extractHighlights(row.description);
+            for (const h of highlights) {
+                xml += `  <g:product_highlight>${escapeXml(h)}</g:product_highlight>\n`;
+            }
+
+            xml += `  <g:custom_label_0>${escapeXml(row.category || 'uncategorized')}</g:custom_label_0>\n`;
+            xml += `  <g:custom_label_1>${priceTierLabel(row.price)}</g:custom_label_1>\n`;
+            xml += `  <g:custom_label_2>${totalStock > 0 ? 'in_stock' : 'out_of_stock'}</g:custom_label_2>\n`;
 
             // Shipping to UAE
             xml += `  <g:shipping>
