@@ -2774,7 +2774,16 @@
             if (P_floor <= 25)        recommended = 25;
             else if (P_floor <= 29)   recommended = 29;
             else if (P_floor <= 35)   recommended = 35;
-            else if (P_floor <= 56)   recommended = 49;
+            else if (P_floor <= 56) {
+                // Bobblehead fix: if the floor itself is already above 49,
+                // dropping to 49 breaks margin. Push to the premium anchor instead.
+                recommended = (P_floor > 49) ? (T + 4) : 49;
+            }
+            else if (P_floor >= T) {
+                // Camper-van fix: never discount a floor that's already at or
+                // above the free-delivery threshold.
+                recommended = P_floor;
+            }
             else if ((T - P_floor) <= UDC) {
                 recommended = (P_floor <= (T - 7)) ? T : (T + 4);
             } else {
