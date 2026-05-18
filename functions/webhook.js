@@ -284,6 +284,20 @@ export async function onRequestPost(context) {
                     const deliveryItem = cartItems.find(i => (i.name || '').toLowerCase().includes('delivery'));
                     const shippingAmount = deliveryItem ? Math.round((deliveryItem.price || 0) * 100) * (deliveryItem.quantity || 1) : (session.shipping_cost?.amount_total || 0);
 
+                    // Prefer Stripe's shipping address (delivery destination) over the billing
+                    // address. Newer API versions nest it under collected_information.
+                    const shippingDetails = session.collected_information?.shipping_details
+                        || session.shipping_details
+                        || null;
+                    const shippingAddress = shippingDetails?.address
+                        || session.customer_details?.address
+                        || {};
+                    const shippingRecipient = shippingDetails?.name
+                        || session.customer_details?.name
+                        || '';
+                    const shippingAddressBlob = { ...shippingAddress };
+                    if (shippingRecipient) shippingAddressBlob.name = shippingRecipient;
+
                     await DB.prepare(
                         `INSERT OR IGNORE INTO orders (id, customer_email, customer_name, customer_phone, amount_total, currency, shipping_address, shipping_amount, items, metadata, created_at)
                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
@@ -294,7 +308,7 @@ export async function onRequestPost(context) {
                         session.customer_details?.phone || '',
                         session.amount_total || 0,
                         session.currency || 'aed',
-                        JSON.stringify(session.customer_details?.address || session.shipping_details?.address || {}),
+                        JSON.stringify(shippingAddressBlob),
                         shippingAmount,
                         JSON.stringify(orderItems),
                         JSON.stringify(session.metadata || {}),
@@ -350,7 +364,10 @@ export async function onRequestPost(context) {
                     const nameParts = (session.customer_details?.name || '').trim().split(/\s+/);
                     if (nameParts[0]) userData.fn = [await hashSHA256(nameParts[0].toLowerCase())];
                     if (nameParts.length > 1) userData.ln = [await hashSHA256(nameParts[nameParts.length - 1].toLowerCase())];
-                    const address = session.customer_details?.address || session.shipping_details?.address || {};
+                    const address = session.collected_information?.shipping_details?.address
+                        || session.shipping_details?.address
+                        || session.customer_details?.address
+                        || {};
                     if (address.city) userData.ct = [await hashSHA256(address.city.toLowerCase().replace(/\s/g, ''))];
                     if (address.country) userData.country = [await hashSHA256(address.country.toLowerCase())];
                     if (address.postal_code) userData.zp = [await hashSHA256(String(address.postal_code).toLowerCase())];
