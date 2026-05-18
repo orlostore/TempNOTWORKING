@@ -3256,11 +3256,28 @@
         }
         
         function getProductCost(itemName) {
-            // Match product by name and get cost
-            const product = products.find(p => 
-                itemName.toLowerCase().includes(p.name.toLowerCase()) ||
-                p.name.toLowerCase().includes(itemName.toLowerCase())
-            );
+            if (!itemName) return 0;
+            const lower = itemName.toLowerCase().trim();
+            // Strip variant suffix like " — Black" before matching
+            const base = lower.split(' — ')[0].trim();
+
+            // 1. Match by slug (handles old orders that stored the slug as name)
+            let product = products.find(p => p.slug && p.slug.toLowerCase() === base);
+
+            // 2. Match by exact / fuzzy name
+            if (!product) {
+                product = products.find(p =>
+                    base.includes(p.name.toLowerCase()) ||
+                    p.name.toLowerCase().includes(base)
+                );
+            }
+
+            // 3. Convert name to slug-form and try again ("Vintage Italian Vespa" → "vintage-italian-vespa")
+            if (!product) {
+                const slugified = base.replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                product = products.find(p => p.slug && p.slug.toLowerCase() === slugified);
+            }
+
             return product ? (product.cost || 0) : 0;
         }
         
