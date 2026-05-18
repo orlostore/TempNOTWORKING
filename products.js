@@ -74,21 +74,17 @@ async function initProducts() {
     }
 }
 
-// Background sync — bypasses browser/proxy cache, updates UI if product list changed
+// Background sync — bypasses browser/proxy cache, updates UI if any field changed
 async function syncProductState() {
     try {
         const response = await fetch('/api/products', { cache: 'no-store' });
         if (!response.ok) return;
         const fresh = await response.json();
         if (!Array.isArray(fresh)) return;
-        const isDifferent =
-            products &&
-            (fresh.length !== products.length ||
-            (fresh.length > 0 && products.length > 0 && fresh[0].id !== products[0].id));
-        if (isDifferent) {
-            console.log('🔄 Stale cache detected. Syncing...');
-            updateUIIfNeeded(fresh);
-        }
+        // updateUIIfNeeded does a deep JSON compare and only re-renders on real changes,
+        // so always hand it the fresh data — that catches price/name/stock edits, not
+        // just add/remove/reorder.
+        updateUIIfNeeded(fresh);
     } catch (e) {}
 }
 
