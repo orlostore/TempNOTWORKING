@@ -1327,6 +1327,16 @@
                 <input type="number" id="deliveryFeeRural" step="0.01" min="0" placeholder="0" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;font-weight:600;text-align:center;" oninput="saveDeliveryFees()">
                 <span style="font-size:0.8rem;color:var(--text-light);">AED</span>
             </div>
+            <div style="background:white;border-radius:10px;padding:14px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:10px;">
+                <label style="font-weight:600;font-size:0.85rem;color:var(--text);white-space:nowrap;">📦 Unified Delivery Charge</label>
+                <input type="number" id="unifiedDeliveryCharge" step="0.01" min="0" placeholder="0" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;font-weight:600;text-align:center;" oninput="saveDeliveryFees()">
+                <span style="font-size:0.8rem;color:var(--text-light);">AED</span>
+            </div>
+            <div style="background:white;border-radius:10px;padding:14px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:10px;">
+                <label style="font-weight:600;font-size:0.85rem;color:var(--text);white-space:nowrap;">🎁 Free Delivery Threshold</label>
+                <input type="number" id="freeDeliveryThreshold" step="0.01" min="0" placeholder="75" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;font-weight:600;text-align:center;" oninput="saveDeliveryFees()">
+                <span style="font-size:0.8rem;color:var(--text-light);">AED</span>
+            </div>
         </div>
 
         <!-- Dashboard Alert Cards -->
@@ -1939,6 +1949,11 @@
                             <div class="form-hint">= (cost×2 + delivery/2 + Stripe fixed) ÷ Stripe divisor</div>
                         </div>
                         <div class="form-group">
+                            <label>Recommended Sale Price (AED)</label>
+                            <input type="text" id="formRecommendedPrice" readonly style="background:#f0f7ff; color:#0a4d6e; font-weight:700; cursor:default;" placeholder="—" tabindex="-1">
+                            <div class="form-hint">Unified delivery: <span id="recoUDCHint">—</span> AED · Free delivery threshold: <span id="recoThresholdHint">—</span> AED</div>
+                        </div>
+                        <div class="form-group">
                             <label>Price (AED) *</label>
                             <input type="number" id="formPrice" step="0.01" min="0" placeholder="Min. price used if empty">
                         </div>
@@ -2527,15 +2542,22 @@
         // --- Delivery fees (persisted in D1 via /api/admin/settings) ---
         let deliveryFeeCity = 0;
         let deliveryFeeRural = 0;
+        let unifiedDeliveryCharge = 0;
+        let freeDeliveryThreshold = 75;
 
         function getDeliveryFeeCity() { return deliveryFeeCity; }
         function getDeliveryFeeRural() { return deliveryFeeRural; }
+        function getUnifiedDeliveryCharge() { return unifiedDeliveryCharge; }
+        function getFreeDeliveryThreshold() { return freeDeliveryThreshold; }
 
         let saveDeliveryTimeout = null;
         function saveDeliveryFees() {
             deliveryFeeCity = parseFloat(document.getElementById('deliveryFeeCity').value) || 0;
             deliveryFeeRural = parseFloat(document.getElementById('deliveryFeeRural').value) || 0;
+            unifiedDeliveryCharge = parseFloat(document.getElementById('unifiedDeliveryCharge').value) || 0;
+            freeDeliveryThreshold = parseFloat(document.getElementById('freeDeliveryThreshold').value) || 75;
             calcMinPrice();
+            calcRecommendedPrice();
             // Debounce: save to D1 after 500ms of no typing
             clearTimeout(saveDeliveryTimeout);
             saveDeliveryTimeout = setTimeout(() => {
@@ -2544,7 +2566,9 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         deliveryFeeCity: String(deliveryFeeCity),
-                        deliveryFeeRural: String(deliveryFeeRural)
+                        deliveryFeeRural: String(deliveryFeeRural),
+                        unifiedDeliveryCharge: String(unifiedDeliveryCharge),
+                        freeDeliveryThreshold: String(freeDeliveryThreshold)
                     })
                 }).catch(err => console.error('Failed to save delivery fees:', err));
             }, 500);
@@ -2558,9 +2582,14 @@
                 if (data.success && data.settings) {
                     deliveryFeeCity = parseFloat(data.settings.deliveryFeeCity) || 0;
                     deliveryFeeRural = parseFloat(data.settings.deliveryFeeRural) || 0;
+                    unifiedDeliveryCharge = parseFloat(data.settings.unifiedDeliveryCharge) || 0;
+                    freeDeliveryThreshold = parseFloat(data.settings.freeDeliveryThreshold) || 75;
                     document.getElementById('deliveryFeeCity').value = deliveryFeeCity || '';
                     document.getElementById('deliveryFeeRural').value = deliveryFeeRural || '';
+                    document.getElementById('unifiedDeliveryCharge').value = unifiedDeliveryCharge || '';
+                    document.getElementById('freeDeliveryThreshold').value = freeDeliveryThreshold || '';
                     calcMinPrice();
+                    calcRecommendedPrice();
                 }
             } catch (e) {
                 // Fallback: try localStorage for migration
@@ -2716,12 +2745,44 @@
             const minPriceEl = document.getElementById('formMinPrice');
             if (!cost || cost <= 0) {
                 minPriceEl.value = '';
+                calcRecommendedPrice();
                 return 0;
             }
             const deliveryFee = getDeliveryFee();
             const minPrice = Math.ceil(((cost * 2) + (deliveryFee / 2) + getStripeFixedAfterTax()) / getStripeDivisor() * 100) / 100;
             minPriceEl.value = minPrice.toFixed(2) + ' AED';
+            calcRecommendedPrice();
             return minPrice;
+        }
+
+        function calcRecommendedPrice() {
+            const recoEl = document.getElementById('formRecommendedPrice');
+            const udcHintEl = document.getElementById('recoUDCHint');
+            const thresholdHintEl = document.getElementById('recoThresholdHint');
+            if (!recoEl) return 0; // form not in DOM (yet)
+
+            const UDC = getUnifiedDeliveryCharge();
+            const T = getFreeDeliveryThreshold();
+            if (udcHintEl) udcHintEl.textContent = UDC ? UDC.toFixed(2) : '0';
+            if (thresholdHintEl) thresholdHintEl.textContent = T ? T.toFixed(2) : '—';
+
+            const minPriceRaw = (document.getElementById('formMinPrice').value || '').replace(/[^\d.]/g, '');
+            const P_floor = parseFloat(minPriceRaw);
+            if (!P_floor || P_floor <= 0) { recoEl.value = ''; return 0; }
+
+            let recommended;
+            if (P_floor <= 25)        recommended = 25;
+            else if (P_floor <= 29)   recommended = 29;
+            else if (P_floor <= 35)   recommended = 35;
+            else if (P_floor <= 56)   recommended = 49;
+            else if ((T - P_floor) <= UDC) {
+                recommended = (P_floor <= (T - 7)) ? T : (T + 4);
+            } else {
+                recommended = P_floor;
+            }
+
+            recoEl.value = recommended.toFixed(2) + ' AED';
+            return recommended;
         }
 
         function openAddModal() {
