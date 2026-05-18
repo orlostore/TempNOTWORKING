@@ -273,16 +273,40 @@ export async function onRequestPost(context) {
                     )`).run();
                     await DB.prepare(`CREATE INDEX IF NOT EXISTS idx_orders_email ON orders(customer_email)`).run();
 
-                    // Build items JSON from cart_items metadata
-                    const orderItems = cartItems.map(i => ({
-                        name: (i.name || i.slug || 'Item').split(/[\n\r]/)[0].trim(),
-                        quantity: i.quantity,
-                        amount: Math.round((i.price || 0) * 100) * i.quantity
-                    }));
+                    // Build items JSON from Stripe line_items (source of truth for prices).
+                    // cart_items metadata only carries slug/qty/variantId for inventory deduction
+                    // — it has no name/price, so falling back to it would store AED 0 lines.
+                    let orderItems = [];
+                    let stripeLineItems = [];
+                    try {
+                        const liResp = await fetch(
+                            `https://api.stripe.com/v1/checkout/sessions/${session.id}/line_items?limit=100`,
+                            { headers: { 'Authorization': `Bearer ${STRIPE_SECRET_KEY}` } }
+                        );
+                        const liData = await liResp.json();
+                        stripeLineItems = liData?.data || [];
+                        orderItems = stripeLineItems.map(li => ({
+                            name: (li.description || 'Item').split(/[\n\r]/)[0].trim(),
+                            quantity: li.quantity || 1,
+                            amount: li.amount_total || 0
+                        }));
+                    } catch (e) {
+                        console.error('Failed to fetch line_items for order storage:', e);
+                    }
+                    if (orderItems.length === 0) {
+                        // Last-resort fallback so we never store an empty items list
+                        orderItems = cartItems.map(i => ({
+                            name: (i.name || i.slug || 'Item').split(/[\n\r]/)[0].trim(),
+                            quantity: i.quantity,
+                            amount: Math.round((i.price || 0) * 100) * i.quantity
+                        }));
+                    }
 
                     // Calculate shipping amount from delivery line item
-                    const deliveryItem = cartItems.find(i => (i.name || '').toLowerCase().includes('delivery'));
-                    const shippingAmount = deliveryItem ? Math.round((deliveryItem.price || 0) * 100) * (deliveryItem.quantity || 1) : (session.shipping_cost?.amount_total || 0);
+                    const deliveryLi = stripeLineItems.find(li => (li.description || '').toLowerCase().includes('delivery'));
+                    const shippingAmount = deliveryLi
+                        ? (deliveryLi.amount_total || 0)
+                        : (session.shipping_cost?.amount_total || 0);
 
                     // Prefer Stripe's shipping address (delivery destination) over the billing
                     // address. Newer API versions nest it under collected_information.
