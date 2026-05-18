@@ -273,16 +273,54 @@ export async function onRequestPost(context) {
                     )`).run();
                     await DB.prepare(`CREATE INDEX IF NOT EXISTS idx_orders_email ON orders(customer_email)`).run();
 
-                    // Build items JSON from cart_items metadata
-                    const orderItems = cartItems.map(i => ({
-                        name: (i.name || i.slug || 'Item').split(/[\n\r]/)[0].trim(),
-                        quantity: i.quantity,
-                        amount: Math.round((i.price || 0) * 100) * i.quantity
-                    }));
+                    // Build items JSON from Stripe line_items (source of truth for prices).
+                    // cart_items metadata only carries slug/qty/variantId for inventory deduction
+                    // — it has no name/price, so falling back to it would store AED 0 lines.
+                    let orderItems = [];
+                    let stripeLineItems = [];
+                    try {
+                        const liResp = await fetch(
+                            `https://api.stripe.com/v1/checkout/sessions/${session.id}/line_items?limit=100`,
+                            { headers: { 'Authorization': `Bearer ${STRIPE_SECRET_KEY}` } }
+                        );
+                        const liData = await liResp.json();
+                        stripeLineItems = liData?.data || [];
+                        orderItems = stripeLineItems.map(li => ({
+                            name: (li.description || 'Item').split(/[\n\r]/)[0].trim(),
+                            quantity: li.quantity || 1,
+                            amount: li.amount_total || 0
+                        }));
+                    } catch (e) {
+                        console.error('Failed to fetch line_items for order storage:', e);
+                    }
+                    if (orderItems.length === 0) {
+                        // Last-resort fallback so we never store an empty items list
+                        orderItems = cartItems.map(i => ({
+                            name: (i.name || i.slug || 'Item').split(/[\n\r]/)[0].trim(),
+                            quantity: i.quantity,
+                            amount: Math.round((i.price || 0) * 100) * i.quantity
+                        }));
+                    }
 
                     // Calculate shipping amount from delivery line item
-                    const deliveryItem = cartItems.find(i => (i.name || '').toLowerCase().includes('delivery'));
-                    const shippingAmount = deliveryItem ? Math.round((deliveryItem.price || 0) * 100) * (deliveryItem.quantity || 1) : (session.shipping_cost?.amount_total || 0);
+                    const deliveryLi = stripeLineItems.find(li => (li.description || '').toLowerCase().includes('delivery'));
+                    const shippingAmount = deliveryLi
+                        ? (deliveryLi.amount_total || 0)
+                        : (session.shipping_cost?.amount_total || 0);
+
+                    // Prefer Stripe's shipping address (delivery destination) over the billing
+                    // address. Newer API versions nest it under collected_information.
+                    const shippingDetails = session.collected_information?.shipping_details
+                        || session.shipping_details
+                        || null;
+                    const shippingAddress = shippingDetails?.address
+                        || session.customer_details?.address
+                        || {};
+                    const shippingRecipient = shippingDetails?.name
+                        || session.customer_details?.name
+                        || '';
+                    const shippingAddressBlob = { ...shippingAddress };
+                    if (shippingRecipient) shippingAddressBlob.name = shippingRecipient;
 
                     await DB.prepare(
                         `INSERT OR IGNORE INTO orders (id, customer_email, customer_name, customer_phone, amount_total, currency, shipping_address, shipping_amount, items, metadata, created_at)
@@ -294,7 +332,7 @@ export async function onRequestPost(context) {
                         session.customer_details?.phone || '',
                         session.amount_total || 0,
                         session.currency || 'aed',
-                        JSON.stringify(session.customer_details?.address || session.shipping_details?.address || {}),
+                        JSON.stringify(shippingAddressBlob),
                         shippingAmount,
                         JSON.stringify(orderItems),
                         JSON.stringify(session.metadata || {}),
@@ -350,7 +388,10 @@ export async function onRequestPost(context) {
                     const nameParts = (session.customer_details?.name || '').trim().split(/\s+/);
                     if (nameParts[0]) userData.fn = [await hashSHA256(nameParts[0].toLowerCase())];
                     if (nameParts.length > 1) userData.ln = [await hashSHA256(nameParts[nameParts.length - 1].toLowerCase())];
-                    const address = session.customer_details?.address || session.shipping_details?.address || {};
+                    const address = session.collected_information?.shipping_details?.address
+                        || session.shipping_details?.address
+                        || session.customer_details?.address
+                        || {};
                     if (address.city) userData.ct = [await hashSHA256(address.city.toLowerCase().replace(/\s/g, ''))];
                     if (address.country) userData.country = [await hashSHA256(address.country.toLowerCase())];
                     if (address.postal_code) userData.zp = [await hashSHA256(String(address.postal_code).toLowerCase())];

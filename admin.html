@@ -3287,12 +3287,13 @@
                 });
                 
                 const address = order.shipping_address;
-                const addressStr = address ? 
-                    `${address.line1 || ''}${address.line2 ? ', ' + address.line2 : ''}<br>${address.city || ''} ${address.postal_code || ''}<br>${address.country || ''}` 
+                const recipientName = (address && address.name && address.name !== order.customer_name) ? address.name : '';
+                const addressStr = address ?
+                    `${recipientName ? `<strong>${recipientName}</strong><br>` : ''}${address.line1 || ''}${address.line2 ? ', ' + address.line2 : ''}<br>${address.city || ''} ${address.postal_code || ''}<br>${address.country || ''}`
                     : 'No address';
-                
+
                 const addressCopy = address ?
-                    `${order.customer_name}\n${address.line1 || ''}${address.line2 ? ', ' + address.line2 : ''}\n${address.city || ''} ${address.postal_code || ''}\n${order.customer_phone || ''}`
+                    `${recipientName || order.customer_name}\n${address.line1 || ''}${address.line2 ? ', ' + address.line2 : ''}\n${address.city || ''} ${address.postal_code || ''}\n${order.customer_phone || ''}`
                     : '';
                 
                 // Calculate order cost and profit
@@ -3738,7 +3739,7 @@
 
     <div style="margin-bottom:10px;">
         <div class="section-title">Ship To</div>
-        <div class="customer-name">${order.customer_name}</div>
+        <div class="customer-name">${(address && address.name) || order.customer_name}</div>
         <div class="customer-details">
             ${addressStr}<br>
             ${order.customer_phone !== 'N/A' ? order.customer_phone : ''}
@@ -3780,6 +3781,7 @@
 
     const order = orders.find(o => o.id === orderId);
     const addr = order?.shipping_address || {};
+    const recipient = addr.name || order?.customer_name || '';
 
     try {
         const response = await adminFetch('/api/admin/ship-order', {
@@ -3788,7 +3790,7 @@
             body: JSON.stringify({
                 order_id: orderId,
                 customer_email: customerEmail,
-                customer_name: order?.customer_name || '',
+                customer_name: recipient,
                 customer_phone: order?.customer_phone || '',
                 items: order?.items || [],
                 address_line_1: addr.line1 || '',
@@ -3842,7 +3844,8 @@
             if (!order) return showToast('Order not found', 'error');
 
             const addr = order.shipping_address || {};
-            const ok = await showConfirm('Create Zajel Shipment', `Create AWB for ${order.customer_name}?`, { icon: '📦', okText: 'Create AWB', okClass: 'btn-success' });
+            const recipient = addr.name || order.customer_name;
+            const ok = await showConfirm('Create Zajel Shipment', `Create AWB for ${recipient}?`, { icon: '📦', okText: 'Create AWB', okClass: 'btn-success' });
             if (!ok) return;
 
             try {
@@ -3851,7 +3854,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         order_id: orderId,
-                        customer_name: order.customer_name,
+                        customer_name: recipient,
                         customer_email: order.customer_email,
                         customer_phone: order.customer_phone,
                         address_line_1: addr.line1 || '',

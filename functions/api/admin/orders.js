@@ -92,7 +92,7 @@ export async function onRequestGet(context) {
         // === Stripe fallback: backfill orders not yet in D1 ===
         if (STRIPE_SECRET_KEY) {
             try {
-                const response = await fetch('https://api.stripe.com/v1/checkout/sessions?limit=100&expand[]=data.customer_details&expand[]=data.line_items&expand[]=data.payment_intent', {
+                const response = await fetch('https://api.stripe.com/v1/checkout/sessions?limit=100&expand[]=data.customer_details&expand[]=data.line_items&expand[]=data.payment_intent&expand[]=data.shipping_details&expand[]=data.collected_information', {
                     headers: { 'Authorization': `Bearer ${STRIPE_SECRET_KEY}` }
                 });
                 const data = await response.json();
@@ -110,6 +110,18 @@ export async function onRequestGet(context) {
                         }));
                         const shippingAmount = session.shipping_cost?.amount_total || lineItems.find(i => i.description?.toLowerCase().includes('delivery'))?.amount_total || 0;
 
+                        const shippingDetails = session.collected_information?.shipping_details
+                            || session.shipping_details
+                            || null;
+                        const shipAddr = shippingDetails?.address
+                            || session.customer_details?.address
+                            || {};
+                        const shipRecipient = shippingDetails?.name
+                            || session.customer_details?.name
+                            || '';
+                        const shipAddrBlob = { ...shipAddr };
+                        if (shipRecipient) shipAddrBlob.name = shipRecipient;
+
                         const order = {
                             id: session.id,
                             customer_email: session.customer_details?.email || session.customer_email || 'N/A',
@@ -117,7 +129,7 @@ export async function onRequestGet(context) {
                             customer_phone: session.customer_details?.phone || 'N/A',
                             amount_total: session.amount_total,
                             currency: session.currency,
-                            shipping_address: JSON.stringify(session.customer_details?.address || session.shipping_details?.address || {}),
+                            shipping_address: JSON.stringify(shipAddrBlob),
                             shipping_amount: shippingAmount,
                             items: JSON.stringify(items),
                             metadata: JSON.stringify(session.metadata || {}),

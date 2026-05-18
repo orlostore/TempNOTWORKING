@@ -45,7 +45,7 @@ export async function onRequestGet(context) {
         if (STRIPE_SECRET_KEY) {
             try {
                 const stripeResponse = await fetch(
-                    `https://api.stripe.com/v1/checkout/sessions?customer_details[email]=${encodeURIComponent(customer.email)}&limit=50&expand[]=data.line_items`,
+                    `https://api.stripe.com/v1/checkout/sessions?customer_details[email]=${encodeURIComponent(customer.email)}&limit=50&expand[]=data.line_items&expand[]=data.shipping_details&expand[]=data.collected_information`,
                     { headers: { 'Authorization': `Bearer ${STRIPE_SECRET_KEY}` } }
                 );
                 const stripeData = await stripeResponse.json();
@@ -74,6 +74,18 @@ export async function onRequestGet(context) {
 
                             // Persist to D1 for next time (full schema)
                             try {
+                                const shipDetails = session.collected_information?.shipping_details
+                                    || session.shipping_details
+                                    || null;
+                                const shipAddr = shipDetails?.address
+                                    || session.customer_details?.address
+                                    || {};
+                                const shipRecipient = shipDetails?.name
+                                    || session.customer_details?.name
+                                    || '';
+                                const shipBlob = { ...shipAddr };
+                                if (shipRecipient) shipBlob.name = shipRecipient;
+
                                 await DB.prepare(
                                     `INSERT OR IGNORE INTO orders (id, customer_email, customer_name, customer_phone, amount_total, currency, shipping_address, shipping_amount, items, metadata, created_at)
                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
@@ -84,7 +96,7 @@ export async function onRequestGet(context) {
                                     session.customer_details?.phone || '',
                                     session.amount_total || 0,
                                     session.currency || 'aed',
-                                    JSON.stringify(session.customer_details?.address || session.shipping_details?.address || {}),
+                                    JSON.stringify(shipBlob),
                                     shippingAmount,
                                     JSON.stringify(items),
                                     JSON.stringify(session.metadata || {}),
