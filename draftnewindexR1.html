@@ -901,25 +901,26 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           right: -100% !important;
           border-radius: 0 !important;
         }
-        /* Cart-sidebar must end EXACTLY at the top of the mobile bottom nav.
-           Mobile nav is ~80-85px tall (with home-indicator safe area).
-           Use 100dvh (dynamic viewport height) — adjusts as Chrome's URL
-           bar hides/shows on scroll. 100vh fallback for older browsers. */
+        /* Cart-sidebar extends FULL VIEWPORT — top:0 to bottom:0. This is
+           the most bulletproof model: regardless of how the browser
+           computes vh / dvh / svh / lvh, the sidebar always covers the
+           entire viewport edge-to-edge. The mobile bottom nav (which is
+           position:fixed bottom:0 with its own opaque background) floats
+           on top of the sidebar's bottom area without exposing any gap. */
         .cart-sidebar {
-          height: calc(100vh - 85px) !important;
-          height: calc(100dvh - 85px) !important;
+          top: 0 !important;
+          bottom: 0 !important;
+          height: auto !important;
         }
 
         /* cart-checkout-fixed holds Pay by Card / Sign in / As Guest on
-           mobile (set by app.min.js). Pin it absolutely 25px above the
-           cart-sidebar's bottom — that 25px is filled by cart-sidebar's
-           cream background, giving visual breathing room between the
-           checkout buttons and the mobile bottom nav (without exposing
-           the page behind). */
+           mobile. Position it 95px above the cart-sidebar's bottom —
+           that's above the mobile bottom nav (~85px tall) plus ~10px
+           breathing room. */
         .cart-checkout-fixed {
           position: absolute !important;
           top: auto !important;
-          bottom: 25px !important;
+          bottom: 95px !important;
           left: 0 !important;
           right: 0 !important;
           background: var(--bg) !important;
@@ -929,10 +930,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           z-index: 10 !important;
           padding: 10px 14px !important;
         }
-        /* cart-footer needs padding-bottom for the absolute checkout bar
-           above (~120px tall) PLUS its 25px bottom offset = 145px buffer.
-           Round up to 160 for safety. */
-        .cart-footer { padding-bottom: 160px !important; }
+        /* cart-footer extends to cart-sidebar bottom (viewport bottom),
+           but its content must clear: 95px (cart-checkout-fixed offset)
+           + ~120px (checkout bar height) + ~20px breathing = ~235px. */
+        .cart-footer { padding-bottom: 235px !important; }
         [data-theme="dark"] .cart-checkout-fixed { background: #0d1f2d !important; }
       }
 
