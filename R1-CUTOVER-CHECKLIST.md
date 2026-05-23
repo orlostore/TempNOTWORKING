@@ -123,12 +123,75 @@ Not blockers for cutover. Sequence as separate sprints.
 
 ### Phase 2.5 — Cart migration (from R1/T&C overlays into styles.css)
 
+**Reality check on this migration: it is NOT just copy-paste.** Every
+`!important` in the overlay's `/* CART */` block exists because
+`app.min.js` injects inline `style="..."` attributes when rendering the
+cart, and inline styles beat external CSS unless overridden with
+`!important`. Drop the `!important` markers without also patching
+`app.min.js` to remove its inline styles, and the cart visually
+regresses to the old look on EVERY page.
+
+So the migration is a **coordinated CSS + JS edit pass**, ~1 hour of
+focused work. Detailed steps below.
+
 The cart restyle (sidebar shape, header font, footer cream bg, checkout
 button colors, sticky-bottom mobile, outlined-navy remove button, product
 image, cart item color overrides) currently lives **duplicated** inside
 the `<style id="edit-overlay">` block in both `draftnewindexR1.html`
 and `terms-and-conditions.html`, using `!important` to override the
 inline styles `app.min.js` injects.
+
+#### The 8 surgical `app.min.js` patches needed at migration
+
+These can be done one by one with `sed`, `perl`, or a Python script. Each
+needs verification before moving to the next.
+
+| # | Inline today | Replace with |
+|---|---|---|
+| **1** | `<button id="stripeBtn" style="...background: #2c4a5c; ...">` (logged-in variant) | Remove `background: #2c4a5c;` from inline style. Same for `onmouseover="this.style.background='#1e3545'"` and `onmouseout`. Let `#stripeBtn` CSS class control color. |
+| **2** | `<div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 10px 10px; ...">` (Pay by Card label) | Add `class="checkout-header-band"`. Remove inline `background:`, `color:`. Add CSS `.checkout-header-band { background: var(--primary); color: #fff; ... }`. |
+| **3** | `<div style="display: flex; gap: 8px; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 10px 8px;">` (buttons wrapper) | Add `class="checkout-buttons-wrap"`. Remove inline `background:`. Style via class. |
+| **4** | `<button id="stripeBtn" ... style="...background: #3d6178; ...">Sign in</button>` and same for `#stripeBtnGuest` | Remove inline `background: #3d6178;`. Let `#stripeBtn`/`#stripeBtnGuest` CSS class control color. |
+| **5** | `<div style="background: #f8f9fa; border-radius: 8px;">` (Subtotal/Delivery/Total wrapper) | Add `class="cart-summary"`. Remove inline `background:`. Style via class. |
+| **6** | `<strong style="font-size:${p}; color:#2c4a5c;">${name}</strong>` (cart item product name) | Remove `color:#2c4a5c;` from the inline. Let `.cart-items strong` CSS class control color. |
+| **7** | `<span style="color:#e07856; font-weight:600; font-size:${g};">AED ${price}</span>` (cart item price) | Remove `color:#e07856;`. Let `.cart-items span.price` (or similar — add a class) CSS control color. |
+| **8** | `<button onclick="removeFromCart(${d})" style="padding:${y}; background:#dc3545; ...">` (remove button) | Remove `background:#dc3545; color:white;`. Let CSS class control. |
+
+After those 8 edits, the inline style attributes hold only **layout** properties (padding, font-size, etc.) that don't conflict with the new design, and the new design's colors / backgrounds / shapes are driven entirely by `styles.css`.
+
+#### Migration sequence
+
+- [ ] **1. Backup** — branch off main as `claude/cart-migration` for testing.
+- [ ] **2. Copy the entire `/* CART — Edit-look restyle */` block** out of `draftnewindexR1.html`'s `<style id="edit-overlay">`. Paste it into `styles.css` near the existing `.cart-sidebar` rules. Overwrite the existing cart-related rules in `styles.css` (the old `.cart-sidebar { ... }`, `.cart-header { ... }`, `.cart-footer { ... }`, `.checkout-btn { ... }`).
+- [ ] **3. Delete the same `/* CART */` block from `terms-and-conditions.html`'s overlay** — it was a duplicate of R1's.
+- [ ] **4. Patch `app.min.js`** — apply the 8 surgical edits in the table above. Verify each with `grep` afterwards (e.g., `grep -c '#2c4a5c' app.min.js` should drop to zero hits inside cart-render strings).
+- [ ] **5. Replace the attribute selectors with class selectors** in the migrated CSS:
+  - `[style*="linear-gradient(135deg, #2c4a5c"]` → `.checkout-header-band, .checkout-buttons-wrap` (depending on context)
+  - `[style*="background: #f8f9fa"]` → `.cart-summary`
+- [ ] **6. Drop ALL `!important` markers** from the migrated cart rules. Verify by visually testing the cart in dev / preview after each removal pass.
+- [ ] **7. Drop the inline `style="display:none"` from the cart-item image template** in `app.min.js` — it was hiding the image on production. After migration, image is the new default everywhere.
+- [ ] **8. Remove the `<div id="cartItem-N" style="display:flex; ...">` inline `display:flex`** from `app.min.js`'s cart-item template, so our new `display:grid` becomes the default without `!important`.
+- [ ] **9. Delete the dead `.checkout-btn.whatsapp-btn`** rule from `styles.css` — no element ever uses the `whatsapp-btn` class.
+- [ ] **10. Reconcile mobile cart heights** — the overlay currently overrides `.cart-sidebar { height: calc(100vh - 90px) !important; }` because the base 70px was too tight. Update the base rule in `styles.css`'s `@media (max-width:768px)` block to use 90px too. Drop the `!important`.
+- [ ] **11. Reconcile mobile cart-footer padding** — overlay sets `.cart-footer { padding-bottom: 150px !important; }` for mobile. Move that to `styles.css` mobile media query (without `!important`).
+- [ ] **12. Reconcile cart-checkout-fixed positioning** — overlay sets `.cart-checkout-fixed { position: absolute; bottom: 0; ... }` for mobile (replacing the old `position: sticky; top: 0;`). Move to `styles.css` mobile media query.
+- [ ] **13. Test on Firebase preview channel** — deploy `claude/cart-migration` to a `r1-cart-migration` preview channel. Open in incognito on mobile + desktop. Verify cart looks identical to current R1 cart. Take side-by-side screenshots if anything seems off.
+- [ ] **14. Merge to main** — once visual parity confirmed, merge the branch.
+
+#### Migration risk
+
+- **Low** if the 8 patches are done carefully and tested. The cart's behavior (JS event handlers, checkout flow, Stripe integration) does NOT change — we only touch presentational inline attributes.
+- **Medium-to-high if rushed.** Missing one hex value means the cart looks half-old-half-new and it's hard to spot which patch was missed without methodical comparison.
+
+#### Time estimate
+
+- ~10 min: copy CSS into `styles.css`
+- ~25 min: apply 8 `app.min.js` patches with verification
+- ~10 min: drop `!important` markers; convert attribute selectors → class selectors
+- ~15 min: deploy to preview channel + visual testing on mobile/desktop
+- ~5 min: deploy to main
+
+**Total: ~1 hour focused work.** Schedule for a quiet day.
 
 Migration steps:
 
