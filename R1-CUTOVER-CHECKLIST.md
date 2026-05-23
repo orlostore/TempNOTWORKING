@@ -122,9 +122,14 @@ Not blockers for cutover. Sequence as separate sprints.
       `styles.css` and delete `fonts/inter-latin-variable.woff2`
 
 ### Phase 3 — self-host The Edit's fonts
-- [ ] `orlo-the-edit.html` currently loads Cormorant + DM Sans from
-      Google Fonts CDN. Switch to the self-hosted versions in
-      `/fonts/` and delete the `<link href="https://fonts.googleapis.com/..."` line.
+- [x] **DONE** — `orlo-the-edit.html` no longer loads from Google
+      Fonts CDN. The `<link rel="preconnect" href="fonts.googleapis.com">`
+      and the `<link href="https://fonts.googleapis.com/css2?...">`
+      were replaced with 8 inline `@font-face` declarations pointing
+      at `/fonts/` (Cormorant 300, 400, 600 + 300i, 400i; DM Sans
+      300, 400, 500). Two preloads added for the most-used regular
+      weights. The Edit is now fully self-hosted, no third-party
+      font requests, no visitor IPs sent to Google for font delivery.
 
 ### Phase 4 — repo cleanup
 - [ ] Delete unused Spectral files from `/fonts/`:
@@ -206,7 +211,7 @@ there's still an action.
 | **4** | **SEO content section** reduced from 5 paragraphs + bullets + `<strong>` keyword anchors → 1 short paragraph per language; ~100 fewer indexable words; "Why Shop at ORLO?" lost | ✅ **Fixed in R1** — full 5-paragraph English + 3-paragraph Arabic block restored, all `<strong>` tags back, "Why Shop at ORLO?" sub-heading and 4-bullet list per language back. Body uses DM Sans 16px / 1.85 line-height to match Edit reading rhythm | §2 (don't revert) |
 | **5** | **T&C restructure** — homepage `#terms` section with 5 `<h3>` cards deleted; only path to Shipping / Returns / Privacy / Exchange was a faded footer strip with `href="#"` calling JS modals; standalone `terms-and-conditions.html` page existed but was orphaned (no inbound links anywhere) | ✅ **Fixed across files** — orphan page restyled to match Edit (Cormorant headings, DM Sans body, full header/footer/cart, dark mode, back arrow, menu-active indicator); 5 anchor IDs added (`#shipping`, `#returns`, `#exchange`, `#privacy`, `#terms`); R1's footer strip + top-menu link now point to real `terms-and-conditions.html#anchor` URLs; mobile-menu Terms link also routes there via `app.min.js` patch | §2 (T&C page), §1.4 (Stripe/Meta URL updates at cutover) |
 | **6** | **Internal linking** — new "The Edit" teaser CTA added (`orlo-the-edit.html` link) | ✅ **Net positive** — kept as-is, gives Google a crawlable destination + drives content-marketing funnel | §2 (don't revert) |
-| **7** | **Third-party dependency** — Google Fonts CDN added for Cormorant Garamond + Spectral; extra DNS+TLS request, visitor IPs sent to Google | ✅ **Fixed for R1 + T&C** — all fonts now self-hosted in `/fonts/`, Google Fonts `<link>` removed from R1. Spectral dropped entirely; replaced with Cormorant for editorial leads + DM Sans for body to match The Edit's type system | 🟡 **Partial** — `orlo-the-edit.html` itself still loads Cormorant + DM Sans from Google CDN. See §3 Phase 3 to finish |
+| **7** | **Third-party dependency** — Google Fonts CDN added for Cormorant Garamond + Spectral; extra DNS+TLS request, visitor IPs sent to Google | ✅ **Fully fixed** — all fonts on R1, T&C, and `orlo-the-edit.html` now self-hosted from `/fonts/`. Zero Google Fonts requests anywhere. Spectral dropped entirely; Cormorant + DM Sans + Almarai is the unified set | §3 Phase 3 marked complete |
 
 ### Items beyond the original 7 (added during the work)
 
