@@ -138,6 +138,26 @@
       .container.policy-container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
       @media (max-width: 600px) { .container.policy-container { padding: 1.4rem 1rem 3rem; } }
 
+      /* Back arrow — top-left of the content area */
+      .policy-back-link {
+        display: inline-flex; align-items: center; gap: 8px;
+        margin-bottom: 1.6rem;
+        padding: 8px 14px 8px 10px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1px solid var(--draft-border);
+        color: var(--draft-text);
+        text-decoration: none;
+        font-family: 'DM Sans', system-ui, sans-serif;
+        font-size: 13px; font-weight: 500;
+        letter-spacing: 0.02em;
+        transition: background .2s ease, transform .2s ease, border-color .2s ease;
+      }
+      .policy-back-link:hover { background: var(--primary); color: var(--surface); border-color: var(--primary); transform: translateX(-2px); }
+      .policy-back-link:hover svg { stroke: var(--surface); }
+      .policy-back-link .arabic-text { font-family: 'Almarai', sans-serif; font-size: 12px; opacity: 0.8; }
+      [data-theme="dark"] .policy-back-link:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
       /* Anchor scroll offset so the fixed header doesn't overlap the section heading */
       .policy-section { scroll-margin-top: 80px; }
       @media (max-width: 768px) { .policy-section { scroll-margin-top: 110px; } }
@@ -288,6 +308,11 @@
 </div>
 
 <div class="container policy-container">
+    <a href="/" class="policy-back-link" onclick="if(history.length>1){event.preventDefault();history.back();}" aria-label="Back">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back</span>
+        <span class="arabic-text">رجوع</span>
+    </a>
     <h1 class="page-title">Terms &amp; Conditions</h1>
     <p class="page-title-ar arabic-text">الشروط والأحكام</p>
 
@@ -445,6 +470,8 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
     navItems.forEach(function(item, i) {
         item.addEventListener('click', function() { moveIndicator(i); });
     });
+    // Policy pages are reached via the Menu button — highlight Menu on load
+    moveIndicator(3);
 })();
 </script>
 </body>
