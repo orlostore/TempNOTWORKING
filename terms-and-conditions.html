@@ -72,13 +72,13 @@
       header { background: var(--surface) !important; border-bottom: 1px solid var(--draft-border); transition: background .4s ease; }
       [data-theme="dark"] header { box-shadow: 0 2px 8px rgba(0,0,0,0.35); }
 
-      /* Editorial typography for English headings */
+      /* Editorial typography for English headings — matches draftnewindexR1 */
       .page-title,
       .policy-section h2:not(.arabic-heading) {
         font-family: 'Cormorant Garamond', 'DM Serif Display', Georgia, serif !important;
-        font-weight: 400 !important;
+        font-weight: 300 !important;
         letter-spacing: -0.01em !important;
-        line-height: 1.15 !important;
+        line-height: 1.1 !important;
         color: var(--primary) !important;
       }
       [data-theme="dark"] .page-title,
@@ -419,7 +419,7 @@
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="app.min.js?v=19" defer></script>
+<script src="app.min.js?v=20" defer></script>
 <script>
 function updateAccountLink() {
     const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
