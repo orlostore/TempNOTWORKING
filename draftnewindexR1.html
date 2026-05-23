@@ -759,7 +759,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .cart-footer {
         background: var(--bg) !important;
         border-top: 1px solid var(--draft-border) !important;
-        padding: 0.6rem 1.4rem !important;
+        padding: 0.3rem 1.4rem !important;
       }
       [data-theme="dark"] .cart-footer { background: #0d1f2d !important; }
 
@@ -871,11 +871,12 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         border-color: rgba(255,255,255,0.10) !important;
       }
 
-      /* Override #2: Totals summary box (#f8f9fa) → transparent on cream */
+      /* Override #2: Totals summary box (#f8f9fa) → transparent + halve padding */
       .cart-sidebar [style*="background: #f8f9fa"],
       .cart-sidebar [style*="background:#f8f9fa"] {
         background: transparent !important;
         border: none !important;
+        padding: 0.15rem 0.75rem 0.125rem !important;
       }
 
       /* Override #3: Horizontal cart-item layout — image | info | controls
@@ -936,7 +937,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         .cart-sidebar [style*="padding: 2px 10px 8px"] {
           padding: 2px 10px 0 !important;
         }
-        .cart-footer { padding-bottom: 220px !important; padding-top: 0.5rem !important; }
+        .cart-footer { padding-bottom: 220px !important; padding-top: 0.25rem !important; }
         [data-theme="dark"] .cart-checkout-fixed { background: #0d1f2d !important; }
       }
 
