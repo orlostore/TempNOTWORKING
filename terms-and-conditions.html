@@ -297,8 +297,10 @@
       }
       .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] svg { width: 14px !important; height: 14px !important; }
 
-      /* Override #1: Checkout pill — Option C (cream card, editorial Cormorant header). */
-      .cart-checkout-fixed > div:first-child {
+      /* Override #1: Checkout pill — Option C (cream card, editorial Cormorant header).
+         Targets the outer wrapper by its unique box-shadow color, so this
+         applies on BOTH mobile and desktop. */
+      .cart-sidebar [style*="rgba(44,74,92,0.15)"] {
         background: var(--surface) !important;
         border: 1px solid var(--draft-border) !important;
         border-radius: 14px !important;
@@ -306,17 +308,17 @@
         padding: 14px !important;
         overflow: visible !important;
       }
-      [data-theme="dark"] .cart-checkout-fixed > div:first-child {
+      [data-theme="dark"] .cart-sidebar [style*="rgba(44,74,92,0.15)"] {
         background: var(--surface) !important;
         border-color: rgba(255,255,255,0.10) !important;
       }
-      .cart-checkout-fixed > div:first-child > div {
+      .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div {
         background: transparent !important;
         border-radius: 0 !important;
         border: none !important;
         box-shadow: none !important;
       }
-      .cart-checkout-fixed > div:first-child > div:first-child {
+      .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:first-child {
         color: var(--primary) !important;
         font-family: 'Cormorant Garamond', serif !important;
         font-size: 1.05rem !important;
@@ -325,10 +327,10 @@
         padding: 0 0 10px 0 !important;
         text-align: center !important;
       }
-      [data-theme="dark"] .cart-checkout-fixed > div:first-child > div:first-child {
+      [data-theme="dark"] .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:first-child {
         color: var(--draft-text) !important;
       }
-      .cart-checkout-fixed > div:first-child > div:first-child span {
+      .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:first-child span {
         font-family: 'Almarai', sans-serif !important;
         color: var(--draft-muted) !important;
         font-size: 0.78rem !important;
@@ -336,7 +338,7 @@
         margin-left: 6px !important;
         font-weight: 400 !important;
       }
-      .cart-checkout-fixed > div:first-child > div:last-child {
+      .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:last-child {
         padding: 0 !important;
         gap: 8px !important;
       }

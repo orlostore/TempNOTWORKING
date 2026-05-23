@@ -259,8 +259,12 @@ CART — Edit-look restyle ═══════ */` and the next non-cart rule.
 .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] svg { width: 14px; height: 14px; }
 
 /* ─── OPTION C — Checkout pill (cream card with editorial Cormorant header) ─── */
-/* Outer wrapper of the cart-checkout-fixed content becomes the single white card. */
-.cart-checkout-fixed > div:first-child {
+/* IMPORTANT: app.min.js routes the checkout HTML into different containers
+   depending on viewport — on mobile it goes into #cartCheckoutFixed, on
+   desktop it goes inline inside .cart-footer. To make Option C apply in
+   BOTH places, target the OUTER WRAPPER by its unique inline box-shadow
+   color (rgba(44,74,92,0.15) is only used on this wrapper). */
+.cart-sidebar [style*="rgba(44,74,92,0.15)"] {
   background: var(--surface);
   border: 1px solid var(--draft-border);
   border-radius: 14px;
@@ -268,27 +272,27 @@ CART — Edit-look restyle ═══════ */` and the next non-cart rule.
   padding: 14px;
   overflow: visible;
 }
-[data-theme="dark"] .cart-checkout-fixed > div:first-child {
+[data-theme="dark"] .cart-sidebar [style*="rgba(44,74,92,0.15)"] {
   background: var(--surface); border-color: rgba(255,255,255,0.10);
 }
 /* Both inner gradient children become transparent (let outer surface show). */
-.cart-checkout-fixed > div:first-child > div {
+.cart-sidebar [style*="rgba(44,74,92,0.15)"] > div {
   background: transparent; border-radius: 0; border: none; box-shadow: none;
 }
 /* Pay-by-Card label (first inner child) — Cormorant navy text + card icon. */
-.cart-checkout-fixed > div:first-child > div:first-child {
+.cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:first-child {
   color: var(--primary);
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.05rem; font-weight: 400; letter-spacing: -0.01em;
   padding: 0 0 10px 0; text-align: center;
 }
-[data-theme="dark"] .cart-checkout-fixed > div:first-child > div:first-child { color: var(--draft-text); }
-.cart-checkout-fixed > div:first-child > div:first-child span {
+[data-theme="dark"] .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:first-child { color: var(--draft-text); }
+.cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:first-child span {
   font-family: 'Almarai', sans-serif; color: var(--draft-muted);
   font-size: 0.78rem; opacity: 1; margin-left: 6px; font-weight: 400;
 }
 /* Buttons wrapper (second inner child) — no padding, transparent. */
-.cart-checkout-fixed > div:first-child > div:last-child { padding: 0; gap: 8px; }
+.cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:last-child { padding: 0; gap: 8px; }
 
 /* ─── Attribute-selector overrides (will be replaced with class selectors after JS patches) ─── */
 

@@ -893,11 +893,13 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] svg { width: 14px !important; height: 14px !important; }
 
       /* Override #1: Checkout pill — Option C (cream card, editorial Cormorant header).
-         Target the OUTER wrapper (div with border-radius:9px overflow:hidden)
-         as the single card. Make both inner gradient children transparent so
-         the cream of the outer card shows through. Restyle the label as
-         Cormorant Garamond navy text + card icon. Buttons keep their navy. */
-      .cart-checkout-fixed > div:first-child {
+         Targets the OUTER wrapper of the checkout HTML by its unique inline
+         box-shadow color, so this applies on BOTH mobile (wrapper inside
+         #cartCheckoutFixed) and desktop (wrapper inside .cart-footer).
+         Make both inner gradient children transparent so the white of the
+         outer card shows through. Restyle the label as Cormorant Garamond
+         navy text + card icon. Buttons keep their navy. */
+      .cart-sidebar [style*="rgba(44,74,92,0.15)"] {
         background: var(--surface) !important;
         border: 1px solid var(--draft-border) !important;
         border-radius: 14px !important;
@@ -905,19 +907,19 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         padding: 14px !important;
         overflow: visible !important;
       }
-      [data-theme="dark"] .cart-checkout-fixed > div:first-child {
+      [data-theme="dark"] .cart-sidebar [style*="rgba(44,74,92,0.15)"] {
         background: var(--surface) !important;
         border-color: rgba(255,255,255,0.10) !important;
       }
       /* Kill the navy gradient on BOTH inner children (label and buttons-wrapper). */
-      .cart-checkout-fixed > div:first-child > div {
+      .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div {
         background: transparent !important;
         border-radius: 0 !important;
         border: none !important;
         box-shadow: none !important;
       }
       /* Restyle the Pay by Card LABEL (first inner child) as Cormorant navy text. */
-      .cart-checkout-fixed > div:first-child > div:first-child {
+      .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:first-child {
         color: var(--primary) !important;
         font-family: 'Cormorant Garamond', serif !important;
         font-size: 1.05rem !important;
@@ -926,11 +928,11 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         padding: 0 0 10px 0 !important;
         text-align: center !important;
       }
-      [data-theme="dark"] .cart-checkout-fixed > div:first-child > div:first-child {
+      [data-theme="dark"] .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:first-child {
         color: var(--draft-text) !important;
       }
       /* Arabic span inside the label */
-      .cart-checkout-fixed > div:first-child > div:first-child span {
+      .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:first-child span {
         font-family: 'Almarai', sans-serif !important;
         color: var(--draft-muted) !important;
         font-size: 0.78rem !important;
@@ -939,7 +941,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         font-weight: 400 !important;
       }
       /* Buttons wrapper (second inner child) — no padding, transparent */
-      .cart-checkout-fixed > div:first-child > div:last-child {
+      .cart-sidebar [style*="rgba(44,74,92,0.15)"] > div:last-child {
         padding: 0 !important;
         gap: 8px !important;
       }
