@@ -901,21 +901,22 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           right: -100% !important;
           border-radius: 0 !important;
         }
-        /* Bigger bottom buffer for cart-sidebar — base is calc(100vh - 70px)
-           which clipped the bottom of the checkout buttons. 90px wasn't
-           enough either (buttons touched the nav). 115px gives the
-           checkout buttons clear breathing room above the mobile nav. */
-        .cart-sidebar { height: calc(100vh - 115px) !important; }
+        /* Cart-sidebar must end EXACTLY at the top of the mobile bottom nav.
+           Mobile nav is ~80-85px tall (with home-indicator safe area).
+           Going shorter than that exposes the page behind the cart-footer
+           area. Use 85px for tight fit, no page-behind gap. */
+        .cart-sidebar { height: calc(100vh - 85px) !important; }
 
         /* cart-checkout-fixed holds Pay by Card / Sign in / As Guest on
-           mobile (set by app.min.js). Pin it absolutely to the bottom of
-           cart-sidebar — which is now calc(100vh - 90px) tall, so its
-           bottom = 90px above viewport bottom = comfortably above the
-           floating mobile bottom nav. */
+           mobile (set by app.min.js). Pin it absolutely 25px above the
+           cart-sidebar's bottom — that 25px is filled by cart-sidebar's
+           cream background, giving visual breathing room between the
+           checkout buttons and the mobile bottom nav (without exposing
+           the page behind). */
         .cart-checkout-fixed {
           position: absolute !important;
           top: auto !important;
-          bottom: 0 !important;
+          bottom: 25px !important;
           left: 0 !important;
           right: 0 !important;
           background: var(--bg) !important;
@@ -925,11 +926,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           z-index: 10 !important;
           padding: 10px 14px !important;
         }
-        /* cart-footer content (Add AED 25 box + Subtotal/Delivery/Total)
-           needs enough padding-bottom so the Total row isn't covered by
-           the absolutely-positioned checkout bar (~120px tall). 150px
-           gives the checkout bar ~30px of breathing room above the Total. */
-        .cart-footer { padding-bottom: 150px !important; }
+        /* cart-footer needs padding-bottom for the absolute checkout bar
+           above (~120px tall) PLUS its 25px bottom offset = 145px buffer.
+           Round up to 160 for safety. */
+        .cart-footer { padding-bottom: 160px !important; }
         [data-theme="dark"] .cart-checkout-fixed { background: #0d1f2d !important; }
       }
 
