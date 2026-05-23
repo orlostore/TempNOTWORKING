@@ -123,169 +123,162 @@ Not blockers for cutover. Sequence as separate sprints.
 
 ### Phase 2.5 — Cart migration (from R1/T&C overlays into styles.css)
 
-**Reality check on this migration: it is NOT just copy-paste.** Every
-`!important` in the overlay's `/* CART */` block exists because
-`app.min.js` injects inline `style="..."` attributes when rendering the
-cart, and inline styles beat external CSS unless overridden with
-`!important`. Drop the `!important` markers without also patching
-`app.min.js` to remove its inline styles, and the cart visually
-regresses to the old look on EVERY page.
+**Reality check**: This is NOT a copy-paste. The `!important` markers in
+the overlay exist because `app.min.js` injects inline `style="..."`
+attributes when rendering the cart. Drop the `!important`s without
+patching the inline styles in `app.min.js`, and the cart regresses to
+the old look. The migration is a **coordinated CSS + JS edit pass**.
 
-So the migration is a **coordinated CSS + JS edit pass**, ~1 hour of
-focused work. Detailed steps below.
+The cart restyle currently lives **duplicated** in the
+`<style id="edit-overlay">` block of both `draftnewindexR1.html` and
+`terms-and-conditions.html`. The T&C block is a verbatim copy of R1's
+— delete it after lifting R1's into `styles.css`.
 
-The cart restyle (sidebar shape, header font, footer cream bg, checkout
-button colors, sticky-bottom mobile, outlined-navy remove button, product
-image, cart item color overrides) currently lives **duplicated** inside
-the `<style id="edit-overlay">` block in both `draftnewindexR1.html`
-and `terms-and-conditions.html`, using `!important` to override the
-inline styles `app.min.js` injects.
+#### Current overlay cart values (the source of truth as of this commit)
 
-#### The 8 surgical `app.min.js` patches needed at migration
+CSS block lives in R1's `edit-overlay` between the comment `/* ═══════
+CART — Edit-look restyle ═══════ */` and the next non-cart rule.
 
-These can be done one by one with `sed`, `perl`, or a Python script. Each
-needs verification before moving to the next.
+**Desktop / shared rules:**
 
-| # | Inline today | Replace with |
+```css
+.cart-sidebar { width: 440px; right: -440px; border-radius: 16px 0 0 16px; box-shadow: -8px 0 32px rgba(26,58,82,0.12); background: var(--surface); border-left: 1px solid var(--draft-border); }
+.cart-sidebar.active { right: 0; }
+[data-theme="dark"] .cart-sidebar { box-shadow: -8px 0 32px rgba(0,0,0,0.4); }
+
+.cart-header { background: var(--primary); padding: 1rem 1.4rem; border-bottom: none; }
+.cart-header h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 1.25rem; letter-spacing: -0.01em; color: #fff; }
+.cart-header h2 span { font-family: 'Almarai', sans-serif; font-weight: 400; font-size: 0.95rem; opacity: 0.85; margin-left: 8px; }
+
+.cart-items { padding: 0.6rem 1.4rem 0.4rem; }     /* tightened — was 1.2rem 1.4rem 0.5rem */
+
+.cart-footer { background: var(--bg); border-top: 1px solid var(--draft-border); padding: 0.6rem 1.4rem; }    /* tightened — was 1.2rem 1.4rem */
+[data-theme="dark"] .cart-footer { background: #0d1f2d; }
+
+.cart-total { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 1.35rem; color: var(--draft-text); margin-bottom: 0.9rem; }
+
+.cart-sidebar #stripeBtn,
+.cart-sidebar #stripeBtnGuest {
+  background: var(--primary); color: #fff; border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-weight: 500; letter-spacing: 0.02em;
+  padding: 0.95rem 1rem; transition: filter .2s ease, transform .2s ease;
+}
+.cart-sidebar #stripeBtn:hover,
+.cart-sidebar #stripeBtnGuest:hover { filter: brightness(0.85); transform: translateY(-1px); }
+
+/* Cart item rows — horizontal flex, image | info | controls all in one row */
+.cart-items > div[id^="cartItem-"] {
+  display: flex; align-items: center; gap: 12px;
+  padding: 0.6rem 0;     /* tightened — was 0.9rem 0 */
+  border-bottom: 1px solid var(--draft-border);
+}
+.cart-items > div[id^="cartItem-"] img.cart-item-image {
+  display: block;        /* unhide (was display:none inline default for production safety) */
+  width: 60px; height: 60px;
+  object-fit: contain; background: #fff; border-radius: 8px; flex-shrink: 0;
+  margin-right: 0;       /* gap handles spacing */
+  border: 1px solid var(--draft-border);
+}
+.cart-items > div[id^="cartItem-"] strong { color: var(--draft-text); font-family: 'DM Sans', sans-serif; font-weight: 500; }
+[data-theme="dark"] .cart-items > div[id^="cartItem-"] strong { color: var(--draft-text); }
+.cart-items > div[id^="cartItem-"] span[style*="#e07856"] { color: var(--accent); font-family: 'DM Sans', sans-serif; }
+.cart-items > div[id^="cartItem-"] span[style*="#888"] { color: var(--draft-muted); }
+.cart-items > div[id^="cartItem-"] > div:nth-of-type(2) { flex-shrink: 0; gap: 6px; }
+
+/* Quantity − / + buttons */
+.cart-items > div[id^="cartItem-"] button[onclick^="updateQuantity"] {
+  background: var(--bg); color: var(--draft-text); border: 1px solid var(--draft-border);
+  border-radius: 6px; font-family: 'DM Sans', sans-serif; transition: background .2s ease;
+}
+.cart-items > div[id^="cartItem-"] button[onclick^="updateQuantity"]:hover { background: var(--draft-border); }
+
+/* Remove button — outlined navy circle */
+.cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] {
+  background: transparent; color: var(--primary); border: 1px solid var(--draft-border);
+  border-radius: 50%; width: 30px; height: 30px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: border-color .2s ease, color .2s ease;
+}
+[data-theme="dark"] .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] { color: var(--draft-text); }
+.cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"]:hover { border-color: var(--accent); color: var(--accent); }
+.cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] svg { width: 14px; height: 14px; }
+
+/* Attribute-selector overrides (kill the inline gradients/colors from app.min.js) */
+.cart-sidebar [style*="linear-gradient(135deg, #2c4a5c"] {
+  background: var(--bg); padding: 14px; border-radius: 12px;
+  border: 1px solid var(--draft-border); box-shadow: none;
+}
+[data-theme="dark"] .cart-sidebar [style*="linear-gradient(135deg, #2c4a5c"] {
+  background: #0d1f2d; border-color: rgba(255,255,255,0.10);
+}
+.cart-sidebar [style*="background: #f8f9fa"],
+.cart-sidebar [style*="background:#f8f9fa"] { background: transparent; border: none; }
+/* Kill the inline padding-bottom on the buttons-row wrapper so buttons sit flush */
+.cart-sidebar [style*="padding: 2px 10px 8px"] { padding: 2px 10px 0; }
+```
+
+**Mobile media query (`@media (max-width: 514.56px)`):**
+
+```css
+.cart-sidebar { width: 100%; right: -100%; border-radius: 0; top: 0; bottom: 0; height: auto; }
+.cart-sidebar.active { right: 0; }
+.cart-checkout-fixed {
+  position: absolute; top: auto; bottom: 85px; left: 0; right: 0;
+  background: var(--bg); border-top: 1px solid var(--draft-border); border-bottom: none;
+  box-shadow: 0 -2px 8px rgba(26,58,82,0.08); z-index: 10;
+  padding: 10px 14px 0 14px;     /* no bottom padding so buttons touch mobile nav top */
+}
+.cart-footer { padding-bottom: 220px; padding-top: 0.5rem; }    /* clears the absolute checkout bar */
+[data-theme="dark"] .cart-checkout-fixed { background: #0d1f2d; }
+```
+
+#### App.min.js inline-style patches needed at migration
+
+These eight surgical edits remove the inline colors/gradients that
+force us to use `!important`. Apply with python/sed, verify with grep
+after each.
+
+| # | Find (in app.min.js) | Replace with |
 |---|---|---|
-| **1** | `<button id="stripeBtn" style="...background: #2c4a5c; ...">` (logged-in variant) | Remove `background: #2c4a5c;` from inline style. Same for `onmouseover="this.style.background='#1e3545'"` and `onmouseout`. Let `#stripeBtn` CSS class control color. |
-| **2** | `<div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 10px 10px; ...">` (Pay by Card label) | Add `class="checkout-header-band"`. Remove inline `background:`, `color:`. Add CSS `.checkout-header-band { background: var(--primary); color: #fff; ... }`. |
-| **3** | `<div style="display: flex; gap: 8px; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 10px 8px;">` (buttons wrapper) | Add `class="checkout-buttons-wrap"`. Remove inline `background:`. Style via class. |
-| **4** | `<button id="stripeBtn" ... style="...background: #3d6178; ...">Sign in</button>` and same for `#stripeBtnGuest` | Remove inline `background: #3d6178;`. Let `#stripeBtn`/`#stripeBtnGuest` CSS class control color. |
-| **5** | `<div style="background: #f8f9fa; border-radius: 8px;">` (Subtotal/Delivery/Total wrapper) | Add `class="cart-summary"`. Remove inline `background:`. Style via class. |
-| **6** | `<strong style="font-size:${p}; color:#2c4a5c;">${name}</strong>` (cart item product name) | Remove `color:#2c4a5c;` from the inline. Let `.cart-items strong` CSS class control color. |
-| **7** | `<span style="color:#e07856; font-weight:600; font-size:${g};">AED ${price}</span>` (cart item price) | Remove `color:#e07856;`. Let `.cart-items span.price` (or similar — add a class) CSS control color. |
-| **8** | `<button onclick="removeFromCart(${d})" style="padding:${y}; background:#dc3545; ...">` (remove button) | Remove `background:#dc3545; color:white;`. Let CSS class control. |
+| 1 | `<button id="stripeBtn"` logged-in variant with inline `background: #2c4a5c` + `onmouseover/onmouseout` hover handlers | Strip the inline `background`. Strip the hover handlers. Let CSS rule control. |
+| 2 | Pay-by-Card label `<div style="background: linear-gradient(135deg, #2c4a5c, #1e3545); color: white; text-align: center; padding: 10px 10px; ...">` | Add `class="checkout-header-band"`. Strip inline `background:` and `color:`. Add `.checkout-header-band { background: var(--primary); color: #fff; padding: 10px 10px; }` in styles.css. |
+| 3 | Buttons wrapper `<div style="display: flex; gap: 8px; background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 10px 8px;">` | Add `class="checkout-buttons-wrap"`. Strip inline `background:` and the `padding: 2px 10px 8px` (replace with `padding: 2px 10px 0` via class). |
+| 4 | Sign-in `<button id="stripeBtn" ... style="...background: #3d6178;...">` and As-Guest `<button id="stripeBtnGuest" ...>` | Strip the inline `background: #3d6178`. Both buttons get colored via `#stripeBtn` / `#stripeBtnGuest` CSS rules. |
+| 5 | Totals box `<div style="background: #f8f9fa; border-radius: 8px;">` | Add `class="cart-summary"`. Strip inline `background:`. Add `.cart-summary { background: transparent; border-radius: 8px; }` in styles.css. |
+| 6 | Cart item product name `<strong style="font-size:${p}; color:#2c4a5c;">` | Strip `color:#2c4a5c;`. Let `.cart-items strong` CSS rule control. |
+| 7 | Cart item price `<span style="color:#e07856; font-weight:600; font-size:${g};">` | Strip `color:#e07856;`. Add a class (e.g. `cart-item-price`) and style via `.cart-item-price { color: var(--accent); }`. |
+| 8 | Remove button `<button onclick="removeFromCart(...)" style="padding:${y}; background:#dc3545; ...">` | Strip `background:#dc3545; color:white; border:none;`. Let the outlined-navy CSS rule control. |
 
-After those 8 edits, the inline style attributes hold only **layout** properties (padding, font-size, etc.) that don't conflict with the new design, and the new design's colors / backgrounds / shapes are driven entirely by `styles.css`.
+Also strip `style="display:none"` from the `<img class="cart-item-image">`
+template — at cutover, image should be the default everywhere, not
+hidden by default.
 
 #### Migration sequence
 
-- [ ] **1. Backup** — branch off main as `claude/cart-migration` for testing.
-- [ ] **2. Copy the entire `/* CART — Edit-look restyle */` block** out of `draftnewindexR1.html`'s `<style id="edit-overlay">`. Paste it into `styles.css` near the existing `.cart-sidebar` rules. Overwrite the existing cart-related rules in `styles.css` (the old `.cart-sidebar { ... }`, `.cart-header { ... }`, `.cart-footer { ... }`, `.checkout-btn { ... }`).
-- [ ] **3. Delete the same `/* CART */` block from `terms-and-conditions.html`'s overlay** — it was a duplicate of R1's.
-- [ ] **4. Patch `app.min.js`** — apply the 8 surgical edits in the table above. Verify each with `grep` afterwards (e.g., `grep -c '#2c4a5c' app.min.js` should drop to zero hits inside cart-render strings).
-- [ ] **5. Replace the attribute selectors with class selectors** in the migrated CSS:
-  - `[style*="linear-gradient(135deg, #2c4a5c"]` → `.checkout-header-band, .checkout-buttons-wrap` (depending on context)
+- [ ] **1. Branch** off main as `claude/cart-migration` (not directly on main).
+- [ ] **2. Copy** R1's `/* ═══════ CART ═══════ */` block from the `edit-overlay` into `styles.css`. Overwrite the existing cart rules in styles.css. Strip the `!important` markers in the migrated version.
+- [ ] **3. Delete** the same block from T&C's overlay (was a verbatim duplicate).
+- [ ] **4. Apply the 8 `app.min.js` patches** in the table above, one at a time. After each: `grep -c '#2c4a5c' app.min.js` etc. to verify the inline hex/string is gone.
+- [ ] **5. Convert attribute selectors → class selectors** in the migrated CSS:
+  - `[style*="linear-gradient(135deg, #2c4a5c"]` → `.checkout-header-band, .checkout-buttons-wrap`
   - `[style*="background: #f8f9fa"]` → `.cart-summary`
-- [ ] **6. Drop ALL `!important` markers** from the migrated cart rules. Verify by visually testing the cart in dev / preview after each removal pass.
-- [ ] **7. Drop the inline `style="display:none"` from the cart-item image template** in `app.min.js` — it was hiding the image on production. After migration, image is the new default everywhere.
-- [ ] **8. Remove the `<div id="cartItem-N" style="display:flex; ...">` inline `display:flex`** from `app.min.js`'s cart-item template, so our new `display:grid` becomes the default without `!important`.
-- [ ] **9. Delete the dead `.checkout-btn.whatsapp-btn`** rule from `styles.css` — no element ever uses the `whatsapp-btn` class.
-- [ ] **10. Reconcile mobile cart heights** — the overlay overrides `.cart-sidebar` to use `top: 0 !important; bottom: 0 !important; height: auto !important;` instead of any vh/dvh calc. The full-viewport positioning is the most bulletproof model: regardless of how the browser computes `vh`/`dvh`/`svh`/`lvh`, the sidebar always covers the entire viewport edge-to-edge. The mobile bottom nav (position:fixed bottom:0 with opaque background) floats on top of the sidebar's bottom area — no gap can possibly appear. Position checkout bar with `bottom: 95px` (above the ~85px nav + ~10px breathing). Cart-footer `padding-bottom: 235px` clears the checkout bar. Migration: lift this approach to `styles.css`'s `@media (max-width:768px)` block, replacing the current `height: calc(100vh - 70px)`. Drop the `!important`s.
-- [ ] **11. Reconcile mobile cart-footer padding** — overlay sets `.cart-footer { padding-bottom: 150px !important; }` for mobile. Move that to `styles.css` mobile media query (without `!important`).
-- [ ] **12. Reconcile cart-checkout-fixed positioning** — overlay sets `.cart-checkout-fixed { position: absolute; bottom: 0; ... }` for mobile (replacing the old `position: sticky; top: 0;`). Move to `styles.css` mobile media query.
-- [ ] **13. Test on Firebase preview channel** — deploy `claude/cart-migration` to a `r1-cart-migration` preview channel. Open in incognito on mobile + desktop. Verify cart looks identical to current R1 cart. Take side-by-side screenshots if anything seems off.
-- [ ] **14. Merge to main** — once visual parity confirmed, merge the branch.
+  - `[style*="padding: 2px 10px 8px"]` → `.checkout-buttons-wrap` (with the padding baked into the class)
+- [ ] **6. Strip `style="display:none"`** from the cart-item-image element in `app.min.js`. Add `display: block` to the migrated CSS as the default.
+- [ ] **7. Delete dead `.checkout-btn.whatsapp-btn`** rules from `styles.css` — no element ever uses that class.
+- [ ] **8. Reconcile base mobile rules** in `styles.css`'s `@media (max-width:768px)` block:
+  - Replace `.cart-sidebar { height: calc(100vh - 70px); padding-bottom: 0; }` with `.cart-sidebar { top: 0; bottom: 0; height: auto; }`
+  - Replace `.cart-checkout-fixed { position: sticky; top: 0; ... }` with `.cart-checkout-fixed { position: absolute; bottom: 85px; padding: 10px 14px 0 14px; ... }` (full ruleset from overlay above)
+  - Add `.cart-footer { padding-bottom: 220px; padding-top: 0.5rem; }`
+- [ ] **9. Deploy to Firebase preview channel** (`r1-cart-migration`). Open in incognito on mobile and desktop. Compare cart visually to the current R1 cart — should be pixel-identical.
+- [ ] **10. Merge to main** once visual parity is confirmed.
 
-#### Migration risk
+#### Risk and time
 
-- **Low** if the 8 patches are done carefully and tested. The cart's behavior (JS event handlers, checkout flow, Stripe integration) does NOT change — we only touch presentational inline attributes.
-- **Medium-to-high if rushed.** Missing one hex value means the cart looks half-old-half-new and it's hard to spot which patch was missed without methodical comparison.
+- **Low risk** if the 8 patches land cleanly. The cart behavior (event handlers, checkout flow, Stripe) does NOT change — only inline presentational attributes get moved to CSS classes.
+- **Medium risk if rushed** — missing one hex value means a half-old/half-new cart.
+- **Time**: ~10 min CSS copy + ~25 min JS patches + ~10 min selector cleanup + ~15 min preview channel test + ~5 min merge = **~65 min focused work.**
 
-#### Time estimate
-
-- ~10 min: copy CSS into `styles.css`
-- ~25 min: apply 8 `app.min.js` patches with verification
-- ~10 min: drop `!important` markers; convert attribute selectors → class selectors
-- ~15 min: deploy to preview channel + visual testing on mobile/desktop
-- ~5 min: deploy to main
-
-**Total: ~1 hour focused work.** Schedule for a quiet day.
-
-Migration steps:
-
-- [ ] **Lift the cart block into `styles.css`**: open `draftnewindexR1.html`,
-      copy the `/* ═══ CART — Edit-look restyle ═══ */` block
-      (everything between that comment header and the `/* Small draft
-      marker */` comment), paste it into `styles.css` near the existing
-      `.cart-sidebar` rules. Overwrite the old cart rules.
-- [ ] **Delete the duplicate** from `terms-and-conditions.html` (same
-      copy lives there).
-- [ ] **Patch `app.min.js` to use CSS variables for the Stripe button
-      colors** so we can drop the `!important`s from the migrated CSS:
-      - Find `style="width: 100%; padding: 0.9rem; ... background: #2c4a5c; ...` (logged-in stripeBtn) →
-        change `#2c4a5c` to `var(--primary)` and the hover handlers
-        `onmouseover="this.style.background='#1e3545'"` /
-        `onmouseout="this.style.background='#2c4a5c'"` →
-        `onmouseover="this.style.filter='brightness(0.85)'"` /
-        `onmouseout="this.style.filter=''"`
-      - Find `linear-gradient(135deg, #2c4a5c, #1e3545)` (guest sign-up
-        promo background) → replace with `var(--primary)` solid or a
-        new gradient using CSS variables
-      - Find `<button id="stripeBtnGuest"` (guest direct checkout) →
-        same color treatment
-      - Also: the cart-item template has inline `color:#2c4a5c` on the
-        product name `<strong>` and `color:#e07856` on the price
-        `<span>`. Either replace those literal hex values with
-        `var(--primary)` and `var(--accent)` inline, OR strip the inline
-        colors and let the class-based CSS in styles.css do it.
-- [ ] **Drop all `!important` markers** from the migrated cart rules
-      once the inline JS colors are gone.
-- [ ] **Delete dead CSS**: `.checkout-btn.whatsapp-btn` rules in
-      styles.css are unused — no `<button class="whatsapp-btn">` is
-      ever rendered. Remove them.
-- [ ] **Cart-item image — flip the default**. The `<img class="cart-item-image">`
-      element is currently rendered with inline `style="display:none"` so
-      it stays invisible on production `index.html`; R1 and T&C overlays
-      override with `display: block !important`. At cutover, when R1 IS
-      the new index.html, we WANT the image visible everywhere. Steps:
-      remove the inline `style="display:none"` from the cart-item template
-      in `app.min.js`; lift the full `.cart-items img.cart-item-image`
-      rule (without the `display: block !important`, just the size /
-      background / border properties) into `styles.css` as the new global
-      default. Drop the `!important`s.
-- [ ] **Guest sign-up wrapper gradient** — currently overridden via
-      `[style*="linear-gradient(135deg, #2c4a5c"]` attribute selector
-      with `!important`. Migration: find the inline
-      `style="...background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 10px 8px;"`
-      in `app.min.js`, replace with `class="guest-checkout-wrapper"`
-      (with no inline background). Then add a clean
-      `.guest-checkout-wrapper { background: var(--bg); padding: 14px;
-      border-radius: 12px; border: 1px solid rgba(26,58,82,0.10); }`
-      block in `styles.css`. Drop the attribute selector from the
-      migrated CSS.
-- [ ] **Totals summary box** (`#f8f9fa` background) — currently
-      overridden via `[style*="background: #f8f9fa"]`. Migration: find
-      the inline `style="background: #f8f9fa; border-radius: 8px;"`
-      that wraps the Subtotal / Delivery / Total rows in `app.min.js`,
-      replace the inline background with `class="cart-summary"` (keep
-      the border-radius via the class). Add a clean `.cart-summary`
-      rule in `styles.css` (background transparent or inherit). Drop
-      the attribute selector from the migrated CSS.
-- [ ] **Horizontal cart-item layout** — implemented in overlays as
-      `display: flex !important; align-items: center; gap: 12px;`. This
-      matches the original flex layout from `app.min.js` but with cleaner
-      gap/align values. Migration: lift the rule into `styles.css`. The
-      inline `display: flex` from `app.min.js` already matches; just
-      need to harmonise the inline `gap: 0.3rem` etc. with the new
-      values (or strip the inline gap so the class wins without
-      `!important`).
-- [ ] **Mobile checkout bar positioning** — `app.min.js` puts the
-      Pay-by-Card / Sign-in / As-Guest HTML into `#cartCheckoutFixed`
-      on mobile (NOT into `.cart-footer`). The overlay positions that
-      element absolutely to the bottom of `.cart-sidebar`:
-      ```css
-      @media (max-width:514.56px) {
-        .cart-checkout-fixed {
-          position: absolute; top: auto; bottom: 0; left: 0; right: 0;
-          background: var(--bg); border-top: 1px solid var(--draft-border);
-          z-index: 10; padding: 10px 14px;
-        }
-        .cart-footer { padding-bottom: 110px; }
-      }
-      ```
-      Migration: lift these into `styles.css`'s
-      `@media (max-width:514.56px)` block, replacing the current
-      `.cart-checkout-fixed { position: sticky; top: 0; ... }` rule.
-      Drop the `!important`s. Rationale: cart-sidebar is default
-      `calc(100vh - 70px)` tall on mobile (the 70px leaves room for
-      the floating mobile bottom nav). Pinning `.cart-checkout-fixed`
-      `bottom: 0` of the sidebar puts the checkout bar exactly above
-      the nav. The cart-footer padding-bottom keeps its content
-      (Add AED 25 + totals) from being covered by the absolute child.
-
-Estimated migration effort: 30–45 minutes of mechanical edits.
+Schedule for a quiet hour. Don't migrate while still iterating on R1's cart visuals.
 
 ### Phase 3 — self-host The Edit's fonts
 - [x] **DONE** — `orlo-the-edit.html` no longer loads from Google
