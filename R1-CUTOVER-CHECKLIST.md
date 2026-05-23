@@ -121,6 +121,54 @@ Not blockers for cutover. Sequence as separate sprints.
 - [ ] After all pages migrated, remove the Inter `@font-face` from
       `styles.css` and delete `fonts/inter-latin-variable.woff2`
 
+### Phase 2.5 — Cart migration (from R1/T&C overlays into styles.css)
+
+The cart restyle (sidebar shape, header font, footer cream bg, checkout
+button colors, sticky-bottom mobile, outlined-navy remove button, product
+image, cart item color overrides) currently lives **duplicated** inside
+the `<style id="edit-overlay">` block in both `draftnewindexR1.html`
+and `terms-and-conditions.html`, using `!important` to override the
+inline styles `app.min.js` injects.
+
+Migration steps:
+
+- [ ] **Lift the cart block into `styles.css`**: open `draftnewindexR1.html`,
+      copy the `/* ═══ CART — Edit-look restyle ═══ */` block
+      (everything between that comment header and the `/* Small draft
+      marker */` comment), paste it into `styles.css` near the existing
+      `.cart-sidebar` rules. Overwrite the old cart rules.
+- [ ] **Delete the duplicate** from `terms-and-conditions.html` (same
+      copy lives there).
+- [ ] **Patch `app.min.js` to use CSS variables for the Stripe button
+      colors** so we can drop the `!important`s from the migrated CSS:
+      - Find `style="width: 100%; padding: 0.9rem; ... background: #2c4a5c; ...` (logged-in stripeBtn) →
+        change `#2c4a5c` to `var(--primary)` and the hover handlers
+        `onmouseover="this.style.background='#1e3545'"` /
+        `onmouseout="this.style.background='#2c4a5c'"` →
+        `onmouseover="this.style.filter='brightness(0.85)'"` /
+        `onmouseout="this.style.filter=''"`
+      - Find `linear-gradient(135deg, #2c4a5c, #1e3545)` (guest sign-up
+        promo background) → replace with `var(--primary)` solid or a
+        new gradient using CSS variables
+      - Find `<button id="stripeBtnGuest"` (guest direct checkout) →
+        same color treatment
+      - Also: the cart-item template has inline `color:#2c4a5c` on the
+        product name `<strong>` and `color:#e07856` on the price
+        `<span>`. Either replace those literal hex values with
+        `var(--primary)` and `var(--accent)` inline, OR strip the inline
+        colors and let the class-based CSS in styles.css do it.
+- [ ] **Drop all `!important` markers** from the migrated cart rules
+      once the inline JS colors are gone.
+- [ ] **Delete dead CSS**: `.checkout-btn.whatsapp-btn` rules in
+      styles.css are unused — no `<button class="whatsapp-btn">` is
+      ever rendered. Remove them.
+- [ ] **Image rendering stays as-is**: the `<img class="cart-item-image">`
+      patch in `app.min.js`'s cart item template (with the `clean.webp`
+      finder IIFE) is good logic — leave it. Just confirm it's still
+      there after any future minifier passes.
+
+Estimated migration effort: 30–45 minutes of mechanical edits.
+
 ### Phase 3 — self-host The Edit's fonts
 - [x] **DONE** — `orlo-the-edit.html` no longer loads from Google
       Fonts CDN. The `<link rel="preconnect" href="fonts.googleapis.com">`
@@ -228,3 +276,4 @@ them here so the historical record is complete:
 | Back arrow on T&C with `history.back()` smart-fallback | ✅ live |
 | Bottom-nav indicator defaults to Menu on T&C | ✅ live |
 | Mobile-menu (`toggleMobileMenu()`) homepage detection patched to recognise R1 | 🟡 temp — see §1.3 to revert at cutover |
+| **Cart restyled to Edit look** — soft 16px radius, navy-tinted shadow, Cormorant header h2 and total, cream footer, sticky-bottom mobile checkout, outlined-navy remove button (was alarm red), product image with `clean.webp` selection, color overrides for inline-styled name + price | 🟡 lives in R1 + T&C overlays as `!important` overrides + one surgical `app.min.js` image patch — see §3 Phase 2.5 to migrate to `styles.css` and drop the `!important`s |

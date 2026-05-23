@@ -40,7 +40,7 @@
     <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="products.min.js?v=11" as="script">
-    <link rel="preload" href="app.min.js?v=21" as="script">
+    <link rel="preload" href="app.min.js?v=22" as="script">
     <!-- Type system: DM Sans body + Cormorant Garamond headings (self-hosted; declarations live in styles.css) -->
     <link rel="preload" href="/fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/dm-sans-v17-latin-500.woff2" as="font" type="font/woff2" crossorigin>
@@ -716,6 +716,164 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .footer-terms-strip a:hover { opacity: 1; text-decoration: underline; }
       .footer-terms-strip span { opacity: 0.4; }
 
+      /* ═══════════════════════════════════════════════════════════
+         CART — Edit-look restyle. R1 + T&C overlay scope only.
+         Uses CSS variables and !important to override the inline
+         styles app.min.js injects on cart items and Stripe buttons.
+         To migrate: lift this block into styles.css, drop !important,
+         patch app.min.js to remove inline colors (see CUTOVER §3).
+         ═══════════════════════════════════════════════════════════ */
+      .cart-sidebar {
+        width: 440px !important;
+        right: -440px !important;
+        border-radius: 16px 0 0 16px !important;
+        box-shadow: -8px 0 32px rgba(26, 58, 82, 0.12) !important;
+        background: var(--surface) !important;
+        border-left: 1px solid var(--draft-border) !important;
+      }
+      [data-theme="dark"] .cart-sidebar { box-shadow: -8px 0 32px rgba(0, 0, 0, 0.4) !important; }
+
+      .cart-header {
+        background: var(--primary) !important;
+        padding: 1rem 1.4rem !important;
+        border-bottom: none !important;
+      }
+      .cart-header h2 {
+        font-family: 'Cormorant Garamond', serif !important;
+        font-weight: 400 !important;
+        font-size: 1.25rem !important;
+        letter-spacing: -0.01em !important;
+        color: #ffffff !important;
+      }
+      .cart-header h2 span {
+        font-family: 'Almarai', sans-serif !important;
+        font-weight: 400 !important;
+        font-size: 0.95rem !important;
+        opacity: 0.85;
+        margin-left: 8px;
+      }
+
+      .cart-items { padding: 1.2rem 1.4rem 0.5rem !important; }
+
+      .cart-footer {
+        background: var(--bg) !important;
+        border-top: 1px solid var(--draft-border) !important;
+        padding: 1.2rem 1.4rem !important;
+      }
+      [data-theme="dark"] .cart-footer { background: #0d1f2d !important; }
+
+      .cart-total {
+        font-family: 'Cormorant Garamond', serif !important;
+        font-weight: 400 !important;
+        font-size: 1.35rem !important;
+        color: var(--draft-text) !important;
+        margin-bottom: 0.9rem !important;
+      }
+
+      /* Stripe / guest checkout buttons — navy with darken-on-hover */
+      .cart-sidebar #stripeBtn,
+      .cart-sidebar #stripeBtnGuest {
+        background: var(--primary) !important;
+        color: #ffffff !important;
+        border-radius: 10px !important;
+        font-family: 'DM Sans', sans-serif !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.02em !important;
+        padding: 0.95rem 1rem !important;
+        transition: filter .2s ease, transform .2s ease !important;
+      }
+      .cart-sidebar #stripeBtn:hover,
+      .cart-sidebar #stripeBtnGuest:hover {
+        filter: brightness(0.85) !important;
+        transform: translateY(-1px) !important;
+      }
+
+      /* Cart item rows — color overrides for inline-styled spans/strong */
+      .cart-items > div[id^="cartItem-"] {
+        border-bottom: 1px solid var(--draft-border) !important;
+        padding: 0.9rem 0 !important;
+      }
+      .cart-items > div[id^="cartItem-"] strong {
+        color: var(--draft-text) !important;
+        font-family: 'DM Sans', sans-serif !important;
+        font-weight: 500 !important;
+      }
+      .cart-items > div[id^="cartItem-"] span[style*="#e07856"] {
+        color: var(--accent) !important;
+        font-family: 'DM Sans', sans-serif !important;
+      }
+      .cart-items > div[id^="cartItem-"] span[style*="#888"] {
+        color: var(--draft-muted) !important;
+      }
+
+      /* Cart product image — styled here, rendered by patched app.min.js */
+      .cart-items img.cart-item-image {
+        width: 60px !important;
+        height: 60px !important;
+        object-fit: contain !important;
+        background: #ffffff !important;
+        border-radius: 8px !important;
+        flex-shrink: 0 !important;
+        margin-right: 12px !important;
+        border: 1px solid var(--draft-border) !important;
+      }
+
+      /* Quantity − / + buttons — soft pill style */
+      .cart-items > div[id^="cartItem-"] button[onclick^="updateQuantity"] {
+        background: var(--bg) !important;
+        color: var(--draft-text) !important;
+        border: 1px solid var(--draft-border) !important;
+        border-radius: 6px !important;
+        font-family: 'DM Sans', sans-serif !important;
+        transition: background .2s ease !important;
+      }
+      .cart-items > div[id^="cartItem-"] button[onclick^="updateQuantity"]:hover {
+        background: var(--draft-border) !important;
+      }
+
+      /* Remove button — outlined navy circle, NO alarm red */
+      .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] {
+        background: transparent !important;
+        color: var(--primary) !important;
+        border: 1px solid var(--draft-border) !important;
+        border-radius: 50% !important;
+        width: 30px !important;
+        height: 30px !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: border-color .2s ease, color .2s ease !important;
+      }
+      [data-theme="dark"] .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] {
+        color: var(--draft-text) !important;
+      }
+      .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"]:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+      }
+      .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] svg { width: 14px !important; height: 14px !important; }
+
+      /* Mobile: pin checkout-fixed to BOTTOM of cart (was sticky-top) */
+      @media (max-width: 514.56px) {
+        .cart-sidebar {
+          width: 100% !important;
+          right: -100% !important;
+          border-radius: 0 !important;
+        }
+        .cart-checkout-fixed {
+          position: sticky !important;
+          top: auto !important;
+          bottom: 0 !important;
+          background: var(--bg) !important;
+          border-top: 1px solid var(--draft-border) !important;
+          border-bottom: none !important;
+          box-shadow: 0 -2px 8px rgba(26, 58, 82, 0.08) !important;
+          order: 99 !important;
+        }
+        [data-theme="dark"] .cart-checkout-fixed { background: #0d1f2d !important; }
+      }
+
       /* Small draft marker — so you know what page you're on */
       .draft-marker {
         position: fixed; bottom: 10px; left: 10px;
@@ -1233,7 +1391,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="app.min.js?v=21" defer></script>
+<script src="app.min.js?v=22" defer></script>
 <script>
 // Logic for Account Link and Indicator positioning (same as your original)
 function updateAccountLink() {
