@@ -9,3 +9,5 @@
 #earlyPriceDesktop,#earlyPriceMobile{min-height:80px}
 #productDescription{content-visibility:auto;contain-intrinsic-size:1px 1000px}
 #mobileDetailsSection{content-visibility:auto;contain-intrinsic-size:1px 800px;min-height:400px}
+/* CART-OPEN-HIDE-BUYBAR: hide product-page floating buy bar while cart drawer is open (so Delivery/Total rows aren't covered). Remove this line to revert. */
+body:has(.cart-sidebar.active) .early-price-bottom{display:none}
