@@ -198,17 +198,29 @@ Migration steps:
       in the inline style on the cart item div (set by `app.min.js`)
       will need to be removed (or wrapped in a class) so the new grid
       can apply without overrides.
-- [ ] **Mobile cart wraps around bottom-nav** — at `<=514.56px` the
-      overlay sets `.cart-sidebar.active { height: 100vh; }` and
-      `.cart-footer { padding-bottom: 80px; }`. This lets the cart
-      extend behind the fixed mobile bottom nav while the cart-footer's
-      checkout content stays 80px above the screen bottom (~70px nav
-      + 10px breathing room). Migration: lift these into `styles.css`'s
+- [ ] **Mobile checkout bar positioning** — `app.min.js` puts the
+      Pay-by-Card / Sign-in / As-Guest HTML into `#cartCheckoutFixed`
+      on mobile (NOT into `.cart-footer`). The overlay positions that
+      element absolutely to the bottom of `.cart-sidebar`:
+      ```css
+      @media (max-width:514.56px) {
+        .cart-checkout-fixed {
+          position: absolute; top: auto; bottom: 0; left: 0; right: 0;
+          background: var(--bg); border-top: 1px solid var(--draft-border);
+          z-index: 10; padding: 10px 14px;
+        }
+        .cart-footer { padding-bottom: 110px; }
+      }
+      ```
+      Migration: lift these into `styles.css`'s
       `@media (max-width:514.56px)` block, replacing the current
-      `.cart-sidebar { height: calc(100vh - 70px); }`. Drop the
-      `!important`s. Rationale: the calc-minus-70 model clips footer
-      content; the padding-bottom model gives content room without
-      hiding the nav.
+      `.cart-checkout-fixed { position: sticky; top: 0; ... }` rule.
+      Drop the `!important`s. Rationale: cart-sidebar is default
+      `calc(100vh - 70px)` tall on mobile (the 70px leaves room for
+      the floating mobile bottom nav). Pinning `.cart-checkout-fixed`
+      `bottom: 0` of the sidebar puts the checkout bar exactly above
+      the nav. The cart-footer padding-bottom keeps its content
+      (Add AED 25 + totals) from being covered by the absolute child.
 
 Estimated migration effort: 30–45 minutes of mechanical edits.
 

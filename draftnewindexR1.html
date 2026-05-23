@@ -910,20 +910,28 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           right: -100% !important;
           border-radius: 0 !important;
         }
-        /* Cart wraps around the mobile bottom nav: full viewport height,
-           with padding-bottom on cart-footer leaving room above the nav */
-        .cart-sidebar.active { height: 100vh !important; }
-        .cart-footer { padding-bottom: 80px !important; }
+        /* cart-checkout-fixed holds Pay by Card / Sign in / As Guest on
+           mobile (set by app.min.js). Pin it absolutely to the bottom of
+           cart-sidebar — which is calc(100vh - 70px) tall by default, so
+           "bottom of cart-sidebar" = 70px above viewport bottom = just
+           above the floating mobile bottom nav. */
         .cart-checkout-fixed {
-          position: sticky !important;
+          position: absolute !important;
           top: auto !important;
           bottom: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
           background: var(--bg) !important;
           border-top: 1px solid var(--draft-border) !important;
           border-bottom: none !important;
           box-shadow: 0 -2px 8px rgba(26, 58, 82, 0.08) !important;
-          order: 99 !important;
+          z-index: 10 !important;
+          padding: 10px 14px !important;
         }
+        /* cart-footer content (Add AED 25 box + totals) needs padding-bottom
+           so it isn't visually hidden behind the absolutely-positioned
+           checkout bar below it. */
+        .cart-footer { padding-bottom: 110px !important; }
         [data-theme="dark"] .cart-checkout-fixed { background: #0d1f2d !important; }
       }
 
