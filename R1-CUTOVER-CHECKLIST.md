@@ -139,21 +139,34 @@ The cart restyle currently lives **duplicated** in the
 CSS block lives in R1's `edit-overlay` between the comment `/* ═══════
 CART — Edit-look restyle ═══════ */` and the next non-cart rule.
 
-**Desktop / shared rules:**
+**Desktop / shared rules (verbatim from R1 overlay, with !important stripped):**
 
 ```css
-.cart-sidebar { width: 440px; right: -440px; border-radius: 16px 0 0 16px; box-shadow: -8px 0 32px rgba(26,58,82,0.12); background: var(--surface); border-left: 1px solid var(--draft-border); }
+.cart-sidebar {
+  width: 440px; right: -440px;
+  border-radius: 16px 0 0 16px;
+  box-shadow: -8px 0 32px rgba(26,58,82,0.12);
+  background: var(--surface);
+  border-left: 1px solid var(--draft-border);
+}
 .cart-sidebar.active { right: 0; }
 [data-theme="dark"] .cart-sidebar { box-shadow: -8px 0 32px rgba(0,0,0,0.4); }
 
 .cart-header { background: var(--primary); padding: 1rem 1.4rem; border-bottom: none; }
-.cart-header h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 1.25rem; letter-spacing: -0.01em; color: #fff; }
-.cart-header h2 span { font-family: 'Almarai', sans-serif; font-weight: 400; font-size: 0.95rem; opacity: 0.85; margin-left: 8px; }
+.cart-header h2 {
+  font-family: 'Cormorant Garamond', serif; font-weight: 400;
+  font-size: 1.25rem; letter-spacing: -0.01em; color: #fff;
+}
+.cart-header h2 span {
+  font-family: 'Almarai', sans-serif; font-weight: 400;
+  font-size: 0.95rem; opacity: 0.85; margin-left: 8px;
+}
 
 .cart-items {
-  padding: 0.6rem 1.4rem 0.4rem;     /* tightened — was 1.2rem 1.4rem 0.5rem */
-  /* Apple-style CSS scroll shadows — auto-appear at top/bottom when there's
-     overflowing content, auto-hide when reaching the boundaries. Pure CSS. */
+  padding: 0.6rem 1.4rem 0.4rem;
+  /* Apple-style scroll shadows (Lea Verou trick) — soft navy-tinted
+     shadows at top/bottom of the scrollable list. Auto-show on overflow,
+     auto-hide at boundaries. Pure CSS, no JS. */
   background:
     linear-gradient(var(--surface) 30%, rgba(255,255,255,0)) center top / 100% 30px no-repeat,
     linear-gradient(rgba(255,255,255,0), var(--surface) 70%) center bottom / 100% 30px no-repeat,
@@ -162,36 +175,66 @@ CART — Edit-look restyle ═══════ */` and the next non-cart rule.
   background-color: var(--surface);
   background-attachment: local, local, scroll, scroll;
 }
-/* Dark-mode variant uses transparent black instead of white covers */
+[data-theme="dark"] .cart-items {
+  /* Same scroll-shadow trick but with transparent black instead of white covers */
+  background:
+    linear-gradient(var(--surface) 30%, rgba(0,0,0,0)) center top / 100% 30px no-repeat,
+    linear-gradient(rgba(0,0,0,0), var(--surface) 70%) center bottom / 100% 30px no-repeat,
+    radial-gradient(farthest-side at 50% 0, rgba(0,0,0,0.35), transparent 70%) center top / 100% 12px no-repeat,
+    radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,0.35), transparent 70%) center bottom / 100% 12px no-repeat;
+  background-color: var(--surface);
+  background-attachment: local, local, scroll, scroll;
+}
 
-.cart-footer { background: var(--bg); border-top: 1px solid var(--draft-border); padding: 0.6rem 1.4rem; }    /* tightened — was 1.2rem 1.4rem */
+.cart-footer {
+  background: var(--bg); border-top: 1px solid var(--draft-border);
+  padding: 0.3rem 1.4rem;     /* tightened — was 1.2rem 1.4rem originally, then 0.6rem, now 0.3rem */
+}
 [data-theme="dark"] .cart-footer { background: #0d1f2d; }
 
-.cart-total { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 1.35rem; color: var(--draft-text); margin-bottom: 0.9rem; }
+.cart-total {
+  font-family: 'Cormorant Garamond', serif; font-weight: 400;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;     /* added to match Edit's heading pattern */
+  color: var(--draft-text);
+  margin-bottom: 0.9rem;
+}
 
+/* Stripe / guest checkout buttons — navy, UPPERCASE, Edit's .btn-buy pattern */
 .cart-sidebar #stripeBtn,
 .cart-sidebar #stripeBtnGuest {
   background: var(--primary); color: #fff; border-radius: 10px;
-  font-family: 'DM Sans', sans-serif; font-weight: 500; letter-spacing: 0.02em;
-  padding: 0.95rem 1rem; transition: filter .2s ease, transform .2s ease;
+  font-family: 'DM Sans', sans-serif; font-weight: 500;
+  letter-spacing: 0.08em;          /* Edit's btn-buy: 0.08em (was 0.02em) */
+  text-transform: uppercase;       /* Edit's btn-buy: uppercase */
+  padding: 0.95rem 1rem;
+  transition: filter .2s ease, transform .2s ease;
+}
+/* Arabic span inside the buttons — natural case, no letter-spacing */
+.cart-sidebar #stripeBtn .arabic-text,
+.cart-sidebar #stripeBtnGuest .arabic-text,
+.cart-sidebar #stripeBtn span[style*="Almarai"],
+.cart-sidebar #stripeBtnGuest span[style*="Almarai"] {
+  text-transform: none; letter-spacing: 0;
 }
 .cart-sidebar #stripeBtn:hover,
 .cart-sidebar #stripeBtnGuest:hover { filter: brightness(0.85); transform: translateY(-1px); }
 
-/* Cart item rows — horizontal flex, image | info | controls all in one row */
+/* Cart item rows — horizontal flex (image | info | controls one row) */
 .cart-items > div[id^="cartItem-"] {
   display: flex; align-items: center; gap: 12px;
-  padding: 0.6rem 0;     /* tightened — was 0.9rem 0 */
+  padding: 0.6rem 0;
   border-bottom: 1px solid var(--draft-border);
 }
 .cart-items > div[id^="cartItem-"] img.cart-item-image {
-  display: block;        /* unhide (was display:none inline default for production safety) */
+  display: block;       /* unhide (default is display:none inline for production safety) */
   width: 60px; height: 60px;
   object-fit: contain; background: #fff; border-radius: 8px; flex-shrink: 0;
-  margin-right: 0;       /* gap handles spacing */
-  border: 1px solid var(--draft-border);
+  margin-right: 0; border: 1px solid var(--draft-border);
 }
-.cart-items > div[id^="cartItem-"] strong { color: var(--draft-text); font-family: 'DM Sans', sans-serif; font-weight: 500; }
+.cart-items > div[id^="cartItem-"] strong {
+  color: var(--draft-text); font-family: 'DM Sans', sans-serif; font-weight: 500;
+}
 [data-theme="dark"] .cart-items > div[id^="cartItem-"] strong { color: var(--draft-text); }
 .cart-items > div[id^="cartItem-"] span[style*="#e07856"] { color: var(--accent); font-family: 'DM Sans', sans-serif; }
 .cart-items > div[id^="cartItem-"] span[style*="#888"] { color: var(--draft-muted); }
@@ -215,7 +258,41 @@ CART — Edit-look restyle ═══════ */` and the next non-cart rule.
 .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"]:hover { border-color: var(--accent); color: var(--accent); }
 .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] svg { width: 14px; height: 14px; }
 
-/* Attribute-selector overrides (kill the inline gradients/colors from app.min.js) */
+/* ─── OPTION C — Checkout pill (cream card with editorial Cormorant header) ─── */
+/* Outer wrapper of the cart-checkout-fixed content becomes the single white card. */
+.cart-checkout-fixed > div:first-child {
+  background: var(--surface);
+  border: 1px solid var(--draft-border);
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(26,58,82,0.08);
+  padding: 14px;
+  overflow: visible;
+}
+[data-theme="dark"] .cart-checkout-fixed > div:first-child {
+  background: var(--surface); border-color: rgba(255,255,255,0.10);
+}
+/* Both inner gradient children become transparent (let outer surface show). */
+.cart-checkout-fixed > div:first-child > div {
+  background: transparent; border-radius: 0; border: none; box-shadow: none;
+}
+/* Pay-by-Card label (first inner child) — Cormorant navy text + card icon. */
+.cart-checkout-fixed > div:first-child > div:first-child {
+  color: var(--primary);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-weight: 400; letter-spacing: -0.01em;
+  padding: 0 0 10px 0; text-align: center;
+}
+[data-theme="dark"] .cart-checkout-fixed > div:first-child > div:first-child { color: var(--draft-text); }
+.cart-checkout-fixed > div:first-child > div:first-child span {
+  font-family: 'Almarai', sans-serif; color: var(--draft-muted);
+  font-size: 0.78rem; opacity: 1; margin-left: 6px; font-weight: 400;
+}
+/* Buttons wrapper (second inner child) — no padding, transparent. */
+.cart-checkout-fixed > div:first-child > div:last-child { padding: 0; gap: 8px; }
+
+/* ─── Attribute-selector overrides (will be replaced with class selectors after JS patches) ─── */
+
+/* Override on the GUEST sign-up wrapper gradient — at migration, replace with .guest-checkout-wrapper class */
 .cart-sidebar [style*="linear-gradient(135deg, #2c4a5c"] {
   background: var(--bg); padding: 14px; border-radius: 12px;
   border: 1px solid var(--draft-border); box-shadow: none;
@@ -223,24 +300,46 @@ CART — Edit-look restyle ═══════ */` and the next non-cart rule.
 [data-theme="dark"] .cart-sidebar [style*="linear-gradient(135deg, #2c4a5c"] {
   background: #0d1f2d; border-color: rgba(255,255,255,0.10);
 }
+
+/* Override #2: Totals summary box (#f8f9fa) and ALL internal spacing. */
 .cart-sidebar [style*="background: #f8f9fa"],
-.cart-sidebar [style*="background:#f8f9fa"] { background: transparent; border: none; }
-/* Kill the inline padding-bottom on the buttons-row wrapper so buttons sit flush */
-.cart-sidebar [style*="padding: 2px 10px 8px"] { padding: 2px 10px 0; }
+.cart-sidebar [style*="background:#f8f9fa"] {
+  background: transparent; border: none;
+  padding: 0.15rem 0.75rem 0.125rem;
+}
+.cart-sidebar [style*="background: #f8f9fa"] > div {
+  padding-top: 0.05rem; padding-bottom: 0.05rem;
+}
+.cart-sidebar [style*="background: #f8f9fa"] > div[style*="border-top"] {
+  margin: 0.05rem 0; padding: 0;
+  border-top-color: var(--draft-border);
+}
+.cart-sidebar [style*="background: #f8f9fa"] > div:last-of-type {
+  padding-top: 0.1rem; padding-bottom: 0.05rem;
+}
 ```
 
 **Mobile media query (`@media (max-width: 514.56px)`):**
 
 ```css
-.cart-sidebar { width: 100%; right: -100%; border-radius: 0; top: 0; bottom: 0; height: auto; }
+.cart-sidebar {
+  width: 100%; right: -100%; border-radius: 0;
+  top: 0; bottom: 0; height: auto;     /* full-viewport positioning, NOT vh calc */
+}
 .cart-sidebar.active { right: 0; }
 .cart-checkout-fixed {
-  position: absolute; top: auto; bottom: 85px; left: 0; right: 0;
-  background: var(--bg); border-top: 1px solid var(--draft-border); border-bottom: none;
-  box-shadow: 0 -2px 8px rgba(26,58,82,0.08); z-index: 10;
-  padding: 10px 14px 0 14px;     /* no bottom padding so buttons touch mobile nav top */
+  position: absolute; top: auto; bottom: 85px;     /* 85px = mobile nav height */
+  left: 0; right: 0;
+  background: var(--bg);
+  border-top: 1px solid var(--draft-border); border-bottom: none;
+  box-shadow: 0 -2px 8px rgba(26,58,82,0.08);
+  z-index: 10;
+  padding: 10px 14px 0 14px;     /* no bottom padding so buttons touch nav top */
 }
-.cart-footer { padding-bottom: 220px; padding-top: 0.5rem; }    /* clears the absolute checkout bar */
+.cart-footer {
+  padding-bottom: 220px;     /* clears the absolute checkout bar */
+  padding-top: 0.25rem;
+}
 [data-theme="dark"] .cart-checkout-fixed { background: #0d1f2d; }
 ```
 
