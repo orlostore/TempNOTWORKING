@@ -914,13 +914,13 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         }
 
         /* cart-checkout-fixed holds Pay by Card / Sign in / As Guest on
-           mobile. Position it 95px above the cart-sidebar's bottom —
-           that's above the mobile bottom nav (~85px tall) plus ~10px
-           breathing room. */
+           mobile. Position its BOTTOM EDGE at exactly the mobile bottom
+           nav's TOP EDGE — touching, no gap. Mobile nav ≈ 85px tall, so
+           bottom: 85px from cart-sidebar bottom (which is at viewport bottom). */
         .cart-checkout-fixed {
           position: absolute !important;
           top: auto !important;
-          bottom: 95px !important;
+          bottom: 85px !important;
           left: 0 !important;
           right: 0 !important;
           background: var(--bg) !important;
@@ -930,10 +930,12 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           z-index: 10 !important;
           padding: 10px 14px !important;
         }
-        /* cart-footer extends to cart-sidebar bottom (viewport bottom),
-           but its content must clear: 95px (cart-checkout-fixed offset)
-           + ~120px (checkout bar height) + ~20px breathing = ~235px. */
-        .cart-footer { padding-bottom: 235px !important; }
+        /* Math for cart-footer padding-bottom:
+             85px  (cart-checkout-fixed bottom offset)
+           + 150px (cart-checkout-fixed visual height — label + buttons + padding)
+           + 35px  (breathing room so Total isn't tight against the bar)
+           = 270px */
+        .cart-footer { padding-bottom: 270px !important; }
         [data-theme="dark"] .cart-checkout-fixed { background: #0d1f2d !important; }
       }
 
