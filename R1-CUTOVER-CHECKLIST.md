@@ -188,3 +188,38 @@ These are NOT bugs to fix — they're intentional design decisions:
 | `styles.css` | LIVE | Shared stylesheet. Now centralises all `@font-face`. |
 | `app.min.js` | LIVE | Shared JS. Contains the **temporary patch** documented in §1.3. |
 | `R1-CUTOVER-CHECKLIST.md` | THIS FILE | Delete after cutover and Phases 2-4 done. |
+
+---
+
+## 6. Original 7-point SEO audit — resolution map
+
+Cross-reference of the seven SEO / technical regressions identified
+when first comparing `index.html` vs `draftnewindex.html`. Each row
+shows what we did about it and where to look in this checklist if
+there's still an action.
+
+| # | Original issue | Status | Where in this checklist |
+|---|---|---|---|
+| **1** | **Indexability** — draft `<title>` ("ORLO — Draft Preview") + `<meta name="robots" content="noindex,nofollow">` | 🟡 **Intentional draft state** — keep until cutover | §1.2 (revert at cutover) |
+| **2** | **Organization JSON-LD** weakened — `name` changed to "ORLO", `@id` / `legalName` / `alternateName` / `slogan` / Facebook `sameAs` all dropped, weaker `description` | ✅ **Fixed in R1** — full 8-field block restored verbatim, incl. Facebook `sameAs` and `@id` hook for future `BlogPosting` schemas on The Edit | §2 (don't revert) |
+| **3** | **UTM tracking script** — initially flagged as removed | ⚪ **False alarm** — script was actually present in the draft (my error in the original audit). No action ever needed; UTM capture into `sessionStorage.orlo_utm` works on both R1 and T&C | — |
+| **4** | **SEO content section** reduced from 5 paragraphs + bullets + `<strong>` keyword anchors → 1 short paragraph per language; ~100 fewer indexable words; "Why Shop at ORLO?" lost | ✅ **Fixed in R1** — full 5-paragraph English + 3-paragraph Arabic block restored, all `<strong>` tags back, "Why Shop at ORLO?" sub-heading and 4-bullet list per language back. Body uses DM Sans 16px / 1.85 line-height to match Edit reading rhythm | §2 (don't revert) |
+| **5** | **T&C restructure** — homepage `#terms` section with 5 `<h3>` cards deleted; only path to Shipping / Returns / Privacy / Exchange was a faded footer strip with `href="#"` calling JS modals; standalone `terms-and-conditions.html` page existed but was orphaned (no inbound links anywhere) | ✅ **Fixed across files** — orphan page restyled to match Edit (Cormorant headings, DM Sans body, full header/footer/cart, dark mode, back arrow, menu-active indicator); 5 anchor IDs added (`#shipping`, `#returns`, `#exchange`, `#privacy`, `#terms`); R1's footer strip + top-menu link now point to real `terms-and-conditions.html#anchor` URLs; mobile-menu Terms link also routes there via `app.min.js` patch | §2 (T&C page), §1.4 (Stripe/Meta URL updates at cutover) |
+| **6** | **Internal linking** — new "The Edit" teaser CTA added (`orlo-the-edit.html` link) | ✅ **Net positive** — kept as-is, gives Google a crawlable destination + drives content-marketing funnel | §2 (don't revert) |
+| **7** | **Third-party dependency** — Google Fonts CDN added for Cormorant Garamond + Spectral; extra DNS+TLS request, visitor IPs sent to Google | ✅ **Fixed for R1 + T&C** — all fonts now self-hosted in `/fonts/`, Google Fonts `<link>` removed from R1. Spectral dropped entirely; replaced with Cormorant for editorial leads + DM Sans for body to match The Edit's type system | 🟡 **Partial** — `orlo-the-edit.html` itself still loads Cormorant + DM Sans from Google CDN. See §3 Phase 3 to finish |
+
+### Items beyond the original 7 (added during the work)
+
+Several improvements were made beyond the original audit. Logging
+them here so the historical record is complete:
+
+| Addition | Status |
+|---|---|
+| Self-hosted **DM Sans** (3 weights) added to `styles.css` | ✅ live |
+| Self-hosted **Cormorant Garamond** (5 weights) added to `styles.css` | ✅ live |
+| Centralised `@font-face` declarations in `styles.css` (was: duplicated per-page) | ✅ live |
+| Dark-mode toggle persisted across R1 and T&C via `localStorage.orlo_draft_theme` | ✅ live |
+| `WebPage` JSON-LD on T&C linked to Organization `@id` | ✅ live |
+| Back arrow on T&C with `history.back()` smart-fallback | ✅ live |
+| Bottom-nav indicator defaults to Menu on T&C | ✅ live |
+| Mobile-menu (`toggleMobileMenu()`) homepage detection patched to recognise R1 | 🟡 temp — see §1.3 to revert at cutover |
