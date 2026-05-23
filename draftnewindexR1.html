@@ -789,6 +789,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         font-family: 'Cormorant Garamond', serif !important;
         font-weight: 400 !important;
         font-size: 1.35rem !important;
+        letter-spacing: -0.01em !important;
         color: var(--draft-text) !important;
         margin-bottom: 0.9rem !important;
       }
@@ -801,9 +802,20 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         border-radius: 10px !important;
         font-family: 'DM Sans', sans-serif !important;
         font-weight: 500 !important;
-        letter-spacing: 0.02em !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
         padding: 0.95rem 1rem !important;
         transition: filter .2s ease, transform .2s ease !important;
+      }
+      /* Keep the Arabic span inside the buttons in natural case
+         (Arabic has no case but text-transform inherits and
+         can affect rendering of the gap/letterspacing) */
+      .cart-sidebar #stripeBtn .arabic-text,
+      .cart-sidebar #stripeBtnGuest .arabic-text,
+      .cart-sidebar #stripeBtn span[style*="Almarai"],
+      .cart-sidebar #stripeBtnGuest span[style*="Almarai"] {
+        text-transform: none !important;
+        letter-spacing: 0 !important;
       }
       .cart-sidebar #stripeBtn:hover,
       .cart-sidebar #stripeBtnGuest:hover {
