@@ -928,14 +928,15 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           border-bottom: none !important;
           box-shadow: 0 -2px 8px rgba(26, 58, 82, 0.08) !important;
           z-index: 10 !important;
-          padding: 10px 14px !important;
+          padding: 10px 14px 0 14px !important;
         }
-        /* Math for cart-footer padding-bottom:
-             85px  (cart-checkout-fixed bottom offset)
-           + 150px (cart-checkout-fixed visual height — label + buttons + padding)
-           + 35px  (breathing room so Total isn't tight against the bar)
-           = 270px */
-        .cart-footer { padding-bottom: 270px !important; }
+        /* Kill the inline padding-bottom on the buttons-row wrapper so the
+           buttons themselves sit flush with the bottom of cart-checkout-fixed
+           = flush with the mobile nav top. */
+        .cart-sidebar [style*="padding: 2px 10px 8px"] {
+          padding: 2px 10px 0 !important;
+        }
+        .cart-footer { padding-bottom: 250px !important; }
         [data-theme="dark"] .cart-checkout-fixed { background: #0d1f2d !important; }
       }
 
