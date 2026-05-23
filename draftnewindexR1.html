@@ -855,6 +855,51 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       }
       .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] svg { width: 14px !important; height: 14px !important; }
 
+      /* Override #1: Guest sign-up wrapper gradient → cream card */
+      .cart-sidebar [style*="linear-gradient(135deg, #2c4a5c"] {
+        background: var(--bg) !important;
+        padding: 14px !important;
+        border-radius: 12px !important;
+        border: 1px solid var(--draft-border) !important;
+        box-shadow: none !important;
+      }
+      [data-theme="dark"] .cart-sidebar [style*="linear-gradient(135deg, #2c4a5c"] {
+        background: #0d1f2d !important;
+        border-color: rgba(255,255,255,0.10) !important;
+      }
+
+      /* Override #2: Totals summary box (#f8f9fa) → transparent on cream */
+      .cart-sidebar [style*="background: #f8f9fa"],
+      .cart-sidebar [style*="background:#f8f9fa"] {
+        background: transparent !important;
+        border: none !important;
+      }
+
+      /* Override #3: Vertical cart-item layout — image left, info right, controls below */
+      .cart-items > div[id^="cartItem-"] {
+        display: grid !important;
+        grid-template-columns: 60px 1fr !important;
+        grid-template-areas: "img info" "ctrl ctrl" !important;
+        gap: 0.5rem 0.85rem !important;
+        align-items: start !important;
+        justify-content: stretch !important;
+      }
+      .cart-items > div[id^="cartItem-"] img.cart-item-image {
+        grid-area: img !important;
+        margin-right: 0 !important;
+        margin-top: 2px !important;
+      }
+      .cart-items > div[id^="cartItem-"] > div:nth-of-type(1) {
+        grid-area: info !important;
+        flex: none !important;
+      }
+      .cart-items > div[id^="cartItem-"] > div:nth-of-type(2) {
+        grid-area: ctrl !important;
+        justify-content: flex-start !important;
+        gap: 6px !important;
+        margin-top: 4px !important;
+      }
+
       /* Mobile: pin checkout-fixed to BOTTOM of cart (was sticky-top) */
       @media (max-width: 514.56px) {
         .cart-sidebar {

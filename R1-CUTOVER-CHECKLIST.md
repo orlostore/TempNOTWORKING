@@ -166,6 +166,32 @@ Migration steps:
       patch in `app.min.js`'s cart item template (with the `clean.webp`
       finder IIFE) is good logic — leave it. Just confirm it's still
       there after any future minifier passes.
+- [ ] **Guest sign-up wrapper gradient** — currently overridden via
+      `[style*="linear-gradient(135deg, #2c4a5c"]` attribute selector
+      with `!important`. Migration: find the inline
+      `style="...background: linear-gradient(135deg, #2c4a5c, #1e3545); padding: 2px 10px 8px;"`
+      in `app.min.js`, replace with `class="guest-checkout-wrapper"`
+      (with no inline background). Then add a clean
+      `.guest-checkout-wrapper { background: var(--bg); padding: 14px;
+      border-radius: 12px; border: 1px solid rgba(26,58,82,0.10); }`
+      block in `styles.css`. Drop the attribute selector from the
+      migrated CSS.
+- [ ] **Totals summary box** (`#f8f9fa` background) — currently
+      overridden via `[style*="background: #f8f9fa"]`. Migration: find
+      the inline `style="background: #f8f9fa; border-radius: 8px;"`
+      that wraps the Subtotal / Delivery / Total rows in `app.min.js`,
+      replace the inline background with `class="cart-summary"` (keep
+      the border-radius via the class). Add a clean `.cart-summary`
+      rule in `styles.css` (background transparent or inherit). Drop
+      the attribute selector from the migrated CSS.
+- [ ] **Vertical cart-item layout** (image left, info right, controls
+      below) — implemented in overlays as `display: grid !important`
+      with `grid-template-areas: "img info" "ctrl ctrl"`. Migration:
+      this grid layout BECOMES the new default for `.cart-items > div`
+      in `styles.css`. Strip the `!important`s. Existing `display:flex`
+      in the inline style on the cart item div (set by `app.min.js`)
+      will need to be removed (or wrapped in a class) so the new grid
+      can apply without overrides.
 
 Estimated migration effort: 30–45 minutes of mechanical edits.
 
