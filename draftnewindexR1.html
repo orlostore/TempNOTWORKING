@@ -871,12 +871,26 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         border-color: rgba(255,255,255,0.10) !important;
       }
 
-      /* Override #2: Totals summary box (#f8f9fa) → transparent + halve padding */
+      /* Override #2: Totals summary box (#f8f9fa) → transparent + halve all internal spacing */
       .cart-sidebar [style*="background: #f8f9fa"],
       .cart-sidebar [style*="background:#f8f9fa"] {
         background: transparent !important;
         border: none !important;
         padding: 0.15rem 0.75rem 0.125rem !important;
+      }
+      /* Subtotal / Delivery row padding (was 0.15rem 0) */
+      .cart-sidebar [style*="padding: 0.15rem 0;"] {
+        padding: 0.05rem 0 !important;
+      }
+      /* Divider between Delivery and Total (margin was 0.2rem 0 mobile / 0.3rem 0 desktop) */
+      .cart-sidebar [style*="border-top: 2px solid #ddd"] {
+        margin: 0.05rem 0 !important;
+        border-top-color: var(--draft-border) !important;
+      }
+      /* Total row padding (was 0.25rem 0 0.1rem mobile / 0.4rem 0 0.2rem desktop) */
+      .cart-sidebar [style*="padding: 0.25rem 0 0.1rem"],
+      .cart-sidebar [style*="padding: 0.4rem 0 0.2rem"] {
+        padding: 0.1rem 0 0.05rem !important;
       }
 
       /* Override #3: Horizontal cart-item layout — image | info | controls
