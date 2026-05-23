@@ -903,9 +903,12 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         }
         /* Cart-sidebar must end EXACTLY at the top of the mobile bottom nav.
            Mobile nav is ~80-85px tall (with home-indicator safe area).
-           Going shorter than that exposes the page behind the cart-footer
-           area. Use 85px for tight fit, no page-behind gap. */
-        .cart-sidebar { height: calc(100vh - 85px) !important; }
+           Use 100dvh (dynamic viewport height) — adjusts as Chrome's URL
+           bar hides/shows on scroll. 100vh fallback for older browsers. */
+        .cart-sidebar {
+          height: calc(100vh - 85px) !important;
+          height: calc(100dvh - 85px) !important;
+        }
 
         /* cart-checkout-fixed holds Pay by Card / Sign in / As Guest on
            mobile (set by app.min.js). Pin it absolutely 25px above the
