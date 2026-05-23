@@ -225,6 +225,7 @@
       }
 
       .cart-items img.cart-item-image {
+        display: block !important;
         width: 60px !important;
         height: 60px !important;
         object-fit: contain !important;
@@ -641,7 +642,7 @@
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="app.min.js?v=22" defer></script>
+<script src="app.min.js?v=23" defer></script>
 <script>
 function updateAccountLink() {
     const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');

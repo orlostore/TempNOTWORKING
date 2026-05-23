@@ -162,10 +162,16 @@ Migration steps:
 - [ ] **Delete dead CSS**: `.checkout-btn.whatsapp-btn` rules in
       styles.css are unused — no `<button class="whatsapp-btn">` is
       ever rendered. Remove them.
-- [ ] **Image rendering stays as-is**: the `<img class="cart-item-image">`
-      patch in `app.min.js`'s cart item template (with the `clean.webp`
-      finder IIFE) is good logic — leave it. Just confirm it's still
-      there after any future minifier passes.
+- [ ] **Cart-item image — flip the default**. The `<img class="cart-item-image">`
+      element is currently rendered with inline `style="display:none"` so
+      it stays invisible on production `index.html`; R1 and T&C overlays
+      override with `display: block !important`. At cutover, when R1 IS
+      the new index.html, we WANT the image visible everywhere. Steps:
+      remove the inline `style="display:none"` from the cart-item template
+      in `app.min.js`; lift the full `.cart-items img.cart-item-image`
+      rule (without the `display: block !important`, just the size /
+      background / border properties) into `styles.css` as the new global
+      default. Drop the `!important`s.
 - [ ] **Guest sign-up wrapper gradient** — currently overridden via
       `[style*="linear-gradient(135deg, #2c4a5c"]` attribute selector
       with `!important`. Migration: find the inline

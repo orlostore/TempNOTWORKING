@@ -40,7 +40,7 @@
     <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="products.min.js?v=11" as="script">
-    <link rel="preload" href="app.min.js?v=22" as="script">
+    <link rel="preload" href="app.min.js?v=23" as="script">
     <!-- Type system: DM Sans body + Cormorant Garamond headings (self-hosted; declarations live in styles.css) -->
     <link rel="preload" href="/fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/dm-sans-v17-latin-500.woff2" as="font" type="font/woff2" crossorigin>
@@ -807,8 +807,11 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         color: var(--draft-muted) !important;
       }
 
-      /* Cart product image — styled here, rendered by patched app.min.js */
+      /* Cart product image — hidden by default in app.min.js (display:none
+         inline so it doesn't render on production), unhidden + styled here
+         so it's visible only on R1 and T&C. */
       .cart-items img.cart-item-image {
+        display: block !important;
         width: 60px !important;
         height: 60px !important;
         object-fit: contain !important;
@@ -1437,7 +1440,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="app.min.js?v=22" defer></script>
+<script src="app.min.js?v=23" defer></script>
 <script>
 // Logic for Account Link and Indicator positioning (same as your original)
 function updateAccountLink() {
