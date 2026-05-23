@@ -253,14 +253,14 @@ Migration steps:
       the border-radius via the class). Add a clean `.cart-summary`
       rule in `styles.css` (background transparent or inherit). Drop
       the attribute selector from the migrated CSS.
-- [ ] **Vertical cart-item layout** (image left, info right, controls
-      below) — implemented in overlays as `display: grid !important`
-      with `grid-template-areas: "img info" "ctrl ctrl"`. Migration:
-      this grid layout BECOMES the new default for `.cart-items > div`
-      in `styles.css`. Strip the `!important`s. Existing `display:flex`
-      in the inline style on the cart item div (set by `app.min.js`)
-      will need to be removed (or wrapped in a class) so the new grid
-      can apply without overrides.
+- [ ] **Horizontal cart-item layout** — implemented in overlays as
+      `display: flex !important; align-items: center; gap: 12px;`. This
+      matches the original flex layout from `app.min.js` but with cleaner
+      gap/align values. Migration: lift the rule into `styles.css`. The
+      inline `display: flex` from `app.min.js` already matches; just
+      need to harmonise the inline `gap: 0.3rem` etc. with the new
+      values (or strip the inline gap so the class wins without
+      `!important`).
 - [ ] **Mobile checkout bar positioning** — `app.min.js` puts the
       Pay-by-Card / Sign-in / As-Guest HTML into `#cartCheckoutFixed`
       on mobile (NOT into `.cart-footer`). The overlay positions that
