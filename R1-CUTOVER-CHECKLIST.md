@@ -150,7 +150,19 @@ CART — Edit-look restyle ═══════ */` and the next non-cart rule.
 .cart-header h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 1.25rem; letter-spacing: -0.01em; color: #fff; }
 .cart-header h2 span { font-family: 'Almarai', sans-serif; font-weight: 400; font-size: 0.95rem; opacity: 0.85; margin-left: 8px; }
 
-.cart-items { padding: 0.6rem 1.4rem 0.4rem; }     /* tightened — was 1.2rem 1.4rem 0.5rem */
+.cart-items {
+  padding: 0.6rem 1.4rem 0.4rem;     /* tightened — was 1.2rem 1.4rem 0.5rem */
+  /* Apple-style CSS scroll shadows — auto-appear at top/bottom when there's
+     overflowing content, auto-hide when reaching the boundaries. Pure CSS. */
+  background:
+    linear-gradient(var(--surface) 30%, rgba(255,255,255,0)) center top / 100% 30px no-repeat,
+    linear-gradient(rgba(255,255,255,0), var(--surface) 70%) center bottom / 100% 30px no-repeat,
+    radial-gradient(farthest-side at 50% 0, rgba(26,58,82,0.18), transparent 70%) center top / 100% 12px no-repeat,
+    radial-gradient(farthest-side at 50% 100%, rgba(26,58,82,0.18), transparent 70%) center bottom / 100% 12px no-repeat;
+  background-color: var(--surface);
+  background-attachment: local, local, scroll, scroll;
+}
+/* Dark-mode variant uses transparent black instead of white covers */
 
 .cart-footer { background: var(--bg); border-top: 1px solid var(--draft-border); padding: 0.6rem 1.4rem; }    /* tightened — was 1.2rem 1.4rem */
 [data-theme="dark"] .cart-footer { background: #0d1f2d; }
