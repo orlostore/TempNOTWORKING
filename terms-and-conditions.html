@@ -321,11 +321,11 @@
           right: -100% !important;
           border-radius: 0 !important;
         }
-        /* Bigger bottom buffer for cart-sidebar — the base styles.css uses
-           calc(100vh - 70px) but the actual mobile bottom nav is ~80–85px
-           tall on devices with home-indicator safe area. Bumping to 90px
-           lets the cart-sidebar end with breathing room above the nav. */
-        .cart-sidebar { height: calc(100vh - 90px) !important; }
+        /* Bigger bottom buffer for cart-sidebar — base is calc(100vh - 70px)
+           which clipped the bottom of the checkout buttons. 90px wasn't
+           enough either (buttons touched the nav). 115px gives the
+           checkout buttons clear breathing room above the mobile nav. */
+        .cart-sidebar { height: calc(100vh - 115px) !important; }
 
         /* cart-checkout-fixed holds Pay by Card / Sign in / As Guest on
            mobile (set by app.min.js). Pin it absolutely to the bottom of
