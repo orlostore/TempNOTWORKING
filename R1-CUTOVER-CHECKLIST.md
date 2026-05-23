@@ -198,6 +198,17 @@ Migration steps:
       in the inline style on the cart item div (set by `app.min.js`)
       will need to be removed (or wrapped in a class) so the new grid
       can apply without overrides.
+- [ ] **Mobile cart wraps around bottom-nav** — at `<=514.56px` the
+      overlay sets `.cart-sidebar.active { height: 100vh; }` and
+      `.cart-footer { padding-bottom: 80px; }`. This lets the cart
+      extend behind the fixed mobile bottom nav while the cart-footer's
+      checkout content stays 80px above the screen bottom (~70px nav
+      + 10px breathing room). Migration: lift these into `styles.css`'s
+      `@media (max-width:514.56px)` block, replacing the current
+      `.cart-sidebar { height: calc(100vh - 70px); }`. Drop the
+      `!important`s. Rationale: the calc-minus-70 model clips footer
+      content; the padding-bottom model gives content room without
+      hiding the nav.
 
 Estimated migration effort: 30–45 minutes of mechanical edits.
 

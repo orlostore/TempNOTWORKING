@@ -321,6 +321,10 @@
           right: -100% !important;
           border-radius: 0 !important;
         }
+        /* Cart wraps around the mobile bottom nav: full viewport height,
+           with padding-bottom on cart-footer leaving room above the nav */
+        .cart-sidebar.active { height: 100vh !important; }
+        .cart-footer { padding-bottom: 80px !important; }
         .cart-checkout-fixed {
           position: sticky !important;
           top: auto !important;
