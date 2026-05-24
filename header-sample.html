@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Header Sample — Hermès-inspired ORLO</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52;min-height:100vh;font-variant-numeric:lining-nums}
+.label{padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10)}
+.label .sub{font-family:'DM Sans',sans-serif;font-style:normal;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px}
+
+/* ===== OPTION A — minimal Hermès-style (logo left, icons right) ===== */
+.opt-title{padding:18px 32px 8px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;color:#1a3a52;max-width:1280px;margin:0 auto}
+.opt-title .desc{font-family:'DM Sans',sans-serif;font-style:normal;font-size:0.7rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:10px}
+
+.hdr{background:#fff;border-bottom:1px solid rgba(26,58,82,0.10)}
+.hdr-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;gap:24px}
+.hdr-logo img{height:42px;width:auto;display:block}
+.hdr-nav{display:flex;align-items:center;gap:30px;flex:1;justify-content:center}
+.hdr-nav a{font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:#1a3a52;text-decoration:none;font-weight:500;transition:color .2s}
+.hdr-nav a:hover{color:#e76f51}
+.hdr-icons{display:flex;align-items:center;gap:18px;flex-shrink:0}
+.hdr-ico-btn{background:none;border:none;cursor:pointer;color:#1a3a52;padding:6px;display:flex;align-items:center;transition:color .2s;position:relative}
+.hdr-ico-btn:hover{color:#e76f51}
+.hdr-ico-btn svg{width:20px;height:20px;display:block}
+.hdr-cart-count{position:absolute;top:-2px;right:-2px;background:#e76f51;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.55rem;font-weight:500;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.hdr-login{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:#1a3a52;text-decoration:none;font-weight:500;transition:color .2s;padding:6px 0}
+.hdr-login:hover{color:#e76f51}
+.hdr-login .ar{display:block;font-family:'Almarai',sans-serif;text-transform:none;letter-spacing:0;font-size:0.6rem;color:#6b6b6b;font-weight:400;margin-top:2px}
+
+/* Mobile layout */
+@media(max-width:780px){
+  .hdr-inner{padding:12px 16px;gap:10px}
+  .hdr-nav{display:none}
+  .hdr-logo img{height:34px}
+  .hdr-icons{gap:14px}
+  .hdr-mobile-menu{display:flex;background:none;border:none;cursor:pointer;color:#1a3a52;padding:6px;align-items:center}
+  .hdr-mobile-menu svg{width:22px;height:22px}
+  .hdr-login .ar{display:none}
+}
+@media(min-width:781px){
+  .hdr-mobile-menu{display:none}
+}
+
+/* Frame to show preview */
+.preview-frame{background:#f8f6f2;padding:30px 0 60px;border-top:1px solid rgba(26,58,82,0.08)}
+.preview-hero{padding:48px 24px;max-width:1280px;margin:0 auto}
+.preview-hero .eyebrow{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:10px;display:block}
+.preview-hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,5vw,56px);line-height:0.95;letter-spacing:-0.02em;color:#1a3a52}
+.preview-hero h1 em{color:#e76f51;font-style:italic;font-weight:400}
+
+/* Current ORLO header for comparison */
+.current-frame{background:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(26,58,82,0.10);max-width:none}
+.current-logo img{height:46px}
+.current-search{flex:1;max-width:500px;margin:0 20px;display:flex;background:#f8f9fa;border:1px solid #e5e5e5;border-radius:6px}
+.current-search input{flex:1;border:none;background:transparent;padding:8px 12px;font-size:0.85rem;outline:none}
+.current-search button{background:#1a3a52;color:#fff;border:none;padding:0 14px;cursor:pointer;border-radius:0 5px 5px 0}
+.current-search svg{width:14px;height:14px;display:block}
+.current-nav{display:flex;gap:18px;align-items:center}
+.current-nav a{font-size:0.75rem;color:#1a3a52;text-decoration:none}
+.current-cart{background:#1a3a52;color:#fff;padding:8px 12px;border-radius:6px;font-size:0.75rem;position:relative;cursor:pointer}
+.current-cart-count{background:#e76f51;color:#fff;font-size:0.55rem;border-radius:50%;width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;margin-left:6px}
+@media(max-width:780px){
+  .current-search,.current-nav{display:none}
+}
+</style></head>
+<body>
+
+<div class="label">Header Sample<span class="sub">Hermès-inspired ORLO — logo left, nav row, search icon, no person icon</span></div>
+
+<!-- =============== PROPOSED HEADER =============== -->
+<div class="opt-title">Proposed<span class="desc">Hermès-inspired, logo left, search collapsed to icon, nav in row</span></div>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <!-- Left: Logo -->
+    <a href="/" class="hdr-logo"><img src="logo.png" alt="ORLO"></a>
+
+    <!-- Center: Nav links (desktop only) -->
+    <nav class="hdr-nav">
+      <a href="#shop">Shop</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="#terms">Terms</a>
+    </nav>
+
+    <!-- Right: Icons + Login -->
+    <div class="hdr-icons">
+      <button class="hdr-ico-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <a href="login.html" class="hdr-login">
+        Login
+        <span class="ar">دخول</span>
+      </a>
+      <button class="hdr-ico-btn" aria-label="Bag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        <span class="hdr-cart-count">1</span>
+      </button>
+      <!-- Mobile menu (only visible ≤780px) -->
+      <button class="hdr-mobile-menu" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="preview-frame">
+  <section class="preview-hero">
+    <div class="eyebrow">Shop</div>
+    <h1>The <em>collection.</em></h1>
+  </section>
+</div>
+
+<!-- =============== CURRENT HEADER FOR COMPARISON =============== -->
+<div class="opt-title">Current<span class="desc">For reference — what's live now</span></div>
+
+<header class="current-frame">
+  <div class="current-logo"><img src="logo.png" alt="ORLO"></div>
+  <div class="current-search">
+    <input type="text" placeholder="Search products... | البحث عن منتجات...">
+    <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+  </div>
+  <nav class="current-nav">
+    <a href="#">Shop</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="#">Terms</a>
+    <a href="#">Login</a>
+  </nav>
+  <div class="current-cart">🛒 Cart <span class="current-cart-count">1</span></div>
+</header>
+
+</body></html>
