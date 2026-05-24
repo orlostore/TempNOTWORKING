@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Product Card 2 — Magazine card</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1a1a1a;min-height:100vh;padding:0;margin:0;font-variant-numeric:lining-nums}
+.option-label{padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10)}
+.option-label .sub{font-family:'DM Sans',sans-serif;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px}
+.nav{padding:14px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(26,58,82,0.10);background:#fff}
+.lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.lockup .logo-img{height:36px;width:auto;display:block;flex-shrink:0}
+.lockup .sep{display:inline-block;width:1px;height:24px;background:rgba(26,58,82,0.25)}
+.lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.3rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.lockup .wordmark span{color:#e76f51}
+.hero{padding:48px 32px 24px;max-width:1280px;margin:0 auto}
+.hero .eyebrow{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:10px;display:block}
+.hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,5vw,56px);line-height:0.95;letter-spacing:-0.02em;color:#1a3a52}
+.hero h1 em{color:#e76f51;font-style:italic;font-weight:400}
+.shop-body{padding:32px 32px 80px;max-width:1280px;margin:0 auto}
+
+/* MAGAZINE CARD — cream card, Cormorant italic name */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px}
+.card{background:#fff;border:1px solid rgba(26,58,82,0.08);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .25s, transform .25s}
+.card:hover{border-color:rgba(231,111,81,0.30);transform:translateY(-2px)}
+.card-img{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#eee}
+.card-img > div{width:100%;height:100%}
+.card-img .badge{position:absolute;top:12px;left:12px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.78rem;color:#e76f51;background:transparent;padding:0;font-weight:400}
+.card-img .badge.oos{color:#9aa5ad}
+.card-info{padding:16px 18px;display:flex;flex-direction:column;flex:1}
+.card-category{font-family:'DM Sans',sans-serif;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:#9aa5ad;margin-bottom:8px;font-weight:500}
+.card-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:#1a3a52;line-height:1.25;margin-bottom:2px;letter-spacing:-0.005em}
+.card-name-ar{font-family:'Almarai',sans-serif;font-size:0.78rem;color:#9aa5ad;direction:rtl;margin-bottom:10px}
+.card-foot{display:flex;justify-content:space-between;align-items:baseline;margin-top:auto;padding-top:8px}
+.card-price{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#1a3a52}
+.card-add{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:#e76f51;font-weight:500;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;opacity:0;transition:opacity .2s}
+.card:hover .card-add{opacity:1}
+.card.oos .card-name,.card.oos .card-price{color:#9aa5ad}
+.card.oos:hover{border-color:rgba(26,58,82,0.08);transform:none}
+
+@media(max-width:680px){
+  .products-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .card-add{opacity:1}
+  .hero{padding:32px 20px 16px}
+  .shop-body{padding:20px 20px 60px}
+}
+</style></head>
+<body>
+<div class="option-label">Product Card 2<span class="sub">Magazine card — cream + Cormorant italic name + coral hover</span></div>
+<nav class="nav">
+  <a href="/" class="lockup">
+    <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+    <span class="sep"></span>
+    <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+  </a>
+</nav>
+<section class="hero">
+  <div class="eyebrow">Shop</div>
+  <h1>The <em>collection.</em></h1>
+</section>
+<section class="shop-body">
+  <div class="products-grid">
+    <div class="card">
+      <div class="card-img"><div style="background:linear-gradient(135deg,#d4a373,#b87f48)"></div><span class="badge">Best seller</span></div>
+      <div class="card-info"><div class="card-category">Telephones</div><div class="card-name">Vintage Rotary Telephone</div><div class="card-name-ar">هاتف قديم بقرص دوّار</div><div class="card-foot"><div class="card-price">AED 285</div><a href="#" class="card-add">Add +</a></div></div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div style="background:linear-gradient(135deg,#1a3a52,#0f2638)"></div></div>
+      <div class="card-info"><div class="card-category">Accessories</div><div class="card-name">Silktie · Black</div><div class="card-name-ar">سيلكتاي · أسود</div><div class="card-foot"><div class="card-price">AED 140</div><a href="#" class="card-add">Add +</a></div></div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div style="background:linear-gradient(135deg,#8a9a5b,#5d6b3e)"></div></div>
+      <div class="card-info"><div class="card-category">Gifts</div><div class="card-name">Dangling Buddies — Set of 3</div><div class="card-name-ar">دانغلينغ بادي · مجموعة من ٣</div><div class="card-foot"><div class="card-price">AED 95</div><a href="#" class="card-add">Add +</a></div></div>
+    </div>
+    <div class="card oos">
+      <div class="card-img"><div style="background:linear-gradient(135deg,#c4a484,#8b6f47)"></div><span class="badge oos">Out of stock</span></div>
+      <div class="card-info"><div class="card-category">Cables</div><div class="card-name">FlexiWrap — Multicolor</div><div class="card-name-ar">فلكسي راب · متعدد الألوان</div><div class="card-foot"><div class="card-price">AED 76</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div style="background:linear-gradient(135deg,#9c8472,#6b563f)"></div></div>
+      <div class="card-info"><div class="card-category">Desk</div><div class="card-name">Aesthetic Desk Mat</div><div class="card-name-ar">سجاد مكتب جمالي</div><div class="card-foot"><div class="card-price">AED 175 or less</div><a href="#" class="card-add">Options →</a></div></div>
+    </div>
+    <div class="card">
+      <div class="card-img"><div style="background:linear-gradient(135deg,#e8d5a3,#c4a36c)"></div></div>
+      <div class="card-info"><div class="card-category">Cables</div><div class="card-name">Cable Manager Pro</div><div class="card-name-ar">منظّم كابلات احترافي</div><div class="card-foot"><div class="card-price">AED 52</div><a href="#" class="card-add">Add +</a></div></div>
+    </div>
+  </div>
+</section>
+</body></html>
