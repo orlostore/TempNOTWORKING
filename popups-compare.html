@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Popups — Original vs Proposed</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a3a52;font-family:'DM Sans',sans-serif;color:#fff;min-height:100vh;padding:24px 20px 60px}
+.option-label{padding:10px 20px;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#fff;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.15);border-radius:10px;margin-bottom:32px;max-width:600px;margin-left:auto;margin-right:auto}
+.option-label .sub{display:block;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-top:4px;font-style:normal}
+
+.audit{max-width:600px;margin:0 auto 36px;padding:18px 24px;background:rgba(0,0,0,0.3);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.85);line-height:1.7}
+.audit strong{color:#fff;font-weight:500}
+.audit b{color:#e76f51;font-weight:500}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1100px;margin:0 auto 40px;align-items:start}
+.col{padding:14px}
+.col-label{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-weight:500;margin-bottom:14px;text-align:center}
+.col.before .col-label{color:rgba(255,255,255,0.6)}
+.col.after .col-label{color:#e76f51}
+
+/* ────────────────────────────────────────
+   ORIGINAL STYLES (lifted from styles.css)
+   ──────────────────────────────────────── */
+.orig-modal{background:#fff;border-radius:14px;padding:28px 28px 22px;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2);font-family:'Inter',system-ui,sans-serif;color:#222}
+.orig-modal-icon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px}
+.orig-modal-icon.warn{background:#fff3cd;color:#856404}
+.orig-modal-icon.danger{background:#f8d7da;color:#721c24}
+.orig-modal-icon.info{background:#cfe2ff;color:#084298}
+.orig-modal h3{font-size:1.15rem;font-weight:600;margin-bottom:10px;color:#212529}
+.orig-modal p{font-size:0.9rem;color:#666;line-height:1.55;margin-bottom:22px}
+.orig-modal input{width:100%;padding:10px 12px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:0.9rem;margin-bottom:16px;font-family:inherit}
+.orig-modal-actions{display:flex;gap:10px}
+.orig-modal-actions button{flex:1;padding:11px 14px;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;border:none;font-family:inherit}
+.orig-btn-cancel{background:#f0f0f0;color:#666}
+.orig-btn-primary{background:linear-gradient(135deg,#e07856,#c96644);color:#fff}
+.orig-btn-danger{background:#dc3545;color:#fff}
+
+.orig-toast{position:relative;display:flex;align-items:flex-start;gap:10px;background:#fff;padding:14px 32px 14px 14px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.18);font-family:'Inter',system-ui,sans-serif;color:#222;max-width:380px;overflow:hidden}
+.orig-toast-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;color:#fff}
+.orig-toast-icon.success{background:#2db86d}
+.orig-toast-icon.error{background:#dc3545}
+.orig-toast-icon.warning{background:#f0a020;color:#fff}
+.orig-toast-title{font-size:14px;font-weight:600;color:#222;margin-bottom:2px}
+.orig-toast-msg{font-size:12px;color:#777;line-height:1.45}
+.orig-toast-close{position:absolute;top:10px;right:10px;background:0;border:0;color:#bbb;cursor:pointer;font-size:18px;line-height:1;padding:2px}
+.orig-toast-progress{position:absolute;bottom:0;left:0;height:3px;width:60%;background:#2db86d;border-radius:0 0 10px 10px}
+
+/* ────────────────────────────────────────
+   PROPOSED EDITORIAL STYLES
+   ──────────────────────────────────────── */
+.new-modal{background:#fff;border-radius:14px;padding:32px 32px 24px;max-width:420px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.18);font-family:'DM Sans',sans-serif;color:#1a1a1a;border:1px solid rgba(26,58,82,0.08)}
+.new-modal h3{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.6rem;color:#1a3a52;margin-bottom:10px;letter-spacing:-0.005em}
+.new-modal p{font-family:'DM Sans',sans-serif;font-size:0.92rem;color:#6b6b6b;line-height:1.6;margin-bottom:24px;max-width:340px;margin-left:auto;margin-right:auto}
+.new-modal input{width:100%;padding:12px 0;font-family:'DM Sans',sans-serif;font-size:1rem;background:transparent;border:none;border-bottom:1px solid rgba(26,58,82,0.20);color:#1a1a1a;outline:none;margin-bottom:24px;text-align:center;letter-spacing:0.12em;text-transform:uppercase}
+.new-modal input::placeholder{color:#a8a8a8;letter-spacing:0;text-transform:none}
+.new-modal-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.new-modal-actions button{padding:13px 24px;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;cursor:pointer;border:none;transition:filter .2s,transform .2s,background .2s,color .2s}
+.new-btn-cancel{background:transparent;color:#6b6b6b;border:1px solid rgba(26,58,82,0.20)}
+.new-btn-cancel:hover{background:#fbf6f3}
+.new-btn-primary{background:#1a3a52;color:#fff}
+.new-btn-primary:hover{filter:brightness(0.85);transform:translateY(-1px)}
+.new-btn-danger{background:transparent;color:#dc3545;border:1px solid rgba(220,53,69,0.40)}
+.new-btn-danger:hover{background:#dc3545;color:#fff}
+
+.new-toast{position:relative;display:flex;align-items:flex-start;gap:14px;background:#fff;padding:16px 38px 16px 18px;border-radius:12px;box-shadow:0 12px 36px rgba(26,58,82,0.18);font-family:'DM Sans',sans-serif;color:#1a1a1a;max-width:400px;overflow:hidden;border-left:3px solid #e76f51;border-top:1px solid rgba(26,58,82,0.08);border-right:1px solid rgba(26,58,82,0.08);border-bottom:1px solid rgba(26,58,82,0.08)}
+.new-toast.success{border-left-color:#5a9e3d}
+.new-toast.error{border-left-color:#dc3545}
+.new-toast.warning{border-left-color:#e76f51}
+.new-toast-icon{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.new-toast-icon svg{width:22px;height:22px;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.new-toast.success .new-toast-icon svg{stroke:#5a9e3d}
+.new-toast.error .new-toast-icon svg{stroke:#dc3545}
+.new-toast.warning .new-toast-icon svg{stroke:#e76f51}
+.new-toast-body{flex:1;min-width:0}
+.new-toast-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.1rem;color:#1a3a52;margin-bottom:2px;letter-spacing:-0.005em}
+.new-toast-msg{font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#6b6b6b;line-height:1.5}
+.new-toast-close{position:absolute;top:10px;right:10px;background:0;border:0;color:#9aa5ad;cursor:pointer;padding:4px;line-height:1;transition:color .2s}
+.new-toast-close svg{width:14px;height:14px;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.new-toast-close:hover{color:#1a3a52}
+.new-toast-progress{position:absolute;bottom:0;left:0;height:2px;width:60%;background:#5a9e3d;border-radius:0 0 12px 12px}
+.new-toast.error .new-toast-progress{background:#dc3545}
+.new-toast.warning .new-toast-progress{background:#e76f51}
+
+@media (max-width:680px){
+  .row{grid-template-columns:1fr;gap:36px}
+  .col{padding:0}
+}
+</style></head>
+<body>
+
+<div class="option-label">Popups — Original vs Proposed<span class="sub">Logout · cancel · delete · toast notifications</span></div>
+
+<div class="audit">
+  <strong>Usage audit</strong><br>
+  <b>3 orloConfirm</b> calls — logout, cancelOrder, deleteAddress (all in account.html)<br>
+  <b>1 orloPrompt</b> call — deleteAccount (account.html, DELETE confirmation)<br>
+  <b>21 orloToast</b> calls — site-wide (success/error/warning notifications)<br>
+  Total: <b>25 popup interactions</b>. All defined in app.js + styled in styles.css. One CSS change → all popups update site-wide.
+</div>
+
+<!-- ROW 1: Confirm popup -->
+<div class="row">
+  <div class="col before">
+    <div class="col-label">Original — orloConfirm</div>
+    <div class="orig-modal">
+      <div class="orig-modal-icon warn">⚠️</div>
+      <h3>Logout</h3>
+      <p>Are you sure you want to logout?<br>هل أنت متأكد أنك تريد تسجيل الخروج؟</p>
+      <div class="orig-modal-actions">
+        <button class="orig-btn-cancel">Stay</button>
+        <button class="orig-btn-primary">Logout</button>
+      </div>
+    </div>
+  </div>
+  <div class="col after">
+    <div class="col-label">Proposed — Editorial</div>
+    <div class="new-modal">
+      <h3>Sign out.</h3>
+      <p>Are you sure you want to sign out?<br>هل أنت متأكد أنك تريد تسجيل الخروج؟</p>
+      <div class="new-modal-actions">
+        <button class="new-btn-cancel">Stay</button>
+        <button class="new-btn-primary">Sign out</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 2: Danger confirm popup -->
+<div class="row">
+  <div class="col before">
+    <div class="col-label">Original — Danger (cancel order)</div>
+    <div class="orig-modal">
+      <div class="orig-modal-icon danger">⚠️</div>
+      <h3>Cancel Order</h3>
+      <p>Are you sure you want to cancel this order?<br>A full refund will be issued to your card.</p>
+      <div class="orig-modal-actions">
+        <button class="orig-btn-cancel">Keep Order</button>
+        <button class="orig-btn-danger">Cancel Order</button>
+      </div>
+    </div>
+  </div>
+  <div class="col after">
+    <div class="col-label">Proposed — Editorial danger</div>
+    <div class="new-modal">
+      <h3>Cancel order?</h3>
+      <p>A full refund will be issued to your card. This can't be undone once your order ships.</p>
+      <div class="new-modal-actions">
+        <button class="new-btn-cancel">Keep order</button>
+        <button class="new-btn-danger">Cancel order</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 3: Prompt popup (DELETE) -->
+<div class="row">
+  <div class="col before">
+    <div class="col-label">Original — orloPrompt (delete account)</div>
+    <div class="orig-modal">
+      <div class="orig-modal-icon danger">⚠️</div>
+      <h3>Delete Account</h3>
+      <p>This will permanently delete your account and all data.<br>سيؤدي هذا إلى حذف حسابك نهائياً.</p>
+      <input type="text" placeholder="Type DELETE here">
+      <div class="orig-modal-actions">
+        <button class="orig-btn-cancel">Cancel</button>
+        <button class="orig-btn-danger">Delete My Account</button>
+      </div>
+    </div>
+  </div>
+  <div class="col after">
+    <div class="col-label">Proposed — Editorial prompt</div>
+    <div class="new-modal">
+      <h3>Delete account?</h3>
+      <p>This will permanently delete your account and all data. Type DELETE to confirm.</p>
+      <input type="text" placeholder="DELETE">
+      <div class="new-modal-actions">
+        <button class="new-btn-cancel">Cancel</button>
+        <button class="new-btn-danger">Delete my account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 4: Toast notifications -->
+<div class="row">
+  <div class="col before">
+    <div class="col-label">Original — orloToast (success)</div>
+    <div class="orig-toast">
+      <div class="orig-toast-icon success">✓</div>
+      <div>
+        <div class="orig-toast-title">Order Cancelled</div>
+        <div class="orig-toast-msg">Your order has been cancelled and a refund initiated.</div>
+      </div>
+      <button class="orig-toast-close">×</button>
+      <div class="orig-toast-progress"></div>
+    </div>
+  </div>
+  <div class="col after">
+    <div class="col-label">Proposed — Editorial toast</div>
+    <div class="new-toast success">
+      <div class="new-toast-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="new-toast-body">
+        <div class="new-toast-title">Order cancelled.</div>
+        <div class="new-toast-msg">Refund initiated to your card — 5–7 business days.</div>
+      </div>
+      <button class="new-toast-close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <div class="new-toast-progress"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ROW 5: Toast — error variant -->
+<div class="row">
+  <div class="col before">
+    <div class="col-label">Original — error toast</div>
+    <div class="orig-toast">
+      <div class="orig-toast-icon error">✗</div>
+      <div>
+        <div class="orig-toast-title">Connection Error</div>
+        <div class="orig-toast-msg">Could not reach the server. Please try again.</div>
+      </div>
+      <button class="orig-toast-close">×</button>
+      <div class="orig-toast-progress" style="background:#dc3545"></div>
+    </div>
+  </div>
+  <div class="col after">
+    <div class="col-label">Proposed — error toast</div>
+    <div class="new-toast error">
+      <div class="new-toast-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      </div>
+      <div class="new-toast-body">
+        <div class="new-toast-title">Couldn't connect.</div>
+        <div class="new-toast-msg">Could not reach the server. Please try again.</div>
+      </div>
+      <button class="new-toast-close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <div class="new-toast-progress"></div>
+    </div>
+  </div>
+</div>
+
+</body></html>
