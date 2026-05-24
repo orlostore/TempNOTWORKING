@@ -3,369 +3,176 @@
 <head>
     <!-- ORLO unified analytics: Meta Pixel + TikTok Pixel + CAPI (deferred) -->
     <script src="/analytics.js?v=3" defer></script>
-  
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Email | ORLO</title>
+    <title>Verify Email | ORLO Store</title>
     <meta name="description" content="Verify your email address for your ORLO Store account.">
     <link rel="canonical" href="https://orlostore.com/verify-email.html">
     <meta name="robots" content="noindex">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <style>@font-face{font-family:'Inter';src:url('/fonts/inter-latin-variable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}@font-face{font-family:'Almarai';src:url('/fonts/almarai-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}@font-face{font-family:'Almarai';src:url('/fonts/almarai-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}</style>
+    <style>
+        @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+        @font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+    </style>
     <style>html{opacity:0;transition:opacity .15s}</style>
     <script>Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})</script>
     <link rel="stylesheet" href="styles.css?v=31">
     <style>
-        .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 80px 20px 20px;
-        }
-        .verify-box {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.1);
-            max-width: 460px;
-            width: 100%;
-            text-align: center;
-            overflow: hidden;
-        }
-        .verify-header {
-            background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%);
-            color: white;
-            padding: 2.5rem 2rem;
-        }
-        .verify-header h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        .verify-header p {
-            font-family: 'Almarai', sans-serif;
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-top: 0.5rem;
-        }
-        .verify-body {
-            padding: 2.5rem 2rem;
-        }
-        .status-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-        .email-icon-wrap {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #e8f4f8 0%, #d4eef6 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-        }
-        .email-icon-wrap svg {
-            width: 38px;
-            height: 38px;
-            stroke: #2c4a5c;
-            fill: none;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        .status-message {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #2c4a5c;
-            margin-bottom: 0.5rem;
-        }
-        .status-message-ar {
-            font-family: 'Almarai', sans-serif;
-            font-size: 0.95rem;
-            color: #888;
-            direction: rtl;
-            margin-bottom: 1rem;
-        }
-        .status-detail {
-            font-size: 0.9rem;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-        .email-highlight {
-            font-weight: 600;
-            color: #2c4a5c;
-        }
-        .btn {
-            display: inline-block;
-            padding: 0.9rem 2rem;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            border: none;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #e07856 0%, #c96644 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(224, 120, 86, 0.3);
-        }
-        .btn-outline {
-            background: white;
-            color: #2c4a5c;
-            border: 2px solid #2c4a5c;
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background:#f8f6f2; font-family:'DM Sans',sans-serif; color:#1a1a1a; min-height:100vh; padding:0; margin:0; }
 
-        /* Open email quick links */
-        .email-providers {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-        .email-provider-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1.5px solid #e0e0e0;
-            text-decoration: none;
-            font-size: 0.82rem;
-            font-weight: 500;
-            color: #444;
-            transition: border-color 0.2s, background 0.2s;
-        }
-        .email-provider-link:hover {
-            border-color: #2c4a5c;
-            background: #f8f9fa;
-        }
-        .email-provider-link svg {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
+        @keyframes fadeSlideIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Resend section */
-        .resend-section {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
-        }
-        .resend-text {
-            font-size: 0.85rem;
-            color: #888;
-            margin-bottom: 0.75rem;
-        }
-        .resend-btn {
-            background: none;
-            border: none;
-            color: #e07856;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            padding: 6px 12px;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-        .resend-btn:hover:not(:disabled) {
-            background: #fff5f2;
-        }
-        .resend-btn:disabled {
-            color: #bbb;
-            cursor: not-allowed;
-        }
-        .resend-timer {
-            font-size: 0.82rem;
-            color: #aaa;
-            margin-top: 4px;
-        }
-        .resend-success {
-            font-size: 0.85rem;
-            color: #28a745;
-            font-weight: 500;
-            margin-top: 6px;
-        }
+        /* ── LOCKUP NAV ── */
+        .verify-nav { padding:14px 32px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(26,58,82,0.10); background:#fff; }
+        .verify-lockup { display:inline-flex; align-items:center; gap:14px; text-decoration:none; }
+        .verify-lockup .logo-img { height:40px; width:auto; display:block; flex-shrink:0; }
+        .verify-lockup .sep { display:inline-block; width:1px; height:28px; background:rgba(26,58,82,0.25); }
+        .verify-lockup .wordmark { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.4rem; letter-spacing:0.1em; color:#1a3a52; line-height:1; }
+        .verify-lockup .wordmark span { color:#e76f51; }
+        .verify-nav .back { font-family:'DM Sans',sans-serif; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:#6b6b6b; text-decoration:none; transition:color .2s; }
+        .verify-nav .back:hover { color:#1a3a52; }
+
+        /* ── HERO ── */
+        .verify-hero { padding:60px 32px 36px; max-width:900px; margin:0 auto; border-bottom:1px solid rgba(26,58,82,0.10); animation:fadeSlideIn 0.4s ease-out; }
+        .verify-hero .hero-eyebrow { font-family:'DM Sans',sans-serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:#e76f51; font-weight:500; margin-bottom:14px; display:block; }
+        .verify-hero h1 { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(48px,7vw,84px); line-height:0.95; letter-spacing:-0.02em; color:#1a3a52; margin-bottom:10px; }
+        .verify-hero h1 em { color:#e76f51; font-style:italic; font-weight:400; }
+        .verify-hero p { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:#6b6b6b; max-width:420px; line-height:1.6; }
+        .verify-hero p.ar { font-family:'Almarai',sans-serif; font-size:1rem; direction:rtl; margin-top:14px; font-style:normal; color:#6b6b6b; line-height:1.6; max-width:420px; }
+        .verify-hero p.ar-tag { font-family:'Almarai',sans-serif; font-size:0.85rem; direction:rtl; margin-top:4px; font-style:normal; color:#6b6b6b; line-height:1.7; max-width:420px; }
+
+        /* ── BODY ── */
+        .verify-body { padding:48px 32px; max-width:520px; margin:0 auto; }
+
+        /* Status icons */
+        .status-icon { margin-bottom:20px; display:flex; justify-content:center; }
+        .status-icon svg { width:1.75rem; height:1.75rem; fill:none; stroke-width:1.2; stroke-linecap:round; stroke-linejoin:round; }
+        .status-icon.navy svg { stroke:#1a3a52; }
+        .status-icon.coral svg { stroke:#e76f51; stroke-width:1.5; }
+        .status-icon.muted svg { stroke:#9aa5ad; stroke-width:1.5; }
+
+        /* Loading spinner */
+        .status-spinner { width:32px; height:32px; border:1.5px solid rgba(26,58,82,0.15); border-top:1.5px solid #1a3a52; border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 20px; }
+
+        /* Email display */
+        .email-display { text-align:center; margin-bottom:32px; }
+        .email-display .label { font-family:'DM Sans',sans-serif; font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; margin-bottom:8px; font-weight:500; }
+        .email-display .email { font-family:'Cormorant Garamond',serif; font-weight:400; font-style:italic; font-size:1.4rem; color:#1a3a52; letter-spacing:-0.005em; word-break:break-all; }
+
+        /* Centered status text (for verified/failed/etc.) */
+        .status-message { text-align:center; margin-bottom:24px; }
+        .status-message h3 { font-family:'Cormorant Garamond',serif; font-weight:400; font-style:italic; font-size:1.6rem; color:#1a3a52; margin-bottom:10px; letter-spacing:-0.005em; }
+        .status-message p { font-family:'DM Sans',sans-serif; color:#6b6b6b; font-size:0.9rem; line-height:1.6; max-width:360px; margin:0 auto 6px; }
+        .status-message p.ar { font-family:'Almarai',sans-serif; font-size:0.88rem; direction:rtl; color:#6b6b6b; line-height:1.7; margin-top:4px; }
 
         /* Spam hint */
-        .spam-hint {
-            font-size: 0.8rem;
-            color: #aaa;
-            margin-top: 1rem;
-            line-height: 1.5;
-        }
+        .spam-hint { text-align:center; font-family:'DM Sans',sans-serif; font-size:0.82rem; color:#6b6b6b; line-height:1.6; padding:18px 0; border-top:1px solid rgba(26,58,82,0.08); border-bottom:1px solid rgba(26,58,82,0.08); margin-bottom:24px; }
+        .spam-hint strong { color:#1a3a52; font-weight:500; }
+        .spam-hint .ar { display:block; font-family:'Almarai',sans-serif; font-size:0.78rem; color:#9aa5ad; margin-top:6px; direction:rtl; }
 
-        /* Countdown redirect */
-        .redirect-countdown {
-            font-size: 0.85rem;
-            color: #888;
-            margin-top: 1rem;
-        }
+        /* Resend section */
+        .resend { text-align:center; margin-bottom:24px; }
+        .resend .question { font-family:'DM Sans',sans-serif; font-size:0.85rem; color:#6b6b6b; margin-bottom:12px; }
+        .resend .question .ar { display:block; font-family:'Almarai',sans-serif; font-size:0.78rem; color:#9aa5ad; margin-top:2px; direction:rtl; }
+        .resend-btn { padding:12px 28px; background:transparent; color:#1a3a52; border:1px solid #1a3a52; border-radius:999px; font-family:'DM Sans',sans-serif; font-weight:500; font-size:0.75rem; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; transition:background .2s, color .2s; }
+        .resend-btn:hover:not(:disabled) { background:#1a3a52; color:#fff; }
+        .resend-btn:disabled { opacity:0.5; cursor:not-allowed; }
+        .resend-btn .ar { font-family:'Almarai',sans-serif; font-size:0.7rem; margin-left:6px; text-transform:none; letter-spacing:0; font-weight:400; opacity:0.85; }
+        .resend-timer { font-family:'DM Sans',sans-serif; font-size:0.72rem; color:#9aa5ad; margin-top:10px; letter-spacing:0.05em; }
+        .resend-success { font-family:'DM Sans',sans-serif; font-size:0.78rem; color:#2d8a4f; margin-top:10px; letter-spacing:0.05em; }
+        .resend-error { font-family:'DM Sans',sans-serif; font-size:0.78rem; color:#dc3545; margin-top:10px; letter-spacing:0.05em; }
+
+        /* Primary navy CTA (Go to account / Sign in) */
+        .btn-primary { display:inline-block; padding:14px 32px; background:#1a3a52; color:#fff; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-weight:500; font-size:0.82rem; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; text-decoration:none; transition:filter .2s, transform .2s; }
+        .btn-primary:hover { filter:brightness(0.85); transform:translateY(-1px); }
+        .btn-primary .ar { font-family:'Almarai',sans-serif; font-size:0.72rem; margin-left:6px; text-transform:none; letter-spacing:0; font-weight:400; opacity:0.85; }
+        .btn-wrap { text-align:center; margin-bottom:24px; }
 
         /* Skip link */
-        .skip-link {
-            display: inline-block;
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            color: #aaa;
-            text-decoration: none;
-        }
-        .skip-link:hover {
-            color: #666;
+        .skip-link { display:block; text-align:center; padding-top:24px; border-top:1px solid rgba(26,58,82,0.08); font-family:'DM Sans',sans-serif; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:#6b6b6b; text-decoration:none; font-weight:500; transition:color .2s; }
+        .skip-link:hover { color:#e76f51; }
+        .skip-link .ar { font-family:'Almarai',sans-serif; font-size:0.78rem; margin-left:6px; text-transform:none; letter-spacing:0; font-weight:400; color:#9aa5ad; }
+
+        /* Countdown text */
+        .redirect-countdown { font-family:'DM Sans',sans-serif; font-size:0.78rem; color:#9aa5ad; margin-top:14px; text-align:center; letter-spacing:0.05em; }
+
+        @media (max-width:680px){
+            .verify-nav { padding:12px 20px; }
+            .verify-lockup { gap:10px; }
+            .verify-lockup .logo-img { height:32px; }
+            .verify-lockup .sep { height:24px; }
+            .verify-lockup .wordmark { font-size:1.2rem; }
+            .verify-hero { padding:36px 24px 24px; }
+            .verify-body { padding:32px 20px; }
+            .email-display .email { font-size:1.15rem; }
+            .status-message h3 { font-size:1.35rem; }
         }
 
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e0e0e0;
-            border-top: 4px solid #e07856;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 1.5rem;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        /* ── MOBILE BOTTOM NAV (consistent with other auth pages) ── */
+        .mobile-bottom-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:white; z-index:6000; padding:10px 8px 14px; }
+        .bottom-nav-indicator { position:absolute; top:0; height:3px; width:50px; background:#1a3a52; border-radius:0 0 4px 4px; left:calc(25% + 12.5% - 25px); }
+        .bottom-nav-item { display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; flex:1; position:relative; }
+        .bottom-nav-item svg { width:24px; height:24px; stroke:#c0c8ce; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+        .bottom-nav-item.active svg { stroke:#1a3a52; stroke-width:2; }
+        .bottom-nav-item .nav-label { font-size:0.62rem; font-weight:600; color:#c0c8ce; position:relative; font-family:'DM Sans',sans-serif; }
+        .bottom-nav-item.active .nav-label { color:#1a3a52; }
+        .bottom-nav-item.active .nav-label::after { content:''; position:absolute; bottom:-3px; left:0; right:0; height:1.5px; background:#e76f51; border-radius:1px; }
+        .bottom-cart-badge:empty, .cart-count:empty { display:none !important; }
+        @media (max-width:576px){
+            .mobile-bottom-nav { display:flex; justify-content:space-around; }
+            body { padding-bottom:80px !important; }
         }
     </style>
 </head>
 <body>
-<header>
-    <nav>
-        <div class="logo-container">
-            <a href="index.html"><img src="logo.png" class="logo-img" alt="ORLO Logo"></a>
-        </div>
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span><span></span><span></span>
-        </button>
-        <div class="mobile-cart-icon" id="mobileCartIcon">
-            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-            <span class="cart-count" id="mobileCartCount"></span>
-        </div>
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | البحث عن منتجات..." autocomplete="off">
-            <button class="search-btn" id="searchBtn"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            <div class="search-autocomplete" id="searchAutocomplete"></div>
-        </div>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
-            <li><a href="index.html#about">About<br><span class="arabic-text">من نحن</span></a></li>
-            <li><a href="index.html#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
-            <li><a href="index.html#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
-            <li><a href="login.html" id="accountLink" class="account-nav-link">Login<br><span class="arabic-text">دخول</span></a></li>
-            <li>
-                <div class="cart-icon" id="cartIcon">
-                    <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-                    <span class="cart-count" id="cartCount"></span>
-                </div>
-            </li>
-        </ul>
+    <nav class="verify-nav">
+        <a href="/" class="verify-lockup">
+            <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+            <span class="sep"></span>
+            <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+        </a>
+        <a href="/" class="back">← Back to Shop</a>
     </nav>
-</header>
-<script>
-(function(){
-    try { var c=JSON.parse(localStorage.getItem('cart')||'[]'); var n=c.reduce(function(s,i){return s+(i.quantity||0);},0); ['cartCount','mobileCartCount'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=n>0?n:'';}); } catch(e){}
-    var searchBtn=document.getElementById('searchBtn'),searchInput=document.getElementById('searchInput'),acIndex=-1;
-    function isAr(t){return /[\u0600-\u06FF]/.test(t);}
-    function doSearch(){var term=searchInput?searchInput.value.trim():'';var dd=document.getElementById('searchAutocomplete');if(dd)dd.classList.remove('active');if(term)window.location.href='index.html?search='+encodeURIComponent(term);}
-    function showAC(term){var dd=document.getElementById('searchAutocomplete');if(!dd||!term||term.length<1){if(dd){dd.classList.remove('active');dd.innerHTML='';}acIndex=-1;return;}if(typeof products==='undefined'||!products.length)return;var m=products.filter(function(p){return p.name.toLowerCase().indexOf(term)!==-1||(p.nameAr&&p.nameAr.indexOf(term)!==-1)||p.category.toLowerCase().indexOf(term)!==-1||(p.categoryAr&&p.categoryAr.indexOf(term)!==-1);}).slice(0,6);if(!m.length){dd.classList.remove('active');dd.innerHTML='';acIndex=-1;return;}var ar=isAr(term);dd.innerHTML=m.map(function(p,i){var img=p.image&&p.image.indexOf('http')===0?'<img src="'+p.image+'" alt="">':'';var dn=ar?(p.nameAr||p.name):p.name;return '<div class="autocomplete-item" data-index="'+i+'" data-slug="'+p.slug+'" data-name="'+dn+'"'+(ar?' dir="rtl"':'')+'>'+img+'<div class="autocomplete-item-info"><div class="autocomplete-item-name">'+(ar?'<span class="arabic-text">'+(p.nameAr||p.name)+'</span>':p.name)+'</div><div class="autocomplete-item-price">'+(ar?p.price+' د.إ':'AED '+p.price)+'</div></div></div>';}).join('');dd.classList.add('active');acIndex=-1;dd.querySelectorAll('.autocomplete-item').forEach(function(item){item.addEventListener('mousedown',function(e){e.preventDefault();searchInput.value=this.dataset.name;dd.classList.remove('active');doSearch();});});}
-    function navAC(dir){var dd=document.getElementById('searchAutocomplete');if(!dd)return;var items=dd.querySelectorAll('.autocomplete-item');if(!items.length)return;items.forEach(function(it){it.classList.remove('active');});acIndex+=dir;if(acIndex<0)acIndex=items.length-1;if(acIndex>=items.length)acIndex=0;items[acIndex].classList.add('active');searchInput.value=items[acIndex].dataset.name;}
-    if(searchBtn)searchBtn.addEventListener('click',doSearch);
-    if(searchInput){searchInput.addEventListener('input',function(){showAC(this.value.toLowerCase().trim());});searchInput.addEventListener('keydown',function(e){if(e.key==='ArrowDown'){e.preventDefault();navAC(1);}else if(e.key==='ArrowUp'){e.preventDefault();navAC(-1);}else if(e.key==='Enter'){e.preventDefault();doSearch();}else if(e.key==='Escape'){var dd=document.getElementById('searchAutocomplete');if(dd)dd.classList.remove('active');}});}
-    var hamburger=document.getElementById('hamburger'),navLinks=document.getElementById('navLinks');
-    if(hamburger&&navLinks){hamburger.addEventListener('click',function(){hamburger.classList.toggle('active');navLinks.classList.toggle('active');});navLinks.querySelectorAll('a').forEach(function(link){link.addEventListener('click',function(){hamburger.classList.remove('active');navLinks.classList.remove('active');});});}
-    try{var token=localStorage.getItem('orlo_token')||sessionStorage.getItem('orlo_token');var customer=JSON.parse(localStorage.getItem('orlo_customer')||sessionStorage.getItem('orlo_customer')||'null');var al=document.getElementById('accountLink');if(token&&customer&&al){var fn=customer.name?customer.name.split(' ')[0]:'Account';al.innerHTML=fn+'<br><span class="arabic-text">حسابي</span>';al.href='account.html';}}catch(e){}
-})();
-</script>
-<script src="products.js?v=10"></script>
-    <div class="verify-box">
-        <div class="verify-header">
-            <h1>Email Verification</h1>
-            <p>تأكيد البريد الإلكتروني</p>
-        </div>
-        <div class="verify-body" id="verifyBody">
-            <div class="loading-spinner"></div>
-            <p class="status-message">Verifying your email...</p>
-            <p class="status-message-ar">جارٍ التحقق من بريدك الإلكتروني</p>
-        </div>
-    </div>
+
+    <main id="verifyMain">
+        <!-- Initial loading state; replaced by JS based on URL params -->
+        <section class="verify-hero">
+            <div class="hero-eyebrow">Verify Email</div>
+            <h1>One<br><em>moment.</em></h1>
+            <p>We're verifying your link — this will only take a second.</p>
+            <p class="ar">لحظة من فضلك.</p>
+            <p class="ar-tag">جارٍ التحقق من الرابط — لن يستغرق ذلك سوى ثانية.</p>
+        </section>
+        <section class="verify-body">
+            <div class="status-spinner"></div>
+        </section>
+    </main>
 
     <script>
         const params = new URLSearchParams(window.location.search);
         const token = params.get('token');
         const emailParam = params.get('email');
-        const body = document.getElementById('verifyBody');
+        const main = document.getElementById('verifyMain');
 
         let resendCooldown = 0;
         let resendInterval = null;
 
         function maskEmail(email) {
             if (!email) return '';
-            const [local, domain] = email.split('@');
+            const parts = email.split('@');
+            const local = parts[0];
+            const domain = parts[1];
             if (!domain) return email;
             if (local.length <= 2) return local[0] + '***@' + domain;
             return local[0] + local[1] + '***@' + domain;
-        }
-
-        function getEmailProvider(email) {
-            if (!email) return null;
-            const domain = email.split('@')[1];
-            if (!domain) return null;
-            const d = domain.toLowerCase();
-            if (d === 'gmail.com' || d === 'googlemail.com') return 'gmail';
-            if (d === 'outlook.com' || d === 'hotmail.com' || d === 'live.com') return 'outlook';
-            if (d === 'yahoo.com' || d === 'ymail.com') return 'yahoo';
-            return null;
-        }
-
-        function buildProviderLinks(email) {
-            const provider = getEmailProvider(email);
-            const links = [];
-
-            // Always show the user's provider first, then the others
-            const providers = {
-                gmail: {
-                    label: 'Gmail',
-                    url: 'https://mail.google.com/mail/u/0/#inbox',
-                    svg: '<svg viewBox="0 0 24 24" fill="none"><path d="M2 6l10 7 10-7" stroke="#EA4335" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="4" width="20" height="16" rx="2" stroke="#4285F4" stroke-width="1.5" fill="none"/></svg>'
-                },
-                outlook: {
-                    label: 'Outlook',
-                    url: 'https://outlook.live.com/mail/0/inbox',
-                    svg: '<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#0078D4" stroke-width="1.5" fill="none"/><path d="M2 6l10 7 10-7" stroke="#0078D4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-                },
-                yahoo: {
-                    label: 'Yahoo',
-                    url: 'https://mail.yahoo.com/d/folders/1',
-                    svg: '<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#6001D2" stroke-width="1.5" fill="none"/><path d="M2 6l10 7 10-7" stroke="#6001D2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-                }
-            };
-
-            // Show the detected provider first
-            if (provider && providers[provider]) {
-                links.push(providers[provider]);
-            }
-            // Then show others
-            for (const key of Object.keys(providers)) {
-                if (key !== provider) links.push(providers[key]);
-            }
-
-            return links.map(p =>
-                `<a href="${p.url}" target="_blank" rel="noopener" class="email-provider-link">${p.svg} ${p.label}</a>`
-            ).join('');
         }
 
         function startResendCooldown(seconds) {
@@ -373,10 +180,8 @@
             const btn = document.getElementById('resendBtn');
             const timer = document.getElementById('resendTimer');
             if (!btn) return;
-
             btn.disabled = true;
             if (timer) timer.textContent = `Resend available in ${resendCooldown}s`;
-
             resendInterval = setInterval(() => {
                 resendCooldown--;
                 if (timer) timer.textContent = `Resend available in ${resendCooldown}s`;
@@ -394,12 +199,12 @@
             const authToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
 
             if (!authToken) {
-                if (feedback) feedback.innerHTML = '<span style="color:#dc3545">Please log in first to resend.</span>';
+                if (feedback) feedback.innerHTML = '<span class="resend-error">Please sign in first to resend.</span>';
                 return;
             }
 
             btn.disabled = true;
-            btn.textContent = 'Sending...';
+            btn.textContent = 'Sending…';
 
             try {
                 const response = await fetch('/api/auth/verify', {
@@ -410,57 +215,171 @@
 
                 if (data.success) {
                     if (data.message === 'Email already verified') {
-                        if (feedback) feedback.innerHTML = '<span class="resend-success">Your email is already verified!</span>';
+                        if (feedback) feedback.innerHTML = '<span class="resend-success">Your email is already verified.</span>';
                         setTimeout(() => { window.location.href = 'account.html'; }, 1500);
                     } else {
-                        if (feedback) feedback.innerHTML = '<span class="resend-success">Verification email sent!</span>';
-                        btn.textContent = 'Resend Email';
+                        if (feedback) feedback.innerHTML = '<span class="resend-success">Verification email sent.</span>';
+                        btn.innerHTML = 'Resend email<span class="ar">إعادة الإرسال</span>';
                         startResendCooldown(60);
                     }
                 } else {
-                    if (feedback) feedback.innerHTML = '<span style="color:#dc3545">' + (data.error || 'Failed to send. Try again.') + '</span>';
-                    btn.textContent = 'Resend Email';
+                    if (feedback) feedback.innerHTML = '<span class="resend-error">' + (data.error || 'Failed to send. Try again.') + '</span>';
+                    btn.innerHTML = 'Resend email<span class="ar">إعادة الإرسال</span>';
                     btn.disabled = false;
                 }
             } catch (e) {
-                if (feedback) feedback.innerHTML = '<span style="color:#dc3545">Connection error. Try again.</span>';
-                btn.textContent = 'Resend Email';
+                if (feedback) feedback.innerHTML = '<span class="resend-error">Connection error. Try again.</span>';
+                btn.innerHTML = 'Resend email<span class="ar">إعادة الإرسال</span>';
                 btn.disabled = false;
             }
         }
 
-        function showCheckInbox() {
-            const masked = maskEmail(emailParam);
-            const providerLinks = buildProviderLinks(emailParam);
+        const ICON_MAIL = '<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>';
+        const ICON_CHECK = '<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+        const ICON_X = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
 
-            body.innerHTML = `
-                <div class="email-icon-wrap">
-                    <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
-                </div>
-                <p class="status-message">Check Your Inbox</p>
-                <p class="status-message-ar">تحقق من بريدك الوارد</p>
-                <p class="status-detail">
-                    We sent a verification link to<br>
-                    <span class="email-highlight">${masked}</span>
-                </p>
-                <div class="email-providers">
-                    ${providerLinks}
-                </div>
-                <div class="spam-hint">
-                    Don't see it? Check your <strong>spam</strong> or <strong>junk</strong> folder.<br>
-                    <span style="font-family:'Almarai',sans-serif;direction:rtl;display:inline-block;margin-top:4px;">لم تجده؟ تحقق من مجلد الرسائل غير المرغوب فيها</span>
-                </div>
-                <div class="resend-section">
-                    <p class="resend-text">Didn't receive the email?</p>
-                    <button class="resend-btn" id="resendBtn" onclick="resendVerification()">Resend Email</button>
-                    <div id="resendTimer" class="resend-timer"></div>
-                    <div id="resendFeedback"></div>
-                </div>
-                <a href="account.html" class="skip-link">Continue to account | الذهاب للحساب</a>
+        function renderCheckInbox(email) {
+            const masked = maskEmail(email);
+            main.innerHTML = `
+                <section class="verify-hero">
+                    <div class="hero-eyebrow">Verify Email</div>
+                    <h1>Check<br><em>your inbox.</em></h1>
+                    <p>We sent a verification link to your email — open it to finish setting up your account.</p>
+                    <p class="ar">تحقق من بريدك.</p>
+                    <p class="ar-tag">أرسلنا رابط التحقق إلى بريدك — افتحه لإتمام إنشاء حسابك.</p>
+                </section>
+                <section class="verify-body">
+                    <div class="status-icon navy">${ICON_MAIL}</div>
+                    <div class="email-display">
+                        <div class="label">Sent to</div>
+                        <div class="email">${masked}</div>
+                    </div>
+                    <div class="spam-hint">
+                        Don't see it? Check your <strong>spam</strong> or <strong>junk</strong> folder.
+                        <span class="ar">لم تجده؟ تحقق من مجلد الرسائل غير المرغوب فيها.</span>
+                    </div>
+                    <div class="resend">
+                        <p class="question">Didn't receive the email?<span class="ar">لم تستلم البريد؟</span></p>
+                        <button class="resend-btn" id="resendBtn" onclick="resendVerification()">Resend email<span class="ar">إعادة الإرسال</span></button>
+                        <div id="resendTimer" class="resend-timer"></div>
+                        <div id="resendFeedback"></div>
+                    </div>
+                    <a href="account.html" class="skip-link">Continue to account →<span class="ar">المتابعة للحساب</span></a>
+                </section>
             `;
-
-            // Start the cooldown immediately (user just signed up, email was just sent)
             startResendCooldown(60);
+        }
+
+        function renderVerified() {
+            let countdown = 5;
+            main.innerHTML = `
+                <section class="verify-hero">
+                    <div class="hero-eyebrow">Verify Email</div>
+                    <h1>Email<br><em>verified.</em></h1>
+                    <p>Welcome to ORLO — your account is all set up.</p>
+                    <p class="ar">تم التحقق.</p>
+                    <p class="ar-tag">أهلاً بك في ORLO — حسابك جاهز للاستخدام.</p>
+                </section>
+                <section class="verify-body">
+                    <div class="status-icon coral">${ICON_CHECK}</div>
+                    <div class="status-message">
+                        <h3>You're all set.</h3>
+                        <p>Redirecting you to your account in a moment.</p>
+                    </div>
+                    <div class="btn-wrap">
+                        <a href="account.html" class="btn-primary">Go to account<span class="ar">الذهاب للحساب</span></a>
+                    </div>
+                    <div class="redirect-countdown" id="redirectCountdown">Redirecting in ${countdown}s…</div>
+                </section>
+            `;
+            const cdEl = document.getElementById('redirectCountdown');
+            const cdInterval = setInterval(() => {
+                countdown--;
+                if (cdEl) cdEl.textContent = `Redirecting in ${countdown}s…`;
+                if (countdown <= 0) {
+                    clearInterval(cdInterval);
+                    window.location.href = 'account.html';
+                }
+            }, 1000);
+        }
+
+        function renderAlreadyVerified() {
+            main.innerHTML = `
+                <section class="verify-hero">
+                    <div class="hero-eyebrow">Verify Email</div>
+                    <h1>Already<br><em>verified.</em></h1>
+                    <p>Your email is verified — you're good to go.</p>
+                    <p class="ar">تم التحقق مسبقاً.</p>
+                    <p class="ar-tag">بريدك الإلكتروني مُؤكَّد بالفعل — كل شيء جاهز.</p>
+                </section>
+                <section class="verify-body">
+                    <div class="status-icon coral">${ICON_CHECK}</div>
+                    <div class="btn-wrap">
+                        <a href="account.html" class="btn-primary">Go to account<span class="ar">الذهاب للحساب</span></a>
+                    </div>
+                </section>
+            `;
+        }
+
+        function renderFailed(errorMsg) {
+            main.innerHTML = `
+                <section class="verify-hero">
+                    <div class="hero-eyebrow">Verify Email</div>
+                    <h1>Link<br><em>expired.</em></h1>
+                    <p>This verification link may have expired or already been used.</p>
+                    <p class="ar">انتهى الرابط.</p>
+                    <p class="ar-tag">قد يكون رابط التحقق منتهي الصلاحية أو تم استخدامه من قبل.</p>
+                </section>
+                <section class="verify-body">
+                    <div class="status-icon muted">${ICON_X}</div>
+                    <div class="status-message">
+                        <p>${errorMsg || 'Please request a new verification link to continue.'}</p>
+                    </div>
+                    <div class="resend">
+                        <p class="question">Need a new link?<span class="ar">تحتاج رابطاً جديداً؟</span></p>
+                        <button class="resend-btn" id="resendBtn" onclick="resendVerification()">Resend email<span class="ar">إعادة الإرسال</span></button>
+                        <div id="resendTimer" class="resend-timer"></div>
+                        <div id="resendFeedback"></div>
+                    </div>
+                    <a href="account.html" class="skip-link">Continue to account →<span class="ar">المتابعة للحساب</span></a>
+                </section>
+            `;
+        }
+
+        function renderInvalid() {
+            main.innerHTML = `
+                <section class="verify-hero">
+                    <div class="hero-eyebrow">Verify Email</div>
+                    <h1>Invalid<br><em>link.</em></h1>
+                    <p>This verification link is invalid or has expired. Sign in to request a new one.</p>
+                    <p class="ar">رابط غير صالح.</p>
+                    <p class="ar-tag">رابط التحقق غير صالح أو انتهت صلاحيته. سجّل الدخول لطلب رابط جديد.</p>
+                </section>
+                <section class="verify-body">
+                    <div class="status-icon muted">${ICON_X}</div>
+                    <div class="btn-wrap">
+                        <a href="login.html" class="btn-primary">Sign in<span class="ar">تسجيل الدخول</span></a>
+                    </div>
+                </section>
+            `;
+        }
+
+        function renderConnectionError() {
+            main.innerHTML = `
+                <section class="verify-hero">
+                    <div class="hero-eyebrow">Verify Email</div>
+                    <h1>Couldn't<br><em>connect.</em></h1>
+                    <p>Please check your connection and try again.</p>
+                    <p class="ar">تعذّر الاتصال.</p>
+                    <p class="ar-tag">يُرجى التحقق من اتصالك بالإنترنت ثم المحاولة مرة أخرى.</p>
+                </section>
+                <section class="verify-body">
+                    <div class="status-icon muted">${ICON_X}</div>
+                    <div class="btn-wrap">
+                        <button class="btn-primary" onclick="location.reload()">Try again<span class="ar">حاول مرة أخرى</span></button>
+                    </div>
+                </section>
+            `;
         }
 
         async function verifyEmail() {
@@ -470,111 +389,128 @@
 
                 if (data.success) {
                     if (data.already_verified) {
-                        body.innerHTML = `
-                            <div class="status-icon">\u2705</div>
-                            <p class="status-message">Already Verified</p>
-                            <p class="status-message-ar">تم التحقق مسبقاً</p>
-                            <p class="status-detail">Your email is already verified. You're all set!</p>
-                            <a href="account.html" class="btn btn-primary">Go to Account | الذهاب للحساب</a>
-                        `;
+                        renderAlreadyVerified();
                     } else {
-                        let countdown = 5;
-                        body.innerHTML = `
-                            <div class="status-icon">\u2705</div>
-                            <p class="status-message">Email Verified!</p>
-                            <p class="status-message-ar">تم تأكيد بريدك الإلكتروني بنجاح</p>
-                            <p class="status-detail">Your email has been verified successfully. Welcome to ORLO!</p>
-                            <a href="account.html" class="btn btn-primary">Go to Account | الذهاب للحساب</a>
-                            <p class="redirect-countdown" id="redirectCountdown">Redirecting in ${countdown}s...</p>
-                        `;
-                        const cdEl = document.getElementById('redirectCountdown');
-                        const cdInterval = setInterval(() => {
-                            countdown--;
-                            if (cdEl) cdEl.textContent = 'Redirecting in ' + countdown + 's...';
-                            if (countdown <= 0) {
-                                clearInterval(cdInterval);
-                                window.location.href = 'account.html';
-                            }
-                        }, 1000);
+                        renderVerified();
                     }
                 } else {
-                    body.innerHTML = `
-                        <div class="status-icon">\u274C</div>
-                        <p class="status-message">Verification Failed</p>
-                        <p class="status-message-ar">فشل التحقق</p>
-                        <p class="status-detail">${data.error || 'This link may have expired or is invalid.'}</p>
-                        <div class="resend-section" style="border-top:none;margin-top:0;padding-top:0;">
-                            <p class="resend-text">Need a new link?</p>
-                            <button class="resend-btn" id="resendBtn" onclick="resendVerification()">Resend Verification Email</button>
-                            <div id="resendTimer" class="resend-timer"></div>
-                            <div id="resendFeedback"></div>
-                        </div>
-                        <a href="account.html" class="btn btn-outline" style="margin-top:1rem;">Go to Account | الذهاب للحساب</a>
-                    `;
+                    renderFailed(data.error);
                 }
             } catch (error) {
-                body.innerHTML = `
-                    <div class="status-icon">\u26A0\uFE0F</div>
-                    <p class="status-message">Connection Error</p>
-                    <p class="status-message-ar">خطأ في الاتصال</p>
-                    <p class="status-detail">Please check your connection and try again.</p>
-                    <button class="btn btn-outline" onclick="location.reload()">Try Again | حاول مرة أخرى</button>
-                `;
+                renderConnectionError();
             }
         }
 
-        // Route: token present → verify, email present → check inbox, neither → redirect
+        // Route: token present → verify, email present → check inbox,
+        // neither but logged in → check inbox with customer email,
+        // otherwise → invalid link
         if (token) {
             verifyEmail();
         } else if (emailParam) {
-            showCheckInbox();
+            renderCheckInbox(emailParam);
         } else {
-            // No token and no email — check if user is logged in and needs to verify
             const authToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
             const customer = JSON.parse(localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer') || 'null');
             if (authToken && customer && customer.email) {
-                // Show check inbox with the user's email
                 window.history.replaceState(null, '', '?email=' + encodeURIComponent(customer.email));
-                body.innerHTML = '';
-                const fakeParam = customer.email;
-                const masked = maskEmail(fakeParam);
-                const providerLinks = buildProviderLinks(fakeParam);
-                body.innerHTML = `
-                    <div class="email-icon-wrap">
-                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
-                    </div>
-                    <p class="status-message">Verify Your Email</p>
-                    <p class="status-message-ar">قم بتأكيد بريدك الإلكتروني</p>
-                    <p class="status-detail">
-                        A verification link was sent to<br>
-                        <span class="email-highlight">${masked}</span>
-                    </p>
-                    <div class="email-providers">
-                        ${providerLinks}
-                    </div>
-                    <div class="spam-hint">
-                        Don't see it? Check your <strong>spam</strong> or <strong>junk</strong> folder.<br>
-                        <span style="font-family:'Almarai',sans-serif;direction:rtl;display:inline-block;margin-top:4px;">لم تجده؟ تحقق من مجلد الرسائل غير المرغوب فيها</span>
-                    </div>
-                    <div class="resend-section">
-                        <p class="resend-text">Didn't receive the email?</p>
-                        <button class="resend-btn" id="resendBtn" onclick="resendVerification()">Resend Email</button>
-                        <div id="resendTimer" class="resend-timer"></div>
-                        <div id="resendFeedback"></div>
-                    </div>
-                    <a href="account.html" class="skip-link">Continue to account | الذهاب للحساب</a>
-                `;
+                renderCheckInbox(customer.email);
             } else {
-                // Not logged in and no params — show generic message
-                body.innerHTML = `
-                    <div class="status-icon">\u274C</div>
-                    <p class="status-message">Invalid Link</p>
-                    <p class="status-message-ar">رابط غير صالح</p>
-                    <p class="status-detail">This verification link is invalid or has expired.</p>
-                    <a href="login.html" class="btn btn-primary">Log In | تسجيل الدخول</a>
-                `;
+                renderInvalid();
             }
         }
+    </script>
+
+    <script>
+    (function() {
+        window.toggleVerifyMobileMenu = function() {
+            var overlay = document.querySelector('.mobile-menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'mobile-menu-overlay';
+                var chevron = '<svg class="menu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+                overlay.innerHTML =
+                    '<div class="mobile-menu">' +
+                        '<a href="index.html#products">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Shop</span><span class="menu-ar">تسوق</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#about">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">About</span><span class="menu-ar">من نحن</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#contact">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Contact</span><span class="menu-ar">اتصل بنا</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="terms-and-conditions.html">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Terms</span><span class="menu-ar">الشروط</span></div>' +
+                            chevron +
+                        '</a>' +
+                    '</div>';
+                document.body.appendChild(overlay);
+                overlay.onclick = function(e) {
+                    if (e.target === overlay) { overlay.classList.remove('active'); }
+                };
+            }
+            overlay.classList.toggle('active');
+        };
+
+        function moveIndicator(index) {
+            var indicator = document.getElementById('bottomNavIndicator');
+            if (indicator) indicator.style.left = 'calc(' + (index * 25) + '% + 12.5% - 25px)';
+        }
+        var navItems = document.querySelectorAll('.mobile-bottom-nav .bottom-nav-item');
+        navItems.forEach(function(item, i) {
+            item.addEventListener('click', function() { moveIndicator(i); });
+        });
+        moveIndicator(1);
+    })();
+    </script>
+
+    <nav class="mobile-bottom-nav">
+        <div class="bottom-nav-indicator" id="bottomNavIndicator"></div>
+        <div class="bottom-nav-item" id="bottomHomeBtn" data-index="0" onclick="window.location.href=localStorage.getItem('lastProduct')||'index.html'">
+            <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="bottom-nav-item active" id="bottomAccountBtn" data-index="1">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
+            <span class="nav-label" id="bottomAccountLabel">Account</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomCartBtn" data-index="2" onclick="var lp=localStorage.getItem('lastProduct')||'index.html';window.location.href=lp+(lp.includes('?')?'&amp;':'?')+'openCart=true'">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+            <span class="bottom-cart-badge" id="bottomCartCount" style="display:none"></span>
+            <span class="nav-label">Cart</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomMenuBtn" data-index="3" onclick="toggleVerifyMobileMenu()">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <span class="nav-label">Menu</span>
+        </div>
+    </nav>
+
+    <script>
+    (function(){
+      try {
+        var cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+        var totalCount = cartData.reduce(function(sum, item){ return sum + (item.quantity || 0); }, 0);
+        ['bottomCartCount'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) {
+            if (totalCount > 0) {
+              el.textContent = totalCount;
+              el.style.display = 'flex';
+            } else {
+              el.textContent = '';
+              el.style.display = 'none';
+            }
+          }
+        });
+      } catch(e) {}
+    })();
     </script>
 </body>
 </html>
