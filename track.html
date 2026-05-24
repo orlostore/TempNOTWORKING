@@ -79,11 +79,14 @@
         .result-label.delivered { color:#e76f51; }
         .result-label.failed { color:#9aa5ad; }
         .result-label-ar { font-family:'Almarai',sans-serif; font-size:0.95rem; color:#6b6b6b; margin-bottom:20px; direction:rtl; }
-        .result-meta { display:flex; justify-content:center; gap:32px; margin-bottom:20px; }
-        .result-meta-item { text-align:center; }
-        .result-meta-item .label { font-family:'DM Sans',sans-serif; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; font-weight:500; margin-bottom:4px; }
-        .result-meta-item .val { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.95rem; color:#1a3a52; word-break:break-all; }
-        .courier-note { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.95rem; color:#6b6b6b; line-height:1.6; max-width:340px; margin:24px auto 0; }
+        .result-meta { display:block; text-align:center; margin-bottom:20px; }
+        .result-meta-item { padding:14px 0; }
+        .result-meta-item + .result-meta-item { border-top:1px solid rgba(26,58,82,0.08); }
+        .result-meta-item .label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; font-weight:500; margin-bottom:8px; display:block; }
+        .result-meta-item .val { font-family:'Cormorant Garamond',serif; font-style:italic; color:#1a3a52; word-break:break-all; display:block; }
+        .result-meta-item.awb .val { font-size:1.6rem; letter-spacing:0.02em; }
+        .result-meta-item.updated .val { font-size:1.15rem; }
+        .courier-note { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; color:#6b6b6b; line-height:1.6; max-width:360px; margin:28px auto 0; }
         .courier-note strong { color:#1a3a52; font-style:normal; font-weight:400; }
         .courier-note .ar { display:block; font-family:'Almarai',sans-serif; font-size:0.82rem; color:#9aa5ad; font-style:normal; margin-top:6px; direction:rtl; }
 
@@ -290,8 +293,8 @@
                     <div class="result-label ${isDelivered ? 'delivered' : (isFailed ? 'failed' : '')}">${esc(mapped.label)}</div>
                     <div class="result-label-ar">${esc(mapped.labelAr)}</div>
                     <div class="result-meta">
-                        ${dateStr ? `<div class="result-meta-item"><div class="label">${dateLabel}</div><div class="val">${esc(dateStr)}</div></div>` : ''}
-                        <div class="result-meta-item"><div class="label">AWB</div><div class="val">${esc(data.awb || '')}</div></div>
+                        <div class="result-meta-item awb"><div class="label">AWB</div><div class="val">№ ${esc(data.awb || '')}</div></div>
+                        ${dateStr ? `<div class="result-meta-item updated"><div class="label">${dateLabel}</div><div class="val">${esc(dateStr)}</div></div>` : ''}
                     </div>
                     <p class="courier-note">${courierNote}</p>
                 </div>
