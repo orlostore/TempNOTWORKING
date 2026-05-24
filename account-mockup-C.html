@@ -155,8 +155,10 @@ body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a1a1a;min-heigh
 
 <section class="body">
   <style>
-    .addr-add-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px}
-    .btn-add-addr{padding:10px 22px;background:#1a3a52;color:#fff;border:none;border-radius:999px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:filter .2s, transform .2s;display:inline-flex;align-items:center;gap:8px}
+    .addr-add-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+    .addr-section-label{display:inline-flex;align-items:baseline;gap:10px;font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.2em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
+    .addr-section-label .ar{font-family:'Almarai',sans-serif;font-size:0.78rem;letter-spacing:0;text-transform:none;color:#9aa5ad}
+    .btn-add-addr{padding:10px 22px;background:#1a3a52;color:#fff;border:none;border-radius:999px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:filter .2s, transform .2s;display:inline-flex;align-items:center;gap:8px;flex-shrink:0}
     .btn-add-addr:hover{filter:brightness(0.85);transform:translateY(-1px)}
     .btn-add-addr .ar{font-family:'Almarai',sans-serif;font-size:0.65rem;margin-left:4px;text-transform:none;letter-spacing:0;font-weight:400;opacity:0.85}
 
@@ -179,7 +181,7 @@ body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a1a1a;min-heigh
   </style>
 
   <div class="addr-add-row">
-    <div class="section-label" style="margin-bottom:0">Your addresses<span class="ar">عناوينك</span></div>
+    <div class="addr-section-label"><span>Your addresses</span><span class="ar">عناوينك</span></div>
     <a href="#" class="btn-add-addr">+ Add address<span class="ar">إضافة عنوان</span></a>
   </div>
 
