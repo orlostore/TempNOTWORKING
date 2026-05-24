@@ -76,9 +76,11 @@ body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a1a1a;min-heigh
 .guest-suggest .ar{display:block;font-family:'Almarai',sans-serif;font-size:0.82rem;color:#9aa5ad;font-style:normal;margin-top:4px;direction:rtl}
 
 /* Footer help link — small text */
-.help-link{display:block;text-align:center;padding-top:24px;border-top:1px solid rgba(26,58,82,0.08);font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;text-decoration:none;font-weight:500;transition:color .2s}
-.help-link:hover{color:#e76f51}
-.help-link .ar{font-family:'Almarai',sans-serif;font-size:0.78rem;margin-left:6px;text-transform:none;letter-spacing:0;font-weight:400;color:#9aa5ad}
+.help-block{text-align:center;padding-top:24px;border-top:1px solid rgba(26,58,82,0.08)}
+.help-label{font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.2em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;display:block}
+.help-label .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;margin-left:6px;text-transform:none;letter-spacing:0;font-weight:400}
+.help-email{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#1a3a52;text-decoration:none;border-bottom:1px solid rgba(26,58,82,0.20);transition:border-color .2s}
+.help-email:hover{border-bottom-color:#1a3a52}
 
 @media (max-width:680px){
   .nav{padding:12px 20px}
@@ -167,7 +169,10 @@ body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a1a1a;min-heigh
     <span class="ar">احفظ بياناتك للمرة القادمة؟ <a href="#" style="color:#1a3a52;">إنشاء حساب</a>.</span>
   </p>
 
-  <a href="mailto:info@orlostore.com" class="help-link">Need help? info@orlostore.com<span class="ar">تحتاج مساعدة؟</span></a>
+  <div class="help-block">
+    <span class="help-label">Need help?<span class="ar">تحتاج مساعدة؟</span></span>
+    <a href="mailto:info@orlostore.com" class="help-email">info@orlostore.com</a>
+  </div>
 
 </section>
 </body></html>
