@@ -38,7 +38,8 @@ body{background:#e8e3da;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52
 .cart-item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .cart-item-name{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#1a3a52;font-weight:500;line-height:1.3}
 .cart-item-name-ar{font-family:'Almarai',sans-serif;font-size:0.68rem;color:#9aa5ad;direction:rtl;text-align:left;margin-top:2px}
-.cart-item-meta{font-family:'DM Sans',sans-serif;font-size:0.68rem;color:#6b6b6b;line-height:1.5;margin-top:4px}
+.cart-item-meta{font-family:'DM Sans',sans-serif;font-size:0.68rem;color:#6b6b6b;line-height:1.65;margin-top:6px}
+.cart-item-meta div{display:block}
 .cart-item-price{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;font-weight:500;letter-spacing:0.01em;flex-shrink:0;text-align:right}
 .cart-item-controls{display:flex;align-items:center;gap:14px;margin-top:8px}
 .qty-stepper{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid rgba(26,58,82,0.20);border-radius:18px;padding:2px 6px;height:28px}
@@ -57,13 +58,19 @@ body{background:#e8e3da;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52
 .totals{padding:8px 22px 4px}
 .total-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#1a3a52}
 .total-row.divider{border-top:1px solid rgba(26,58,82,0.15);padding-top:12px;margin-top:4px}
-.total-row.grand{font-family:'Cormorant Garamond',serif;font-weight:400;font-style:italic;font-size:1.3rem;color:#1a3a52;padding-top:4px}
+.total-row.grand{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.95rem;color:#1a3a52;padding-top:14px;text-transform:uppercase;letter-spacing:0.16em}
 .total-row .label-en{flex:1}
-.total-row .label-ar{font-family:'Almarai',sans-serif;font-size:0.7rem;color:#9aa5ad;direction:rtl;margin:0 6px;font-style:normal}
-.total-row.grand .label-ar{font-family:'Almarai',sans-serif;font-size:0.85rem;color:#6b6b6b;font-style:normal}
+.total-row .label-ar{font-family:'Almarai',sans-serif;font-size:0.7rem;color:#9aa5ad;direction:rtl;margin:0 6px;font-style:normal;text-transform:none;letter-spacing:0}
+.total-row.grand .label-ar{font-family:'Almarai',sans-serif;font-size:0.78rem;color:#6b6b6b;font-style:normal;text-transform:none;letter-spacing:0}
 .total-row .amount{font-variant-numeric:lining-nums;font-weight:500;letter-spacing:0.01em}
-.total-row.grand .amount{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400}
-.taxes-line{font-family:'DM Sans',sans-serif;font-size:0.62rem;color:#9aa5ad;padding:4px 0 12px;letter-spacing:0.02em}
+.total-row.grand .amount{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.95rem;letter-spacing:0.05em}
+.taxes-line{font-family:'DM Sans',sans-serif;font-size:0.66rem;color:#9aa5ad;padding:6px 0 14px;letter-spacing:0.02em}
+
+/* GIFTING toggle row (Hermès has it) */
+.gifting-row{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-top:1px solid rgba(26,58,82,0.10);border-bottom:1px solid rgba(26,58,82,0.10);margin-top:8px}
+.gifting-label{font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#1a3a52;text-transform:uppercase;letter-spacing:0.16em;font-weight:500}
+.gifting-label .ar{font-family:'Almarai',sans-serif;font-size:0.7rem;color:#9aa5ad;text-transform:none;letter-spacing:0;margin-left:8px;font-weight:400}
+.gifting-checkbox{width:20px;height:20px;border:1.5px solid rgba(26,58,82,0.30);background:transparent;cursor:pointer;border-radius:2px}
 
 /* ============ CHECKOUT PILLS (2-button, Sign in / As guest) ============ */
 .checkout-actions{padding:22px 22px 28px;display:flex;flex-direction:column;gap:10px}
@@ -112,7 +119,10 @@ body{background:#e8e3da;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52
           <div>
             <div class="cart-item-name">Rotary telephone</div>
             <div class="cart-item-name-ar">هاتف دوّار</div>
-            <div class="cart-item-meta">Color: cream</div>
+            <div class="cart-item-meta">
+              <div>Color: cream</div>
+              <div>Ref: ORLO-TEL-001</div>
+            </div>
           </div>
           <div class="cart-item-price">AED 285</div>
         </div>
@@ -134,7 +144,11 @@ body{background:#e8e3da;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52
           <div>
             <div class="cart-item-name">Silk tie</div>
             <div class="cart-item-name-ar">ربطة حرير</div>
-            <div class="cart-item-meta">Color: black</div>
+            <div class="cart-item-meta">
+              <div>Color: black</div>
+              <div>Length: 142 cm</div>
+              <div>Ref: ORLO-TIE-BLK</div>
+            </div>
           </div>
           <div class="cart-item-price">AED 140</div>
         </div>
@@ -156,7 +170,10 @@ body{background:#e8e3da;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52
           <div>
             <div class="cart-item-name">Dangling buddies</div>
             <div class="cart-item-name-ar">دانغلينغ بادي</div>
-            <div class="cart-item-meta">Set of 3</div>
+            <div class="cart-item-meta">
+              <div>Set of 3</div>
+              <div>Ref: ORLO-DB-S3</div>
+            </div>
           </div>
           <div class="cart-item-price">AED 95</div>
         </div>
@@ -199,6 +216,12 @@ body{background:#e8e3da;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52
       <span class="amount">AED 520.00</span>
     </div>
     <div class="taxes-line">All applicable taxes included · شامل الضرائب</div>
+  </div>
+
+  <!-- ========== GIFTING TOGGLE (Hermès has it — optional gift wrap) ========== -->
+  <div class="gifting-row">
+    <div class="gifting-label">Gifting<span class="ar">تغليف هدية</span></div>
+    <input type="checkbox" class="gifting-checkbox" aria-label="Add gift wrap">
   </div>
 
   <!-- ========== CHECKOUT PILLS (two-button, no Pay by Card label, no cream box) ========== -->
