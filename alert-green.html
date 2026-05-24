@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Alert Green — ORLO Edit green palette</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a1a1a;min-height:100vh;padding:0;margin:0}
+.option-label{padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10)}
+.option-label .sub{font-family:'DM Sans',sans-serif;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px}
+
+.nav{padding:14px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(26,58,82,0.10);background:#fff}
+.lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.lockup .logo-img{height:40px;width:auto;display:block;flex-shrink:0}
+.lockup .sep{display:inline-block;width:1px;height:28px;background:rgba(26,58,82,0.25)}
+.lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.lockup .wordmark span{color:#e76f51}
+.nav .actions{display:inline-flex;gap:24px;align-items:center}
+.nav .actions a{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b;text-decoration:none;transition:color .2s}
+.nav .actions a:hover{color:#1a3a52}
+.nav .actions a.logout{color:#1a3a52;border-bottom:1px solid currentColor}
+
+.hero{padding:60px 32px 28px;max-width:1100px;margin:0 auto;border-bottom:1px solid rgba(26,58,82,0.10)}
+.hero .eyebrow{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:14px;display:block}
+.hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(48px,7vw,84px);line-height:0.95;letter-spacing:-0.02em;color:#1a3a52;margin-bottom:10px}
+.hero h1 em{color:#e76f51;font-style:italic;font-weight:400}
+.hero p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#6b6b6b;max-width:420px;line-height:1.6}
+.hero p.ar{font-family:'Almarai',sans-serif;font-size:1rem;direction:rtl;margin-top:14px;font-style:normal;color:#6b6b6b;line-height:1.6;max-width:420px}
+.hero p.ar-tag{font-family:'Almarai',sans-serif;font-size:0.85rem;direction:rtl;margin-top:4px;font-style:normal;color:#6b6b6b;line-height:1.7;max-width:420px}
+.hero .member-since{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#9aa5ad;margin-top:24px;font-weight:500}
+
+/* Verify banner — Option A: coral hairline left + cream · centered text + button */
+.verify-banner{max-width:1100px;margin:24px auto 0;padding:22px 32px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;background:#fbf6f3;border-left:3px solid #e76f51;border-radius:0 10px 10px 0}
+.verify-banner-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#1a3a52;line-height:1.5;max-width:520px}
+.verify-banner-text .ar{display:block;font-family:'Almarai',sans-serif;font-style:normal;font-size:0.82rem;color:#6b6b6b;margin-top:4px;direction:rtl}
+.verify-banner-btn{padding:10px 20px;background:transparent;color:#1a3a52;border:1px solid #1a3a52;border-radius:999px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s;white-space:nowrap}
+.verify-banner-btn:hover{background:#1a3a52;color:#fff}
+.verify-banner-btn .ar{font-family:'Almarai',sans-serif;font-size:0.65rem;margin-left:6px;text-transform:none;letter-spacing:0;font-weight:400;opacity:0.85}
+
+/* Tabs */
+.tabs-wrap{max-width:1100px;margin:32px auto 0;padding:0 32px;border-bottom:1px solid rgba(26,58,82,0.10)}
+.tabs{display:flex;gap:36px;overflow-x:auto}
+.tab{padding:18px 0;font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:#9aa5ad;cursor:pointer;background:none;border:none;position:relative;transition:color .2s;display:flex;flex-direction:column;align-items:flex-start;gap:2px;white-space:nowrap}
+.tab:hover{color:#1a3a52}
+.tab.active{color:#1a3a52}
+.tab.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:#e76f51}
+.tab .ar{font-family:'Almarai',sans-serif;font-size:0.7rem;text-transform:none;letter-spacing:0;font-weight:400;color:#9aa5ad}
+
+.body{padding:48px 32px;max-width:1100px;margin:0 auto}
+
+/* Order card */
+.order-card{background:#fff;border:1px solid rgba(26,58,82,0.10);border-radius:14px;margin-bottom:18px;overflow:hidden}
+.order-card-header{padding:20px 24px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:1px solid rgba(26,58,82,0.06)}
+.order-id{font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.2em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:4px}
+.order-id .num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#1a3a52;letter-spacing:0.02em;text-transform:none;font-weight:400;margin-left:6px}
+.order-date{font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#6b6b6b}
+
+.status-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;border:1px solid;flex-shrink:0}
+.status-pill::before{content:'';width:6px;height:6px;border-radius:50%}
+.status-pill.coral{color:#e76f51;border-color:rgba(231,111,81,0.30)}
+.status-pill.coral::before{background:#e76f51}
+.status-pill.navy{color:#1a3a52;border-color:rgba(26,58,82,0.25)}
+.status-pill.navy::before{background:#1a3a52}
+.status-pill.muted{color:#9aa5ad;border-color:rgba(154,165,173,0.40)}
+.status-pill.muted::before{background:#9aa5ad}
+
+.order-items{padding:8px 24px}
+.order-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(26,58,82,0.06)}
+.order-item:last-child{border-bottom:none}
+.order-item-img{width:44px;height:44px;border-radius:6px;background:#eee;flex-shrink:0}
+.order-item-info{flex:1;min-width:0}
+.order-item-name{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#1a1a1a;font-weight:400;line-height:1.3;display:block;margin-bottom:3px}
+.order-item-qty{font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#9aa5ad;letter-spacing:0.04em}
+.order-item-price{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#1a3a52;flex-shrink:0}
+
+.order-footer{padding:18px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:rgba(248,246,242,0.5)}
+.order-total{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
+.order-total .amt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;color:#1a3a52;font-weight:400;text-transform:none;letter-spacing:0;margin-left:10px}
+.order-actions{display:inline-flex;gap:22px;align-items:center}
+.order-actions a{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#1a3a52;text-decoration:none;font-weight:500;border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .2s}
+.order-actions a:hover{border-bottom-color:currentColor}
+.order-actions a.cancel{color:#9aa5ad}
+.order-actions a.cancel:hover{color:#1a3a52}
+
+.empty-state{text-align:center;padding:60px 24px;background:#fff;border:1px solid rgba(26,58,82,0.10);border-radius:14px}
+.empty-state h3{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.5rem;color:#1a3a52;margin-bottom:8px}
+.empty-state p{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#6b6b6b;line-height:1.6;max-width:340px;margin:0 auto 24px}
+
+.section-label{font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.2em;text-transform:uppercase;color:#9aa5ad;margin-bottom:18px;font-weight:500;display:flex;justify-content:space-between;align-items:baseline}
+.section-label .ar{font-family:'Almarai',sans-serif;letter-spacing:0;text-transform:none;font-size:0.78rem;color:#9aa5ad}
+
+/* Help block */
+.help-block{text-align:center;padding-top:32px;border-top:1px solid rgba(26,58,82,0.08);margin-top:48px;max-width:1100px;margin-left:auto;margin-right:auto;padding-left:32px;padding-right:32px}
+.help-label{font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.2em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;display:block}
+.help-label .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;margin-left:6px;text-transform:none;letter-spacing:0;font-weight:400}
+.help-email{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#1a3a52;text-decoration:none;border-bottom:1px solid rgba(26,58,82,0.20)}
+
+@media (max-width:680px){
+  .nav{padding:12px 20px;flex-wrap:wrap;gap:8px}
+  .lockup{gap:10px}.lockup .logo-img{height:32px}.lockup .sep{height:24px}.lockup .wordmark{font-size:1.2rem}
+  .nav .actions{gap:14px}
+  .hero{padding:36px 24px 20px}
+  .tabs-wrap{padding:0 24px;margin-top:24px}
+  .tabs{gap:24px}
+  .body{padding:32px 20px}
+  .order-card-header{padding:16px 18px;flex-direction:column;align-items:flex-start}
+  .order-items{padding:8px 18px}
+  .order-footer{padding:14px 18px;flex-direction:column;align-items:flex-start}
+  .order-actions{flex-wrap:wrap;gap:14px}
+  .help-block{padding-left:24px;padding-right:24px}
+}
+</style></head>
+<body>
+<div class="option-label">Alert Green<span class="sub">Success alert using Edit's olive #2c5f2e + leaf #5a9e3d palette</span></div>
+
+<nav class="nav">
+  <a href="/" class="lockup">
+    <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+    <span class="sep"></span>
+    <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+  </a>
+  <div class="actions">
+    <a href="/">← Back to Shop</a>
+    <a href="#" class="logout">Sign out</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">Account</div>
+  <h1>Hello,<br><em>Rami.</em></h1>
+  <p>Your orders, addresses, and profile — all in one place.</p>
+  <p class="ar">مرحباً، رامي.</p>
+  <p class="ar-tag">طلباتك، عناوينك، وملفك — في مكان واحد.</p>
+  <div class="member-since">Member since March 2024</div>
+</section>
+
+<div class="verify-banner">
+  <div class="verify-banner-text">Your email isn't verified yet. Open your inbox to complete setup.<span class="ar">بريدك الإلكتروني غير مُفعّل بعد.</span></div>
+  <button class="verify-banner-btn">Resend email<span class="ar">إعادة إرسال</span></button>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab">Orders<span class="ar">طلباتي</span></button>
+    <button class="tab active">Profile<span class="ar">الملف الشخصي</span></button>
+    <button class="tab">Addresses<span class="ar">العناوين</span></button>
+  </div>
+</div>
+
+<section class="body">
+  <style>
+    /* Alert success — ORLO Edit green */
+    .alert{font-family:'DM Sans',sans-serif;padding:12px 16px;border-radius:8px;margin-bottom:18px;font-size:0.85rem;line-height:1.5}
+    .alert-success{background:#f4f7f1;color:#2c5f2e;border:1px solid rgba(90,158,61,0.30)}
+    .alert-error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+
+    .profile-block{background:#fff;border:1px solid rgba(26,58,82,0.10);border-radius:14px;padding:32px 28px;margin-bottom:18px}
+    .profile-block-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;color:#1a3a52;margin-bottom:6px}
+    .profile-block-sub{font-family:'Almarai',sans-serif;font-size:0.85rem;color:#9aa5ad;direction:rtl;margin-bottom:24px}
+    .profile-form-row{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:18px}
+    .profile-form-group{flex:1;min-width:240px}
+    .profile-form-group label{display:flex;justify-content:space-between;align-items:baseline;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:6px;font-weight:500}
+    .profile-form-group label .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;letter-spacing:0;color:#9aa5ad;text-transform:none;font-weight:400}
+    .profile-form-group input{width:100%;padding:12px 0;font-family:'DM Sans',sans-serif;font-size:1rem;background:transparent;border:none;border-bottom:1px solid rgba(26,58,82,0.20);color:#1a1a1a;outline:none;transition:border-color .2s;border-radius:0}
+    .profile-form-group input:focus{border-bottom-color:#1a3a52}
+    .profile-form-group input:disabled{color:#9aa5ad;cursor:not-allowed}
+    .pw-wrap{position:relative}
+    .pw-toggle{position:absolute;right:0;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#b8c0c8;padding:4px;line-height:1;transition:color .2s}
+    .pw-toggle:hover{color:#1a3a52}
+    .pw-toggle svg{width:1.1rem;height:1.1rem;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .btn-save{padding:14px 32px;margin-top:12px;background:#1a3a52;color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:filter .2s, transform .2s}
+    .btn-save:hover{filter:brightness(0.85);transform:translateY(-1px)}
+    .btn-save .ar{font-family:'Almarai',sans-serif;font-size:0.7rem;margin-left:6px;text-transform:none;letter-spacing:0;font-weight:400;opacity:0.85}
+
+    /* Delete block */
+    .danger-block{background:#fff;border:1px solid rgba(220,53,69,0.20);border-radius:14px;padding:32px 28px}
+    .danger-block-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;color:#dc3545;margin-bottom:6px}
+    .danger-block p{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#6b6b6b;line-height:1.6;max-width:480px;margin-bottom:18px}
+    .danger-block p .ar{display:block;font-family:'Almarai',sans-serif;font-size:0.82rem;color:#9aa5ad;margin-top:4px;direction:rtl}
+    .btn-delete{padding:14px 28px;background:transparent;color:#dc3545;border:1px solid rgba(220,53,69,0.40);border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background .2s, color .2s}
+    .btn-delete:hover{background:#dc3545;color:#fff;border-color:#dc3545}
+    .btn-delete .ar{font-family:'Almarai',sans-serif;font-size:0.7rem;margin-left:6px;text-transform:none;letter-spacing:0;font-weight:400;opacity:0.85}
+  </style>
+
+  <div class="section-label">Your profile<span class="ar">ملفك الشخصي</span></div>
+
+  <!-- Profile form -->
+  <div class="profile-block">
+    <div class="profile-block-title">Personal details.</div>
+    <div class="profile-block-sub">المعلومات الشخصية.</div>
+    <div class="alert alert-success">Profile updated successfully.</div>
+    <div class="profile-form-row">
+      <div class="profile-form-group">
+        <label>Full name <span class="ar">الاسم الكامل</span></label>
+        <input type="text" value="Rami Habash">
+      </div>
+      <div class="profile-form-group">
+        <label>Email <span class="ar">البريد الإلكتروني</span></label>
+        <input type="email" value="ra***@gmail.com" disabled>
+      </div>
+    </div>
+    <div class="profile-form-row">
+      <div class="profile-form-group" style="max-width:50%">
+        <label>Phone <span class="ar">رقم الهاتف</span></label>
+        <input type="tel" value="+971 50 123 4567">
+      </div>
+    </div>
+    <button class="btn-save">Save changes<span class="ar">حفظ التغييرات</span></button>
+  </div>
+
+  <!-- Change password -->
+  <div class="profile-block">
+    <div class="profile-block-title">Change password.</div>
+    <div class="profile-block-sub">تغيير كلمة المرور.</div>
+    <div class="profile-form-row">
+      <div class="profile-form-group">
+        <label>Current password <span class="ar">الحالية</span></label>
+        <div class="pw-wrap">
+          <input type="password" placeholder="••••••••">
+          <button type="button" class="pw-toggle"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+      </div>
+      <div class="profile-form-group">
+        <label>New password <span class="ar">الجديدة</span></label>
+        <div class="pw-wrap">
+          <input type="password" placeholder="Min. 8 characters">
+          <button type="button" class="pw-toggle"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <button class="btn-save">Update password<span class="ar">تحديث</span></button>
+  </div>
+
+  <!-- Delete account -->
+  <div class="danger-block">
+    <div class="danger-block-title">Delete account.</div>
+    <p>Permanently delete your account and all associated data. This action cannot be undone.<span class="ar">حذف حسابك نهائياً وجميع البيانات المرتبطة. لا يمكن التراجع عن هذا الإجراء.</span></p>
+    <button class="btn-delete">Delete my account<span class="ar">حذف حسابي</span></button>
+  </div>
+
+</section>
+
+<div class="help-block">
+  <span class="help-label">Need help?<span class="ar">تحتاج مساعدة؟</span></span>
+  <a href="mailto:info@orlostore.com" class="help-email">info@orlostore.com</a>
+</div>
+
+</body></html>
