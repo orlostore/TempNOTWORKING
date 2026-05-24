@@ -1,478 +1,211 @@
 <!DOCTYPE html>
-<html lang="en" style="background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);min-height:100vh">
+<html lang="en">
 <head>
     <!-- ORLO unified analytics: Meta Pixel + TikTok Pixel + CAPI (deferred) -->
     <script src="/analytics.js?v=3" defer></script>
-  
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmed - ORLO Store</title>
+    <title>Order Confirmed | ORLO Store</title>
     <meta name="description" content="Your ORLO order has been confirmed. Thank you for shopping with us.">
     <meta name="robots" content="noindex">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <style>@font-face{font-family:'Inter';src:url('/fonts/inter-latin-variable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}@font-face{font-family:'Almarai';src:url('/fonts/almarai-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}@font-face{font-family:'Almarai';src:url('/fonts/almarai-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}</style>
+    <style>
+        @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+        @font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+    </style>
+    <style>html{opacity:0;transition:opacity .15s}</style>
+    <script>Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})</script>
+    <link rel="stylesheet" href="styles.css?v=31">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background:#f8f6f2; font-family:'DM Sans',sans-serif; color:#1a1a1a; min-height:100vh; padding:0; margin:0; }
 
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .arabic-text { font-family: 'Almarai', sans-serif; direction: rtl; }
+        @keyframes fadeSlideIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
 
-        .page-container {
-            width: 100%;
-            max-width: 780px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(44,74,92,0.08), 0 1px 3px rgba(0,0,0,0.04);
-            overflow: hidden;
-            display: flex;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-        }
-        .page-container.ready { opacity: 1; transform: translateY(0); }
+        /* ── LOCKUP NAV ── */
+        .success-nav { padding:14px 32px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(26,58,82,0.10); background:#fff; }
+        .success-lockup { display:inline-flex; align-items:center; gap:14px; text-decoration:none; }
+        .success-lockup .logo-img { height:40px; width:auto; display:block; flex-shrink:0; }
+        .success-lockup .sep { display:inline-block; width:1px; height:28px; background:rgba(26,58,82,0.25); }
+        .success-lockup .wordmark { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.4rem; letter-spacing:0.1em; color:#1a3a52; line-height:1; }
+        .success-lockup .wordmark span { color:#e76f51; }
+        .success-nav .back { font-family:'DM Sans',sans-serif; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:#6b6b6b; text-decoration:none; transition:color .2s; }
+        .success-nav .back:hover { color:#1a3a52; }
 
-        /* LEFT PANEL */
-        .left-panel {
-            width: 250px;
-            flex-shrink: 0;
-            background: linear-gradient(160deg, #2c4a5c 0%, #1a3242 60%, #162b3a 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 35px 20px;
-            position: relative;
-            overflow: hidden;
-        }
+        /* ── HERO ── */
+        .success-hero { padding:60px 32px 36px; max-width:900px; margin:0 auto; border-bottom:1px solid rgba(26,58,82,0.10); animation:fadeSlideIn 0.4s ease-out; }
+        .success-hero .hero-eyebrow { font-family:'DM Sans',sans-serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:#e76f51; font-weight:500; margin-bottom:14px; display:block; }
+        .success-hero h1 { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(48px,7vw,84px); line-height:0.95; letter-spacing:-0.02em; color:#1a3a52; margin-bottom:10px; }
+        .success-hero h1 em { color:#e76f51; font-style:italic; font-weight:400; }
+        .success-hero p { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:#6b6b6b; max-width:420px; line-height:1.6; }
+        .success-hero p.ar { font-family:'Almarai',sans-serif; font-size:1rem; direction:rtl; margin-top:14px; font-style:normal; color:#6b6b6b; line-height:1.6; max-width:420px; }
+        .success-hero p.ar-tag { font-family:'Almarai',sans-serif; font-size:0.85rem; direction:rtl; margin-top:4px; font-style:normal; color:#6b6b6b; line-height:1.7; max-width:420px; }
 
-        .left-panel::before {
-            content: '';
-            position: absolute;
-            top: -40%;
-            right: -40%;
-            width: 80%;
-            height: 80%;
-            background: radial-gradient(circle, rgba(224,120,86,0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
+        /* ── BODY ── */
+        .success-body { padding:48px 32px; max-width:540px; margin:0 auto; }
 
-        .left-panel::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -30%;
-            width: 60%;
-            height: 60%;
-            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
-            pointer-events: none;
-        }
+        /* Order number */
+        .order-no { text-align:center; margin-bottom:36px; padding-bottom:32px; border-bottom:1px solid rgba(26,58,82,0.08); }
+        .order-no .label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; margin-bottom:10px; font-weight:500; }
+        .order-no .number { font-family:'Cormorant Garamond',serif; font-weight:400; font-style:italic; font-size:1.6rem; color:#1a3a52; letter-spacing:0.02em; word-break:break-all; }
 
-        .checkmark-circle {
-            width: 65px; height: 65px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 14px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-            animation: scaleIn 0.4s ease-out 0.2s both;
-            position: relative;
-            z-index: 1;
-        }
-        @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
+        /* Items */
+        .items { margin-bottom:36px; }
+        .items-label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; margin-bottom:18px; font-weight:500; display:flex; justify-content:space-between; align-items:baseline; }
+        .items-label .ar { font-family:'Almarai',sans-serif; letter-spacing:0; text-transform:none; font-size:0.78rem; color:#9aa5ad; }
+        .order-item { display:flex; align-items:center; gap:16px; padding:14px 0; border-bottom:1px solid rgba(26,58,82,0.06); }
+        .order-item:last-child { border-bottom:none; }
+        .order-item-img { width:48px; height:48px; border-radius:6px; background:#eee; flex-shrink:0; object-fit:cover; }
+        .order-item-details { flex:1; min-width:0; }
+        .order-item-name { font-family:'DM Sans',sans-serif; font-size:0.92rem; color:#1a1a1a; font-weight:400; line-height:1.3; display:block; margin-bottom:4px; }
+        .order-item-qty { font-family:'DM Sans',sans-serif; font-size:0.72rem; color:#9aa5ad; letter-spacing:0.04em; }
+        .order-item-price { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; color:#1a3a52; flex-shrink:0; }
+        .order-more { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.92rem; color:#9aa5ad; padding:8px 0 2px; text-align:center; }
 
-        .checkmark { width: 32px; height: 32px; stroke: #28a745; stroke-width: 3; fill: none; animation: drawCheck 0.5s ease-out 0.5s both; }
-        @keyframes drawCheck { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+        /* Totals */
+        .totals { padding-top:18px; border-top:1px solid rgba(26,58,82,0.08); margin-top:8px; }
+        .order-subtotal-row, .order-total-row { display:flex; justify-content:space-between; align-items:baseline; padding:6px 0; font-family:'DM Sans',sans-serif; font-size:0.88rem; color:#6b6b6b; }
+        .order-subtotal-row .ar, .order-total-row .ar { font-family:'Almarai',sans-serif; font-size:0.75rem; margin-left:8px; color:#9aa5ad; font-weight:400; }
+        .order-total-row { padding-top:18px; margin-top:10px; border-top:1px solid rgba(26,58,82,0.12); font-size:1.05rem; color:#1a3a52; font-weight:500; }
+        .order-total-row #orderTotal { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.5rem; font-weight:400; }
+        .order-delivery-free { font-family:'Cormorant Garamond',serif; font-style:italic; color:#1a3a52; }
 
-        .left-panel h1 {
-            color: white; font-size: 1.15rem; font-weight: 700;
-            text-align: center; margin-bottom: 3px; position: relative; z-index: 1;
-        }
+        /* Delivery estimate */
+        .delivery { text-align:center; padding:32px 0; border-top:1px solid rgba(26,58,82,0.08); border-bottom:1px solid rgba(26,58,82,0.08); margin-bottom:32px; }
+        .delivery-label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; margin-bottom:10px; font-weight:500; }
+        .delivery-dates-en { font-family:'Cormorant Garamond',serif; font-weight:400; font-style:italic; font-size:1.4rem; color:#1a3a52; letter-spacing:-0.005em; }
+        .delivery-ar { font-family:'Almarai',sans-serif; font-size:0.85rem; color:#6b6b6b; direction:rtl; margin-top:8px; display:block; }
 
-        .left-panel .ar-title {
-            color: rgba(255,255,255,0.85); font-family: 'Almarai', sans-serif;
-            font-size: 0.9rem; text-align: center; margin-bottom: 18px;
-            position: relative; z-index: 1;
-        }
+        /* Primary CTA */
+        .cta-wrap { text-align:center; margin-bottom:32px; }
+        .btn-primary { display:inline-block; padding:16px 36px; background:#1a3a52; color:#fff; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-weight:500; font-size:0.82rem; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; text-decoration:none; transition:filter .2s, transform .2s; }
+        .btn-primary:hover { filter:brightness(0.85); transform:translateY(-1px); }
+        .btn-primary:disabled { opacity:0.6; cursor:not-allowed; transform:none; filter:none; }
+        .btn-primary .ar { font-family:'Almarai',sans-serif; font-size:0.72rem; margin-left:6px; text-transform:none; letter-spacing:0; font-weight:400; opacity:0.85; }
 
-        /* Vertical timeline */
-        .timeline-vertical {
-            display: flex; flex-direction: column; gap: 0;
-            position: relative; z-index: 1; width: 100%; padding: 0 12px;
-        }
+        /* Guest suggest — italic Cormorant inline (varies per state) */
+        .guest-suggest { text-align:center; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1rem; color:#6b6b6b; line-height:1.6; padding:0 16px; margin-bottom:24px; }
+        .guest-suggest a { color:#1a3a52; text-decoration:none; border-bottom:1px solid currentColor; font-weight:500; }
+        .guest-suggest .ar { display:block; font-family:'Almarai',sans-serif; font-size:0.82rem; color:#9aa5ad; font-style:normal; margin-top:4px; direction:rtl; }
+        .guest-suggest .ar a { color:#1a3a52; font-style:normal; }
 
-        .tl-step {
-            display: flex; align-items: center; gap: 8px;
-            padding: 6px 0; position: relative;
+        /* Account message (for accountMsg div — used by one-click flow + error) */
+        .account-msg { text-align:center; margin-bottom:24px; padding:14px 16px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.85rem; line-height:1.6; display:none; }
+        .account-msg.success { display:block; background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; }
+        .account-msg.error { display:block; background:#fef2f2; border:1px solid #fecaca; color:#991b1b; }
+        .account-msg a { color:inherit; font-weight:500; text-decoration:underline; }
+        .account-msg .arabic-text { display:block; font-family:'Almarai',sans-serif; font-size:0.78rem; opacity:0.85; margin-top:6px; direction:rtl; }
+
+        /* Help block — Option B (uppercase label + italic Cormorant email) */
+        .help-block { text-align:center; padding-top:24px; border-top:1px solid rgba(26,58,82,0.08); }
+        .help-label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; font-weight:500; margin-bottom:8px; display:block; }
+        .help-label .ar { font-family:'Almarai',sans-serif; font-size:0.72rem; margin-left:6px; text-transform:none; letter-spacing:0; font-weight:400; }
+        .help-email { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:#1a3a52; text-decoration:none; border-bottom:1px solid rgba(26,58,82,0.20); transition:border-color .2s; }
+        .help-email:hover { border-bottom-color:#1a3a52; }
+
+        @media (max-width:680px){
+            .success-nav { padding:12px 20px; }
+            .success-lockup { gap:10px; }
+            .success-lockup .logo-img { height:32px; }
+            .success-lockup .sep { height:24px; }
+            .success-lockup .wordmark { font-size:1.2rem; }
+            .success-hero { padding:36px 24px 24px; }
+            .success-body { padding:32px 20px; }
+            .order-no .number { font-size:1.35rem; }
+            .delivery-dates-en { font-size:1.2rem; }
+            .order-total-row #orderTotal { font-size:1.3rem; }
         }
 
-        .tl-step:not(:last-child)::after {
-            content: ''; position: absolute; left: 12px; top: 30px;
-            width: 2px; height: calc(100% - 14px);
-            background: rgba(255,255,255,0.25);
-        }
-
-        .tl-step.active:not(:last-child)::after { background: rgba(255,255,255,0.5); }
-
-        .tl-dot {
-            width: 26px; height: 26px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.65rem; flex-shrink: 0;
-            background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.75);
-        }
-
-        .tl-step.active .tl-dot { background: white; color: #28a745; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-
-        .tl-text { font-size: 0.7rem; color: rgba(255,255,255,0.75); line-height: 1.3; }
-        .tl-step.active .tl-text { color: white; font-weight: 600; }
-        .tl-text .ar { font-family: 'Almarai', sans-serif; font-size: 0.6rem; opacity: 0.8; display: block; }
-
-        /* RIGHT PANEL */
-        .right-panel {
-            flex: 1;
-            padding: 20px 24px;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            max-height: 85vh;
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: #999;
-            text-decoration: none;
-            font-size: 0.78rem;
-            margin-bottom: 12px;
-            transition: color 0.2s;
-        }
-        .back-link:hover { color: #2c4a5c; }
-        .back-link svg {
-            width: 1em; height: 1em;
-            stroke: currentColor; fill: none;
-            stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
-        }
-
-        /* Email notice */
-        .email-notice {
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            border-radius: 8px;
-            padding: 10px 14px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.78rem;
-            color: #166534;
-        }
-        .email-notice .icon { font-size: 1.1rem; flex-shrink: 0; }
-        .email-notice .ar { display: block; font-family: 'Almarai', sans-serif; font-size: 0.7rem; color: #22863a; margin-top: 2px; }
-
-        /* Order summary */
-        .order-summary {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 14px;
-            margin-bottom: 10px;
-            border-left: 3px solid #2c4a5c;
-        }
-        .order-summary h3 {
-            color: #2c4a5c; font-size: 0.82rem; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 5px;
-        }
-
-        .order-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 6px 0;
-        }
-        .order-item:not(:last-child) { border-bottom: 1px solid #eef0f2; }
-
-        .order-item-img {
-            width: 40px; height: 40px;
-            border-radius: 6px;
-            object-fit: cover;
-            flex-shrink: 0;
-            background: #eee;
-        }
-
-        .order-item-details {
-            flex: 1;
-            min-width: 0;
-        }
-        .order-item-name {
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: #333;
-            display: block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .order-item-qty {
-            font-size: 0.7rem;
-            color: #888;
-        }
-        .order-item-price {
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: #2c4a5c;
-            flex-shrink: 0;
-        }
-
-        .order-subtotal-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 8px;
-            margin-top: 6px;
-            border-top: 1px solid #e2e6ea;
-            font-size: 0.78rem;
-            color: #555;
-        }
-        .order-subtotal-row .ar {
-            font-family: 'Almarai', sans-serif;
-            font-size: 0.68rem;
-            font-weight: 400;
-            color: #888;
-        }
-        .order-delivery-free {
-            color: #28a745;
-            font-weight: 600;
-        }
-        .order-total-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 10px;
-            margin-top: 6px;
-            border-top: 2px solid #e2e6ea;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #2c4a5c;
-        }
-        .order-total-row .ar {
-            font-family: 'Almarai', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 400;
-            color: #888;
-        }
-
-        .order-more {
-            font-size: 0.72rem;
-            color: #888;
-            padding: 4px 0 2px;
-        }
-
-        .info-card {
-            background: #f8f9fa; border-radius: 10px; padding: 12px 14px;
-            margin-bottom: 10px; border-left: 3px solid #e07856;
-        }
-
-        .info-card h3 { color: #2c4a5c; font-size: 0.82rem; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
-        .info-card p { color: #666; font-size: 0.78rem; line-height: 1.5; }
-        .info-card .arabic-text { text-align: right; margin-top: 2px; color: #999; font-size: 0.7rem; }
-
-        .delivery-dates {
-            font-weight: 700;
-            color: #2c4a5c;
-        }
-
-        /* BUTTONS */
-        .btn-stack { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-
-        .btn-row { display: flex; gap: 8px; }
-
-        .btn {
-            flex: 1; padding: 11px; border-radius: 10px; text-align: center;
-            font-size: 0.82rem; font-weight: 600; text-decoration: none; color: white;
-            cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: all 0.2s;
-        }
-        .btn .ar { display: block; font-size: 0.65rem; opacity: 0.85; font-family: 'Almarai', sans-serif; margin-top: 1px; }
-
-        .btn-blue { background: linear-gradient(135deg, #2c4a5c, #1e3545); }
-        .btn-blue:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(44,74,92,0.3); }
-
-        .btn-orange { background: linear-gradient(135deg, #e07856, #c96644); }
-        .btn-orange:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(224,120,86,0.3); }
-
-        .btn-green {
-            background: linear-gradient(135deg, #1e7a4a, #2c6e5a);
-            padding: 9px 14px; font-size: 0.78rem;
-        }
-        .btn-green:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(30,122,74,0.3); }
-        .btn-green .ar { font-size: 0.65rem; }
-
-        .footer-note { text-align: center; margin-top: 12px; padding-top: 10px; border-top: 1px solid #eee; color: #bbb; font-size: 0.7rem; }
-        .footer-note a { color: #e07856; text-decoration: none; }
-
-        .account-msg {
-            text-align: center; margin-top: 10px; padding: 12px;
-            border-radius: 10px; font-size: 0.78rem; line-height: 1.5;
-            display: none;
-        }
-        .account-msg.success {
-            display: block; background: #f0faf4; border: 1px solid #1e7a4a; color: #1e7a4a;
-        }
-        .account-msg.error {
-            display: block; background: #f8d7da; border: 1px solid #dc3545; color: #721c24;
-        }
-        .account-msg .arabic-text { font-size: 0.72rem; color: inherit; opacity: 0.85; margin-top: 4px; }
-        .account-msg a { color: #e07856; font-weight: 600; }
-
-        /* MOBILE */
-        @media (max-width: 768px) {
-            body { padding: 15px; }
-
-            .page-container {
-                flex-direction: column;
-                max-width: 420px;
-            }
-
-            .left-panel {
-                width: 100%; padding: 22px 20px; flex-shrink: initial;
-            }
-
-            .checkmark-circle { width: 50px; height: 50px; margin-bottom: 10px; }
-            .checkmark { width: 25px; height: 25px; }
-            .left-panel h1 { font-size: 1.05rem; }
-            .left-panel .ar-title { font-size: 0.85rem; margin-bottom: 12px; }
-
-            .timeline-vertical { flex-direction: row; justify-content: space-between; padding: 0; }
-            .tl-step { flex-direction: column; text-align: center; gap: 3px; padding: 0; }
-            .tl-step:not(:last-child)::after { display: none; }
-            .tl-dot { width: 24px; height: 24px; font-size: 0.6rem; }
-            .tl-text { font-size: 0.6rem; }
-            .tl-text .ar { font-size: 0.5rem; }
-
-            .right-panel { padding: 16px 18px; max-height: none; }
-            .btn-row { flex-direction: column; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-            .page-container { opacity: 1; transform: none; }
+        /* ── MOBILE BOTTOM NAV (consistent with other auth pages) ── */
+        .mobile-bottom-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:white; z-index:6000; padding:10px 8px 14px; }
+        .bottom-nav-indicator { position:absolute; top:0; height:3px; width:50px; background:#1a3a52; border-radius:0 0 4px 4px; left:calc(25% + 12.5% - 25px); }
+        .bottom-nav-item { display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; flex:1; position:relative; }
+        .bottom-nav-item svg { width:24px; height:24px; stroke:#c0c8ce; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+        .bottom-nav-item.active svg { stroke:#1a3a52; stroke-width:2; }
+        .bottom-nav-item .nav-label { font-size:0.62rem; font-weight:600; color:#c0c8ce; position:relative; font-family:'DM Sans',sans-serif; }
+        .bottom-nav-item.active .nav-label { color:#1a3a52; }
+        .bottom-nav-item.active .nav-label::after { content:''; position:absolute; bottom:-3px; left:0; right:0; height:1.5px; background:#e76f51; border-radius:1px; }
+        .bottom-cart-badge:empty, .cart-count:empty { display:none !important; }
+        @media (max-width:576px){
+            .mobile-bottom-nav { display:flex; justify-content:space-around; }
+            body { padding-bottom:80px !important; }
         }
     </style>
 </head>
 <body>
-    <main class="page-container">
-        <div class="left-panel">
-            <div class="checkmark-circle" aria-hidden="true">
-                <svg class="checkmark" viewBox="0 0 52 52" stroke-dasharray="100" stroke-dashoffset="100">
-                    <path fill="none" d="M14 27l7 7 16-16"/>
-                </svg>
-            </div>
-            <h1>Order Confirmed!</h1>
-            <p class="ar-title">تم تأكيد طلبك بنجاح</p>
+    <nav class="success-nav">
+        <a href="/" class="success-lockup">
+            <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+            <span class="sep"></span>
+            <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+        </a>
+        <a href="/" class="back">← Back to Shop</a>
+    </nav>
 
-            <div class="timeline-vertical" role="list" aria-label="Order progress">
-                <div class="tl-step active" role="listitem">
-                    <div class="tl-dot" aria-hidden="true">✓</div>
-                    <div class="tl-text">Confirmed<span class="ar">تم التأكيد</span></div>
-                </div>
-                <div class="tl-step" role="listitem">
-                    <div class="tl-dot" aria-hidden="true">📦</div>
-                    <div class="tl-text">Processing<span class="ar">قيد التجهيز</span></div>
-                </div>
-                <div class="tl-step" role="listitem">
-                    <div class="tl-dot" aria-hidden="true">🚚</div>
-                    <div class="tl-text">Shipped<span class="ar">تم الشحن</span></div>
-                </div>
-                <div class="tl-step" role="listitem">
-                    <div class="tl-dot" aria-hidden="true">✨</div>
-                    <div class="tl-text">Delivered<span class="ar">تم التوصيل</span></div>
-                </div>
-            </div>
+    <section class="success-hero">
+        <div class="hero-eyebrow">Order Confirmed</div>
+        <h1>Thank<br><em>you.</em></h1>
+        <p>Your order is in — we'll have it on its way to you shortly.</p>
+        <p class="ar">شكراً لك.</p>
+        <p class="ar-tag">تم استلام طلبك — سنحرص على وصوله إليك قريباً.</p>
+    </section>
+
+    <section class="success-body">
+
+        <div class="order-no" id="orderNoWrap" style="display:none;">
+            <div class="label">Order No.</div>
+            <div class="number" id="orderNo"></div>
         </div>
 
-        <div class="right-panel">
-            <a href="/" class="back-link"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Shop <span class="arabic-text" style="font-size:0.72rem">العودة للمتجر</span></a>
-
-            <!-- Confirmation email notice -->
-            <div class="email-notice">
-                <span class="icon" aria-hidden="true">✉️</span>
-                <div>
-                    Confirmation email sent with your order details
-                    <span class="ar">تم إرسال بريد التأكيد مع تفاصيل طلبك</span>
-                </div>
-            </div>
-
-            <!-- Order summary — populated dynamically from cart -->
-            <div class="order-summary" id="orderSummary" style="display:none">
-                <h3><span aria-hidden="true">🧾</span> Order Summary</h3>
-                <div id="orderItems"></div>
+        <div class="items" id="orderSummary" style="display:none;">
+            <div class="items-label">Your order<span class="ar">طلبك</span></div>
+            <div id="orderItems"></div>
+            <div class="totals">
                 <div class="order-subtotal-row" id="orderSubtotalRow" style="display:none">
-                    <span>Subtotal <span class="ar">المجموع الفرعي</span></span>
+                    <span>Subtotal<span class="ar">المجموع الفرعي</span></span>
                     <span id="orderSubtotal"></span>
                 </div>
                 <div class="order-subtotal-row" id="orderDeliveryRow" style="display:none">
-                    <span>Delivery <span class="ar">التوصيل</span></span>
+                    <span>Delivery<span class="ar">التوصيل</span></span>
                     <span id="orderDeliveryFee"></span>
                 </div>
                 <div class="order-total-row">
-                    <span>Total <span class="ar">الإجمالي</span></span>
+                    <span>Total<span class="ar">الإجمالي</span></span>
                     <span id="orderTotal"></span>
                 </div>
             </div>
-
-            <div class="info-card">
-                <h3><span aria-hidden="true">⏱️</span> Estimated Delivery</h3>
-                <p><span class="delivery-dates" id="deliveryDates">2-5 business days</span> across UAE</p>
-                <p class="arabic-text" id="deliveryDatesAr"><strong>٢-٥ أيام عمل</strong> في جميع أنحاء الإمارات</p>
-            </div>
-
-            <div class="info-card">
-                <h3><span aria-hidden="true">📦</span> What's Next?</h3>
-                <p>We're preparing your order! You'll get tracking info once it ships.</p>
-                <p class="arabic-text">نحن نجهز طلبك! ستتلقى معلومات التتبع عند الشحن.</p>
-            </div>
-
-            <div class="btn-stack">
-                <div class="btn-row">
-                    <a href="/" class="btn btn-blue" onclick="localStorage.removeItem('cart')">
-                        <span aria-hidden="true">🛍️</span> Continue Shopping<span class="ar">متابعة التسوق</span>
-                    </a>
-                    <a href="mailto:info@orlostore.com" class="btn btn-orange">
-                        <span aria-hidden="true">✉️</span> Need Help?<span class="ar">تحتاج مساعدة؟</span>
-                    </a>
-                </div>
-                <!-- Guest only: Create Account button -->
-                <button class="btn btn-green" id="registerBtn" style="display:none" onclick="oneClickAccount()">
-                    <span aria-hidden="true">🔐</span> Create Hassle-Free Account in One Click<span class="ar">إنشاء حساب بدون عناء بنقرة واحدة</span>
-                </button>
-            </div>
-
-            <div class="account-msg" id="accountMsg"></div>
-
-            <div class="footer-note">
-                Questions? <a href="mailto:info@orlostore.com">info@orlostore.com</a>
-            </div>
         </div>
-    </main>
+
+        <div class="delivery">
+            <div class="delivery-label">Arriving</div>
+            <div class="delivery-dates-en" id="deliveryDates">2 – 5 business days</div>
+            <div class="delivery-ar" id="deliveryDatesAr">٢ – ٥ أيام عمل</div>
+        </div>
+
+        <div class="cta-wrap">
+            <a href="/" class="btn-primary" onclick="localStorage.removeItem('cart')">Continue browsing<span class="ar">متابعة التسوق</span></a>
+        </div>
+
+        <!-- Guest-suggest line — populated by JS per state (logged-in / guest existing / guest new) -->
+        <p class="guest-suggest" id="registerBtn" style="display:none;"></p>
+
+        <!-- Account message (one-click registration success/error) -->
+        <div class="account-msg" id="accountMsg"></div>
+
+        <div class="help-block">
+            <span class="help-label">Need help?<span class="ar">تحتاج مساعدة؟</span></span>
+            <a href="mailto:info@orlostore.com" class="help-email">info@orlostore.com</a>
+        </div>
+
+    </section>
 
     <script>
-        // Reveal content when fonts ready
-        Promise.race([document.fonts.ready, new Promise(function(r){ setTimeout(r, 1200); })]).then(function(){
-            document.querySelector('.page-container').classList.add('ready');
-        });
-
         sessionStorage.removeItem('orlo_checkout_pending');
 
         // XSS-safe text escaping
@@ -481,6 +214,13 @@
         // Capture session_id early
         var urlParams = new URLSearchParams(window.location.search);
         var sessionId = urlParams.get('session_id');
+
+        // Display order number (strip Stripe prefix, uppercase, truncate)
+        if (sessionId) {
+            var display = '№ ' + sessionId.replace(/^cs_(live|test)_/, '').slice(0, 12).toUpperCase();
+            document.getElementById('orderNo').textContent = display;
+            document.getElementById('orderNoWrap').style.display = 'block';
+        }
 
         // Read cart BEFORE clearing — used for GA4 + order summary display
         // Falls back to sessionStorage backup in case localStorage was cleared during Stripe redirect
@@ -556,21 +296,21 @@
             var itemsHtml = cartData.slice(0, maxShow).map(function(item) {
                 var imgHtml = item.image
                     ? '<img src="' + esc(item.image) + '" alt="" class="order-item-img">'
-                    : '';
+                    : '<div class="order-item-img"></div>';
                 var qty = item.quantity || 1;
                 var lineTotal = (item.price * qty).toFixed(2);
                 return '<div class="order-item">' +
                     imgHtml +
                     '<div class="order-item-details">' +
                         '<span class="order-item-name">' + esc(item.name || 'Item') + '</span>' +
-                        '<span class="order-item-qty">Qty: ' + qty + '</span>' +
+                        '<span class="order-item-qty">Qty ' + qty + '</span>' +
                     '</div>' +
                     '<span class="order-item-price">AED ' + lineTotal + '</span>' +
                 '</div>';
             }).join('');
 
             if (cartData.length > maxShow) {
-                itemsHtml += '<p class="order-more">+' + (cartData.length - maxShow) + ' more item' + (cartData.length - maxShow > 1 ? 's' : '') + '</p>';
+                itemsHtml += '<p class="order-more">+ ' + (cartData.length - maxShow) + ' more item' + (cartData.length - maxShow > 1 ? 's' : '') + '</p>';
             }
 
             var subtotal = cartData.reduce(function(sum, item) {
@@ -585,13 +325,12 @@
 
             document.getElementById('orderItems').innerHTML = itemsHtml;
 
-            // Show subtotal and delivery rows
             document.getElementById('orderSubtotal').textContent = 'AED ' + subtotal.toFixed(2);
             document.getElementById('orderSubtotalRow').style.display = 'flex';
             if (deliveryFee > 0) {
                 document.getElementById('orderDeliveryFee').textContent = 'AED ' + deliveryFee.toFixed(2);
             } else {
-                document.getElementById('orderDeliveryFee').innerHTML = '<span class="order-delivery-free">FREE | <span class="ar">مجاني</span></span>';
+                document.getElementById('orderDeliveryFee').innerHTML = '<span class="order-delivery-free">Complimentary</span>';
             }
             document.getElementById('orderDeliveryRow').style.display = 'flex';
 
@@ -617,20 +356,22 @@
 
         document.getElementById('deliveryDates').textContent =
             minDate.toLocaleDateString('en-US', enOpts) + ' – ' + maxDate.toLocaleDateString('en-US', enOpts);
-        document.getElementById('deliveryDatesAr').innerHTML =
-            '<strong>' + minDate.toLocaleDateString('ar-AE', { month: 'long', day: 'numeric' }) +
-            ' – ' + maxDate.toLocaleDateString('ar-AE', { month: 'long', day: 'numeric' }) +
-            '</strong> في جميع أنحاء الإمارات';
+        document.getElementById('deliveryDatesAr').textContent =
+            minDate.toLocaleDateString('ar-AE', { month: 'long', day: 'numeric' }) +
+            ' – ' + maxDate.toLocaleDateString('ar-AE', { month: 'long', day: 'numeric' });
 
         // Clear cart AFTER rendering summary + GA4
         localStorage.removeItem('cart');
         sessionStorage.removeItem('orlo_cart_backup');
 
-        // Guest-to-account flow
+        // Guest-to-account flow (three states: logged-in / guest existing email / guest new email)
         var existingToken = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
+        var registerBtn = document.getElementById('registerBtn');
+        var accountMsg = document.getElementById('accountMsg');
 
         if (existingToken) {
-            document.getElementById('registerBtn').style.display = 'none';
+            // State A — logged-in: hide guest-suggest
+            registerBtn.style.display = 'none';
         } else if (sessionId) {
             (async function() {
                 try {
@@ -641,25 +382,25 @@
                     });
                     var data = await res.json();
                     if (data.registered) {
-                        document.getElementById('registerBtn').style.display = 'none';
-                        var msg = document.getElementById('accountMsg');
-                        msg.className = 'account-msg success';
-                        msg.innerHTML = 'You already have an account! <a href="login.html">Login to track your order</a><p class="arabic-text">لديك حساب بالفعل! <a href="login.html">سجل دخول لتتبع طلبك</a></p>';
+                        // State B — guest with existing email: subtle "you already have an account" line
+                        registerBtn.style.display = 'block';
+                        registerBtn.innerHTML = 'You already have an account with us. <a href="login.html">Sign in</a> to track your order.<span class="ar">لديك حساب بالفعل. <a href="login.html">سجّل الدخول</a> لتتبّع طلبك.</span>';
                     } else {
-                        document.getElementById('registerBtn').style.display = 'block';
+                        // State C — guest brand new: invitation to create an account in one click
+                        registerBtn.style.display = 'block';
+                        registerBtn.style.cursor = 'pointer';
+                        registerBtn.innerHTML = 'Save your details for next time? <a href="#" onclick="event.preventDefault();oneClickAccount();">Create an account</a> — one click.<span class="ar">احفظ بياناتك للمرة القادمة؟ <a href="#" onclick="event.preventDefault();oneClickAccount();">إنشاء حساب</a> بنقرة واحدة.</span>';
                     }
                 } catch (e) {
-                    document.getElementById('registerBtn').style.display = 'block';
+                    // Fallback to State C if API check fails
+                    registerBtn.style.display = 'block';
+                    registerBtn.innerHTML = 'Save your details for next time? <a href="#" onclick="event.preventDefault();oneClickAccount();">Create an account</a> — one click.<span class="ar">احفظ بياناتك للمرة القادمة؟ <a href="#" onclick="event.preventDefault();oneClickAccount();">إنشاء حساب</a> بنقرة واحدة.</span>';
                 }
             })();
         }
 
         async function oneClickAccount() {
-            var btn = document.getElementById('registerBtn');
-            var msg = document.getElementById('accountMsg');
-
-            btn.disabled = true;
-            btn.innerHTML = 'Creating...<span class="ar">جاري الإنشاء...</span>';
+            registerBtn.innerHTML = '<em>Creating your account…</em><span class="ar">جاري إنشاء الحساب…</span>';
 
             try {
                 var response = await fetch('/api/auth/guest-to-account', {
@@ -674,28 +415,98 @@
                     localStorage.setItem('orlo_token', data.token);
                     localStorage.setItem('orlo_customer', JSON.stringify(data.customer));
 
-                    btn.style.display = 'none';
-                    msg.className = 'account-msg success';
-                    msg.innerHTML = "You're all set! We've sent your login details to your email. Don't forget to change your password and verify your account when you get a chance.<br><a href=\"account.html\">Go to your account</a><p class=\"arabic-text\">أرسلنا بيانات الدخول إلى بريدك. لا تنسَ تغيير كلمة المرور وتفعيل حسابك.</p>";
+                    registerBtn.style.display = 'none';
+                    accountMsg.className = 'account-msg success';
+                    accountMsg.innerHTML = "You're all set. We've sent your login details to your email — don't forget to change your password and verify your account when you have a moment. <a href=\"account.html\">Go to your account</a>.<span class=\"arabic-text\">أرسلنا بيانات الدخول إلى بريدك. لا تنسَ تغيير كلمة المرور وتأكيد حسابك.</span>";
                 } else {
                     if (data.error && data.error.includes('already registered')) {
-                        btn.style.display = 'none';
-                        msg.className = 'account-msg error';
-                        msg.innerHTML = 'This email already has an account. <a href="login.html">Login instead</a>';
+                        registerBtn.style.display = 'none';
+                        accountMsg.className = 'account-msg error';
+                        accountMsg.innerHTML = 'This email already has an account. <a href="login.html">Sign in instead</a>.';
                     } else {
-                        msg.className = 'account-msg error';
-                        msg.innerHTML = data.error || 'Something went wrong. Please try again.';
-                        btn.disabled = false;
-                        btn.innerHTML = '<span aria-hidden="true">🔐</span> Create Hassle-Free Account in One Click<span class="ar">إنشاء حساب بدون عناء بنقرة واحدة</span>';
+                        accountMsg.className = 'account-msg error';
+                        accountMsg.innerHTML = data.error || 'Something went wrong. Please try again.';
+                        registerBtn.innerHTML = 'Save your details for next time? <a href="#" onclick="event.preventDefault();oneClickAccount();">Create an account</a> — one click.<span class="ar">احفظ بياناتك للمرة القادمة؟ <a href="#" onclick="event.preventDefault();oneClickAccount();">إنشاء حساب</a> بنقرة واحدة.</span>';
                     }
                 }
             } catch (error) {
-                msg.className = 'account-msg error';
-                msg.innerHTML = 'Connection error. Please try again.';
-                btn.disabled = false;
-                btn.innerHTML = '<span aria-hidden="true">🔐</span> Create Hassle-Free Account in One Click<span class="ar">إنشاء حساب بدون عناء بنقرة واحدة</span>';
+                accountMsg.className = 'account-msg error';
+                accountMsg.innerHTML = 'Connection error. Please try again.';
+                registerBtn.innerHTML = 'Save your details for next time? <a href="#" onclick="event.preventDefault();oneClickAccount();">Create an account</a> — one click.<span class="ar">احفظ بياناتك للمرة القادمة؟ <a href="#" onclick="event.preventDefault();oneClickAccount();">إنشاء حساب</a> بنقرة واحدة.</span>';
             }
         }
     </script>
+
+    <script>
+    (function() {
+        window.toggleSuccessMobileMenu = function() {
+            var overlay = document.querySelector('.mobile-menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'mobile-menu-overlay';
+                var chevron = '<svg class="menu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+                overlay.innerHTML =
+                    '<div class="mobile-menu">' +
+                        '<a href="index.html#products">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Shop</span><span class="menu-ar">تسوق</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#about">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">About</span><span class="menu-ar">من نحن</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#contact">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Contact</span><span class="menu-ar">اتصل بنا</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="terms-and-conditions.html">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Terms</span><span class="menu-ar">الشروط</span></div>' +
+                            chevron +
+                        '</a>' +
+                    '</div>';
+                document.body.appendChild(overlay);
+                overlay.onclick = function(e) {
+                    if (e.target === overlay) { overlay.classList.remove('active'); }
+                };
+            }
+            overlay.classList.toggle('active');
+        };
+
+        function moveIndicator(index) {
+            var indicator = document.getElementById('bottomNavIndicator');
+            if (indicator) indicator.style.left = 'calc(' + (index * 25) + '% + 12.5% - 25px)';
+        }
+        var navItems = document.querySelectorAll('.mobile-bottom-nav .bottom-nav-item');
+        navItems.forEach(function(item, i) {
+            item.addEventListener('click', function() { moveIndicator(i); });
+        });
+        moveIndicator(1);
+    })();
+    </script>
+
+    <nav class="mobile-bottom-nav">
+        <div class="bottom-nav-indicator" id="bottomNavIndicator"></div>
+        <div class="bottom-nav-item" id="bottomHomeBtn" data-index="0" onclick="window.location.href='index.html'">
+            <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="bottom-nav-item active" id="bottomAccountBtn" data-index="1" onclick="window.location.href='account.html'">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
+            <span class="nav-label" id="bottomAccountLabel">Account</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomCartBtn" data-index="2" onclick="window.location.href='index.html'">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+            <span class="bottom-cart-badge" id="bottomCartCount" style="display:none"></span>
+            <span class="nav-label">Cart</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomMenuBtn" data-index="3" onclick="toggleSuccessMobileMenu()">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <span class="nav-label">Menu</span>
+        </div>
+    </nav>
 </body>
 </html>
