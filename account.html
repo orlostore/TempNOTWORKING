@@ -669,9 +669,9 @@
 
         async function logout() {
             const yes = await orloConfirm({
-                title: 'Logout',
-                msg: 'Are you sure you want to logout?\nهل أنت متأكد أنك تريد تسجيل الخروج؟',
-                confirmText: 'Logout',
+                title: 'Sign out.',
+                msg: 'Are you sure you want to sign out?\nهل أنت متأكد أنك تريد تسجيل الخروج؟',
+                confirmText: 'Sign out',
                 cancelText: 'Stay',
                 type: 'info'
             });
@@ -873,10 +873,10 @@
 
         async function cancelOrder(orderId, btn) {
             const yes = await orloConfirm({
-                title: 'Cancel Order',
-                msg: 'Are you sure you want to cancel this order?\nA full refund will be issued to your card.',
-                confirmText: 'Cancel Order',
-                cancelText: 'Keep Order',
+                title: 'Cancel order?',
+                msg: 'A full refund will be issued to your card. This can\'t be undone once your order ships.\nسيتم استرداد كامل المبلغ إلى بطاقتك. لا يمكن التراجع بعد شحن الطلب.',
+                confirmText: 'Cancel order',
+                cancelText: 'Keep order',
                 type: 'danger'
             });
             if (!yes) return;
@@ -889,15 +889,15 @@
                 });
                 const data = await response.json();
                 if (data.success) {
-                    orloToast('success', 'Order Cancelled', 'Your order has been cancelled and a refund initiated.');
+                    orloToast('success', 'Order cancelled.', 'Refund initiated to your card — 5-7 business days.\nتم بدء الاسترداد إلى بطاقتك — ٥-٧ أيام عمل.');
                     loadOrders();
                 } else {
-                    orloToast('error', 'Cancel Failed', data.error || 'Failed to cancel order');
+                    orloToast('error', 'Cancel failed.', (data.error || 'Failed to cancel order.') + '\nتعذّر إلغاء الطلب.');
                     btn.textContent = 'Cancel order';
                     btn.disabled = false;
                 }
             } catch (e) {
-                orloToast('error', 'Connection Error', 'Could not reach the server. Please try again.');
+                orloToast('error', 'Couldn\'t connect.', 'Could not reach the server. Please try again.\nيُرجى التحقق من اتصالك والمحاولة مرة أخرى.');
                 btn.textContent = 'Cancel order';
                 btn.disabled = false;
             }
@@ -921,8 +921,8 @@
             const reason = document.getElementById('returnReason').value;
             const btn = document.getElementById('returnSubmitBtn');
 
-            if (!reason) return orloToast('warning', 'Missing Information', 'Please select a return reason.');
-            if (!document.getElementById('returnShippingAck').checked) return orloToast('warning', 'Missing Information', 'Please acknowledge the shipping cost policy.');
+            if (!reason) return orloToast('warning', 'Missing information.', 'Please select a return reason.\nيُرجى اختيار سبب الإرجاع.');
+            if (!document.getElementById('returnShippingAck').checked) return orloToast('warning', 'Missing information.', 'Please acknowledge the shipping cost policy.\nيُرجى تأكيد سياسة تكاليف الشحن.');
 
             btn.disabled = true;
             btn.textContent = 'Submitting…';
@@ -939,15 +939,15 @@
                 const data = await res.json();
                 if (data.success) {
                     closeReturnModal();
-                    orloToast('success', 'Return Requested', data.message);
+                    orloToast('success', 'Return requested.', (data.message || 'Your return request has been submitted.') + '\nتم تقديم طلب الإرجاع.');
                     loadOrders();
                 } else {
-                    orloToast('error', 'Return Failed', data.error || 'Failed to submit return request');
+                    orloToast('error', 'Return failed.', (data.error || 'Failed to submit return request.') + '\nتعذّر تقديم طلب الإرجاع.');
                     btn.textContent = 'Submit request';
                     btn.disabled = false;
                 }
             } catch (e) {
-                orloToast('error', 'Connection Error', 'Could not reach the server. Please try again.');
+                orloToast('error', 'Couldn\'t connect.', 'Could not reach the server. Please try again.\nيُرجى التحقق من اتصالك والمحاولة مرة أخرى.');
                 btn.textContent = 'Submit request';
                 btn.disabled = false;
             }
@@ -1124,16 +1124,16 @@
                 });
                 loadAddresses();
             } catch (error) {
-                orloToast('error', 'Address Error', 'Error setting default address. Please try again.');
+                orloToast('error', 'Address error.', 'Error setting default address. Please try again.\nتعذّر تعيين العنوان الافتراضي.');
             }
         }
 
         async function deleteAddress(id) {
             const yes = await orloConfirm({
-                title: 'Delete Address',
-                msg: 'This address will be permanently removed from your account.',
+                title: 'Delete address?',
+                msg: 'This address will be permanently removed from your account.\nسيتم حذف هذا العنوان نهائياً من حسابك.',
                 confirmText: 'Delete',
-                cancelText: 'Keep It',
+                cancelText: 'Keep it',
                 type: 'danger'
             });
             if (!yes) return;
@@ -1144,7 +1144,7 @@
                 });
                 loadAddresses();
             } catch (error) {
-                orloToast('error', 'Address Error', 'Error deleting address. Please try again.');
+                orloToast('error', 'Address error.', 'Error deleting address. Please try again.\nتعذّر حذف العنوان.');
             }
         }
 
@@ -1155,7 +1155,7 @@
             .then(r => r.json())
             .then(data => {
                 const addr = (data.addresses || []).find(a => a.id === id);
-                if (!addr) return orloToast('error', 'Not Found', 'Address not found.');
+                if (!addr) return orloToast('error', 'Not found.', 'Address not found.\nالعنوان غير موجود.');
                 editingAddressId = id;
                 document.getElementById('addressModalTitle').innerHTML = 'Edit address <span class="arabic-text">تعديل العنوان</span>';
                 document.getElementById('addressModalSubmitBtn').textContent = 'Save changes | حفظ التغييرات';
@@ -1237,12 +1237,12 @@
                 if (added > 0) {
                     let msg = added + ' item(s) added to cart!\nتمت إضافة ' + added + ' منتج(ات) إلى السلة';
                     if (skipped.length > 0) msg += '\n\nUnavailable: ' + skipped.join(', ');
-                    orloToast('success', 'Added to Cart', msg);
+                    orloToast('success', 'Added to cart.', msg);
                 } else {
-                    orloToast('error', 'Unavailable', 'These items are no longer available:\n' + skipped.join(', '));
+                    orloToast('error', 'Unavailable.', 'These items are no longer available:\n' + skipped.join(', ') + '\nهذه المنتجات لم تعد متوفرة.');
                 }
             } catch (err) {
-                orloToast('error', 'Error', 'Could not reorder. Please try again.');
+                orloToast('error', 'Reorder failed.', 'Could not reorder. Please try again.\nتعذّرت إعادة الطلب. يُرجى المحاولة مرة أخرى.');
             } finally {
                 if (btn) { btn.disabled = false; btn.innerHTML = 'Reorder <span class="arabic-part">إعادة الطلب</span>'; }
             }
@@ -1250,11 +1250,11 @@
 
         async function deleteAccount() {
             const confirmation = await orloPrompt({
-                title: 'Delete Account',
-                msg: 'This will permanently delete your account and all data.\nسيؤدي هذا إلى حذف حسابك نهائياً.',
+                title: 'Delete account?',
+                msg: 'This will permanently delete your account and all data. Type DELETE to confirm.\nسيؤدي هذا إلى حذف حسابك نهائياً. اكتب DELETE للتأكيد.',
                 matchValue: 'DELETE',
-                placeholder: 'Type DELETE here',
-                confirmText: 'Delete My Account',
+                placeholder: 'DELETE',
+                confirmText: 'Delete my account',
                 cancelText: 'Cancel'
             });
             if (confirmation !== 'DELETE') return;
@@ -1265,7 +1265,7 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    orloToast('success', 'Account Deleted', 'Your account has been deleted. Goodbye!');
+                    orloToast('success', 'Account deleted.', 'Your account has been deleted. Goodbye!\nتم حذف حسابك. مع السلامة.');
                     setTimeout(function() {
                         localStorage.removeItem('orlo_token');
                         localStorage.removeItem('orlo_customer');
@@ -1274,10 +1274,10 @@
                         window.location.href = '/';
                     }, 2000);
                 } else {
-                    orloToast('error', 'Deletion Failed', data.error || 'Failed to delete account');
+                    orloToast('error', 'Deletion failed.', (data.error || 'Failed to delete account.') + '\nتعذّر حذف الحساب.');
                 }
             } catch (e) {
-                orloToast('error', 'Connection Error', 'Could not reach the server. Please try again.');
+                orloToast('error', 'Couldn\'t connect.', 'Could not reach the server. Please try again.\nيُرجى التحقق من اتصالك والمحاولة مرة أخرى.');
             }
         }
 
