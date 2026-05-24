@@ -22,14 +22,11 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
 .login-nav .back{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b;text-decoration:none;transition:color .2s}
 .login-nav .back:hover{color:#1a3a52}
 
-/* ── HERO (editorial title) ─────────────────────── */
-.cart-hero{padding:48px 32px 28px;max-width:780px;margin:0 auto;border-bottom:1px solid rgba(26,58,82,0.10)}
-.cart-hero .eyebrow{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:14px}
-.cart-hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,5vw,52px);line-height:0.95;letter-spacing:-0.02em;color:#1a3a52;margin-bottom:12px}
-.cart-hero h1 em{color:#e76f51;font-style:italic;font-weight:400}
-.cart-hero .sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:#6b6b6b;line-height:1.5}
-.cart-hero .ar{font-family:'Almarai',sans-serif;font-size:1.05rem;color:#1a3a52;direction:rtl;text-align:right;margin-top:18px;line-height:1.5}
-.cart-hero .ar-tag{font-family:'Almarai',sans-serif;font-size:0.85rem;color:#6b6b6b;direction:rtl;text-align:right;margin-top:4px}
+/* ── CART STATE LABEL (Hermès-style monospace caps) ─────────────────────── */
+.cart-state{padding:34px 32px 18px;max-width:780px;margin:0 auto;border-bottom:1px solid rgba(26,58,82,0.10)}
+.cart-state h1{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.95rem;text-transform:uppercase;letter-spacing:0.18em;color:#1a3a52;line-height:1.3;margin:0}
+.cart-state h1 .ar{font-family:'Almarai',sans-serif;font-size:0.78rem;color:#9aa5ad;text-transform:none;letter-spacing:0;margin-left:14px;font-weight:400;direction:rtl;display:inline-block}
+@media(max-width:576px){.cart-state{padding:24px 20px 14px}.cart-state h1{font-size:0.78rem;letter-spacing:0.14em}.cart-state h1 .ar{display:block;margin:6px 0 0 0;font-size:0.72rem}}
 
 /* ── ITEMS ─────────────────────── */
 .cart-page{max-width:780px;margin:0 auto;padding:0 32px}
@@ -142,13 +139,9 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
   <a href="/" class="back">← Back to Shop</a>
 </nav>
 
-<!-- ═══ HERO ═══════════════ -->
-<section class="cart-hero">
-  <div class="eyebrow">Your Cart</div>
-  <h1>Ready when<br><em>you are.</em></h1>
-  <p class="sub">Three pieces, all in stock — and you're almost there.</p>
-  <p class="ar">سلتك بانتظارك.</p>
-  <p class="ar-tag">ثلاث قطع، جميعها متوفرة — وأنت على وشك الانتهاء.</p>
+<!-- ═══ CART STATE LABEL (Hermes-style monospace caps, no invented copy) ═══════════════ -->
+<section class="cart-state">
+  <h1>You have 3 items in your cart<span class="ar">لديك ٣ عناصر في سلتك</span></h1>
 </section>
 
 <!-- ═══ ITEMS ═══════════════ -->
