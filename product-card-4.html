@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Product Card 4 — Hermès true</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1a1a1a;min-height:100vh;padding:0;margin:0;font-variant-numeric:lining-nums}
+.option-label{padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10)}
+.option-label .sub{font-family:'DM Sans',sans-serif;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px}
+.nav{padding:14px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(26,58,82,0.10);background:#fff}
+.lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.lockup .logo-img{height:36px;width:auto;display:block;flex-shrink:0}
+.lockup .sep{display:inline-block;width:1px;height:24px;background:rgba(26,58,82,0.25)}
+.lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.3rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.lockup .wordmark span{color:#e76f51}
+.hero{padding:48px 32px 24px;max-width:1280px;margin:0 auto}
+.hero .eyebrow{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:10px;display:block}
+.hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,5vw,56px);line-height:0.95;letter-spacing:-0.02em;color:#1a3a52}
+.hero h1 em{color:#e76f51;font-style:italic;font-weight:400}
+.shop-body{padding:32px 32px 80px;max-width:1280px;margin:0 auto}
+
+/* HERMÈS TRUE — no frame, sans-serif name, bag icon quick-add, no Arabic */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:32px 16px}
+.card{background:transparent;position:relative}
+.card-link{display:block;text-decoration:none;color:inherit}
+.card-img{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#efeae0;padding:14px;display:flex;align-items:center;justify-content:center}
+.card-img > div{width:100%;height:100%}
+.card-img .badge{position:absolute;top:14px;left:14px;font-family:'DM Sans',sans-serif;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:#1a3a52;background:rgba(255,255,255,0.92);padding:5px 9px;font-weight:500;z-index:2}
+.card-img .badge.oos{background:rgba(26,58,82,0.92);color:#fff}
+.card-info{padding:14px 4px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.card-info-text{flex:1;min-width:0}
+.card-name{font-family:'DM Sans',sans-serif;font-size:0.92rem;color:#1a3a52;font-weight:400;line-height:1.3;margin-bottom:4px}
+.card-price{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#1a3a52;font-weight:400;letter-spacing:0.01em}
+.card-bag{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid rgba(26,58,82,0.25);border-radius:50%;color:#1a3a52;text-decoration:none;flex-shrink:0;transition:background .2s, color .2s, border-color .2s;background:#fff}
+.card-bag svg{width:15px;height:15px;display:block}
+.card-bag:hover{background:#1a3a52;border-color:#1a3a52;color:#fff}
+.card.oos .card-name,.card.oos .card-price{color:#9aa5ad}
+.card.oos .card-bag{display:none}
+
+@media(max-width:680px){
+  .products-grid{grid-template-columns:repeat(2,1fr);gap:24px 12px}
+  .hero{padding:32px 20px 16px}
+  .shop-body{padding:20px 20px 60px}
+  .card-name{font-size:0.85rem}
+  .card-price{font-size:0.82rem}
+  .card-bag{width:30px;height:30px}
+  .card-bag svg{width:13px;height:13px}
+}
+</style></head>
+<body>
+<div class="option-label">Product Card 4<span class="sub">Hermès true — no frame, cream tile, sans-serif name, bag icon quick-add, no Arabic</span></div>
+<nav class="nav">
+  <a href="/" class="lockup">
+    <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+    <span class="sep"></span>
+    <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+  </a>
+</nav>
+<section class="hero">
+  <div class="eyebrow">Shop</div>
+  <h1>The <em>collection.</em></h1>
+</section>
+<section class="shop-body">
+  <div class="products-grid">
+    <div class="card">
+      <a href="#" class="card-link">
+        <div class="card-img"><div style="background:linear-gradient(135deg,#d4a373,#b87f48)"></div><span class="badge">Best seller</span></div>
+        <div class="card-info">
+          <div class="card-info-text">
+            <div class="card-name">Rotary telephone</div>
+            <div class="card-price">AED 285</div>
+          </div>
+          <a href="#" class="card-bag" aria-label="Add to bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg></a>
+        </div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="#" class="card-link">
+        <div class="card-img"><div style="background:linear-gradient(135deg,#1a3a52,#0f2638)"></div></div>
+        <div class="card-info">
+          <div class="card-info-text">
+            <div class="card-name">Silk tie</div>
+            <div class="card-price">AED 140</div>
+          </div>
+          <a href="#" class="card-bag" aria-label="Add to bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg></a>
+        </div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="#" class="card-link">
+        <div class="card-img"><div style="background:linear-gradient(135deg,#8a9a5b,#5d6b3e)"></div><span class="badge">New</span></div>
+        <div class="card-info">
+          <div class="card-info-text">
+            <div class="card-name">Dangling buddies</div>
+            <div class="card-price">AED 95</div>
+          </div>
+          <a href="#" class="card-bag" aria-label="Add to bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg></a>
+        </div>
+      </a>
+    </div>
+    <div class="card oos">
+      <a href="#" class="card-link">
+        <div class="card-img"><div style="background:linear-gradient(135deg,#c4a484,#8b6f47)"></div><span class="badge oos">Sold out</span></div>
+        <div class="card-info">
+          <div class="card-info-text">
+            <div class="card-name">Flexi wrap</div>
+            <div class="card-price">AED 76</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="#" class="card-link">
+        <div class="card-img"><div style="background:linear-gradient(135deg,#9c8472,#6b563f)"></div></div>
+        <div class="card-info">
+          <div class="card-info-text">
+            <div class="card-name">Desk mat</div>
+            <div class="card-price">AED 175</div>
+          </div>
+          <a href="#" class="card-bag" aria-label="Add to bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg></a>
+        </div>
+      </a>
+    </div>
+    <div class="card">
+      <a href="#" class="card-link">
+        <div class="card-img"><div style="background:linear-gradient(135deg,#e8d5a3,#c4a36c)"></div></div>
+        <div class="card-info">
+          <div class="card-info-text">
+            <div class="card-name">Cable manager</div>
+            <div class="card-price">AED 52</div>
+          </div>
+          <a href="#" class="card-bag" aria-label="Add to bag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg></a>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+</body></html>
