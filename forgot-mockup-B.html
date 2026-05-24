@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Forgot Password Mockup B — Declarative</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a1a1a;min-height:100vh;padding:0;margin:0}
+.option-label{padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10)}
+.option-label .sub{font-family:'DM Sans',sans-serif;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px}
+
+.nav{padding:14px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(26,58,82,0.10);background:#fff}
+.lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.lockup .logo-img{height:40px;width:auto;display:block;flex-shrink:0}
+.lockup .sep{display:inline-block;width:1px;height:28px;background:rgba(26,58,82,0.25)}
+.lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.lockup .wordmark span{color:#e76f51}
+.nav .back{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b;text-decoration:none}
+
+.hero{padding:60px 32px 36px;max-width:900px;margin:0 auto;border-bottom:1px solid rgba(26,58,82,0.10)}
+.hero .eyebrow{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:14px}
+.hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(48px,7vw,84px);line-height:0.95;letter-spacing:-0.02em;color:#1a3a52;margin-bottom:10px}
+.hero h1 em{color:#e76f51;font-style:italic;font-weight:400}
+.hero p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#6b6b6b;max-width:380px;line-height:1.6}
+.hero p.ar{font-family:'Almarai',sans-serif;font-size:1rem;direction:rtl;margin-top:14px;font-style:normal;color:#6b6b6b;line-height:1.6;max-width:420px}
+.hero p.ar-tag{font-family:'Almarai',sans-serif;font-size:0.85rem;direction:rtl;margin-top:4px;font-style:normal;color:#6b6b6b;line-height:1.7;max-width:420px}
+
+.form-section{padding:48px 32px;max-width:480px;margin:0 auto}
+.form-group{margin-bottom:18px}
+.form-group label{display:flex;justify-content:space-between;align-items:baseline;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:6px;font-weight:500}
+.form-group label .arabic{font-family:'Almarai',sans-serif;font-size:0.72rem;letter-spacing:0;color:#9aa5ad;text-transform:none;font-weight:400}
+.form-group input{width:100%;padding:12px 0;font-family:'DM Sans',sans-serif;font-size:1rem;background:transparent;border:none;border-bottom:1px solid rgba(26,58,82,0.20);color:#1a1a1a;outline:none;transition:border-color .2s;border-radius:0}
+.form-group input:focus{border-bottom-color:#1a3a52}
+.form-group input::placeholder{color:#a8a8a8}
+
+.btn{width:100%;padding:16px;margin-top:18px;background:#1a3a52;color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:filter .2s,transform .2s}
+.btn:hover{filter:brightness(0.85);transform:translateY(-1px)}
+.btn .ar{display:block;font-family:'Almarai',sans-serif;font-size:0.72rem;opacity:0.85;margin-top:2px;text-transform:none;letter-spacing:0;font-weight:400}
+
+.footer{margin-top:32px;text-align:center;font-size:0.85rem;color:#6b6b6b;font-family:'DM Sans',sans-serif}
+.footer a{color:#1a3a52;font-weight:500;text-decoration:none;border-bottom:1px solid currentColor}
+.footer .arabic{font-family:'Almarai',sans-serif;font-size:0.78rem;border-bottom:none;margin-left:4px}
+
+@media (max-width:680px){
+  .nav{padding:12px 20px}
+  .lockup{gap:10px}
+  .lockup .logo-img{height:32px}
+  .lockup .sep{height:24px}
+  .lockup .wordmark{font-size:1.2rem}
+  .hero{padding:36px 24px 24px}
+  .form-section{padding:32px 24px}
+}
+</style></head>
+<body>
+<div class="option-label">Forgot Password B<span class="sub">Declarative — Reset your password.</span></div>
+
+<nav class="nav">
+  <a href="/" class="lockup">
+    <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+    <span class="sep"></span>
+    <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+  </a>
+  <a href="/" class="back">← Back to Shop</a>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">Password Reset</div>
+  <h1>Reset your<br><em>password.</em></h1>
+  <p>Enter your email — we'll send you a link to set a new one.</p>
+  <p class="ar">إعادة تعيين كلمة المرور.</p>
+  <p class="ar-tag">أدخل بريدك الإلكتروني وسنرسل لك رابطاً لتعيين كلمة جديدة.</p>
+</section>
+
+<section class="form-section">
+  <form>
+    <div class="form-group">
+      <label>Email <span class="arabic">البريد الإلكتروني</span></label>
+      <input type="email" placeholder="your@email.com">
+    </div>
+    <button class="btn" type="submit">Send reset link<span class="ar">إرسال رابط إعادة التعيين</span></button>
+    <div class="footer">Remembered your password? <a href="login.html">Sign in <span class="arabic">تسجيل الدخول</span></a></div>
+  </form>
+</section>
+</body></html>
