@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ORLO unified analytics: Meta Pixel + TikTok Pixel + CAPI (deferred) -->
+    <script src="/analytics.js?v=3" defer></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password Mockup — Almost there</title>
+    <meta name="description" content="Set a new password for your ORLO Store account.">
+    <link rel="canonical" href="https://orlostore.com/reset-password.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Reset Password | ORLO Store">
+    <meta property="og:description" content="Set a new password for your ORLO Store account.">
+    <meta property="og:url" content="https://orlostore.com/reset-password.html">
+    <meta property="og:image" content="https://orlostore.com/logo.png">
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+        @font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+    </style>
+    <style>html{opacity:0;transition:opacity .15s}</style>
+    <script>Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})</script>
+    <link rel="stylesheet" href="styles.css?v=31">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #f8f6f2;
+            font-family: 'DM Sans', sans-serif;
+            color: #1a1a1a;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── LOCKUP NAV ── */
+        .reset-nav {
+            padding: 14px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(26,58,82,0.10);
+            background: #fff;
+        }
+        .reset-lockup {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+        .reset-lockup .logo-img {
+            height: 40px;
+            width: auto;
+            display: block;
+            flex-shrink: 0;
+        }
+        .reset-lockup .sep {
+            display: inline-block;
+            width: 1px;
+            height: 28px;
+            background: rgba(26,58,82,0.25);
+        }
+        .reset-lockup .wordmark {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 0.1em;
+            color: #1a3a52;
+            line-height: 1;
+        }
+        .reset-lockup .wordmark span { color: #e76f51; }
+        .reset-nav .back {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #6b6b6b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .reset-nav .back:hover { color: #1a3a52; }
+
+        /* ── HERO ── */
+        .reset-hero {
+            padding: 60px 32px 36px;
+            max-width: 900px;
+            margin: 0 auto;
+            border-bottom: 1px solid rgba(26,58,82,0.10);
+            animation: fadeSlideIn 0.4s ease-out;
+        }
+        .reset-hero .hero-eyebrow {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #e76f51;
+            font-weight: 500;
+            margin-bottom: 14px;
+            display: block;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            position: static;
+        }
+        .reset-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            font-size: clamp(48px, 7vw, 84px);
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            color: #1a3a52;
+            margin-bottom: 10px;
+        }
+        .reset-hero h1 em {
+            color: #e76f51;
+            font-style: italic;
+            font-weight: 400;
+        }
+        .reset-hero p {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #6b6b6b;
+            max-width: 380px;
+            line-height: 1.6;
+        }
+        .reset-hero p.ar {
+            font-family: 'Almarai', sans-serif;
+            font-size: 1rem;
+            direction: rtl;
+            margin-top: 14px;
+            font-style: normal;
+            color: #6b6b6b;
+            line-height: 1.6;
+            max-width: 420px;
+        }
+        .reset-hero p.ar-tag {
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.85rem;
+            direction: rtl;
+            margin-top: 4px;
+            font-style: normal;
+            color: #6b6b6b;
+            line-height: 1.7;
+            max-width: 420px;
+        }
+
+        /* ── FORM ── */
+        .reset-form-section {
+            padding: 48px 32px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        .reset-form-group { margin-bottom: 18px; }
+        .reset-form-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #6b6b6b;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .reset-form-group label .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0;
+            color: #9aa5ad;
+            text-transform: none;
+            font-weight: 400;
+        }
+        .reset-form-group input {
+            width: 100%;
+            padding: 12px 0;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(26,58,82,0.20);
+            color: #1a1a1a;
+            outline: none;
+            transition: border-color 0.2s;
+            border-radius: 0;
+        }
+        .reset-form-group input:focus { border-bottom-color: #1a3a52; }
+        .reset-form-group input::placeholder { color: #a8a8a8; }
+
+        .password-input-wrap { position: relative; }
+        .password-input-wrap input { padding-right: 36px; }
+        .password-toggle {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #b8c0c8;
+            padding: 4px;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .password-toggle:hover { color: #1a3a52; }
+        .password-toggle svg {
+            width: 1.1rem;
+            height: 1.1rem;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            vertical-align: middle;
+        }
+
+        /* Password strength indicator */
+        .password-strength {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s;
+        }
+        .password-strength.visible {
+            height: 2px;
+            margin-top: 0;
+        }
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background 0.3s;
+        }
+        .password-strength-bar.weak { width: 33%; background: #dc3545; }
+        .password-strength-bar.medium { width: 66%; background: #e7a52f; }
+        .password-strength-bar.strong { width: 100%; background: #2d8a4f; }
+
+        .password-hint {
+            color: #9aa5ad;
+            font-size: 0.72rem;
+            margin-top: 6px;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: 0.04em;
+        }
+        .password-hint .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            margin-left: 6px;
+            letter-spacing: 0;
+        }
+
+        .btn-reset {
+            width: 100%;
+            padding: 16px;
+            margin-top: 10px;
+            background: #1a3a52;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: 0.82rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: filter 0.2s, transform 0.2s;
+        }
+        .btn-reset:hover { filter: brightness(0.85); transform: translateY(-1px); }
+        .btn-reset:active { transform: translateY(0); }
+        .btn-reset:disabled { opacity: 0.6; cursor: not-allowed; transform: none; filter: none; }
+        .btn-reset .arabic-text {
+            display: block;
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.72rem;
+            opacity: 0.85;
+            margin-top: 2px;
+            text-transform: none;
+            letter-spacing: 0;
+            font-weight: 400;
+        }
+
+        .reset-footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #6b6b6b;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .reset-footer a {
+            color: #1a3a52;
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px solid currentColor;
+        }
+        .reset-footer .arabic-text {
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.78rem;
+            border-bottom: none;
+        }
+
+        .alert {
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            font-size: 0.82rem;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .alert-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        .alert-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+
+        /* No-token state (invalid/missing reset link) */
+        .no-token {
+            text-align: center;
+            padding: 16px 0;
+        }
+        .no-token p {
+            font-family: 'DM Sans', sans-serif;
+            color: #6b6b6b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            max-width: 360px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .no-token p.ar {
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.88rem;
+            direction: rtl;
+            margin-top: 6px;
+        }
+
+        /* Success state */
+        .success-message {
+            text-align: center;
+            padding: 16px 0;
+            animation: fadeSlideIn 0.4s ease-out;
+        }
+        .success-icon {
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: center;
+        }
+        .success-icon svg {
+            width: 3rem;
+            height: 3rem;
+            stroke: #e76f51;
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .success-message h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            font-style: italic;
+            font-size: 1.8rem;
+            color: #1a3a52;
+            margin-bottom: 12px;
+            letter-spacing: -0.005em;
+        }
+        .success-message p {
+            font-family: 'DM Sans', sans-serif;
+            color: #6b6b6b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 360px;
+            margin: 0 auto 8px;
+        }
+        .success-message p.ar {
+            font-family: 'Almarai', sans-serif;
+            font-size: 0.88rem;
+            direction: rtl;
+            color: #6b6b6b;
+            margin-top: 4px;
+            line-height: 1.7;
+        }
+        .success-message .btn-reset { margin-top: 22px; display: block; text-decoration: none; text-align: center; }
+
+        @media (max-width: 680px) {
+            .reset-nav { padding: 12px 20px; }
+            .reset-lockup { gap: 10px; }
+            .reset-lockup .logo-img { height: 32px; }
+            .reset-lockup .sep { height: 24px; }
+            .reset-lockup .wordmark { font-size: 1.2rem; }
+            .reset-hero { padding: 36px 24px 24px; }
+            .reset-form-section { padding: 32px 24px; }
+            .success-message h3 { font-size: 1.5rem; }
+        }
+
+        /* ── MOBILE BOTTOM NAV (preserved from original) ── */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            z-index: 6000;
+            padding: 10px 8px 14px;
+        }
+        .bottom-nav-indicator {
+            position: absolute;
+            top: 0;
+            height: 3px;
+            width: 50px;
+            background: #1a3a52;
+            border-radius: 0 0 4px 4px;
+            left: calc(25% + 12.5% - 25px);
+        }
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            flex: 1;
+            position: relative;
+        }
+        .bottom-nav-item svg {
+            width: 24px;
+            height: 24px;
+            stroke: #c0c8ce;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+        .bottom-nav-item.active svg { stroke: #1a3a52; stroke-width: 2; }
+        .bottom-nav-item .nav-label {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: #c0c8ce;
+            position: relative;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .bottom-nav-item.active .nav-label { color: #1a3a52; }
+        .bottom-nav-item.active .nav-label::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            right: 0;
+            height: 1.5px;
+            background: #e76f51;
+            border-radius: 1px;
+        }
+        .bottom-cart-badge:empty,
+        .cart-count:empty { display: none !important; }
+        @media (max-width: 576px) {
+            .mobile-bottom-nav { display: flex; justify-content: space-around; }
+            body { padding-bottom: 80px !important; }
+        }
+    </style>
+</head>
+<body>
+    <div style="padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10)">Reset Password Mockup<span style="font-family:'DM Sans',sans-serif;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px">Almost there — Cormorant hero · navy CTA</span></div>
+    <nav class="reset-nav">
+        <a href="/" class="reset-lockup">
+            <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+            <span class="sep"></span>
+            <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+        </a>
+        <a href="/" class="back">← Back to Shop</a>
+    </nav>
+
+    <section class="reset-hero">
+        <div class="hero-eyebrow">New Password</div>
+        <h1>Almost<br><em>there.</em></h1>
+        <p>Choose a new password for your account below.</p>
+        <p class="ar">أوشكت على الانتهاء.</p>
+        <p class="ar-tag">اختر كلمة مرور جديدة لحسابك أدناه.</p>
+    </section>
+
+    <section class="reset-form-section">
+        <div id="formContainer">
+            <div id="noTokenMsg" style="display:none;">
+                <div class="no-token">
+                    <div class="alert alert-error">Reset link is invalid or expired.<br><span style="font-family:'Almarai',sans-serif;font-size:0.85rem;">رابط إعادة التعيين غير صالح أو منتهي الصلاحية.</span></div>
+                    <p>Please request a new password reset link.</p>
+                    <p class="ar">يُرجى طلب رابط جديد لإعادة تعيين كلمة المرور.</p>
+                    <a href="forgot-password.html" class="btn-reset" style="display:block;text-align:center;text-decoration:none;margin-top:22px;">
+                        Request new link
+                        <span class="arabic-text">طلب رابط جديد</span>
+                    </a>
+                </div>
+            </div>
+
+            <form id="resetForm" onsubmit="handleResetPassword(event)" style="display:none;">
+                <div id="alertBox"></div>
+
+                <div class="reset-form-group">
+                    <label>New Password <span class="arabic-text">كلمة المرور الجديدة</span></label>
+                    <div class="password-input-wrap">
+                        <input type="password" id="password" name="password" required minlength="8" placeholder="Min. 8 characters" oninput="checkPasswordStrength()">
+                        <button type="button" class="password-toggle" onclick="togglePassword('password', this)" aria-label="Show password"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    </div>
+                    <div class="password-strength"><div class="password-strength-bar" id="passwordStrength"></div></div>
+                    <p class="password-hint">At least 8 characters<span class="arabic-text">٨ أحرف على الأقل</span></p>
+                </div>
+
+                <div class="reset-form-group">
+                    <label>Confirm <span class="arabic-text">تأكيد</span></label>
+                    <div class="password-input-wrap">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required minlength="8" placeholder="Re-enter password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)" aria-label="Show password"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-reset" id="submitBtn">
+                    Reset password
+                    <span class="arabic-text">إعادة تعيين كلمة المرور</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="reset-footer">
+            Remembered your password? <a href="login.html">Sign in <span class="arabic-text">تسجيل الدخول</span></a>
+        </div>
+    </section>
+
+    <script>
+        // Mockup: always show the form for preview (real page uses URL token check)
+        var resetToken = 'mockup';
+        document.getElementById('resetForm').style.display = 'block';
+
+        var SVG_EYE_OPEN = '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+        var SVG_EYE_CLOSED = '<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+
+        function togglePassword(inputId, btn) {
+            var input = document.getElementById(inputId);
+            if (input.type === 'password') { input.type = 'text'; btn.innerHTML = SVG_EYE_CLOSED; }
+            else { input.type = 'password'; btn.innerHTML = SVG_EYE_OPEN; }
+        }
+
+        function checkPasswordStrength() {
+            var password = document.getElementById('password').value;
+            var bar = document.getElementById('passwordStrength');
+            var wrap = bar.parentElement;
+            bar.className = 'password-strength-bar';
+            if (password.length === 0) { wrap.classList.remove('visible'); return; }
+            wrap.classList.add('visible');
+            if (password.length < 6) bar.classList.add('weak');
+            else if (password.length < 10 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) bar.classList.add('medium');
+            else bar.classList.add('strong');
+        }
+
+        function showAlert(message, type) {
+            var div = document.createElement('div');
+            div.className = 'alert alert-' + type;
+            div.textContent = message;
+            var alertBox = document.getElementById('alertBox');
+            alertBox.innerHTML = '';
+            alertBox.appendChild(div);
+        }
+
+        function showSuccess() {
+            document.getElementById('formContainer').innerHTML =
+                '<div class="success-message">' +
+                    '<div class="success-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>' +
+                    '<h3>Password reset.</h3>' +
+                    '<p>Your password has been updated. You can sign in with your new password.</p>' +
+                    '<p class="ar">تم تحديث كلمة المرور — يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.</p>' +
+                    '<a href="login.html" class="btn-reset">Sign in<span class="arabic-text">تسجيل الدخول</span></a>' +
+                '</div>';
+        }
+
+        async function handleResetPassword(e) {
+            e.preventDefault();
+
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirmPassword').value;
+            var btn = document.getElementById('submitBtn');
+
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match', 'error');
+                return;
+            }
+
+            if (password.length < 8) {
+                showAlert('Password must be at least 8 characters', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = 'Resetting...<span class="arabic-text">جاري التحديث...</span>';
+
+            try {
+                var response = await fetch('/api/auth/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: resetToken, password: password })
+                });
+
+                var data = await response.json();
+
+                if (data.success) {
+                    showSuccess();
+                } else {
+                    showAlert(data.error || 'Failed to reset password', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = 'Reset password<span class="arabic-text">إعادة تعيين كلمة المرور</span>';
+                }
+            } catch (error) {
+                showAlert('Connection error. Please try again.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = 'Reset password<span class="arabic-text">إعادة تعيين كلمة المرور</span>';
+            }
+        }
+    </script>
+
+    <script>
+    (function() {
+        window.toggleResetMobileMenu = function() {
+            var overlay = document.querySelector('.mobile-menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'mobile-menu-overlay';
+                var chevron = '<svg class="menu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+                overlay.innerHTML =
+                    '<div class="mobile-menu">' +
+                        '<a href="index.html#products">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Shop</span><span class="menu-ar">تسوق</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#about">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">About</span><span class="menu-ar">من نحن</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#contact">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Contact</span><span class="menu-ar">اتصل بنا</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="terms-and-conditions.html">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Terms</span><span class="menu-ar">الشروط</span></div>' +
+                            chevron +
+                        '</a>' +
+                    '</div>';
+                document.body.appendChild(overlay);
+                overlay.onclick = function(e) {
+                    if (e.target === overlay) { overlay.classList.remove('active'); }
+                };
+            }
+            overlay.classList.toggle('active');
+        };
+
+        function moveIndicator(index) {
+            var indicator = document.getElementById('bottomNavIndicator');
+            if (indicator) indicator.style.left = 'calc(' + (index * 25) + '% + 12.5% - 25px)';
+        }
+        var navItems = document.querySelectorAll('.mobile-bottom-nav .bottom-nav-item');
+        navItems.forEach(function(item, i) {
+            item.addEventListener('click', function() { moveIndicator(i); });
+        });
+        moveIndicator(1);
+    })();
+    </script>
+
+    <nav class="mobile-bottom-nav">
+        <div class="bottom-nav-indicator" id="bottomNavIndicator"></div>
+        <div class="bottom-nav-item" id="bottomHomeBtn" data-index="0" onclick="window.location.href=localStorage.getItem('lastProduct')||'index.html'">
+            <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="bottom-nav-item active" id="bottomAccountBtn" data-index="1">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
+            <span class="nav-label" id="bottomAccountLabel">Account</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomCartBtn" data-index="2" onclick="var lp=localStorage.getItem('lastProduct')||'index.html';window.location.href=lp+(lp.includes('?')?'&amp;':'?')+'openCart=true'">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+            <span class="bottom-cart-badge" id="bottomCartCount" style="display:none"></span>
+            <span class="nav-label">Cart</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomMenuBtn" data-index="3" onclick="toggleResetMobileMenu()">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <span class="nav-label">Menu</span>
+        </div>
+    </nav>
+
+    <script>
+    (function(){
+      try {
+        var cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+        var totalCount = cartData.reduce(function(sum, item){ return sum + (item.quantity || 0); }, 0);
+        ['bottomCartCount'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) {
+            if (totalCount > 0) {
+              el.textContent = totalCount;
+              el.style.display = 'flex';
+            } else {
+              el.textContent = '';
+              el.style.display = 'none';
+            }
+          }
+        });
+      } catch(e) {}
+    })();
+    </script>
+</body>
+</html>
