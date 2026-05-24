@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Menu Mockup 1 — Current (control)</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8f6f2;font-family:'DM Sans',sans-serif;min-height:100vh;color:#1a1a1a}
+.option-label{position:fixed;top:0;left:0;right:0;padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10);z-index:200}
+.option-label .sub{font-family:'DM Sans',sans-serif;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px}
+
+/* Faded page context */
+.page-hint{padding:80px 24px 0;opacity:0.55}
+.page-hint h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:64px;line-height:0.95;letter-spacing:-0.02em;color:#1a3a52}
+.page-hint h1 em{color:#e76f51;font-style:italic;font-weight:400}
+.page-hint p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#6b6b6b;margin-top:14px;max-width:340px;line-height:1.6}
+
+/* Dim overlay */
+.dim{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:50}
+
+/* OPTION 1 — current site menu (replicates styles.css) */
+.menu{position:fixed;bottom:80px;left:10px;right:10px;background:#fff;border-radius:14px;padding:8px;z-index:100;box-shadow:0 -5px 25px rgba(0,0,0,0.2);overflow:hidden}
+.menu a{display:flex;align-items:center;gap:14px;padding:14px 16px;color:#1a3a52;text-decoration:none;font-weight:600;font-size:1.13rem;border-bottom:1px solid #f0f0f0;transition:background .2s}
+.menu a:last-child{border-bottom:none}
+.menu a:hover{background:#f0f2f4}
+.menu .icon-box{width:38px;height:38px;border-radius:10px;background:#f0f2f4;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.menu .icon-box svg{width:18px;height:18px;stroke:#1a3a52;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.menu .text{flex:1;display:flex;justify-content:space-between;align-items:center}
+.menu .en{font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.8rem;direction:ltr}
+.menu .ar{font-family:'Almarai',sans-serif;font-size:0.7rem;color:#999;direction:rtl}
+.menu .chev{width:16px;height:16px;stroke:#ccc;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* Mobile bottom nav (for proportion) */
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;z-index:60;padding:10px 8px 14px;display:flex;justify-content:space-around}
+.nav .item{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;color:#c0c8ce;font-size:0.62rem;font-weight:600;font-family:'DM Sans',sans-serif}
+.nav .item.active{color:#1a3a52}
+.nav .item.active svg{stroke:#1a3a52;stroke-width:2}
+.nav .item svg{width:24px;height:24px;stroke:#c0c8ce;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill:none}
+</style></head>
+<body>
+<div class="option-label">Menu Option 1<span class="sub">Current — Default site menu (control)</span></div>
+
+<div class="page-hint">
+  <h1>Become a<br><em>member.</em></h1>
+  <p>A few details and you're in — track orders, save what you love, check out faster next time.</p>
+</div>
+
+<div class="dim"></div>
+
+<div class="menu">
+  <a href="#">
+    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+    <div class="text"><span class="en">Shop</span><span class="ar">تسوق</span></div>
+    <svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </a>
+  <a href="#">
+    <div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+    <div class="text"><span class="en">About</span><span class="ar">من نحن</span></div>
+    <svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </a>
+  <a href="#">
+    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+    <div class="text"><span class="en">Contact</span><span class="ar">اتصل بنا</span></div>
+    <svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </a>
+  <a href="#">
+    <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>
+    <div class="text"><span class="en">Terms</span><span class="ar">الشروط</span></div>
+    <svg class="chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </a>
+</div>
+
+<div class="nav">
+  <div class="item"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>Home</div>
+  <div class="item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>Sign Up</div>
+  <div class="item"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>Cart</div>
+  <div class="item active"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>Menu</div>
+</div>
+</body></html>
