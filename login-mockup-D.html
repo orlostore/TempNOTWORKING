@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Login Option D — Card on Cream</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a1a1a;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:60px 20px 40px}
+.option-label{position:fixed;top:0;left:0;right:0;padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10);z-index:100}
+.option-label .sub{display:inline;font-family:'DM Sans',sans-serif;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:10px}
+.arabic{font-family:'Almarai',sans-serif}
+
+/* ───────── OPTION D — Card on cream ───────── */
+.logo{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.5rem;letter-spacing:0.1em;color:#1a3a52;margin:20px 0 24px}
+.logo span{color:#e76f51}
+.auth-card{width:100%;max-width:420px;background:#fff;border:1px solid rgba(26,58,82,0.10);border-radius:18px;padding:40px 36px;box-shadow:0 4px 24px rgba(26,58,82,0.06)}
+.auth-card .header{text-align:center;margin-bottom:28px}
+.auth-card h1{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.8rem;letter-spacing:-0.01em;color:#1a3a52;margin-bottom:4px}
+.auth-card .subtitle{font-family:'Almarai',sans-serif;font-size:0.88rem;color:#6b6b6b}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:6px;font-weight:500}
+.form-group input{width:100%;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:0.92rem;background:#f8f6f2;border:1px solid rgba(26,58,82,0.10);border-radius:10px;color:#1a1a1a;outline:none;transition:border-color .2s,background .2s}
+.form-group input:focus{border-color:#1a3a52;background:#fff}
+.form-options{display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;color:#6b6b6b;margin:6px 0 20px}
+.form-options a{color:#e76f51;text-decoration:none;font-weight:500}
+.btn-login{width:100%;padding:14px;background:#1a3a52;color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:filter .2s,transform .2s}
+.btn-login:hover{filter:brightness(0.85);transform:translateY(-1px)}
+.btn-login .ar{display:block;font-family:'Almarai',sans-serif;font-size:0.72rem;opacity:0.85;margin-top:2px;text-transform:none;letter-spacing:0}
+.auth-footer{margin-top:24px;padding-top:20px;border-top:1px solid rgba(26,58,82,0.08);text-align:center;font-size:0.82rem;color:#6b6b6b}
+.auth-footer a{color:#1a3a52;font-weight:500;text-decoration:none}
+.back{margin-top:20px;font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;text-decoration:none}
+</style></head>
+<body>
+<div class="option-label">Option D<span class="sub">Card on cream — refined and contained</span></div>
+<div class="logo">ORL<span>O</span></div>
+<div class="auth-card">
+  <div class="header">
+    <h1>Welcome back.</h1>
+    <p class="subtitle">مرحباً بعودتك</p>
+  </div>
+  <form>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" placeholder="your@email.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" placeholder="••••••••">
+    </div>
+    <div class="form-options">
+      <label><input type="checkbox"> Remember me</label>
+      <a href="#">Reset</a>
+    </div>
+    <button class="btn-login">Sign in<span class="ar">تسجيل الدخول</span></button>
+  </form>
+  <div class="auth-footer">No account yet? <a href="#">Create one</a></div>
+</div>
+<a href="#" class="back">← Back to Shop</a>
+</body></html>
