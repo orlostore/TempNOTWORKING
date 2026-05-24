@@ -435,10 +435,11 @@ function gridQtyChange(productId, change, event) {
         localCart = localCart.filter(i => i.id !== productId);
         localStorage.setItem("cart", JSON.stringify(localCart));
         
-        // Reset button to original "Add to Cart"
+        // Reset qty stepper back to the bag icon
         const container = document.getElementById(`gridQty-${productId}`);
         if (container) {
-            container.outerHTML = `<button class="add-to-cart" onclick="addToCart(${qId(productId)}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
+            const bagSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>';
+            container.outerHTML = `<button class="product-bag add-to-cart" onclick="addToCart(${qId(productId)}, event)" aria-label="Add to bag">${bagSvg}</button>`;
         }
     } else {
         item.quantity = newQty;
@@ -546,47 +547,39 @@ function renderProducts(list, arabicMode) {
         const inCart = cartItem && cartItem.quantity > 0;
 
         const hasVariants = p.variants && p.variants.length > 0;
-        let buttonHTML;
+        const bagSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>';
+        let bagOrQty;
         if (outOfStock) {
-            buttonHTML = arabicMode
-                ? `<button class="add-to-cart" disabled style="background:#999;border-color:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`
-                : `<button class="add-to-cart" disabled style="background:#999;border-color:#999;cursor:not-allowed;">Out of Stock<br><span class="arabic-text">نفذ المخزون</span></button>`;
+            bagOrQty = '';
         } else if (hasVariants) {
-            buttonHTML = arabicMode
-                ? `<a href="product.html?product=${safeSlug}" class="view-options-btn">View Options<br><span class="arabic-text">عرض الخيارات</span></a>`
-                : `<a href="product.html?product=${safeSlug}" class="view-options-btn">View Options<br><span class="arabic-text">عرض الخيارات</span></a>`;
+            bagOrQty = `<a href="product.html?product=${safeSlug}" class="product-bag" aria-label="View options">${bagSvg}</a>`;
         } else if (inCart) {
-            buttonHTML = `
-                <div class="grid-qty-control" id="gridQty-${p.id}">
-                    <button class="grid-qty-btn" onclick="gridQtyChange(${qId(p.id)}, -1, event)">−</button>
-                    <span class="grid-qty-display" id="gridQtyNum-${p.id}">${cartItem.quantity}</span>
-                    <button class="grid-qty-btn" onclick="gridQtyChange(${qId(p.id)}, 1, event)">+</button>
-                </div>
-            `;
+            bagOrQty = `<div class="grid-qty-control" id="gridQty-${p.id}"><button class="grid-qty-btn" onclick="gridQtyChange(${qId(p.id)}, -1, event)">−</button><span class="grid-qty-display" id="gridQtyNum-${p.id}">${cartItem.quantity}</span><button class="grid-qty-btn" onclick="gridQtyChange(${qId(p.id)}, 1, event)">+</button></div>`;
         } else {
-            buttonHTML = `<button class="add-to-cart" onclick="addToCart(${qId(p.id)}, event)"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
+            bagOrQty = `<button class="product-bag add-to-cart" onclick="addToCart(${qId(p.id)}, event)" aria-label="Add to bag">${bagSvg}</button>`;
         }
 
-        // Arabic mode: show Arabic name first, English secondary
+        const priceHTML = outOfStock
+            ? `<div class="product-price">${arabicMode ? 'نفذ' : 'Sold out'}</div>`
+            : `<div class="product-price">${formatProductPrice(p, arabicMode)}</div>`;
+
         const titleHTML = arabicMode
-            ? `<p class="product-title-ar" style="font-size:0.95rem;">${safeNameAr || safeName}</p>
-               <h3 class="product-title" style="font-size:0.75rem;color:#888;">${safeName}</h3>`
+            ? `<p class="product-title-ar">${safeNameAr || safeName}</p>
+               <h3 class="product-title">${safeName}</h3>`
             : `<h3 class="product-title">${safeName}</h3>
                ${safeNameAr ? `<p class="product-title-ar">${safeNameAr}</p>` : ''}`;
 
         return `
-        <div class="product-card ${outOfStock ? 'out-of-stock' : ''}" ${arabicMode ? 'dir="rtl"' : ''}>
-            ${p.featured ? `<span class="badge">${arabicMode ? 'الأكثر مبيعاً' : 'Best Seller'}</span>` : ""}
-            ${outOfStock ? `<span class="badge out-of-stock-badge">${arabicMode ? 'نفذ المخزون' : 'Out of Stock'}</span>` : ""}
-            <a href="product.html?product=${safeSlug}" style="text-decoration:none;">
+        <div class="product-card${outOfStock ? ' out-of-stock' : ''}" ${arabicMode ? 'dir="rtl"' : ''}>
+            <a href="product.html?product=${safeSlug}" class="product-card-link">
                 <div class="product-image">${imageHTML}</div>
             </a>
             <div class="product-info">
-                <a href="product.html?product=${safeSlug}" style="text-decoration:none; color:inherit;">
+                <a href="product.html?product=${safeSlug}" class="product-info-text-link">
                     ${titleHTML}
+                    ${priceHTML}
                 </a>
-                <div class="product-price">${formatProductPrice(p, arabicMode)}</div>
-                ${buttonHTML}
+                ${bagOrQty}
             </div>
         </div>
     `}).join("");

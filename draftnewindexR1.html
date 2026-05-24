@@ -78,7 +78,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=28">
+    <link rel="stylesheet" href="styles.css?v=29">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -187,13 +187,11 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .headline-ar, .mobile-hero-ar { color: rgba(255,255,255,0.82) !important; }
 
       /* Rounder, warmer cards across the board */
-      .product-card, .term-card, .contact-box, .mobile-carousel-box,
+      .term-card, .contact-box, .mobile-carousel-box,
       .trust-badges-row, .hero-trust-badges, .hero-delivery-box {
         border-radius: 16px !important;
       }
-      .product-card { border: 1px solid var(--draft-border) !important; box-shadow: 0 4px 18px rgba(26,58,82,0.06) !important; background: var(--surface) !important; transition: transform .25s ease, box-shadow .25s ease !important; }
-      .product-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(26,58,82,0.12) !important; }
-      .product-title { color: var(--primary) !important; }
+      /* .product-card styling moved to styles.css (Card 4 overhaul) */
       [data-theme="dark"] .product-title { color: var(--draft-text) !important; }
 
       /* Buttons: uppercase, letter-spaced, intentional */
