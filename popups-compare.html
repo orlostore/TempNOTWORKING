@@ -67,6 +67,11 @@ body{background:#1a3a52;font-family:'DM Sans',sans-serif;color:#fff;min-height:1
 .new-btn-danger{background:transparent;color:#dc3545;border:1px solid rgba(220,53,69,0.40)}
 .new-btn-danger:hover{background:#dc3545;color:#fff}
 
+.new-modal p .ar{display:block;font-family:'Almarai',sans-serif;direction:rtl;font-size:0.85rem;color:#9aa5ad;margin-top:6px}
+.new-modal-actions button .ar{font-family:'Almarai',sans-serif;font-size:0.65rem;margin-left:6px;text-transform:none;letter-spacing:0;font-weight:400;opacity:0.85}
+.new-toast-title .ar{display:block;font-family:'Almarai',sans-serif;direction:rtl;font-size:0.85rem;color:#6b6b6b;font-style:normal;margin-top:2px;letter-spacing:0}
+.new-toast-msg .ar{display:block;font-family:'Almarai',sans-serif;direction:rtl;font-size:0.75rem;color:#9aa5ad;margin-top:4px}
+
 .new-toast{position:relative;display:flex;align-items:flex-start;gap:14px;background:#fff;padding:16px 38px 16px 18px;border-radius:12px;box-shadow:0 12px 36px rgba(26,58,82,0.18);font-family:'DM Sans',sans-serif;color:#1a1a1a;max-width:400px;overflow:hidden;border-left:3px solid #e76f51;border-top:1px solid rgba(26,58,82,0.08);border-right:1px solid rgba(26,58,82,0.08);border-bottom:1px solid rgba(26,58,82,0.08)}
 .new-toast.success{border-left-color:#5a9e3d}
 .new-toast.error{border-left-color:#dc3545}
@@ -121,10 +126,10 @@ body{background:#1a3a52;font-family:'DM Sans',sans-serif;color:#fff;min-height:1
     <div class="col-label">Proposed — Editorial</div>
     <div class="new-modal">
       <h3>Sign out.</h3>
-      <p>Are you sure you want to sign out?<br>هل أنت متأكد أنك تريد تسجيل الخروج؟</p>
+      <p>Are you sure you want to sign out?<span class="ar">هل أنت متأكد أنك تريد تسجيل الخروج؟</span></p>
       <div class="new-modal-actions">
-        <button class="new-btn-cancel">Stay</button>
-        <button class="new-btn-primary">Sign out</button>
+        <button class="new-btn-cancel">Stay <span class="ar">البقاء</span></button>
+        <button class="new-btn-primary">Sign out <span class="ar">تسجيل الخروج</span></button>
       </div>
     </div>
   </div>
@@ -148,10 +153,10 @@ body{background:#1a3a52;font-family:'DM Sans',sans-serif;color:#fff;min-height:1
     <div class="col-label">Proposed — Editorial danger</div>
     <div class="new-modal">
       <h3>Cancel order?</h3>
-      <p>A full refund will be issued to your card. This can't be undone once your order ships.</p>
+      <p>A full refund will be issued to your card. This can't be undone once your order ships.<span class="ar">سيتم استرداد كامل المبلغ إلى بطاقتك. لا يمكن التراجع بعد شحن الطلب.</span></p>
       <div class="new-modal-actions">
-        <button class="new-btn-cancel">Keep order</button>
-        <button class="new-btn-danger">Cancel order</button>
+        <button class="new-btn-cancel">Keep order <span class="ar">الإبقاء</span></button>
+        <button class="new-btn-danger">Cancel order <span class="ar">إلغاء</span></button>
       </div>
     </div>
   </div>
@@ -176,11 +181,11 @@ body{background:#1a3a52;font-family:'DM Sans',sans-serif;color:#fff;min-height:1
     <div class="col-label">Proposed — Editorial prompt</div>
     <div class="new-modal">
       <h3>Delete account?</h3>
-      <p>This will permanently delete your account and all data. Type DELETE to confirm.</p>
+      <p>This will permanently delete your account and all data. Type DELETE to confirm.<span class="ar">سيؤدي هذا إلى حذف حسابك نهائياً. اكتب DELETE للتأكيد.</span></p>
       <input type="text" placeholder="DELETE">
       <div class="new-modal-actions">
-        <button class="new-btn-cancel">Cancel</button>
-        <button class="new-btn-danger">Delete my account</button>
+        <button class="new-btn-cancel">Cancel <span class="ar">إلغاء</span></button>
+        <button class="new-btn-danger">Delete my account <span class="ar">حذف حسابي</span></button>
       </div>
     </div>
   </div>
@@ -207,8 +212,8 @@ body{background:#1a3a52;font-family:'DM Sans',sans-serif;color:#fff;min-height:1
         <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       </div>
       <div class="new-toast-body">
-        <div class="new-toast-title">Order cancelled.</div>
-        <div class="new-toast-msg">Refund initiated to your card — 5–7 business days.</div>
+        <div class="new-toast-title">Order cancelled.<span class="ar">تم إلغاء الطلب.</span></div>
+        <div class="new-toast-msg">Refund initiated to your card — 5–7 business days.<span class="ar">تم بدء الاسترداد إلى بطاقتك — ٥-٧ أيام عمل.</span></div>
       </div>
       <button class="new-toast-close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       <div class="new-toast-progress"></div>
@@ -237,8 +242,8 @@ body{background:#1a3a52;font-family:'DM Sans',sans-serif;color:#fff;min-height:1
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
       </div>
       <div class="new-toast-body">
-        <div class="new-toast-title">Couldn't connect.</div>
-        <div class="new-toast-msg">Could not reach the server. Please try again.</div>
+        <div class="new-toast-title">Couldn't connect.<span class="ar">تعذّر الاتصال.</span></div>
+        <div class="new-toast-msg">Could not reach the server. Please try again.<span class="ar">يُرجى التحقق من اتصالك والمحاولة مرة أخرى.</span></div>
       </div>
       <button class="new-toast-close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       <div class="new-toast-progress"></div>
