@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Track Bump 3 — restructure, AWB hero</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a1a1a;min-height:100vh;padding:0;margin:0}
+.option-label{padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10)}
+.option-label .sub{font-family:'DM Sans',sans-serif;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px}
+
+.nav{padding:14px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(26,58,82,0.10);background:#fff}
+.lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.lockup .logo-img{height:40px;width:auto;display:block;flex-shrink:0}
+.lockup .sep{display:inline-block;width:1px;height:28px;background:rgba(26,58,82,0.25)}
+.lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.lockup .wordmark span{color:#e76f51}
+.nav .back{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b;text-decoration:none}
+
+.hero{padding:60px 32px 36px;max-width:900px;margin:0 auto;border-bottom:1px solid rgba(26,58,82,0.10)}
+.hero .eyebrow{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:14px;display:block}
+.hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(48px,7vw,84px);line-height:0.95;letter-spacing:-0.02em;color:#1a3a52;margin-bottom:10px}
+.hero h1 em{color:#e76f51;font-style:italic;font-weight:400}
+.hero p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#6b6b6b;max-width:420px;line-height:1.6}
+.hero p.ar{font-family:'Almarai',sans-serif;font-size:1rem;direction:rtl;margin-top:14px;font-style:normal;color:#6b6b6b;line-height:1.6;max-width:420px}
+.hero p.ar-tag{font-family:'Almarai',sans-serif;font-size:0.85rem;direction:rtl;margin-top:4px;font-style:normal;color:#6b6b6b;line-height:1.7;max-width:420px}
+
+.body{padding:48px 32px;max-width:540px;margin:0 auto}
+
+/* OPTION 1 — Light proportional bump (~15% everything) */
+.result{text-align:center;padding:8px 0}
+.result-icon{display:flex;justify-content:center;margin-bottom:18px}
+.result-icon svg{width:2rem;height:2rem;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke:#9aa5ad}
+.result-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.8rem;color:#9aa5ad;margin-bottom:6px;letter-spacing:-0.005em}
+.result-label-ar{font-family:'Almarai',sans-serif;font-size:0.95rem;color:#6b6b6b;margin-bottom:20px;direction:rtl}
+
+/* BUMP 3: restructure — AWB on its own row, big like an order number */
+.result-meta{display:block;text-align:center;margin-bottom:20px}
+.result-meta-item{padding:14px 0}
+.result-meta-item + .result-meta-item{border-top:1px solid rgba(26,58,82,0.08)}
+.result-meta-item .label{font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.2em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;display:block}
+.result-meta-item .val{font-family:'Cormorant Garamond',serif;font-style:italic;color:#1a3a52;word-break:break-all;display:block}
+.result-meta-item.awb .val{font-size:1.6rem;letter-spacing:0.02em}
+.result-meta-item.updated .val{font-size:1.15rem}
+.courier-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#6b6b6b;line-height:1.6;max-width:360px;margin:28px auto 0}
+.courier-note strong{color:#1a3a52;font-style:normal;font-weight:400}
+.courier-note .ar{display:block;font-family:'Almarai',sans-serif;font-size:0.88rem;color:#9aa5ad;font-style:normal;margin-top:6px;direction:rtl}
+
+.help-block{text-align:center;padding-top:32px;border-top:1px solid rgba(26,58,82,0.08);margin-top:48px}
+.help-label{font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.2em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;display:block}
+.help-label .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;margin-left:6px;text-transform:none;letter-spacing:0;font-weight:400}
+.help-email{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#1a3a52;text-decoration:none;border-bottom:1px solid rgba(26,58,82,0.20)}
+
+@media (max-width:680px){
+  .nav{padding:12px 20px}
+  .lockup{gap:10px}.lockup .logo-img{height:32px}.lockup .sep{height:24px}.lockup .wordmark{font-size:1.2rem}
+  .hero{padding:36px 24px 24px}
+  .body{padding:32px 20px}
+  .result-label{font-size:1.5rem}
+  .result-meta{gap:24px}
+}
+</style></head>
+<body>
+<div class="option-label">Bump 3<span class="sub">Restructured · AWB as the hero number</span></div>
+
+<nav class="nav">
+  <a href="/" class="lockup">
+    <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+    <span class="sep"></span>
+    <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+  </a>
+  <a href="/" class="back">← Back to Shop</a>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">Shipment Tracking</div>
+  <h1>Track<br><em>your order.</em></h1>
+  <p>Enter the email used at checkout to see your latest update.</p>
+  <p class="ar">تتبّع طلبك.</p>
+  <p class="ar-tag">أدخل البريد المستخدم عند الشراء لمعرفة آخر تحديث.</p>
+</section>
+
+<section class="body">
+  <div class="result">
+    <div class="result-icon">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+    </div>
+    <div class="result-label">Cancelled.</div>
+    <div class="result-label-ar">تم الإلغاء.</div>
+    <div class="result-meta">
+      <div class="result-meta-item awb">
+        <div class="label">AWB</div>
+        <div class="val">№ 90600251372</div>
+      </div>
+      <div class="result-meta-item updated">
+        <div class="label">Updated</div>
+        <div class="val">10 Mar 2026, 8:34 PM</div>
+      </div>
+    </div>
+    <p class="courier-note"><strong>Zajel</strong> couldn't complete delivery. We'll be in touch shortly.<span class="ar">لم تتمكّن زاجل من إكمال التوصيل. سنتواصل معك قريباً.</span></p>
+  </div>
+
+  <div class="help-block">
+    <span class="help-label">Need help?<span class="ar">تحتاج مساعدة؟</span></span>
+    <a href="mailto:info@orlostore.com" class="help-email">info@orlostore.com</a>
+  </div>
+</section>
+</body></html>
