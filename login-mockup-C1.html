@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Login Option C1 — Logo centered above hero</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a1a1a;min-height:100vh}
+.option-label{padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10)}
+.option-label .sub{display:inline;font-family:'DM Sans',sans-serif;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:10px}
+
+.logo-hero{padding:56px 32px 0;text-align:center;max-width:900px;margin:0 auto}
+.logo-hero img{width:140px;height:auto;display:inline-block}
+.hero{padding:28px 32px 36px;max-width:900px;margin:0 auto;text-align:center;border-bottom:1px solid rgba(26,58,82,0.10)}
+.hero .badge{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:14px}
+.hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(48px,7vw,84px);line-height:0.95;letter-spacing:-0.02em;color:#1a3a52;margin-bottom:14px}
+.hero h1 em{color:#e76f51;font-style:italic;font-weight:400}
+.hero p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#6b6b6b;max-width:340px;line-height:1.6;margin:0 auto}
+.hero p.ar{font-family:'Almarai',sans-serif;font-size:0.9rem;direction:rtl;margin-top:4px;font-style:normal}
+.form-section{padding:48px 32px;max-width:480px;margin:0 auto}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:6px;font-weight:500}
+.form-group input{width:100%;padding:12px 0;font-family:'DM Sans',sans-serif;font-size:1rem;background:transparent;border:none;border-bottom:1px solid rgba(26,58,82,0.20);color:#1a1a1a;outline:none;transition:border-color .2s}
+.form-group input:focus{border-bottom-color:#1a3a52}
+.form-options{display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;color:#6b6b6b;margin-bottom:24px}
+.form-options a{color:#e76f51;text-decoration:none;font-weight:500}
+.btn-login{width:100%;padding:16px;background:#1a3a52;color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:filter .2s,transform .2s}
+.btn-login:hover{filter:brightness(0.85);transform:translateY(-1px)}
+.btn-login .ar{display:block;font-family:'Almarai',sans-serif;font-size:0.72rem;opacity:0.85;margin-top:2px;text-transform:none;letter-spacing:0}
+.auth-footer{margin-top:32px;text-align:center;font-size:0.85rem;color:#6b6b6b}
+.auth-footer a{color:#1a3a52;font-weight:500;text-decoration:none;border-bottom:1px solid currentColor}
+.back-link{display:block;text-align:center;padding:24px 32px 40px;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;text-decoration:none}
+@media (max-width:680px){
+  .logo-hero{padding:36px 24px 0}
+  .logo-hero img{width:110px}
+  .hero{padding:20px 24px 24px}
+  .form-section{padding:32px 24px}
+}
+</style></head>
+<body>
+<div class="option-label">Option C1<span class="sub">No nav — centered logo above hero (ceremonial)</span></div>
+<div class="logo-hero">
+  <img src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+</div>
+<section class="hero">
+  <div class="badge">Member Sign-in</div>
+  <h1>Welcome<br><em>back.</em></h1>
+  <p>Pick up where you left off — your cart and saved items are waiting.</p>
+  <p class="ar">مرحباً بعودتك</p>
+</section>
+<section class="form-section">
+  <form>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" placeholder="your@email.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" placeholder="••••••••">
+    </div>
+    <div class="form-options">
+      <label><input type="checkbox"> Remember me</label>
+      <a href="#">Reset password</a>
+    </div>
+    <button class="btn-login">Sign in<span class="ar">تسجيل الدخول</span></button>
+    <div class="auth-footer">No account yet? <a href="#">Create one</a></div>
+  </form>
+</section>
+<a href="#" class="back-link">← Back to Shop</a>
+</body></html>
