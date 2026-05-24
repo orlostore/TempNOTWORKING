@@ -63,5 +63,5 @@ body:has(.cart-sidebar.active) .early-price-bottom{display:none}
 .cart-sidebar .checkout-card-header{display:none!important}
 .cart-sidebar .checkout-card-buttons{padding-top:18px;gap:10px}
 /* Bigger, calmer buttons */
-.cart-sidebar #stripeBtn,.cart-sidebar #stripeBtnGuest{padding:1.05rem 1rem!important;font-size:0.78rem!important;letter-spacing:0.12em!important}
+.cart-sidebar #stripeBtn,.cart-sidebar #stripeBtnGuest{padding:16px 16px!important;font-size:0.82rem!important;letter-spacing:0.12em!important}
 @media (max-width: 514.56px){.cart-sidebar{width:100%;right:-100%;border-radius:0;top:0;bottom:0;height:auto}.cart-sidebar.active{right:0}.cart-checkout-fixed{display:block;position:absolute;top:auto;bottom:85px;left:0;right:0;background:var(--bg);border-top:1px solid var(--draft-border);border-bottom:none;box-shadow:0 -2px 8px rgba(26,58,82,0.08);z-index:10;padding:10px 14px 0 14px}.cart-footer{padding-bottom:220px;padding-top:0.25rem}.cart-sidebar:not(:has(.checkout-card)) .cart-footer{padding-bottom:140px}[data-theme="dark"] .cart-checkout-fixed{background:#0d1f2d}}
