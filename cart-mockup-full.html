@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Cart Mockup — Hermès-aligned full</title>
+<title>Cart — ORLO</title>
 <style>
 @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
@@ -10,106 +10,126 @@
 @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
 @font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#e8e3da;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52;min-height:100vh;padding:30px 0;font-variant-numeric:lining-nums}
-.label{padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10);position:fixed;top:0;left:0;right:0;z-index:1000}
-.label .sub{font-family:'DM Sans',sans-serif;font-style:normal;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px}
-.phone{max-width:420px;margin:60px auto;background:#fbf8f3;min-height:900px;box-shadow:0 12px 48px rgba(26,58,82,0.15);position:relative;display:flex;flex-direction:column;border-radius:18px;overflow:hidden}
+html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52;min-height:100vh;font-variant-numeric:lining-nums}
 
-/* ============ LOCKUP HEADER (replaces 'Your Cart' navy bar) ============ */
-.cart-lockup-header{padding:18px 22px;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10);display:flex;align-items:center;justify-content:space-between;position:relative}
-.lockup{display:inline-flex;align-items:center;gap:12px;text-decoration:none}
-.lockup .logo-img{height:32px;width:auto;display:block;flex-shrink:0}
-.lockup .sep{display:inline-block;width:1px;height:22px;background:rgba(26,58,82,0.25)}
-.lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.15rem;letter-spacing:0.12em;color:#1a3a52;line-height:1}
-.lockup .wordmark span{color:#e76f51}
-.close-cart{background:transparent;border:none;color:#1a3a52;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center}
-.close-cart svg{width:18px;height:18px;display:block}
+/* ── HEADER (exact login.html pattern) ─────────────────────── */
+.login-nav{padding:14px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(26,58,82,0.10);background:#fff}
+.login-lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.login-lockup .logo-img{height:40px;width:auto;display:block;flex-shrink:0}
+.login-lockup .sep{display:inline-block;width:1px;height:28px;background:rgba(26,58,82,0.25)}
+.login-lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.login-lockup .wordmark span{color:#e76f51}
+.login-nav .back{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b;text-decoration:none;transition:color .2s}
+.login-nav .back:hover{color:#1a3a52}
 
-/* ============ CART TITLE (Hermes monospace caps) ============ */
-.cart-title{padding:22px 22px 8px;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:#1a3a52;font-weight:500}
-.cart-title .ar{font-family:'Almarai',sans-serif;font-size:0.65rem;color:#6b6b6b;letter-spacing:0;text-transform:none;margin-left:8px;direction:rtl;display:inline-block}
+/* ── HERO (editorial title) ─────────────────────── */
+.cart-hero{padding:48px 32px 28px;max-width:780px;margin:0 auto;border-bottom:1px solid rgba(26,58,82,0.10)}
+.cart-hero .eyebrow{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:14px}
+.cart-hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,5vw,52px);line-height:0.95;letter-spacing:-0.02em;color:#1a3a52;margin-bottom:12px}
+.cart-hero h1 em{color:#e76f51;font-style:italic;font-weight:400}
+.cart-hero .sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:#6b6b6b;line-height:1.5}
+.cart-hero .ar{font-family:'Almarai',sans-serif;font-size:1.05rem;color:#1a3a52;direction:rtl;text-align:right;margin-top:18px;line-height:1.5}
+.cart-hero .ar-tag{font-family:'Almarai',sans-serif;font-size:0.85rem;color:#6b6b6b;direction:rtl;text-align:right;margin-top:4px}
 
-/* ============ CART ITEMS (Hermes-style: thumbnail + info + price) ============ */
-.cart-items{padding:0 22px;flex:1}
-.cart-item{display:flex;gap:14px;padding:18px 0;border-bottom:1px solid rgba(26,58,82,0.10)}
-.cart-item-img{width:78px;height:78px;background:#efeae0;border-radius:0;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:8px}
+/* ── ITEMS ─────────────────────── */
+.cart-page{max-width:780px;margin:0 auto;padding:0 32px}
+.cart-items{padding:24px 0}
+.cart-item{display:flex;gap:18px;padding:22px 0;border-bottom:1px solid rgba(26,58,82,0.10)}
+.cart-item-img{width:96px;height:96px;background:#efeae0;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:10px}
 .cart-item-img > div{width:100%;height:100%}
 .cart-item-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
-.cart-item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.cart-item-name{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#1a3a52;font-weight:500;line-height:1.3}
-.cart-item-name-ar{font-family:'Almarai',sans-serif;font-size:0.68rem;color:#9aa5ad;direction:rtl;text-align:left;margin-top:2px}
-.cart-item-meta{font-family:'DM Sans',sans-serif;font-size:0.68rem;color:#6b6b6b;line-height:1.65;margin-top:6px}
+.cart-item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.cart-item-name{font-family:'DM Sans',sans-serif;font-size:0.95rem;color:#1a3a52;font-weight:500;line-height:1.3}
+.cart-item-name-ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#9aa5ad;direction:rtl;text-align:left;margin-top:3px}
+.cart-item-meta{font-family:'DM Sans',sans-serif;font-size:0.72rem;color:#6b6b6b;line-height:1.65;margin-top:8px}
 .cart-item-meta div{display:block}
-.cart-item-price{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;font-weight:500;letter-spacing:0.01em;flex-shrink:0;text-align:right}
-.cart-item-controls{display:flex;align-items:center;gap:14px;margin-top:8px}
-.qty-stepper{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid rgba(26,58,82,0.20);border-radius:18px;padding:2px 6px;height:28px}
-.qty-btn{width:18px;height:18px;border-radius:50%;background:transparent;border:none;color:#1a3a52;font-size:13px;cursor:pointer;padding:0;line-height:1}
-.qty-num{font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#1a3a52;min-width:14px;text-align:center;font-weight:500}
-.remove-link{font-family:'DM Sans',sans-serif;font-size:0.68rem;color:#6b6b6b;text-decoration:underline;text-underline-offset:3px;cursor:pointer;letter-spacing:0.02em;background:none;border:none;padding:0}
+.cart-item-price{font-family:'DM Sans',sans-serif;font-size:0.92rem;color:#1a3a52;font-weight:500;letter-spacing:0.01em;flex-shrink:0;text-align:right;white-space:nowrap}
+.cart-item-controls{display:flex;align-items:center;gap:16px;margin-top:12px}
+.qty-stepper{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(26,58,82,0.20);border-radius:20px;padding:3px 8px;height:32px}
+.qty-btn{width:20px;height:20px;border-radius:50%;background:transparent;border:none;color:#1a3a52;font-size:14px;cursor:pointer;padding:0;line-height:1}
+.qty-num{font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#1a3a52;min-width:16px;text-align:center;font-weight:500}
+.remove-link{font-family:'DM Sans',sans-serif;font-size:0.72rem;color:#6b6b6b;text-decoration:underline;text-underline-offset:3px;cursor:pointer;letter-spacing:0.02em;background:none;border:none;padding:0}
 .remove-link:hover{color:#e76f51}
 
-/* ============ FREE-DELIVERY UPSELL (kept for now) ============ */
-.upsell{margin:18px 22px;padding:12px 14px;background:#fff;border:1px solid rgba(26,58,82,0.10);border-radius:8px}
-.upsell-msg{font-family:'DM Sans',sans-serif;font-size:0.75rem;color:#1a3a52;font-weight:500;display:flex;align-items:flex-start;gap:8px;line-height:1.45}
-.upsell-msg svg{width:14px;height:14px;flex-shrink:0;color:#e76f51;margin-top:2px}
-.upsell-toggle{font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#e76f51;font-weight:500;margin-top:6px;cursor:pointer;display:inline-block;letter-spacing:0.02em}
-
-/* ============ TOTALS SECTION ============ */
-.totals{padding:8px 22px 4px}
-.total-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#1a3a52}
-.total-row.divider{border-top:1px solid rgba(26,58,82,0.15);padding-top:12px;margin-top:4px}
-.total-row.grand{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.95rem;color:#1a3a52;padding-top:14px;text-transform:uppercase;letter-spacing:0.16em}
+/* ── TOTALS ─────────────────────── */
+.totals{padding:24px 0 8px}
+.total-row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52}
+.total-row.divider{border-top:1px solid rgba(26,58,82,0.15);padding-top:16px;margin-top:6px}
+.total-row.grand{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.98rem;color:#1a3a52;padding-top:16px;text-transform:uppercase;letter-spacing:0.16em}
 .total-row .label-en{flex:1}
-.total-row .label-ar{font-family:'Almarai',sans-serif;font-size:0.7rem;color:#9aa5ad;direction:rtl;margin:0 6px;font-style:normal;text-transform:none;letter-spacing:0}
-.total-row.grand .label-ar{font-family:'Almarai',sans-serif;font-size:0.78rem;color:#6b6b6b;font-style:normal;text-transform:none;letter-spacing:0}
+.total-row .label-ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#9aa5ad;direction:rtl;margin:0 8px;letter-spacing:0;text-transform:none}
+.total-row.grand .label-ar{font-family:'Almarai',sans-serif;font-size:0.82rem;color:#6b6b6b;letter-spacing:0;text-transform:none}
 .total-row .amount{font-variant-numeric:lining-nums;font-weight:500;letter-spacing:0.01em}
-.total-row.grand .amount{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.95rem;letter-spacing:0.05em}
-.taxes-line{font-family:'DM Sans',sans-serif;font-size:0.66rem;color:#9aa5ad;padding:6px 0 14px;letter-spacing:0.02em}
+.total-row.grand .amount{font-family:'DM Sans',sans-serif;font-weight:500;letter-spacing:0.06em}
+.taxes-line{font-family:'DM Sans',sans-serif;font-size:0.68rem;color:#9aa5ad;padding:8px 0 14px;letter-spacing:0.02em;text-align:left}
+.taxes-line .ar{font-family:'Almarai',sans-serif;margin-left:6px}
 
-/* GIFTING toggle row (Hermès has it) */
-.gifting-row{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-top:1px solid rgba(26,58,82,0.10);border-bottom:1px solid rgba(26,58,82,0.10);margin-top:8px}
-.gifting-label{font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#1a3a52;text-transform:uppercase;letter-spacing:0.16em;font-weight:500}
-.gifting-label .ar{font-family:'Almarai',sans-serif;font-size:0.7rem;color:#9aa5ad;text-transform:none;letter-spacing:0;margin-left:8px;font-weight:400}
-.gifting-checkbox{width:20px;height:20px;border:1.5px solid rgba(26,58,82,0.30);background:transparent;cursor:pointer;border-radius:2px}
+/* ── GIFTING TOGGLE ─────────────────────── */
+.gifting-row{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-top:1px solid rgba(26,58,82,0.10);border-bottom:1px solid rgba(26,58,82,0.10)}
+.gifting-label{font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#1a3a52;text-transform:uppercase;letter-spacing:0.16em;font-weight:500}
+.gifting-label .ar{font-family:'Almarai',sans-serif;font-size:0.74rem;color:#9aa5ad;text-transform:none;letter-spacing:0;margin-left:10px;font-weight:400}
+.gifting-checkbox{width:20px;height:20px;border:1.5px solid rgba(26,58,82,0.30);background:transparent;cursor:pointer;border-radius:2px;appearance:none;position:relative}
+.gifting-checkbox:checked{background:#1a3a52;border-color:#1a3a52}
+.gifting-checkbox:checked::after{content:'';position:absolute;left:5px;top:1px;width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
 
-/* ============ CHECKOUT PILLS (2-button, Sign in / As guest) ============ */
-.checkout-actions{padding:22px 22px 28px;display:flex;flex-direction:column;gap:10px}
-.checkout-btn{flex:1;padding:16px;background:#1a3a52;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:filter .2s, transform .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.checkout-btn .ar{font-family:'Almarai',sans-serif;font-size:0.7rem;text-transform:none;letter-spacing:0;font-weight:400;opacity:0.85;margin-left:2px}
+/* ── CHECKOUT BUTTONS ─────────────────────── */
+.checkout-actions{padding:30px 0 60px}
+.checkout-btn-row{display:flex;gap:12px}
+.checkout-btn{flex:1;padding:16px 12px;background:#1a3a52;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:filter .2s, transform .2s;display:flex;align-items:center;justify-content:center;gap:8px}
 .checkout-btn:hover{filter:brightness(0.88);transform:translateY(-1px)}
-.checkout-btn-row{display:flex;gap:10px}
-.checkout-btn-row .checkout-btn{padding:14px 8px;font-size:0.74rem;letter-spacing:0.1em}
-.checkout-btn-row .checkout-btn .ar{font-size:0.62rem;display:block;margin:3px 0 0 0;opacity:0.7}
+.checkout-btn .svg-ico{width:13px;height:13px;flex-shrink:0}
+.checkout-btn-text{display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.checkout-btn-text .ar{font-family:'Almarai',sans-serif;font-size:0.62rem;text-transform:none;letter-spacing:0;font-weight:400;opacity:0.85;margin-top:3px}
 
-/* Note column outside phone */
-.notes{max-width:620px;margin:30px auto 60px;padding:0 20px;font-family:'DM Sans',sans-serif;color:#1a3a52}
-.notes h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.5rem;margin-bottom:14px;color:#1a3a52}
-.notes ul{list-style:none;padding:0}
-.notes li{padding:10px 0;border-bottom:1px solid rgba(26,58,82,0.10);font-size:0.85rem;line-height:1.55}
-.notes li strong{font-weight:500;color:#e76f51}
+/* ── MOBILE BOTTOM NAV (exact login.html pattern) ─────────────────────── */
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:white;z-index:6000;padding:10px 8px 14px}
+.bottom-nav-indicator{position:absolute;top:0;height:3px;width:50px;background:#1a3a52;border-radius:0 0 4px 4px;left:calc(50% + 12.5% - 25px)}
+.bottom-nav-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;flex:1;position:relative}
+.bottom-nav-item svg{width:24px;height:24px;stroke:#c0c8ce;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.bottom-nav-item.active svg{stroke:#1a3a52;stroke-width:2}
+.bottom-nav-item .nav-label{font-size:0.62rem;font-weight:600;color:#c0c8ce;position:relative;font-family:'DM Sans',sans-serif}
+.bottom-nav-item.active .nav-label{color:#1a3a52}
+.bottom-nav-item.active .nav-label::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1.5px;background:#e76f51;border-radius:1px}
+.bottom-cart-badge{position:absolute;top:-2px;right:30%;background:#e76f51;color:#fff;font-size:0.55rem;font-weight:500;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}
+@media(max-width:576px){
+  .mobile-bottom-nav{display:flex;justify-content:space-around}
+  body{padding-bottom:80px!important}
+  .login-nav{padding:12px 18px}
+  .login-lockup{gap:10px}
+  .login-lockup .logo-img{height:32px}
+  .login-lockup .sep{height:24px}
+  .login-lockup .wordmark{font-size:1.2rem}
+  .cart-hero{padding:32px 20px 22px}
+  .cart-page{padding:0 20px}
+  .cart-item-img{width:78px;height:78px}
+  .cart-item-name{font-size:0.88rem}
+  .cart-item-price{font-size:0.85rem}
+}
 </style></head>
 <body>
 
-<div class="label">Cart Mockup — Hermès-aligned<span class="sub">lockup header · monospace title · stacked items · refined totals · two-pill checkout</span></div>
+<!-- ═══ HEADER (lockup + back to shop) ═══════════════ -->
+<nav class="login-nav">
+  <a href="/" class="login-lockup">
+    <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO" onerror="this.style.display='none'">
+    <span class="sep"></span>
+    <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+  </a>
+  <a href="/" class="back">← Back to Shop</a>
+</nav>
 
-<div class="phone">
+<!-- ═══ HERO ═══════════════ -->
+<section class="cart-hero">
+  <div class="eyebrow">Your Cart</div>
+  <h1>Ready when<br><em>you are.</em></h1>
+  <p class="sub">Three pieces, all in stock — and you're almost there.</p>
+  <p class="ar">سلتك بانتظارك.</p>
+  <p class="ar-tag">ثلاث قطع، جميعها متوفرة — وأنت على وشك الانتهاء.</p>
+</section>
 
-  <!-- ========== LOCKUP HEADER (replaces navy 'Your Cart') ========== -->
-  <div class="cart-lockup-header">
-    <a href="/" class="lockup">
-      <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO" onerror="this.style.display='none'">
-      <span class="sep"></span>
-      <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
-    </a>
-    <button class="close-cart" aria-label="Close cart">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
+<!-- ═══ ITEMS ═══════════════ -->
+<div class="cart-page">
 
-  <!-- ========== CART TITLE (Hermès monospace caps) ========== -->
-  <div class="cart-title">You have 3 items in your cart<span class="ar">لديك ٣ عناصر في سلتك</span></div>
-
-  <!-- ========== ITEMS ========== -->
   <div class="cart-items">
 
     <div class="cart-item">
@@ -190,15 +210,7 @@ body{background:#e8e3da;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52
 
   </div>
 
-  <!-- ========== UPSELL (kept until you decide to drop) ========== -->
-  <div class="upsell">
-    <div class="upsell-msg">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-      <span>You've earned free delivery <span style="color:#9aa5ad;font-weight:400;font-size:0.7rem;margin-left:4px;">حصلت على توصيل مجاني</span></span>
-    </div>
-  </div>
-
-  <!-- ========== TOTALS ========== -->
+  <!-- ═══ TOTALS (no upsell, "Complimentary" delivery) ═══════════════ -->
   <div class="totals">
     <div class="total-row">
       <span class="label-en">Subtotal</span>
@@ -208,50 +220,58 @@ body{background:#e8e3da;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52
     <div class="total-row">
       <span class="label-en">Delivery</span>
       <span class="label-ar">التوصيل</span>
-      <span class="amount">Free</span>
+      <span class="amount">Complimentary</span>
     </div>
     <div class="total-row grand divider">
       <span class="label-en">Total</span>
       <span class="label-ar">الإجمالي</span>
       <span class="amount">AED 520.00</span>
     </div>
-    <div class="taxes-line">All applicable taxes included · شامل الضرائب</div>
+    <div class="taxes-line">All applicable taxes included <span class="ar">شامل الضرائب</span></div>
   </div>
 
-  <!-- ========== GIFTING TOGGLE (Hermès has it — optional gift wrap) ========== -->
+  <!-- ═══ GIFTING TOGGLE ═══════════════ -->
   <div class="gifting-row">
     <div class="gifting-label">Gifting<span class="ar">تغليف هدية</span></div>
     <input type="checkbox" class="gifting-checkbox" aria-label="Add gift wrap">
   </div>
 
-  <!-- ========== CHECKOUT PILLS (two-button, no Pay by Card label, no cream box) ========== -->
+  <!-- ═══ CHECKOUT (two pills, no Pay-by-Card label, no cream box) ═══════════════ -->
   <div class="checkout-actions">
     <div class="checkout-btn-row">
       <button class="checkout-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <div>SIGN IN<span class="ar">تسجيل الدخول</span></div>
+        <svg class="svg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div class="checkout-btn-text">Sign in<span class="ar">تسجيل الدخول</span></div>
       </button>
       <button class="checkout-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
-        <div>AS GUEST<span class="ar">كضيف</span></div>
+        <svg class="svg-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+        <div class="checkout-btn-text">As guest<span class="ar">كضيف</span></div>
       </button>
     </div>
   </div>
 
 </div>
 
-<!-- Design notes outside the phone -->
-<div class="notes">
-  <h2>What's in this mockup</h2>
-  <ul>
-    <li><strong>Header</strong> — replaces the navy "Your Cart" bar with the lockup (logo + separator + ORLO wordmark) on white. Close × stays on the right.</li>
-    <li><strong>Cart title</strong> — Hermès-style monospace caps "YOU HAVE 3 ITEMS IN YOUR CART" with a small Arabic mirror.</li>
-    <li><strong>Items</strong> — square cream thumbnail (78px) + info column + price right-aligned. Below the name: small meta line for variant ("Color: cream"). Qty stepper + "Remove" text link below in one row. Hairline divider between items.</li>
-    <li><strong>Upsell</strong> — kept (you haven't decided to drop yet). Single hairline border, no box-shadow.</li>
-    <li><strong>Totals</strong> — clean rows, hairline above the Total. "Total" in Cormorant italic for editorial weight, Subtotal/Delivery in DM Sans. Tiny "All applicable taxes included" line below.</li>
-    <li><strong>Checkout</strong> — two pills (Sign In + As Guest), full-width side-by-side. No "Pay by Card" label. No cream Option C card wrapper. Same height as the Cancel page button.</li>
-    <li><strong>Fonts</strong> — DM Sans for body/labels, Cormorant italic for the Total amount only, Almarai for Arabic mirrors throughout.</li>
-  </ul>
-</div>
+<!-- ═══ MOBILE BOTTOM NAV (exact login.html pattern, Cart active) ═══════════════ -->
+<nav class="mobile-bottom-nav">
+  <div class="bottom-nav-indicator"></div>
+  <div class="bottom-nav-item">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
+    <span class="nav-label">Home</span>
+  </div>
+  <div class="bottom-nav-item">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
+    <span class="nav-label">Login</span>
+  </div>
+  <div class="bottom-nav-item active">
+    <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+    <span class="bottom-cart-badge">3</span>
+    <span class="nav-label">Cart</span>
+  </div>
+  <div class="bottom-nav-item">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <span class="nav-label">Menu</span>
+  </div>
+</nav>
 
 </body></html>
