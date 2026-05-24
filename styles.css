@@ -14,7 +14,11 @@ body:has(.cart-sidebar.active) .early-price-bottom{display:none}
 /* ═══════════════════════════════════════════════════════════
    CART — Edit-look (migrated from R1/T&C overlays).
    Source of truth: R1-CUTOVER-CHECKLIST.md §2.5.
+   Edit-palette vars are scoped to .cart-sidebar so the cart
+   looks consistent regardless of the host page's :root palette.
    ═══════════════════════════════════════════════════════════ */
+.cart-sidebar{--primary:#1a3a52;--accent:#e76f51;--bg:#f8f6f2;--surface:#ffffff;--draft-text:#1a1a1a;--draft-muted:#6b6b6b;--draft-border:rgba(26,58,82,0.10)}
+[data-theme="dark"] .cart-sidebar{--primary:#f0ece4;--accent:#e76f51;--bg:#0d1f2d;--surface:#15293d;--draft-text:#f0ece4;--draft-muted:#8a9baa;--draft-border:rgba(255,255,255,0.10)}
 .cart-sidebar{width:440px;right:-440px;border-radius:16px 0 0 16px;box-shadow:-8px 0 32px rgba(26,58,82,0.12);background:var(--surface);border-left:1px solid var(--draft-border)}
 .cart-sidebar.active{right:0}
 [data-theme="dark"] .cart-sidebar{box-shadow:-8px 0 32px rgba(0,0,0,0.4)}
