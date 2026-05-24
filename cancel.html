@@ -1,375 +1,154 @@
 <!DOCTYPE html>
-<html lang="en" style="background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);min-height:100vh">
+<html lang="en">
 <head>
     <!-- ORLO unified analytics: Meta Pixel + TikTok Pixel + CAPI (deferred) -->
     <script src="/analytics.js?v=3" defer></script>
-  
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Cancelled - ORLO Store</title>
+    <title>Payment Cancelled | ORLO Store</title>
     <meta name="description" content="Your payment was cancelled. Your ORLO cart is still waiting for you.">
     <meta name="robots" content="noindex">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <style>@font-face{font-family:'Inter';src:url('/fonts/inter-latin-variable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}@font-face{font-family:'Almarai';src:url('/fonts/almarai-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}@font-face{font-family:'Almarai';src:url('/fonts/almarai-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}</style>
+    <style>
+        @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+        @font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+    </style>
+    <style>html{opacity:0;transition:opacity .15s}</style>
+    <script>Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})</script>
+    <link rel="stylesheet" href="styles.css?v=31">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background:#f8f6f2; font-family:'DM Sans',sans-serif; color:#1a1a1a; min-height:100vh; padding:0; margin:0; }
 
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .arabic-text { font-family: 'Almarai', sans-serif; direction: rtl; }
+        @keyframes fadeSlideIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
 
-        .page-container {
-            width: 100%;
-            max-width: 740px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(44,74,92,0.08), 0 1px 3px rgba(0,0,0,0.04);
-            overflow: hidden;
-            display: flex;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-        }
-        .page-container.ready { opacity: 1; transform: translateY(0); }
+        /* ── LOCKUP NAV ── */
+        .cancel-nav { padding:14px 32px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(26,58,82,0.10); background:#fff; }
+        .cancel-lockup { display:inline-flex; align-items:center; gap:14px; text-decoration:none; }
+        .cancel-lockup .logo-img { height:40px; width:auto; display:block; flex-shrink:0; }
+        .cancel-lockup .sep { display:inline-block; width:1px; height:28px; background:rgba(26,58,82,0.25); }
+        .cancel-lockup .wordmark { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.4rem; letter-spacing:0.1em; color:#1a3a52; line-height:1; }
+        .cancel-lockup .wordmark span { color:#e76f51; }
+        .cancel-nav .back { font-family:'DM Sans',sans-serif; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:#6b6b6b; text-decoration:none; transition:color .2s; }
+        .cancel-nav .back:hover { color:#1a3a52; }
 
-        /* LEFT PANEL */
-        .left-panel {
-            width: 240px;
-            flex-shrink: 0;
-            background: linear-gradient(160deg, #2c4a5c 0%, #1a3242 60%, #162b3a 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 25px;
-            position: relative;
-            overflow: hidden;
-        }
+        /* ── HERO ── */
+        .cancel-hero { padding:60px 32px 36px; max-width:900px; margin:0 auto; border-bottom:1px solid rgba(26,58,82,0.10); animation:fadeSlideIn 0.4s ease-out; }
+        .cancel-hero .hero-eyebrow { font-family:'DM Sans',sans-serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:#e76f51; font-weight:500; margin-bottom:14px; display:block; }
+        .cancel-hero h1 { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(48px,7vw,84px); line-height:0.95; letter-spacing:-0.02em; color:#1a3a52; margin-bottom:10px; }
+        .cancel-hero h1 em { color:#e76f51; font-style:italic; font-weight:400; }
+        .cancel-hero p { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:#6b6b6b; max-width:420px; line-height:1.6; }
+        .cancel-hero p.ar { font-family:'Almarai',sans-serif; font-size:1rem; direction:rtl; margin-top:14px; font-style:normal; color:#6b6b6b; line-height:1.6; max-width:420px; }
+        .cancel-hero p.ar-tag { font-family:'Almarai',sans-serif; font-size:0.85rem; direction:rtl; margin-top:4px; font-style:normal; color:#6b6b6b; line-height:1.7; max-width:420px; }
 
-        .left-panel::before {
-            content: '';
-            position: absolute;
-            top: -40%;
-            right: -40%;
-            width: 80%;
-            height: 80%;
-            background: radial-gradient(circle, rgba(224,120,86,0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .left-panel::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -30%;
-            width: 60%;
-            height: 60%;
-            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .cancel-icon {
-            width: 70px; height: 70px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-            animation: scaleIn 0.4s ease-out 0.2s both;
-            position: relative;
-            z-index: 1;
-        }
-        @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
-
-        .left-panel h1 {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 4px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .left-panel .ar-title {
-            color: rgba(255,255,255,0.85);
-            font-family: 'Almarai', sans-serif;
-            font-size: 0.95rem;
-            text-align: center;
-            margin-bottom: 14px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .left-panel .reassure {
-            color: rgba(255,255,255,0.75);
-            font-size: 0.8rem;
-            text-align: center;
-            line-height: 1.5;
-            position: relative;
-            z-index: 1;
-        }
-        .left-panel .reassure .ar {
-            display: block;
-            font-family: 'Almarai', sans-serif;
-            font-size: 0.72rem;
-            margin-top: 3px;
-            opacity: 0.8;
-        }
-
-        /* RIGHT PANEL */
-        .right-panel {
-            flex: 1;
-            padding: 22px 24px;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            max-height: 85vh;
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: #999;
-            text-decoration: none;
-            font-size: 0.78rem;
-            margin-bottom: 12px;
-            transition: color 0.2s;
-        }
-        .back-link:hover { color: #2c4a5c; }
-        .back-link svg {
-            width: 1em; height: 1em;
-            stroke: currentColor; fill: none;
-            stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
-        }
-
-        .info-card {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
-            border-left: 3px solid #e07856;
-        }
-
-        .info-card h3 {
-            color: #2c4a5c;
-            font-size: 0.85rem;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .info-card p { color: #666; font-size: 0.8rem; line-height: 1.5; }
-        .info-card .arabic-text { text-align: right; margin-top: 3px; color: #888; font-size: 0.75rem; }
+        /* ── BODY ── */
+        .cancel-body { padding:48px 32px; max-width:540px; margin:0 auto; }
 
         /* Cart preview */
-        .cart-preview {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
-            border-left: 3px solid #2c4a5c;
-        }
-        .cart-preview h3 {
-            color: #2c4a5c;
-            font-size: 0.85rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .cart-preview { margin-bottom:36px; }
+        .cart-preview-label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; margin-bottom:18px; font-weight:500; display:flex; justify-content:space-between; align-items:baseline; }
+        .cart-preview-label .ar { font-family:'Almarai',sans-serif; letter-spacing:0; text-transform:none; font-size:0.78rem; color:#9aa5ad; }
+        .cart-item { display:flex; align-items:center; gap:16px; padding:14px 0; border-bottom:1px solid rgba(26,58,82,0.06); }
+        .cart-item:last-of-type { border-bottom:none; }
+        .cart-item-img { width:48px; height:48px; border-radius:6px; background:#eee; flex-shrink:0; object-fit:cover; }
+        .cart-item-details { flex:1; min-width:0; }
+        .cart-item-name { font-family:'DM Sans',sans-serif; font-size:0.92rem; color:#1a1a1a; font-weight:400; line-height:1.3; display:block; margin-bottom:4px; }
+        .cart-item-qty { font-family:'DM Sans',sans-serif; font-size:0.72rem; color:#9aa5ad; letter-spacing:0.04em; }
+        .cart-item-price { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; color:#1a3a52; flex-shrink:0; }
+        .cart-more { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.92rem; color:#9aa5ad; padding:8px 0 2px; text-align:center; }
 
-        .cart-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 6px 0;
-        }
-        .cart-item:not(:last-child) { border-bottom: 1px solid #eef0f2; }
+        /* Cart total */
+        .cart-total-row { display:flex; justify-content:space-between; align-items:baseline; padding-top:18px; margin-top:10px; border-top:1px solid rgba(26,58,82,0.12); font-family:'DM Sans',sans-serif; font-size:1.05rem; color:#1a3a52; font-weight:500; }
+        .cart-total-row .ar { font-family:'Almarai',sans-serif; font-size:0.75rem; margin-left:8px; color:#9aa5ad; font-weight:400; }
+        .cart-total-row #cartTotal { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.5rem; font-weight:400; }
 
-        .cart-item-img {
-            width: 38px; height: 38px;
-            border-radius: 6px;
-            object-fit: cover;
-            flex-shrink: 0;
-            background: #eee;
-        }
+        /* Primary CTA */
+        .cta-wrap { text-align:center; margin-bottom:32px; margin-top:36px; }
+        .btn-primary { display:inline-block; padding:16px 36px; background:#1a3a52; color:#fff; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-weight:500; font-size:0.82rem; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; text-decoration:none; transition:filter .2s, transform .2s; }
+        .btn-primary:hover { filter:brightness(0.85); transform:translateY(-1px); }
+        .btn-primary .ar { font-family:'Almarai',sans-serif; font-size:0.72rem; margin-left:6px; text-transform:none; letter-spacing:0; font-weight:400; opacity:0.85; }
 
-        .cart-item-details { flex: 1; min-width: 0; }
-        .cart-item-name {
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: #333;
-            display: block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .cart-item-qty { font-size: 0.7rem; color: #888; }
-        .cart-item-price { font-size: 0.78rem; font-weight: 600; color: #2c4a5c; flex-shrink: 0; }
+        /* Help block — Option B (uppercase label + italic Cormorant email) */
+        .help-block { text-align:center; padding-top:24px; border-top:1px solid rgba(26,58,82,0.08); }
+        .help-label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; font-weight:500; margin-bottom:8px; display:block; }
+        .help-label .ar { font-family:'Almarai',sans-serif; font-size:0.72rem; margin-left:6px; text-transform:none; letter-spacing:0; font-weight:400; }
+        .help-email { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:#1a3a52; text-decoration:none; border-bottom:1px solid rgba(26,58,82,0.20); transition:border-color .2s; }
+        .help-email:hover { border-bottom-color:#1a3a52; }
 
-        .cart-total-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 8px;
-            margin-top: 4px;
-            border-top: 2px solid #e2e6ea;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #2c4a5c;
+        @media (max-width:680px){
+            .cancel-nav { padding:12px 20px; }
+            .cancel-lockup { gap:10px; }
+            .cancel-lockup .logo-img { height:32px; }
+            .cancel-lockup .sep { height:24px; }
+            .cancel-lockup .wordmark { font-size:1.2rem; }
+            .cancel-hero { padding:36px 24px 24px; }
+            .cancel-body { padding:32px 20px; }
+            .cart-total-row #cartTotal { font-size:1.3rem; }
         }
 
-        .cart-more { font-size: 0.72rem; color: #888; padding: 4px 0 2px; }
-
-        /* Primary CTA — Return to Cart */
-        .btn-retry {
-            display: block;
-            width: 100%;
-            padding: 13px 14px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-decoration: none;
-            text-align: center;
-            border: none;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-            background: linear-gradient(135deg, #e07856 0%, #c96644 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(224,120,86,0.3);
-            margin-bottom: 10px;
-        }
-        .btn-retry:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(224,120,86,0.4); }
-        .btn-retry .ar { display: block; font-size: 0.72rem; margin-top: 2px; font-family: 'Almarai', sans-serif; opacity: 0.9; }
-
-        .btn-row { display: flex; gap: 10px; }
-
-        .btn {
-            flex: 1; padding: 11px 14px; border-radius: 10px;
-            font-size: 0.82rem; font-weight: 600; text-decoration: none;
-            text-align: center; border: none; cursor: pointer;
-            font-family: 'Inter', sans-serif; transition: all 0.2s;
-        }
-        .btn .arabic-text { display: block; font-size: 0.7rem; margin-top: 2px; opacity: 0.9; }
-
-        .btn-shop {
-            background: linear-gradient(135deg, #2c4a5c, #1e3545);
-            color: white;
-        }
-        .btn-shop:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(44,74,92,0.3); }
-
-        .btn-help {
-            background: #f0f2f4;
-            color: #2c4a5c;
-        }
-        .btn-help:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
-
-        .footer-note { text-align: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid #eee; color: #aaa; font-size: 0.75rem; }
-        .footer-note a { color: #e07856; text-decoration: none; }
-
-        /* MOBILE */
-        @media (max-width: 768px) {
-            body { padding: 15px; }
-
-            .page-container {
-                flex-direction: column;
-                max-width: 420px;
-            }
-
-            .left-panel {
-                width: 100%;
-                padding: 24px 20px;
-                flex-shrink: initial;
-            }
-
-            .cancel-icon { width: 55px; height: 55px; font-size: 1.6rem; margin-bottom: 10px; }
-            .left-panel h1 { font-size: 1.05rem; }
-            .left-panel .ar-title { font-size: 0.85rem; margin-bottom: 8px; }
-            .left-panel .reassure { font-size: 0.75rem; }
-
-            .right-panel { padding: 18px 20px; max-height: none; }
-            .btn-row { flex-direction: column; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-            .page-container { opacity: 1; transform: none; }
+        /* ── MOBILE BOTTOM NAV ── */
+        .mobile-bottom-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:white; z-index:6000; padding:10px 8px 14px; }
+        .bottom-nav-indicator { position:absolute; top:0; height:3px; width:50px; background:#1a3a52; border-radius:0 0 4px 4px; left:calc(25% + 12.5% - 25px); }
+        .bottom-nav-item { display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; flex:1; position:relative; }
+        .bottom-nav-item svg { width:24px; height:24px; stroke:#c0c8ce; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+        .bottom-nav-item.active svg { stroke:#1a3a52; stroke-width:2; }
+        .bottom-nav-item .nav-label { font-size:0.62rem; font-weight:600; color:#c0c8ce; position:relative; font-family:'DM Sans',sans-serif; }
+        .bottom-nav-item.active .nav-label { color:#1a3a52; }
+        .bottom-nav-item.active .nav-label::after { content:''; position:absolute; bottom:-3px; left:0; right:0; height:1.5px; background:#e76f51; border-radius:1px; }
+        .bottom-cart-badge:empty, .cart-count:empty { display:none !important; }
+        @media (max-width:576px){
+            .mobile-bottom-nav { display:flex; justify-content:space-around; }
+            body { padding-bottom:80px !important; }
         }
     </style>
 </head>
 <body>
-    <main class="page-container">
-        <div class="left-panel">
-            <div class="cancel-icon" aria-hidden="true">🛒</div>
-            <h1>Payment Cancelled</h1>
-            <p class="ar-title">تم إلغاء الدفع</p>
-            <p class="reassure">No charges were made to your account<span class="ar">لم يتم خصم أي مبلغ من حسابك</span></p>
-        </div>
+    <nav class="cancel-nav">
+        <a href="/" class="cancel-lockup">
+            <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+            <span class="sep"></span>
+            <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+        </a>
+        <a href="/" class="back">← Back to Shop</a>
+    </nav>
 
-        <div class="right-panel">
-            <a href="/" class="back-link"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Shop <span class="arabic-text" style="font-size:0.72rem">العودة للمتجر</span></a>
+    <section class="cancel-hero">
+        <div class="hero-eyebrow">Payment Cancelled</div>
+        <h1>Your cart<br><em>waits.</em></h1>
+        <p>Everything is right where you left it — pick up whenever you're ready. No charges were made.</p>
+        <p class="ar">سلّتك تنتظر.</p>
+        <p class="ar-tag">كل شيء كما تركته — أكمل وقتما تشاء. لم يتم خصم أي مبلغ.</p>
+    </section>
 
-            <!-- Cart preview — populated dynamically from localStorage -->
-            <div class="cart-preview" id="cartPreviewCard" style="display:none">
-                <h3><span aria-hidden="true">🛍️</span> Your Cart Is Waiting</h3>
-                <div id="cartItems"></div>
-                <div class="cart-total-row">
-                    <span>Cart Total</span>
-                    <span id="cartTotal"></span>
-                </div>
-            </div>
+    <section class="cancel-body">
 
-            <!-- Primary CTA — Return to Cart (shown only when cart has items) -->
-            <a href="/" id="retryBtn" class="btn-retry" style="display:none">
-                Complete Your Purchase
-                <span class="ar">أكمل عملية الشراء</span>
-            </a>
-
-            <div class="info-card">
-                <h3><span aria-hidden="true">💳</span> No Charges Made</h3>
-                <p>Don't worry! No payment was processed and your card was not charged.</p>
-                <p class="arabic-text">لا تقلق! لم تتم معالجة أي دفعة ولم يتم خصم أي مبلغ.</p>
-            </div>
-
-            <div class="btn-row">
-                <a href="/" class="btn btn-shop">
-                    <span aria-hidden="true">🛍️</span> Continue Shopping<span class="arabic-text">متابعة التسوق</span>
-                </a>
-                <a href="mailto:info@orlostore.com" class="btn btn-help">
-                    <span aria-hidden="true">✉️</span> Need Help?<span class="arabic-text">تحتاج مساعدة؟</span>
-                </a>
-            </div>
-
-            <div class="footer-note">
-                Having trouble? <a href="mailto:info@orlostore.com">info@orlostore.com</a>
+        <div class="cart-preview" id="cartPreviewCard" style="display:none;">
+            <div class="cart-preview-label">Still in your cart<span class="ar">ما زال في سلّتك</span></div>
+            <div id="cartItems"></div>
+            <div class="cart-total-row">
+                <span>Total<span class="ar">الإجمالي</span></span>
+                <span id="cartTotal"></span>
             </div>
         </div>
-    </main>
+
+        <div class="cta-wrap">
+            <a href="/" id="retryBtn" class="btn-primary">Return to checkout<span class="ar">العودة للدفع</span></a>
+        </div>
+
+        <div class="help-block">
+            <span class="help-label">Need help?<span class="ar">تحتاج مساعدة؟</span></span>
+            <a href="mailto:info@orlostore.com" class="help-email">info@orlostore.com</a>
+        </div>
+
+    </section>
 
     <script>
-        // Reveal content when fonts ready
-        Promise.race([document.fonts.ready, new Promise(function(r){ setTimeout(r, 1200); })]).then(function(){
-            document.querySelector('.page-container').classList.add('ready');
-        });
-
         sessionStorage.removeItem('orlo_checkout_pending');
 
         // XSS-safe text escaping
@@ -380,26 +159,28 @@
             var cartData = [];
             try { cartData = JSON.parse(localStorage.getItem('cart') || '[]'); } catch(e) {}
 
+            var retryBtn = document.getElementById('retryBtn');
+
             if (cartData.length > 0) {
                 var maxShow = 3;
                 var itemsHtml = cartData.slice(0, maxShow).map(function(item) {
                     var imgHtml = item.image
                         ? '<img src="' + esc(item.image) + '" alt="" class="cart-item-img">'
-                        : '';
+                        : '<div class="cart-item-img"></div>';
                     var qty = item.quantity || 1;
                     var lineTotal = (item.price * qty).toFixed(2);
                     return '<div class="cart-item">' +
                         imgHtml +
                         '<div class="cart-item-details">' +
                             '<span class="cart-item-name">' + esc(item.name || 'Item') + '</span>' +
-                            '<span class="cart-item-qty">Qty: ' + qty + '</span>' +
+                            '<span class="cart-item-qty">Qty ' + qty + '</span>' +
                         '</div>' +
                         '<span class="cart-item-price">AED ' + lineTotal + '</span>' +
                     '</div>';
                 }).join('');
 
                 if (cartData.length > maxShow) {
-                    itemsHtml += '<p class="cart-more">+' + (cartData.length - maxShow) + ' more item' + (cartData.length - maxShow > 1 ? 's' : '') + '</p>';
+                    itemsHtml += '<p class="cart-more">+ ' + (cartData.length - maxShow) + ' more item' + (cartData.length - maxShow > 1 ? 's' : '') + '</p>';
                 }
 
                 var cartTotal = cartData.reduce(function(sum, item) {
@@ -410,13 +191,108 @@
                 document.getElementById('cartTotal').textContent = 'AED ' + cartTotal.toFixed(2);
                 document.getElementById('cartPreviewCard').style.display = 'block';
 
-                // Show retry button and wire up to open cart on last visited page
-                var retryBtn = document.getElementById('retryBtn');
+                // Wire retryBtn to open cart on last visited page
                 var lastProduct = localStorage.getItem('lastProduct') || 'index.html';
                 retryBtn.href = lastProduct + (lastProduct.indexOf('?') > -1 ? '&' : '?') + 'openCart=true';
-                retryBtn.style.display = 'block';
+            } else {
+                // No cart items — change CTA to "Continue browsing"
+                retryBtn.innerHTML = 'Continue browsing<span class="ar">متابعة التسوق</span>';
+                retryBtn.href = '/';
             }
         })();
+    </script>
+
+    <script>
+    (function() {
+        window.toggleCancelMobileMenu = function() {
+            var overlay = document.querySelector('.mobile-menu-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'mobile-menu-overlay';
+                var chevron = '<svg class="menu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+                overlay.innerHTML =
+                    '<div class="mobile-menu">' +
+                        '<a href="index.html#products">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Shop</span><span class="menu-ar">تسوق</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#about">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">About</span><span class="menu-ar">من نحن</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="index.html#contact">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Contact</span><span class="menu-ar">اتصل بنا</span></div>' +
+                            chevron +
+                        '</a>' +
+                        '<a href="terms-and-conditions.html">' +
+                            '<div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>' +
+                            '<div class="menu-text"><span class="menu-en">Terms</span><span class="menu-ar">الشروط</span></div>' +
+                            chevron +
+                        '</a>' +
+                    '</div>';
+                document.body.appendChild(overlay);
+                overlay.onclick = function(e) {
+                    if (e.target === overlay) { overlay.classList.remove('active'); }
+                };
+            }
+            overlay.classList.toggle('active');
+        };
+
+        function moveIndicator(index) {
+            var indicator = document.getElementById('bottomNavIndicator');
+            if (indicator) indicator.style.left = 'calc(' + (index * 25) + '% + 12.5% - 25px)';
+        }
+        var navItems = document.querySelectorAll('.mobile-bottom-nav .bottom-nav-item');
+        navItems.forEach(function(item, i) {
+            item.addEventListener('click', function() { moveIndicator(i); });
+        });
+        moveIndicator(2);
+    })();
+    </script>
+
+    <nav class="mobile-bottom-nav">
+        <div class="bottom-nav-indicator" id="bottomNavIndicator"></div>
+        <div class="bottom-nav-item" id="bottomHomeBtn" data-index="0" onclick="window.location.href='index.html'">
+            <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomAccountBtn" data-index="1" onclick="window.location.href='account.html'">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
+            <span class="nav-label">Account</span>
+        </div>
+        <div class="bottom-nav-item active" id="bottomCartBtn" data-index="2" onclick="var lp=localStorage.getItem('lastProduct')||'index.html';window.location.href=lp+(lp.includes('?')?'&amp;':'?')+'openCart=true'">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+            <span class="bottom-cart-badge" id="bottomCartCount" style="display:none"></span>
+            <span class="nav-label">Cart</span>
+        </div>
+        <div class="bottom-nav-item" id="bottomMenuBtn" data-index="3" onclick="toggleCancelMobileMenu()">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <span class="nav-label">Menu</span>
+        </div>
+    </nav>
+
+    <script>
+    (function(){
+      try {
+        var cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+        var totalCount = cartData.reduce(function(sum, item){ return sum + (item.quantity || 0); }, 0);
+        ['bottomCartCount'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) {
+            if (totalCount > 0) {
+              el.textContent = totalCount;
+              el.style.display = 'flex';
+            } else {
+              el.textContent = '';
+              el.style.display = 'none';
+            }
+          }
+        });
+      } catch(e) {}
+    })();
     </script>
 </body>
 </html>
