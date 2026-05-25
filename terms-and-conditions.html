@@ -251,42 +251,26 @@
 <body>
 <button class="draft-theme-toggle" onclick="toggleDraftTheme()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
 
-<header>
-    <nav>
-        <div class="logo-container">
-            <a href="/"><img src="logo.png" class="logo-img" alt="ORLO Logo"></a>
-        </div>
-
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span><span></span><span></span>
-        </button>
-
-        <div class="mobile-cart-icon" id="mobileCartIcon">
-            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-            <span class="cart-count" id="mobileCartCount"></span>
-        </div>
-
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | البحث عن منتجات..." autocomplete="off">
-            <button class="search-btn" id="searchBtn" aria-label="Search"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            <div class="search-autocomplete" id="searchAutocomplete"></div>
-        </div>
-
-        <ul class="nav-links" id="navLinks">
-            <li><a href="/#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
-            <li><a href="/#about">About<br><span class="arabic-text">من نحن</span></a></li>
-            <li><a href="/#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
-            <li><a href="terms-and-conditions.html">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
-            <li><a href="login.html" id="accountLink" class="account-nav-link">Login<br><span class="arabic-text">دخول</span></a></li>
-            <li>
-                <div class="cart-icon" id="cartIcon">
-                    <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-                    <span class="cart-count" id="cartCount"></span>
-                </div>
-            </li>
-        </ul>
-    </nav>
-</header>
+<style>
+.tc-nav{padding:14px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(26,58,82,0.10);background:#fff}
+.tc-lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.tc-lockup .logo-img{height:40px;width:auto;display:block;flex-shrink:0}
+.tc-lockup .sep{display:inline-block;width:1px;height:28px;background:rgba(26,58,82,0.25)}
+.tc-lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.tc-lockup .wordmark span{color:#e76f51}
+.tc-nav .back{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b;text-decoration:none;transition:color .2s}
+.tc-nav .back:hover{color:#1a3a52}
+@media(max-width:576px){.tc-nav{padding:12px 18px}.tc-lockup{gap:10px}.tc-lockup .logo-img{height:32px}.tc-lockup .sep{height:24px}.tc-lockup .wordmark{font-size:1.2rem}}
+body{padding-top:0!important}
+</style>
+<nav class="tc-nav">
+    <a href="/" class="tc-lockup">
+        <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO" onerror="this.src='logo.png'">
+        <span class="sep"></span>
+        <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+    </a>
+    <a href="/" class="back">← Back to Shop</a>
+</nav>
 
 <main>
 <script>
