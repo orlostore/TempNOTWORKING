@@ -223,8 +223,8 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   /* Neutralize the .nav-hidden translate-Y that product.js adds on scroll */
   .early-price-bottom.nav-hidden,#earlyPriceMobile.early-price-bottom.nav-hidden{transform:none!important;opacity:1!important;visibility:visible!important;display:block!important}
 
-  /* Inside the bar — hide the truck/price decoration, button alone fills width */
-  .early-price-bottom .early-price-row{display:block!important;width:100%!important;padding:0!important;margin:0!important;background:transparent!important;border:none!important}
+  /* Inside the bar — flex row so the View Bag + stepper split can sit side-by-side after add */
+  .early-price-bottom .early-price-row{display:flex!important;flex-direction:row!important;align-items:stretch!important;width:100%!important;padding:0!important;margin:0!important;background:transparent!important;border:none!important;gap:0!important;height:auto!important}
   .early-price-bottom .del-col,.early-price-bottom .price-col{display:none!important}
 
   /* Pill — 56px navy white text (matches cart's .checkout-btn for consistency with Sign in / Pay by card / Continue as Guest) */
@@ -264,6 +264,31 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     letter-spacing:0.04em!important;background:transparent!important;padding:0!important;margin:0!important;
     /* product.js puts an onclick=toggleCart() on this span; suppress accidental tap-through after transform */
     pointer-events:none!important;cursor:default!important
+  }
+
+  /* ═════════ Option G — Split pill: View Bag (2/3) + Stepper (1/3) after add ═════════ */
+  /* .atc-split-vb is injected by inline JS once .product-btn-transformed appears */
+  .early-price-bottom .atc-split-vb{
+    flex:2 1 0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+    gap:10px!important;background:#1a3a52!important;color:#fff!important;
+    border:none!important;border-radius:8px 0 0 8px!important;
+    font-family:'DM Sans',sans-serif!important;font-size:0.78rem!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;
+    cursor:pointer!important;text-decoration:none!important;
+    height:56px!important;min-height:56px!important;max-height:56px!important;
+    border-right:1px solid rgba(255,255,255,0.18)!important;
+    padding:0 10px!important;box-sizing:border-box!important;line-height:1!important;
+    transition:filter .2s, transform .2s!important;
+  }
+  .early-price-bottom .atc-split-vb:hover{filter:brightness(0.88)!important;transform:translateY(-1px)!important}
+  .early-price-bottom .atc-split-vb svg{width:16px!important;height:18px!important;flex-shrink:0!important;stroke:#fff!important;fill:none!important;stroke-width:1.6!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+  .early-price-bottom .atc-split-vb .badge{background:#e76f51!important;color:#fff!important;font-size:0.62rem!important;font-weight:600!important;width:22px!important;height:22px!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;letter-spacing:0!important;line-height:1!important;flex-shrink:0!important;font-family:'DM Sans',sans-serif!important}
+
+  /* When split mode active, the stepper shrinks to 1/3 and rounds only on the right */
+  .early-price-bottom .grid-qty-control.split-mode,.early-price-bottom .product-btn-transformed.split-mode{
+    flex:1 1 0!important;border-radius:0 8px 8px 0!important;
+  }
+  .early-price-bottom .grid-qty-control.split-mode .grid-qty-btn,.early-price-bottom .product-btn-transformed.split-mode .grid-qty-btn{
+    width:38px!important;flex:0 0 38px!important;
   }
 
   /* ═════════ Pricing tier bar — editorial Hermès-style (was busy with coral prices + green Save badges) ═════════ */
@@ -579,6 +604,37 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
         el.textContent = el.textContent.replace(/^\s*[✓✔]\s*/, '').replace(/[✓✔]/g, '');
       }
     });
+
+    // 3. Option G — inject "View Bag" left half once product.js spawns the qty stepper
+    var bar = document.getElementById('earlyPriceMobile');
+    if (bar) {
+      var row = bar.querySelector('.early-price-row');
+      if (row) {
+        var stepper = row.querySelector('.grid-qty-control.product-btn-transformed');
+        var existingVB = row.querySelector('.atc-split-vb');
+        if (!stepper) {
+          // No stepper (ATC pill state) — remove the View Bag side if it was injected previously
+          if (existingVB) existingVB.remove();
+        } else {
+          var qtyEl = stepper.querySelector('.grid-qty-display');
+          var qty = qtyEl ? (qtyEl.textContent || '1').trim() : '1';
+          if (existingVB) {
+            // Already injected — just sync the badge to the stepper qty
+            var badge = existingVB.querySelector('.badge');
+            if (badge && badge.textContent !== qty) badge.textContent = qty;
+          } else {
+            // First time — inject the View Bag pill before the stepper, mark stepper as split-mode
+            var vb = document.createElement('a');
+            vb.className = 'atc-split-vb';
+            vb.href = '/cart.html';
+            vb.setAttribute('aria-label', 'View bag');
+            vb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>View Bag<span class="badge">' + qty + '</span>';
+            row.insertBefore(vb, stepper);
+            stepper.classList.add('split-mode');
+          }
+        }
+      }
+    }
   }
 
   // Run early + repeatedly to catch product.js's late writes
