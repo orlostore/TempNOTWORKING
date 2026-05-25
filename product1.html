@@ -399,7 +399,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   <div class="mobile-details-section" id="mobileDetailsSection"></div>
   <div id="variantSelectorMobile"></div>
   <div id="pricingTiersMobile"></div>
-  <div class="mobile-buybox-compact">
+  <div class="mobile-buybox-compact" style="display:flex !important;visibility:visible !important;opacity:1 !important;position:fixed !important;bottom:62px;left:0;right:0;z-index:9999;background:#fff;">
     <div class="mobile-price-section"><div class="mobile-price" id="mobileProductPrice"></div></div>
     <div class="mobile-cart-section"><button class="mobile-add-to-cart" id="mobileAddToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button></div>
     <div class="mobile-delivery-info"></div>
@@ -524,6 +524,11 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
       buybox.style.setProperty('display', 'flex', 'important');
       buybox.style.setProperty('visibility', 'visible', 'important');
       buybox.style.setProperty('opacity', '1', 'important');
+      buybox.style.setProperty('position', 'fixed', 'important');
+      buybox.style.setProperty('bottom', '62px', 'important');
+      buybox.style.setProperty('left', '0', 'important');
+      buybox.style.setProperty('right', '0', 'important');
+      buybox.style.setProperty('z-index', '9999', 'important');
     }
     // 1b. Kill the scroll-triggered duplicate that product.js spawns (#earlyPriceMobile.early-price-bottom)
     var earlyMobile = document.getElementById('earlyPriceMobile');
@@ -540,22 +545,43 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
     });
   }
 
-  // Run repeatedly to catch product.js's late writes
+  // Run early + repeatedly to catch product.js's late writes
+  applyOverrides();
   document.addEventListener('DOMContentLoaded', applyOverrides);
   setTimeout(applyOverrides, 50);
   setTimeout(applyOverrides, 200);
   setTimeout(applyOverrides, 500);
   setTimeout(applyOverrides, 1500);
+  setTimeout(applyOverrides, 3000);
 
-  // Observer: keep undoing any future hide / re-checkmark
+  // Observer: keep undoing any future hide on .mobile-buybox-compact + .variant-selected-name + #earlyPriceMobile
   var obs = new MutationObserver(applyOverrides);
-  document.addEventListener('DOMContentLoaded', function(){
+  function attachObservers(){
     var bb = document.querySelector('.mobile-buybox-compact');
-    if (bb) obs.observe(bb, { attributes: true, attributeFilter: ['style'] });
+    if (bb) obs.observe(bb, { attributes: true, attributeFilter: ['style', 'class'] });
+    var em = document.getElementById('earlyPriceMobile');
+    if (em) obs.observe(em, { attributes: true, attributeFilter: ['style', 'class'] });
     document.querySelectorAll('.variant-selected-name').forEach(function(el){
       obs.observe(el, { childList: true, characterData: true, subtree: true });
     });
-  });
+  }
+  document.addEventListener('DOMContentLoaded', attachObservers);
+  setTimeout(attachObservers, 200);
+
+  // Scroll listener — re-enforce on every scroll tick (product.js adds .nav-hidden during scroll)
+  var ticking = false;
+  window.addEventListener('scroll', function(){
+    if (!ticking) {
+      requestAnimationFrame(function(){
+        applyOverrides();
+        // also strip .nav-hidden from the buybox if product.js adds it
+        var bb = document.querySelector('.mobile-buybox-compact');
+        if (bb && bb.classList.contains('nav-hidden')) bb.classList.remove('nav-hidden');
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 })();
 </script>
 </body>
