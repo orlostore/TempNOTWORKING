@@ -68,29 +68,21 @@
 @font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:'Almarai';src:url('/fonts/almarai-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:'Almarai';src:url('/fonts/almarai-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
-@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
-@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
-@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
-@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
-@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
-@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
 *{margin:0;padding:0;box-sizing:border-box}
 html{overflow-x:clip;width:100%;position:relative;scrollbar-gutter:stable}
-body{overflow-x:clip;max-width:100%;width:100%;position:relative;margin:0;padding:0;padding-top:58px;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f8f6f2;color:#333;line-height:1.6;font-size:7.18px}
+body{overflow-x:clip;max-width:100%;width:100%;position:relative;margin:0;padding:0;padding-top:58px;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f8f9fa;color:#333;line-height:1.6;font-size:7.18px}
 @media(min-width:769px){body{font-size:16px}}
 body>*:not(header){max-width:100%;overflow-x:clip}
 .container,section,footer{max-width:100%;overflow-x:clip}
 header,nav{max-width:100%}
-:root{--primary:#2c4a5c;--accent:#e07856;--accent-gradient:linear-gradient(145deg,#eb8a65 0%,#c9603e 100%);--accent-gradient-hover:linear-gradient(145deg,#d97a57 0%,#b55035 100%);--category-band:#3d6278;--text:#333;--bg:#f8f6f2;--white:#ffffff;--card-btn-min-h:calc(0.75rem * 2.6 + 15px)}
+:root{--primary:#2c4a5c;--accent:#e07856;--accent-gradient:linear-gradient(145deg,#eb8a65 0%,#c9603e 100%);--accent-gradient-hover:linear-gradient(145deg,#d97a57 0%,#b55035 100%);--category-band:#3d6278;--text:#333;--bg:#f8f9fa;--white:#ffffff;--card-btn-min-h:calc(0.75rem * 2.6 + 15px)}
 header{background:#fff;box-shadow:0 2px 5.36px rgba(0,0,0,.06);position:fixed;top:0;left:0;right:0;z-index:1000;width:100%}
 nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:center;gap:0}
 .logo-container{flex:0 0 auto;display:flex;justify-content:flex-start;align-items:center}
 .logo-img{width:46px;height:46px}
 .main-image-container{position:relative;text-align:center;overflow:hidden;background:#fff;border-radius:14px;border:1px solid #eee;width:500px;height:500px}
 .main-product-image{width:500px;height:500px;display:block;margin:0 auto;object-fit:contain;object-position:top}
-.mobile-carousel-container{background:#fff;position:relative;margin-top:0;padding:16px 15px 0}
+.mobile-carousel-container{background:#f8f9fa;position:relative;margin-top:0;padding:16px 15px 0}
 .mobile-carousel-box{border:1.5px solid #e2e8ef;border-radius:16px;overflow:hidden;aspect-ratio:1/1}
 .mobile-carousel-slide{min-width:100%;display:flex;align-items:center;justify-content:center;background:#fff}
 .container{max-width:calc(1180px - 2 * 1.34rem);margin:0 auto;padding-bottom:1rem}
@@ -107,284 +99,44 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   <style>
       .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
       .close-cart svg, .gallery-close svg { width: 1.2rem; height: 1.2rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
-
-  /* ═══════════════════════════════════════════════════════════
-     PDP OVERHAUL — Hermès-aligned editorial style (cosmetic only)
-     ═══════════════════════════════════════════════════════════ */
-  body{background:#fff!important;font-family:'DM Sans','Almarai',sans-serif!important;color:#1a3a52!important;padding-top:0!important;font-variant-numeric:lining-nums}
-
-  /* New lockup header (replaces old fat header) */
-  .pdp-lockup-nav{padding:14px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(26,58,82,0.10);background:#fff;position:relative}
-  .pdp-lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
-  .pdp-lockup .logo-img{height:40px;width:auto;display:block;flex-shrink:0}
-  .pdp-lockup .sep{display:inline-block;width:1px;height:28px;background:rgba(26,58,82,0.25)}
-  .pdp-lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
-  .pdp-lockup .wordmark span{color:#e76f51}
-  .pdp-lockup-nav .back{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b;text-decoration:none;transition:color .2s}
-  .pdp-lockup-nav .back:hover{color:#1a3a52}
-  @media(max-width:576px){
-    .pdp-lockup-nav{padding:12px 18px}
-    .pdp-lockup{gap:10px}
-    .pdp-lockup .logo-img{height:32px}
-    .pdp-lockup .sep{height:24px}
-    .pdp-lockup .wordmark{font-size:1.2rem}
-  }
-
-  /* Hide legacy chrome — cart sidebar (cart is now a page), search/nav remnants */
-  .cart-sidebar{display:none!important}
-
-  /* Product page — flat cream, no white card backgrounds */
-  .product-page-container,.product-page,.product-details,.product-buybox,.mobile-product-page,.mobile-product-header,.mobile-details-section,.mobile-buybox-compact,.mobile-cart-section,.mobile-price-section{background:transparent!important;border:none!important;box-shadow:none!important}
-
-  /* Image area — no cream tile, blend with page */
-  .product-gallery,.mobile-carousel-box,.mobile-carousel{background:transparent!important;border:none!important;box-shadow:none!important;border-radius:0!important}
-
-  /* Product titles — DM Sans not Cormorant for editorial calm */
-  #productTitle,.mobile-product-title{font-family:'DM Sans',sans-serif!important;font-weight:500!important;font-size:1.2rem!important;color:#1a3a52!important;line-height:1.3!important;letter-spacing:0!important;margin-bottom:6px!important}
-  #productTitleAr,.mobile-product-title-ar{font-family:'Almarai',sans-serif!important;font-size:0.85rem!important;color:#6b6b6b!important;direction:rtl!important;text-align:left!important;margin-bottom:14px!important}
-  #productCategory,.mobile-product-category{font-family:'DM Sans',sans-serif!important;font-size:0.65rem!important;letter-spacing:0.16em!important;text-transform:uppercase!important;color:#e76f51!important;margin-bottom:10px!important}
-
-  /* Price */
-  #productPrice,#mobileProductPrice,.price,.mobile-price{font-family:'DM Sans',sans-serif!important;font-size:1.05rem!important;color:#1a3a52!important;font-weight:500!important;letter-spacing:0.02em!important}
-
-  /* ADD TO CART — match cart's checkout pill style (height + typography) */
-  .add-to-cart-btn,.mobile-add-to-cart{width:100%!important;padding:16px 16px!important;background:#1a3a52!important;color:#fff!important;border:none!important;border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.82rem!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;cursor:pointer!important;min-height:56px!important;line-height:1!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;transition:filter .2s!important;margin:0!important}
-  .add-to-cart-btn:hover,.mobile-add-to-cart:hover{filter:brightness(0.88)!important}
-  .add-to-cart-btn .btn-en,.mobile-add-to-cart .btn-en{font-weight:500}
-  .add-to-cart-btn .btn-ar,.mobile-add-to-cart .btn-ar{font-family:'Almarai',sans-serif!important;font-size:0.7rem!important;text-transform:none!important;letter-spacing:0!important;font-weight:400!important;opacity:0.85!important;display:none!important}
-
-  /* Delivery info — tone down */
-  .delivery-info,.mobile-delivery-info{font-family:'DM Sans',sans-serif!important;font-size:0.72rem!important;color:#6b6b6b!important;text-align:center!important;margin-top:14px!important;letter-spacing:0.02em!important}
-  .delivery-item{display:block!important}
-  .delivery-icon svg{stroke:#6b6b6b!important;width:14px;height:14px;vertical-align:middle;margin-right:4px}
-  .delivery-ar{display:none!important}
-
-  /* Breadcrumb */
-  .breadcrumb{font-family:'DM Sans',sans-serif!important;font-size:0.65rem!important;letter-spacing:0.14em!important;text-transform:uppercase!important;color:#6b6b6b!important;padding:14px 32px!important;margin:0!important}
-  .breadcrumb a{color:#6b6b6b!important;text-decoration:none!important}
-  .breadcrumb a:hover{color:#1a3a52!important}
-
-  /* Product details container — clean spacing */
-  .product-details{padding:24px 32px!important}
-  .mobile-product-page{padding:0!important}
-  .mobile-product-header{padding:24px 20px 8px!important}
-  .mobile-details-section{padding:14px 20px!important}
-  .mobile-buybox-compact{padding:0 20px 80px!important;display:flex!important;flex-direction:column!important;gap:14px!important}
-
-  /* Variant selector area */
-  #variantSelectorDesktop,#variantSelectorMobile{padding:18px 0 22px!important;background:transparent!important;margin:0!important}
-
-  /* Description */
-  #productDescription{padding-top:18px!important;color:#1a3a52!important;font-family:'DM Sans',sans-serif!important;font-size:0.92rem!important;line-height:1.7!important}
-
-  /* ═════════ CONSIDERED ALONGSIDE — paired products section ═════════ */
-  .considered-alongside{background:#f8f6f2;padding:42px 22px 36px;margin:0}
-  .considered-alongside[hidden]{display:none!important}
-  .considered-alongside .ca-inner{max-width:760px;margin:0 auto}
-  .considered-alongside .ca-heading{font-family:'Cormorant Garamond',serif!important;font-style:italic!important;font-weight:400!important;font-size:2rem!important;color:#1a3a52;text-align:left;letter-spacing:0.005em;margin:0 0 28px;line-height:1.1}
-  .considered-alongside .ca-heading .ca-heading-ar{display:none}
-  .considered-alongside .ca-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}
-  @media(min-width:769px){.considered-alongside .ca-grid{grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:22px 18px;max-width:760px}}
-  .considered-alongside .ca-card{display:block;text-decoration:none;color:inherit;background:transparent;border:none;padding:0;overflow:hidden;border-radius:0;font-family:'DM Sans',sans-serif!important}
-  .considered-alongside .ca-img{aspect-ratio:1/1;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;margin-bottom:10px}
-  .considered-alongside .ca-img img{width:100%;height:100%;object-fit:cover;display:block}
-  .considered-alongside .ca-meta{padding:0;text-align:left;background:transparent}
-  .considered-alongside .ca-name{font-family:'DM Sans',sans-serif!important;font-size:0.86rem!important;font-weight:400!important;color:#1a3a52;line-height:1.35;margin-bottom:4px}
-  .considered-alongside .ca-price{font-family:'DM Sans',sans-serif!important;font-size:0.8rem!important;color:#6b6b6b;letter-spacing:0.02em;font-weight:400!important}
-
-  /* ═════════ FOOTER (Customer Enquiries) — same as other pages ═════════ */
-  .cs-footer-section{background:#fff;padding:28px 32px;margin-top:30px}
-  .cs-footer-inner{max-width:780px;margin:0 auto}
-  .cs-footer-section .cs-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.16em;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
-  .cs-footer-section .cs-heading .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#6b6b6b;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
-  .cs-footer-section .cs-block{margin-bottom:18px}
-  .cs-footer-section .cs-block:last-child{margin-bottom:0}
-  .cs-footer-section .cs-block-title{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#6b6b6b;font-weight:500;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
-  .cs-footer-section .cs-block-title .muted{margin-left:0;direction:rtl}
-  .cs-footer-section .cs-block-content{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;line-height:1.7}
-  .cs-footer-section .cs-block-content a{color:#1a3a52;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(26,58,82,0.40)}
-  .cs-footer-section .cs-block-content a:hover{text-decoration-color:#1a3a52;color:#e76f51}
-  .cs-footer-section .cs-block-content .muted{color:#6b6b6b;font-size:0.78rem;margin-left:6px}
-  .cs-footer-section .social-row{display:flex;align-items:center;gap:8px}
-  .cs-footer-section .social-row .label-en{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;font-weight:500}
-  .cs-footer-section .social-row .icons{margin-left:auto;display:flex;gap:6px}
-  .cs-footer-section .social-link{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;color:#1a3a52;text-decoration:none;transition:color .2s, border-color .2s}
-  .cs-footer-section .social-link:hover{color:#e76f51;border-color:#e76f51}
-  .cs-footer-section .social-link svg{width:13px;height:13px;display:block}
-  .cs-footer-section .cs-legal{padding:22px 0 8px;border-top:1px solid rgba(26,58,82,0.10);display:flex;flex-wrap:wrap;gap:6px 18px;font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#6b6b6b;letter-spacing:0.04em}
-  .cs-footer-section .cs-legal a{color:#6b6b6b;text-decoration:none;transition:color .2s}
-  .cs-footer-section .cs-legal a:hover{color:#1a3a52}
-  .cs-footer-section .cs-legal .sep{color:#c0c8ce}
-  .cs-footer-section .cs-copyright{margin-top:14px;font-family:'DM Sans',sans-serif;font-size:0.65rem;color:#9aa5ad;letter-spacing:0.02em;padding-bottom:8px}
-  @media(max-width:576px){.cs-footer-section{padding:22px 18px}}
-
-  /* ═════════ Single sticky ATC pill — use #earlyPriceMobile.early-price-bottom (product.js wires its inner button) ═════════ */
-  /* Hide the static .mobile-buybox-compact entirely (product.js removes its button anyway for variant products) */
-  .mobile-buybox-compact{display:none!important;visibility:hidden!important}
-
-  /* Body padding so content isn't hidden behind sticky ATC */
-  body{padding-bottom:140px!important}
-
-  /* White cards for the upper product UI */
-  .product-details,.mobile-product-header,.mobile-details-section{background:#fff!important}
-  .mobile-product-header{padding:30px 22px 18px!important}
-  .mobile-details-section{padding:18px 22px 24px!important}
-  .mobile-carousel-container{background:#fff!important;padding:0 0 14px!important}
-
-  /* The bar product.js spawns: #earlyPriceMobile with class .early-price-bottom — white, full-width, sits above mobile-bottom-nav */
-  .early-price-bottom,#earlyPriceMobile.early-price-bottom{position:fixed!important;bottom:max(72px, calc(env(safe-area-inset-bottom) + 56px))!important;left:0!important;right:0!important;background:#fff!important;z-index:100!important;padding:10px 16px!important;border-top:1px solid rgba(26,58,82,0.10)!important;box-shadow:0 -2px 8px rgba(26,58,82,0.04)!important;margin:0!important;display:block!important;visibility:visible!important;opacity:1!important;height:auto!important;max-height:80px!important;box-sizing:border-box!important;width:100%!important;transform:none!important;transition:none!important}
-  @media(min-width:769px){.early-price-bottom,#earlyPriceMobile.early-price-bottom{bottom:0!important;padding:14px 22px!important;max-height:88px!important}}
-
-  /* Neutralize the .nav-hidden translate-Y that product.js adds on scroll */
-  .early-price-bottom.nav-hidden,#earlyPriceMobile.early-price-bottom.nav-hidden{transform:none!important;opacity:1!important;visibility:visible!important;display:block!important}
-
-  /* Inside the bar — hide the truck/price decoration, button alone fills width */
-  .early-price-bottom .early-price-row{display:block!important;width:100%!important;padding:0!important;margin:0!important;background:transparent!important;border:none!important}
-  .early-price-bottom .del-col,.early-price-bottom .price-col{display:none!important}
-
-  /* Pill — 56px navy white text (matches cart's .checkout-btn for consistency with Sign in / Pay by card / Continue as Guest) */
-  .early-price-bottom .mobile-add-to-cart,.early-price-bottom #mobileAddToCartBtn,.early-price-bottom #earlyCartMobile{width:100%!important;height:56px!important;min-height:56px!important;max-height:56px!important;padding:16px 12px!important;background:#1a3a52!important;color:#fff!important;border:none!important;border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.78rem!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;cursor:pointer!important;line-height:1!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:10px!important;margin:0!important;box-sizing:border-box!important;visibility:visible!important;opacity:1!important;transition:filter .2s, transform .2s!important}
-  .early-price-bottom .mobile-add-to-cart:hover,.early-price-bottom #mobileAddToCartBtn:hover,.early-price-bottom #earlyCartMobile:hover{filter:brightness(0.88)!important;transform:translateY(-1px)!important}
-  .early-price-bottom .mobile-add-to-cart .btn-ar{display:none!important}
-  .early-price-bottom .mobile-add-to-cart .btn-en{font-weight:500!important;white-space:nowrap!important}
-
-  /* Hermès-style bag SVG icon prefixing the pill text */
-  .early-price-bottom .mobile-add-to-cart::before,.early-price-bottom #mobileAddToCartBtn::before,.early-price-bottom #earlyCartMobile::before{content:'';display:inline-block;width:16px;height:18px;flex-shrink:0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/></svg>") center/contain no-repeat}
-
-  /* ═════════ Qty stepper inside the sticky bar (the orange "ghost" was the OG .grid-qty-control with coral gradient + #c9603e border) ═════════ */
-  /* When item is in cart, product.js replaces .mobile-add-to-cart with <div class="grid-qty-control product-btn-transformed">…</div> */
-  .early-price-bottom .grid-qty-control,
-  .early-price-bottom .product-btn-transformed,
-  .early-price-bottom.early-price .product-btn-transformed,
-  .mobile-product-header .early-price.early-price-bottom .product-btn-transformed{
-    display:flex!important;flex-direction:row!important;align-items:stretch!important;justify-content:center!important;
-    width:100%!important;min-width:0!important;max-width:none!important;
-    height:56px!important;min-height:56px!important;max-height:56px!important;
-    background:#1a3a52!important;background-image:none!important;border:none!important;border-radius:8px!important;
-    overflow:hidden!important;margin:0!important;padding:0!important;box-sizing:border-box!important;
-    flex:1 1 100%!important
-  }
-  .early-price-bottom .grid-qty-btn{
-    width:56px!important;height:56px!important;flex:0 0 56px!important;
-    background:rgba(255,255,255,0.10)!important;background-image:none!important;border:none!important;border-radius:0!important;
-    color:#fff!important;font-family:'DM Sans',sans-serif!important;font-size:1.1rem!important;font-weight:500!important;
-    cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;
-    padding:0!important;margin:0!important;min-height:56px!important
-  }
-  .early-price-bottom .grid-qty-btn:hover{background:rgba(255,255,255,0.18)!important}
-  .early-price-bottom .grid-qty-btn:active{background:rgba(255,255,255,0.26)!important}
-  .early-price-bottom .grid-qty-display{
-    flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;
-    color:#fff!important;font-family:'DM Sans',sans-serif!important;font-size:0.95rem!important;font-weight:500!important;
-    letter-spacing:0.04em!important;background:transparent!important;padding:0!important;margin:0!important;
-    /* product.js puts an onclick=toggleCart() on this span; suppress accidental tap-through after transform */
-    pointer-events:none!important;cursor:default!important
-  }
-
-  /* ═════════ Pricing tier bar — editorial Hermès-style (was busy with coral prices + green Save badges) ═════════ */
-  #pricingTiersDesktop,#pricingTiersMobile{padding:14px 0 22px!important;background:transparent!important;border:none!important;box-shadow:none!important;margin:0!important}
-  #pricingTiersDesktop > div,#pricingTiersMobile > div{background:transparent!important;border:none!important;box-shadow:none!important;border-radius:0!important;padding:0!important}
-  .tier-item{flex:1!important;background:transparent!important;border:none!important;border-bottom:2px solid transparent!important;border-radius:0!important;box-shadow:none!important;padding:12px 8px!important;text-align:center!important;cursor:pointer!important;transition:border-color .2s!important}
-  .tier-item.active{border-bottom-color:#1a3a52!important;background:transparent!important}
-  .tier-item.best-deal{background:transparent!important}
-  .tier-row-top{display:flex!important;flex-direction:column!important;align-items:center!important;gap:4px!important;margin-bottom:6px!important}
-  .tier-qty{font-family:'DM Sans',sans-serif!important;font-size:0.7rem!important;color:#6b6b6b!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;background:none!important;padding:0!important;border:none!important}
-  .tier-price{font-family:'DM Sans',sans-serif!important;font-size:0.95rem!important;color:#1a3a52!important;font-weight:500!important;background:none!important;padding:0!important;border:none!important}
-  .tier-item.active .tier-price{color:#1a3a52!important;font-weight:500!important}
-  .tier-row-bottom{font-family:'DM Sans',sans-serif!important;font-size:0.65rem!important;color:#9aa5ad!important;letter-spacing:0.04em!important;text-transform:lowercase!important;background:none!important}
-  .tier-save{color:#6b6b6b!important;font-weight:500!important;background:none!important;padding:0!important}
-  /* Tier container: grid, auto-fit, max 4 per row, cells auto-adjust width */
-  #pricingTiersDesktop > div:first-child,#pricingTiersMobile > div:first-child{display:grid!important;grid-template-columns:repeat(auto-fit, minmax(max(80px, calc(25% - 6px)), 1fr))!important;border-top:1px solid rgba(26,58,82,0.10)!important;border-bottom:1px solid rgba(26,58,82,0.10)!important;background:transparent!important;gap:0!important}
-  .tier-item{min-width:0!important;max-width:none!important;outline:none!important;border-left:1px solid rgba(26,58,82,0.06)!important}
-  .tier-item:first-child{border-left:none!important}
-
-  /* Hide 'save 0%' on tiers with zero discount — show only 'each' */
-  .tier-item[data-discount="0"] .tier-row-bottom,
-  .tier-item[data-discount="0.0"] .tier-row-bottom{font-size:0!important;line-height:1.4!important;color:transparent!important}
-  .tier-item[data-discount="0"] .tier-row-bottom::after,
-  .tier-item[data-discount="0.0"] .tier-row-bottom::after{content:'each';font-size:0.65rem!important;color:#9aa5ad!important;letter-spacing:0.04em!important;display:inline-block}
-
-  /* ═════════ Variant selector — strip the busy "shopping-card" feel ═════════ */
-  /* Kill the magnifier overlay and "In Stock" label clutter */
-  .variant-img-zoom-btn{display:none!important}
-  .variant-tile-stock{display:none!important}
-
-  /* Variant section header — make label cleaner */
-  .variant-section .variant-label{font-family:'DM Sans',sans-serif!important;font-size:0.78rem!important;text-transform:uppercase!important;letter-spacing:0.16em!important;color:#1a3a52!important;font-weight:500!important;padding:0 0 14px 0!important;background:transparent!important;display:flex!important;justify-content:space-between!important;align-items:baseline!important;border:none!important}
-  .variant-section .variant-label > span:first-child{font-size:0.78rem!important;color:#6b6b6b!important;font-weight:500!important;text-transform:none!important;letter-spacing:0.02em!important}
-  .variant-section .variant-label .arabic-text{font-family:'Almarai',sans-serif!important;font-size:0.7rem!important;color:#9aa5ad!important;margin-left:6px!important}
-  .variant-section .variant-selected-name{font-family:'DM Sans',sans-serif!important;font-size:0.85rem!important;color:#1a3a52!important;font-weight:400!important;text-transform:none!important;letter-spacing:0!important}
-
-  /* Variant tiles — NUCLEAR: kill all backgrounds + shadows from every descendant */
-  .variant-tile,.variant-tile *{background:transparent!important;background-color:transparent!important;background-image:none!important;box-shadow:none!important}
-  .variant-tile{border:none!important;border-bottom:2px solid transparent!important;border-radius:0!important;padding:0 0 6px!important;cursor:pointer!important;transition:border-color .2s!important;min-width:0!important;max-width:none!important;outline:none!important}
-  .variant-tile.active{border-bottom:2px solid #1a3a52!important}
-  .variant-tile.out-of-stock{opacity:0.4!important}
-  .variant-tile > div:first-child{aspect-ratio:1!important;border-radius:0!important;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-bottom:6px;border:none!important}
-  .variant-tile img{width:100%!important;height:100%!important;object-fit:contain!important;border-radius:0!important;padding:6px!important}
-
-  /* Variant grid: auto-fit columns, 78-90px each, max 4 per row, wraps when more variants */
-  .variant-grid,.variant-grid-scroll{display:grid!important;grid-template-columns:repeat(auto-fit, minmax(78px, 1fr))!important;gap:8px!important;overflow:visible!important;padding:0!important}
-  @media(max-width:576px){
-    .variant-grid,.variant-grid-scroll{grid-template-columns:repeat(auto-fit, minmax(70px, 1fr))!important}
-  }
-  /* Hide scroll arrows — no longer needed with wrap */
-  .scroll-arrow,.scroll-arrow-left,.scroll-arrow-right{display:none!important}
-
-  /* Variant image popup (lightbox) — kill ALL grey backgrounds */
-  .variant-img-popup,.variant-img-popup *,.variant-img-popup-container,.variant-img-popup-container *{background:transparent!important;background-color:transparent!important;background-image:none!important;box-shadow:none!important}
-  .variant-img-popup{background:rgba(248,246,242,0.98)!important}
-  .variant-img-popup-close{background:#1a3a52!important;color:#fff!important;width:36px!important;height:36px!important;border-radius:50%!important;border:none!important}
-
-  /* Main product image overlay (.gallery-overlay) — cream bg instead of #ececec so the gaps between stacked images blend */
-  .gallery-overlay{background:#f8f6f2!important}
-  .gallery-image-wrapper{background:#f8f6f2!important}
-  .gallery-close{background:#1a3a52!important}
-  .gallery-close:hover{background:#0f2638!important}
-
-  /* ═══ KILL EVERY GREY / OFF-WHITE on the product page ═══ */
-  .mobile-carousel-container,.mobile-carousel-container *,
-  .mobile-carousel-box,.mobile-carousel-box *,
-  .mobile-carousel,.mobile-carousel *,
-  .mobile-dots,.mobile-dots *,
-  .product-gallery,.product-gallery *,
-  .mobile-product-header,.mobile-product-header *,
-  .mobile-details-section,.mobile-details-section *,
-  .product-details,.product-details *,
-  [style*="background:#f8f8f8"],[style*="background:#f8f9fa"],[style*="background:#f5f5f5"],[style*="background:#eee"],[style*="background:#fafafa"]{
-    background:transparent!important;background-color:transparent!important;background-image:none!important;box-shadow:none!important
-  }
-  /* Re-establish the white card backgrounds we want */
-  .mobile-product-header,.mobile-carousel-container,.mobile-details-section,.product-details{background:#fff!important}
-  /* Dots — overlay on image at center-bottom (Hermès) */
-  .mobile-carousel-box{position:relative!important}
-  .mobile-dots{position:absolute!important;bottom:12px!important;left:50%!important;transform:translateX(-50%)!important;background:transparent!important;padding:0!important;z-index:5!important;display:flex!important;gap:6px!important;width:auto!important}
-  .mobile-dots > *{background:rgba(26,58,82,0.25)!important;width:6px!important;height:6px!important;border-radius:50%!important}
-  .mobile-dots > *.active{background:#1a3a52!important}
-
-  /* Disable footer auto-hide on scroll (product.js adds .nav-hidden — revert it) */
-  .mobile-bottom-nav.nav-hidden,.nav-hidden{transform:none!important;opacity:1!important;display:flex!important;visibility:visible!important;pointer-events:auto!important}
-
-  /* Description edge-to-edge: full-width white, internal padding only */
-  .mobile-details-section,.product-details{margin:0!important;border-radius:0!important;width:100%!important;padding:18px 22px 24px!important}
-  .mobile-product-page{padding:0!important;margin:0!important}
-  .mobile-product-header{padding:24px 22px 14px!important;margin:0!important;width:100%!important}
-  .mobile-carousel-container{margin:0!important;width:100%!important;padding:0!important}
-  .variant-tile-name{font-family:'DM Sans',sans-serif!important;font-size:0.7rem!important;color:#1a3a52!important;font-weight:400!important;text-align:center!important;line-height:1.3!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;padding:0 2px!important;margin-top:4px!important}
-  .variant-tile.active .variant-tile-name{color:#1a3a52!important;font-weight:500!important}
-
-  /* Scroll arrows — subtle */
-  .scroll-arrow{background:#fff!important;border:1px solid rgba(26,58,82,0.15)!important;border-radius:50%!important;color:#1a3a52!important;width:30px!important;height:30px!important;box-shadow:0 2px 6px rgba(26,58,82,0.10)!important}
   </style>
 </head>
 <body>
-<header class="pdp-lockup-nav">
-  <a href="/" class="pdp-lockup">
-    <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO" onerror="this.src='logo.png'">
-    <span class="sep"></span>
-    <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
-  </a>
-  <a href="/" class="back">← Back to Shop</a>
+<header>
+    <nav>
+        <div class="logo-container">
+            <a href="index.html"><img src="logo.png" class="logo-img" alt="ORLO Logo"></a>
+        </div>
+        
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        
+        <div class="mobile-cart-icon" id="mobileCartIcon">
+            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> 
+            <span class="cart-count" id="mobileCartCount"></span>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | البحث عن منتجات..." autocomplete="off">
+            <button class="search-btn" id="searchBtn" aria-label="Search"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+            <div class="search-autocomplete" id="searchAutocomplete"></div>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
+            <li><a href="index.html?showAbout=true#about">About<br><span class="arabic-text">من نحن</span></a></li>
+            <li><a href="index.html#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
+            <li><a href="index.html#terms">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
+            <li><a href="login.html" id="accountLink">Login<br><span class="arabic-text">دخول</span></a></li>
+            <li>
+              <div class="cart-icon" id="cartIcon">
+                <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> 
+                <span class="cart-count" id="cartCount"></span>
+              </div>
+            </li>
+        </ul>
+    </nav>
 </header>
 
 <main>
@@ -453,61 +205,21 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   <div class="mobile-details-section" id="mobileDetailsSection"></div>
   <div id="variantSelectorMobile"></div>
   <div id="pricingTiersMobile"></div>
-  <div class="mobile-buybox-compact" style="display:none !important;">
+  <div class="mobile-buybox-compact">
     <div class="mobile-price-section"><div class="mobile-price" id="mobileProductPrice"></div></div>
     <div class="mobile-cart-section"><button class="mobile-add-to-cart" id="mobileAddToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button></div>
     <div class="mobile-delivery-info"></div>
   </div>
 </div>
 </main>
-<!-- ═══ CONSIDERED ALONGSIDE — paired products, populated by inline JS from product.pairings; hidden when empty ═══ -->
-<section class="considered-alongside" id="consideredAlongside" hidden>
-  <div class="ca-inner">
-    <h2 class="ca-heading">Considered alongside<span class="ca-heading-ar">يُختار معه</span></h2>
-    <div class="ca-grid" id="caGrid"></div>
+<div class="product-content-floor">
+  <div style="margin-bottom:0.6rem;display:flex;justify-content:center;gap:1rem;">
+      <a href="https://www.instagram.com/orlostore" target="_blank" rel="noopener" aria-label="ORLO on Instagram" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="white" stroke="none"/></svg></a>
+      <a href="https://www.tiktok.com/@shoporlo" target="_blank" rel="noopener" aria-label="ORLO on TikTok" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:#000;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"><svg width="17" height="17" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="#69C9D0" transform="translate(0.5,0.5)"/><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="#EE1D52" transform="translate(-0.5,-0.5)"/><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="white"/></svg></a>
   </div>
-</section>
-<!-- ═══ FOOTER: Customer Enquiries + Follow us + Legal (unified across all pages) ═══════════════ -->
-<section class="cs-footer-section">
-  <div class="cs-footer-inner">
-    <div class="cs-heading">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
-    <div class="cs-block">
-      <div class="cs-block-title">Email</div>
-      <div class="cs-block-content">
-        <a href="mailto:info@orlostore.com">info@orlostore.com</a>
-        <span class="muted">Reply within 24h</span>
-      </div>
-    </div>
-    <div class="cs-block">
-      <div class="cs-block-title">Online orders<span class="muted">الطلبات عبر الإنترنت</span></div>
-      <div class="cs-block-content">
-        WhatsApp: <a href="https://wa.me/971555477206">+971 55 547 7206</a>
-        <span class="muted">Everyday 9am – 9pm</span>
-      </div>
-    </div>
-    <div class="cs-block">
-      <div class="social-row">
-        <span class="label-en">Follow us</span>
-        <span class="icons">
-          <a href="https://instagram.com/orlostore" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
-          <a href="https://tiktok.com/@shoporlo" class="social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg></a>
-        </span>
-      </div>
-    </div>
-    <nav class="cs-legal">
-      <a href="terms-and-conditions.html#terms">Terms &amp; Conditions</a>
-      <span class="sep">·</span>
-      <a href="terms-and-conditions.html#privacy">Privacy</a>
-      <span class="sep">·</span>
-      <a href="terms-and-conditions.html#returns">Returns</a>
-      <span class="sep">·</span>
-      <a href="terms-and-conditions.html#shipping">Shipping</a>
-      <span class="sep">·</span>
-      <a href="terms-and-conditions.html#exchange">Exchange</a>
-    </nav>
-    <div class="cs-copyright">© ORLO 2026 · All rights reserved.</div>
-  </div>
-</section>
+  <span>&copy; 2026 ORLO &nbsp;·&nbsp; Your privacy matters &nbsp;·&nbsp; Dubai, UAE</span><br>
+  <span class="arabic-text" style="display:inline-block;direction:rtl">خصوصيتك تهمنا &nbsp;·&nbsp; دبي، الإمارات العربية المتحدة</span>
+</div>
 <div class="gallery-overlay" id="galleryOverlay">
   <button class="gallery-close" id="galleryClose"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   <div class="gallery-scroll" id="galleryScroll"></div>
@@ -628,253 +340,5 @@ function updateAccountLink() {
 }
 document.addEventListener('DOMContentLoaded', updateAccountLink);
 </script>
-<script>
-/* ═══ product1.html overrides — runs after product.js to force visibility + clean text ═══ */
-(function(){
-  // Re-entry guard — applyOverrides writes inline styles on #earlyPriceMobile and the MutationObserver
-  // below watches that same attribute. Browsers usually dedupe identical setProperty writes, but if
-  // anything ever writes a *different* value the MO would fire and re-invoke applyOverrides recursively,
-  // chaining microtasks until the main thread locks. The guard makes that impossible.
-  var _inOverrides = false;
-  function applyOverrides(){
-    if (_inOverrides) return;
-    _inOverrides = true;
-    try {
-    // 1. Force the dynamic #earlyPriceMobile.early-price-bottom visible (product.js wires the working button inside this).
-    //    Strip .nav-hidden / display:none / transforms that product.js may apply on scroll.
-    var earlyMobile = document.getElementById('earlyPriceMobile');
-    if (earlyMobile) {
-      earlyMobile.style.setProperty('display', 'block', 'important');
-      earlyMobile.style.setProperty('visibility', 'visible', 'important');
-      earlyMobile.style.setProperty('opacity', '1', 'important');
-      earlyMobile.style.setProperty('position', 'fixed', 'important');
-      earlyMobile.style.setProperty('bottom', 'max(72px, calc(env(safe-area-inset-bottom) + 56px))', 'important');
-      earlyMobile.style.setProperty('left', '0', 'important');
-      earlyMobile.style.setProperty('right', '0', 'important');
-      earlyMobile.style.setProperty('z-index', '100', 'important');
-      earlyMobile.style.setProperty('transform', 'none', 'important');
-      if (earlyMobile.classList.contains('nav-hidden')) earlyMobile.classList.remove('nav-hidden');
-    }
-    // 1b. Hide the static .mobile-buybox-compact (product.js removes its inner button anyway for variant products)
-    var buybox = document.querySelector('.mobile-buybox-compact');
-    if (buybox) {
-      buybox.style.setProperty('display', 'none', 'important');
-      buybox.style.setProperty('visibility', 'hidden', 'important');
-    }
-
-    // 2. Strip the leading '✓ ' that product.js puts in front of the variant name (anywhere in text, not just index 0)
-    document.querySelectorAll('.variant-selected-name').forEach(function(el){
-      if (el.textContent && /[✓✔]/.test(el.textContent)) {
-        el.textContent = el.textContent.replace(/^\s*[✓✔]\s*/, '').replace(/[✓✔]/g, '');
-      }
-    });
-    } finally {
-      _inOverrides = false;
-    }
-  }
-
-  // Run early + repeatedly to catch product.js's late writes
-  applyOverrides();
-  document.addEventListener('DOMContentLoaded', applyOverrides);
-  setTimeout(applyOverrides, 50);
-  setTimeout(applyOverrides, 200);
-  setTimeout(applyOverrides, 500);
-  setTimeout(applyOverrides, 1500);
-  setTimeout(applyOverrides, 3000);
-
-  // Observer: keep undoing any future hide on #earlyPriceMobile (style + class) + .variant-selected-name
-  var obs = new MutationObserver(applyOverrides);
-  function attachObservers(){
-    var em = document.getElementById('earlyPriceMobile');
-    if (em) obs.observe(em, { attributes: true, attributeFilter: ['style', 'class'] });
-    var bb = document.querySelector('.mobile-buybox-compact');
-    if (bb) obs.observe(bb, { attributes: true, attributeFilter: ['style', 'class'] });
-    document.querySelectorAll('.variant-selected-name').forEach(function(el){
-      obs.observe(el, { childList: true, characterData: true, subtree: true });
-    });
-  }
-  document.addEventListener('DOMContentLoaded', attachObservers);
-  setTimeout(attachObservers, 200);
-  setTimeout(attachObservers, 600);
-  setTimeout(attachObservers, 1500);
-
-  // Polling fallback — product.js may create/replace .variant-selected-name AFTER my observers attach,
-  // making the observer reference stale. Re-run applyOverrides every 300ms forever (cheap, idempotent).
-  setInterval(applyOverrides, 300);
-
-  // Scroll listener — strip .nav-hidden from the sticky bar on every scroll tick
-  var ticking = false;
-  window.addEventListener('scroll', function(){
-    if (!ticking) {
-      requestAnimationFrame(function(){
-        var em = document.getElementById('earlyPriceMobile');
-        if (em && em.classList.contains('nav-hidden')) em.classList.remove('nav-hidden');
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
-})();
-</script>
-
-<style>
-/* ═══════════════════════════════════════════════════════════
-   Option G — View Bag (2/3) + Stepper (1/3) split pill after add
-   Activated via :has(.atc-split-vb) — layout follows DOM, no JS class adds needed.
-   ═══════════════════════════════════════════════════════════ */
-
-/* When .atc-split-vb is present, switch the row to flex so siblings share width */
-.early-price-bottom .early-price-row:has(.atc-split-vb){display:flex!important;flex-direction:row!important;align-items:stretch!important;gap:0!important;width:100%!important;padding:0!important;margin:0!important;background:transparent!important;border:none!important;height:auto!important}
-
-/* The View Bag pill — 2/3 width, navy, bag SVG + label + coral count badge */
-.early-price-bottom .atc-split-vb{flex:11 1 0!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;background:#1a3a52!important;color:#fff!important;border:none!important;border-radius:8px 0 0 8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.78rem!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;cursor:pointer!important;text-decoration:none!important;height:56px!important;min-height:56px!important;max-height:56px!important;border-right:1px solid rgba(255,255,255,0.18)!important;padding:0 10px!important;box-sizing:border-box!important;line-height:1!important;white-space:nowrap!important;width:auto!important;min-width:0!important;transition:filter .2s, transform .2s!important}
-.early-price-bottom .atc-split-vb:hover{filter:brightness(0.88)!important;transform:translateY(-1px)!important}
-.early-price-bottom .atc-split-vb svg{width:16px!important;height:18px!important;flex-shrink:0!important;stroke:#fff!important;fill:none!important;stroke-width:1.6!important;stroke-linecap:round!important;stroke-linejoin:round!important;position:static!important}
-.early-price-bottom .atc-split-vb .vb-count{background:#e76f51!important;color:#fff!important;font-size:0.88rem!important;font-weight:700!important;min-width:26px!important;height:26px!important;padding:0 7px!important;border-radius:13px!important;display:flex!important;align-items:center!important;justify-content:center!important;letter-spacing:0!important;line-height:1!important;flex-shrink:0!important;font-family:'DM Sans',sans-serif!important;position:static!important;top:auto!important;right:auto!important;left:auto!important;bottom:auto!important;margin:0!important}
-.early-price-bottom .atc-split-vb .vb-count:empty{display:none!important}
-
-/* When VB is alongside the stepper, shrink stepper to 1/3 and round only on the right */
-.early-price-bottom .early-price-row:has(.atc-split-vb) .grid-qty-control,
-.early-price-bottom .early-price-row:has(.atc-split-vb) .product-btn-transformed{flex:9 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;border-radius:0 8px 8px 0!important}
-.early-price-bottom .early-price-row:has(.atc-split-vb) .grid-qty-btn{width:38px!important;flex:0 0 38px!important}
-</style>
-
-<script>
-/* ═══ Option G — inject/remove View Bag based on stepper presence; sync badge to stepper qty ═══
-   Self-contained: only operates inside .early-price-row, never touches #earlyPriceMobile attributes
-   (that was the recursion source in the earlier attempt). Re-entry guard for safety. */
-(function(){
-  var _inSync = false;
-  function syncSplit(){
-    if (_inSync) return;
-    _inSync = true;
-    try {
-      var row = document.querySelector('#earlyPriceMobile .early-price-row');
-      if (!row) return;
-      var stepper = row.querySelector('.grid-qty-control.product-btn-transformed');
-      var vb = row.querySelector('.atc-split-vb');
-      if (!stepper) {
-        if (vb) vb.remove();
-        return;
-      }
-      // The circle next to VIEW BAG shows the TOTAL cart count (mirrors the footer bag).
-      // It used to mirror the stepper which made it duplicate this-product qty -- now it's
-      // a true bag-preview number: "tap this link and you'll see N items".
-      var total = 0;
-      try {
-        var cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        total = cart.reduce(function(s,i){ return s + (i.quantity || 0); }, 0);
-      } catch(e){}
-      var totalStr = total > 0 ? String(total) : '';
-      if (vb) {
-        var badge = vb.querySelector('.vb-count');
-        if (badge && badge.textContent !== totalStr) badge.textContent = totalStr;
-      } else {
-        vb = document.createElement('a');
-        vb.className = 'atc-split-vb';
-        vb.href = '/cart.html';
-        vb.setAttribute('aria-label', 'View bag');
-        vb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>View Bag<span class="vb-count">' + totalStr + '</span>';
-        row.insertBefore(vb, stepper);
-      }
-    } finally { _inSync = false; }
-  }
-
-  function attachObs(){
-    // Observe #earlyPriceMobile (the persistent ancestor — product.js fills/replaces its innerHTML on load).
-    // childList + subtree catches: row creation, button→stepper transform, stepper→button restore.
-    // characterData catches: qty-display textContent change on + / − so the badge syncs without polling.
-    // NO attribute observation = no recursion with applyOverrides (which writes inline styles on this same element).
-    var em = document.getElementById('earlyPriceMobile');
-    if (!em || em._splitObsAttached) return;
-    em._splitObsAttached = true;
-    new MutationObserver(syncSplit).observe(em, { childList: true, subtree: true, characterData: true });
-  }
-
-  // Run immediately (script may load before DOMContentLoaded if placed at end of body) + retries to catch
-  // late-arriving #earlyPriceMobile from product.js's innerHTML rewrite, so the View Bag is injected
-  // BEFORE the first paint of the stepper (no flash of the unsplit qty stepper).
-  syncSplit(); attachObs();
-  document.addEventListener('DOMContentLoaded', function(){ syncSplit(); attachObs(); });
-  setTimeout(function(){ syncSplit(); attachObs(); }, 50);
-  setTimeout(function(){ syncSplit(); attachObs(); }, 200);
-  setTimeout(function(){ syncSplit(); attachObs(); }, 500);
-  setTimeout(function(){ syncSplit(); attachObs(); }, 1500);
-})();
-</script>
-
-<script>
-/* ═══ Considered alongside — populate the paired-products section from product.pairings ═══
-   Reads product.pairings (array of slugs, set in admin.html). If empty/missing, section stays hidden. */
-(function(){
-  function findCurrentProduct(){
-    // products.js declares `let products = []` — script-scope global, accessible by name but NOT on window.
-    // typeof guard avoids ReferenceError if products.min.js (defer-loaded) hasn't run yet.
-    if (typeof products === 'undefined' || !products || !products.length) return null;
-    var slug = new URLSearchParams(window.location.search).get('product');
-    if (!slug) return null;
-    return products.find(function(p){ return p.slug === slug; });
-  }
-  function imageOf(p){
-    // Strict preference: filename must contain 'lifestyle' (covers lifestyle.webp, lifestyles.webp, lifestyle1.webp, lifestyle-before-after.webp etc.)
-    if (p.images && p.images.length) {
-      var lifestyle = p.images.find(function(img){ return img && /lifestyle/i.test(img); });
-      if (lifestyle) return lifestyle;
-    }
-    // Check the main image too (admin's formMainImage field — usually set to the lifestyle shot)
-    if (p.image && /lifestyle/i.test(p.image)) return p.image;
-    // Soft fallback: main image, then first array image (last-resort so cards never break)
-    return p.image || (p.images && p.images[0]) || '';
-  }
-  function cdnUrl(url){
-    if (!url || typeof url !== 'string' || !url.startsWith('http')) return url;
-    return 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/' + url;
-  }
-  function render(){
-    var section = document.getElementById('consideredAlongside');
-    var grid = document.getElementById('caGrid');
-    if (!section || !grid) return;
-    var current = findCurrentProduct();
-    if (!current || !current.pairings || !current.pairings.length) {
-      section.hidden = true;
-      return;
-    }
-    var paired = current.pairings
-      .map(function(slug){ return products.find(function(p){ return p.slug === slug; }); })
-      .filter(function(p){ return p && p.id; });
-    if (!paired.length) {
-      section.hidden = true;
-      return;
-    }
-    grid.innerHTML = paired.map(function(p){
-      var img = imageOf(p);
-      var imgTag = img ? '<img src="' + cdnUrl(img) + '" alt="' + (p.name || '').replace(/"/g,'&quot;') + '" loading="lazy">' : '';
-      var price = p.price ? 'AED ' + Number(p.price).toFixed(2) : '';
-      return '<a class="ca-card" href="/product?product=' + encodeURIComponent(p.slug) + '">' +
-        '<div class="ca-img">' + imgTag + '</div>' +
-        '<div class="ca-meta">' +
-          '<div class="ca-name">' + (p.name || '').replace(/</g,'&lt;') + '</div>' +
-          '<div class="ca-price">' + price + '</div>' +
-        '</div>' +
-      '</a>';
-    }).join('');
-    section.hidden = false;
-  }
-
-  // Wait for products array — fetched async via window._productsFetch
-  function waitAndRender(attempts){
-    attempts = attempts || 0;
-    if (typeof products !== 'undefined' && products && products.length) { render(); return; }
-    if (attempts > 40) return;  // ~4 seconds total, give up gracefully
-    setTimeout(function(){ waitAndRender(attempts + 1); }, 100);
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function(){ waitAndRender(0); });
-  } else {
-    waitAndRender(0);
-  }
-})();
-</script>
-
 </body>
 </html>
