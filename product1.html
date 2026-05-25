@@ -755,11 +755,15 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
     return products.find(function(p){ return p.slug === slug; });
   }
   function imageOf(p){
-    if (p.variants && p.variants.length) {
-      var v = p.variants.find(function(x){ return x && x.image && x.quantity > 0; });
-      if (v && v.image) return v.image;
+    // Strict preference: filename must contain 'lifestyle' (covers lifestyle.webp, lifestyles.webp, lifestyle1.webp, lifestyle-before-after.webp etc.)
+    if (p.images && p.images.length) {
+      var lifestyle = p.images.find(function(img){ return img && /lifestyle/i.test(img); });
+      if (lifestyle) return lifestyle;
     }
-    return (p.images && p.images[0]) || '';
+    // Check the main image too (admin's formMainImage field — usually set to the lifestyle shot)
+    if (p.image && /lifestyle/i.test(p.image)) return p.image;
+    // Soft fallback: main image, then first array image (last-resort so cards never break)
+    return p.image || (p.images && p.images[0]) || '';
   }
   function cdnUrl(url){
     if (!url || typeof url !== 'string' || !url.startsWith('http')) return url;
