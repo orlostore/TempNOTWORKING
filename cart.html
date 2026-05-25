@@ -362,11 +362,11 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
               '</div>' +
               '<div class="cart-item-controls">' +
                 '<div class="qty-stepper">' +
-                  '<button class="qty-btn" data-act="dec" data-id="' + escHTML(item.id) + '" aria-label="Decrease">−</button>' +
+                  '<button class="qty-btn" data-act="dec" data-id="' + escHTML(item.id) + '" data-vid="' + escHTML(item.variantId || '') + '" aria-label="Decrease">−</button>' +
                   '<span class="qty-num">' + item.quantity + '</span>' +
-                  '<button class="qty-btn" data-act="inc" data-id="' + escHTML(item.id) + '" aria-label="Increase">+</button>' +
+                  '<button class="qty-btn" data-act="inc" data-id="' + escHTML(item.id) + '" data-vid="' + escHTML(item.variantId || '') + '" aria-label="Increase">+</button>' +
                 '</div>' +
-                '<button class="remove-link" data-act="rm" data-id="' + escHTML(item.id) + '">Remove</button>' +
+                '<button class="remove-link" data-act="rm" data-id="' + escHTML(item.id) + '" data-vid="' + escHTML(item.variantId || '') + '">Remove</button>' +
               '</div>' +
             '</div>' +
           '</div>';
@@ -413,11 +413,13 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
     if (t) {
       var act = t.getAttribute('data-act');
       var id = t.getAttribute('data-id');
+      var vid = t.getAttribute('data-vid') || '';
       if (!id) return;
       var idVal = isNaN(Number(id)) ? id : Number(id);
-      if (act === 'inc' && typeof updateQuantity === 'function') { updateQuantity(idVal, 1); setTimeout(renderCartPage, 0); }
-      else if (act === 'dec' && typeof updateQuantity === 'function') { updateQuantity(idVal, -1); setTimeout(renderCartPage, 0); }
-      else if (act === 'rm' && typeof removeFromCart === 'function') { removeFromCart(idVal); setTimeout(renderCartPage, 0); }
+      var vidVal = vid ? (isNaN(Number(vid)) ? vid : Number(vid)) : undefined;
+      if (act === 'inc' && typeof updateQuantity === 'function') { updateQuantity(idVal, 1, vidVal); setTimeout(renderCartPage, 0); }
+      else if (act === 'dec' && typeof updateQuantity === 'function') { updateQuantity(idVal, -1, vidVal); setTimeout(renderCartPage, 0); }
+      else if (act === 'rm' && typeof removeFromCart === 'function') { removeFromCart(idVal, vidVal); setTimeout(renderCartPage, 0); }
       return;
     }
     if (ev.target.closest('#asGuestBtn') || ev.target.closest('#payByCardBtn')) {
