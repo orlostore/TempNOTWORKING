@@ -1262,6 +1262,28 @@
             background: var(--success);
         }
         .last-refreshed-dot.stale { background: var(--warning); }
+
+        /* Considered alongside — pairings picker */
+        .pairings-picker-wrap{border:1px solid #ddd;border-radius:6px;padding:10px;background:#fafafa}
+        .pairings-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;min-height:0}
+        .pairings-chips:empty{margin-bottom:0}
+        .pairings-chip{display:inline-flex;align-items:center;gap:6px;background:#1a3a52;color:#fff;padding:4px 6px 4px 10px;border-radius:14px;font-size:0.78rem;font-family:'DM Sans',sans-serif}
+        .pairings-chip-x{cursor:pointer;font-size:1rem;line-height:1;opacity:0.85;padding:0 4px;user-select:none}
+        .pairings-chip-x:hover{opacity:1}
+        .pairings-search{width:100%;padding:7px 10px;border:1px solid #ddd;border-radius:4px;margin-bottom:8px;font-size:0.85rem;box-sizing:border-box}
+        .pairings-search:focus{outline:none;border-color:#1a3a52}
+        .pairings-list{max-height:260px;overflow-y:auto;border:1px solid #eee;border-radius:4px;background:#fff}
+        .pairings-list:empty::before{content:'No products available';display:block;padding:16px;color:#999;font-style:italic;text-align:center;font-size:0.85rem}
+        .pairings-option{display:flex;align-items:center;gap:10px;padding:6px 10px;cursor:pointer;border-bottom:1px solid #f0f0f0}
+        .pairings-option:hover{background:#f5f5f5}
+        .pairings-option:last-child{border-bottom:none}
+        .pairings-option input[type=checkbox]{margin:0;cursor:pointer;flex-shrink:0}
+        .pairings-option img{width:32px;height:32px;object-fit:contain;background:#f5f5f5;border-radius:3px;flex-shrink:0}
+        .pairings-option .pairings-option-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+        .pairings-option .pairings-option-name{font-size:0.82rem;color:#333;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .pairings-option .pairings-option-sub{font-size:0.68rem;color:#888;display:flex;gap:8px;font-family:monospace}
+        .pairings-option.hidden{display:none}
+        .pairings-option.checked{background:#eef5fa}
     </style>
 </head>
 <body>
@@ -2057,8 +2079,13 @@
                         <input type="text" id="formSpecificationsAr" dir="rtl" placeholder="الحجم: ١٠ سم | الوزن: ٥٠ غ">
                     </div>
                     <div class="form-group">
-                        <label>Considered alongside <span style="font-weight:400;font-size:0.78rem;color:#888;">(slugs separated with | — these products appear in the "Considered alongside" section on the PDP, hidden when empty)</span></label>
-                        <input type="text" id="formPairings" placeholder="silky-flexi-ties | retro-radio-decor">
+                        <label>Considered alongside <span style="font-weight:400;font-size:0.78rem;color:#888;">(tick the products that pair with this one — they'll appear in the "Considered alongside" section on the PDP, hidden when none ticked)</span></label>
+                        <div class="pairings-picker-wrap">
+                            <div class="pairings-chips" id="pairingsChips"></div>
+                            <input type="text" class="pairings-search" id="pairingsSearch" placeholder="Search products by name or category…">
+                            <div class="pairings-list" id="pairingsList"></div>
+                        </div>
+                        <input type="hidden" id="formPairings">
                     </div>
                 </div>
 
@@ -2805,8 +2832,97 @@
             setCategoryDropdown('');
             document.getElementById('variantsContainer').innerHTML = '';
             document.getElementById('tiersContainer').innerHTML = '';
+            renderPairingsPicker(null);
             document.getElementById('productModal').classList.add('active');
             document.getElementById('formName').focus();
+        }
+
+        // Considered alongside — interactive picker (avoids the user having to type/remember slugs).
+        // Stores the selected slugs in #formPairings (hidden input, pipe-separated) so save logic stays the same.
+        function renderPairingsPicker(excludeId) {
+            const hidden = document.getElementById('formPairings');
+            const chipsEl = document.getElementById('pairingsChips');
+            const listEl = document.getElementById('pairingsList');
+            const searchEl = document.getElementById('pairingsSearch');
+            if (!hidden || !chipsEl || !listEl || !searchEl) return;
+
+            // Parse currently-selected slugs from the hidden input (set by openEditModal from product.pairings)
+            const selected = new Set((hidden.value || '').split('|').map(s => s.trim()).filter(Boolean));
+
+            // Available products = all except the one being edited
+            const available = (products || []).filter(p => p && p.slug && p.id !== excludeId).slice().sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            function syncHidden() {
+                hidden.value = Array.from(selected).join(' | ');
+                renderChips();
+            }
+            function renderChips() {
+                chipsEl.innerHTML = '';
+                Array.from(selected).forEach(slug => {
+                    const p = (products || []).find(x => x.slug === slug);
+                    const label = p ? (p.name || slug) : slug;
+                    const chip = document.createElement('span');
+                    chip.className = 'pairings-chip';
+                    chip.innerHTML = label.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])) + ' <span class="pairings-chip-x" title="Remove">×</span>';
+                    chip.querySelector('.pairings-chip-x').addEventListener('click', () => {
+                        selected.delete(slug);
+                        const cb = listEl.querySelector('input[data-slug="' + slug.replace(/"/g, '\\"') + '"]');
+                        if (cb) { cb.checked = false; cb.closest('.pairings-option').classList.remove('checked'); }
+                        syncHidden();
+                    });
+                    chipsEl.appendChild(chip);
+                });
+            }
+            function renderList() {
+                listEl.innerHTML = '';
+                available.forEach(p => {
+                    const opt = document.createElement('label');
+                    opt.className = 'pairings-option' + (selected.has(p.slug) ? ' checked' : '');
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.dataset.slug = p.slug;
+                    cb.checked = selected.has(p.slug);
+                    cb.addEventListener('change', () => {
+                        if (cb.checked) selected.add(p.slug);
+                        else selected.delete(p.slug);
+                        opt.classList.toggle('checked', cb.checked);
+                        syncHidden();
+                    });
+                    opt.appendChild(cb);
+                    const img = p.image || (p.images && p.images[0]) || '';
+                    if (img) {
+                        const imgEl = document.createElement('img');
+                        imgEl.src = img;
+                        imgEl.alt = '';
+                        imgEl.loading = 'lazy';
+                        imgEl.onerror = function(){ this.style.display = 'none'; };
+                        opt.appendChild(imgEl);
+                    }
+                    const meta = document.createElement('div');
+                    meta.className = 'pairings-option-meta';
+                    const nameEl = document.createElement('div');
+                    nameEl.className = 'pairings-option-name';
+                    nameEl.textContent = p.name || '(no name)';
+                    const subEl = document.createElement('div');
+                    subEl.className = 'pairings-option-sub';
+                    subEl.innerHTML = '<span>' + (p.category || '—') + '</span><span>' + (p.slug || '') + '</span>' + (p.price ? '<span>AED ' + Number(p.price).toFixed(2) + '</span>' : '');
+                    meta.appendChild(nameEl);
+                    meta.appendChild(subEl);
+                    opt.appendChild(meta);
+                    listEl.appendChild(opt);
+                });
+            }
+            function applyFilter() {
+                const q = (searchEl.value || '').trim().toLowerCase();
+                listEl.querySelectorAll('.pairings-option').forEach(opt => {
+                    const txt = opt.textContent.toLowerCase();
+                    opt.classList.toggle('hidden', q && txt.indexOf(q) === -1);
+                });
+            }
+            searchEl.value = '';
+            searchEl.oninput = applyFilter;
+            renderList();
+            renderChips();
         }
 
         function openEditModal(id) {
@@ -2843,6 +2959,7 @@
             document.getElementById('formSpecifications').value = product.specifications ? product.specifications.join(' | ') : '';
             document.getElementById('formSpecificationsAr').value = product.specificationsAr ? product.specificationsAr.join(' | ') : '';
             document.getElementById('formPairings').value = product.pairings ? product.pairings.join(' | ') : '';
+            renderPairingsPicker(id);
             document.getElementById('formFeatured').checked = product.featured;
             // Extra specs
             document.getElementById('formWattage').value = product.wattage || '';
