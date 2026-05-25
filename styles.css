@@ -84,5 +84,5 @@ body:has(.cart-sidebar.active) .early-price-bottom{display:none}
 .orlo-nav-item.active .orlo-nav-label{color:#1a3a52;font-weight:500}
 .orlo-nav-pin{position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);width:18px;height:1.5px;background:#e76f51;border-radius:1px;opacity:0;transition:opacity .2s ease}
 .orlo-nav-item.active .orlo-nav-pin{opacity:1}
-.orlo-nav-badge{position:absolute;top:-2px;right:22%;background:#e76f51;color:#fff;font-size:0.52rem;font-weight:500;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;line-height:1;letter-spacing:0;border:1px solid #fff;box-sizing:border-box}
+.orlo-nav-badge{position:absolute;top:-3px;right:20%;background:#e76f51;color:#fff;font-size:0.6rem;font-weight:600;min-width:18px;height:18px;padding:0 4px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;line-height:1;letter-spacing:0;border:1.5px solid #fff;box-sizing:border-box}
 .orlo-nav-badge:empty{display:none}
