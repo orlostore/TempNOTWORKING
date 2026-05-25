@@ -117,9 +117,11 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
 .bottom-nav-item.active .nav-label{color:#1a3a52}
 .bottom-nav-item.active .nav-label::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1.5px;background:#e76f51;border-radius:1px}
 .bottom-cart-badge{position:absolute;top:-2px;right:30%;background:#e76f51;color:#fff;font-size:0.55rem;font-weight:500;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}
-@media(max-width:576px){
+@media(max-width:768px){
   .mobile-bottom-nav{display:flex;justify-content:space-around}
   body{padding-bottom:80px!important}
+}
+@media(max-width:576px){
   .login-nav{padding:12px 18px}
   .login-lockup{gap:10px}
   .login-lockup .logo-img{height:32px}
@@ -239,23 +241,23 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
 
 </div>
 
-<!-- ═══ MOBILE BOTTOM NAV (exact login.html pattern, Cart active) ═══════════════ -->
+<!-- ═══ MOBILE BOTTOM NAV (functional links, Cart active, account-aware label) ═══════════════ -->
 <nav class="mobile-bottom-nav">
   <div class="bottom-nav-indicator"></div>
-  <div class="bottom-nav-item">
+  <a href="/" class="bottom-nav-item" style="text-decoration:none">
     <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
     <span class="nav-label">Home</span>
-  </div>
-  <div class="bottom-nav-item">
+  </a>
+  <a href="account.html" class="bottom-nav-item" id="bottomAccountBtn" style="text-decoration:none">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
-    <span class="nav-label">Login</span>
-  </div>
-  <div class="bottom-nav-item active">
+    <span class="nav-label" id="bottomAccountLabel">Login</span>
+  </a>
+  <a href="cart.html" class="bottom-nav-item active" style="text-decoration:none">
     <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
-    <span class="bottom-cart-badge">3</span>
+    <span class="bottom-cart-badge" id="bottomCartBadge" style="display:none"></span>
     <span class="nav-label">Cart</span>
-  </div>
-  <div class="bottom-nav-item">
+  </a>
+  <div class="bottom-nav-item" onclick="if(typeof toggleMobileMenu==='function')toggleMobileMenu();else window.location.href='/'" style="cursor:pointer">
     <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     <span class="nav-label">Menu</span>
   </div>
@@ -430,6 +432,32 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
   // Render on load + after products fetched
   document.addEventListener('DOMContentLoaded', renderCartPage);
   if (document.readyState !== 'loading') renderCartPage();
+
+  // Bottom nav: account label + cart badge count
+  function updateBottomNav() {
+    var loggedIn = isLoggedIn();
+    var label = document.getElementById('bottomAccountLabel');
+    var accountLink = document.getElementById('bottomAccountBtn');
+    if (label) {
+      if (loggedIn) {
+        var name = '';
+        try { var cd = JSON.parse(localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer') || '{}'); name = (cd.firstName || cd.name || '').split(' ')[0] || ''; } catch(e){}
+        label.textContent = name || 'Account';
+      } else {
+        label.textContent = 'Login';
+      }
+    }
+    if (accountLink) accountLink.href = loggedIn ? 'account.html' : 'login.html';
+
+    var badge = document.getElementById('bottomCartBadge');
+    if (badge) {
+      var c = getCart().reduce(function(s,i){return s + (i.quantity||0);}, 0);
+      badge.textContent = c;
+      badge.style.display = c > 0 ? 'flex' : 'none';
+    }
+  }
+  document.addEventListener('DOMContentLoaded', updateBottomNav);
+  if (document.readyState !== 'loading') updateBottomNav();
 
   // Keep cart in sync if products.min.js fetches and replaces them later
   var tries = 0;
