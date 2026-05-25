@@ -51,6 +51,8 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
 .qty-num{font-family:'DM Sans',sans-serif;font-size:0.82rem;color:#1a3a52;min-width:16px;text-align:center;font-weight:500}
 .remove-link{font-family:'DM Sans',sans-serif;font-size:0.72rem;color:#6b6b6b;text-decoration:underline;text-underline-offset:3px;cursor:pointer;letter-spacing:0.02em;background:none;border:none;padding:0}
 .remove-link:hover{color:#e76f51}
+.cart-item-link{display:block;text-decoration:none;color:inherit}
+.cart-item-link:hover .cart-item-name{color:#e76f51}
 
 /* ── TOTALS ─────────────────────── */
 .totals{padding:24px 0 8px}
@@ -363,18 +365,24 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
         var price = item._tierPrice || (item.variantId && item.variantPrice > 0 ? item.variantPrice : item.price);
         var meta = [];
         if (item.variantName) meta.push('<div>' + escHTML(item.variantName) + '</div>');
-        return '' +
-          '<div class="cart-item" data-id="' + escHTML(item.id) + '">' +
-            '<div class="cart-item-img">' + imgHtml + '</div>' +
-            '<div class="cart-item-info">' +
-              '<div class="cart-item-top">' +
+        var slug = (item.slug || (p && p.slug)) || '';
+        var pdpHref = slug ? 'product.html?product=' + encodeURIComponent(slug) : null;
+        var imgInner = '<div class="cart-item-img">' + imgHtml + '</div>';
+        var infoTopInner = '<div class="cart-item-top">' +
                 '<div>' +
                   '<div class="cart-item-name">' + escHTML(item.name) + '</div>' +
                   (item.nameAr ? '<div class="cart-item-name-ar">' + escHTML(item.nameAr) + '</div>' : '') +
                   (meta.length ? '<div class="cart-item-meta">' + meta.join('') + '</div>' : '') +
                 '</div>' +
                 '<div class="cart-item-price">' + fmtAed(price * item.quantity) + '</div>' +
-              '</div>' +
+              '</div>';
+        var imgHtmlWrapped = pdpHref ? '<a href="' + pdpHref + '" class="cart-item-link" aria-label="View product">' + imgInner + '</a>' : imgInner;
+        var infoTopWrapped = pdpHref ? '<a href="' + pdpHref + '" class="cart-item-link">' + infoTopInner + '</a>' : infoTopInner;
+        return '' +
+          '<div class="cart-item" data-id="' + escHTML(item.id) + '">' +
+            imgHtmlWrapped +
+            '<div class="cart-item-info">' +
+              infoTopWrapped +
               '<div class="cart-item-controls">' +
                 '<div class="qty-stepper">' +
                   '<button class="qty-btn" data-act="dec" data-id="' + escHTML(item.id) + '" data-vid="' + escHTML(item.variantId || '') + '" aria-label="Decrease">−</button>' +
