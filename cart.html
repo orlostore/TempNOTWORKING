@@ -3,7 +3,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Your Cart — ORLO Store</title>
 <meta name="robots" content="noindex,nofollow">
-<link rel="stylesheet" href="styles.css?v=45">
+<link rel="stylesheet" href="styles.css?v=46">
 <!-- Bootstrap product data so renderCartPage can resolve cart items to product info -->
 <script src="products.min.js?v=24"></script>
 <style>
@@ -564,13 +564,38 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
     if (vid) return c.findIndex(function(i){return i.id === id && i.variantId === vid;});
     return c.findIndex(function(i){return i.id === id && !i.variantId;});
   }
+  // Look up the actual stock for an item (variant-aware) from the global products array.
+  // Returns Infinity if products hasn't loaded yet (graceful — falls back to the 10-per-product cap).
+  function stockFor(id, vid) {
+    if (typeof products === 'undefined' || !Array.isArray(products)) return Infinity;
+    var p = products.find(function(x){ return x.id === id; });
+    if (!p) return Infinity;
+    if (vid && p.variants && p.variants.length) {
+      var v = p.variants.find(function(vv){ return vv.id === vid; });
+      return v ? (v.quantity || 0) : 0;
+    }
+    return p.quantity || 0;
+  }
   function mutateQty(id, delta, vid) {
     var c = getCart();
     var idx = findItemIndex(c, id, vid);
     if (idx < 0) return;
     var newQty = c[idx].quantity + delta;
-    if (newQty <= 0) { c.splice(idx, 1); }
-    else { c[idx].quantity = Math.min(newQty, 10); }  // cap at 10 like app.js MAX_QTY_PER_PRODUCT
+    if (newQty <= 0) {
+      c.splice(idx, 1);
+    } else {
+      var stock = stockFor(id, vid);
+      var cap = Math.min(10, stock);  // 10-per-product limit AND admin-managed stock
+      if (delta > 0 && newQty > cap) {
+        // Hit the cap — toast the user so the unresponsive + button is explained, then bail
+        if (typeof showOrloToast === 'function') {
+          var msg = stock < 10 ? 'Only ' + stock + ' left in stock' : 'Limit of 10 per order';
+          showOrloToast(msg, '', 'warning', 3000);
+        }
+        return;
+      }
+      c[idx].quantity = Math.min(newQty, cap);
+    }
     saveCartAndSync(c);
     renderCartPage();
     updateBottomNav();
