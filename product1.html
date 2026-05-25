@@ -213,6 +213,22 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   /* The "Free delivery" delivery-info row — keep but quiet (no more sticky orange bar) */
   .mobile-buybox-compact .mobile-price-section{display:none!important}
   .mobile-buybox-compact .mobile-delivery-info{display:none!important}
+
+  /* ═════════ Pricing tier bar — editorial Hermès-style (was busy with coral prices + green Save badges) ═════════ */
+  #pricingTiersDesktop,#pricingTiersMobile{padding:14px 0 22px!important;background:transparent!important;border:none!important;box-shadow:none!important;margin:0!important}
+  #pricingTiersDesktop > div,#pricingTiersMobile > div{background:transparent!important;border:none!important;box-shadow:none!important;border-radius:0!important;padding:0!important}
+  .tier-item{flex:1!important;background:transparent!important;border:none!important;border-bottom:2px solid transparent!important;border-radius:0!important;box-shadow:none!important;padding:12px 8px!important;text-align:center!important;cursor:pointer!important;transition:border-color .2s!important}
+  .tier-item.active{border-bottom-color:#1a3a52!important;background:transparent!important}
+  .tier-item.best-deal{background:transparent!important}
+  .tier-row-top{display:flex!important;flex-direction:column!important;align-items:center!important;gap:4px!important;margin-bottom:6px!important}
+  .tier-qty{font-family:'DM Sans',sans-serif!important;font-size:0.7rem!important;color:#6b6b6b!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;background:none!important;padding:0!important;border:none!important}
+  .tier-price{font-family:'DM Sans',sans-serif!important;font-size:0.95rem!important;color:#1a3a52!important;font-weight:500!important;background:none!important;padding:0!important;border:none!important}
+  .tier-item.active .tier-price{color:#1a3a52!important;font-weight:500!important}
+  .tier-row-bottom{font-family:'DM Sans',sans-serif!important;font-size:0.65rem!important;color:#9aa5ad!important;letter-spacing:0.04em!important;text-transform:lowercase!important;background:none!important}
+  .tier-save{color:#6b6b6b!important;font-weight:500!important;background:none!important;padding:0!important}
+  /* Tier container: flex row with hairline between items */
+  #pricingTiersDesktop > div:first-child,#pricingTiersMobile > div:first-child{display:flex!important;flex-wrap:nowrap!important;border-top:1px solid rgba(26,58,82,0.10)!important;border-bottom:1px solid rgba(26,58,82,0.10)!important;background:transparent!important}
+  .tier-item + .tier-item{border-left:1px solid rgba(26,58,82,0.08)!important}
   </style>
 </head>
 <body>
