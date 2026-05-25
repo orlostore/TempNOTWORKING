@@ -97,6 +97,26 @@
       .policy-row ul.arabic-list { padding-left: 0 !important; padding-right: 1.2rem !important; }
       .policy-row li { margin-bottom: 0.4rem; }
 
+      /* CUSTOMER ENQUIRIES (mirrors cart.html pattern) */
+      .cs-section{padding:0}
+      .cs-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.16em;color:var(--primary);font-weight:500;padding-bottom:14px;border-bottom:1px solid var(--draft-border);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+      .cs-heading .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:var(--draft-muted);text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
+      .cs-block{margin-bottom:18px}
+      .cs-block:last-child{margin-bottom:0}
+      .cs-block-title{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--draft-muted);font-weight:500;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+      .cs-block-title .muted{margin-left:0;direction:rtl}
+      .cs-block-content{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--primary);line-height:1.7}
+      .cs-block-content a{color:var(--primary);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(26,58,82,0.40)}
+      .cs-block-content a:hover{text-decoration-color:var(--primary);color:var(--accent)}
+      .cs-block-content .muted{color:var(--draft-muted);font-size:0.78rem;margin-left:6px}
+      .social-row{display:flex;align-items:center;gap:8px}
+      .social-row .label-en{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--primary);font-weight:500}
+      .social-row .ar{font-family:'Almarai',sans-serif;font-size:0.78rem;color:var(--draft-muted);margin-left:6px}
+      .social-row .icons{margin-left:auto;display:flex;gap:6px}
+      .social-link{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;color:var(--primary);text-decoration:none;transition:color .2s, border-color .2s}
+      .social-link:hover{color:var(--accent);border-color:var(--accent)}
+      .social-link svg{width:13px;height:13px;display:block}
+
       /* BOTTOM CARD */
       .tc-bottom-card { background: var(--surface) !important; padding: 28px 32px !important; margin-bottom: 0 !important; }
       .tc-bottom-card-inner { max-width: 780px; margin: 0 auto; text-align: center; }
@@ -301,6 +321,39 @@ body{padding-top:0!important}
   </div>
 </section>
 
+<!-- CUSTOMER ENQUIRIES (mirrors cart.html: Email + WhatsApp + Follow) -->
+<section class="policy-section" id="contact">
+  <div class="policy-section-inner">
+    <div class="cs-section">
+      <div class="cs-heading">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+      <div class="cs-block">
+        <div class="cs-block-title">Email</div>
+        <div class="cs-block-content">
+          <a href="mailto:info@orlostore.com">info@orlostore.com</a>
+          <span class="muted">Reply within 24h</span>
+        </div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-block-title">Online orders<span class="muted">الطلبات عبر الإنترنت</span></div>
+        <div class="cs-block-content">
+          WhatsApp: <a href="https://wa.me/971555477206">+971 55 547 7206</a>
+          <span class="muted">Everyday 9am – 9pm</span>
+        </div>
+      </div>
+      <div class="cs-block">
+        <div class="social-row">
+          <span class="label-en">Follow</span>
+          <span class="ar">تابعنا</span>
+          <span class="icons">
+            <a href="https://instagram.com/orlostore" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+            <a href="https://tiktok.com/@shoporlo" class="social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg></a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="tc-bottom-card">
   <div class="tc-bottom-card-inner">
     <div class="copyright">© ORLO 2026<span class="sep">·</span>All rights reserved<span class="sep">·</span>info@orlostore.com</div>
@@ -319,25 +372,6 @@ body{padding-top:0!important}
 </div>
 
 </main>
-<footer>
-    <nav class="footer-terms-strip" aria-label="Policies">
-        <a href="terms-and-conditions.html#shipping">Shipping</a>
-        <span aria-hidden="true">·</span>
-        <a href="terms-and-conditions.html#returns">Returns</a>
-        <span aria-hidden="true">·</span>
-        <a href="terms-and-conditions.html#privacy">Privacy</a>
-        <span aria-hidden="true">·</span>
-        <a href="terms-and-conditions.html#terms">Terms</a>
-        <span aria-hidden="true">·</span>
-        <a href="terms-and-conditions.html#exchange">Exchange</a>
-    </nav>
-    <div style="margin-bottom:0.6rem;display:flex;justify-content:center;gap:1rem;">
-        <a href="https://www.instagram.com/orlostore" target="_blank" rel="noopener" aria-label="ORLO on Instagram" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="white" stroke="none"/></svg></a>
-        <a href="https://www.tiktok.com/@shoporlo" target="_blank" rel="noopener" aria-label="ORLO on TikTok" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:#000;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"><svg width="17" height="17" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="white"/></svg></a>
-    </div>
-    <span>&copy; 2026 ORLO &nbsp;·&nbsp; Your privacy matters &nbsp;·&nbsp; Dubai, UAE</span><br>
-    <span class="arabic-text" style="display:inline-block;direction:rtl">خصوصيتك تهمنا &nbsp;·&nbsp; دبي، الإمارات العربية المتحدة</span>
-</footer>
 
 <nav class="mobile-bottom-nav">
     <div class="bottom-nav-indicator" id="bottomNavIndicator"></div>
