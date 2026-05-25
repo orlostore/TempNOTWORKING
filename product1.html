@@ -232,7 +232,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .mobile-carousel-container{background:#fff!important;padding:0 0 14px!important}
 
   /* The bar product.js spawns: #earlyPriceMobile with class .early-price-bottom — white, full-width, sits above mobile-bottom-nav */
-  .early-price-bottom,#earlyPriceMobile.early-price-bottom{position:fixed!important;bottom:62px!important;left:0!important;right:0!important;background:#fff!important;z-index:9999!important;padding:10px 16px!important;border-top:1px solid rgba(26,58,82,0.10)!important;box-shadow:0 -2px 8px rgba(26,58,82,0.04)!important;margin:0!important;display:block!important;visibility:visible!important;opacity:1!important;height:auto!important;max-height:80px!important;box-sizing:border-box!important;width:100%!important;transform:none!important;transition:none!important}
+  .early-price-bottom,#earlyPriceMobile.early-price-bottom{position:fixed!important;bottom:max(72px, calc(env(safe-area-inset-bottom) + 56px))!important;left:0!important;right:0!important;background:#fff!important;z-index:100!important;padding:10px 16px!important;border-top:1px solid rgba(26,58,82,0.10)!important;box-shadow:0 -2px 8px rgba(26,58,82,0.04)!important;margin:0!important;display:block!important;visibility:visible!important;opacity:1!important;height:auto!important;max-height:80px!important;box-sizing:border-box!important;width:100%!important;transform:none!important;transition:none!important}
   @media(min-width:769px){.early-price-bottom,#earlyPriceMobile.early-price-bottom{bottom:0!important;padding:14px 22px!important;max-height:88px!important}}
 
   /* Neutralize the .nav-hidden translate-Y that product.js adds on scroll */
@@ -637,10 +637,10 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
       earlyMobile.style.setProperty('visibility', 'visible', 'important');
       earlyMobile.style.setProperty('opacity', '1', 'important');
       earlyMobile.style.setProperty('position', 'fixed', 'important');
-      earlyMobile.style.setProperty('bottom', '62px', 'important');
+      earlyMobile.style.setProperty('bottom', 'max(72px, calc(env(safe-area-inset-bottom) + 56px))', 'important');
       earlyMobile.style.setProperty('left', '0', 'important');
       earlyMobile.style.setProperty('right', '0', 'important');
-      earlyMobile.style.setProperty('z-index', '9999', 'important');
+      earlyMobile.style.setProperty('z-index', '100', 'important');
       earlyMobile.style.setProperty('transform', 'none', 'important');
       if (earlyMobile.classList.contains('nav-hidden')) earlyMobile.classList.remove('nav-hidden');
     }
