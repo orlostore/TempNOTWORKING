@@ -1,0 +1,62 @@
+<!-- ═══ ORLO BOTTOM NAV — canonical block. Do NOT hand-edit per-page. Run `node scripts/sync-nav.js` to propagate. ═══ -->
+<nav class="orlo-nav" id="orloBottomNav" aria-label="Primary">
+  <a href="/" class="orlo-nav-item" data-tab="home">
+    <svg class="orlo-nav-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11L12 4l8 7v9H4z"/></svg>
+    <span class="orlo-nav-label">Home</span>
+    <span class="orlo-nav-pin" aria-hidden="true"></span>
+  </a>
+  <a href="account.html" class="orlo-nav-item" data-tab="account" id="orloNavAccountBtn">
+    <svg class="orlo-nav-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="2.5"/><path d="M7 21c0-2.8 2.2-5 5-5s5 2.2 5 5"/></svg>
+    <span class="orlo-nav-label" id="orloNavAccountLabel">Login</span>
+    <span class="orlo-nav-pin" aria-hidden="true"></span>
+  </a>
+  <a href="cart.html" class="orlo-nav-item" data-tab="bag">
+    <svg class="orlo-nav-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 9h13l-1 12.5a.7.7 0 0 1-.7.5H7.2a.7.7 0 0 1-.7-.5L5.5 9z"/><path d="M9 9V6.5a3 3 0 0 1 6 0V9"/></svg>
+    <span class="orlo-nav-badge" id="bottomCartCount" aria-label="Bag items"></span>
+    <span class="orlo-nav-label">Bag</span>
+    <span class="orlo-nav-pin" aria-hidden="true"></span>
+  </a>
+  <a href="#" class="orlo-nav-item" data-tab="menu" onclick="event.preventDefault();if(typeof toggleMobileMenu==='function')toggleMobileMenu();else window.location.href='/'">
+    <svg class="orlo-nav-svg" viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="10" x2="18" y2="10"/><line x1="6" y1="14" x2="18" y2="14"/></svg>
+    <span class="orlo-nav-label">Menu</span>
+    <span class="orlo-nav-pin" aria-hidden="true"></span>
+  </a>
+</nav>
+<script>
+(function(){
+  // Active-tab detection — derives from window.location.pathname
+  var p = (location.pathname || '/').toLowerCase().replace(/\.html$/, '').replace(/\/$/, '') || '/';
+  var routes = { '/':'home','/index':'home','/shop':'home',
+    '/account':'account','/login':'account','/signup':'account',
+    '/forgot-password':'account','/reset-password':'account','/verify-email':'account','/track':'account',
+    '/cart':'bag' };
+  var active = routes[p];
+  if (active) {
+    var el = document.querySelector('.orlo-nav-item[data-tab="'+active+'"]');
+    if (el) el.classList.add('active');
+  }
+  // Cart badge — read from localStorage, hide when zero. Self-syncs via MutationObserver so app.js's updates flow through.
+  var badge = document.getElementById('bottomCartCount');
+  function sync(){
+    try {
+      var c = JSON.parse(localStorage.getItem('cart')||'[]');
+      var n = c.reduce(function(s,i){return s+(i.quantity||0);},0);
+      if (badge) badge.textContent = n > 0 ? String(n) : '';
+    } catch(e){}
+  }
+  sync();
+  if (badge) new MutationObserver(function(){
+    // If app.js set textContent to "0", normalise to '' so the :empty CSS hides it
+    if (badge.textContent === '0') badge.textContent = '';
+  }).observe(badge, { childList: true, characterData: true, subtree: true });
+  window.addEventListener('storage', function(e){ if (e.key === 'cart') sync(); });
+  // Logged-in label swap (account.html sets a flag in localStorage on sign in)
+  try {
+    if (localStorage.getItem('orloAuth') === '1') {
+      var l = document.getElementById('orloNavAccountLabel');
+      if (l) l.textContent = 'Account';
+    }
+  } catch(e){}
+})();
+</script>
+<!-- ═══ /ORLO BOTTOM NAV ═══ -->

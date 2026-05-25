@@ -65,3 +65,24 @@ body:has(.cart-sidebar.active) .early-price-bottom{display:none}
 /* Bigger, calmer buttons */
 .cart-sidebar #stripeBtn,.cart-sidebar #stripeBtnGuest{padding:16px 16px!important;font-size:0.82rem!important;letter-spacing:0.12em!important}
 @media (max-width: 514.56px){.cart-sidebar{width:100%;right:-100%;border-radius:0;top:0;bottom:0;height:auto}.cart-sidebar.active{right:0}.cart-checkout-fixed{display:block;position:absolute;top:auto;bottom:85px;left:0;right:0;background:var(--bg);border-top:1px solid var(--draft-border);border-bottom:none;box-shadow:0 -2px 8px rgba(26,58,82,0.08);z-index:10;padding:10px 14px 0 14px}.cart-footer{padding-bottom:220px;padding-top:0.25rem}.cart-sidebar:not(:has(.checkout-card)) .cart-footer{padding-bottom:140px}[data-theme="dark"] .cart-checkout-fixed{background:#0d1f2d}}
+
+/* ═══════════════════════════════════════════════════════════
+   ORLO BOTTOM NAV (canonical · Variant D + coral pin · Apple HIG + Material 3)
+   - 20px hairline icons (1px stroke, 1.4 on active)
+   - 6px coral pin under active tab (single brand moment)
+   - DM Sans 0.55rem caps 0.22em tracked labels
+   - 48px min-height tap zones per Apple HIG
+   - max(16px, env(safe-area-inset-bottom)) bottom padding for iPhone notched
+   - Mobile only — hidden on desktop (≥769px)
+   ═══════════════════════════════════════════════════════════ */
+.orlo-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;z-index:6000;padding:14px 10px 16px;padding-bottom:max(16px,env(safe-area-inset-bottom));border-top:1px solid rgba(26,58,82,0.10);box-sizing:border-box}
+@media(max-width:768px){.orlo-nav{display:flex;justify-content:space-around;align-items:stretch}}
+.orlo-nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer;flex:1;position:relative;text-decoration:none;min-height:48px;padding:6px 0;color:inherit}
+.orlo-nav-svg{width:20px;height:20px;stroke:#c0c8ce;stroke-width:1;fill:none;stroke-linecap:round;stroke-linejoin:round;display:block;transition:stroke .2s ease,stroke-width .2s ease}
+.orlo-nav-item.active .orlo-nav-svg{stroke:#1a3a52;stroke-width:1.4}
+.orlo-nav-label{font-family:'DM Sans',sans-serif;font-size:0.55rem;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;line-height:1;transition:color .2s ease,font-weight .2s ease}
+.orlo-nav-item.active .orlo-nav-label{color:#1a3a52;font-weight:500}
+.orlo-nav-pin{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:6px;height:6px;background:#e76f51;border-radius:50%;opacity:0;transition:opacity .2s ease}
+.orlo-nav-item.active .orlo-nav-pin{opacity:1}
+.orlo-nav-badge{position:absolute;top:0;right:24%;background:#e76f51;color:#fff;font-size:0.5rem;font-weight:500;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;line-height:1;letter-spacing:0;border:1px solid #fff;box-sizing:border-box}
+.orlo-nav-badge:empty{display:none}

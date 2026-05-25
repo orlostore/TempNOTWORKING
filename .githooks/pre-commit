@@ -32,3 +32,12 @@ for asset in $ASSETS; do
 
   echo "pre-commit: bumped ${asset} → v=${next}" >&2
 done
+
+# Verify the canonical bottom-nav block hasn't drifted across pages.
+# Any drift fails the commit with a clear pointer to scripts/sync-nav.js.
+if [ -f scripts/verify-nav.js ]; then
+  node scripts/verify-nav.js >&2 || {
+    echo "pre-commit: bottom-nav drift — run \`node scripts/sync-nav.js\` then re-stage." >&2
+    exit 1
+  }
+fi
