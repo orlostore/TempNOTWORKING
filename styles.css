@@ -86,3 +86,33 @@ body:has(.cart-sidebar.active) .early-price-bottom{display:none}
 .orlo-nav-item.active .orlo-nav-pin{opacity:1}
 .orlo-nav-badge{position:absolute;top:-3px;right:20%;background:transparent;color:#e76f51;font-size:0.92rem;font-weight:700;padding:0;border:none;border-radius:0;font-family:'DM Sans',sans-serif;line-height:1;letter-spacing:0}
 .orlo-nav-badge:empty{display:none}
+
+/* ═══════════════════════════════════════════════════════════
+   PRODUCT CARD v2 — Hermès card-4 design
+   Activated only when <body data-cards="v2"> is present (drafts: draftnewindex.html / draftnewindexR1.html).
+   Live pages without the flag keep the legacy .product-card rendering — zero risk to production.
+   ═══════════════════════════════════════════════════════════ */
+body[data-cards="v2"] .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:32px 16px}
+body[data-cards="v2"] .card{background:transparent;position:relative}
+body[data-cards="v2"] .card-link{display:block;text-decoration:none;color:inherit}
+body[data-cards="v2"] .card-img{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:transparent;padding:0;display:block}
+body[data-cards="v2"] .card-img > div,body[data-cards="v2"] .card-img img{width:100%;height:100%;object-fit:cover;display:block}
+body[data-cards="v2"] .card-img .badge{position:absolute;top:14px;left:14px;font-family:'DM Sans',sans-serif;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:#1a3a52;background:rgba(255,255,255,0.92);padding:5px 9px;font-weight:500;z-index:2}
+body[data-cards="v2"] .card-img .badge.oos{background:rgba(26,58,82,0.92);color:#fff}
+body[data-cards="v2"] .card-info{padding:14px 4px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+body[data-cards="v2"] .card-info-text{flex:1;min-width:0;text-decoration:none;color:inherit;display:block}
+body[data-cards="v2"] .card-name{font-family:'DM Sans',sans-serif;font-size:0.92rem;color:#1a3a52;font-weight:400;line-height:1.3;margin-bottom:2px}
+body[data-cards="v2"] .card-name-ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#9aa5ad;direction:rtl;text-align:left;line-height:1.4;margin-bottom:5px}
+body[data-cards="v2"] .card-price{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#1a3a52;font-weight:400;letter-spacing:0.01em}
+body[data-cards="v2"] .card-bag{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid rgba(26,58,82,0.25);border-radius:50%;color:#1a3a52;text-decoration:none;flex-shrink:0;transition:background .2s, color .2s, border-color .2s;background:#fff;cursor:pointer;padding:0}
+body[data-cards="v2"] .card-bag svg{width:15px;height:15px;display:block;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+body[data-cards="v2"] .card-bag:hover{background:#1a3a52;border-color:#1a3a52;color:#fff}
+body[data-cards="v2"] .card.oos .card-name,body[data-cards="v2"] .card.oos .card-price{color:#9aa5ad}
+body[data-cards="v2"] .card.oos .card-bag{display:none}
+@media(max-width:680px){
+  body[data-cards="v2"] .products-grid{grid-template-columns:repeat(2,1fr);gap:24px 12px}
+  body[data-cards="v2"] .card-name{font-size:0.85rem}
+  body[data-cards="v2"] .card-price{font-size:0.82rem}
+  body[data-cards="v2"] .card-bag{width:30px;height:30px}
+  body[data-cards="v2"] .card-bag svg{width:13px;height:13px}
+}

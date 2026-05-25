@@ -80,7 +80,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=46">
+    <link rel="stylesheet" href="styles.css?v=47">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -849,7 +849,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         .close-cart svg, .policy-close-btn svg { width: 1.2rem; height: 1.2rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
     </style>
 </head>
-<body>
+<body data-cards="v2">
 <!-- Draft overlay controls -->
 <button class="draft-theme-toggle" onclick="toggleDraftTheme()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
 <div class="draft-marker">Draft · The Edit look</div>
@@ -1288,6 +1288,62 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 
 <script src="products.min.js?v=11" defer></script>
 <script src="app.min.js?v=25" defer></script>
+<script>
+/* ═══ CARD v2 — Hermès card-4 override. Active only on this draft page (body[data-cards="v2"]). Live pages keep legacy cards. ═══ */
+(function(){
+  if (document.body.dataset.cards !== 'v2') return;
+  function esc(s){return typeof s!=='string'?s:s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+  function qid(v){return typeof v==='string'?"'"+v.replace(/'/g,"\\'")+"'":v}
+  window.renderProducts = function(list, arabicMode){
+    var grid = document.getElementById('productsGrid');
+    if (!grid) return;
+    if (!list || !list.length){
+      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;padding:3rem;">'+(arabicMode?'لم يتم العثور على منتجات':'No products found')+'</p>';
+      return;
+    }
+    grid.innerHTML = list.map(function(p, i){
+      var safeName = esc(p.name||''), safeNameAr = esc(p.nameAr||''), safeSlug = encodeURIComponent(p.slug||'');
+      var pdpHref = 'product1.html?product='+safeSlug;
+      var isUrl = p.image && p.image.indexOf('http')===0;
+      var rawSrc = isUrl ? esc(p.image) : '';
+      var cdnSrc = rawSrc ? 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/'+rawSrc : '';
+      var imgAttrs = i<4 ? 'fetchpriority="'+(i===0?'high':'auto')+'"' : 'loading="lazy"';
+      var imgHTML = isUrl
+        ? '<img src="'+cdnSrc+'" alt="'+safeName+'" width="400" height="400" onerror="this.onerror=null;this.src=\''+rawSrc+'\'" '+imgAttrs+'>'
+        : '<div style="background:#efeae0"></div>';
+      var stock = p.totalStock!==undefined ? p.totalStock : (p.quantity||0);
+      var isOOS = stock === 0;
+      var badge = '';
+      if (isOOS) badge = '<span class="badge oos">Sold out</span>';
+      else if (p.featured) badge = '<span class="badge">Best seller</span>';
+      else if (stock>0 && stock<=3) badge = '<span class="badge">Only '+stock+' left</span>';
+      var bag = '';
+      if (!isOOS){
+        var hasV = p.variants && p.variants.length>0;
+        var act = hasV
+          ? "window.location.href='"+pdpHref+"';event.stopPropagation();event.preventDefault();"
+          : "if(typeof addToCart==='function')addToCart("+qid(p.id)+",event);event.stopPropagation();event.preventDefault();";
+        bag = '<button class="card-bag" aria-label="Add to bag" onclick="'+act+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></button>';
+      }
+      var price = p.price ? 'AED '+Number(p.price).toFixed(2) : '';
+      return '<div class="card'+(isOOS?' oos':'')+'">'+
+        '<a href="'+pdpHref+'" class="card-link"><div class="card-img">'+imgHTML+badge+'</div></a>'+
+        '<div class="card-info">'+
+          '<a href="'+pdpHref+'" class="card-info-text">'+
+            '<div class="card-name">'+safeName+'</div>'+
+            (safeNameAr ? '<div class="card-name-ar">'+safeNameAr+'</div>' : '')+
+            '<div class="card-price">'+price+'</div>'+
+          '</a>'+bag+
+        '</div>'+
+      '</div>';
+    }).join('');
+  };
+  // If the original renderProducts already fired before our override registered, force a re-render
+  if (typeof products !== 'undefined' && Array.isArray(products) && products.length){
+    window.renderProducts(products, false);
+  }
+})();
+</script>
 <script>
 // Logic for Account Link and Indicator positioning (same as your original)
 function updateAccountLink() {
