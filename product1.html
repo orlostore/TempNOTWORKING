@@ -206,13 +206,16 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   /* The "story" + footer will sit on cream below — gap them off the white card */
   .mobile-buybox-compact{padding:18px 22px 28px!important;margin-bottom:14px!important}
 
-  /* Sticky ATC pill — single full-width navy button matching cart's checkout pill exactly */
-  .mobile-buybox-compact{position:sticky!important;bottom:0!important;background:#fff!important;z-index:50!important;padding:18px 22px 78px!important;border-top:1px solid rgba(26,58,82,0.10)!important;margin-bottom:0!important}
+  /* Sticky ATC pill — FIXED at viewport bottom (more reliable than sticky for cross-page consistency) */
+  .mobile-buybox-compact{position:fixed!important;bottom:0!important;left:0!important;right:0!important;background:#f8f6f2!important;z-index:50!important;padding:18px 22px 78px!important;border-top:1px solid rgba(26,58,82,0.10)!important;margin:0!important;display:block!important}
   @media(min-width:769px){.mobile-buybox-compact{padding-bottom:18px!important}}
+  body{padding-bottom:140px!important}
 
-  /* The "Free delivery" delivery-info row — keep but quiet (no more sticky orange bar) */
+  /* Hide price/delivery rows in the sticky bar (just the ATC button) */
   .mobile-buybox-compact .mobile-price-section{display:none!important}
   .mobile-buybox-compact .mobile-delivery-info{display:none!important}
+  .mobile-buybox-compact .mobile-cart-section{display:block!important;width:100%!important}
+  .mobile-buybox-compact .mobile-add-to-cart{display:flex!important;visibility:visible!important;opacity:1!important}
 
   /* ═════════ Pricing tier bar — editorial Hermès-style (was busy with coral prices + green Save badges) ═════════ */
   #pricingTiersDesktop,#pricingTiersMobile{padding:14px 0 22px!important;background:transparent!important;border:none!important;box-shadow:none!important;margin:0!important}
@@ -247,7 +250,6 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .variant-section .variant-label > span:first-child{font-size:0.78rem!important;color:#6b6b6b!important;font-weight:500!important;text-transform:none!important;letter-spacing:0.02em!important}
   .variant-section .variant-label .arabic-text{font-family:'Almarai',sans-serif!important;font-size:0.7rem!important;color:#9aa5ad!important;margin-left:6px!important}
   .variant-section .variant-selected-name{font-family:'DM Sans',sans-serif!important;font-size:0.85rem!important;color:#1a3a52!important;font-weight:400!important;text-transform:none!important;letter-spacing:0!important}
-  .variant-section .variant-selected-name::before{content:'✓ ';color:#1a3a52;margin-right:2px}
 
   /* Variant tiles — NUCLEAR: kill all backgrounds + shadows from every descendant */
   .variant-tile,.variant-tile *{background:transparent!important;background-color:transparent!important;background-image:none!important;box-shadow:none!important}
