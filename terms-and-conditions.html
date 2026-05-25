@@ -52,8 +52,7 @@
       :root{
         --primary: #1a3a52;
         --accent: #e76f51;
-        --category-band: #1a3a52;
-        --bg: #f8f6f2;
+        --bg: #f3eee5;
         --surface: #ffffff;
         --draft-text: #1a1a1a;
         --draft-muted: #6b6b6b;
@@ -68,26 +67,48 @@
         --primary: #f0ece4;
       }
       html, body { background: var(--bg) !important; transition: background .4s ease, color .4s ease; }
-      body { color: var(--draft-text) !important; font-family: 'DM Sans', system-ui, -apple-system, sans-serif !important; line-height: 1.6; padding-top: 58px; }
-      @media (max-width: 768px) { body { padding-top: 95px; } }
+      body { color: var(--draft-text) !important; font-family: 'DM Sans', system-ui, -apple-system, sans-serif !important; line-height: 1.6; padding:0 !important; margin:0 !important; font-variant-numeric: lining-nums; }
 
-      header { background: var(--surface) !important; border-bottom: 1px solid var(--draft-border); transition: background .4s ease; }
-      [data-theme="dark"] header { box-shadow: 0 2px 8px rgba(0,0,0,0.35); }
+      /* hide old policy-container wrapper styles — content flows full-width with section cards now */
+      .container.policy-container { max-width: none !important; margin: 0 !important; padding: 0 !important; background: transparent !important; }
 
-      /* Editorial typography for English headings — matches draftnewindexR1 */
-      .page-title,
-      .policy-section h2:not(.arabic-heading) {
-        font-family: 'Cormorant Garamond', 'DM Serif Display', Georgia, serif !important;
-        font-weight: 300 !important;
-        letter-spacing: -0.01em !important;
-        line-height: 1.1 !important;
-        color: var(--primary) !important;
-      }
-      [data-theme="dark"] .page-title,
-      [data-theme="dark"] .policy-section h2:not(.arabic-heading) { color: var(--draft-text) !important; }
+      /* TITLE CARD */
+      .title-card { background: var(--surface) !important; padding: 40px 32px !important; margin-bottom: 12px !important; }
+      .title-card-inner { max-width: 780px; margin: 0 auto; }
+      .title-card h1 { font-family: 'DM Sans', sans-serif !important; font-weight: 500 !important; font-size: 1.05rem !important; text-transform: uppercase !important; letter-spacing: 0.22em !important; color: var(--primary) !important; line-height: 1.4 !important; margin-bottom: 18px !important; text-align: left !important; }
+      .title-card .last-updated { font-family: 'DM Sans', sans-serif; font-size: 0.78rem; color: var(--draft-muted); letter-spacing: 0.02em; }
+      .title-card .last-updated strong { font-weight: 500; color: var(--primary); margin-right: 4px; }
+      .title-card .ar-title { font-family: 'Almarai', sans-serif; font-size: 0.9rem; color: var(--draft-muted); direction: rtl; text-align: right; margin-top: 12px; }
 
-      .page-title { font-size: clamp(32px, 4vw, 48px) !important; text-align: center; margin: 0; }
-      .page-title-ar { text-align: center; margin: 4px 0 32px; font-family: 'Almarai', system-ui, sans-serif; font-weight: 400; color: var(--draft-muted); font-size: clamp(18px, 2vw, 24px); }
+      /* SECTION CARDS */
+      .policy-section { background: var(--surface) !important; padding: 28px 32px !important; margin-bottom: 12px !important; border: none !important; border-radius: 0 !important; box-shadow: none !important; max-width: none !important; }
+      .policy-section-inner { max-width: 780px; margin: 0 auto; }
+      .policy-header-row { display: flex !important; align-items: baseline !important; gap: 12px !important; border-bottom: 1px solid var(--draft-border) !important; padding-bottom: 14px !important; margin-bottom: 22px !important; }
+      .policy-header-row .num { font-family: 'DM Sans', sans-serif; font-weight: 400; color: var(--draft-muted); font-size: 0.78rem; letter-spacing: 0.04em; }
+      .policy-header-row h2 { font-family: 'DM Sans', sans-serif !important; font-weight: 500 !important; font-size: 0.9rem !important; text-transform: uppercase !important; letter-spacing: 0.16em !important; color: var(--primary) !important; margin: 0 !important; line-height: 1 !important; flex: 0 0 auto !important; }
+      .policy-header-row h2.arabic-heading { font-family: 'Almarai', sans-serif !important; font-weight: 400 !important; font-size: 0.78rem !important; color: var(--draft-muted) !important; letter-spacing: 0 !important; text-transform: none !important; margin-left: auto !important; direction: rtl !important; }
+
+      .policy-row { display: block !important; padding: 0 !important; margin-bottom: 18px !important; border-bottom: none !important; }
+      .policy-row:last-child { margin-bottom: 0 !important; }
+      .policy-row > p, .policy-row > ul { font-family: 'DM Sans', sans-serif !important; font-size: 0.92rem !important; color: var(--primary) !important; line-height: 1.65 !important; margin: 0 0 8px 0 !important; text-align: left !important; flex: none !important; }
+      .policy-row > p.arabic-text, .policy-row > ul.arabic-list { font-family: 'Almarai', sans-serif !important; font-size: 0.82rem !important; color: var(--draft-muted) !important; direction: rtl !important; text-align: right !important; line-height: 1.85 !important; margin-top: 6px !important; }
+      .policy-row strong { color: var(--primary) !important; font-weight: 500 !important; }
+      .policy-row ul { padding-left: 1.2rem !important; margin-top: 6px !important; }
+      .policy-row ul.arabic-list { padding-left: 0 !important; padding-right: 1.2rem !important; }
+      .policy-row li { margin-bottom: 0.4rem; }
+
+      /* BOTTOM CARD */
+      .tc-bottom-card { background: var(--surface) !important; padding: 28px 32px !important; margin-bottom: 0 !important; }
+      .tc-bottom-card-inner { max-width: 780px; margin: 0 auto; text-align: center; }
+      .tc-bottom-card .copyright { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--draft-muted); letter-spacing: 0.04em; }
+      .tc-bottom-card .copyright .sep { margin: 0 8px; color: #c0c8ce; }
+
+      /* Old back-link no longer used (now in lockup nav) */
+      .policy-back-link { display: none !important; }
+      .page-title, .page-title-ar { display: none !important; }
+
+      /* Anchor scroll offset */
+      .policy-section { scroll-margin-top: 80px; }
 
       .arabic-text, .arabic-inline, .arabic-heading, .arabic-list, [lang="ar"] {
         font-family: 'Almarai', system-ui, sans-serif !important;
@@ -95,112 +116,28 @@
         letter-spacing: 0 !important;
       }
 
-      .policy-section {
-        background: var(--surface) !important;
-        border: 1px solid var(--draft-border) !important;
-        border-radius: 16px !important;
-        padding: 1.8rem 1.6rem !important;
-        margin-bottom: 1.4rem !important;
-        box-shadow: 0 4px 18px rgba(26,58,82,0.06) !important;
-      }
-      .policy-header-row {
-        display: flex; justify-content: space-between; align-items: flex-start;
-        gap: 1.5rem;
-        border-bottom: 1px solid var(--draft-border);
-        padding-bottom: 0.8rem;
-        margin-bottom: 1rem;
-      }
-      .policy-header-row h2 { flex: 1; font-size: clamp(22px, 2.4vw, 30px) !important; margin: 0; }
-      .policy-header-row h2.arabic-heading { text-align: right; color: var(--draft-muted) !important; font-size: clamp(18px, 2vw, 22px) !important; }
-
-      .policy-row {
-        display: flex; gap: 1.5rem; align-items: flex-start;
-        border-bottom: 1px solid rgba(26,58,82,0.06);
-        padding-bottom: 0.7rem; margin-bottom: 0.7rem;
-      }
-      .policy-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-      .policy-row > p, .policy-row > ul { flex: 1; min-width: 0; margin: 0; line-height: 1.85; font-size: 15px; color: var(--draft-text); font-family: 'DM Sans', system-ui, sans-serif; }
-      .policy-row > p:first-child, .policy-row > ul:first-child { text-align: left; }
-      .policy-row > p.arabic-text, .policy-row > ul.arabic-list { text-align: right; direction: rtl; font-size: 14px; line-height: 1.9; color: var(--draft-muted); font-family: 'Almarai', system-ui, sans-serif; }
-      .policy-row ul { padding-left: 1.2rem; }
-      .policy-row ul.arabic-list { padding-left: 0; padding-right: 1.2rem; }
-      .policy-row li { margin-bottom: 0.4rem; }
-      .policy-row strong { color: var(--accent); font-weight: 600; }
-
-      @media (max-width: 700px) {
-        .policy-section { padding: 1.2rem 1rem !important; }
-        .policy-header-row { flex-direction: column; gap: 0.3rem; }
-        .policy-header-row h2.arabic-heading { text-align: left; }
-        .policy-row { flex-direction: column; gap: 0.3rem; }
-        .policy-row > p.arabic-text, .policy-row > ul.arabic-list { text-align: left; direction: rtl; }
-      }
-
-      .container.policy-container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-      @media (max-width: 600px) { .container.policy-container { padding: 1.4rem 1rem 3rem; } }
-
-
-      /* Back arrow — top-left of the content area */
-      .policy-back-link {
-        display: inline-flex; align-items: center; gap: 8px;
-        margin-bottom: 1.6rem;
-        padding: 8px 14px 8px 10px;
-        border-radius: 999px;
-        background: var(--surface);
-        border: 1px solid var(--draft-border);
-        color: var(--draft-text);
-        text-decoration: none;
-        font-family: 'DM Sans', system-ui, sans-serif;
-        font-size: 13px; font-weight: 500;
-        letter-spacing: 0.02em;
-        transition: background .2s ease, transform .2s ease, border-color .2s ease;
-      }
-      .policy-back-link:hover { background: var(--primary); color: var(--surface); border-color: var(--primary); transform: translateX(-2px); }
-      .policy-back-link:hover svg { stroke: var(--surface); }
-      .policy-back-link .arabic-text { font-family: 'Almarai', sans-serif; font-size: 12px; opacity: 0.8; }
-      [data-theme="dark"] .policy-back-link:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-      /* Anchor scroll offset so the fixed header doesn't overlap the section heading */
-      .policy-section { scroll-margin-top: 80px; }
-      @media (max-width: 768px) { .policy-section { scroll-margin-top: 110px; } }
-
-      /* Edit-look chrome: pills, rounded buttons, footer strip */
-      .footer-terms-strip {
-        display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-        gap: 0.5rem; margin-bottom: 0.9rem;
-        font-family: 'DM Sans', system-ui, sans-serif;
-        font-size: 12px; letter-spacing: 0.04em;
-      }
+      /* Footer terms strip kept */
+      .footer-terms-strip { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.5rem; margin-bottom: 0.9rem; font-family: 'DM Sans', system-ui, sans-serif; font-size: 12px; letter-spacing: 0.04em; padding-top: 20px; }
       .footer-terms-strip a { color: inherit; text-decoration: none; opacity: 0.85; transition: opacity .2s ease; }
       .footer-terms-strip a:hover { opacity: 1; text-decoration: underline; }
       .footer-terms-strip span { opacity: 0.4; }
 
       /* Dark mode toggle button */
-      .draft-theme-toggle {
-        position: fixed; bottom: 78px; right: 14px;
-        width: 38px; height: 38px; border-radius: 50%;
-        background: var(--primary); border: 0; cursor: pointer;
-        z-index: 1500; box-shadow: 0 4px 14px rgba(0,0,0,0.18);
-        transition: transform .2s ease;
-      }
-      .draft-theme-toggle::before {
-        content: ''; display: block; width: 18px; height: 18px;
-        margin: 10px auto;
-        background: var(--surface);
-        border-radius: 50%;
-        box-shadow: inset -4px -4px 0 0 var(--primary);
-        transition: background .3s ease, box-shadow .3s ease;
-      }
+      .draft-theme-toggle { position: fixed; bottom: 78px; right: 14px; width: 38px; height: 38px; border-radius: 50%; background: var(--primary); border: 0; cursor: pointer; z-index: 1500; box-shadow: 0 4px 14px rgba(0,0,0,0.18); transition: transform .2s ease; }
+      .draft-theme-toggle::before { content: ''; display: block; width: 18px; height: 18px; margin: 10px auto; background: var(--surface); border-radius: 50%; box-shadow: inset -4px -4px 0 0 var(--primary); transition: background .3s ease, box-shadow .3s ease; }
       [data-theme="dark"] .draft-theme-toggle::before { box-shadow: inset -4px -4px 0 0 var(--surface); background: var(--draft-text); }
       .draft-theme-toggle:hover { transform: translateY(-2px); }
       @media (min-width: 769px) { .draft-theme-toggle { bottom: 18px; } }
 
-      /* Dark mode: card / cart / footer surface tweaks */
-      [data-theme="dark"] .policy-row > p, [data-theme="dark"] .policy-row > ul { color: var(--draft-text); }
-      [data-theme="dark"] .policy-row > p.arabic-text, [data-theme="dark"] .policy-row > ul.arabic-list { color: var(--draft-muted); }
-      [data-theme="dark"] footer { background: linear-gradient(140deg, #15293d 0%, #0d1f2d 100%) !important; }
-      [data-theme="dark"] .cart-sidebar { background: var(--surface); color: var(--draft-text); }
-      [data-theme="dark"] .cart-header { background: var(--surface); border-bottom: 1px solid var(--draft-border); }
-      [data-theme="dark"] .mobile-bottom-nav { background: var(--surface); border-top: 1px solid var(--draft-border); }
+      /* Mobile */
+      @media (max-width: 576px) {
+        .title-card { padding: 28px 20px !important; }
+        .title-card h1 { font-size: 0.85rem !important; letter-spacing: 0.18em !important; }
+        .policy-section { padding: 22px 20px !important; }
+        .policy-header-row h2 { font-size: 0.82rem !important; }
+        .policy-header-row h2.arabic-heading { font-size: 0.7rem !important; }
+        .policy-row > p, .policy-row > ul { font-size: 0.88rem !important; }
+      }
     </style>
     <!-- Cancel-page redirect (defensive) -->
     <script>
@@ -289,29 +226,29 @@ body{padding-top:0!important}
 </script>
 
 
-<div class="container policy-container">
-    <a href="/" class="policy-back-link" onclick="if(history.length>1){event.preventDefault();history.back();}" aria-label="Back">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        <span>Back</span>
-        <span class="arabic-text">رجوع</span>
-    </a>
-    <h1 class="page-title">Terms &amp; Conditions</h1>
-    <p class="page-title-ar arabic-text">الشروط والأحكام</p>
+<section class="title-card">
+  <div class="title-card-inner">
+    <h1>Terms &amp; Conditions of Sale</h1>
+    <div class="last-updated"><strong>Last updated:</strong> 25 May 2026</div>
+    <div class="ar-title">الشروط والأحكام</div>
+  </div>
+</section>
 
-    <!-- Shipping & Delivery -->
-    <div class="policy-section" id="shipping">
-        <div class="policy-row policy-header-row"><h2>Shipping &amp; Delivery</h2><h2 class="arabic-heading">الشحن والتوصيل</h2></div>
+<section class="policy-section" id="shipping">
+  <div class="policy-section-inner">
+    <div class="policy-header-row"><span class="num">01</span><h2>Shipping &amp; Delivery</h2><h2 class="arabic-heading">الشحن والتوصيل</h2></div>
         <div class="policy-row"><p><strong>Coverage:</strong> We currently deliver within the UAE only.</p><p class="arabic-text"><strong>التغطية:</strong> نقوم حالياً بالتوصيل داخل الإمارات العربية المتحدة فقط.</p></div>
         <div class="policy-row"><p><strong>Processing Time:</strong> Orders are processed within 24–48 hours of payment confirmation.</p><p class="arabic-text"><strong>وقت المعالجة:</strong> يتم معالجة الطلبات خلال ٢٤-٤٨ ساعة من تأكيد الدفع.</p></div>
         <div class="policy-row"><p><strong>Delivery Timeline:</strong> 2-5 business days for all locations.</p><p class="arabic-text"><strong>مدة التوصيل:</strong> ٢-٥ أيام عمل لجميع المواقع.</p></div>
         <div class="policy-row"><p><strong>Delivery Fees:</strong></p><p class="arabic-text"><strong>رسوم التوصيل:</strong></p></div>
         <div class="policy-row"><ul><li><strong>All UAE:</strong> 18 AED (FREE on orders over 75 AED)</li></ul><ul class="arabic-list"><li class="arabic-text"><strong>جميع أنحاء الإمارات:</strong> ١٨ درهم (مجاناً للطلبات فوق ٧٥ درهم)</li></ul></div>
         <div class="policy-row"><p><strong>Tracking:</strong> You will receive tracking information via WhatsApp once your order ships.</p><p class="arabic-text"><strong>التتبع:</strong> ستتلقى معلومات التتبع عبر واتساب بمجرد شحن طلبك.</p></div>
-    </div>
+  </div>
+</section>
 
-    <!-- Returns & Refunds -->
-    <div class="policy-section" id="returns">
-        <div class="policy-row policy-header-row"><h2>Returns &amp; Refunds</h2><h2 class="arabic-heading">الإرجاع والاسترداد</h2></div>
+<section class="policy-section" id="returns">
+  <div class="policy-section-inner">
+    <div class="policy-header-row"><span class="num">02</span><h2>Returns &amp; Refunds</h2><h2 class="arabic-heading">الإرجاع والاسترداد</h2></div>
         <div class="policy-row"><p><strong>5-Day Return Window:</strong> Returns are accepted within 5 days of the shipping date only. No exceptions.</p><p class="arabic-text"><strong>فترة الإرجاع ٥ أيام:</strong> يتم قبول المرتجعات خلال ٥ أيام من تاريخ الشحن فقط. بدون استثناءات.</p></div>
         <div class="policy-row"><p><strong>Unopened Items Only:</strong> Items must be completely unused, unopened, and in original sealed packaging with all tags and seals intact.</p><p class="arabic-text"><strong>المنتجات غير المفتوحة فقط:</strong> يجب أن تكون المنتجات غير مستخدمة تماماً، غير مفتوحة، وفي العبوة الأصلية المغلقة مع جميع الملصقات والأختام سليمة.</p></div>
         <div class="policy-row"><p><strong>No Returns on Opened Items:</strong> Once opened, used, or packaging is damaged, items cannot be returned for any reason.</p><p class="arabic-text"><strong>لا إرجاع للمنتجات المفتوحة:</strong> بمجرد الفتح أو الاستخدام أو تلف العبوة، لا يمكن إرجاع المنتجات لأي سبب.</p></div>
@@ -322,32 +259,35 @@ body{padding-top:0!important}
         <div class="policy-row"><p><strong>Wrong or Defective Items:</strong> If you received a wrong or defective item, contact us via WhatsApp or email within 24 hours of delivery with photos. We will arrange return shipping at our expense and issue a full refund including delivery fees. Claims made after 24 hours of delivery will be treated as change-of-mind returns.</p><p class="arabic-text"><strong>المنتجات الخاطئة أو المعيبة:</strong> إذا استلمت منتجاً خاطئاً أو معيباً، اتصل بنا عبر واتساب أو البريد الإلكتروني خلال ٢٤ ساعة من التسليم مع صور. سنرتب شحن الإرجاع على نفقتنا ونصدر استرداداً كاملاً شاملاً رسوم التوصيل. المطالبات بعد ٢٤ ساعة من التسليم تُعامل كمرتجعات تغيير رأي.</p></div>
         <div class="policy-row"><p><strong>Non-Returnable Items:</strong> Sale items, clearance items, items with damaged packaging, or items showing any signs of use are not eligible for return.</p><p class="arabic-text"><strong>المنتجات غير القابلة للإرجاع:</strong> منتجات التخفيض، منتجات التصفية، المنتجات ذات العبوة التالفة، أو المنتجات التي تظهر أي علامات استخدام غير مؤهلة للإرجاع.</p></div>
         <div class="policy-row"><p><strong>How to Initiate a Return:</strong> Contact us via WhatsApp or email within 5 days of the shipping date with your order number and reason for return.</p><p class="arabic-text"><strong>كيفية بدء الإرجاع:</strong> اتصل بنا عبر واتساب أو البريد الإلكتروني خلال ٥ أيام من تاريخ الشحن مع رقم طلبك وسبب الإرجاع.</p></div>
-    </div>
+  </div>
+</section>
 
-    <!-- Exchange Policy -->
-    <div class="policy-section" id="exchange">
-        <div class="policy-row policy-header-row"><h2>Exchange Policy</h2><h2 class="arabic-heading">سياسة الاستبدال</h2></div>
+<section class="policy-section" id="exchange">
+  <div class="policy-section-inner">
+    <div class="policy-header-row"><span class="num">03</span><h2>Exchange Policy</h2><h2 class="arabic-heading">سياسة الاستبدال</h2></div>
         <div class="policy-row"><p><strong>No Direct Exchanges:</strong> ORLO Store does not offer direct product exchanges. If you wish to receive a different item, you must return the original item and place a new order separately.</p><p class="arabic-text"><strong>لا يوجد استبدال مباشر:</strong> لا يقدم متجر أورلو استبدالاً مباشراً للمنتجات. إذا كنت ترغب في الحصول على منتج مختلف، يجب عليك إرجاع المنتج الأصلي وتقديم طلب جديد بشكل منفصل.</p></div>
         <div class="policy-row"><p><strong>How It Works:</strong> To get a different product, initiate a return within 5 days of the shipping date. Once your return is approved and refund processed, place a new order for the item you want.</p><p class="arabic-text"><strong>كيف يعمل ذلك:</strong> للحصول على منتج مختلف، قم ببدء عملية إرجاع خلال ٥ أيام من تاريخ الشحن. بمجرد الموافقة على الإرجاع ومعالجة الاسترداد، قم بتقديم طلب جديد للمنتج الذي تريده.</p></div>
         <div class="policy-row"><p><strong>Return Conditions Apply:</strong> The original item must be completely unused, unopened, and in its original sealed packaging with all tags and seals intact. Opened or used items are not eligible for return.</p><p class="arabic-text"><strong>تطبق شروط الإرجاع:</strong> يجب أن يكون المنتج الأصلي غير مستخدم تماماً، غير مفتوح، وفي عبوته الأصلية المغلقة مع جميع الملصقات والأختام سليمة. المنتجات المفتوحة أو المستخدمة غير مؤهلة للإرجاع.</p></div>
         <div class="policy-row"><p><strong>Return Shipping:</strong> All return shipping costs are the buyer's responsibility. We do not provide prepaid return labels.</p><p class="arabic-text"><strong>شحن الإرجاع:</strong> جميع تكاليف شحن الإرجاع على عاتق المشتري. لا نوفر ملصقات إرجاع مدفوعة مسبقاً.</p></div>
         <div class="policy-row"><p><strong>Wrong or Defective Items:</strong> If you received a wrong or defective item, contact us via WhatsApp or email within 24 hours of delivery with photos. We will arrange return shipping at our expense and issue a full refund including delivery fees.</p><p class="arabic-text"><strong>المنتجات الخاطئة أو المعيبة:</strong> إذا استلمت منتجاً خاطئاً أو معيباً، اتصل بنا عبر واتساب أو البريد الإلكتروني خلال ٢٤ ساعة من التسليم مع صور. سنرتب شحن الإرجاع على نفقتنا ونصدر استرداداً كاملاً شاملاً رسوم التوصيل.</p></div>
         <div class="policy-row"><p><strong>Contact Us:</strong> To initiate a return, contact us via WhatsApp at +971 55 547 7206 or email info@orlostore.com with your order number and reason.</p><p class="arabic-text"><strong>اتصل بنا:</strong> لبدء عملية إرجاع، اتصل بنا عبر واتساب على 7206 547 55 971+ أو البريد الإلكتروني info@orlostore.com مع رقم طلبك والسبب.</p></div>
-    </div>
+  </div>
+</section>
 
-    <!-- Privacy Policy -->
-    <div class="policy-section" id="privacy">
-        <div class="policy-row policy-header-row"><h2>Privacy Policy</h2><h2 class="arabic-heading">سياسة الخصوصية</h2></div>
+<section class="policy-section" id="privacy">
+  <div class="policy-section-inner">
+    <div class="policy-header-row"><span class="num">04</span><h2>Privacy Policy</h2><h2 class="arabic-heading">سياسة الخصوصية</h2></div>
         <div class="policy-row"><p><strong>Information Collection:</strong> We collect only the information necessary to process and fulfill your order (name, phone number, delivery address, email).</p><p class="arabic-text"><strong>جمع المعلومات:</strong> نجمع فقط المعلومات الضرورية لمعالجة وتنفيذ طلبك (الاسم، رقم الهاتف، عنوان التوصيل، البريد الإلكتروني).</p></div>
         <div class="policy-row"><p><strong>Data Usage:</strong> Your information is used solely for order processing, delivery coordination, and customer support.</p><p class="arabic-text"><strong>استخدام البيانات:</strong> تُستخدم معلوماتك فقط لمعالجة الطلبات، وتنسيق التوصيل، ودعم العملاء.</p></div>
         <div class="policy-row"><p><strong>Third-Party Sharing:</strong> Your data is never sold or shared with third parties except for delivery partners who need your address to complete delivery.</p><p class="arabic-text"><strong>المشاركة مع أطراف ثالثة:</strong> لا يتم بيع بياناتك أو مشاركتها مع أطراف ثالثة أبداً باستثناء شركاء التوصيل الذين يحتاجون إلى عنوانك لإتمام التوصيل.</p></div>
         <div class="policy-row"><p><strong>Data Security:</strong> We use secure communication channels (WhatsApp, encrypted email) to protect your information.</p><p class="arabic-text"><strong>أمن البيانات:</strong> نستخدم قنوات اتصال آمنة (واتساب، بريد إلكتروني مشفر) لحماية معلوماتك.</p></div>
         <div class="policy-row"><p><strong>Your Rights:</strong> You may request deletion of your data at any time by contacting us.</p><p class="arabic-text"><strong>حقوقك:</strong> يمكنك طلب حذف بياناتك في أي وقت عن طريق الاتصال بنا.</p></div>
-    </div>
+  </div>
+</section>
 
-    <!-- Terms of Service -->
-    <div class="policy-section" id="terms">
-        <div class="policy-row policy-header-row"><h2>Terms of Service</h2><h2 class="arabic-heading">شروط الخدمة</h2></div>
+<section class="policy-section" id="terms">
+  <div class="policy-section-inner">
+    <div class="policy-header-row"><span class="num">05</span><h2>Terms of Service</h2><h2 class="arabic-heading">شروط الخدمة</h2></div>
         <div class="policy-row"><p><strong>Order Agreement:</strong> By placing an order, you agree to provide accurate information and accept these terms.</p><p class="arabic-text"><strong>اتفاقية الطلب:</strong> بتقديم طلب، فإنك توافق على تقديم معلومات دقيقة وقبول هذه الشروط.</p></div>
         <div class="policy-row"><p><strong>Payment:</strong> Full payment is required before order processing begins. We accept credit/debit card payments only.</p><p class="arabic-text"><strong>الدفع:</strong> يلزم الدفع الكامل قبل بدء معالجة الطلب. نقبل الدفع بالبطاقات الائتمانية وبطاقات الخصم فقط.</p></div>
         <div class="policy-row"><p><strong>Order Cancellation:</strong> Orders may be cancelled within <strong>30 minutes</strong> of placement, provided the order has not yet been dispatched. Once the order is picked up by our delivery partner, cancellations are not accepted.</p><p class="arabic-text"><strong>إلغاء الطلب:</strong> يمكن إلغاء الطلبات خلال <strong>٣٠ دقيقة</strong> من تقديمها، بشرط عدم شحن الطلب بعد. بمجرد استلام شريك التوصيل للطلب، لا يُقبل الإلغاء.</p></div>
@@ -358,8 +298,15 @@ body{padding-top:0!important}
         <div class="policy-row"><p><strong>Liability:</strong> ORLO is not responsible for delivery delays caused by courier services, incorrect addresses provided by customers, or force majeure events.</p><p class="arabic-text"><strong>المسؤولية:</strong> أورلو غير مسؤولة عن تأخيرات التوصيل الناتجة عن خدمات التوصيل، أو العناوين غير الصحيحة المقدمة من العملاء، أو أحداث القوة القاهرة.</p></div>
         <div class="policy-row"><p><strong>Changes to Terms:</strong> We reserve the right to update these terms at any time. Continued use of our service constitutes acceptance of updated terms.</p><p class="arabic-text"><strong>التغييرات على الشروط:</strong> نحتفظ بالحق في تحديث هذه الشروط في أي وقت. الاستخدام المستمر لخدمتنا يشكل قبولاً للشروط المحدثة.</p></div>
         <div class="policy-row"><p><strong>Contact:</strong> For questions about these terms, contact us at info@orlostore.com</p><p class="arabic-text"><strong>الاتصال:</strong> للاستفسارات حول هذه الشروط، اتصل بنا على info@orlostore.com</p></div>
-    </div>
-</div>
+  </div>
+</section>
+
+<section class="tc-bottom-card">
+  <div class="tc-bottom-card-inner">
+    <div class="copyright">© ORLO 2026<span class="sep">·</span>All rights reserved<span class="sep">·</span>info@orlostore.com</div>
+  </div>
+</section>
+
 
 <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-checkout-fixed" id="cartCheckoutFixed"></div>
