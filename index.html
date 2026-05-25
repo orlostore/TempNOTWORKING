@@ -858,6 +858,33 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         .orlo-hero-v2-cta{display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px;margin-top:20px;font-family:'DM Sans',sans-serif;font-size:0.7rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#fff;text-decoration:none;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.85);transition:border-color .2s, transform .2s}
         .orlo-hero-v2-cta:hover{border-color:#fff;transform:translateY(-1px)}
         .orlo-hero-v2-cta .arabic-text{font-family:'Almarai',sans-serif;font-size:0.58rem;letter-spacing:0;text-transform:none;font-weight:400;opacity:0.82;margin-top:2px;direction:rtl}
+
+        /* ═══ UNIFIED FOOTER (Customer Enquiries) — mirrors cart / login / signup pages ═══ */
+        .cs-footer-section{background:#fff;padding:28px 32px;margin-top:30px}
+        .cs-footer-inner{max-width:780px;margin:0 auto}
+        .cs-footer-section .cs-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.16em;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+        .cs-footer-section .cs-heading .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#6b6b6b;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
+        .cs-footer-section .cs-block{margin-bottom:18px}
+        .cs-footer-section .cs-block:last-child{margin-bottom:0}
+        .cs-footer-section .cs-block-title{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#6b6b6b;font-weight:500;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+        .cs-footer-section .cs-block-title .muted{margin-left:0;direction:rtl}
+        .cs-footer-section .cs-block-content{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;line-height:1.7}
+        .cs-footer-section .cs-block-content a{color:#1a3a52;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(26,58,82,0.40)}
+        .cs-footer-section .cs-block-content a:hover{text-decoration-color:#1a3a52;color:#e76f51}
+        .cs-footer-section .cs-block-content .muted{color:#6b6b6b;font-size:0.78rem;margin-left:6px}
+        .cs-footer-section .social-row{display:flex;align-items:center;gap:8px}
+        .cs-footer-section .social-row .label-en{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;font-weight:500}
+        .cs-footer-section .social-row .ar{font-family:'Almarai',sans-serif;font-size:0.78rem;color:#6b6b6b;margin-left:6px}
+        .cs-footer-section .social-row .icons{margin-left:auto;display:flex;gap:6px}
+        .cs-footer-section .social-link{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;color:#1a3a52;text-decoration:none;transition:color .2s, border-color .2s}
+        .cs-footer-section .social-link:hover{color:#e76f51;border-color:#e76f51}
+        .cs-footer-section .social-link svg{width:13px;height:13px;display:block}
+        .cs-footer-section .cs-legal{padding:22px 0 8px;border-top:1px solid rgba(26,58,82,0.10);display:flex;flex-wrap:wrap;gap:6px 18px;font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#6b6b6b;letter-spacing:0.04em}
+        .cs-footer-section .cs-legal a{color:#6b6b6b;text-decoration:none;transition:color .2s}
+        .cs-footer-section .cs-legal a:hover{color:#1a3a52}
+        .cs-footer-section .cs-legal .sep{color:#c0c8ce}
+        .cs-footer-section .cs-copyright{margin-top:14px;font-family:'DM Sans',sans-serif;font-size:0.65rem;color:#9aa5ad;letter-spacing:0.02em;padding-bottom:8px}
+        @media(max-width:576px){.cs-footer-section{padding:22px 18px}}
     </style>
 </head>
 <body data-cards="v2">
@@ -1190,25 +1217,48 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 </main>
-<footer>
-    <nav class="footer-terms-strip" aria-label="Policies">
-        <a href="terms-and-conditions.html#shipping">Shipping</a>
-        <span aria-hidden="true">·</span>
-        <a href="terms-and-conditions.html#returns">Returns</a>
-        <span aria-hidden="true">·</span>
-        <a href="terms-and-conditions.html#privacy">Privacy</a>
-        <span aria-hidden="true">·</span>
-        <a href="terms-and-conditions.html#terms">Terms</a>
-        <span aria-hidden="true">·</span>
-        <a href="terms-and-conditions.html#exchange">Exchange</a>
-    </nav>
-    <div style="margin-bottom:0.6rem;display:flex;justify-content:center;gap:1rem;">
-        <a href="https://www.instagram.com/orlostore" target="_blank" rel="noopener" aria-label="ORLO on Instagram" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="white" stroke="none"/></svg></a>
-        <a href="https://www.tiktok.com/@shoporlo" target="_blank" rel="noopener" aria-label="ORLO on TikTok" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:#000;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'"><svg width="17" height="17" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="#69C9D0" transform="translate(0.5,0.5)"/><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="#EE1D52" transform="translate(-0.5,-0.5)"/><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="white"/></svg></a>
+
+<!-- ═══ UNIFIED FOOTER (Customer Enquiries + Follow us + Legal) — mirrors cart / login / signup ═══ -->
+<section class="cs-footer-section">
+  <div class="cs-footer-inner">
+    <div class="cs-heading">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+    <div class="cs-block">
+      <div class="cs-block-title">Email</div>
+      <div class="cs-block-content">
+        <a href="mailto:info@orlostore.com">info@orlostore.com</a>
+        <span class="muted">Reply within 24h</span>
+      </div>
     </div>
-    <span>&copy; 2026 ORLO &nbsp;·&nbsp; Your privacy matters &nbsp;·&nbsp; Dubai, UAE</span><br>
-    <span class="arabic-text" style="display:inline-block;direction:rtl">خصوصيتك تهمنا &nbsp;·&nbsp; دبي، الإمارات العربية المتحدة</span>
-</footer>
+    <div class="cs-block">
+      <div class="cs-block-title">Online orders<span class="muted">الطلبات عبر الإنترنت</span></div>
+      <div class="cs-block-content">
+        WhatsApp: <a href="https://wa.me/971555477206">+971 55 547 7206</a>
+        <span class="muted">Everyday 9am – 9pm</span>
+      </div>
+    </div>
+    <div class="cs-block">
+      <div class="social-row">
+        <span class="label-en">Follow us</span>
+        <span class="icons">
+          <a href="https://instagram.com/orlostore" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+          <a href="https://tiktok.com/@shoporlo" class="social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg></a>
+        </span>
+      </div>
+    </div>
+    <nav class="cs-legal">
+      <a href="terms-and-conditions.html#terms">Terms &amp; Conditions</a>
+      <span class="sep">·</span>
+      <a href="terms-and-conditions.html#privacy">Privacy</a>
+      <span class="sep">·</span>
+      <a href="terms-and-conditions.html#returns">Returns</a>
+      <span class="sep">·</span>
+      <a href="terms-and-conditions.html#shipping">Shipping</a>
+      <span class="sep">·</span>
+      <a href="terms-and-conditions.html#exchange">Exchange</a>
+    </nav>
+    <div class="cs-copyright">© ORLO 2026 · All rights reserved.</div>
+  </div>
+</section>
 
 <!-- ═══ ORLO BOTTOM NAV — canonical block. Do NOT hand-edit per-page. Run `node scripts/sync-nav.js` to propagate. ═══ -->
 <nav class="orlo-nav" id="orloBottomNav" aria-label="Primary">
