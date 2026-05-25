@@ -292,6 +292,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .mobile-dots > *{background:rgba(26,58,82,0.25)!important;width:6px!important;height:6px!important;border-radius:50%!important}
   .mobile-dots > *.active{background:#1a3a52!important}
 
+  /* Disable footer auto-hide on scroll (product.js adds .nav-hidden — revert it) */
+  .mobile-bottom-nav.nav-hidden,.nav-hidden{transform:none!important;opacity:1!important;display:flex!important;visibility:visible!important;pointer-events:auto!important}
+
   /* Description edge-to-edge: full-width white, internal padding only */
   .mobile-details-section,.product-details{margin:0!important;border-radius:0!important;width:100%!important;padding:18px 22px 24px!important}
   .mobile-product-page{padding:0!important;margin:0!important}
