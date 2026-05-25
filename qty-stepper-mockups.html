@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qty Stepper — Elevation Mockups</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#f8f6f2;color:#1a3a52;padding:40px 20px 80px;line-height:1.5}
+.page-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.6rem;text-align:center;color:#1a3a52;margin-bottom:8px}
+.page-sub{text-align:center;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;color:#6b6b6b;margin-bottom:50px}
+
+.option-block{max-width:420px;margin:0 auto 56px;padding:0}
+.option-label{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;color:#e76f51;margin-bottom:8px;font-weight:500}
+.option-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#1a3a52;margin-bottom:6px;font-weight:400}
+.option-desc{font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#6b6b6b;margin-bottom:18px;line-height:1.6}
+
+/* Bar container — mirrors product1.html sticky bar */
+.bar{background:#fff;border-top:1px solid rgba(26,58,82,0.10);box-shadow:0 -2px 8px rgba(26,58,82,0.04);padding:10px 16px;border-radius:0;max-width:420px}
+
+/* ─────────── Option A: Split pill — stepper + VIEW CART link ─────────── */
+.opt-a{display:flex;align-items:stretch;width:100%;height:48px;background:#1a3a52;border-radius:8px;overflow:hidden}
+.opt-a .qty-side{display:flex;align-items:stretch;flex:1 1 50%}
+.opt-a .qty-btn{width:44px;height:48px;flex:0 0 44px;background:rgba(255,255,255,0.10);border:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.opt-a .qty-btn:hover{background:rgba(255,255,255,0.18)}
+.opt-a .qty-num{flex:1;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;letter-spacing:0.04em}
+.opt-a .divider{width:1px;background:rgba(255,255,255,0.18);align-self:stretch}
+.opt-a .view-cart{flex:1 1 50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.74rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;gap:8px}
+.opt-a .view-cart svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ─────────── Option B: Editorial label above qty ─────────── */
+.opt-b{display:flex;flex-direction:column;align-items:stretch;width:100%;background:#1a3a52;border-radius:8px;overflow:hidden;padding:8px 0 0}
+.opt-b .added-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.78rem;color:rgba(255,255,255,0.7);text-align:center;letter-spacing:0.04em;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.10);margin:0 18px 0}
+.opt-b .stepper{display:flex;align-items:stretch;width:100%;height:44px}
+.opt-b .qty-btn{width:48px;height:44px;flex:0 0 48px;background:transparent;border:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.opt-b .qty-btn:hover{background:rgba(255,255,255,0.10)}
+.opt-b .qty-num{flex:1;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:500;letter-spacing:0.04em}
+
+/* ─────────── Option C: Cream pill with navy outline ─────────── */
+.opt-c{display:flex;align-items:stretch;width:100%;height:48px;background:#fff;border:1.5px solid #1a3a52;border-radius:8px;overflow:hidden}
+.opt-c .qty-btn{width:48px;height:46px;flex:0 0 48px;background:transparent;border:none;color:#1a3a52;font-family:'DM Sans',sans-serif;font-size:1.2rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.opt-c .qty-btn:hover{background:rgba(26,58,82,0.06)}
+.opt-c .qty-num{flex:1;display:flex;align-items:center;justify-content:center;color:#1a3a52;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;letter-spacing:0.04em;border-left:1px solid rgba(26,58,82,0.10);border-right:1px solid rgba(26,58,82,0.10)}
+
+/* ─────────── Option D: Price × qty inline ─────────── */
+.opt-d{display:flex;align-items:stretch;width:100%;height:48px;background:#1a3a52;border-radius:8px;overflow:hidden}
+.opt-d .price-side{flex:1.2 1 0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding-left:14px;gap:2px}
+.opt-d .price-label{font-family:'DM Sans',sans-serif;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:500}
+.opt-d .price-val{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#fff;font-weight:500;letter-spacing:0.02em}
+.opt-d .stepper{display:flex;align-items:stretch;flex:1.4 1 0;border-left:1px solid rgba(255,255,255,0.14)}
+.opt-d .qty-btn{width:44px;height:48px;flex:0 0 44px;background:rgba(255,255,255,0.06);border:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.opt-d .qty-btn:hover{background:rgba(255,255,255,0.18)}
+.opt-d .qty-num{flex:1;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;letter-spacing:0.04em}
+
+/* Current state (for reference) */
+.opt-current{display:flex;align-items:stretch;width:100%;height:48px;background:#1a3a52;border-radius:8px;overflow:hidden}
+.opt-current .qty-btn{width:48px;height:48px;flex:0 0 48px;background:rgba(255,255,255,0.10);border:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.opt-current .qty-num{flex:1;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;letter-spacing:0.04em}
+
+@media(max-width:480px){
+  body{padding:24px 16px 60px}
+  .page-title{font-size:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<div class="page-title">Qty Stepper — Elevation Studies</div>
+<div class="page-sub">post-add transformed cart · 4 options</div>
+
+<!-- CURRENT (reference) -->
+<div class="option-block">
+  <div class="option-label">CURRENT (reference)</div>
+  <div class="option-title">Flat navy stepper</div>
+  <div class="option-desc">What's live on product1.html right now. Functional but flat.</div>
+  <div class="bar">
+    <div class="opt-current">
+      <button class="qty-btn">−</button>
+      <div class="qty-num">1</div>
+      <button class="qty-btn">+</button>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION A -->
+<div class="option-block">
+  <div class="option-label">OPTION A</div>
+  <div class="option-title">Split pill — stepper + VIEW CART link</div>
+  <div class="option-desc">Left half is the stepper. Right half is a "View Cart →" link separated by a thin white hairline. Two actions in one bar.</div>
+  <div class="bar">
+    <div class="opt-a">
+      <div class="qty-side">
+        <button class="qty-btn">−</button>
+        <div class="qty-num">1</div>
+        <button class="qty-btn">+</button>
+      </div>
+      <div class="divider"></div>
+      <a class="view-cart">View Cart
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION B -->
+<div class="option-block">
+  <div class="option-label">OPTION B</div>
+  <div class="option-title">Editorial label above qty</div>
+  <div class="option-desc">Same navy pill, but a tiny Cormorant Garamond italic "added to cart" label above the −[1]+ row, hairline divider beneath. Pure visual polish.</div>
+  <div class="bar">
+    <div class="opt-b">
+      <div class="added-label">added to cart</div>
+      <div class="stepper">
+        <button class="qty-btn">−</button>
+        <div class="qty-num">1</div>
+        <button class="qty-btn">+</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION C -->
+<div class="option-block">
+  <div class="option-label">OPTION C</div>
+  <div class="option-title">Cream pill with navy outline</div>
+  <div class="option-desc">Flip the colors — pill bg becomes white, 1.5px navy border, navy −[1]+ text. Lighter, more editorial, less harsh than solid navy.</div>
+  <div class="bar">
+    <div class="opt-c">
+      <button class="qty-btn">−</button>
+      <div class="qty-num">1</div>
+      <button class="qty-btn">+</button>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION D -->
+<div class="option-block">
+  <div class="option-label">OPTION D</div>
+  <div class="option-title">Show price × qty inline</div>
+  <div class="option-desc">Left shows a tiny "SUBTOTAL" label and AED amount. Right side is the −[1]+ stepper separated by a hairline. Communicates cart-line state.</div>
+  <div class="bar">
+    <div class="opt-d">
+      <div class="price-side">
+        <div class="price-label">Subtotal</div>
+        <div class="price-val">AED 79.21</div>
+      </div>
+      <div class="stepper">
+        <button class="qty-btn">−</button>
+        <div class="qty-num">1</div>
+        <button class="qty-btn">+</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
