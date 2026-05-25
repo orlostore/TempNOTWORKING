@@ -386,18 +386,33 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
                        '<span class="ar">لديك ' + itemCount + ' ' + nounAr + ' في سلتك</span>';
     }
 
+    // Compute priced cart ONCE — tier discount is applied here. Both rendering and totals use this.
+    var pricedCart;
+    if (typeof calculateTierPricing === 'function') {
+      try { pricedCart = calculateTierPricing(cart); } catch(e){ pricedCart = cart; }
+    } else {
+      pricedCart = cart;
+    }
+
     // Items
     if (list) {
-      list.innerHTML = cart.map(function(item){
+      list.innerHTML = pricedCart.map(function(item){
         var p = readProduct(item.id) || {};
         var imgUrl = pickCleanImage(p, item);
         var cdnUrl = imgUrl && imgUrl.indexOf('http') === 0 ? 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_200,h_200,f_auto,q_auto/' + encodeURI(imgUrl) : imgUrl;
         var imgHtml = imgUrl
           ? '<img src="' + escHTML(cdnUrl) + '" alt="' + escHTML(item.name) + '" onerror="this.onerror=null;this.src=\'' + escHTML(imgUrl) + '\'" style="max-width:100%;max-height:100%;object-fit:contain">'
           : '<div style="width:100%;height:100%;background:#efeae0"></div>';
-        var price = item._tierPrice || (item.variantId && item.variantPrice > 0 ? item.variantPrice : item.price);
+        // Original (non-tier) unit price for strikethrough
+        var originalUnit = item.variantId && item.variantPrice > 0 ? item.variantPrice : item.price;
+        var tierUnit = item._tierPrice && item._tierPrice < originalUnit ? item._tierPrice : null;
+        var unitPrice = tierUnit || originalUnit;
+        var lineTotal = unitPrice * item.quantity;
         var meta = [];
         if (item.variantName) meta.push('<div>' + escHTML(item.variantName) + '</div>');
+        var priceHtml = tierUnit
+          ? '<div class="cart-item-price"><span style="text-decoration:line-through;color:#9aa5ad;font-weight:400;margin-right:6px;">' + fmtAed(originalUnit * item.quantity) + '</span>' + fmtAed(lineTotal) + '</div>'
+          : '<div class="cart-item-price">' + fmtAed(lineTotal) + '</div>';
         var slug = (item.slug || (p && p.slug)) || '';
         var pdpHref = slug ? 'product.html?product=' + encodeURIComponent(slug) : null;
         var imgInner = '<div class="cart-item-img">' + imgHtml + '</div>';
@@ -407,7 +422,7 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
                   (item.nameAr ? '<div class="cart-item-name-ar">' + escHTML(item.nameAr) + '</div>' : '') +
                   (meta.length ? '<div class="cart-item-meta">' + meta.join('') + '</div>' : '') +
                 '</div>' +
-                '<div class="cart-item-price">' + fmtAed(price * item.quantity) + '</div>' +
+                priceHtml +
               '</div>';
         var imgHtmlWrapped = pdpHref ? '<a href="' + pdpHref + '" class="cart-item-link" aria-label="View product">' + imgInner + '</a>' : imgInner;
         var infoTopWrapped = pdpHref ? '<a href="' + pdpHref + '" class="cart-item-link">' + infoTopInner + '</a>' : infoTopInner;
@@ -429,16 +444,40 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
       }).join('');
     }
 
-    // Totals
-    var subtotal = calcSubtotal(cart);
-    var delivery = calcDelivery(subtotal);
-    var total = subtotal + delivery;
+    // Totals — use pricedCart (with tier discounts applied) for accurate subtotal
+    var originalSubtotal = 0, discountedSubtotal = 0;
+    pricedCart.forEach(function(it){
+      var origUnit = it.variantId && it.variantPrice > 0 ? it.variantPrice : it.price;
+      var unit = it._tierPrice && it._tierPrice < origUnit ? it._tierPrice : origUnit;
+      originalSubtotal += origUnit * it.quantity;
+      discountedSubtotal += unit * it.quantity;
+    });
+    var savings = originalSubtotal - discountedSubtotal;
+    var delivery = calcDelivery(discountedSubtotal);
+    var total = discountedSubtotal + delivery;
     var subEl = document.getElementById('cartSubtotal');
     var delEl = document.getElementById('cartDelivery');
     var totEl = document.getElementById('cartGrandTotal');
-    if (subEl) subEl.textContent = fmtAed(subtotal);
+    if (subEl) subEl.textContent = fmtAed(discountedSubtotal);
     if (delEl) delEl.textContent = delivery === 0 ? 'Complimentary' : fmtAed(delivery);
     if (totEl) totEl.textContent = fmtAed(total);
+    // Render/hide a "You saved" row
+    var savingsRow = document.getElementById('cartSavingsRow');
+    if (savings > 0.005) {
+      if (!savingsRow) {
+        savingsRow = document.createElement('div');
+        savingsRow.id = 'cartSavingsRow';
+        savingsRow.className = 'total-row';
+        savingsRow.innerHTML = '<span class="label-en" style="color:#e76f51">You saved</span><span class="amount" style="color:#e76f51">−' + fmtAed(savings) + '</span>';
+        var subRow = subEl && subEl.closest('.total-row');
+        if (subRow && subRow.parentNode) subRow.parentNode.insertBefore(savingsRow, subRow.nextSibling);
+      } else {
+        savingsRow.innerHTML = '<span class="label-en" style="color:#e76f51">You saved</span><span class="amount" style="color:#e76f51">−' + fmtAed(savings) + '</span>';
+        savingsRow.style.display = '';
+      }
+    } else if (savingsRow) {
+      savingsRow.style.display = 'none';
+    }
 
     // Checkout sticky — logged-in vs guest
     if (sticky) {
