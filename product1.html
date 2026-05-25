@@ -621,19 +621,25 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
         } else {
           var qtyEl = stepper.querySelector('.grid-qty-display');
           var qty = qtyEl ? (qtyEl.textContent || '1').trim() : '1';
+          // ALWAYS re-mark stepper with .split-mode + inline flex overrides — product.js may have re-rendered the stepper element on +/- which strips my class
+          stepper.classList.add('split-mode');
+          stepper.style.setProperty('flex', '1 1 0', 'important');
+          stepper.style.setProperty('width', 'auto', 'important');
+          stepper.style.setProperty('min-width', '0', 'important');
+          stepper.style.setProperty('max-width', 'none', 'important');
+          stepper.style.setProperty('border-radius', '0 8px 8px 0', 'important');
           if (existingVB) {
             // Already injected — just sync the badge to the stepper qty
             var badge = existingVB.querySelector('.vb-count');
             if (badge && badge.textContent !== qty) badge.textContent = qty;
           } else {
-            // First time — inject the View Bag pill before the stepper, mark stepper as split-mode
+            // First time — inject the View Bag pill before the stepper
             var vb = document.createElement('a');
             vb.className = 'atc-split-vb';
             vb.href = '/cart.html';
             vb.setAttribute('aria-label', 'View bag');
             vb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>View Bag<span class="vb-count">' + qty + '</span>';
             row.insertBefore(vb, stepper);
-            stepper.classList.add('split-mode');
           }
         }
       }
@@ -653,7 +659,7 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
   var obs = new MutationObserver(applyOverrides);
   function attachObservers(){
     var em = document.getElementById('earlyPriceMobile');
-    if (em) obs.observe(em, { attributes: true, attributeFilter: ['style', 'class'] });
+    if (em) obs.observe(em, { attributes: true, attributeFilter: ['style', 'class'], childList: true, subtree: true });
     var bb = document.querySelector('.mobile-buybox-compact');
     if (bb) obs.observe(bb, { attributes: true, attributeFilter: ['style', 'class'] });
     document.querySelectorAll('.variant-selected-name').forEach(function(el){
