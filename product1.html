@@ -194,6 +194,25 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .cs-footer-section .cs-legal .sep{color:#c0c8ce}
   .cs-footer-section .cs-copyright{margin-top:14px;font-family:'DM Sans',sans-serif;font-size:0.65rem;color:#9aa5ad;letter-spacing:0.02em;padding-bottom:8px}
   @media(max-width:576px){.cs-footer-section{padding:22px 18px}}
+
+  /* Kill legacy sticky bottom bar (coral truck + price + qty stepper) — superseded by new sticky ATC */
+  .early-price-bottom{display:none!important}
+
+  /* Wrap product details + description in a WHITE card on cream */
+  .product-details,.mobile-product-header,.mobile-details-section,.mobile-buybox-compact{background:#fff!important}
+  .mobile-product-header{padding:30px 22px 18px!important}
+  .mobile-details-section{padding:18px 22px 24px!important}
+  .mobile-carousel-container{background:#fff!important;padding:0 0 14px!important}
+  /* The "story" + footer will sit on cream below — gap them off the white card */
+  .mobile-buybox-compact{padding:18px 22px 28px!important;margin-bottom:14px!important}
+
+  /* Sticky ATC pill — single full-width navy button matching cart's checkout pill exactly */
+  .mobile-buybox-compact{position:sticky!important;bottom:0!important;background:#fff!important;z-index:50!important;padding:18px 22px 78px!important;border-top:1px solid rgba(26,58,82,0.10)!important;margin-bottom:0!important}
+  @media(min-width:769px){.mobile-buybox-compact{padding-bottom:18px!important}}
+
+  /* The "Free delivery" delivery-info row — keep but quiet (no more sticky orange bar) */
+  .mobile-buybox-compact .mobile-price-section{display:none!important}
+  .mobile-buybox-compact .mobile-delivery-info{display:none!important}
   </style>
 </head>
 <body>
