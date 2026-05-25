@@ -748,10 +748,12 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
    Reads product.pairings (array of slugs, set in admin.html). If empty/missing, section stays hidden. */
 (function(){
   function findCurrentProduct(){
-    if (!window.products || !window.products.length) return null;
+    // products.js declares `let products = []` — script-scope global, accessible by name but NOT on window.
+    // typeof guard avoids ReferenceError if products.min.js (defer-loaded) hasn't run yet.
+    if (typeof products === 'undefined' || !products || !products.length) return null;
     var slug = new URLSearchParams(window.location.search).get('product');
     if (!slug) return null;
-    return window.products.find(function(p){ return p.slug === slug; });
+    return products.find(function(p){ return p.slug === slug; });
   }
   function imageOf(p){
     if (p.variants && p.variants.length) {
@@ -774,7 +776,7 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
       return;
     }
     var paired = current.pairings
-      .map(function(slug){ return window.products.find(function(p){ return p.slug === slug; }); })
+      .map(function(slug){ return products.find(function(p){ return p.slug === slug; }); })
       .filter(function(p){ return p && p.id; });
     if (!paired.length) {
       section.hidden = true;
@@ -798,7 +800,7 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
   // Wait for products array — fetched async via window._productsFetch
   function waitAndRender(attempts){
     attempts = attempts || 0;
-    if (window.products && window.products.length) { render(); return; }
+    if (typeof products !== 'undefined' && products && products.length) { render(); return; }
     if (attempts > 40) return;  // ~4 seconds total, give up gracefully
     setTimeout(function(){ waitAndRender(attempts + 1); }, 100);
   }
