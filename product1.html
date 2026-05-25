@@ -730,7 +730,7 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
 .early-price-bottom .atc-split-vb{flex:11 1 0!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;background:#1a3a52!important;color:#fff!important;border:none!important;border-radius:8px 0 0 8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.78rem!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;cursor:pointer!important;text-decoration:none!important;height:56px!important;min-height:56px!important;max-height:56px!important;border-right:1px solid rgba(255,255,255,0.18)!important;padding:0 10px!important;box-sizing:border-box!important;line-height:1!important;white-space:nowrap!important;width:auto!important;min-width:0!important;transition:filter .2s, transform .2s!important}
 .early-price-bottom .atc-split-vb:hover{filter:brightness(0.88)!important;transform:translateY(-1px)!important}
 .early-price-bottom .atc-split-vb svg{width:16px!important;height:18px!important;flex-shrink:0!important;stroke:#fff!important;fill:none!important;stroke-width:1.6!important;stroke-linecap:round!important;stroke-linejoin:round!important;position:static!important}
-/* .vb-count removed — VIEW BAG no longer shows a count (the stepper carries the per-product qty, footer bag shows the grand total). */
+.early-price-bottom .atc-split-vb .vb-count{background:#e76f51!important;color:#fff!important;font-size:0.62rem!important;font-weight:600!important;width:22px!important;height:22px!important;min-width:22px!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;letter-spacing:0!important;line-height:1!important;flex-shrink:0!important;font-family:'DM Sans',sans-serif!important;position:static!important;top:auto!important;right:auto!important;left:auto!important;bottom:auto!important;margin:0!important;padding:0!important}
 
 /* When VB is alongside the stepper, shrink stepper to 1/3 and round only on the right */
 .early-price-bottom .early-price-row:has(.atc-split-vb) .grid-qty-control,
@@ -759,13 +759,14 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
       var qtyEl = stepper.querySelector('.grid-qty-display');
       var qty = qtyEl ? (qtyEl.textContent || '1').trim() : '1';
       if (vb) {
-        // VIEW BAG no longer carries a count — the stepper's '- N +' already shows the per-product qty, and the footer bag carries the grand total. Nothing to sync.
+        var badge = vb.querySelector('.vb-count');
+        if (badge && badge.textContent !== qty) badge.textContent = qty;
       } else {
         vb = document.createElement('a');
         vb.className = 'atc-split-vb';
         vb.href = '/cart.html';
         vb.setAttribute('aria-label', 'View bag');
-        vb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>View Bag';
+        vb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>View Bag<span class="vb-count">' + qty + '</span>';
         row.insertBefore(vb, stepper);
       }
     } finally { _inSync = false; }
