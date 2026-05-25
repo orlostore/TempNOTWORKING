@@ -18,6 +18,34 @@
         @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
         @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
         @font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+    
+/* ── FOOTER: Customer Enquiries + Follow + Legal (mirrors cart.html) ─────── */
+.cs-footer-section{background:#fff;padding:28px 32px;margin-top:30px}
+.cs-footer-inner{max-width:780px;margin:0 auto}
+.cs-footer-section .cs-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.16em;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.cs-footer-section .cs-heading .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#6b6b6b;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
+.cs-footer-section .cs-block{margin-bottom:18px}
+.cs-footer-section .cs-block:last-child{margin-bottom:0}
+.cs-footer-section .cs-block-title{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#6b6b6b;font-weight:500;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.cs-footer-section .cs-block-title .muted{margin-left:0;direction:rtl}
+.cs-footer-section .cs-block-content{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;line-height:1.7}
+.cs-footer-section .cs-block-content a{color:#1a3a52;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(26,58,82,0.40)}
+.cs-footer-section .cs-block-content a:hover{text-decoration-color:#1a3a52;color:#e76f51}
+.cs-footer-section .cs-block-content .muted{color:#6b6b6b;font-size:0.78rem;margin-left:6px}
+.cs-footer-section .social-row{display:flex;align-items:center;gap:8px}
+.cs-footer-section .social-row .label-en{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;font-weight:500}
+.cs-footer-section .social-row .ar{font-family:'Almarai',sans-serif;font-size:0.78rem;color:#6b6b6b;margin-left:6px}
+.cs-footer-section .social-row .icons{margin-left:auto;display:flex;gap:6px}
+.cs-footer-section .social-link{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;color:#1a3a52;text-decoration:none;transition:color .2s, border-color .2s}
+.cs-footer-section .social-link:hover{color:#e76f51;border-color:#e76f51}
+.cs-footer-section .social-link svg{width:13px;height:13px;display:block}
+.cs-footer-section .cs-legal{padding:22px 0 8px;border-top:1px solid rgba(26,58,82,0.10);display:flex;flex-wrap:wrap;gap:6px 18px;font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#6b6b6b;letter-spacing:0.04em}
+.cs-footer-section .cs-legal a{color:#6b6b6b;text-decoration:none;transition:color .2s}
+.cs-footer-section .cs-legal a:hover{color:#1a3a52}
+.cs-footer-section .cs-legal .sep{color:#c0c8ce}
+.cs-footer-section .cs-copyright{margin-top:14px;font-family:'DM Sans',sans-serif;font-size:0.65rem;color:#9aa5ad;letter-spacing:0.02em;padding-bottom:8px}
+@media(max-width:576px){.cs-footer-section{padding:22px 18px}}
+    
     </style>
     <style>html{opacity:0;transition:opacity .15s}</style>
     <script>Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})</script>
@@ -488,7 +516,50 @@
     })();
     </script>
 
-    <nav class="mobile-bottom-nav">
+    <!-- ═══ FOOTER: Customer Enquiries + Follow + Legal ═══════════════ -->
+<section class="cs-footer-section">
+  <div class="cs-footer-inner">
+    <div class="cs-heading">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+    <div class="cs-block">
+      <div class="cs-block-title">Email</div>
+      <div class="cs-block-content">
+        <a href="mailto:info@orlostore.com">info@orlostore.com</a>
+        <span class="muted">Reply within 24h</span>
+      </div>
+    </div>
+    <div class="cs-block">
+      <div class="cs-block-title">Online orders<span class="muted">الطلبات عبر الإنترنت</span></div>
+      <div class="cs-block-content">
+        WhatsApp: <a href="https://wa.me/971555477206">+971 55 547 7206</a>
+        <span class="muted">Everyday 9am – 9pm</span>
+      </div>
+    </div>
+    <div class="cs-block">
+      <div class="social-row">
+        <span class="label-en">Follow</span>
+        <span class="ar">تابعنا</span>
+        <span class="icons">
+          <a href="https://instagram.com/orlostore" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+          <a href="https://tiktok.com/@shoporlo" class="social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg></a>
+        </span>
+      </div>
+    </div>
+    <nav class="cs-legal">
+      <a href="terms-and-conditions.html#terms">Terms &amp; Conditions</a>
+      <span class="sep">·</span>
+      <a href="terms-and-conditions.html#privacy">Privacy</a>
+      <span class="sep">·</span>
+      <a href="terms-and-conditions.html#returns">Returns</a>
+      <span class="sep">·</span>
+      <a href="terms-and-conditions.html#shipping">Shipping</a>
+      <span class="sep">·</span>
+      <a href="terms-and-conditions.html#exchange">Exchange</a>
+    </nav>
+    <div class="cs-copyright">© ORLO 2026 · All rights reserved.</div>
+  </div>
+</section>
+
+<nav class="mobile-bottom-nav">
         <div class="bottom-nav-indicator" id="bottomNavIndicator"></div>
         <div class="bottom-nav-item" id="bottomHomeBtn" data-index="0" onclick="window.location.href='index.html'">
             <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
