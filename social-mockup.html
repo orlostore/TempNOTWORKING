@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Social Icons — 3 placement options</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52;min-height:100vh;padding:30px 16px;font-variant-numeric:lining-nums}
+
+.label{padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10);margin:-30px -16px 30px}
+.label .sub{font-family:'DM Sans',sans-serif;font-style:normal;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px}
+
+.container{max-width:560px;margin:0 auto}
+.variant{margin-bottom:60px}
+.variant-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.3rem;color:#1a3a52;margin-bottom:6px}
+.variant-desc{font-family:'DM Sans',sans-serif;font-size:0.72rem;color:#6b6b6b;letter-spacing:0.04em;margin-bottom:18px;line-height:1.5}
+
+/* Frame (preview area) */
+.frame{padding:24px 22px;background:#f8f6f2;border:1px solid rgba(26,58,82,0.10)}
+
+/* Customer enquiries (shared) */
+.cs-section{padding:24px 0 18px}
+.cs-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.16em;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.cs-heading .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#6b6b6b;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
+.cs-block{margin-bottom:18px}
+.cs-block:last-child{margin-bottom:0}
+.cs-block-title{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#6b6b6b;font-weight:500;margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.cs-block-title .muted{margin-left:0;direction:rtl}
+.cs-block-content{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;line-height:1.7}
+.cs-block-content a{color:#1a3a52;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(26,58,82,0.40)}
+.cs-block-content .muted{color:#6b6b6b;font-size:0.78rem;margin-left:6px}
+
+/* Legal footer (shared) */
+.legal-footer{padding:22px 0 8px;border-top:1px solid rgba(26,58,82,0.10);display:flex;flex-wrap:wrap;gap:6px 18px;font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#6b6b6b;letter-spacing:0.04em;align-items:center}
+.legal-footer a{color:#6b6b6b;text-decoration:none}
+.legal-footer .sep{color:#c0c8ce}
+.legal-copyright{margin-top:14px;font-family:'DM Sans',sans-serif;font-size:0.65rem;color:#9aa5ad;letter-spacing:0.02em}
+
+/* Social icons (shared) */
+.social-link{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;color:#1a3a52;text-decoration:none;transition:color .2s, background .2s;border-radius:50%}
+.social-link:hover{color:#e76f51}
+.social-link svg{width:16px;height:16px;display:block}
+
+/* ── VARIANT 1: Inline as Customer Enquiries block ── */
+.v1 .social-row{display:flex;align-items:center;gap:8px}
+.v1 .social-row .label-en{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;font-weight:500}
+.v1 .social-row .ar{font-family:'Almarai',sans-serif;font-size:0.78rem;color:#6b6b6b;margin-left:6px}
+.v1 .social-row .icons{margin-left:auto;display:flex;gap:6px}
+.v1 .social-row .icons .social-link{width:28px;height:28px;border:1px solid rgba(26,58,82,0.20)}
+
+/* ── VARIANT 2: Tiny row above legal links, centered ── */
+.v2 .follow-row{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0 4px;border-top:1px solid rgba(26,58,82,0.10);margin-top:8px}
+.v2 .follow-label{font-family:'DM Sans',sans-serif;font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:#6b6b6b;font-weight:500}
+.v2 .follow-label .ar{font-family:'Almarai',sans-serif;text-transform:none;letter-spacing:0;color:#9aa5ad;margin-left:8px;font-size:0.62rem}
+.v2 .follow-icons{display:flex;gap:14px}
+.v2 .legal-footer{border-top:none;padding-top:6px}
+
+/* ── VARIANT 3: Appended to legal links inline ── */
+.v3 .social-inline{display:inline-flex;gap:4px;margin-left:8px}
+.v3 .social-inline .social-link{width:22px;height:22px}
+.v3 .social-inline .social-link svg{width:13px;height:13px}
+</style></head>
+<body>
+
+<div class="label">Social Icons<span class="sub">3 ways to keep Insta/TikTok after dropping the navy footer</span></div>
+
+<div class="container">
+
+<!-- VARIANT 1 -->
+<div class="variant v1">
+  <div class="variant-title">1 · Inline as a Customer Enquiries block</div>
+  <div class="variant-desc">Treats social as another contact channel. Sits alongside Email + WhatsApp. Reads as "here's how to reach us."</div>
+  <div class="frame">
+    <div class="cs-section">
+      <div class="cs-heading">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+      <div class="cs-block">
+        <div class="cs-block-title">Email</div>
+        <div class="cs-block-content"><a href="mailto:info@orlostore.com">info@orlostore.com</a> <span class="muted">Reply within 24h</span></div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-block-title">Online orders<span class="muted">الطلبات عبر الإنترنت</span></div>
+        <div class="cs-block-content">WhatsApp: <a href="#">+971 55 547 7206</a> <span class="muted">Everyday 9am – 9pm</span></div>
+      </div>
+      <div class="cs-block">
+        <div class="social-row">
+          <span class="label-en">Follow</span>
+          <span class="ar">تابعنا</span>
+          <span class="icons">
+            <a href="#" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+            <a href="#" class="social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg></a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <nav class="legal-footer">
+      <a href="#">Terms &amp; Conditions</a>
+      <span class="sep">·</span>
+      <a href="#">Privacy</a>
+      <span class="sep">·</span>
+      <a href="#">Returns</a>
+      <span class="sep">·</span>
+      <a href="#">Shipping</a>
+      <span class="sep">·</span>
+      <a href="#">Exchange</a>
+    </nav>
+    <div class="legal-copyright">© ORLO 2026 · All rights reserved.</div>
+  </div>
+</div>
+
+<!-- VARIANT 2 -->
+<div class="variant v2">
+  <div class="variant-title">2 · Centered "Follow" row above legal links</div>
+  <div class="variant-desc">Small "Follow · تابعنا" label with 2 icons centered. Visually separated from contact + legal. Hermes-adjacent.</div>
+  <div class="frame">
+    <div class="cs-section">
+      <div class="cs-heading">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+      <div class="cs-block">
+        <div class="cs-block-title">Email</div>
+        <div class="cs-block-content"><a href="mailto:info@orlostore.com">info@orlostore.com</a> <span class="muted">Reply within 24h</span></div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-block-title">Online orders<span class="muted">الطلبات عبر الإنترنت</span></div>
+        <div class="cs-block-content">WhatsApp: <a href="#">+971 55 547 7206</a> <span class="muted">Everyday 9am – 9pm</span></div>
+      </div>
+    </div>
+    <div class="follow-row">
+      <div class="follow-label">Follow<span class="ar">تابعنا</span></div>
+      <div class="follow-icons">
+        <a href="#" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+        <a href="#" class="social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg></a>
+      </div>
+    </div>
+    <nav class="legal-footer">
+      <a href="#">Terms &amp; Conditions</a>
+      <span class="sep">·</span>
+      <a href="#">Privacy</a>
+      <span class="sep">·</span>
+      <a href="#">Returns</a>
+      <span class="sep">·</span>
+      <a href="#">Shipping</a>
+      <span class="sep">·</span>
+      <a href="#">Exchange</a>
+    </nav>
+    <div class="legal-copyright">© ORLO 2026 · All rights reserved.</div>
+  </div>
+</div>
+
+<!-- VARIANT 3 -->
+<div class="variant v3">
+  <div class="variant-title">3 · Appended to legal links inline</div>
+  <div class="variant-desc">Tiniest possible footprint. Social icons sit at the end of the legal link strip, monochrome and small.</div>
+  <div class="frame">
+    <div class="cs-section">
+      <div class="cs-heading">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+      <div class="cs-block">
+        <div class="cs-block-title">Email</div>
+        <div class="cs-block-content"><a href="mailto:info@orlostore.com">info@orlostore.com</a> <span class="muted">Reply within 24h</span></div>
+      </div>
+      <div class="cs-block">
+        <div class="cs-block-title">Online orders<span class="muted">الطلبات عبر الإنترنت</span></div>
+        <div class="cs-block-content">WhatsApp: <a href="#">+971 55 547 7206</a> <span class="muted">Everyday 9am – 9pm</span></div>
+      </div>
+    </div>
+    <nav class="legal-footer">
+      <a href="#">Terms &amp; Conditions</a>
+      <span class="sep">·</span>
+      <a href="#">Privacy</a>
+      <span class="sep">·</span>
+      <a href="#">Returns</a>
+      <span class="sep">·</span>
+      <a href="#">Shipping</a>
+      <span class="sep">·</span>
+      <a href="#">Exchange</a>
+      <span class="social-inline">
+        <a href="#" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+        <a href="#" class="social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg></a>
+      </span>
+    </nav>
+    <div class="legal-copyright">© ORLO 2026 · All rights reserved.</div>
+  </div>
+</div>
+
+</div>
+</body></html>
