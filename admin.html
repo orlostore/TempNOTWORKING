@@ -2056,6 +2056,10 @@
                         <label>Specifications Arabic (separate with |)</label>
                         <input type="text" id="formSpecificationsAr" dir="rtl" placeholder="الحجم: ١٠ سم | الوزن: ٥٠ غ">
                     </div>
+                    <div class="form-group">
+                        <label>Considered alongside <span style="font-weight:400;font-size:0.78rem;color:#888;">(slugs separated with | — these products appear in the "Considered alongside" section on the PDP, hidden when empty)</span></label>
+                        <input type="text" id="formPairings" placeholder="silky-flexi-ties | retro-radio-decor">
+                    </div>
                 </div>
 
                 <div class="form-section">
@@ -2838,6 +2842,7 @@
             document.getElementById('formPackagingAr').value = product.packagingAr || '';
             document.getElementById('formSpecifications').value = product.specifications ? product.specifications.join(' | ') : '';
             document.getElementById('formSpecificationsAr').value = product.specificationsAr ? product.specificationsAr.join(' | ') : '';
+            document.getElementById('formPairings').value = product.pairings ? product.pairings.join(' | ') : '';
             document.getElementById('formFeatured').checked = product.featured;
             // Extra specs
             document.getElementById('formWattage').value = product.wattage || '';
@@ -2965,6 +2970,7 @@
                 packagingAr: document.getElementById('formPackagingAr').value.trim(),
                 specifications: document.getElementById('formSpecifications').value.trim(),
                 specificationsAr: document.getElementById('formSpecificationsAr').value.trim(),
+                pairings: document.getElementById('formPairings').value.trim(),
                 featured: document.getElementById('formFeatured').checked ? 1 : 0,
                 wattage: document.getElementById('formWattage').value.trim(),
                 voltage: document.getElementById('formVoltage').value.trim(),
