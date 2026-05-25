@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero · ORLO Mockups</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300italic.woff2') format('woff2');font-weight:300;font-style:italic;font-display:swap}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#f8f6f2;color:#1a3a52;line-height:1.5}
+
+.page-head{padding:32px 24px 8px;text-align:center}
+.page-head h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.6rem;color:#1a3a52;letter-spacing:0.01em}
+.page-head .sub{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:#6b6b6b;margin-top:6px}
+
+.variant-block{margin:32px 0 56px;border-top:1px solid rgba(26,58,82,0.08)}
+.variant-tag{padding:18px 24px 0;text-align:left}
+.variant-tag .label{font-size:0.66rem;letter-spacing:0.18em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:4px}
+.variant-tag .title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.2rem;color:#1a3a52}
+.variant-tag .desc{font-size:0.78rem;color:#6b6b6b;margin-top:6px;line-height:1.6;max-width:680px}
+
+/* ─────────── HERO BASE (full-bleed photographic) ─────────── */
+.hero{position:relative;width:100%;background:#1a1a1a;overflow:hidden}
+.hero-img{display:block;width:100%;height:auto}
+.hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:32px 28px 36px;background:linear-gradient(180deg,rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%)}
+.hero-overlay.center{justify-content:center;align-items:center;text-align:center;background:linear-gradient(180deg,rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.35) 100%)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(34px,7.5vw,52px);color:#fff;line-height:1.0;letter-spacing:-0.005em;max-width:520px}
+.hero-overlay.center .hero-title{max-width:none}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.05rem;color:rgba(255,255,255,0.92);margin-top:14px;line-height:1.45;max-width:480px;letter-spacing:0.005em}
+.hero-overlay.center .hero-sub{max-width:none;font-size:0.98rem}
+.hero-cta{display:inline-block;margin-top:22px;font-family:'DM Sans',sans-serif;font-size:0.7rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#fff;text-decoration:none;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.85);transition:border-color .2s, color .2s}
+.hero-cta:hover{border-color:#fff;color:#fff}
+
+/* ─────────── Variant C: editorial diptych (two stacked photos) ─────────── */
+.hero-dip{position:relative;width:100%;background:#f8f6f2;padding:0}
+.hero-dip-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.hero-dip-grid img{width:100%;display:block;aspect-ratio:1/1.1;object-fit:cover}
+.hero-dip-text{padding:32px 28px;text-align:center;background:#f8f6f2}
+.hero-dip-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(30px,6.5vw,44px);color:#1a3a52;line-height:1.05;letter-spacing:-0.005em}
+.hero-dip-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#1a3a52;margin-top:12px;line-height:1.5;max-width:520px;margin-left:auto;margin-right:auto}
+.hero-dip-cta{display:inline-block;margin-top:18px;font-family:'DM Sans',sans-serif;font-size:0.68rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#1a3a52;text-decoration:none;padding-bottom:4px;border-bottom:1px solid rgba(26,58,82,0.5)}
+
+/* ─────────── Variant D: editorial pure-typography (no photo) ─────────── */
+.hero-edit{padding:80px 28px 64px;text-align:center;background:#f8f6f2}
+.hero-edit .eyebrow{font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.22em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-bottom:18px;display:block}
+.hero-edit h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(40px,9vw,72px);color:#1a3a52;line-height:0.95;letter-spacing:-0.012em;margin-bottom:18px}
+.hero-edit .sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#1a3a52;max-width:520px;margin:0 auto 22px;line-height:1.55}
+.hero-edit .cta{display:inline-block;font-family:'DM Sans',sans-serif;font-size:0.7rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#1a3a52;text-decoration:none;padding-bottom:5px;border-bottom:1px solid #1a3a52}
+
+@media(max-width:520px){
+  .hero-dip-grid{grid-template-columns:1fr}
+  .hero-dip-grid img{aspect-ratio:1.4/1}
+}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>Hero · 3 directions</h1>
+  <div class="sub">Hermès-aligned · uses existing lifestyle shots</div>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<!-- VARIANT A: Single photo (Italian Vespa lifestyle), bottom-left overlay -->
+<!-- ──────────────────────────────────────────────────────────── -->
+<div class="variant-block">
+  <div class="variant-tag">
+    <div class="label">VARIANT A · single photo · bottom-left overlay</div>
+    <div class="title">Small things, considered.</div>
+    <div class="desc">Existing lifestyle shot of your Italian Vespa figurine. Italic Cormorant 300 title sits bottom-left over the photo with a subtle dark gradient at the base for legibility. Subtitle in italic serif. CTA is text-only with a hairline underline — no button. Trust badges removed from the hero (move to footer).</div>
+  </div>
+  <section class="hero">
+    <img class="hero-img" src="https://images.orlostore.com/vintage-italian-vespa/lifestyle1.webp" alt="Hand-painted vintage Italian Vespa on a desk">
+    <div class="hero-overlay">
+      <h2 class="hero-title">Small things, considered.</h2>
+      <p class="hero-sub">Hand-painted figurines, vintage models, and quiet objects worth keeping.</p>
+      <a href="#" class="hero-cta">Discover the collection</a>
+    </div>
+  </section>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<!-- VARIANT B: Single photo (Camper Van lifestyle), centered overlay -->
+<!-- ──────────────────────────────────────────────────────────── -->
+<div class="variant-block">
+  <div class="variant-tag">
+    <div class="label">VARIANT B · single photo · centered overlay</div>
+    <div class="title">A considered everyday.</div>
+    <div class="desc">Camper Van lifestyle shot. Title + subtitle + CTA all centered. Softer gradient. More poetic — sells the lifestyle the products inhabit, not the products themselves.</div>
+  </div>
+  <section class="hero">
+    <img class="hero-img" src="https://images.orlostore.com/vintage-camper-van/lifestyle.webp" alt="Vintage camper van model on a styled travel desk">
+    <div class="hero-overlay center">
+      <h2 class="hero-title">A considered everyday.</h2>
+      <p class="hero-sub">Made by hand. Made to keep.</p>
+      <a href="#" class="hero-cta">Browse the edit</a>
+    </div>
+  </section>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<!-- VARIANT C: Two-image diptych + cream typography block below -->
+<!-- ──────────────────────────────────────────────────────────── -->
+<div class="variant-block">
+  <div class="variant-tag">
+    <div class="label">VARIANT C · two-image diptych · text below</div>
+    <div class="title">Objects with character.</div>
+    <div class="desc">Two stacked photos (Vespa on left, Camper on right) carry the visual story; the typography sits below on cream. Most editorial of the three — feels like the cover of a printed catalogue. Photos read large on mobile (stack vertically below 520px).</div>
+  </div>
+  <section class="hero-dip">
+    <div class="hero-dip-grid">
+      <img src="https://images.orlostore.com/vintage-italian-vespa/lifestyle1.webp" alt="Italian Vespa lifestyle">
+      <img src="https://images.orlostore.com/vintage-camper-van/lifestyle.webp" alt="Camper Van lifestyle">
+    </div>
+    <div class="hero-dip-text">
+      <h2 class="hero-dip-title">Objects with character.</h2>
+      <p class="hero-dip-sub">From the dashboard to the desk — small things that say something.</p>
+      <a href="#" class="hero-dip-cta">Discover the collection</a>
+    </div>
+  </section>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<!-- VARIANT D: Pure-typography (no photo) — quietest, fastest -->
+<!-- ──────────────────────────────────────────────────────────── -->
+<div class="variant-block">
+  <div class="variant-tag">
+    <div class="label">VARIANT D · typography only · no photo</div>
+    <div class="title">Made by hand.</div>
+    <div class="desc">No photo at all. Just typography on cream. The largest title here — Cormorant 300 italic at clamp(40px,9vw,72px) — carries the whole hero. A small coral eyebrow above, italic subtitle below, text CTA. Most restrained. Works even if you don't have great lifestyle photography.</div>
+  </div>
+  <section class="hero-edit">
+    <span class="eyebrow">ORLO · A Curated Edit</span>
+    <h2>Made by hand,<br><em>made to keep.</em></h2>
+    <p class="sub">Hand-painted figurines, vintage models, and small objects with character — for the desk, the dashboard, the shelf that holds a story.</p>
+    <a href="#" class="cta">Discover the collection</a>
+  </section>
+</div>
+
+</body>
+</html>
