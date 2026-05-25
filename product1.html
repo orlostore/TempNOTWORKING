@@ -756,17 +756,24 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
         if (vb) vb.remove();
         return;
       }
-      var qtyEl = stepper.querySelector('.grid-qty-display');
-      var qty = qtyEl ? (qtyEl.textContent || '1').trim() : '1';
+      // The circle next to VIEW BAG shows the TOTAL cart count (mirrors the footer bag).
+      // It used to mirror the stepper which made it duplicate this-product qty -- now it's
+      // a true bag-preview number: "tap this link and you'll see N items".
+      var total = 0;
+      try {
+        var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        total = cart.reduce(function(s,i){ return s + (i.quantity || 0); }, 0);
+      } catch(e){}
+      var totalStr = total > 0 ? String(total) : '';
       if (vb) {
         var badge = vb.querySelector('.vb-count');
-        if (badge && badge.textContent !== qty) badge.textContent = qty;
+        if (badge && badge.textContent !== totalStr) badge.textContent = totalStr;
       } else {
         vb = document.createElement('a');
         vb.className = 'atc-split-vb';
         vb.href = '/cart.html';
         vb.setAttribute('aria-label', 'View bag');
-        vb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>View Bag<span class="vb-count">' + qty + '</span>';
+        vb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>View Bag<span class="vb-count">' + totalStr + '</span>';
         row.insertBefore(vb, stepper);
       }
     } finally { _inSync = false; }
