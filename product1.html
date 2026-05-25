@@ -235,6 +235,36 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   /* Hermès-style bag SVG icon prefixing the pill text */
   .early-price-bottom .mobile-add-to-cart::before,.early-price-bottom #mobileAddToCartBtn::before,.early-price-bottom #earlyCartMobile::before{content:'';display:inline-block;width:16px;height:18px;flex-shrink:0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/></svg>") center/contain no-repeat}
 
+  /* ═════════ Qty stepper inside the sticky bar (the orange "ghost" was the OG .grid-qty-control with coral gradient + #c9603e border) ═════════ */
+  /* When item is in cart, product.js replaces .mobile-add-to-cart with <div class="grid-qty-control product-btn-transformed">…</div> */
+  .early-price-bottom .grid-qty-control,
+  .early-price-bottom .product-btn-transformed,
+  .early-price-bottom.early-price .product-btn-transformed,
+  .mobile-product-header .early-price.early-price-bottom .product-btn-transformed{
+    display:flex!important;flex-direction:row!important;align-items:stretch!important;justify-content:center!important;
+    width:100%!important;min-width:0!important;max-width:none!important;
+    height:48px!important;min-height:48px!important;max-height:48px!important;
+    background:#1a3a52!important;background-image:none!important;border:none!important;border-radius:8px!important;
+    overflow:hidden!important;margin:0!important;padding:0!important;box-sizing:border-box!important;
+    flex:1 1 100%!important
+  }
+  .early-price-bottom .grid-qty-btn{
+    width:48px!important;height:48px!important;flex:0 0 48px!important;
+    background:rgba(255,255,255,0.10)!important;background-image:none!important;border:none!important;border-radius:0!important;
+    color:#fff!important;font-family:'DM Sans',sans-serif!important;font-size:1.1rem!important;font-weight:500!important;
+    cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;
+    padding:0!important;margin:0!important;min-height:48px!important
+  }
+  .early-price-bottom .grid-qty-btn:hover{background:rgba(255,255,255,0.18)!important}
+  .early-price-bottom .grid-qty-btn:active{background:rgba(255,255,255,0.26)!important}
+  .early-price-bottom .grid-qty-display{
+    flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;
+    color:#fff!important;font-family:'DM Sans',sans-serif!important;font-size:0.95rem!important;font-weight:500!important;
+    letter-spacing:0.04em!important;background:transparent!important;padding:0!important;margin:0!important;
+    /* product.js puts an onclick=toggleCart() on this span; suppress accidental tap-through after transform */
+    pointer-events:none!important;cursor:default!important
+  }
+
   /* ═════════ Pricing tier bar — editorial Hermès-style (was busy with coral prices + green Save badges) ═════════ */
   #pricingTiersDesktop,#pricingTiersMobile{padding:14px 0 22px!important;background:transparent!important;border:none!important;box-shadow:none!important;margin:0!important}
   #pricingTiersDesktop > div,#pricingTiersMobile > div{background:transparent!important;border:none!important;box-shadow:none!important;border-radius:0!important;padding:0!important}
