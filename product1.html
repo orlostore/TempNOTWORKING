@@ -578,7 +578,14 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
 <script>
 /* ═══ product1.html overrides — runs after product.js to force visibility + clean text ═══ */
 (function(){
+  // Re-entry guard — my applyOverrides writes inline styles on #earlyPriceMobile, and the MutationObserver
+  // below watches that same attribute. Without this guard, every write queues another microtask which calls
+  // applyOverrides again, locking the main thread (page hangs, all buttons unresponsive).
+  var _inOverrides = false;
   function applyOverrides(){
+    if (_inOverrides) return;
+    _inOverrides = true;
+    try {
     // 1. Force the dynamic #earlyPriceMobile.early-price-bottom visible (product.js wires the working button inside this).
     //    Strip .nav-hidden / display:none / transforms that product.js may apply on scroll.
     var earlyMobile = document.getElementById('earlyPriceMobile');
@@ -637,6 +644,9 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
           }
         }
       }
+    }
+    } finally {
+      _inOverrides = false;
     }
   }
 
