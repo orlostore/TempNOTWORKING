@@ -3,7 +3,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Your Cart — ORLO Store</title>
 <meta name="robots" content="noindex,nofollow">
-<link rel="stylesheet" href="styles.css?v=42">
+<link rel="stylesheet" href="styles.css?v=43">
 <!-- Bootstrap product data so renderCartPage can resolve cart items to product info -->
 <script src="products.min.js?v=24"></script>
 <style>
@@ -607,8 +607,9 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
   // Bottom nav: account label + cart badge count
   function updateBottomNav() {
     var loggedIn = isLoggedIn();
-    var label = document.getElementById('bottomAccountLabel');
-    var accountLink = document.getElementById('bottomAccountBtn');
+    // Canonical nav uses orloNavAccountLabel / orloNavAccountBtn (was bottomAccountLabel / bottomAccountBtn pre-rollout)
+    var label = document.getElementById('orloNavAccountLabel');
+    var accountLink = document.getElementById('orloNavAccountBtn');
     if (label) {
       if (loggedIn) {
         var name = '';
@@ -620,11 +621,11 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
     }
     if (accountLink) accountLink.href = loggedIn ? 'account.html' : 'login.html';
 
-    var badge = document.getElementById('bottomCartBadge');
+    // Canonical badge is id="bottomCartCount". CSS .orlo-nav-badge:empty hides it, so setting textContent='' is enough — no inline display toggle needed.
+    var badge = document.getElementById('bottomCartCount');
     if (badge) {
       var c = getCart().reduce(function(s,i){return s + (i.quantity||0);}, 0);
-      badge.textContent = c;
-      badge.style.display = c > 0 ? 'flex' : 'none';
+      badge.textContent = c > 0 ? String(c) : '';
     }
   }
   document.addEventListener('DOMContentLoaded', updateBottomNav);
