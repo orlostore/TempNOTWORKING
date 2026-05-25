@@ -407,6 +407,37 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
     }
   }
 
+  // Self-contained cart mutations — don't rely on app.js's updateQuantity (which has cart-sidebar DOM deps)
+  function saveCartAndSync(c) {
+    try { localStorage.setItem('cart', JSON.stringify(c)); } catch(e){}
+    // Keep app.js global in sync if present (so checkout() reads the right cart)
+    try { if (typeof cart !== 'undefined') cart = c; } catch(e){}
+  }
+  function findItemIndex(c, id, vid) {
+    if (vid) return c.findIndex(function(i){return i.id === id && i.variantId === vid;});
+    return c.findIndex(function(i){return i.id === id && !i.variantId;});
+  }
+  function mutateQty(id, delta, vid) {
+    var c = getCart();
+    var idx = findItemIndex(c, id, vid);
+    if (idx < 0) return;
+    var newQty = c[idx].quantity + delta;
+    if (newQty <= 0) { c.splice(idx, 1); }
+    else { c[idx].quantity = Math.min(newQty, 10); }  // cap at 10 like app.js MAX_QTY_PER_PRODUCT
+    saveCartAndSync(c);
+    renderCartPage();
+    updateBottomNav();
+  }
+  function mutateRemove(id, vid) {
+    var c = getCart();
+    var idx = findItemIndex(c, id, vid);
+    if (idx < 0) return;
+    c.splice(idx, 1);
+    saveCartAndSync(c);
+    renderCartPage();
+    updateBottomNav();
+  }
+
   // Delegated event handlers for qty stepper + remove + checkout
   document.addEventListener('click', function(ev){
     var t = ev.target.closest('[data-act]');
@@ -417,13 +448,14 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
       if (!id) return;
       var idVal = isNaN(Number(id)) ? id : Number(id);
       var vidVal = vid ? (isNaN(Number(vid)) ? vid : Number(vid)) : undefined;
-      if (act === 'inc' && typeof updateQuantity === 'function') { updateQuantity(idVal, 1, vidVal); setTimeout(renderCartPage, 0); }
-      else if (act === 'dec' && typeof updateQuantity === 'function') { updateQuantity(idVal, -1, vidVal); setTimeout(renderCartPage, 0); }
-      else if (act === 'rm' && typeof removeFromCart === 'function') { removeFromCart(idVal, vidVal); setTimeout(renderCartPage, 0); }
+      if (act === 'inc') mutateQty(idVal, 1, vidVal);
+      else if (act === 'dec') mutateQty(idVal, -1, vidVal);
+      else if (act === 'rm') mutateRemove(idVal, vidVal);
       return;
     }
     if (ev.target.closest('#asGuestBtn') || ev.target.closest('#payByCardBtn')) {
       if (typeof checkout === 'function') checkout();
+      else window.location.href = 'login.html?redirect=' + encodeURIComponent('cart.html');
       return;
     }
     if (ev.target.closest('#signInBtn')) {
