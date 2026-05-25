@@ -27,11 +27,11 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
 /* Variant label */
 .variant-label{background:#1a3a52;color:#fff;padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;text-align:center}
 
-/* PDP wrapper */
+/* PDP wrapper — flat cream, no white cards (matches cart + Hermès) */
 .pdp{max-width:780px;margin:0 auto;padding:0 0 80px}
 
 /* IMAGE AREA — A (single hero + dots, Hermès) */
-.pdp-image-a{background:#fff;margin-bottom:14px}
+.pdp-image-a{margin-bottom:14px}
 .pdp-image-a .hero{aspect-ratio:1/1;background:#efeae0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .pdp-image-a .hero > div{width:80%;height:80%;background:linear-gradient(135deg,#d4a373,#b87f48);border-radius:8px}
 .pdp-image-a .dots{display:flex;justify-content:center;gap:6px;padding:14px 0}
@@ -39,22 +39,22 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
 .pdp-image-a .dot.active{background:#1a3a52}
 
 /* IMAGE AREA — B (hero + 4 thumbs, hybrid) */
-.pdp-image-b{background:#fff;margin-bottom:14px}
+.pdp-image-b{margin-bottom:14px}
 .pdp-image-b .hero{aspect-ratio:1/1;background:#efeae0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .pdp-image-b .hero > div{width:80%;height:80%;background:linear-gradient(135deg,#d4a373,#b87f48);border-radius:8px}
-.pdp-image-b .thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px}
+.pdp-image-b .thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 0 0}
 .pdp-image-b .thumb{aspect-ratio:1/1;background:#efeae0;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center}
 .pdp-image-b .thumb > div{width:75%;height:75%;background:linear-gradient(135deg,#d4a373,#b87f48);border-radius:4px;opacity:0.85}
 .pdp-image-b .thumb.active{outline:1px solid #1a3a52;outline-offset:-1px}
 
-/* Product info */
-.pdp-info{background:#fff;padding:24px 32px;margin-bottom:14px}
+/* Product info — flat on cream */
+.pdp-info{padding:24px 32px 8px}
 .pdp-info h1{font-family:'DM Sans',sans-serif;font-weight:500;font-size:1.2rem;color:#1a3a52;line-height:1.3;margin-bottom:6px}
 .pdp-info .name-ar{font-family:'Almarai',sans-serif;font-size:0.85rem;color:#6b6b6b;direction:rtl;text-align:left;margin-bottom:18px}
 .pdp-info .price{font-family:'DM Sans',sans-serif;font-size:1.05rem;color:#1a3a52;font-weight:500;letter-spacing:0.02em}
 
 /* Variant section */
-.variant-section{background:#fff;padding:18px 32px 22px;margin-bottom:14px}
+.variant-section{padding:14px 32px 22px}
 .variant-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
 .variant-header .label-en{font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#6b6b6b;font-weight:500;letter-spacing:0.02em}
 .variant-header .current{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;font-weight:400}
@@ -67,32 +67,46 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
 .variant-note{font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#6b6b6b;margin-top:12px;letter-spacing:0.02em}
 @media(max-width:576px){.swatch{flex:0 0 calc(25% - 6px)}}
 
-/* Description sections */
-.pdp-desc{background:#fff;padding:24px 32px;margin-bottom:14px}
+/* Description sections — flat */
+.pdp-desc{padding:8px 32px}
 .pdp-desc-section{padding:18px 0;border-bottom:1px solid rgba(26,58,82,0.10)}
-.pdp-desc-section:first-child{padding-top:0}
-.pdp-desc-section:last-child{border-bottom:none;padding-bottom:0}
+.pdp-desc-section:last-child{border-bottom:none}
 .pdp-desc-section h3{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.18em;color:#1a3a52;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}
 .pdp-desc-section h3 .ar{font-family:'Almarai',sans-serif;font-weight:400;letter-spacing:0;text-transform:none;color:#6b6b6b;font-size:0.78rem;direction:rtl}
 .pdp-desc-section p{font-family:'DM Sans',sans-serif;font-size:0.9rem;color:#1a3a52;line-height:1.7;margin-bottom:8px}
 .pdp-desc-section p.ar{font-family:'Almarai',sans-serif;font-size:0.82rem;color:#6b6b6b;direction:rtl;text-align:right;line-height:1.85;margin-top:6px}
 
-/* Sticky Add to Cart */
+/* Sticky Add to Cart — matches cart.html checkout pill height (padding 16px, 0.82rem, 0.12em letter-spacing) */
 .atc-sticky{position:sticky;bottom:0;background:#f8f6f2;padding:18px 32px 78px;z-index:50;border-top:1px solid rgba(26,58,82,0.10)}
 @media(min-width:769px){.atc-sticky{padding-bottom:18px}}
-.atc-btn{width:100%;padding:18px 16px;background:#1a3a52;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:filter .2s}
+.atc-btn{width:100%;padding:16px 16px;background:#1a3a52;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;line-height:1;transition:filter .2s}
 .atc-btn:hover{filter:brightness(0.88)}
 .atc-btn .ico{width:16px;height:16px}
 
+/* "The story behind" — editorial section after product */
+.story-section{padding:40px 32px 36px;text-align:center}
+.story-section h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.7rem;color:#1a3a52;margin-bottom:20px}
+.story-section p{font-family:'DM Sans',sans-serif;font-size:0.92rem;color:#1a3a52;line-height:1.75;max-width:620px;margin:0 auto 12px;text-align:center}
+.story-section p.ar{font-family:'Almarai',sans-serif;font-size:0.85rem;color:#6b6b6b;direction:rtl;line-height:1.9;margin-top:14px}
+
+/* "The Perfect Partner" — upsell section (where upselling belongs, not in cart) */
+.upsell-section{padding:30px 32px 40px}
+.upsell-section h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.7rem;color:#1a3a52;margin-bottom:24px;text-align:left}
+.upsell-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.upsell-card{background:transparent;cursor:pointer}
+.upsell-card .img{aspect-ratio:1/1;background:#efeae0;margin-bottom:10px;display:flex;align-items:center;justify-content:center}
+.upsell-card .img > div{width:75%;height:75%}
+.upsell-card .name{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;font-weight:400;margin-bottom:3px;line-height:1.3}
+.upsell-card .price{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#6b6b6b}
+
 /* Added-to-cart bottom sheet (Hermes-style popup) */
-.added-overlay{position:fixed;inset:0;background:rgba(26,58,82,0.45);z-index:200;display:flex;align-items:flex-end;justify-content:center}
 .added-sheet{background:#f8f6f2;width:100%;max-width:560px;padding:36px 28px 28px;text-align:center;border-radius:14px 14px 0 0}
 .added-sheet .ico{width:48px;height:48px;margin:0 auto 16px;color:#1a3a52}
 .added-sheet h3{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.18em;color:#1a3a52;margin-bottom:6px}
 .added-sheet .msg{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#6b6b6b;margin-bottom:22px}
 .added-sheet .msg .ar{display:block;font-family:'Almarai',sans-serif;margin-top:4px;direction:rtl}
 .added-sheet .actions{display:flex;flex-direction:column;gap:10px}
-.added-sheet .btn-primary{padding:16px;background:#1a3a52;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block}
+.added-sheet .btn-primary{padding:16px;background:#1a3a52;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block;min-height:56px;line-height:1;display:flex;align-items:center;justify-content:center}
 .added-sheet .btn-link{padding:8px;background:transparent;color:#6b6b6b;border:none;font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;text-decoration:underline}
 
 /* Section separator */
@@ -171,6 +185,30 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
       <h3>Shipping<span class="ar">الشحن</span></h3>
       <p>Complimentary UAE delivery on orders over AED 75. Estimated 1–3 business days.</p>
       <p class="ar">توصيل مجاني داخل الإمارات للطلبات فوق ٧٥ درهم. مدة التوصيل ١-٣ أيام عمل.</p>
+    </div>
+  </section>
+
+  <!-- THE STORY BEHIND (editorial, Hermès-style) -->
+  <section class="story-section">
+    <h2>The story behind</h2>
+    <p>A nod to the golden age of Italian design — when scooters were sculpture, when transit had soul. Hand-painted in Tuscany, each one a tiny ode to la dolce vita.</p>
+    <p class="ar">تحيّة لعصر التصميم الإيطالي الذهبي — حين كانت السكوترات منحوتات، وحين كان للتنقّل روح. مرسومة يدوياً في توسكانا، كلّ واحدة قصيدة صغيرة للحياة الحلوة.</p>
+  </section>
+
+  <!-- THE PERFECT PARTNER (upsell — where it belongs, not in cart) -->
+  <section class="upsell-section">
+    <h2>The perfect partner</h2>
+    <div class="upsell-grid">
+      <a class="upsell-card">
+        <div class="img"><div style="background:linear-gradient(135deg,#1a3a52,#0f2638)"></div></div>
+        <div class="name">Silk tie</div>
+        <div class="price">AED 140</div>
+      </a>
+      <a class="upsell-card">
+        <div class="img"><div style="background:linear-gradient(135deg,#8a9a5b,#5d6b3e)"></div></div>
+        <div class="name">Dangling buddies — set of 3</div>
+        <div class="price">AED 95</div>
+      </a>
     </div>
   </section>
 
