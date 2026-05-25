@@ -203,9 +203,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .cs-footer-section .cs-copyright{margin-top:14px;font-family:'DM Sans',sans-serif;font-size:0.65rem;color:#9aa5ad;letter-spacing:0.02em;padding-bottom:8px}
   @media(max-width:576px){.cs-footer-section{padding:22px 18px}}
 
-  /* ═════════ Single sticky ATC pill — only .mobile-buybox-compact (always in DOM) ═════════ */
-  /* Kill the scroll-triggered duplicate that product.js spawns (#earlyPriceMobile becomes .early-price-bottom) */
-  .early-price-bottom,#earlyPriceMobile{display:none!important;visibility:hidden!important}
+  /* ═════════ Single sticky ATC pill — use #earlyPriceMobile.early-price-bottom (product.js wires its inner button) ═════════ */
+  /* Hide the static .mobile-buybox-compact entirely (product.js removes its button anyway for variant products) */
+  .mobile-buybox-compact{display:none!important;visibility:hidden!important}
 
   /* Body padding so content isn't hidden behind sticky ATC */
   body{padding-bottom:140px!important}
@@ -216,22 +216,24 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .mobile-details-section{padding:18px 22px 24px!important}
   .mobile-carousel-container{background:#fff!important;padding:0 0 14px!important}
 
-  /* Sticky bar — white bg (Hermès), sits ABOVE mobile-bottom-nav, compact (max 72px) */
-  .mobile-buybox-compact{position:fixed!important;bottom:62px!important;left:0!important;right:0!important;background:#fff!important;z-index:50!important;padding:10px 16px!important;border-top:1px solid rgba(26,58,82,0.10)!important;box-shadow:0 -2px 8px rgba(26,58,82,0.04)!important;margin:0!important;display:flex!important;flex-direction:row!important;align-items:center!important;gap:0!important;height:auto!important;max-height:72px!important;box-sizing:border-box!important;width:100%!important}
-  @media(min-width:769px){.mobile-buybox-compact{bottom:0!important;padding:14px 22px!important;max-height:80px!important}}
+  /* The bar product.js spawns: #earlyPriceMobile with class .early-price-bottom — white, full-width, sits above mobile-bottom-nav */
+  .early-price-bottom,#earlyPriceMobile.early-price-bottom{position:fixed!important;bottom:62px!important;left:0!important;right:0!important;background:#fff!important;z-index:9999!important;padding:10px 16px!important;border-top:1px solid rgba(26,58,82,0.10)!important;box-shadow:0 -2px 8px rgba(26,58,82,0.04)!important;margin:0!important;display:block!important;visibility:visible!important;opacity:1!important;height:auto!important;max-height:72px!important;box-sizing:border-box!important;width:100%!important;transform:none!important;transition:none!important}
+  @media(min-width:769px){.early-price-bottom,#earlyPriceMobile.early-price-bottom{bottom:0!important;padding:14px 22px!important;max-height:80px!important}}
 
-  /* Inside the bar — hide price + delivery, show only cart-section full-width */
-  .mobile-buybox-compact .mobile-price-section{display:none!important}
-  .mobile-buybox-compact .mobile-delivery-info{display:none!important}
-  .mobile-buybox-compact .mobile-cart-section{display:block!important;width:100%!important;padding:0!important;margin:0!important;background:transparent!important;flex:1 1 auto!important}
+  /* Neutralize the .nav-hidden translate-Y that product.js adds on scroll */
+  .early-price-bottom.nav-hidden,#earlyPriceMobile.early-price-bottom.nav-hidden{transform:none!important;opacity:1!important;visibility:visible!important;display:block!important}
 
-  /* Compact pill — 48px navy with white text + Hermès tracking */
-  .mobile-buybox-compact .mobile-add-to-cart,.mobile-buybox-compact #mobileAddToCartBtn{width:100%!important;height:48px!important;min-height:48px!important;max-height:48px!important;padding:0 16px!important;background:#1a3a52!important;color:#fff!important;border:none!important;border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.78rem!important;font-weight:500!important;letter-spacing:0.14em!important;text-transform:uppercase!important;cursor:pointer!important;line-height:1!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:10px!important;margin:0!important;box-sizing:border-box!important;visibility:visible!important;opacity:1!important}
-  .mobile-buybox-compact .mobile-add-to-cart .btn-ar,.mobile-buybox-compact #mobileAddToCartBtn .btn-ar{display:none!important}
-  .mobile-buybox-compact .mobile-add-to-cart .btn-en,.mobile-buybox-compact #mobileAddToCartBtn .btn-en{font-weight:500!important;white-space:nowrap!important}
+  /* Inside the bar — hide the truck/price decoration, button alone fills width */
+  .early-price-bottom .early-price-row{display:block!important;width:100%!important;padding:0!important;margin:0!important;background:transparent!important;border:none!important}
+  .early-price-bottom .del-col,.early-price-bottom .price-col{display:none!important}
+
+  /* Compact pill — 48px navy white text Hermès tracking (button id is mobileAddToCartBtn for variants, earlyCartMobile for non-variants) */
+  .early-price-bottom .mobile-add-to-cart,.early-price-bottom #mobileAddToCartBtn,.early-price-bottom #earlyCartMobile{width:100%!important;height:48px!important;min-height:48px!important;max-height:48px!important;padding:0 16px!important;background:#1a3a52!important;color:#fff!important;border:none!important;border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.78rem!important;font-weight:500!important;letter-spacing:0.14em!important;text-transform:uppercase!important;cursor:pointer!important;line-height:1!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:10px!important;margin:0!important;box-sizing:border-box!important;visibility:visible!important;opacity:1!important}
+  .early-price-bottom .mobile-add-to-cart .btn-ar{display:none!important}
+  .early-price-bottom .mobile-add-to-cart .btn-en{font-weight:500!important;white-space:nowrap!important}
 
   /* Hermès-style bag SVG icon prefixing the pill text */
-  .mobile-buybox-compact .mobile-add-to-cart::before,.mobile-buybox-compact #mobileAddToCartBtn::before{content:'';display:inline-block;width:16px;height:18px;flex-shrink:0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/></svg>") center/contain no-repeat}
+  .early-price-bottom .mobile-add-to-cart::before,.early-price-bottom #mobileAddToCartBtn::before,.early-price-bottom #earlyCartMobile::before{content:'';display:inline-block;width:16px;height:18px;flex-shrink:0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z'/><path d='M9 8V6a3 3 0 0 1 6 0v2'/></svg>") center/contain no-repeat}
 
   /* ═════════ Pricing tier bar — editorial Hermès-style (was busy with coral prices + green Save badges) ═════════ */
   #pricingTiersDesktop,#pricingTiersMobile{padding:14px 0 22px!important;background:transparent!important;border:none!important;box-shadow:none!important;margin:0!important}
@@ -399,7 +401,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   <div class="mobile-details-section" id="mobileDetailsSection"></div>
   <div id="variantSelectorMobile"></div>
   <div id="pricingTiersMobile"></div>
-  <div class="mobile-buybox-compact" style="display:flex !important;visibility:visible !important;opacity:1 !important;position:fixed !important;bottom:62px;left:0;right:0;z-index:9999;background:#fff;">
+  <div class="mobile-buybox-compact" style="display:none !important;">
     <div class="mobile-price-section"><div class="mobile-price" id="mobileProductPrice"></div></div>
     <div class="mobile-cart-section"><button class="mobile-add-to-cart" id="mobileAddToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button></div>
     <div class="mobile-delivery-info"></div>
@@ -518,23 +520,26 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
 /* ═══ product1.html overrides — runs after product.js to force visibility + clean text ═══ */
 (function(){
   function applyOverrides(){
-    // 1. Force the ATC sticky bar visible — use !important inline so product.js's style.display='none' loses
-    var buybox = document.querySelector('.mobile-buybox-compact');
-    if (buybox) {
-      buybox.style.setProperty('display', 'flex', 'important');
-      buybox.style.setProperty('visibility', 'visible', 'important');
-      buybox.style.setProperty('opacity', '1', 'important');
-      buybox.style.setProperty('position', 'fixed', 'important');
-      buybox.style.setProperty('bottom', '62px', 'important');
-      buybox.style.setProperty('left', '0', 'important');
-      buybox.style.setProperty('right', '0', 'important');
-      buybox.style.setProperty('z-index', '9999', 'important');
-    }
-    // 1b. Kill the scroll-triggered duplicate that product.js spawns (#earlyPriceMobile.early-price-bottom)
+    // 1. Force the dynamic #earlyPriceMobile.early-price-bottom visible (product.js wires the working button inside this).
+    //    Strip .nav-hidden / display:none / transforms that product.js may apply on scroll.
     var earlyMobile = document.getElementById('earlyPriceMobile');
     if (earlyMobile) {
-      earlyMobile.style.setProperty('display', 'none', 'important');
-      earlyMobile.style.setProperty('visibility', 'hidden', 'important');
+      earlyMobile.style.setProperty('display', 'block', 'important');
+      earlyMobile.style.setProperty('visibility', 'visible', 'important');
+      earlyMobile.style.setProperty('opacity', '1', 'important');
+      earlyMobile.style.setProperty('position', 'fixed', 'important');
+      earlyMobile.style.setProperty('bottom', '62px', 'important');
+      earlyMobile.style.setProperty('left', '0', 'important');
+      earlyMobile.style.setProperty('right', '0', 'important');
+      earlyMobile.style.setProperty('z-index', '9999', 'important');
+      earlyMobile.style.setProperty('transform', 'none', 'important');
+      if (earlyMobile.classList.contains('nav-hidden')) earlyMobile.classList.remove('nav-hidden');
+    }
+    // 1b. Hide the static .mobile-buybox-compact (product.js removes its inner button anyway for variant products)
+    var buybox = document.querySelector('.mobile-buybox-compact');
+    if (buybox) {
+      buybox.style.setProperty('display', 'none', 'important');
+      buybox.style.setProperty('visibility', 'hidden', 'important');
     }
 
     // 2. Strip the leading '✓ ' that product.js puts in front of the variant name
@@ -554,13 +559,13 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
   setTimeout(applyOverrides, 1500);
   setTimeout(applyOverrides, 3000);
 
-  // Observer: keep undoing any future hide on .mobile-buybox-compact + .variant-selected-name + #earlyPriceMobile
+  // Observer: keep undoing any future hide on #earlyPriceMobile (style + class) + .variant-selected-name
   var obs = new MutationObserver(applyOverrides);
   function attachObservers(){
-    var bb = document.querySelector('.mobile-buybox-compact');
-    if (bb) obs.observe(bb, { attributes: true, attributeFilter: ['style', 'class'] });
     var em = document.getElementById('earlyPriceMobile');
     if (em) obs.observe(em, { attributes: true, attributeFilter: ['style', 'class'] });
+    var bb = document.querySelector('.mobile-buybox-compact');
+    if (bb) obs.observe(bb, { attributes: true, attributeFilter: ['style', 'class'] });
     document.querySelectorAll('.variant-selected-name').forEach(function(el){
       obs.observe(el, { childList: true, characterData: true, subtree: true });
     });
@@ -568,15 +573,13 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
   document.addEventListener('DOMContentLoaded', attachObservers);
   setTimeout(attachObservers, 200);
 
-  // Scroll listener — re-enforce on every scroll tick (product.js adds .nav-hidden during scroll)
+  // Scroll listener — strip .nav-hidden from the sticky bar on every scroll tick
   var ticking = false;
   window.addEventListener('scroll', function(){
     if (!ticking) {
       requestAnimationFrame(function(){
-        applyOverrides();
-        // also strip .nav-hidden from the buybox if product.js adds it
-        var bb = document.querySelector('.mobile-buybox-compact');
-        if (bb && bb.classList.contains('nav-hidden')) bb.classList.remove('nav-hidden');
+        var em = document.getElementById('earlyPriceMobile');
+        if (em && em.classList.contains('nav-hidden')) em.classList.remove('nav-hidden');
         ticking = false;
       });
       ticking = true;
