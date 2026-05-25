@@ -847,6 +847,17 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     <style>
         .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
         .close-cart svg, .policy-close-btn svg { width: 1.2rem; height: 1.2rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
+
+        /* ═══ HERO v2 — Variant F (centered overlay, white text, Hermès editorial) ═══ */
+        .orlo-hero-v2{position:relative;width:100%;background:#1a1a1a;overflow:hidden;margin:0;padding:0}
+        .orlo-hero-v2-img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;filter:brightness(0.78)}
+        @media(max-width:520px){.orlo-hero-v2-img{aspect-ratio:4/5}}
+        .orlo-hero-v2-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 28px;background:linear-gradient(180deg,rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.30) 60%, rgba(0,0,0,0.55) 100%)}
+        .orlo-hero-v2-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(34px,7vw,52px);color:#fff;line-height:1.0;letter-spacing:-0.005em;text-shadow:0 2px 16px rgba(0,0,0,0.45);margin:0}
+        .orlo-hero-v2-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:clamp(0.95rem,2.6vw,1.1rem);color:rgba(255,255,255,0.95);margin:14px auto 0;max-width:540px;line-height:1.5;text-shadow:0 1px 12px rgba(0,0,0,0.45)}
+        .orlo-hero-v2-cta{display:inline-flex;flex-direction:column;align-items:center;gap:2px;margin-top:24px;font-family:'DM Sans',sans-serif;font-size:0.7rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#fff;text-decoration:none;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.85);transition:border-color .2s, transform .2s}
+        .orlo-hero-v2-cta:hover{border-color:#fff;transform:translateY(-1px)}
+        .orlo-hero-v2-cta .arabic-text{font-family:'Almarai',sans-serif;font-size:0.6rem;letter-spacing:0;text-transform:none;font-weight:400;opacity:0.82;margin-top:2px}
     </style>
 </head>
 <body data-cards="v2">
@@ -915,14 +926,15 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     <svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Free delivery over 75 AED | <span class="arabic-text">توصيل مجاني فوق ٧٥ درهم</span>
 </div>
 
-<!-- Compact Mobile Hero (mobile only) -->
-<section class="mobile-hero">
-    <div class="mobile-hero-inner">
-        <h2 class="mobile-hero-heading">Simplify Your Space</h2>
-        <p class="mobile-hero-ar arabic-text">بسّط مساحتك مع أساسيات تصنع الفرق</p>
-        <a href="#popular-now" class="mobile-hero-cta">
-            <span>Shop Best Sellers</span>
-            <span class="arabic-text">تسوق الأكثر مبيعاً</span>
+<!-- ═══ HERO v2 (Variant F · Hermès editorial) — centered overlay, white text, dark gradient + image-darken for contrast ═══ -->
+<section class="orlo-hero-v2">
+    <img class="orlo-hero-v2-img" src="https://images.orlostore.com/vintage-camper-van/lifestyle.webp" alt="Vintage Camper Van model on a styled travel desk" fetchpriority="high">
+    <div class="orlo-hero-v2-overlay">
+        <h2 class="orlo-hero-v2-title">Objects with character.</h2>
+        <p class="orlo-hero-v2-sub">From the dashboard to the desk — small things that say something.</p>
+        <a href="#popular-now" class="orlo-hero-v2-cta">
+            <span>Browse the collection</span>
+            <span class="arabic-text">تصفّح المجموعة</span>
         </a>
     </div>
 </section>
