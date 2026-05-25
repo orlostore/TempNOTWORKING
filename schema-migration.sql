@@ -37,3 +37,6 @@ ALTER TABLE products ADD COLUMN materialAr TEXT DEFAULT '';
 
 -- Product sort order (for manual reordering in admin)
 ALTER TABLE products ADD COLUMN sort_order INTEGER DEFAULT 0;
+
+-- Considered alongside — pipe-separated slugs of complementary products (powers the PDP pairings section)
+ALTER TABLE products ADD COLUMN pairings TEXT DEFAULT '';

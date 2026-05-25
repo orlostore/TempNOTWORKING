@@ -64,7 +64,7 @@ async function fetchFromD1(DB) {
                    image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                    specifications, specificationsAr, featured,
                    wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
-                   material, materialAr, sort_order
+                   material, materialAr, sort_order, pairings
             FROM products
             ORDER BY sort_order ASC, id DESC
         `).all().catch(() =>
@@ -74,7 +74,7 @@ async function fetchFromD1(DB) {
                        image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                        specifications, specificationsAr, featured,
                        wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
-                       material, materialAr, 0 as sort_order
+                       material, materialAr, 0 as sort_order, '' as pairings
                 FROM products
                 ORDER BY id DESC
             `).all()
@@ -156,6 +156,7 @@ async function fetchFromD1(DB) {
             packagingAr: row.packagingAr,
             specifications: row.specifications ? row.specifications.split(' | ').filter(Boolean) : [],
             specificationsAr: row.specificationsAr ? row.specificationsAr.split(' | ').filter(Boolean) : [],
+            pairings: row.pairings ? row.pairings.split(/\s*\|\s*/).filter(Boolean) : [],
             featured: row.featured === 1,
             wattage: row.wattage || '',
             voltage: row.voltage || '',

@@ -38,8 +38,8 @@ export async function onRequestPost(context) {
                     image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                     specifications, specificationsAr, featured,
                     wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
-                    material, materialAr
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    material, materialAr, pairings
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `).bind(
                 data.slug, data.name, data.nameAr || '',
                 data.category || '', data.categoryAr || '',
@@ -55,7 +55,8 @@ export async function onRequestPost(context) {
                 data.wattage || '', data.voltage || '',
                 data.plugType || '', data.plugTypeAr || '',
                 data.baseType || '', data.baseTypeAr || '',
-                data.material || '', data.materialAr || ''
+                data.material || '', data.materialAr || '',
+                data.pairings || ''
             ).run();
 
             const newProduct = await DB.prepare('SELECT id FROM products WHERE slug = ?').bind(data.slug).first();
@@ -96,7 +97,8 @@ export async function onRequestPost(context) {
                     colors = ?, colorsAr = ?, packaging = ?, packagingAr = ?,
                     specifications = ?, specificationsAr = ?, featured = ?,
                     wattage = ?, voltage = ?, plugType = ?, plugTypeAr = ?,
-                    baseType = ?, baseTypeAr = ?, material = ?, materialAr = ?
+                    baseType = ?, baseTypeAr = ?, material = ?, materialAr = ?,
+                    pairings = ?
                 WHERE id = ?
             `).bind(
                 data.slug, data.name, data.nameAr || '',
@@ -114,6 +116,7 @@ export async function onRequestPost(context) {
                 data.plugType || '', data.plugTypeAr || '',
                 data.baseType || '', data.baseTypeAr || '',
                 data.material || '', data.materialAr || '',
+                data.pairings || '',
                 id
             ).run();
 
