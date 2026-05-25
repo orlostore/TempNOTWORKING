@@ -286,8 +286,17 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   }
   /* Re-establish the white card backgrounds we want */
   .mobile-product-header,.mobile-carousel-container,.mobile-details-section,.product-details{background:#fff!important}
-  /* Dots area sits on white card */
-  .mobile-dots{background:transparent!important;padding:14px 0!important}
+  /* Dots — overlay on image at center-bottom (Hermès) */
+  .mobile-carousel-box{position:relative!important}
+  .mobile-dots{position:absolute!important;bottom:12px!important;left:50%!important;transform:translateX(-50%)!important;background:transparent!important;padding:0!important;z-index:5!important;display:flex!important;gap:6px!important;width:auto!important}
+  .mobile-dots > *{background:rgba(26,58,82,0.25)!important;width:6px!important;height:6px!important;border-radius:50%!important}
+  .mobile-dots > *.active{background:#1a3a52!important}
+
+  /* Description edge-to-edge: full-width white, internal padding only */
+  .mobile-details-section,.product-details{margin:0!important;border-radius:0!important;width:100%!important;padding:18px 22px 24px!important}
+  .mobile-product-page{padding:0!important;margin:0!important}
+  .mobile-product-header{padding:24px 22px 14px!important;margin:0!important;width:100%!important}
+  .mobile-carousel-container{margin:0!important;width:100%!important;padding:0!important}
   .variant-tile-name{font-family:'DM Sans',sans-serif!important;font-size:0.7rem!important;color:#1a3a52!important;font-weight:400!important;text-align:center!important;line-height:1.3!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;padding:0 2px!important;margin-top:4px!important}
   .variant-tile.active .variant-tile-name{color:#1a3a52!important;font-weight:500!important}
 
@@ -490,9 +499,9 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
 /* ═══ product1.html overrides — runs after product.js to force visibility + clean text ═══ */
 (function(){
   function applyOverrides(){
-    // 1. Force the ATC sticky bar visible (product.js hides .mobile-buybox-compact via style.display='none')
+    // 1. Force the ATC sticky bar visible — use !important inline so product.js's style.display='none' loses
     var buybox = document.querySelector('.mobile-buybox-compact');
-    if (buybox && buybox.style.display === 'none') buybox.style.removeProperty('display');
+    if (buybox) buybox.style.setProperty('display', 'block', 'important');
 
     // 2. Strip the leading '✓ ' that product.js puts in front of the variant name
     document.querySelectorAll('.variant-selected-name').forEach(function(el){
