@@ -227,11 +227,6 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .early-price-bottom .early-price-row{display:block!important;width:100%!important;padding:0!important;margin:0!important;background:transparent!important;border:none!important}
   .early-price-bottom .del-col,.early-price-bottom .price-col{display:none!important}
 
-  /* Bar slides off-screen when body.atc-footer-hide is on (Customer Enquiries in viewport). applyOverrides
-     releases its inline opacity/transform/pointer-events when this class is active, so these CSS rules win. */
-  .early-price-bottom{transition:transform .3s ease, opacity .3s ease!important}
-  body.atc-footer-hide .early-price-bottom,body.atc-footer-hide #earlyPriceMobile.early-price-bottom{transform:translateY(110%)!important;opacity:0!important;pointer-events:none!important}
-
   /* Pill — 56px navy white text (matches cart's .checkout-btn for consistency with Sign in / Pay by card / Continue as Guest) */
   .early-price-bottom .mobile-add-to-cart,.early-price-bottom #mobileAddToCartBtn,.early-price-bottom #earlyCartMobile{width:100%!important;height:56px!important;min-height:56px!important;max-height:56px!important;padding:16px 12px!important;background:#1a3a52!important;color:#fff!important;border:none!important;border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.78rem!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;cursor:pointer!important;line-height:1!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:10px!important;margin:0!important;box-sizing:border-box!important;visibility:visible!important;opacity:1!important;transition:filter .2s, transform .2s!important}
   .early-price-bottom .mobile-add-to-cart:hover,.early-price-bottom #mobileAddToCartBtn:hover,.early-price-bottom #earlyCartMobile:hover{filter:brightness(0.88)!important;transform:translateY(-1px)!important}
@@ -572,29 +567,17 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
     try {
     // 1. Force the dynamic #earlyPriceMobile.early-price-bottom visible (product.js wires the working button inside this).
     //    Strip .nav-hidden / display:none / transforms that product.js may apply on scroll.
-    //    EXCEPT when .atc-footer-hide is on body — the IntersectionObserver below adds that when the Customer Enquiries
-    //    section enters the viewport, so the sticky bar can slide off-screen with a transition. In that case we still
-    //    force display/position/z-index (so the element stays animatable) but let CSS drive transform + opacity.
     var earlyMobile = document.getElementById('earlyPriceMobile');
-    var hideForFooter = document.body && document.body.classList.contains('atc-footer-hide');
     if (earlyMobile) {
       earlyMobile.style.setProperty('display', 'block', 'important');
       earlyMobile.style.setProperty('visibility', 'visible', 'important');
+      earlyMobile.style.setProperty('opacity', '1', 'important');
       earlyMobile.style.setProperty('position', 'fixed', 'important');
       earlyMobile.style.setProperty('bottom', '62px', 'important');
       earlyMobile.style.setProperty('left', '0', 'important');
       earlyMobile.style.setProperty('right', '0', 'important');
       earlyMobile.style.setProperty('z-index', '9999', 'important');
-      if (hideForFooter) {
-        // Footer is in view — slide the bar down + fade. Let CSS .atc-footer-hide handle it via class selector.
-        earlyMobile.style.removeProperty('opacity');
-        earlyMobile.style.removeProperty('transform');
-        earlyMobile.style.removeProperty('pointer-events');
-      } else {
-        earlyMobile.style.setProperty('opacity', '1', 'important');
-        earlyMobile.style.setProperty('transform', 'none', 'important');
-        earlyMobile.style.setProperty('pointer-events', 'auto', 'important');
-      }
+      earlyMobile.style.setProperty('transform', 'none', 'important');
       if (earlyMobile.classList.contains('nav-hidden')) earlyMobile.classList.remove('nav-hidden');
     }
     // 1b. Hide the static .mobile-buybox-compact (product.js removes its inner button anyway for variant products)
@@ -734,30 +717,6 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
   setTimeout(function(){ syncSplit(); attachObs(); }, 200);
   setTimeout(function(){ syncSplit(); attachObs(); }, 500);
   setTimeout(function(){ syncSplit(); attachObs(); }, 1500);
-})();
-</script>
-
-<script>
-/* ═══ Hide the sticky ATC bar when the Customer Enquiries footer enters the viewport ═══
-   Uses IntersectionObserver — async, performant, doesn't observe #earlyPriceMobile so no recursion
-   risk with applyOverrides. Toggles body.atc-footer-hide which applyOverrides + CSS respect. */
-(function(){
-  function start(){
-    var footer = document.querySelector('.cs-footer-section');
-    if (!footer) { setTimeout(start, 200); return; }  // footer may not exist yet on initial load
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        document.body.classList.toggle('atc-footer-hide', entry.isIntersecting);
-      });
-    }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
-    // rootMargin -60px on bottom: don't trigger until the footer is at least 60px into view (clears the bottom-nav height)
-    io.observe(footer);
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start);
-  } else {
-    start();
-  }
 })();
 </script>
 
