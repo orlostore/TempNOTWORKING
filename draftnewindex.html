@@ -1262,8 +1262,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 <script src="products.min.js?v=11" defer></script>
 <script src="app.min.js?v=25" defer></script>
 <script>
-/* ═══ CARD v2 — Hermès card-4 override. Active only on this draft page (body[data-cards="v2"]). Live pages keep legacy cards. ═══ */
-(function(){
+/* ═══ CARD v2 — Hermès card-4 override. Active only on this draft page (body[data-cards="v2"]). Live pages keep legacy cards.
+   Wrapped in DOMContentLoaded so the override runs AFTER app.min.js's defer execution
+   (otherwise app.min.js's `function renderProducts(){}` declaration hoists and clobbers our override). */
+document.addEventListener('DOMContentLoaded', function(){
   if (document.body.dataset.cards !== 'v2') return;
   function esc(s){return typeof s!=='string'?s:s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
   function qid(v){return typeof v==='string'?"'"+v.replace(/'/g,"\\'")+"'":v}
@@ -1311,11 +1313,18 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       '</div>';
     }).join('');
   };
-  // If the original renderProducts already fired before our override registered, force a re-render
-  if (typeof products !== 'undefined' && Array.isArray(products) && products.length){
-    window.renderProducts(products, false);
+  // Force a re-render now and at intervals — covers the case where legacy renderProducts fired before our override + the async fetch that may complete after DOMContentLoaded
+  function rerender(){
+    if (typeof products !== 'undefined' && Array.isArray(products) && products.length){
+      window.renderProducts(products, document.documentElement.lang === 'ar');
+    }
   }
-})();
+  rerender();
+  setTimeout(rerender, 200);
+  setTimeout(rerender, 500);
+  setTimeout(rerender, 1200);
+  setTimeout(rerender, 2500);
+});
 </script>
 <script>
 // Logic for Account Link and Indicator positioning (same as your original)
