@@ -1253,26 +1253,11 @@ function removeFromCart(id, variantId) {
     if (typeof updateTierHighlight === 'function') updateTierHighlight(id);
 }
 
-function toggleCart() { 
-    const cartSidebar = document.getElementById("cartSidebar");
-    const bottomCartBtn = document.getElementById("bottomCartBtn");
-    const bottomHomeBtn = document.getElementById("bottomHomeBtn");
-    
-    cartSidebar.classList.toggle("active");
-    
-    if (cartSidebar.classList.contains("active")) {
-        if (bottomCartBtn) bottomCartBtn.classList.add("cart-active");
-        if (bottomHomeBtn) bottomHomeBtn.classList.remove("home-active");
-        lockScroll();
-    } else {
-        if (bottomCartBtn) bottomCartBtn.classList.remove("cart-active");
-        if (bottomHomeBtn) bottomHomeBtn.classList.add("home-active");
-        unlockScroll();
-        upsellUsed = false;
-        savedUpsellProducts = null;
-    }
-    
-    updateCart();
+function toggleCart() {
+    // Redirects to the full-page cart instead of opening the drawer sidebar.
+    // (Sidebar HTML still exists on pages for backward compat but is never activated.)
+    if (window.location.pathname.endsWith("cart.html")) return;
+    window.location.href = "cart.html";
 }
 
 function addUpsellItem(id, event) {
