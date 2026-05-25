@@ -266,6 +266,28 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   }
   /* Hide scroll arrows — no longer needed with wrap */
   .scroll-arrow,.scroll-arrow-left,.scroll-arrow-right{display:none!important}
+
+  /* Variant image popup (lightbox) — kill ALL grey backgrounds */
+  .variant-img-popup,.variant-img-popup *,.variant-img-popup-container,.variant-img-popup-container *{background:transparent!important;background-color:transparent!important;background-image:none!important;box-shadow:none!important}
+  .variant-img-popup{background:rgba(248,246,242,0.98)!important}
+  .variant-img-popup-close{background:#1a3a52!important;color:#fff!important;width:36px!important;height:36px!important;border-radius:50%!important;border:none!important}
+
+  /* ═══ KILL EVERY GREY / OFF-WHITE on the product page ═══ */
+  .mobile-carousel-container,.mobile-carousel-container *,
+  .mobile-carousel-box,.mobile-carousel-box *,
+  .mobile-carousel,.mobile-carousel *,
+  .mobile-dots,.mobile-dots *,
+  .product-gallery,.product-gallery *,
+  .mobile-product-header,.mobile-product-header *,
+  .mobile-details-section,.mobile-details-section *,
+  .product-details,.product-details *,
+  [style*="background:#f8f8f8"],[style*="background:#f8f9fa"],[style*="background:#f5f5f5"],[style*="background:#eee"],[style*="background:#fafafa"]{
+    background:transparent!important;background-color:transparent!important;background-image:none!important;box-shadow:none!important
+  }
+  /* Re-establish the white card backgrounds we want */
+  .mobile-product-header,.mobile-carousel-container,.mobile-details-section,.product-details{background:#fff!important}
+  /* Dots area sits on white card */
+  .mobile-dots{background:transparent!important;padding:14px 0!important}
   .variant-tile-name{font-family:'DM Sans',sans-serif!important;font-size:0.7rem!important;color:#1a3a52!important;font-weight:400!important;text-align:center!important;line-height:1.3!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;padding:0 2px!important;margin-top:4px!important}
   .variant-tile.active .variant-tile-name{color:#1a3a52!important;font-weight:500!important}
 
@@ -463,6 +485,40 @@ function updateAccountLink() {
     }
 }
 document.addEventListener('DOMContentLoaded', updateAccountLink);
+</script>
+<script>
+/* ═══ product1.html overrides — runs after product.js to force visibility + clean text ═══ */
+(function(){
+  function applyOverrides(){
+    // 1. Force the ATC sticky bar visible (product.js hides .mobile-buybox-compact via style.display='none')
+    var buybox = document.querySelector('.mobile-buybox-compact');
+    if (buybox && buybox.style.display === 'none') buybox.style.removeProperty('display');
+
+    // 2. Strip the leading '✓ ' that product.js puts in front of the variant name
+    document.querySelectorAll('.variant-selected-name').forEach(function(el){
+      if (el.textContent && el.textContent.indexOf('✓') === 0) {
+        el.textContent = el.textContent.replace(/^✓\s*/, '');
+      }
+    });
+  }
+
+  // Run repeatedly to catch product.js's late writes
+  document.addEventListener('DOMContentLoaded', applyOverrides);
+  setTimeout(applyOverrides, 50);
+  setTimeout(applyOverrides, 200);
+  setTimeout(applyOverrides, 500);
+  setTimeout(applyOverrides, 1500);
+
+  // Observer: keep undoing any future hide / re-checkmark
+  var obs = new MutationObserver(applyOverrides);
+  document.addEventListener('DOMContentLoaded', function(){
+    var bb = document.querySelector('.mobile-buybox-compact');
+    if (bb) obs.observe(bb, { attributes: true, attributeFilter: ['style'] });
+    document.querySelectorAll('.variant-selected-name').forEach(function(el){
+      obs.observe(el, { childList: true, characterData: true, subtree: true });
+    });
+  });
+})();
 </script>
 </body>
 </html>
