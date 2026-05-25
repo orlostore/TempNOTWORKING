@@ -315,7 +315,17 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
     return fname === 'clean.webp';
   }
   function pickCleanImage(p, item) {
+    // Search order for clean.webp:
+    //   1) chosen variant's image (item.variantImage) — variant-specific
+    //   2) product main image (item.image or p.image)
+    //   3) product additional images (p.images[1..7])
+    // For variant items: also search the variant's image inside the product's variants array
     var imgs = [];
+    if (item && item.variantImage) imgs.push(item.variantImage);
+    if (item && item.variantId && p && Array.isArray(p.variants)) {
+      var sv = p.variants.find(function(v){ return v.id === item.variantId; });
+      if (sv && sv.image && imgs.indexOf(sv.image) < 0) imgs.push(sv.image);
+    }
     if (item && item.image) imgs.push(item.image);
     if (p) {
       if (p.image) imgs.push(p.image);
