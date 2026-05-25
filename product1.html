@@ -550,7 +550,15 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
 <script>
 /* ═══ product1.html overrides — runs after product.js to force visibility + clean text ═══ */
 (function(){
+  // Re-entry guard — applyOverrides writes inline styles on #earlyPriceMobile and the MutationObserver
+  // below watches that same attribute. Browsers usually dedupe identical setProperty writes, but if
+  // anything ever writes a *different* value the MO would fire and re-invoke applyOverrides recursively,
+  // chaining microtasks until the main thread locks. The guard makes that impossible.
+  var _inOverrides = false;
   function applyOverrides(){
+    if (_inOverrides) return;
+    _inOverrides = true;
+    try {
     // 1. Force the dynamic #earlyPriceMobile.early-price-bottom visible (product.js wires the working button inside this).
     //    Strip .nav-hidden / display:none / transforms that product.js may apply on scroll.
     var earlyMobile = document.getElementById('earlyPriceMobile');
@@ -579,6 +587,9 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
         el.textContent = el.textContent.replace(/^\s*[✓✔]\s*/, '').replace(/[✓✔]/g, '');
       }
     });
+    } finally {
+      _inOverrides = false;
+    }
   }
 
   // Run early + repeatedly to catch product.js's late writes
