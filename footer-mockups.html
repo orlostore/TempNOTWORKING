@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Footer / Bottom-Nav — Proposal</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#f8f6f2;color:#1a3a52;padding:40px 20px 80px;line-height:1.5}
+.page-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.8rem;text-align:center;color:#1a3a52;margin-bottom:8px;font-weight:300}
+.page-sub{text-align:center;font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:#6b6b6b;margin-bottom:50px}
+
+.option-block{max-width:440px;margin:0 auto 60px}
+.option-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;padding:0 2px}
+.option-label{font-size:0.66rem;letter-spacing:0.18em;text-transform:uppercase;color:#e76f51;font-weight:500}
+.option-inspo{font-style:italic;font-size:0.72rem;color:#9aa5ad}
+.option-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#1a3a52;margin-bottom:6px;font-weight:400}
+.option-desc{font-size:0.78rem;color:#6b6b6b;margin-bottom:18px;line-height:1.65}
+.changes{font-size:0.72rem;color:#1a3a52;margin-bottom:14px;line-height:1.7;padding:10px 14px;background:rgba(231,111,81,0.06);border-left:2px solid #e76f51;border-radius:0 4px 4px 0}
+.changes b{color:#e76f51;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;font-size:0.62rem;display:block;margin-bottom:4px}
+
+/* Common bottom-nav scaffolding */
+.bn{display:flex;justify-content:space-around;align-items:center;background:#f8f6f2;border-top:1px solid rgba(26,58,82,0.10);padding:10px 10px 12px;max-width:440px;position:relative}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;flex:1;position:relative;padding:4px 0}
+.bn-item svg{stroke:#c0c8ce;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.bn-item.active svg{stroke:#1a3a52}
+.bn-item .nav-label{color:#c0c8ce;font-family:'DM Sans',sans-serif}
+.bn-item.active .nav-label{color:#1a3a52}
+.bn-item.active .nav-label::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1.5px;background:#e76f51;border-radius:1px}
+.bag-badge{position:absolute;top:-2px;right:30%;background:#e76f51;color:#fff;font-size:0.55rem;font-weight:500;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;line-height:1}
+
+/* ─────── VARIANT A: current spec, only cart→bag ─────── */
+.bn-a .bn-item svg{width:24px;height:24px;stroke-width:1.5}
+.bn-a .bn-item.active svg{stroke-width:2}
+.bn-a .bn-item .nav-label{font-size:0.62rem;font-weight:600}
+
+/* ─────── VARIANT B: refined editorial sweep ─────── */
+.bn-b .bn-item svg{width:22px;height:22px;stroke-width:1.4}
+.bn-b .bn-item.active svg{stroke-width:1.7}
+.bn-b .bn-item .nav-label{font-size:0.6rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase}
+.bn-b{padding:12px 10px 14px}
+
+/* ─────── VARIANT C: full Hermès — minimal icons + serif label accent ─────── */
+.bn-c{padding:14px 10px 16px;background:#fff}
+.bn-c .bn-item svg{width:20px;height:20px;stroke-width:1.2}
+.bn-c .bn-item.active svg{stroke-width:1.4}
+.bn-c .bn-item .nav-label{font-size:0.58rem;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad}
+.bn-c .bn-item.active .nav-label{color:#1a3a52;font-weight:500}
+.bn-c .bn-item.active .nav-label::after{height:1px;background:#1a3a52}
+.bn-c .bag-badge{background:#1a3a52;border:1px solid #fff}
+</style>
+</head>
+<body>
+
+<div class="page-title">Footer / Bottom-Nav — Proposal</div>
+<div class="page-sub">cart → bag · 3 directions</div>
+
+<!-- ─────────────────────────────────────────────────────────────────
+     CURRENT (reference)
+     ───────────────────────────────────────────────────────────────── -->
+<div class="option-block">
+  <div class="option-meta">
+    <span class="option-label">CURRENT</span>
+    <span class="option-inspo">live on all 12 pages</span>
+  </div>
+  <div class="option-title">Today's footer</div>
+  <div class="option-desc">Supermarket trolley + circle-person login + house + hamburger. Labels 0.62rem bold sentence-case. Active state: navy stroke 2 + coral underline.</div>
+  <nav class="bn bn-a">
+    <a class="bn-item active">
+      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
+      <span class="nav-label">Home</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
+      <span class="nav-label">Login</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg>
+      <span class="bag-badge">4</span>
+      <span class="nav-label">Cart</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span class="nav-label">Menu</span>
+    </a>
+  </nav>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────
+     VARIANT A: minimal swap
+     ───────────────────────────────────────────────────────────────── -->
+<div class="option-block">
+  <div class="option-meta">
+    <span class="option-label">VARIANT A</span>
+    <span class="option-inspo">lowest-effort swap</span>
+  </div>
+  <div class="option-title">Minimal — cart → bag only</div>
+  <div class="option-desc">Everything else stays. Replaces the supermarket trolley with a structured shopping bag (same silhouette as the ATC pill icon, so the bag visual is consistent across PDP + bottom-nav). Label changes Cart → Bag.</div>
+  <div class="changes"><b>changed</b>Cart trolley → structured bag SVG · "Cart" label → "Bag"</div>
+  <nav class="bn bn-a">
+    <a class="bn-item active">
+      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V14h6v7"/></svg>
+      <span class="nav-label">Home</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg>
+      <span class="nav-label">Login</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span class="bag-badge">4</span>
+      <span class="nav-label">Bag</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span class="nav-label">Menu</span>
+    </a>
+  </nav>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────
+     VARIANT B: refined editorial sweep
+     ───────────────────────────────────────────────────────────────── -->
+<div class="option-block">
+  <div class="option-meta">
+    <span class="option-label">VARIANT B</span>
+    <span class="option-inspo">Aritzia · Sezane · Aesop</span>
+  </div>
+  <div class="option-title">Refined sweep — thinner strokes, uppercase tracked labels</div>
+  <div class="option-desc">All four icons get redrawn at 22px (was 24px) with stroke-width 1.4 (was 1.5) for an editorial whisper. Home loses the inner door, person becomes a simple bust silhouette, bag is a structured tote with handles, menu drops to two lines (less hamburger-like). Labels become uppercase 0.6rem with 0.14em tracking — more like cs-footer-section's "CUSTOMER ENQUIRIES" heading style.</div>
+  <div class="changes"><b>changed</b>All 4 icons restroked at 1.4 + slimmed · trolley → bag · 3-line hamburger → 2-line · labels uppercase tracked (matches the editorial typography elsewhere)</div>
+  <nav class="bn bn-b">
+    <a class="bn-item active">
+      <svg viewBox="0 0 24 24"><path d="M3 10L12 3l9 7v11H3V10z"/></svg>
+      <span class="nav-label">Home</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.5"/><path d="M5 21c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>
+      <span class="nav-label">Login</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 13.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span class="bag-badge">4</span>
+      <span class="nav-label">Bag</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/></svg>
+      <span class="nav-label">Menu</span>
+    </a>
+  </nav>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────
+     VARIANT C: full Hermès
+     ───────────────────────────────────────────────────────────────── -->
+<div class="option-block">
+  <div class="option-meta">
+    <span class="option-label">VARIANT C</span>
+    <span class="option-inspo">Hermès · Bottega · Loewe</span>
+  </div>
+  <div class="option-title">Full Hermès — quietest, white bg, hairline icons</div>
+  <div class="option-desc">Background flips to pure white (was cream). Icons drop to 20px with hairline stroke 1.2. Active state uses a navy 1px underline (no coral). Labels 0.58rem light, 0.18em tracked, muted grey when inactive. The bag uses a soft tote silhouette (rounded body + arc handles) — the Hermès Picotin/Aesop reference. Badge becomes navy with a white ring to feel like a Hermès stamp instead of a notification dot.</div>
+  <div class="changes"><b>changed</b>Bg cream → white · icons 24 → 20px, stroke 1.5 → 1.2 (whisper) · bag becomes soft-tote silhouette · active underline coral → navy · badge bg coral → navy w/ white ring · labels lighter, more tracked</div>
+  <nav class="bn bn-c">
+    <a class="bn-item active">
+      <svg viewBox="0 0 24 24"><path d="M4 11L12 4l8 7v9H4v-9z"/></svg>
+      <span class="nav-label">Home</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3"/><path d="M6 21c0-3 2.5-5.5 6-5.5s6 2.5 6 5.5"/></svg>
+      <span class="nav-label">Login</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><path d="M5.5 9h13l-1 12.2a.8.8 0 0 1-.8.8H7.3a.8.8 0 0 1-.8-.8L5.5 9z"/><path d="M9 9c0-1.5 0-3 3-3s3 1.5 3 3"/></svg>
+      <span class="bag-badge">4</span>
+      <span class="nav-label">Bag</span>
+    </a>
+    <a class="bn-item">
+      <svg viewBox="0 0 24 24"><line x1="5" y1="10" x2="19" y2="10"/><line x1="5" y1="14" x2="19" y2="14"/></svg>
+      <span class="nav-label">Menu</span>
+    </a>
+  </nav>
+</div>
+
+</body>
+</html>
