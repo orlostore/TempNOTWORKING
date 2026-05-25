@@ -709,11 +709,22 @@
     if (badge.textContent === '0') badge.textContent = '';
   }).observe(badge, { childList: true, characterData: true, subtree: true });
   window.addEventListener('storage', function(e){ if (e.key === 'cart') sync(); });
-  // Logged-in label swap (account.html sets a flag in localStorage on sign in)
+  // Account/Login tab — points to login.html when logged out so we skip the account.html -> login.html redirect (faster perceived load).
+  // Uses same auth check as cart.html / app.js (orlo_token in local- or sessionStorage).
   try {
-    if (localStorage.getItem('orloAuth') === '1') {
-      var l = document.getElementById('orloNavAccountLabel');
-      if (l) l.textContent = 'Account';
+    var loggedIn = !!(localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token'));
+    var btn = document.getElementById('orloNavAccountBtn');
+    var lbl = document.getElementById('orloNavAccountLabel');
+    if (loggedIn) {
+      if (btn) btn.href = 'account.html';
+      if (lbl) {
+        var nm = '';
+        try { var cd = JSON.parse(localStorage.getItem('orlo_customer') || sessionStorage.getItem('orlo_customer') || '{}'); nm = (cd.firstName || cd.name || '').split(' ')[0] || ''; } catch(e){}
+        lbl.textContent = nm || 'Account';
+      }
+    } else {
+      if (btn) btn.href = 'login.html';
+      // label stays "Login" by default
     }
   } catch(e){}
 })();
