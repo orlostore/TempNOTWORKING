@@ -572,10 +572,10 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
       buybox.style.setProperty('visibility', 'hidden', 'important');
     }
 
-    // 2. Strip the leading '✓ ' that product.js puts in front of the variant name
+    // 2. Strip the leading '✓ ' that product.js puts in front of the variant name (anywhere in text, not just index 0)
     document.querySelectorAll('.variant-selected-name').forEach(function(el){
-      if (el.textContent && el.textContent.indexOf('✓') === 0) {
-        el.textContent = el.textContent.replace(/^✓\s*/, '');
+      if (el.textContent && /[✓✔]/.test(el.textContent)) {
+        el.textContent = el.textContent.replace(/^\s*[✓✔]\s*/, '').replace(/[✓✔]/g, '');
       }
     });
   }
@@ -602,6 +602,12 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
   }
   document.addEventListener('DOMContentLoaded', attachObservers);
   setTimeout(attachObservers, 200);
+  setTimeout(attachObservers, 600);
+  setTimeout(attachObservers, 1500);
+
+  // Polling fallback — product.js may create/replace .variant-selected-name AFTER my observers attach,
+  // making the observer reference stale. Re-run applyOverrides every 300ms forever (cheap, idempotent).
+  setInterval(applyOverrides, 300);
 
   // Scroll listener — strip .nav-hidden from the sticky bar on every scroll tick
   var ticking = false;
