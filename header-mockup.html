@@ -203,5 +203,44 @@ body{font-family:'DM Sans',sans-serif;background:#f8f6f2;color:#1a3a52;padding:3
   </div>
 </div>
 
+<!-- ─────────────────────────── VARIANT E (RECOMMENDED) ─────────────────────────── -->
+<div class="variant-block" style="border:2px solid #e76f51;border-radius:10px;padding:16px;background:#fff">
+  <div class="variant-meta">
+    <div class="variant-label" style="color:#1a3a52">★ VARIANT E · matches your site pattern</div>
+    <div class="variant-title">Centered lockup · search only · no duplicate icons</div>
+    <div class="variant-desc">User's logic: bag + account already live in the bottom-nav, so why repeat them up top? This variant uses the <b>exact lockup from cart.html / login.html / signup.html</b> (logo + thin separator + Cormorant 600 wordmark) but centers it. A single search icon sits top-left as the only utility — no hamburger (menu is in bottom-nav), no account icon (in bottom-nav), no bag icon (in bottom-nav). Most consistent with your site pattern, least visual noise.</div>
+  </div>
+  <div class="preview-frame">
+    <header class="hdr hdr-e">
+      <div class="left">
+        <button class="hdr-icon" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+      </div>
+      <a href="/" class="center lockup-pattern">
+        <span class="logo-img">ORLO</span>
+        <span class="sep"></span>
+        <span class="hdr-wordmark">ORL<span class="orange-o">O</span></span>
+      </a>
+      <div class="right"></div>
+    </header>
+    <div class="thin-banner">Free Delivery over AED 75 · Same-Day in Dubai</div>
+  </div>
+  <div style="margin-top:14px;padding:10px 14px;background:rgba(231,111,81,0.06);border-left:2px solid #e76f51;border-radius:0 4px 4px 0;font-size:0.7rem;line-height:1.65;color:#1a3a52">
+    <b style="color:#e76f51;font-size:0.6rem;letter-spacing:0.06em;text-transform:uppercase;display:block;margin-bottom:4px">Note for desktop</b>
+    Desktop screens don't show the bottom-nav (mobile-only). On desktop we'd need to add the bag + account icons back into this header — easy via a @media(min-width:769px) rule that shows them only on wider viewports. Mobile stays clean.
+  </div>
+</div>
+
+<style>
+/* Variant E — centered lockup matching the site pattern */
+.hdr-e{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+.hdr-e .left,.hdr-e .right{display:flex;gap:4px}
+.hdr-e .left{justify-self:start}
+.hdr-e .right{justify-self:end;min-width:36px}
+.hdr-e .center{justify-self:center}
+.hdr-e .lockup-pattern{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.hdr-e .lockup-pattern .logo-img{width:32px;height:32px;border-radius:50%;background:#1a3a52;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:0.65rem;line-height:1;flex-shrink:0}
+.hdr-e .lockup-pattern .sep{width:1px;height:24px;background:rgba(26,58,82,0.20)}
+</style>
+
 </body>
 </html>
