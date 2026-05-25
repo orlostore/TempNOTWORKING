@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PDP Mockup — Hermès-aligned</title>
+<style>
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1a3a52;min-height:100vh;font-variant-numeric:lining-nums}
+
+.label{padding:0.6rem 1.4rem;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#1a3a52;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10)}
+.label .sub{font-family:'DM Sans',sans-serif;font-style:normal;font-size:0.62rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px}
+
+/* Lockup header */
+.tc-nav{padding:14px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(26,58,82,0.10);background:#fff}
+.tc-lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.tc-lockup .logo-img{height:40px;width:auto;display:block;flex-shrink:0}
+.tc-lockup .sep{display:inline-block;width:1px;height:28px;background:rgba(26,58,82,0.25)}
+.tc-lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.tc-lockup .wordmark span{color:#e76f51}
+.tc-nav .back{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b;text-decoration:none}
+
+/* Variant label */
+.variant-label{background:#1a3a52;color:#fff;padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;text-align:center}
+
+/* PDP wrapper */
+.pdp{max-width:780px;margin:0 auto;padding:0 0 80px}
+
+/* IMAGE AREA — A (single hero + dots, Hermès) */
+.pdp-image-a{background:#fff;margin-bottom:14px}
+.pdp-image-a .hero{aspect-ratio:1/1;background:#efeae0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pdp-image-a .hero > div{width:80%;height:80%;background:linear-gradient(135deg,#d4a373,#b87f48);border-radius:8px}
+.pdp-image-a .dots{display:flex;justify-content:center;gap:6px;padding:14px 0}
+.pdp-image-a .dot{width:6px;height:6px;border-radius:50%;background:rgba(26,58,82,0.20)}
+.pdp-image-a .dot.active{background:#1a3a52}
+
+/* IMAGE AREA — B (hero + 4 thumbs, hybrid) */
+.pdp-image-b{background:#fff;margin-bottom:14px}
+.pdp-image-b .hero{aspect-ratio:1/1;background:#efeae0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pdp-image-b .hero > div{width:80%;height:80%;background:linear-gradient(135deg,#d4a373,#b87f48);border-radius:8px}
+.pdp-image-b .thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px}
+.pdp-image-b .thumb{aspect-ratio:1/1;background:#efeae0;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center}
+.pdp-image-b .thumb > div{width:75%;height:75%;background:linear-gradient(135deg,#d4a373,#b87f48);border-radius:4px;opacity:0.85}
+.pdp-image-b .thumb.active{outline:1px solid #1a3a52;outline-offset:-1px}
+
+/* Product info */
+.pdp-info{background:#fff;padding:24px 32px;margin-bottom:14px}
+.pdp-info h1{font-family:'DM Sans',sans-serif;font-weight:500;font-size:1.2rem;color:#1a3a52;line-height:1.3;margin-bottom:6px}
+.pdp-info .name-ar{font-family:'Almarai',sans-serif;font-size:0.85rem;color:#6b6b6b;direction:rtl;text-align:left;margin-bottom:18px}
+.pdp-info .price{font-family:'DM Sans',sans-serif;font-size:1.05rem;color:#1a3a52;font-weight:500;letter-spacing:0.02em}
+
+/* Variant section */
+.variant-section{background:#fff;padding:18px 32px 22px;margin-bottom:14px}
+.variant-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.variant-header .label-en{font-family:'DM Sans',sans-serif;font-size:0.78rem;color:#6b6b6b;font-weight:500;letter-spacing:0.02em}
+.variant-header .current{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#1a3a52;font-weight:400}
+.variant-swatches{display:flex;flex-wrap:wrap;gap:8px}
+.swatch{flex:0 0 calc(20% - 7px);max-width:88px;aspect-ratio:1/1;background:#efeae0;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;border-bottom:2px solid transparent;transition:border-color .2s}
+.swatch.active{border-bottom-color:#1a3a52}
+.swatch:hover{border-bottom-color:rgba(26,58,82,0.40)}
+.swatch > div{width:80%;height:80%;border-radius:4px}
+.swatch .name{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:0.62rem;color:#6b6b6b;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.variant-note{font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#6b6b6b;margin-top:12px;letter-spacing:0.02em}
+@media(max-width:576px){.swatch{flex:0 0 calc(25% - 6px)}}
+
+/* Description sections */
+.pdp-desc{background:#fff;padding:24px 32px;margin-bottom:14px}
+.pdp-desc-section{padding:18px 0;border-bottom:1px solid rgba(26,58,82,0.10)}
+.pdp-desc-section:first-child{padding-top:0}
+.pdp-desc-section:last-child{border-bottom:none;padding-bottom:0}
+.pdp-desc-section h3{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.18em;color:#1a3a52;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}
+.pdp-desc-section h3 .ar{font-family:'Almarai',sans-serif;font-weight:400;letter-spacing:0;text-transform:none;color:#6b6b6b;font-size:0.78rem;direction:rtl}
+.pdp-desc-section p{font-family:'DM Sans',sans-serif;font-size:0.9rem;color:#1a3a52;line-height:1.7;margin-bottom:8px}
+.pdp-desc-section p.ar{font-family:'Almarai',sans-serif;font-size:0.82rem;color:#6b6b6b;direction:rtl;text-align:right;line-height:1.85;margin-top:6px}
+
+/* Sticky Add to Cart */
+.atc-sticky{position:sticky;bottom:0;background:#f8f6f2;padding:18px 32px 78px;z-index:50;border-top:1px solid rgba(26,58,82,0.10)}
+@media(min-width:769px){.atc-sticky{padding-bottom:18px}}
+.atc-btn{width:100%;padding:18px 16px;background:#1a3a52;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:filter .2s}
+.atc-btn:hover{filter:brightness(0.88)}
+.atc-btn .ico{width:16px;height:16px}
+
+/* Added-to-cart bottom sheet (Hermes-style popup) */
+.added-overlay{position:fixed;inset:0;background:rgba(26,58,82,0.45);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.added-sheet{background:#f8f6f2;width:100%;max-width:560px;padding:36px 28px 28px;text-align:center;border-radius:14px 14px 0 0}
+.added-sheet .ico{width:48px;height:48px;margin:0 auto 16px;color:#1a3a52}
+.added-sheet h3{font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.18em;color:#1a3a52;margin-bottom:6px}
+.added-sheet .msg{font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#6b6b6b;margin-bottom:22px}
+.added-sheet .msg .ar{display:block;font-family:'Almarai',sans-serif;margin-top:4px;direction:rtl}
+.added-sheet .actions{display:flex;flex-direction:column;gap:10px}
+.added-sheet .btn-primary{padding:16px;background:#1a3a52;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block}
+.added-sheet .btn-link{padding:8px;background:transparent;color:#6b6b6b;border:none;font-family:'DM Sans',sans-serif;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;text-decoration:underline}
+
+/* Section separator */
+.divider-band{height:80px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.4rem;color:#1a3a52;border-top:1px solid rgba(26,58,82,0.10);border-bottom:1px solid rgba(26,58,82,0.10);background:#fff;margin:30px 0}
+.divider-band .sub{font-family:'DM Sans',sans-serif;font-style:normal;font-size:0.65rem;color:#6b6b6b;letter-spacing:0.1em;text-transform:uppercase;margin-left:12px}
+</style></head>
+<body>
+
+<div class="label">PDP Mockup<span class="sub">Hermès-aligned · two image options · variant · description · sticky add to cart · bottom-sheet popup</span></div>
+
+<nav class="tc-nav">
+  <a href="/" class="tc-lockup">
+    <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO" onerror="this.src='logo.png'">
+    <span class="sep"></span>
+    <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+  </a>
+  <a href="/" class="back">← Back to Shop</a>
+</nav>
+
+<!-- ════════════════════ VARIANT A — Hermès single hero + dots ════════════════════ -->
+<div class="variant-label">A · Single hero + dots (Hermès style)</div>
+
+<div class="pdp">
+  <section class="pdp-image-a">
+    <div class="hero"><div></div></div>
+    <div class="dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </section>
+
+  <section class="pdp-info">
+    <h1>Vintage Italian Vespa Scooter Metal Model Figurine</h1>
+    <div class="name-ar">مجسم سكوتر فيسبا إيطالي عتيق</div>
+    <div class="price">AED 50.00</div>
+  </section>
+
+  <section class="variant-section">
+    <div class="variant-header">
+      <span class="label-en">Color</span>
+      <span class="current">Cream · Red · Green</span>
+    </div>
+    <div class="variant-swatches">
+      <div class="swatch active"><div style="background:linear-gradient(135deg,#fdf6e3,#f3e1a8)"></div></div>
+      <div class="swatch"><div style="background:linear-gradient(135deg,#c0392b,#922b21)"></div></div>
+      <div class="swatch"><div style="background:linear-gradient(135deg,#27ae60,#1e8449)"></div></div>
+      <div class="swatch"><div style="background:linear-gradient(135deg,#2980b9,#1a5276)"></div></div>
+      <div class="swatch"><div style="background:linear-gradient(135deg,#34495e,#1c2833)"></div></div>
+    </div>
+    <div class="variant-note">5 colours available · ٥ ألوان متوفرة</div>
+  </section>
+
+  <section class="pdp-desc">
+    <div class="pdp-desc-section">
+      <h3>Description<span class="ar">الوصف</span></h3>
+      <p>A miniature scale model of the iconic 1960s Italian scooter — hand-painted metal, weighted base, made for desk and shelf display.</p>
+      <p class="ar">مجسم مصغّر للسكوتر الإيطالي الأيقوني من الستينيات — معدن مطلي يدوياً، قاعدة مرجّحة، صُمّم للعرض على المكتب والرف.</p>
+    </div>
+    <div class="pdp-desc-section">
+      <h3>Materials<span class="ar">المواد</span></h3>
+      <p>Painted die-cast metal · plastic windscreen · rubber tyres</p>
+      <p class="ar">معدن مصبوب مطلي · زجاج أمامي بلاستيكي · إطارات مطاطية</p>
+    </div>
+    <div class="pdp-desc-section">
+      <h3>Dimensions<span class="ar">الأبعاد</span></h3>
+      <p>L 18cm × W 7cm × H 11cm · 280g</p>
+    </div>
+    <div class="pdp-desc-section">
+      <h3>Care<span class="ar">العناية</span></h3>
+      <p>Wipe with a dry soft cloth. Avoid moisture.</p>
+      <p class="ar">امسحه بقطعة قماش ناعمة وجافة. تجنّب الرطوبة.</p>
+    </div>
+    <div class="pdp-desc-section">
+      <h3>Shipping<span class="ar">الشحن</span></h3>
+      <p>Complimentary UAE delivery on orders over AED 75. Estimated 1–3 business days.</p>
+      <p class="ar">توصيل مجاني داخل الإمارات للطلبات فوق ٧٥ درهم. مدة التوصيل ١-٣ أيام عمل.</p>
+    </div>
+  </section>
+
+  <div class="atc-sticky">
+    <button class="atc-btn">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+      Add to cart
+    </button>
+  </div>
+</div>
+
+<div class="divider-band">Variant B<span class="sub">below ↓</span></div>
+
+<!-- ════════════════════ VARIANT B — Hero + 4 thumbs (hybrid) ════════════════════ -->
+<div class="variant-label">B · Hero + 4 thumbnails (our hybrid)</div>
+
+<div class="pdp">
+  <section class="pdp-image-b">
+    <div class="hero"><div></div></div>
+    <div class="thumbs">
+      <div class="thumb active"><div></div></div>
+      <div class="thumb"><div style="background:linear-gradient(135deg,#b87f48,#8b5a2b)"></div></div>
+      <div class="thumb"><div style="background:linear-gradient(135deg,#d4a373,#a87f4c)"></div></div>
+      <div class="thumb"><div style="background:linear-gradient(135deg,#c4a484,#8b6f47)"></div></div>
+    </div>
+  </section>
+
+  <section class="pdp-info">
+    <h1>Vintage Italian Vespa Scooter Metal Model Figurine</h1>
+    <div class="name-ar">مجسم سكوتر فيسبا إيطالي عتيق</div>
+    <div class="price">AED 50.00</div>
+  </section>
+
+  <section class="variant-section">
+    <div class="variant-header">
+      <span class="label-en">Color</span>
+      <span class="current">Cream · 5 options</span>
+    </div>
+    <div class="variant-swatches">
+      <div class="swatch active"><div style="background:linear-gradient(135deg,#fdf6e3,#f3e1a8)"></div></div>
+      <div class="swatch"><div style="background:linear-gradient(135deg,#c0392b,#922b21)"></div></div>
+      <div class="swatch"><div style="background:linear-gradient(135deg,#27ae60,#1e8449)"></div></div>
+      <div class="swatch"><div style="background:linear-gradient(135deg,#2980b9,#1a5276)"></div></div>
+      <div class="swatch"><div style="background:linear-gradient(135deg,#34495e,#1c2833)"></div></div>
+    </div>
+  </section>
+
+  <section class="pdp-desc">
+    <div class="pdp-desc-section">
+      <h3>Description<span class="ar">الوصف</span></h3>
+      <p>A miniature scale model of the iconic 1960s Italian scooter — hand-painted metal, weighted base, made for desk and shelf display.</p>
+    </div>
+    <div class="pdp-desc-section">
+      <h3>Materials<span class="ar">المواد</span></h3>
+      <p>Painted die-cast metal · plastic windscreen · rubber tyres</p>
+    </div>
+    <div class="pdp-desc-section">
+      <h3>Care<span class="ar">العناية</span></h3>
+      <p>Wipe with a dry soft cloth. Avoid moisture.</p>
+    </div>
+  </section>
+
+  <div class="atc-sticky">
+    <button class="atc-btn">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+      Add to cart
+    </button>
+  </div>
+</div>
+
+<div class="divider-band">Many variants?<span class="sub">auto-wrap to multiple rows</span></div>
+
+<!-- Many variants demo: 12 swatches → wraps to 3 rows of ~5 -->
+<section class="variant-section" style="margin:14px auto;max-width:780px;background:#fff;border-top:1px solid rgba(26,58,82,0.10);border-bottom:1px solid rgba(26,58,82,0.10)">
+  <div class="variant-header">
+    <span class="label-en">Color</span>
+    <span class="current">12 options</span>
+  </div>
+  <div class="variant-swatches">
+    <div class="swatch active"><div style="background:linear-gradient(135deg,#fdf6e3,#f3e1a8)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#c0392b,#922b21)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#27ae60,#1e8449)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#2980b9,#1a5276)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#34495e,#1c2833)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#8e44ad,#5b2c6f)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#d35400,#a04000)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#16a085,#0e6655)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#e74c3c,#b03a2e)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#f39c12,#b9770e)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#7f8c8d,#566573)"></div></div>
+    <div class="swatch"><div style="background:linear-gradient(135deg,#1abc9c,#117a65)"></div></div>
+  </div>
+  <div class="variant-note">5 per row · auto-wraps to as many rows as needed</div>
+</section>
+
+<div class="divider-band">Added-to-cart popup<span class="sub">bottom-sheet style</span></div>
+
+<!-- Bottom-sheet popup demo (rendered as visible state) -->
+<div style="position:relative;height:520px;overflow:hidden;background:#1a3a52;margin:14px 0">
+  <div style="position:absolute;inset:0;background:rgba(26,58,82,0.45);display:flex;align-items:flex-end;justify-content:center">
+    <div class="added-sheet" style="max-width:560px">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:48px;height:48px;margin:0 auto 16px;color:#1a3a52"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/><polyline points="9 13 11 15 15 11"/></svg>
+      <h3>Added to your cart</h3>
+      <div class="msg">Vintage Italian Vespa Scooter<span class="ar">تمت إضافته إلى السلة</span></div>
+      <div class="actions">
+        <a href="cart.html" class="btn-primary">View cart</a>
+        <button class="btn-link">Continue shopping</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body></html>
