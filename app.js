@@ -1469,17 +1469,22 @@ function populatePopularNow() {
     }
     list = list.slice(0, 6);
     const total = list.length;
-    track.innerHTML = list.map((p, index) => {
+    const slidesHTML = list.map((p, index) => {
         const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
         const cdnSrc = imgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_800,h_800,f_auto,q_auto/${imgSrc}` : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
         const num = String(index + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+        const outOfStock = 0 === (p.totalStock != null ? p.totalStock : p.quantity);
         const imgHTML = imgSrc
             ? `<img src="${cdnSrc}" alt="${safeName}" onerror="this.onerror=null;this.src='${imgSrc}'" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
             : '';
-        return `<a href="product.html?product=${encodeURIComponent(p.slug)}" class="popular-slide" aria-roledescription="slide" aria-label="${num}"><div class="popular-slide-img">${imgHTML}</div><div class="popular-slide-body"><div class="popular-slide-num">${num}</div><div class="popular-slide-name">${safeName}</div>${safeNameAr ? `<div class="popular-slide-name-ar">${safeNameAr}</div>` : ''}<div class="popular-slide-price">${formatProductPrice(p, false)}</div><span class="popular-slide-cta">View <svg viewBox="0 0 24 12" aria-hidden="true"><path d="M2 6h20M16 1l5 5-5 5"/></svg></span></div></a>`;
+        const price = outOfStock ? '<span class="price-soldout">Sold out</span>' : formatProductPrice(p, false);
+        return `<a href="product.html?product=${encodeURIComponent(p.slug)}" class="popular-slide${outOfStock ? ' is-soldout' : ''}" aria-roledescription="slide" aria-label="${num}"><div class="popular-slide-img">${imgHTML}${buildBadgeHTML(p, outOfStock)}</div><div class="popular-slide-body"><div class="popular-slide-num">${num}</div><div class="popular-slide-name">${safeName}</div>${safeNameAr ? `<div class="popular-slide-name-ar">${safeNameAr}</div>` : ''}<div class="popular-slide-price">${price}</div><span class="popular-slide-cta">View <svg viewBox="0 0 24 12" aria-hidden="true"><path d="M2 6h20M16 1l5 5-5 5"/></svg></span></div></a>`;
     }).join('');
+    // Clone first slide at the end for seamless infinite loop (no rewind backwards animation)
+    const cloneHTML = list.length > 1 ? slidesHTML.match(/^<a [^>]+>[\s\S]*?<\/a>/)[0].replace('class="popular-slide', 'class="popular-slide popular-slide-clone') : '';
+    track.innerHTML = slidesHTML + cloneHTML;
     if (dots) {
         dots.innerHTML = list.map((_, i) => `<button class="popular-dot${i === 0 ? ' is-active' : ''}" type="button" aria-label="Show slide ${i + 1} of ${total}"></button>`).join('');
     }
@@ -1489,24 +1494,55 @@ function populatePopularNow() {
 function initPopularCarousel(root) {
     if (root._inited) return; root._inited = true;
     const track = root.querySelector('.popular-track');
-    const slides = root.querySelectorAll('.popular-slide');
+    const realSlides = root.querySelectorAll('.popular-slide:not(.popular-slide-clone)');
+    const total = realSlides.length;
     const dots = root.querySelectorAll('.popular-dot');
     const prev = root.querySelector('.popular-nav-prev');
     const next = root.querySelector('.popular-nav-next');
     const interval = parseInt(root.dataset.interval || '5000', 10);
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let i = 0, timer = null;
+    let i = 0, timer = null, wrapping = false;
+    // Infinite-loop: when reaching the clone (index = total), animate to it then silently snap to 0
     function go(n) {
-        i = (n + slides.length) % slides.length;
-        track.style.transform = 'translateX(' + (-i * 100) + '%)';
-        dots.forEach((d, j) => d.classList.toggle('is-active', j === i));
+        if (wrapping || total < 2) return;
+        if (n >= total) {
+            // forward wrap: animate to clone position
+            i = total;
+            track.style.transform = 'translateX(' + (-total * 100) + '%)';
+            wrapping = true;
+        } else if (n < 0) {
+            // backward wrap: snap silently to clone, then animate to last real
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(' + (-total * 100) + '%)';
+            track.offsetHeight; // force reflow
+            track.style.transition = '';
+            i = total - 1;
+            requestAnimationFrame(() => {
+                track.style.transform = 'translateX(' + (-i * 100) + '%)';
+            });
+        } else {
+            i = n;
+            track.style.transform = 'translateX(' + (-i * 100) + '%)';
+        }
+        dots.forEach((d, j) => d.classList.toggle('is-active', j === (i % total)));
     }
-    function start() { if (!reduce && slides.length > 1) timer = setInterval(() => go(i + 1), interval); }
+    track.addEventListener('transitionend', () => {
+        if (wrapping) {
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(0)';
+            track.offsetHeight;
+            track.style.transition = '';
+            i = 0;
+            wrapping = false;
+            dots.forEach((d, j) => d.classList.toggle('is-active', j === 0));
+        }
+    });
+    function start() { if (!reduce && total > 1) timer = setInterval(() => go(i + 1), interval); }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
     dots.forEach((d, j) => d.addEventListener('click', (e) => { e.stopPropagation(); stop(); go(j); start(); }));
     if (prev) prev.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); stop(); go(i - 1); start(); });
     if (next) next.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); stop(); go(i + 1); start(); });
-    // swipe (pointer events — work for both touch + mouse drag)
+    // swipe
     let sx = 0, sy = 0, dx = 0, swiping = false, swiped = false;
     root.addEventListener('pointerdown', (e) => {
         if (e.pointerType === 'mouse' && e.button !== 0) return;
@@ -1573,17 +1609,17 @@ function populateNewArrivals() {
         const cdnSrc200arr = imgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/${imgSrc}` : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
+        const outOfStock = 0 === (p.totalStock != null ? p.totalStock : p.quantity);
         const imgHTML = imgSrc
             ? `<img src="${cdnSrc200arr}" alt="${safeName}" width="200" height="200" onerror="this.onerror=null;this.src='${imgSrc}'" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
             : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
         return `
-        <a href="product.html?product=${encodeURIComponent(p.slug)}" class="arrival-card">
-            <div class="arrival-card-img">${imgHTML}</div>
+        <a href="product.html?product=${encodeURIComponent(p.slug)}" class="arrival-card${outOfStock ? ' is-soldout' : ''}">
+            <div class="arrival-card-img">${imgHTML}${buildBadgeHTML(p, outOfStock)}</div>
             <div class="arrival-card-info">
-                <div class="arrival-card-badge">New</div>
                 <div class="arrival-card-name">${safeName}</div>
                 ${safeNameAr ? `<div class="arrival-card-name-ar">${safeNameAr}</div>` : ''}
-                <div class="arrival-card-price">${formatProductPrice(p, false)}</div>
+                <div class="arrival-card-price">${outOfStock ? '<span class="price-soldout">Sold out</span>' : formatProductPrice(p, false)}</div>
             </div>
         </a>`;
     }).join('');
