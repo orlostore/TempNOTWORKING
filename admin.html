@@ -2245,12 +2245,11 @@
 
                             <div class="form-group">
                                 <label>Image</label>
-                                <div style="display:flex;gap:8px;align-items:flex-start;">
-                                    <input type="file" id="heroFile" accept="image/jpeg,image/webp,image/png" style="flex:1;font-size:0.85rem;">
-                                    <button type="button" class="btn btn-secondary btn-small" id="heroUploadBtn" onclick="uploadHeroImage()" disabled>Upload</button>
-                                </div>
-                                <div class="form-hint" id="heroUploadStatus">Pick a file or paste a URL below.</div>
-                                <input type="text" id="heroImageUrl" placeholder="https://images.orlostore.com/heroes/..." style="margin-top:8px;font-family:monospace;font-size:0.78rem;">
+                                <input type="file" id="heroFile" accept="image/jpeg,image/webp,image/png" style="width:100%;font-size:0.85rem;">
+                                <button type="button" id="heroUploadBtn" style="display:none;" onclick="uploadHeroImage()">Upload</button>
+                                <div class="form-hint" id="heroUploadStatus">Pick a file — uploads automatically.</div>
+                                <div style="margin-top:8px;font-size:0.7rem;color:#888;">Or paste an existing URL:</div>
+                                <input type="text" id="heroImageUrl" placeholder="https://images.orlostore.com/heroes/..." style="margin-top:4px;font-family:monospace;font-size:0.78rem;">
                             </div>
 
                             <div class="form-group">
@@ -5406,16 +5405,17 @@
             document.getElementById('heroPreviewCta').textContent = document.getElementById('heroCtaText').value || 'Browse the collection';
         }
 
-        // file picker enables upload button + live preview wiring
+        // file picker AUTO-UPLOADS on pick (no separate button click needed)
         (function() {
             const fileInput = document.getElementById('heroFile');
             if (fileInput) {
                 fileInput.addEventListener('change', () => {
-                    const btn = document.getElementById('heroUploadBtn');
-                    btn.disabled = !fileInput.files || !fileInput.files[0];
-                    document.getElementById('heroUploadStatus').textContent = fileInput.files && fileInput.files[0]
-                        ? 'Ready: ' + fileInput.files[0].name + ' (' + (fileInput.files[0].size/1024).toFixed(0) + ' KB)'
-                        : 'Pick a file or paste a URL below.';
+                    if (fileInput.files && fileInput.files[0]) {
+                        document.getElementById('heroUploadStatus').textContent = 'Uploading ' + fileInput.files[0].name + '…';
+                        uploadHeroImage();
+                    } else {
+                        document.getElementById('heroUploadStatus').textContent = 'Pick a file or paste a URL below.';
+                    }
                 });
             }
             // Live preview on every field change
