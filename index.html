@@ -904,7 +904,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </head>
 <body data-cards="v2">
 <!-- Draft overlay controls -->
-<button class="draft-theme-toggle" onclick="toggleDraftTheme()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+<!-- draft-theme-toggle removed — site is light-only -->
 <div class="draft-marker">Draft · The Edit look</div>
 <!-- ═══ HEADER v2 — ORLO lockup LEFT (matches cart/login/signup pattern). Utility icons right: search always, bag+account on desktop only. ═══ -->
 <header class="hdr-v2">
@@ -913,7 +913,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         <span class="sep"></span>
         <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
     </a>
-    <a href="orlo-the-edit.html" class="hdr-edit-mark" aria-label="Read The Edit"><span class="the">The</span><span class="edit">Edit.</span></a>
+    <span class="hdr-edit-mark" aria-label="The Edit (coming soon)" style="pointer-events:none;cursor:default"><span class="the">The</span><span class="edit">Edit.</span></span>
     <div class="hdr-v2-utility">
         <button class="hdr-icon" id="searchToggle" aria-label="Search products"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
         <a href="account.html" class="hdr-icon hdr-account-link" id="accountLink" aria-label="Account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="2.8"/><path d="M6 21c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5"/></svg></a>
@@ -1042,9 +1042,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     <div class="meta">The Edit · Issue 09 · Spring 2026</div>
     <h2>Stories worth <em>the pause.</em></h2>
     <p>Gift guides, game-night rituals, and home character — written by the team that curated your shelf.</p>
-    <a href="orlo-the-edit.html" class="cta">Read The Edit
+    <span class="cta" style="pointer-events:none;cursor:default;opacity:.55">Coming soon
         <svg viewBox="0 0 24 12" aria-hidden="true"><path d="M2 6h20M16 1l5 5-5 5"/></svg>
-    </a>
+    </span>
 </section>
 
 <!-- About — Hermès accordion · 4 closed rows · SEO copy stays in the DOM for Google -->
