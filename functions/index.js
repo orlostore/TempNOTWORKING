@@ -5,11 +5,25 @@
 export async function onRequestGet(context) {
     const { request, env } = context;
 
-    // Fetch static HTML + products + active hero in parallel
-    const [htmlResponse, productsResponse, heroResponse] = await Promise.all([
+    // Fetch static HTML + products in parallel.
+    // Hero is read DIRECTLY from D1 (no subrequest) so it can't be
+    // dropped by edge routing/caching quirks.
+    const heroPromise = (async () => {
+        try {
+            if (!env.DB) return { err: 'no-db-binding' };
+            const row = await env.DB.prepare(
+                'SELECT * FROM site_heroes WHERE is_active = 1 ORDER BY sort_order ASC, id ASC LIMIT 1'
+            ).first();
+            return { row: row || null };
+        } catch (e) {
+            return { err: 'db-error:' + (e && e.message ? e.message.slice(0, 60) : 'unknown') };
+        }
+    })();
+
+    const [htmlResponse, productsResponse, heroResult] = await Promise.all([
         env.ASSETS.fetch(new Request(request.url, { method: 'GET' })),
         fetch(new URL('/api/products', request.url).toString(), { cf: { cacheTtl: -1 } }).catch(() => null),
-        fetch(new URL('/api/site-config/hero', request.url).toString(), { cf: { cacheTtl: -1 } }).catch(() => null)
+        heroPromise
     ]);
 
     // Debug flags so we can verify worker state from response headers
@@ -33,18 +47,15 @@ export async function onRequestGet(context) {
         debug.products = productsResponse ? `http-${productsResponse.status}` : 'fetch-failed';
     }
 
-    // --- Active hero (independent of products) ---
+    // --- Active hero (read directly from D1, independent of products) ---
     let heroData = null;
-    if (heroResponse && heroResponse.ok) {
-        try {
-            const j = await heroResponse.json();
-            heroData = j && j.hero ? j.hero : null;
-            debug.hero = heroData ? 'ok' : 'no-hero-field';
-        } catch (e) {
-            debug.hero = 'parse-error';
-        }
+    if (heroResult && heroResult.row) {
+        heroData = heroResult.row;
+        debug.hero = 'ok';
+    } else if (heroResult && heroResult.err) {
+        debug.hero = heroResult.err;
     } else {
-        debug.hero = heroResponse ? `http-${heroResponse.status}` : 'fetch-failed';
+        debug.hero = 'no-active-row';
     }
 
     // Build a single rewriter and conditionally attach handlers
