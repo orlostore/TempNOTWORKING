@@ -22,7 +22,7 @@ export async function onRequestGet(context) {
             return new Response(JSON.stringify({ hero: row }), {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Cache-Control': 'public, max-age=60'
+                    'Cache-Control': 'no-store'
                 }
             });
         }
@@ -31,7 +31,7 @@ export async function onRequestGet(context) {
     return new Response(JSON.stringify({ hero: DEFAULT }), {
         headers: {
             'Content-Type': 'application/json',
-            'Cache-Control': 'public, max-age=60'
+            'Cache-Control': 'no-store'
         }
     });
 }

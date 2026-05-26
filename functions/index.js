@@ -9,7 +9,7 @@ export async function onRequestGet(context) {
     const [htmlResponse, productsResponse, heroResponse] = await Promise.all([
         env.ASSETS.fetch(new Request(request.url, { method: 'GET' })),
         fetch(new URL('/api/products', request.url).toString(), { cf: { cacheTtl: -1 } }).catch(() => null),
-        fetch(new URL('/api/site-config/hero', request.url).toString(), { cf: { cacheTtl: 60 } }).catch(() => null)
+        fetch(new URL('/api/site-config/hero', request.url).toString(), { cf: { cacheTtl: -1 } }).catch(() => null)
     ]);
 
     // If products failed for any reason, return plain HTML (existing behaviour)
