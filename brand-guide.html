@@ -82,7 +82,7 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
 .print-bar button{font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--navy);background:#fff;border:1px solid var(--navy);padding:9px 14px;cursor:pointer}
 .print-bar button:hover{background:var(--navy);color:#fff}
 
-@media print{
+.prompt-box{font-family:"DM Sans",sans-serif;font-size:.78rem;line-height:1.6;color:#1a3a52;background:#fff;border:1px solid rgba(26,58,82,0.10);padding:18px 20px;margin:10px 0 24px;white-space:pre-wrap;overflow-x:auto;cursor:text;border-left:3px solid #e76f51}@media print{
   .print-bar{display:none}
   body{background:#fff}
   .ratio-card .dl{display:none}
@@ -100,8 +100,8 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
   <header class="brand-head">
     <div class="tag">ORLO Store · Dubai</div>
     <h1>Product Image <em>Guide.</em></h1>
-    <p>How to shoot, frame, and export product photography so it works consistently across the site, Instagram, and TikTok — without re-shooting for each platform.</p>
-    <div class="ver">Version 01 · 2026</div>
+    <p>How to shoot clean catalogue images and generate editorial lifestyle images (via Gemini) so they look consistent across the site, Instagram, and TikTok.</p>
+    <div class="ver">Version 03 · 2026 · with Gemini lifestyle prompts</div>
   </header>
 
   <!-- 1. Background -->
@@ -147,36 +147,129 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
         <div class="label">1 : 1 · Square</div>
         <div class="dim">1080 × 1080 px</div>
         <div class="use">Site cards, carousel, Popular Now, PDP, Instagram feed</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="dl" data-w="1080" data-h="1080" data-bg="#e5dccf" data-type="A">A · Beige</button><button class="dl" data-w="1080" data-h="1080" data-bg="#f8f6f2" data-type="B">B · Cream</button></div>
+        <button class="dl" data-w="1080" data-h="1080" data-bg="#e5dccf" data-type="A">Download beige canvas</button>
       </div>
       <div class="ratio-card">
         <div class="ratio-frame st"><div class="sub">subject<br>vertical</div></div>
         <div class="label">9 : 16 · Vertical</div>
         <div class="dim">1080 × 1920 px</div>
         <div class="use">IG Stories &amp; Reels, TikTok, future hero on PDP mobile</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="dl" data-w="1080" data-h="1920" data-bg="#e5dccf" data-type="A">A · Beige</button><button class="dl" data-w="1080" data-h="1920" data-bg="#f8f6f2" data-type="B">B · Cream</button></div>
+        <button class="dl" data-w="1080" data-h="1920" data-bg="#e5dccf" data-type="A">Download beige canvas</button>
       </div>
       <div class="ratio-card">
         <div class="ratio-frame la"><div class="sub">subject left or right</div></div>
         <div class="label">16 : 9 · Landscape</div>
         <div class="dim">1920 × 1080 px</div>
         <div class="use">Site hero banner, The Edit cover, desktop OG image</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="dl" data-w="1920" data-h="1080" data-bg="#e5dccf" data-type="A">A · Beige</button><button class="dl" data-w="1920" data-h="1080" data-bg="#f8f6f2" data-type="B">B · Cream</button></div>
+        <button class="dl" data-w="1920" data-h="1080" data-bg="#e5dccf" data-type="A">Download beige canvas</button>
       </div>
       <div class="ratio-card">
         <div class="ratio-frame" style="aspect-ratio:4/5"><div class="sub">subject<br>portrait</div></div>
         <div class="label">4 : 5 · Portrait</div>
         <div class="dim">1080 × 1350 px</div>
         <div class="use">Instagram feed portrait — gets more screen real-estate than square</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="dl" data-w="1080" data-h="1350" data-bg="#e5dccf" data-type="A">A · Beige</button><button class="dl" data-w="1080" data-h="1350" data-bg="#f8f6f2" data-type="B">B · Cream</button></div>
+        <button class="dl" data-w="1080" data-h="1350" data-bg="#e5dccf" data-type="A">Download beige canvas</button>
       </div>
     </div>
-    <p style="margin-top:18px;font-size:.85rem;color:var(--muted)"><strong>A · Beige</strong> = clean catalogue product canvas (warm beige #E5DCCF). <strong>B · Cream</strong> = lifestyle composing canvas (page cream #F8F6F2). Both include a dashed safe-area guide and an ORLO mark.</p>
+    <p style="margin-top:18px;font-size:.85rem;color:var(--muted)">Beige canvas = catalogue (type A). Lifestyle (type B) is generated via Gemini — see section 04 for prompt templates.</p>
   </section>
 
-  <!-- 3. Composition -->
+  <!-- 4. Gemini lifestyle prompts -->
   <section>
-    <h2><span class="n">04</span><span>Composition</span></h2>
+    <h2><span class="n">04</span><span>Gemini lifestyle prompts</span></h2>
+    <p>Lifestyle images (type B — Popular Now carousel, hero, The Edit, Stories, Reels, TikTok) are generated with Gemini / Imagen. Paste a template, replace [BRACKETED] parts with your product details, and request the 1:1 square first. Then re-prompt the same scene at 9:16 (1080 × 1920) for IG Stories &amp; Reels and TikTok — keeps the same image across platforms.</p>
+
+    <h3>Master template — paste this, swap brackets</h3>
+    <pre class="prompt-box">A high-end editorial lifestyle photograph of a [PRODUCT NAME — short description], in the style of a Hermès or Aesop catalogue page.
+
+Setting: [SCENE — e.g., on a vintage wooden writing desk beside an open paper notebook and a brass paperweight].
+
+Background tones: warm cream, beige, and muted natural neutrals (cream #F8F6F2, warm beige #E5DCCF, soft taupe). No saturated colours. A small navy or muted coral accent on a single detail is allowed if natural to the scene.
+
+Lighting: soft, diffused natural daylight from one side (window light), gentle shadow falling away from the product. Late morning quality. No harsh contrast, no flash.
+
+Composition: subject placed [centred / bottom-left third / on a wooden surface]. Product occupies about 60–70% of frame. Leave breathing room at the top and one side so the same image can be cropped to 9:16 vertical for Stories.
+
+Atmosphere: quiet, considered, editorial — like a printed magazine page. Slight film grain. No people. No hands. No text overlays. No watermarks. No props that compete with the product.
+
+Photorealistic, sharp focus on the product, soft natural shadow, fine detail.
+
+Aspect ratio: 1:1 square, 1080 × 1080.</pre>
+
+    <h3>Example — Vintage Camper Van (red &amp; white)</h3>
+    <pre class="prompt-box">A high-end editorial lifestyle photograph of a vintage tin model camper van in red and cream, in the style of a Hermès catalogue page.
+
+Setting: placed on top of an open vintage paper map of the UAE spread across a worn oak desk, beside an old brass magnifying glass and a small leather-bound notebook.
+
+Background tones: warm cream and beige, soft taupe wood, faded map paper. Window light entering from the left.
+
+Lighting: soft natural daylight from a single window, gentle shadow falling behind and to the right of the van. Late morning. No harsh contrast.
+
+Composition: camper van centred slightly right, ~65% of frame width. Map paper visible around it. Leave space at the top — empty wall — so the same image crops cleanly to 9:16 vertical for Stories.
+
+Atmosphere: quiet morning, slow travel, considered. No people. No hands. No text. No watermarks.
+
+Photorealistic, sharp focus on van, soft warm tones, fine grain.
+
+Aspect ratio: 1:1 square, 1080 × 1080.</pre>
+
+    <h3>Example — Brass Gramophone (miniature)</h3>
+    <pre class="prompt-box">A high-end editorial lifestyle photograph of a miniature antique brass gramophone with a curved horn, in the style of an Aesop catalogue page.
+
+Setting: standing on a small worn walnut side table beside an open hardcover book turned face-down and a ceramic bowl with dried lavender stems.
+
+Background tones: cream painted wall behind, warm beige and soft brown. Late afternoon light from the right.
+
+Lighting: soft side-light through sheer curtain, long gentle shadow stretching to the left of the gramophone. Warm honey-toned daylight.
+
+Composition: gramophone centred, horn angled slightly toward the camera. ~60% of frame. Leave headroom above for vertical 9:16 crop.
+
+Atmosphere: quiet contemplation, slow afternoon. No people. No hands. No text. No watermarks.
+
+Photorealistic, sharp focus on gramophone brass, soft bokeh on background, fine grain.
+
+Aspect ratio: 1:1 square, 1080 × 1080.</pre>
+
+    <h3>Example — Handcrafted Fridge Magnet (ceramic)</h3>
+    <pre class="prompt-box">A high-end editorial close-up lifestyle photograph of a single handcrafted ceramic fridge magnet (small object, painted detail), in the style of a Hermès catalogue page.
+
+Setting: arranged on a folded cream linen tea-towel on a pale oak kitchen shelf, beside a small ceramic mug and a sprig of dried wheat.
+
+Background tones: warm cream wall behind, pale beige linen, light oak.
+
+Lighting: soft natural daylight from above-left, gentle shadow falling to the right. Late morning.
+
+Composition: magnet centred, ~55% of frame because it is small — surround it with breathing space and the linen folds. Leave clear vertical space above for a 9:16 crop.
+
+Atmosphere: quiet domestic morning. Considered. No people. No hands. No text. No watermarks.
+
+Photorealistic, sharp focus on the magnet brushwork, soft natural shadow, fine film grain.
+
+Aspect ratio: 1:1 square, 1080 × 1080.</pre>
+
+    <h3>Always keep in every prompt (consistency anchors)</h3>
+    <ul>
+      <li><strong>"Style: Hermès or Aesop catalogue page"</strong> — anchors the register</li>
+      <li><strong>"Warm cream and beige tones, no saturated colours"</strong> — anchors the palette</li>
+      <li><strong>"Soft natural daylight, no harsh contrast"</strong> — anchors the lighting</li>
+      <li><strong>"No people, no hands, no text, no watermarks"</strong> — clean output</li>
+      <li><strong>"Leave breathing room for 9:16 crop"</strong> — same image works on Stories &amp; TikTok</li>
+      <li><strong>"Photorealistic, fine film grain"</strong> — keeps it from looking AI-plastic</li>
+    </ul>
+
+    <h3>The two-size workflow</h3>
+    <ol style="padding-left:20px;line-height:1.8;font-size:.92rem">
+      <li>Generate the master image at <strong>1:1 square (1080 × 1080)</strong> — that's what goes on the site.</li>
+      <li>Re-prompt the same scene at <strong>9:16 vertical (1080 × 1920)</strong> — for Instagram Stories, Reels, and TikTok. Add to the prompt: <em>"vertical composition, more headroom and footroom, same product and same lighting as previous image."</em></li>
+      <li>Save both. Upload square to the site / IG feed, vertical to Stories / Reels / TikTok.</li>
+    </ol>
+    <p style="margin-top:14px;font-size:.85rem;color:var(--muted)">Tip: keep a notes file of prompts that worked — same prompt may need slight rewording in a future Gemini version, but the structure stays.</p>
+  </section>
+
+  <!-- 5. Composition -->
+  <!-- 5. Composition -->
+  <section>
+    <h2><span class="n">05</span><span>Composition</span></h2>
     <ul>
       <li><strong>Subject fills ~75–80% of the frame.</strong> The dashed outline in each frame above is the safe area — keep important detail inside it.</li>
       <li><strong>Centred,</strong> with soft natural shadow falling below or behind. Not floating.</li>
@@ -188,7 +281,7 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
 
   <!-- 4. Lighting -->
   <section>
-    <h2><span class="n">05</span><span>Lighting</span></h2>
+    <h2><span class="n">06</span><span>Lighting</span></h2>
     <ul>
       <li><strong>Soft, diffused daylight</strong> — north-facing window or a daylight LED through diffusion fabric.</li>
       <li>One main light, one bounce card (white) opposite. No coloured lights.</li>
@@ -200,7 +293,7 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
 
   <!-- 5. Do / Don't -->
   <section>
-    <h2><span class="n">06</span><span>Do · Don't</span></h2>
+    <h2><span class="n">07</span><span>Do · Don't</span></h2>
     <div class="dod">
       <div class="col go">
         <h4>Do</h4>
@@ -227,7 +320,7 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
 
   <!-- 6. Export -->
   <section>
-    <h2><span class="n">07</span><span>Export specs</span></h2>
+    <h2><span class="n">08</span><span>Export specs</span></h2>
     <table>
       <tr><th>Use</th><th>Dimensions</th><th>Format</th><th>Quality</th></tr>
       <tr><td>Site cards &amp; carousel</td><td>1080 × 1080</td><td>JPG, sRGB</td><td>85% · &lt; 300 KB</td></tr>
@@ -243,7 +336,7 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
 
   <!-- 7. File naming -->
   <section>
-    <h2><span class="n">08</span><span>File naming</span></h2>
+    <h2><span class="n">09</span><span>File naming</span></h2>
     <p>Use kebab-case, English, no spaces. Helps both SEO and our backup organisation.</p>
     <ul>
       <li><code style="background:var(--cream-darker);padding:2px 6px">vintage-camper-van-red-01.jpg</code></li>
