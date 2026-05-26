@@ -147,8 +147,8 @@ body[data-cards="v2"] .arrival-card-badge{display:none!important}
    ═══════════════════════════════════════════════════════════ */
 .hdr-v2{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10);position:relative;z-index:100;box-sizing:border-box}
 .hdr-v2-utility{display:flex;align-items:center;gap:2px}
-.hdr-v2-utility .hdr-account-link,.hdr-v2-utility .hdr-bag-link{display:none}
-@media(min-width:769px){.hdr-v2-utility .hdr-account-link,.hdr-v2-utility .hdr-bag-link{display:inline-flex}.hdr-v2{padding:16px 32px}}
+.hdr-v2-utility .hdr-account-link,.hdr-v2-utility .hdr-bag-link{display:none!important}
+@media(min-width:769px){.hdr-v2-utility .hdr-account-link,.hdr-v2-utility .hdr-bag-link{display:inline-flex!important}.hdr-v2{padding:16px 32px}}
 .hdr-v2 .hdr-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:transparent;border:none;cursor:pointer;color:#1a3a52;text-decoration:none;position:relative;padding:0}
 .hdr-v2 .hdr-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;display:block}
 .hdr-v2 .hdr-bag-count{position:absolute;top:0;right:0;background:transparent;color:#e76f51;font-family:'DM Sans',sans-serif;font-size:0.66rem;font-weight:700;line-height:1}
