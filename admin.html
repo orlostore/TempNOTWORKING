@@ -1334,6 +1334,7 @@
                 </div>
                 <button class="btn btn-primary" onclick="openAddModal()">+ Add Product</button>
                 <button class="btn btn-secondary" onclick="refreshProducts()">Refresh</button>
+                <button class="btn btn-secondary" onclick="openHeroesModal()" title="Manage homepage hero / banner">🖼️ Heroes</button>
                 <a class="btn btn-secondary" href="brand-guide.html" target="_blank" rel="noopener" title="Product image guide — site, IG, TikTok specs + blank canvas templates">📐 Brand Guide</a>
             </div>
         </header>
@@ -2195,6 +2196,114 @@
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="closeStockModal()">Cancel</button>
                 <button class="btn btn-success" onclick="updateStock()">Update Stock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ HERO / BANNER MODAL ═══════════ -->
+    <div class="modal-overlay" id="heroesModal">
+        <div class="modal" style="max-width:980px;">
+            <div class="modal-header">
+                <h2>🖼️ Heroes — homepage banner</h2>
+                <button class="modal-close" onclick="closeHeroesModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0;">
+
+                <!-- Inline specs panel -->
+                <div style="background:#f8f6f2;padding:14px 22px;border-bottom:1px solid #eee;font-size:0.78rem;line-height:1.6;color:#444;">
+                    <strong style="color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;font-size:0.7rem;">Image specs</strong><br>
+                    Aspect <strong>16:10 desktop</strong> (auto-crops to 4:5 mobile) · Min <strong>1920 × 1200 px</strong> · JPG/WebP, max <strong>2 MB</strong> · Cream / warm tones (lifestyle type B) · Subject bottom-left for overlay legibility · See <a href="brand-guide.html" target="_blank" style="color:#e76f51;text-decoration:underline;">brand guide</a> for Gemini prompts.
+                </div>
+
+                <!-- Heroes list view -->
+                <div id="heroesListView" style="padding:18px 22px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                        <div style="font-size:0.85rem;color:#666;">Active hero shows on the homepage. Max 4 heroes.</div>
+                        <button class="btn btn-primary btn-small" id="heroAddBtn" onclick="openHeroEdit(null)">+ Add Hero</button>
+                    </div>
+                    <div id="heroesList" style="display:flex;flex-direction:column;gap:10px;"></div>
+                </div>
+
+                <!-- Hero edit form (hidden by default, shown when adding/editing) -->
+                <div id="heroEditView" style="display:none;padding:18px 22px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+                        <button class="btn btn-secondary btn-small" onclick="cancelHeroEdit()">← Back to list</button>
+                        <h3 id="heroEditTitle" style="margin:0;font-size:1.1rem;">Edit hero</h3>
+                        <div></div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                        <!-- Form -->
+                        <div>
+                            <input type="hidden" id="heroEditId">
+
+                            <div class="form-group">
+                                <label>Internal name</label>
+                                <input type="text" id="heroName" placeholder="e.g. Spring 2026 — Camper Van" maxlength="80">
+                                <div class="form-hint">Only you see this. Used in the heroes list.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Image</label>
+                                <div style="display:flex;gap:8px;align-items:flex-start;">
+                                    <input type="file" id="heroFile" accept="image/jpeg,image/webp,image/png" style="flex:1;font-size:0.85rem;">
+                                    <button type="button" class="btn btn-secondary btn-small" id="heroUploadBtn" onclick="uploadHeroImage()" disabled>Upload</button>
+                                </div>
+                                <div class="form-hint" id="heroUploadStatus">Pick a file or paste a URL below.</div>
+                                <input type="text" id="heroImageUrl" placeholder="https://images.orlostore.com/heroes/..." style="margin-top:8px;font-family:monospace;font-size:0.78rem;">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" id="heroTitle" placeholder="Objects with character." maxlength="60">
+                                <div class="form-hint">Cormorant italic, white, large.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Subtitle</label>
+                                <textarea id="heroSubtitle" rows="2" placeholder="From the dashboard to the desk — small things that say something." maxlength="160" style="font-family:inherit;"></textarea>
+                            </div>
+
+                            <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                                <div class="form-group">
+                                    <label>CTA — English</label>
+                                    <input type="text" id="heroCtaText" placeholder="Browse the collection" maxlength="40">
+                                </div>
+                                <div class="form-group">
+                                    <label>CTA — Arabic</label>
+                                    <input type="text" id="heroCtaTextAr" placeholder="تصفّح المجموعة" dir="rtl" style="font-family:'Almarai',sans-serif;" maxlength="40">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>CTA link</label>
+                                <input type="text" id="heroCtaLink" placeholder="#popular-now or shop.html" maxlength="200">
+                                <div class="form-hint">Anchor like <code>#popular-now</code>, relative path like <code>shop.html</code>, or full URL.</div>
+                            </div>
+
+                            <div style="display:flex;gap:10px;margin-top:18px;">
+                                <button class="btn btn-primary" onclick="saveHero()" id="heroSaveBtn">Save</button>
+                                <button class="btn btn-secondary" onclick="cancelHeroEdit()">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Live preview -->
+                        <div>
+                            <div style="font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:#666;margin-bottom:8px;">Live preview</div>
+                            <div id="heroPreview" style="position:relative;background:#1a1a1a;aspect-ratio:16/10;overflow:hidden;border:1px solid #ddd;">
+                                <img id="heroPreviewImg" src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;">
+                                <div id="heroPreviewPlaceholder" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#888;font-size:0.85rem;text-align:center;padding:24px;">No image yet — upload above or paste URL</div>
+                                <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,0.45) 75%,rgba(0,0,0,0.75) 100%);pointer-events:none;"></div>
+                                <div style="position:absolute;left:18px;right:18px;bottom:18px;color:#fff;z-index:2;">
+                                    <div id="heroPreviewTitle" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.6rem;line-height:1.05;text-shadow:0 1px 6px rgba(0,0,0,0.35);">Title goes here</div>
+                                    <div id="heroPreviewSubtitle" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:0.85rem;margin-top:8px;color:rgba(255,255,255,0.92);text-shadow:0 1px 4px rgba(0,0,0,0.4);">Subtitle goes here.</div>
+                                    <div id="heroPreviewCta" style="display:inline-block;font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.7);padding-bottom:3px;margin-top:14px;">Browse the collection</div>
+                                </div>
+                            </div>
+                            <div style="font-size:0.72rem;color:#888;margin-top:8px;line-height:1.55;">Preview shows desktop 16:10 framing. Mobile crops to 4:5 — keep your subject bottom-left.</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -5168,6 +5277,217 @@
                 timeEl.textContent += ' (stale)';
             }, 300000);
         }
+
+        // ═════════ HEROES (homepage banner) admin ═════════
+        let heroesList = [];
+        const HEROES_MAX = 4;
+        const HEROES_MIN = 1;
+
+        function openHeroesModal() {
+            document.getElementById('heroesModal').classList.add('active');
+            showHeroListView();
+            loadHeroes();
+        }
+        function closeHeroesModal() { document.getElementById('heroesModal').classList.remove('active'); }
+        function showHeroListView() {
+            document.getElementById('heroesListView').style.display = '';
+            document.getElementById('heroEditView').style.display = 'none';
+        }
+        function showHeroEditView() {
+            document.getElementById('heroesListView').style.display = 'none';
+            document.getElementById('heroEditView').style.display = '';
+        }
+
+        async function loadHeroes() {
+            const container = document.getElementById('heroesList');
+            container.innerHTML = '<div style="padding:20px;color:#888;">Loading…</div>';
+            try {
+                const res = await fetch('/api/admin/heroes?key=' + encodeURIComponent(authKey));
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to load');
+                heroesList = data.heroes || [];
+                renderHeroesList();
+            } catch (e) {
+                container.innerHTML = '<div style="padding:20px;color:#c33;">' + (e.message || 'Failed to load heroes') + '</div>';
+            }
+        }
+
+        function renderHeroesList() {
+            const container = document.getElementById('heroesList');
+            const addBtn = document.getElementById('heroAddBtn');
+            addBtn.disabled = heroesList.length >= HEROES_MAX;
+            addBtn.title = addBtn.disabled ? 'Max ' + HEROES_MAX + ' heroes — delete one first' : '';
+            if (!heroesList.length) {
+                container.innerHTML = '<div style="padding:30px;text-align:center;color:#888;">No heroes yet — click "+ Add Hero" to create the first one.</div>';
+                return;
+            }
+            container.innerHTML = '';
+            heroesList.forEach(h => {
+                const row = document.createElement('div');
+                const isActive = h.is_active === 1;
+                const canDelete = heroesList.length > HEROES_MIN;
+                row.style.cssText = 'display:flex;gap:14px;align-items:center;padding:10px 12px;background:#fff;border:1px solid ' + (isActive ? '#e76f51' : '#eee') + ';border-radius:6px;';
+                row.innerHTML =
+                    '<img src="' + escAttr(h.image_url || '') + '" alt="" style="width:90px;height:56px;object-fit:cover;background:#eee;border-radius:3px;flex-shrink:0;" onerror="this.style.opacity=0.3">' +
+                    '<div style="flex:1;min-width:0;">' +
+                        '<div style="font-weight:600;font-size:0.92rem;color:#1a3a52;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escHTML(h.name) + '</div>' +
+                        '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:0.95rem;color:#777;margin-top:2px;">' + escHTML(h.title || '—') + '</div>' +
+                    '</div>' +
+                    '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">' +
+                        (isActive
+                            ? '<span style="background:#1a3a52;color:#fff;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;padding:3px 8px;">Active</span>'
+                            : '<button class="btn btn-small btn-primary" data-act="activate" data-id="' + h.id + '">Activate</button>') +
+                        '<div style="display:flex;gap:6px;">' +
+                            '<button class="btn btn-small btn-secondary" data-act="edit" data-id="' + h.id + '">Edit</button>' +
+                            '<button class="btn btn-small btn-danger" data-act="delete" data-id="' + h.id + '"' + (canDelete ? '' : ' disabled title="At least one hero must remain"') + '>Delete</button>' +
+                        '</div>' +
+                    '</div>';
+                container.appendChild(row);
+            });
+            // Delegate click events
+            container.querySelectorAll('button[data-act]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const act = btn.dataset.act, id = parseInt(btn.dataset.id, 10);
+                    if (act === 'activate') activateHero(id);
+                    else if (act === 'edit') openHeroEdit(id);
+                    else if (act === 'delete') deleteHero(id);
+                });
+            });
+        }
+
+        function escHTML(s) { return (s == null ? '' : String(s)).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function escAttr(s) { return (s == null ? '' : String(s)).replace(/"/g, '&quot;'); }
+
+        function openHeroEdit(id) {
+            const h = id ? heroesList.find(x => x.id === id) : null;
+            document.getElementById('heroEditId').value = h ? h.id : '';
+            document.getElementById('heroName').value = h ? h.name : '';
+            document.getElementById('heroImageUrl').value = h ? h.image_url : '';
+            document.getElementById('heroTitle').value = h ? (h.title || '') : '';
+            document.getElementById('heroSubtitle').value = h ? (h.subtitle || '') : '';
+            document.getElementById('heroCtaText').value = h ? (h.cta_text || '') : '';
+            document.getElementById('heroCtaTextAr').value = h ? (h.cta_text_ar || '') : '';
+            document.getElementById('heroCtaLink').value = h ? (h.cta_link || '') : '#popular-now';
+            document.getElementById('heroFile').value = '';
+            document.getElementById('heroUploadBtn').disabled = true;
+            document.getElementById('heroUploadStatus').textContent = 'Pick a file or paste a URL below.';
+            document.getElementById('heroEditTitle').textContent = h ? 'Edit hero' : 'Add hero';
+            updateHeroPreview();
+            showHeroEditView();
+        }
+        function cancelHeroEdit() { showHeroListView(); }
+
+        function updateHeroPreview() {
+            const url = document.getElementById('heroImageUrl').value.trim();
+            const img = document.getElementById('heroPreviewImg');
+            const ph = document.getElementById('heroPreviewPlaceholder');
+            if (url) { img.src = url; img.style.display = ''; ph.style.display = 'none'; } else { img.src = ''; img.style.display = 'none'; ph.style.display = ''; }
+            document.getElementById('heroPreviewTitle').textContent = document.getElementById('heroTitle').value || 'Title goes here';
+            document.getElementById('heroPreviewSubtitle').textContent = document.getElementById('heroSubtitle').value || 'Subtitle goes here.';
+            document.getElementById('heroPreviewCta').textContent = document.getElementById('heroCtaText').value || 'Browse the collection';
+        }
+
+        // file picker enables upload button
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('heroFile');
+            if (fileInput) {
+                fileInput.addEventListener('change', () => {
+                    const btn = document.getElementById('heroUploadBtn');
+                    btn.disabled = !fileInput.files || !fileInput.files[0];
+                    document.getElementById('heroUploadStatus').textContent = fileInput.files && fileInput.files[0]
+                        ? 'Ready: ' + fileInput.files[0].name + ' (' + (fileInput.files[0].size/1024).toFixed(0) + ' KB)'
+                        : 'Pick a file or paste a URL below.';
+                });
+            }
+            // Live preview on every field change
+            ['heroImageUrl', 'heroTitle', 'heroSubtitle', 'heroCtaText'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', updateHeroPreview);
+            });
+        });
+
+        async function uploadHeroImage() {
+            const fileInput = document.getElementById('heroFile');
+            const file = fileInput.files && fileInput.files[0];
+            if (!file) return;
+            const status = document.getElementById('heroUploadStatus');
+            const btn = document.getElementById('heroUploadBtn');
+            btn.disabled = true;
+            status.textContent = 'Uploading…';
+            try {
+                const fd = new FormData();
+                fd.append('file', file);
+                fd.append('name', document.getElementById('heroName').value || 'hero');
+                const res = await fetch('/api/admin/upload-hero?key=' + encodeURIComponent(authKey), { method: 'POST', body: fd });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Upload failed');
+                document.getElementById('heroImageUrl').value = data.url;
+                status.textContent = '✓ Uploaded — ' + data.url;
+                updateHeroPreview();
+            } catch (e) {
+                status.textContent = '✗ ' + (e.message || 'Upload failed');
+                btn.disabled = false;
+            }
+        }
+
+        async function saveHero() {
+            const id = document.getElementById('heroEditId').value;
+            const payload = {
+                name: document.getElementById('heroName').value.trim(),
+                image_url: document.getElementById('heroImageUrl').value.trim(),
+                title: document.getElementById('heroTitle').value.trim(),
+                title_em: '',
+                subtitle: document.getElementById('heroSubtitle').value.trim(),
+                cta_text: document.getElementById('heroCtaText').value.trim(),
+                cta_text_ar: document.getElementById('heroCtaTextAr').value.trim(),
+                cta_link: document.getElementById('heroCtaLink').value.trim()
+            };
+            if (!payload.name || !payload.image_url) {
+                orloToast && orloToast('error', 'Missing fields', 'Name and image are required');
+                return;
+            }
+            const btn = document.getElementById('heroSaveBtn');
+            btn.disabled = true; btn.textContent = 'Saving…';
+            try {
+                const action = id ? 'update' : 'add';
+                const qs = '?key=' + encodeURIComponent(authKey) + '&action=' + action + (id ? '&id=' + id : '');
+                const res = await fetch('/api/admin/heroes' + qs, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Save failed');
+                orloToast && orloToast('success', 'Saved', 'Hero saved');
+                await loadHeroes();
+                showHeroListView();
+            } catch (e) {
+                orloToast && orloToast('error', 'Error', e.message || 'Save failed');
+            } finally {
+                btn.disabled = false; btn.textContent = 'Save';
+            }
+        }
+
+        async function activateHero(id) {
+            try {
+                const res = await fetch('/api/admin/heroes?key=' + encodeURIComponent(authKey) + '&action=activate&id=' + id, { method: 'POST' });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed');
+                orloToast && orloToast('success', 'Active', 'Hero is now live');
+                loadHeroes();
+            } catch (e) { orloToast && orloToast('error', 'Error', e.message); }
+        }
+
+        async function deleteHero(id) {
+            const h = heroesList.find(x => x.id === id);
+            if (!h) return;
+            const ok = confirm('Delete hero "' + h.name + '"? This cannot be undone.');
+            if (!ok) return;
+            try {
+                const res = await fetch('/api/admin/heroes?key=' + encodeURIComponent(authKey) + '&action=delete&id=' + id, { method: 'POST' });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed');
+                orloToast && orloToast('success', 'Deleted', 'Hero removed');
+                loadHeroes();
+            } catch (e) { orloToast && orloToast('error', 'Error', e.message); }
+        }
+        // ═════════ END HEROES ═════════
 
         checkAuth();
     </script>
