@@ -79,7 +79,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=51">
+    <link rel="stylesheet" href="styles.css?v=52">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -891,17 +891,15 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 <!-- Draft overlay controls -->
 <button class="draft-theme-toggle" onclick="toggleDraftTheme()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
 <div class="draft-marker">Draft · The Edit look</div>
-<!-- ═══ HEADER v2 — centered ORLO lockup (matches cart/login/signup), search-icon left, bag+account on desktop only ═══ -->
+<!-- ═══ HEADER v2 — ORLO lockup LEFT (matches cart/login/signup pattern). Utility icons right: search always, bag+account on desktop only. ═══ -->
 <header class="hdr-v2">
-    <div class="hdr-v2-left">
-        <button class="hdr-icon" id="searchToggle" aria-label="Search products"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
-    </div>
-    <a href="/" class="hdr-v2-center login-lockup">
+    <a href="/" class="login-lockup">
         <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO" onerror="this.style.display='none'">
         <span class="sep"></span>
         <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
     </a>
-    <div class="hdr-v2-right">
+    <div class="hdr-v2-utility">
+        <button class="hdr-icon" id="searchToggle" aria-label="Search products"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
         <a href="account.html" class="hdr-icon hdr-account-link" id="accountLink" aria-label="Account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="2.8"/><path d="M6 21c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5"/></svg></a>
         <a href="cart.html" class="hdr-icon hdr-bag-link" aria-label="Bag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 9h13l-1 12.5a.7.7 0 0 1-.7.5H7.2a.7.7 0 0 1-.7-.5L5.5 9z"/><path d="M9 9V6.5a3 3 0 0 1 6 0V9"/></svg><span class="hdr-bag-count" id="cartCount"></span></a>
     </div>
