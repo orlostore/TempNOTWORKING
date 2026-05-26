@@ -5381,14 +5381,33 @@
             const url = document.getElementById('heroImageUrl').value.trim();
             const img = document.getElementById('heroPreviewImg');
             const ph = document.getElementById('heroPreviewPlaceholder');
-            if (url) { img.src = url; img.style.display = ''; ph.style.display = 'none'; } else { img.src = ''; img.style.display = 'none'; ph.style.display = ''; }
+            if (url) {
+                img.onerror = function() {
+                    ph.textContent = '⚠ Image failed to load — check URL';
+                    ph.style.display = 'flex';
+                    img.style.display = 'none';
+                };
+                img.onload = function() {
+                    ph.style.display = 'none';
+                    img.style.display = '';
+                };
+                img.src = url;
+                img.style.display = '';
+                ph.style.display = 'none';
+                ph.textContent = 'Loading…';
+            } else {
+                img.src = '';
+                img.style.display = 'none';
+                ph.style.display = 'flex';
+                ph.textContent = 'No image yet — upload above or paste URL';
+            }
             document.getElementById('heroPreviewTitle').textContent = document.getElementById('heroTitle').value || 'Title goes here';
             document.getElementById('heroPreviewSubtitle').textContent = document.getElementById('heroSubtitle').value || 'Subtitle goes here.';
             document.getElementById('heroPreviewCta').textContent = document.getElementById('heroCtaText').value || 'Browse the collection';
         }
 
-        // file picker enables upload button
-        document.addEventListener('DOMContentLoaded', () => {
+        // file picker enables upload button + live preview wiring
+        (function() {
             const fileInput = document.getElementById('heroFile');
             if (fileInput) {
                 fileInput.addEventListener('change', () => {
@@ -5402,9 +5421,12 @@
             // Live preview on every field change
             ['heroImageUrl', 'heroTitle', 'heroSubtitle', 'heroCtaText'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el) el.addEventListener('input', updateHeroPreview);
+                if (el) {
+                    el.addEventListener('input', updateHeroPreview);
+                    el.addEventListener('change', updateHeroPreview);
+                }
             });
-        });
+        })();
 
         async function uploadHeroImage() {
             const fileInput = document.getElementById('heroFile');
