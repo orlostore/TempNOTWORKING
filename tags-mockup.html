@@ -67,6 +67,18 @@ html,body{background:#eceae5;font-family:'DM Sans',sans-serif;color:var(--navy);
 .tag-combined .sep.pipe{font-weight:300;opacity:.4}
 .tag.italic-combined{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;letter-spacing:.01em;text-transform:none;padding:3px 11px}
 
+/* mixed: primary caps + secondary italic Cormorant inside same pill */
+.tag.tag-mixed{padding-right:11px}
+.tag.tag-mixed em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;letter-spacing:.01em;text-transform:none;line-height:1;display:inline-block}
+
+/* separate handmade italic-outline */
+.tag.handmade-italic{background:transparent;border:1px solid var(--navy);padding:3px 9px;color:var(--navy)}
+.tag.handmade-italic em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;letter-spacing:.01em;text-transform:none;line-height:1}
+
+/* bare italic with no box */
+.bare-italic{background:transparent;color:var(--navy);align-self:center;display:inline-block}
+.bare-italic em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.85rem;letter-spacing:.01em;line-height:1;text-shadow:0 1px 4px rgba(248,246,242,0.9)}
+
 /* ─── LOCKED S3 — navy strip across middle ─── */
 .strip-soldout{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);background:rgba(26,58,82,0.88);color:#fff;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;font-weight:500;padding:9px 12px;text-align:center;backdrop-filter:blur(2px);z-index:6}
 
@@ -204,6 +216,37 @@ html,body{background:#eceae5;font-family:'DM Sans',sans-serif;color:var(--navy);
       <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag">Bestseller</span></div><div class="body"><div class="ttl">Cable Management Kit</div><div class="price">AED 79</div></div></div>
       <p class="note">When no secondary tag applies, single tag stays clean. Same shape across the catalogue.</p>
     </div>
+
+  </div>
+
+  <h3 style="font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:32px 0 12px">Handmade in italic — typographic contrast</h3>
+  <div class="row">
+
+    <div class="case"><div class="label"><strong>I7 — combined, Handmade italic Cormorant</strong><span>caps + italic inside one tag</span><span class="pick">STRONG</span></div>
+      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag tag-mixed">Bestseller<span class="sep">·</span><em>Handmade</em></span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
+      <p class="note">Primary in DM Sans caps, secondary in italic Cormorant — same tag, two registers. Tells hierarchy by typography alone, no outline needed.</p>
+    </div>
+
+    <div class="case"><div class="label"><strong>I8 — two separate tags, Handmade as italic-outline</strong></div>
+      <div class="card"><div class="img with-van"></div><div class="tag-area inline"><span class="tag">Bestseller</span><span class="tag handmade-italic"><em>Handmade</em></span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
+      <p class="note">Two boxes. Primary navy caps, secondary hairline outline with italic Cormorant inside. More obvious that they're two qualities.</p>
+    </div>
+
+    <div class="case"><div class="label"><strong>I9 — Handmade as italic text only, no box</strong></div>
+      <div class="card"><div class="img with-van"></div><div class="tag-area inline"><span class="tag">Bestseller</span><span class="bare-italic"><em>handmade</em></span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
+      <p class="note">Quietest. Primary tag stays as a box, Handmade is just italic text floating beside it on cream — looks like a caption. Most Hermès.</p>
+    </div>
+
+    <div class="case"><div class="label"><strong>I10 — Few remaining + italic Handmade</strong></div>
+      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag tag-mixed">Few remaining<span class="sep">·</span><em>Handmade</em></span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
+
+    <div class="case"><div class="label"><strong>I11 — Last one + italic Handmade (whole thing italic)</strong></div>
+      <div class="card"><div class="img with-gram"></div><div class="tag-area"><span class="tag italic-combined">Last one<span class="sep">·</span>Handmade</span></div><div class="body"><div class="ttl">Brass Gramophone</div><div class="price">AED 75</div></div></div>
+      <p class="note">When primary is already italic (Last one), Handmade joins the same italic family — uniform tag.</p>
+    </div>
+
+    <div class="case"><div class="label"><strong>I12 — New + italic Handmade (I7 pattern)</strong></div>
+      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag tag-mixed">New<span class="sep">·</span><em>Handmade</em></span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
 
   </div>
 
