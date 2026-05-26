@@ -60,6 +60,13 @@ html,body{background:#eceae5;font-family:'DM Sans',sans-serif;color:var(--navy);
 .tag.coral{background:var(--coral)}
 .tag.italic{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;letter-spacing:.01em;text-transform:none;padding:3px 10px}
 
+/* ─── inline horizontal stacking ─── */
+.tag-area.inline{flex-direction:row;gap:4px;flex-wrap:wrap;max-width:calc(100% - 20px)}
+.tag-combined{display:inline-flex;align-items:center;gap:6px}
+.tag-combined .sep{font-weight:300;opacity:.55;display:inline-block;letter-spacing:0}
+.tag-combined .sep.pipe{font-weight:300;opacity:.4}
+.tag.italic-combined{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;letter-spacing:.01em;text-transform:none;padding:3px 11px}
+
 /* ─── LOCKED S3 — navy strip across middle ─── */
 .strip-soldout{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);background:rgba(26,58,82,0.88);color:#fff;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;font-weight:500;padding:9px 12px;text-align:center;backdrop-filter:blur(2px);z-index:6}
 
@@ -160,31 +167,44 @@ html,body{background:#eceae5;font-family:'DM Sans',sans-serif;color:var(--navy);
        ============================================================ -->
   <div class="section-header">
     <h2>03 · When two qualifiers apply — clean rules</h2>
-    <p>Simple: <strong>maximum 2 tags</strong>. Primary slot picks one by priority. Handmade is the only one allowed in secondary slot.</p>
+    <p>Simple: <strong>maximum 2 tags</strong>. Primary slot picks one by priority. Handmade is the only one allowed in secondary slot. Below: <strong>vertical stack</strong> (original) vs <strong>inline horizontal</strong> (new).</p>
   </div>
 
+  <h3 style="font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:18px 0 12px">Vertical stack — original</h3>
   <div class="row">
-    <div class="case"><div class="label"><strong>Sold out</strong><span>strip + nothing else</span></div>
-      <div class="card"><div class="img with-radio"></div><div class="strip-soldout">Sold out</div><div class="body"><div class="ttl">Miniature Radio</div><div class="price">AED 29</div></div></div>
-      <p class="note">Sold out alone — no other tag. Card is unavailable, no need to advertise other qualities.</p>
-    </div>
-
-    <div class="case"><div class="label"><strong>Last one + Handmade</strong><span>scarcity + character</span></div>
-      <div class="card"><div class="img with-gram"></div><div class="tag-area"><span class="tag italic">Last one</span><span class="tag handmade">Handmade</span></div><div class="body"><div class="ttl">Brass Gramophone</div><div class="price">AED 75</div></div></div></div>
-
-    <div class="case"><div class="label"><strong>Bestseller + Handmade</strong><span>social proof + character</span></div>
+    <div class="case"><div class="label"><strong>Bestseller + Handmade</strong></div>
       <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag">Bestseller</span><span class="tag handmade">Handmade</span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div></div>
-
-    <div class="case"><div class="label"><strong>New + Handmade</strong><span>fresh + character</span></div>
-      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag">New</span><span class="tag handmade">Handmade</span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
-
-    <div class="case"><div class="label"><strong>Few remaining + Handmade</strong><span>scarcity + character</span></div>
+    <div class="case"><div class="label"><strong>Few remaining + Handmade</strong></div>
       <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag">Few remaining</span><span class="tag handmade">Handmade</span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
+  </div>
 
-    <div class="case"><div class="label"><strong>Bestseller alone (no Handmade)</strong><span>for non-handmade items</span></div>
-      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag">Bestseller</span></div><div class="body"><div class="ttl">Cable Management Kit</div><div class="price">AED 79</div></div></div>
-      <p class="note">Industrial/utility products don't carry the handmade story — single tag only.</p>
+  <h3 style="font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:32px 0 12px">Inline horizontal — new (one line)</h3>
+  <div class="row">
+
+    <div class="case"><div class="label"><strong>I1 — two tags side by side</strong><span>separate boxes, small gap</span></div>
+      <div class="card"><div class="img with-van"></div><div class="tag-area inline"><span class="tag">Bestseller</span><span class="tag handmade">Handmade</span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
+      <p class="note">Two separate tags on the same row. Clear hierarchy (primary filled, secondary outline). Risk: gets tight on narrow mobile cards.</p>
     </div>
+
+    <div class="case"><div class="label"><strong>I2 — combined, bullet separator</strong><span>single tag, "·" between</span><span class="pick">RECOMMENDED</span></div>
+      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag tag-combined">Bestseller<span class="sep">·</span>Handmade</span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
+      <p class="note">One tag, both labels inside, divider bullet. Most compact, most cohesive. Hermès uses this pattern for "Made in France · 1837" type strings.</p>
+    </div>
+
+    <div class="case"><div class="label"><strong>I3 — combined, vertical bar separator</strong><span>single tag, "|" between</span></div>
+      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag tag-combined">Bestseller<span class="sep pipe">|</span>Handmade</span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div></div>
+
+    <div class="case"><div class="label"><strong>I4 — Few remaining + Handmade (I2 pattern)</strong></div>
+      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag tag-combined">Few remaining<span class="sep">·</span>Handmade</span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
+
+    <div class="case"><div class="label"><strong>I5 — Last one + Handmade (I2 pattern, italic)</strong></div>
+      <div class="card"><div class="img with-gram"></div><div class="tag-area"><span class="tag tag-combined italic-combined">Last one<span class="sep">·</span>Handmade</span></div><div class="body"><div class="ttl">Brass Gramophone</div><div class="price">AED 75</div></div></div></div>
+
+    <div class="case"><div class="label"><strong>I6 — single tag (no Handmade) for comparison</strong></div>
+      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag">Bestseller</span></div><div class="body"><div class="ttl">Cable Management Kit</div><div class="price">AED 79</div></div></div>
+      <p class="note">When no secondary tag applies, single tag stays clean. Same shape across the catalogue.</p>
+    </div>
+
   </div>
 
 </div>
@@ -196,11 +216,15 @@ html,body{background:#eceae5;font-family:'DM Sans',sans-serif;color:var(--navy);
     <li><strong>Sold out</strong>: S3 — navy strip across the middle of the image. Image stays full-strength behind. Cleanest signal.</li>
   </ul>
 
+  <h3 style="margin-top:24px">Locked so far</h3>
+  <ul>
+    <li><strong>Low-stock copy</strong>: <em>L2 "Few remaining"</em> ✓</li>
+  </ul>
+
   <h3 style="margin-top:24px">Still to confirm</h3>
   <ul>
-    <li><strong>Low-stock copy</strong>: pick one — <em>L1 "Only X left"</em> · <em>L2 "Few remaining"</em> (my pick) · <em>L3 "Limited"</em> · <em>L4 italic Cormorant</em></li>
     <li><strong>Last-one copy</strong>: pick — navy caps · coral caps · italic Cormorant (my pick)</li>
-    <li><strong>Stacking</strong>: confirm — max 2 tags, Handmade is always the secondary slot (smaller hairline outline), never the primary</li>
+    <li><strong>Stacking layout</strong>: vertical stack (original) OR <em>inline I2 "Bestseller · Handmade" single tag with bullet</em> (my pick) — see Section 03</li>
   </ul>
 
   <h3 style="margin-top:24px">Priority order (which tag wins primary slot)</h3>
