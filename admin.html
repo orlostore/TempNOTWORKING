@@ -2000,7 +2000,15 @@
                         <div class="form-group">
                             <label class="checkbox-label" style="margin-top: 28px;">
                                 <input type="checkbox" id="formFeatured">
-                                Featured Product (Best Seller badge)
+                                Featured (Bestseller badge)
+                            </label>
+                            <label class="checkbox-label" style="margin-top: 8px;">
+                                <input type="checkbox" id="formHandmade">
+                                Handmade (italic <em>Handmade</em> tag)
+                            </label>
+                            <label class="checkbox-label" style="margin-top: 8px;">
+                                <input type="checkbox" id="formIsNew">
+                                New (shows "New" tag — admin-controlled)
                             </label>
                         </div>
                     </div>
@@ -2973,7 +2981,9 @@
             document.getElementById('formSpecificationsAr').value = product.specificationsAr ? product.specificationsAr.join(' | ') : '';
             document.getElementById('formPairings').value = product.pairings ? product.pairings.join(' | ') : '';
             renderPairingsPicker(id);
-            document.getElementById('formFeatured').checked = product.featured;
+            document.getElementById('formFeatured').checked = !!product.featured;
+            document.getElementById('formHandmade').checked = !!product.handmade;
+            document.getElementById('formIsNew').checked = !!product.isNew;
             // Extra specs
             document.getElementById('formWattage').value = product.wattage || '';
             document.getElementById('formVoltage').value = product.voltage || '';
@@ -3150,6 +3160,8 @@
                 specificationsAr: document.getElementById('formSpecificationsAr').value.trim(),
                 pairings: document.getElementById('formPairings').value.trim(),
                 featured: document.getElementById('formFeatured').checked ? 1 : 0,
+                handmade: document.getElementById('formHandmade').checked ? 1 : 0,
+                isNew: document.getElementById('formIsNew').checked ? 1 : 0,
                 wattage: document.getElementById('formWattage').value.trim(),
                 voltage: document.getElementById('formVoltage').value.trim(),
                 plugType: document.getElementById('formPlugType').value.trim(),

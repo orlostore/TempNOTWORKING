@@ -28,9 +28,11 @@ export async function onRequestPost(context) {
     const DB = env.DB;
 
     try {
-        // Idempotent schema migration — add secondary category columns if missing
+        // Idempotent schema migration — add secondary category columns + handmade flag if missing
         try { await DB.prepare('ALTER TABLE products ADD COLUMN category2 TEXT').run(); } catch(e) { /* already exists */ }
         try { await DB.prepare('ALTER TABLE products ADD COLUMN category2Ar TEXT').run(); } catch(e) { /* already exists */ }
+        try { await DB.prepare('ALTER TABLE products ADD COLUMN handmade INTEGER DEFAULT 0').run(); } catch(e) { /* already exists */ }
+        try { await DB.prepare('ALTER TABLE products ADD COLUMN isNew INTEGER DEFAULT 0').run(); } catch(e) { /* already exists */ }
 
         const data = await request.json();
 
@@ -41,10 +43,10 @@ export async function onRequestPost(context) {
                     price, cost, quantity,
                     description, descriptionAr, mainImage, image2, image3, image4, image5,
                     image6, image7, image8, colors, colorsAr, packaging, packagingAr,
-                    specifications, specificationsAr, featured,
+                    specifications, specificationsAr, featured, handmade, isNew,
                     wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
                     material, materialAr, pairings
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `).bind(
                 data.slug, data.name, data.nameAr || '',
                 data.category || '', data.categoryAr || '',
@@ -57,7 +59,7 @@ export async function onRequestPost(context) {
                 data.colors || '', data.colorsAr || '',
                 data.packaging || '', data.packagingAr || '',
                 data.specifications || '', data.specificationsAr || '',
-                data.featured || 0,
+                data.featured || 0, data.handmade || 0, data.isNew || 0,
                 data.wattage || '', data.voltage || '',
                 data.plugType || '', data.plugTypeAr || '',
                 data.baseType || '', data.baseTypeAr || '',
@@ -102,7 +104,8 @@ export async function onRequestPost(context) {
                     mainImage = ?, image2 = ?, image3 = ?, image4 = ?, image5 = ?,
                     image6 = ?, image7 = ?, image8 = ?,
                     colors = ?, colorsAr = ?, packaging = ?, packagingAr = ?,
-                    specifications = ?, specificationsAr = ?, featured = ?,
+                    specifications = ?, specificationsAr = ?,
+                    featured = ?, handmade = ?, isNew = ?,
                     wattage = ?, voltage = ?, plugType = ?, plugTypeAr = ?,
                     baseType = ?, baseTypeAr = ?, material = ?, materialAr = ?,
                     pairings = ?
@@ -119,7 +122,7 @@ export async function onRequestPost(context) {
                 data.colors || '', data.colorsAr || '',
                 data.packaging || '', data.packagingAr || '',
                 data.specifications || '', data.specificationsAr || '',
-                data.featured || 0,
+                data.featured || 0, data.handmade || 0, data.isNew || 0,
                 data.wattage || '', data.voltage || '',
                 data.plugType || '', data.plugTypeAr || '',
                 data.baseType || '', data.baseTypeAr || '',

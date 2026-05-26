@@ -57,13 +57,13 @@ export async function onRequestGet(context) {
 async function fetchFromD1(DB) {
     const [productsResult, variantsResult, tiersResult] = await Promise.all([
 
-        // Query 1: Products (with sort_order + category2 fallbacks)
+        // Query 1: Products (with sort_order + category2 + handmade + isNew fallbacks)
         DB.prepare(`
             SELECT id, slug, name, nameAr, category, categoryAr, category2, category2Ar,
                    price, cost, quantity,
                    description, descriptionAr, mainImage, image2, image3, image4, image5,
                    image6, image7, image8, colors, colorsAr, packaging, packagingAr,
-                   specifications, specificationsAr, featured,
+                   specifications, specificationsAr, featured, handmade, isNew,
                    wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
                    material, materialAr, sort_order, pairings
             FROM products
@@ -76,6 +76,7 @@ async function fetchFromD1(DB) {
                        description, descriptionAr, mainImage, image2, image3, image4, image5,
                        image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                        specifications, specificationsAr, featured,
+                       0 as handmade, 0 as isNew,
                        wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
                        material, materialAr, 0 as sort_order, '' as pairings
                 FROM products
@@ -163,6 +164,8 @@ async function fetchFromD1(DB) {
             specificationsAr: row.specificationsAr ? row.specificationsAr.split(' | ').filter(Boolean) : [],
             pairings: row.pairings ? row.pairings.split(/\s*\|\s*/).filter(Boolean) : [],
             featured: row.featured === 1,
+            handmade: row.handmade === 1,
+            isNew: row.isNew === 1,
             wattage: row.wattage || '',
             voltage: row.voltage || '',
             plugType: row.plugType || '',
