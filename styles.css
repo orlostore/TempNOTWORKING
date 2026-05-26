@@ -178,3 +178,7 @@ body.search-open .hdr-search-drawer{transform:translateY(0);visibility:visible}
 header.hdr-v2{position:static!important;top:auto!important;left:auto!important;right:auto!important;z-index:auto!important;box-shadow:none!important;width:100%!important}
 /* Also undo the body padding-top:58px that was compensating for the legacy fixed header */
 body:has(header.hdr-v2){padding-top:0!important}
+
+/* Thin caps banner that sits right below .hdr-v2 — replaces the old orange "Free delivery" promo bar */
+.hdr-thin-banner{background:#fff;padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:#6b6b6b;text-align:center;border-bottom:1px solid rgba(26,58,82,0.08);font-weight:500;line-height:1.4}
+.hdr-thin-banner .ar{font-family:'Almarai',sans-serif;font-size:0.66rem;letter-spacing:0;text-transform:none;color:#9aa5ad;font-weight:400;direction:rtl;margin-left:4px}
