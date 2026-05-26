@@ -575,6 +575,28 @@ async function initProductPage() {
     productPriceEl.innerText = "AED " + Number(product.price).toFixed(2);
   }
 
+  // Stock caption — quiet "In stock" / "Only N available" with dot indicator (per locked tag system)
+  (function() {
+    if (!productPriceEl || !productPriceEl.parentNode) return;
+    let cap = document.getElementById('productStockCaption');
+    if (!cap) {
+      cap = document.createElement('div');
+      cap.id = 'productStockCaption';
+      productPriceEl.parentNode.insertBefore(cap, productPriceEl.nextSibling);
+    }
+    const stock = product.totalStock != null ? product.totalStock : product.quantity || 0;
+    if (stock <= 0) {
+      cap.className = 'pdp-stock-caption soldout';
+      cap.textContent = 'Sold out';
+    } else if (stock <= 4) {
+      cap.className = 'pdp-stock-caption low';
+      cap.textContent = `Only ${stock} available`;
+    } else {
+      cap.className = 'pdp-stock-caption';
+      cap.textContent = 'In stock';
+    }
+  })();
+
   // === EARLY PRICE ===
   const earlyPriceDesktop = document.getElementById("earlyPriceDesktop");
   const earlyPriceMobile = document.getElementById("earlyPriceMobile");
