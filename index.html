@@ -79,7 +79,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=67">
+    <link rel="stylesheet" href="styles.css?v=68">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -1354,9 +1354,15 @@ document.addEventListener('DOMContentLoaded', function(){
       var stock = p.totalStock!==undefined ? p.totalStock : (p.quantity||0);
       var isOOS = stock === 0;
       var badge = '';
-      if (isOOS) badge = '<span class="badge oos">Sold out</span>';
-      else if (p.featured) badge = '<span class="badge">Best seller</span>';
-      else if (stock>0 && stock<=3) badge = '<span class="badge">Only '+stock+' left</span>';
+      if (isOOS) {
+        badge = '<div class="sold-out-strip">Sold out</div>';
+      } else {
+        var primary = p.isNew ? 'New' : (p.featured ? 'Bestseller' : '');
+        var hand = p.handmade === true;
+        if (primary && hand) badge = '<span class="badge">'+primary+'<span class="badge-sep">&amp;</span><em>Handmade</em></span>';
+        else if (primary) badge = '<span class="badge">'+primary+'</span>';
+        else if (hand) badge = '<span class="badge"><em>Handmade</em></span>';
+      }
       var bag = '';
       if (!isOOS){
         var hasV = p.variants && p.variants.length>0;
@@ -1365,8 +1371,8 @@ document.addEventListener('DOMContentLoaded', function(){
           : "if(typeof addToCart==='function')addToCart("+qid(p.id)+",event);event.stopPropagation();event.preventDefault();";
         bag = '<button class="card-bag" aria-label="Add to bag" onclick="'+act+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></button>';
       }
-      var price = p.price ? 'AED '+Number(p.price).toFixed(2) : '';
-      return '<div class="card'+(isOOS?' oos':'')+'">'+
+      var price = isOOS ? '<span class="price-soldout">Sold out</span>' : (p.price ? 'AED '+Number(p.price).toFixed(2) : '');
+      return '<div class="card'+(isOOS?' oos is-soldout':'')+'">'+
         '<a href="'+pdpHref+'" class="card-link"><div class="card-img">'+imgHTML+badge+'</div></a>'+
         '<div class="card-info">'+
           '<a href="'+pdpHref+'" class="card-info-text">'+
