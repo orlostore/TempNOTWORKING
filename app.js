@@ -1434,36 +1434,57 @@ function getCategoryEmoji(categoryName) {
 }
 
 function populatePopularNow() {
-    const container = document.getElementById('popularScroll');
-    if (!container || !products.length) return;
-    // Show ALL featured (best seller) products — no exclusions
+    const track = document.getElementById('popularScroll');
+    const dots = document.getElementById('popularDots');
+    const carousel = document.getElementById('popularCarousel');
+    if (!track || !products.length) return;
     const featured = products.filter(p => p.featured);
     let list = [...featured];
-    // Auto-fill to at least 6 if not enough featured
     if (list.length < 6) {
         const arrivalIds = new Set([...products].sort((a, b) => b.id - a.id).slice(0, 4).map(p => p.id));
         const filler = products.filter(p => !p.featured && !arrivalIds.has(p.id));
         list = list.concat(filler.slice(0, 6 - list.length));
     }
-
-    container.innerHTML = list.map((p, index) => {
+    list = list.slice(0, 6);
+    const total = list.length;
+    track.innerHTML = list.map((p, index) => {
         const imgSrc = p.image && p.image.startsWith('http') ? escapeHTML(p.image) : '';
-        const cdnSrc200pop = imgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/${imgSrc}` : '';
+        const cdnSrc = imgSrc ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_800,h_800,f_auto,q_auto/${imgSrc}` : '';
         const safeName = escapeHTML(p.name);
         const safeNameAr = escapeHTML(p.nameAr);
+        const num = String(index + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
         const imgHTML = imgSrc
-            ? `<img src="${cdnSrc200pop}" alt="${safeName}" width="200" height="200" onerror="this.onerror=null;this.src='${imgSrc}'" ${index === 0 ? 'fetchpriority="high"' : index < 3 ? '' : 'loading="lazy"'}>`
-            : `<span style="font-size:2rem;">${escapeHTML(p.image || '')}</span>`;
-        return `
-        <a href="product.html?product=${encodeURIComponent(p.slug)}" class="popular-card">
-            <div class="popular-card-img">${imgHTML}</div>
-            <div class="popular-card-info">
-                <div class="popular-card-name">${safeName}</div>
-                ${safeNameAr ? `<div class="popular-card-name-ar">${safeNameAr}</div>` : ''}
-                <div class="popular-card-price">${formatProductPrice(p, false)}</div>
-            </div>
-        </a>`;
+            ? `<img src="${cdnSrc}" alt="${safeName}" onerror="this.onerror=null;this.src='${imgSrc}'" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>`
+            : '';
+        return `<a href="product.html?product=${encodeURIComponent(p.slug)}" class="popular-slide" aria-roledescription="slide" aria-label="${num}"><div class="popular-slide-img">${imgHTML}</div><div class="popular-slide-body"><div class="popular-slide-num">${num}</div><div class="popular-slide-name">${safeName}</div>${safeNameAr ? `<div class="popular-slide-name-ar">${safeNameAr}</div>` : ''}<div class="popular-slide-price">${formatProductPrice(p, false)}</div><span class="popular-slide-cta">View <svg viewBox="0 0 24 12" aria-hidden="true"><path d="M2 6h20M16 1l5 5-5 5"/></svg></span></div></a>`;
     }).join('');
+    if (dots) {
+        dots.innerHTML = list.map((_, i) => `<button class="popular-dot${i === 0 ? ' is-active' : ''}" type="button" aria-label="Show slide ${i + 1} of ${total}"></button>`).join('');
+    }
+    if (carousel) initPopularCarousel(carousel);
+}
+
+function initPopularCarousel(root) {
+    if (root._inited) return; root._inited = true;
+    const track = root.querySelector('.popular-track');
+    const slides = root.querySelectorAll('.popular-slide');
+    const dots = root.querySelectorAll('.popular-dot');
+    const interval = parseInt(root.dataset.interval || '5000', 10);
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let i = 0, timer = null;
+    function go(n) {
+        i = (n + slides.length) % slides.length;
+        track.style.transform = 'translateX(' + (-i * 100) + '%)';
+        dots.forEach((d, j) => d.classList.toggle('is-active', j === i));
+    }
+    function start() { if (!reduce && slides.length > 1) timer = setInterval(() => go(i + 1), interval); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    dots.forEach((d, j) => d.addEventListener('click', () => { stop(); go(j); start(); }));
+    root.addEventListener('touchstart', stop, { passive: true });
+    root.addEventListener('touchend', () => { stop(); start(); }, { passive: true });
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    start();
 }
 
 function populateCategories() {
