@@ -107,55 +107,76 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
   <!-- 1. Background -->
   <section>
     <h2><span class="n">01</span><span>Background &amp; palette</span></h2>
-    <p>The site is built on a single cream tone. Match it in the studio and your products will look at home on every surface — product card, hero, carousel, IG grid, Story.</p>
+    <p>The site sits on a cream page. Product photos use a <strong>distinct warm beige bg</strong> so the card lifts off the page — <em>never the same colour as the cream page</em>.</p>
     <div class="palette">
-      <div class="swatch"><div class="chip" style="background:#f8f6f2"></div><div class="nm">Cream</div><div class="hex">#F8F6F2 · RGB 248 246 242</div><div class="use">Always the background. Studio paper, lit evenly.</div></div>
-      <div class="swatch"><div class="chip" style="background:#efebe3"></div><div class="nm">Cream Darker</div><div class="hex">#EFEBE3</div><div class="use">Sub-bg accents (postcards, framing).</div></div>
+      <div class="swatch"><div class="chip" style="background:#f8f6f2"></div><div class="nm">Cream</div><div class="hex">#F8F6F2 · RGB 248 246 242</div><div class="use">Site page background only — never the product image bg.</div></div>
+      <div class="swatch"><div class="chip" style="background:#efebe3"></div><div class="nm">Cream Darker</div><div class="hex">#EFEBE3</div><div class="use">Sub-bg accents (postcards, framing).</div></div><div class="swatch" style="outline:2px solid var(--coral);outline-offset:6px"><div class="chip" style="background:#e5dccf"></div><div class="nm">Catalogue Beige</div><div class="hex">#E5DCCF · RGB 229 220 207</div><div class="use"><strong>Clean product image background.</strong> Mirrors Hermès — warm taupe, lifts the product off the cream page.</div></div>
       <div class="swatch"><div class="chip" style="background:#1a3a52"></div><div class="nm">Navy</div><div class="hex">#1A3A52</div><div class="use">Type only — never as background.</div></div>
       <div class="swatch"><div class="chip" style="background:#e76f51"></div><div class="nm">Coral</div><div class="hex">#E76F51</div><div class="use">Accent only — the dot of the "O", the italic "the pause." Never as background.</div></div>
     </div>
   </section>
 
-  <!-- 2. Aspect ratios -->
+  <!-- 2. Two image standards -->
   <section>
-    <h2><span class="n">02</span><span>Aspect ratios</span></h2>
-    <p>Shoot once at a square, then crop. For Reels / Stories / TikTok, place the subject so a 9:16 crop still works (more headroom and footroom).</p>
+    <h2><span class="n">02</span><span>Two image standards</span></h2>
+    <p>Every photograph is one of two types. Knowing which before you shoot keeps the catalogue coherent and the homepage editorial.</p>
+    <h3 style="margin-top:24px">A — Catalogue (clean)</h3>
+    <ul>
+      <li><strong>Background: warm beige <code style="background:var(--cream-darker);padding:2px 6px">#E5DCCF</code></strong>. No exceptions. Use studio paper or a calibrated beige seamless.</li>
+      <li>One product per frame, centred, ~75% fill, soft natural shadow.</li>
+      <li>No props, no styling, no narrative. The object alone.</li>
+      <li><strong>Where it shows:</strong> product cards, New Arrivals, All Products grid, PDP main image, Instagram feed catalogue posts.</li>
+    </ul>
+    <h3 style="margin-top:24px">B — Lifestyle (hero)</h3>
+    <ul>
+      <li><strong>Background: any styled scene.</strong> Wood desk, marble, window light, an in-use moment.</li>
+      <li>Tells a story — the gramophone playing, the camper van on an open map, the brass tray with morning coffee.</li>
+      <li>Subject can sit anywhere in the frame (centre, third, bottom-weighted).</li>
+      <li><strong>Where it shows:</strong> Popular Now carousel, hero, The Edit, IG Stories &amp; Reels, TikTok, OG share image.</li>
+    </ul>
+    <p style="margin-top:18px;font-size:.85rem;color:var(--muted)">When in doubt: if it lives in a grid → A. If it lives alone with breathing room → B.</p>
+  </section>
+
+  <!-- 3. Aspect ratios -->
+  <section>
+    <h2><span class="n">03</span><span>Aspect ratios</span></h2>
+    <p>Shoot once at a square, then crop. For Reels / Stories / TikTok, place the subject so a 9:16 crop still works (more headroom and footroom). <strong>Each ratio offers two blank canvases</strong>: warm beige for catalogue (type A), pale cream for composing lifestyle (type B).</p>
     <div class="ratios">
       <div class="ratio-card">
         <div class="ratio-frame sq"><div class="sub">subject<br>centred</div></div>
         <div class="label">1 : 1 · Square</div>
         <div class="dim">1080 × 1080 px</div>
         <div class="use">Site cards, carousel, Popular Now, PDP, Instagram feed</div>
-        <button class="dl" data-w="1080" data-h="1080" data-bg="#f8f6f2">Download blank</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="dl" data-w="1080" data-h="1080" data-bg="#e5dccf" data-type="A">A · Beige</button><button class="dl" data-w="1080" data-h="1080" data-bg="#f8f6f2" data-type="B">B · Cream</button></div>
       </div>
       <div class="ratio-card">
         <div class="ratio-frame st"><div class="sub">subject<br>vertical</div></div>
         <div class="label">9 : 16 · Vertical</div>
         <div class="dim">1080 × 1920 px</div>
         <div class="use">IG Stories &amp; Reels, TikTok, future hero on PDP mobile</div>
-        <button class="dl" data-w="1080" data-h="1920" data-bg="#f8f6f2">Download blank</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="dl" data-w="1080" data-h="1920" data-bg="#e5dccf" data-type="A">A · Beige</button><button class="dl" data-w="1080" data-h="1920" data-bg="#f8f6f2" data-type="B">B · Cream</button></div>
       </div>
       <div class="ratio-card">
         <div class="ratio-frame la"><div class="sub">subject left or right</div></div>
         <div class="label">16 : 9 · Landscape</div>
         <div class="dim">1920 × 1080 px</div>
         <div class="use">Site hero banner, The Edit cover, desktop OG image</div>
-        <button class="dl" data-w="1920" data-h="1080" data-bg="#f8f6f2">Download blank</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="dl" data-w="1920" data-h="1080" data-bg="#e5dccf" data-type="A">A · Beige</button><button class="dl" data-w="1920" data-h="1080" data-bg="#f8f6f2" data-type="B">B · Cream</button></div>
       </div>
       <div class="ratio-card">
         <div class="ratio-frame" style="aspect-ratio:4/5"><div class="sub">subject<br>portrait</div></div>
         <div class="label">4 : 5 · Portrait</div>
         <div class="dim">1080 × 1350 px</div>
         <div class="use">Instagram feed portrait — gets more screen real-estate than square</div>
-        <button class="dl" data-w="1080" data-h="1350" data-bg="#f8f6f2">Download blank</button>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="dl" data-w="1080" data-h="1350" data-bg="#e5dccf" data-type="A">A · Beige</button><button class="dl" data-w="1080" data-h="1350" data-bg="#f8f6f2" data-type="B">B · Cream</button></div>
       </div>
     </div>
-    <p style="margin-top:18px;font-size:.85rem;color:var(--muted)">Download the blank canvas for any ratio (cream-tinted PNG) — drop your shot into it and crop to fit.</p>
+    <p style="margin-top:18px;font-size:.85rem;color:var(--muted)"><strong>A · Beige</strong> = clean catalogue product canvas (warm beige #E5DCCF). <strong>B · Cream</strong> = lifestyle composing canvas (page cream #F8F6F2). Both include a dashed safe-area guide and an ORLO mark.</p>
   </section>
 
   <!-- 3. Composition -->
   <section>
-    <h2><span class="n">03</span><span>Composition</span></h2>
+    <h2><span class="n">04</span><span>Composition</span></h2>
     <ul>
       <li><strong>Subject fills ~75–80% of the frame.</strong> The dashed outline in each frame above is the safe area — keep important detail inside it.</li>
       <li><strong>Centred,</strong> with soft natural shadow falling below or behind. Not floating.</li>
@@ -167,11 +188,11 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
 
   <!-- 4. Lighting -->
   <section>
-    <h2><span class="n">04</span><span>Lighting</span></h2>
+    <h2><span class="n">05</span><span>Lighting</span></h2>
     <ul>
       <li><strong>Soft, diffused daylight</strong> — north-facing window or a daylight LED through diffusion fabric.</li>
       <li>One main light, one bounce card (white) opposite. No coloured lights.</li>
-      <li>Soft shadow on cream — never a hard black shadow.</li>
+      <li>Soft shadow on the beige (catalogue) or the surface in shot (lifestyle) — never a hard black shadow.</li>
       <li>Avoid mixed light temperatures (don't mix tungsten + daylight).</li>
       <li>Same time of day across a shoot — keeps the catalogue tone consistent.</li>
     </ul>
@@ -179,12 +200,12 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
 
   <!-- 5. Do / Don't -->
   <section>
-    <h2><span class="n">05</span><span>Do · Don't</span></h2>
+    <h2><span class="n">06</span><span>Do · Don't</span></h2>
     <div class="dod">
       <div class="col go">
         <h4>Do</h4>
         <ul>
-          <li>Cream background, edge to edge</li>
+          <li>Catalogue: warm beige <code style="background:var(--cream-darker);padding:1px 5px;font-size:.78rem">#E5DCCF</code> edge to edge</li>
           <li>Subject in focus, soft shadow</li>
           <li>Honest colour — what you see is what arrives</li>
           <li>Show scale — include a hand or known object for Stories</li>
@@ -194,7 +215,7 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
       <div class="col no">
         <h4>Don't</h4>
         <ul>
-          <li>White (#FFF) or grey backgrounds — they'll clash on site</li>
+          <li>Pure white (#FFF), grey, or page cream (#F8F6F2) as the product bg — all wrong</li>
           <li>Heavy Instagram filters, vintage tints, HDR</li>
           <li>Drop shadows added in editing — keep it natural</li>
           <li>Text or stickers in the image itself (overlay them in IG instead)</li>
@@ -206,7 +227,7 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
 
   <!-- 6. Export -->
   <section>
-    <h2><span class="n">06</span><span>Export specs</span></h2>
+    <h2><span class="n">07</span><span>Export specs</span></h2>
     <table>
       <tr><th>Use</th><th>Dimensions</th><th>Format</th><th>Quality</th></tr>
       <tr><td>Site cards &amp; carousel</td><td>1080 × 1080</td><td>JPG, sRGB</td><td>85% · &lt; 300 KB</td></tr>
@@ -222,7 +243,7 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
 
   <!-- 7. File naming -->
   <section>
-    <h2><span class="n">07</span><span>File naming</span></h2>
+    <h2><span class="n">08</span><span>File naming</span></h2>
     <p>Use kebab-case, English, no spaces. Helps both SEO and our backup organisation.</p>
     <ul>
       <li><code style="background:var(--cream-darker);padding:2px 6px">vintage-camper-van-red-01.jpg</code></li>
@@ -257,7 +278,7 @@ document.querySelectorAll('button.dl').forEach(b=>{
     ctx.fillText('ORLO · '+w+' × '+h,w-w*0.04,h-h*0.03);
     c.toBlob(blob=>{
       const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');a.href=url;a.download='orlo-blank-'+w+'x'+h+'.png';a.click();
+      const a=document.createElement('a');a.href=url;a.download='orlo-blank-'+(b.dataset.type||'')+'-'+w+'x'+h+'.png';a.click();
       setTimeout(()=>URL.revokeObjectURL(url),1000);
     },'image/png');
   });
