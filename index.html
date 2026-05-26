@@ -39,7 +39,7 @@
     <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="products.min.js?v=11" as="script">
-    <link rel="preload" href="app.min.js?v=28" as="script">
+    <link rel="preload" href="app.min.js?v=29" as="script">
     <!-- Type system: DM Sans body + Cormorant Garamond headings (self-hosted; declarations live in styles.css) -->
     <link rel="preload" href="/fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/dm-sans-v17-latin-500.woff2" as="font" type="font/woff2" crossorigin>
@@ -79,7 +79,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=62">
+    <link rel="stylesheet" href="styles.css?v=63">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -952,8 +952,8 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 <div class="hdr-thin-banner">Free Delivery over AED 75</div>
 
 <!-- ═══ HERO v2 (Variant F · Hermès editorial) — centered overlay, white text, dark gradient + image-darken for contrast ═══ -->
-<section class="orlo-hero-v2">
-    <img class="orlo-hero-v2-img" src="https://images.orlostore.com/vintage-camper-van/lifestyle.webp" alt="Vintage Camper Van model on a styled travel desk" fetchpriority="high">
+<section class="orlo-hero-v2" aria-roledescription="banner">
+    <img class="orlo-hero-v2-img" src="https://images.orlostore.com/vintage-camper-van/lifestyle.webp" alt="Vintage Camper Van model on a styled travel desk" fetchpriority="high" draggable="false">
     <div class="orlo-hero-v2-overlay">
         <h2 class="orlo-hero-v2-title">Objects with character.</h2>
         <p class="orlo-hero-v2-sub">From the dashboard to the desk — small things that say something.</p>
@@ -974,7 +974,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         <h2 class="homepage-section-title">Popular Now <span class="arabic-inline">الأكثر رواجاً</span></h2>
         <div class="popular-carousel" id="popularCarousel" data-interval="1500" aria-roledescription="carousel" aria-label="Popular products">
             <div class="popular-track" id="popularScroll"></div>
-            <div class="popular-dots" id="popularDots" aria-hidden="true"></div>
+            <button class="popular-nav popular-nav-prev" type="button" aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
+            <button class="popular-nav popular-nav-next" type="button" aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
+            <div class="popular-dots" id="popularDots" aria-hidden="false"></div>
         </div>
     </div>
 </section>
@@ -1308,7 +1310,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="app.min.js?v=28" defer></script>
+<script src="app.min.js?v=29" defer></script>
 <script>
 /* ═══ CARD v2 — Hermès card-4 override. Active only on this draft page (body[data-cards="v2"]). Live pages keep legacy cards.
    Wrapped in DOMContentLoaded so the override runs AFTER app.min.js's defer execution

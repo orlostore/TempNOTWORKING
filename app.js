@@ -1469,6 +1469,8 @@ function initPopularCarousel(root) {
     const track = root.querySelector('.popular-track');
     const slides = root.querySelectorAll('.popular-slide');
     const dots = root.querySelectorAll('.popular-dot');
+    const prev = root.querySelector('.popular-nav-prev');
+    const next = root.querySelector('.popular-nav-next');
     const interval = parseInt(root.dataset.interval || '5000', 10);
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let i = 0, timer = null;
@@ -1479,9 +1481,29 @@ function initPopularCarousel(root) {
     }
     function start() { if (!reduce && slides.length > 1) timer = setInterval(() => go(i + 1), interval); }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
-    dots.forEach((d, j) => d.addEventListener('click', () => { stop(); go(j); start(); }));
-    root.addEventListener('touchstart', stop, { passive: true });
-    root.addEventListener('touchend', () => { stop(); start(); }, { passive: true });
+    dots.forEach((d, j) => d.addEventListener('click', (e) => { e.stopPropagation(); stop(); go(j); start(); }));
+    if (prev) prev.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); stop(); go(i - 1); start(); });
+    if (next) next.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); stop(); go(i + 1); start(); });
+    // swipe (pointer events — work for both touch + mouse drag)
+    let sx = 0, sy = 0, dx = 0, swiping = false, swiped = false;
+    root.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        sx = e.clientX; sy = e.clientY; dx = 0; swiping = true; swiped = false; stop();
+    });
+    root.addEventListener('pointermove', (e) => {
+        if (!swiping) return;
+        dx = e.clientX - sx;
+        const dy = Math.abs(e.clientY - sy);
+        if (Math.abs(dx) > 14 && Math.abs(dx) > dy * 1.4) swiped = true;
+    });
+    root.addEventListener('pointerup', () => {
+        if (swiped && Math.abs(dx) > 50) { dx < 0 ? go(i + 1) : go(i - 1); }
+        swiping = false; start();
+    });
+    root.addEventListener('pointercancel', () => { swiping = false; start(); });
+    root.addEventListener('click', (e) => {
+        if (swiped) { e.preventDefault(); e.stopPropagation(); swiped = false; }
+    }, true);
     root.addEventListener('mouseenter', stop);
     root.addEventListener('mouseleave', start);
     start();
