@@ -79,7 +79,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=64">
+    <link rel="stylesheet" href="styles.css?v=65">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -397,8 +397,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .hero-delivery-box .delivery-ar { color: var(--draft-muted) !important; }
       .hero-delivery-box .delivery-icon svg { stroke: var(--primary) !important; }
 
-      /* Sections — unified rhythm via --section-gap (defined below) */
-      .homepage-section { padding: var(--section-gap, 56px) 0 0 !important; }
+      /* Section padding handled by the consolidated rhythm block at the end of this style sheet */
       .homepage-section-title { margin-bottom: 1.25rem !important; }
       .about-section, .contact-section, .terms-section { padding: 3.5rem 1rem !important; }
 
@@ -731,13 +730,15 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         font-family: 'DM Sans', sans-serif;
       }
 
-      /* ─── Unified vertical rhythm — every gap between sections = --section-gap ─── */
+      /* ─── Unified vertical rhythm — single --section-gap controls every gap ─── */
+      /* Tune the page by changing this one value. No !important: each rule wins by
+         specificity or by being the latest declaration in the cascade. */
       :root { --section-gap: 56px; }
       @media (min-width: 769px) { :root { --section-gap: 72px; } }
-      .container#products { padding-top: var(--section-gap) !important; padding-bottom: 0 !important; margin-top: 0 !important; }
-      .edit-teaser-v2 { margin-top: var(--section-gap) !important; margin-bottom: 0 !important; }
-      .about-accordion { margin-top: var(--section-gap) !important; margin-bottom: 0 !important; }
-      .cs-footer-section { margin-top: var(--section-gap) !important; }
+      .homepage-section  { padding: var(--section-gap) 0 0; }
+      .container#products{ padding-top: var(--section-gap); padding-bottom: 0; margin-top: 0; }
+      .edit-teaser-v2    { margin: var(--section-gap) 0 0; }
+      .about-accordion   { margin: var(--section-gap) auto 0; }
     </style>
     <!-- End draft overlay -->
     <script>
@@ -874,7 +875,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         .orlo-hero-v2-cta .arabic-text{font-family:'Almarai',sans-serif;font-size:0.58rem;letter-spacing:0;text-transform:none;font-weight:400;opacity:0.82;margin-top:2px;direction:rtl}
 
         /* ═══ UNIFIED FOOTER (Customer Enquiries) — mirrors cart / login / signup pages ═══ */
-        .cs-footer-section{background:#fff;padding:28px 32px;margin-top:30px}
+        .cs-footer-section{background:#fff;padding:28px 32px;margin-top:var(--section-gap)}
         .cs-footer-inner{max-width:780px;margin:0 auto}
         .cs-footer-section .cs-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.16em;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
         .cs-footer-section .cs-heading .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#6b6b6b;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
