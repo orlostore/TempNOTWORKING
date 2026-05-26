@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Homepage mockup — 4 directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1a3a52;
+  --coral:#e76f51;
+  --cream:#f8f6f2;
+  --cream-darker:#efebe3;
+  --muted:#6b6b6b;
+  --hair:rgba(26,58,82,0.10);
+  --hair-soft:rgba(26,58,82,0.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#eceae5;font-family:'DM Sans',sans-serif;color:var(--navy);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+.page-head{padding:48px 24px 28px;text-align:center;background:var(--cream-darker);border-bottom:1px solid var(--hair)}
+.page-head h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.4rem}
+.page-head p{font-family:'DM Sans',sans-serif;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+
+.lab{padding:36px 16px;display:flex;flex-wrap:wrap;gap:48px;justify-content:center;max-width:1800px;margin:0 auto}
+.mockup{width:420px;display:flex;flex-direction:column;gap:14px}
+.mockup-label{text-align:center;padding:0 8px}
+.mockup-label .tag{font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.mockup-label h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.5rem;color:var(--navy);margin-top:4px}
+.mockup-label p{font-family:'DM Sans',sans-serif;font-size:.78rem;color:var(--muted);margin-top:6px;line-height:1.55}
+.mockup-label .pick{display:inline-block;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.22em;padding:3px 10px;border-radius:2px;margin-top:8px}
+
+.phone{width:100%;aspect-ratio:9/19.5;background:#fff;border:8px solid #1a1a1a;border-radius:28px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.15);position:relative}
+.phone-scroll{position:absolute;inset:0;overflow:auto;background:var(--cream);scroll-behavior:smooth}
+.phone-scroll::-webkit-scrollbar{width:4px}
+.phone-scroll::-webkit-scrollbar-thumb{background:rgba(0,0,0,.1)}
+
+/* ─── shared chrome (each mockup uses these) ─── */
+.h-thin{background:var(--cream-darker);text-align:center;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--navy);border-bottom:1px solid var(--hair)}
+.h-row{display:flex;align-items:center;padding:11px 14px;background:#fff;border-bottom:1px solid var(--hair);gap:10px}
+.h-lockup{display:inline-flex;align-items:center;gap:7px}
+.h-lockup .badge{width:24px;height:24px;background:url("logos/svg/Color%20logo%20-%20no%20background.svg") center/contain no-repeat;background-color:#f0e9e5;border-radius:50%}
+.h-lockup .sep{width:1px;height:14px;background:rgba(26,58,82,.25)}
+.h-lockup .word{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:.85rem;letter-spacing:.18em;color:var(--navy)}
+.h-lockup .word span{color:var(--coral)}
+.h-edit{flex:1;display:flex;justify-content:center;align-items:baseline;gap:.18em;font-family:'Cormorant Garamond',serif;font-size:.95rem;line-height:1;letter-spacing:.005em}
+.h-edit .the{font-weight:500;color:var(--navy)}
+.h-edit .ed{font-weight:500;font-style:italic;color:var(--coral)}
+.h-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center}
+.h-icon svg{width:16px;height:16px;stroke:var(--navy);fill:none;stroke-width:1.3;stroke-linecap:round}
+
+/* bottom nav (always visible) */
+.bn{position:absolute;bottom:0;left:0;right:0;height:54px;background:#fff;border-top:1px solid var(--hair);display:grid;grid-template-columns:repeat(4,1fr);z-index:5}
+.bn a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-family:'DM Sans',sans-serif;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--navy)}
+.bn a.is-active{color:var(--coral)}
+.bn a svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.3;stroke-linecap:round}
+.phone-scroll{padding-bottom:54px}
+
+/* ─── HERO (shared, used in A/B/D) ─── */
+.hero{position:relative;aspect-ratio:9/12;background:url('https://images.unsplash.com/photo-1556228720-195a672e8a03?w=900&q=80') center/cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,rgba(0,0,0,.15) 45%,transparent 65%)}
+.hero .copy{position:absolute;left:18px;right:18px;bottom:18px;color:#fff;z-index:2;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.hero h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.7rem;line-height:1.05}
+.hero p{font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(255,255,255,.85);max-width:80%}
+.hero .cta{font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:#fff;border-bottom:1px solid rgba(255,255,255,.7);padding-bottom:3px;margin-top:6px}
+
+/* ─── SECTION HEADER pattern ─── */
+.sec-head{padding:32px 18px 6px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.sec-head .ttl{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.5rem;color:var(--navy);line-height:1}
+.sec-head .ar{font-family:'Almarai',sans-serif;font-size:.7rem;color:var(--muted);direction:rtl}
+.sec-head .more{font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid currentColor;padding-bottom:2px;align-self:end}
+
+/* ─── PRODUCT CARD v2 ─── */
+.card{display:flex;flex-direction:column}
+.card .img{aspect-ratio:1/1;background:#ddd center/cover;position:relative}
+.card .body{padding:8px 4px 0}
+.card .ttl{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.95rem;color:var(--navy);line-height:1.2}
+.card .price{font-family:'DM Sans',sans-serif;font-size:.7rem;letter-spacing:.05em;color:var(--muted);margin-top:3px}
+
+/* ─── GRID variants ─── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 14px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 14px 0}
+
+/* ─── CATEGORY BAND ─── */
+.cat-band{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:18px 14px;background:var(--cream)}
+.cat{display:flex;flex-direction:column;align-items:center;gap:6px}
+.cat .ico{width:38px;height:38px;border:1px solid var(--hair);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.cat .ico svg{width:18px;height:18px;stroke:var(--navy);fill:none;stroke-width:1.3;stroke-linecap:round}
+.cat .nm{font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);text-align:center}
+
+/* ─── THE EDIT (Variant E — split-screen) ─── */
+.te{display:grid;grid-template-columns:1fr 1fr;min-height:200px;background:var(--cream);margin-top:32px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.te .img{background:url('https://images.unsplash.com/photo-1542354266-44ec3c97daee?w=600&q=80') center/cover}
+.te .body{padding:18px 14px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.te .issue{font-family:'DM Sans',sans-serif;font-size:.5rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.te h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.4rem;line-height:1.05;color:var(--navy)}
+.te .cta{font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.24em;text-transform:uppercase;color:var(--navy);border-bottom:1px solid var(--navy);padding-bottom:2px;align-self:flex-start;margin-top:4px}
+
+/* ─── ACCORDION ─── */
+.acc{padding:32px 18px 24px}
+.acc-row{border-bottom:1px solid var(--hair)}
+.acc-row:first-child{border-top:1px solid var(--hair)}
+.acc-row .trig{display:flex;justify-content:space-between;align-items:center;padding:14px 4px;font-family:'DM Sans',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--navy)}
+.acc-row .trig svg{width:11px;height:11px;stroke:var(--navy);fill:none;stroke-width:1.3;stroke-linecap:round;transition:transform .3s}
+
+/* ─── FOOTER ─── */
+.ft{background:#fff;padding:22px 18px;margin-top:24px}
+.ft-h{font-family:'DM Sans',sans-serif;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);font-weight:500;border-bottom:1px solid var(--hair);padding-bottom:10px;margin-bottom:12px;display:flex;justify-content:space-between}
+.ft-h .ar{font-family:'Almarai',sans-serif;font-size:.62rem;color:var(--muted);text-transform:none;letter-spacing:0}
+.ft-b{font-family:'DM Sans',sans-serif;font-size:.7rem;color:var(--navy);line-height:1.7}
+.ft-b div{margin-bottom:4px}
+.ft-b a{text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(26,58,82,.4)}
+.ft-legal{padding:14px 0 0;border-top:1px solid var(--hair);margin-top:12px;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.55rem;color:var(--muted)}
+
+/* ═══════════════════════════════════════════════════════
+   MOCKUP A — "Magazine" (full-width auto-carousel for Popular)
+   ═══════════════════════════════════════════════════════ */
+.carousel-a{position:relative;background:var(--cream);overflow:hidden;margin-top:14px}
+.carousel-a .track{display:flex;transition:transform .6s cubic-bezier(.45,.05,.55,.95)}
+.carousel-a .slide{flex:0 0 100%;display:flex;flex-direction:column;padding:0 0 16px}
+.carousel-a .slide .img{aspect-ratio:1/1;background:#ddd center/cover}
+.carousel-a .slide .body{padding:16px 18px 0;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.carousel-a .slide .num{font-family:'DM Sans',sans-serif;font-size:.5rem;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+.carousel-a .slide .ttl{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.7rem;line-height:1.1;color:var(--navy)}
+.carousel-a .slide .price{font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--muted);margin-top:2px}
+.carousel-a .slide .cta{font-family:'DM Sans',sans-serif;font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--navy);border-bottom:1px solid var(--navy);padding-bottom:2px;margin-top:8px}
+.carousel-a .dots{display:flex;justify-content:center;gap:6px;padding:10px 0 4px}
+.carousel-a .dot{width:5px;height:5px;border-radius:50%;background:rgba(26,58,82,.25);transition:background .3s,width .3s}
+.carousel-a .dot.is-active{background:var(--navy);width:18px;border-radius:3px}
+
+/* ═══════════════════════════════════════════════════════
+   MOCKUP B — "Boutique" (horizontal-scroll with peek for Arrivals)
+   ═══════════════════════════════════════════════════════ */
+.peek-rail{display:flex;gap:10px;padding:14px 14px 0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.peek-rail::-webkit-scrollbar{display:none}
+.peek-rail .pcard{flex:0 0 60%;scroll-snap-align:start;display:flex;flex-direction:column}
+.peek-rail .pcard:last-child{margin-right:30%}
+.peek-rail .pcard .img{aspect-ratio:1/1;background:#ddd center/cover}
+.peek-rail .pcard .ttl{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.9rem;color:var(--navy);margin-top:6px;line-height:1.2}
+.peek-rail .pcard .price{font-family:'DM Sans',sans-serif;font-size:.66rem;color:var(--muted);margin-top:2px}
+
+/* ═══════════════════════════════════════════════════════
+   MOCKUP C — "Minimal" (no Popular/Arrivals — just a curated trio)
+   ═══════════════════════════════════════════════════════ */
+.chapter{padding:32px 18px}
+.chapter .ch-meta{font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);text-align:center}
+.chapter h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2rem;color:var(--navy);text-align:center;margin:8px 0 4px;line-height:1}
+.chapter .lede{font-family:'DM Sans',sans-serif;font-size:.78rem;color:var(--muted);text-align:center;margin-bottom:22px}
+.chapter .trio{display:grid;grid-template-columns:1fr;gap:24px}
+.chapter .trio .card{align-items:center;text-align:center}
+.chapter .trio .img{aspect-ratio:4/5;width:100%;background:#ddd center/cover}
+.chapter .trio .ttl{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.2rem;color:var(--navy);margin-top:10px}
+.chapter .trio .price{font-family:'DM Sans',sans-serif;font-size:.68rem;color:var(--muted);margin-top:3px;letter-spacing:.06em}
+
+/* ═══════════════════════════════════════════════════════
+   MOCKUP D — "Marquee" (infinite-scroll strip + 2-col arrivals)
+   ═══════════════════════════════════════════════════════ */
+.marq{background:var(--cream);overflow:hidden;padding:14px 0;position:relative;mask-image:linear-gradient(to right,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(to right,transparent,#000 8%,#000 92%,transparent)}
+.marq-track{display:flex;gap:14px;animation:marq 25s linear infinite;width:max-content}
+.marq-track .mc{display:flex;flex-direction:column;gap:6px;width:130px;flex-shrink:0}
+.marq-track .mc .img{aspect-ratio:1/1;background:#ddd center/cover}
+.marq-track .mc .ttl{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;color:var(--navy);line-height:1.2;padding:0 2px}
+.marq-track .mc .price{font-family:'DM Sans',sans-serif;font-size:.6rem;color:var(--muted);padding:0 2px}
+@keyframes marq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* tiny helper */
+.h-spacer{height:20px}
+
+.notes{max-width:980px;margin:60px auto;padding:28px;font-family:'DM Sans',sans-serif;font-size:.9rem;line-height:1.7;background:#fff;border:1px solid var(--hair);color:var(--navy)}
+.notes h3{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.5rem;margin-bottom:12px;color:var(--navy)}
+.notes ul{padding-left:18px;margin-top:8px}
+.notes li{margin:8px 0}
+.notes em{color:var(--coral);font-style:normal;font-weight:500}
+.notes table{width:100%;border-collapse:collapse;margin-top:16px;font-size:.82rem}
+.notes table th,.notes table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--hair);vertical-align:top}
+.notes table th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:500}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>Homepage — 4 layout directions</h1>
+  <p>Auto-carousel · peek-scroll · curated trio · marquee · same hero + Edit + accordion</p>
+</div>
+
+<div class="lab">
+
+  <!-- ═══════════════════════════════════════════════════════
+       MOCKUP A — Magazine (auto-carousel for Popular Now)
+       ═══════════════════════════════════════════════════════ -->
+  <div class="mockup">
+    <div class="mockup-label">
+      <div class="tag">Mockup A</div>
+      <h2>Magazine — auto-carousel</h2>
+      <p>Popular Now becomes a full-width auto-rotating feature (one item, big image, like a magazine cover). New Arrivals stays as a 2-col grid.</p>
+      <span class="pick">RECOMMENDED if items are hero-worthy</span>
+    </div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="h-thin">Free Delivery over AED 75</div>
+        <div class="h-row">
+          <a class="h-lockup"><span class="badge"></span><span class="sep"></span><span class="word">ORL<span>O</span></span></a>
+          <a class="h-edit"><span class="the">The</span><span class="ed">Edit.</span></a>
+          <span class="h-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></span>
+        </div>
+
+        <section class="hero">
+          <div class="copy">
+            <h1>Objects with <em>character.</em></h1>
+            <p>From the dashboard to the desk — small things that say something.</p>
+            <span class="cta">Browse the Collection</span>
+          </div>
+        </section>
+
+        <div class="sec-head"><div><div class="ttl">Popular Now</div></div><a class="more">See all →</a></div>
+        <div class="carousel-a" data-carousel data-interval="3500">
+          <div class="track">
+            <div class="slide"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=600&q=80')"></div><div class="body"><div class="num">01 / 04</div><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div><a class="cta">View</a></div></div>
+            <div class="slide"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1567113463300-102a7eb3cb26?w=600&q=80')"></div><div class="body"><div class="num">02 / 04</div><div class="ttl">Brass Desk Clock</div><div class="price">AED 89</div><a class="cta">View</a></div></div>
+            <div class="slide"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80')"></div><div class="body"><div class="num">03 / 04</div><div class="ttl">Polaroid Memo Frame</div><div class="price">AED 65</div><a class="cta">View</a></div></div>
+            <div class="slide"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1517705008128-361805f42e86?w=600&q=80')"></div><div class="body"><div class="num">04 / 04</div><div class="ttl">Gramophone Lamp</div><div class="price">AED 210</div><a class="cta">View</a></div></div>
+          </div>
+          <div class="dots"><span class="dot is-active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        </div>
+
+        <div class="cat-band">
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/></svg></div><div class="nm">Desk</div></div>
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div><div class="nm">Decor</div></div>
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 7V4h8v3"/></svg></div><div class="nm">Gifts</div></div>
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 18h18M3 12h18M3 6h18"/></svg></div><div class="nm">All</div></div>
+        </div>
+
+        <div class="sec-head"><div><div class="ttl">New Arrivals</div></div><a class="more">See all →</a></div>
+        <div class="grid-2">
+          <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80')"></div><div class="body"><div class="ttl">Atelier Brass Tray</div><div class="price">AED 110</div></div></div>
+          <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=400&q=80')"></div><div class="body"><div class="ttl">Polaroid Frame Set</div><div class="price">AED 75</div></div></div>
+          <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1518733057094-95b53143d2a7?w=400&q=80')"></div><div class="body"><div class="ttl">Vintage Telephone</div><div class="price">AED 220</div></div></div>
+          <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1567113463300-102a7eb3cb26?w=400&q=80')"></div><div class="body"><div class="ttl">Travel Clock</div><div class="price">AED 95</div></div></div>
+        </div>
+
+        <section class="te">
+          <div class="img"></div>
+          <div class="body">
+            <div class="issue">Issue 09 · Spring 2026</div>
+            <h2>Stories worth <em>the pause.</em></h2>
+            <a class="cta">Read The Edit →</a>
+          </div>
+        </section>
+
+        <div class="acc">
+          <div class="acc-row"><div class="trig">About ORLO<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">What we sell<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">Delivery &amp; service<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">Terms &amp; conditions<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+        </div>
+
+        <section class="ft">
+          <div class="ft-h">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+          <div class="ft-b">
+            <div>Email <a href="#">info@orlostore.com</a></div>
+            <div>WhatsApp <a href="#">+971 55 547 7206</a></div>
+          </div>
+          <div class="ft-legal"><a>Terms</a><a>Privacy</a><a>Refunds</a><a>Shipping</a></div>
+        </section>
+      </div>
+      <nav class="bn"><a><svg viewBox="0 0 24 24"><path d="M3 12L12 3l9 9"/><path d="M5 10v9h14v-9"/></svg>Home</a><a><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/></svg>Search</a><a><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>Account</a><a><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 14H7L6 7z"/></svg>Bag</a></nav>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MOCKUP B — Boutique (peek-rail for Arrivals)
+       ═══════════════════════════════════════════════════════ -->
+  <div class="mockup">
+    <div class="mockup-label">
+      <div class="tag">Mockup B</div>
+      <h2>Boutique — peek-rail</h2>
+      <p>Popular Now stays as 2-col grid. New Arrivals becomes a horizontal scroll that peeks the next item (Hermès / Aesop pattern). Encourages exploration.</p>
+      <span class="pick">RECOMMENDED for browsing-first</span>
+    </div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="h-thin">Free Delivery over AED 75</div>
+        <div class="h-row">
+          <a class="h-lockup"><span class="badge"></span><span class="sep"></span><span class="word">ORL<span>O</span></span></a>
+          <a class="h-edit"><span class="the">The</span><span class="ed">Edit.</span></a>
+          <span class="h-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></span>
+        </div>
+
+        <section class="hero">
+          <div class="copy">
+            <h1>Objects with <em>character.</em></h1>
+            <p>From the dashboard to the desk — small things that say something.</p>
+            <span class="cta">Browse the Collection</span>
+          </div>
+        </section>
+
+        <div class="sec-head"><div><div class="ttl">Popular Now</div></div><a class="more">See all →</a></div>
+        <div class="grid-2">
+          <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=400&q=80')"></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
+          <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1517705008128-361805f42e86?w=400&q=80')"></div><div class="body"><div class="ttl">Gramophone Lamp</div><div class="price">AED 210</div></div></div>
+          <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1567113463300-102a7eb3cb26?w=400&q=80')"></div><div class="body"><div class="ttl">Brass Desk Clock</div><div class="price">AED 89</div></div></div>
+          <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=400&q=80')"></div><div class="body"><div class="ttl">Polaroid Memo</div><div class="price">AED 65</div></div></div>
+        </div>
+
+        <div class="cat-band">
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/></svg></div><div class="nm">Desk</div></div>
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div><div class="nm">Decor</div></div>
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 7V4h8v3"/></svg></div><div class="nm">Gifts</div></div>
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 18h18M3 12h18M3 6h18"/></svg></div><div class="nm">All</div></div>
+        </div>
+
+        <div class="sec-head"><div><div class="ttl">New Arrivals</div><div class="ar">الجديد</div></div><a class="more">See all →</a></div>
+        <div class="peek-rail">
+          <div class="pcard"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80')"></div><div class="ttl">Atelier Brass Tray</div><div class="price">AED 110</div></div>
+          <div class="pcard"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=400&q=80')"></div><div class="ttl">Polaroid Frame Set</div><div class="price">AED 75</div></div>
+          <div class="pcard"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1518733057094-95b53143d2a7?w=400&q=80')"></div><div class="ttl">Vintage Telephone</div><div class="price">AED 220</div></div>
+          <div class="pcard"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1567113463300-102a7eb3cb26?w=400&q=80')"></div><div class="ttl">Travel Clock</div><div class="price">AED 95</div></div>
+        </div>
+
+        <section class="te">
+          <div class="img"></div>
+          <div class="body">
+            <div class="issue">Issue 09 · Spring 2026</div>
+            <h2>Stories worth <em>the pause.</em></h2>
+            <a class="cta">Read The Edit →</a>
+          </div>
+        </section>
+
+        <div class="acc">
+          <div class="acc-row"><div class="trig">About ORLO<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">What we sell<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">Delivery &amp; service<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">Terms &amp; conditions<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+        </div>
+
+        <section class="ft">
+          <div class="ft-h">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+          <div class="ft-b">
+            <div>Email <a href="#">info@orlostore.com</a></div>
+            <div>WhatsApp <a href="#">+971 55 547 7206</a></div>
+          </div>
+          <div class="ft-legal"><a>Terms</a><a>Privacy</a><a>Refunds</a><a>Shipping</a></div>
+        </section>
+      </div>
+      <nav class="bn"><a><svg viewBox="0 0 24 24"><path d="M3 12L12 3l9 9"/><path d="M5 10v9h14v-9"/></svg>Home</a><a><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/></svg>Search</a><a><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>Account</a><a><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 14H7L6 7z"/></svg>Bag</a></nav>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MOCKUP C — Minimal (no Popular/Arrivals — curated trio only)
+       ═══════════════════════════════════════════════════════ -->
+  <div class="mockup">
+    <div class="mockup-label">
+      <div class="tag">Mockup C</div>
+      <h2>Minimal — curated chapter</h2>
+      <p>NO Popular Now, NO New Arrivals. Instead: one editorial "Chapter" — three hand-picked items presented vertically, full-bleed, like a printed catalogue page. Most Hermès. Risk: less product discovery.</p>
+      <span class="pick">MOST EDITORIAL</span>
+    </div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="h-thin">Free Delivery over AED 75</div>
+        <div class="h-row">
+          <a class="h-lockup"><span class="badge"></span><span class="sep"></span><span class="word">ORL<span>O</span></span></a>
+          <a class="h-edit"><span class="the">The</span><span class="ed">Edit.</span></a>
+          <span class="h-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></span>
+        </div>
+
+        <section class="hero">
+          <div class="copy">
+            <h1>Objects with <em>character.</em></h1>
+            <p>From the dashboard to the desk — small things that say something.</p>
+            <span class="cta">Browse the Collection</span>
+          </div>
+        </section>
+
+        <section class="chapter">
+          <div class="ch-meta">Chapter 09</div>
+          <h2>The desk, considered.</h2>
+          <p class="lede">Three objects for the space where work begins.</p>
+          <div class="trio">
+            <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1567113463300-102a7eb3cb26?w=500&q=80')"></div><div class="ttl">Brass Desk Clock</div><div class="price">AED 89</div></div>
+            <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500&q=80')"></div><div class="ttl">Atelier Brass Tray</div><div class="price">AED 110</div></div>
+            <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=500&q=80')"></div><div class="ttl">Polaroid Memo Frame</div><div class="price">AED 65</div></div>
+          </div>
+        </section>
+
+        <section class="te">
+          <div class="img"></div>
+          <div class="body">
+            <div class="issue">Issue 09 · Spring 2026</div>
+            <h2>Stories worth <em>the pause.</em></h2>
+            <a class="cta">Read The Edit →</a>
+          </div>
+        </section>
+
+        <div class="acc">
+          <div class="acc-row"><div class="trig">About ORLO<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">All Products<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">Delivery &amp; service<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">Terms &amp; conditions<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+        </div>
+
+        <section class="ft">
+          <div class="ft-h">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+          <div class="ft-b">
+            <div>Email <a href="#">info@orlostore.com</a></div>
+            <div>WhatsApp <a href="#">+971 55 547 7206</a></div>
+          </div>
+          <div class="ft-legal"><a>Terms</a><a>Privacy</a><a>Refunds</a><a>Shipping</a></div>
+        </section>
+      </div>
+      <nav class="bn"><a><svg viewBox="0 0 24 24"><path d="M3 12L12 3l9 9"/><path d="M5 10v9h14v-9"/></svg>Home</a><a><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/></svg>Search</a><a><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>Account</a><a><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 14H7L6 7z"/></svg>Bag</a></nav>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MOCKUP D — Marquee (infinite-scroll strip + 2-col arrivals)
+       ═══════════════════════════════════════════════════════ -->
+  <div class="mockup">
+    <div class="mockup-label">
+      <div class="tag">Mockup D</div>
+      <h2>Marquee — infinite ribbon</h2>
+      <p>Popular Now is an auto-scrolling horizontal ribbon (tickertape style) — items flow continuously across the screen. Different rhythm. New Arrivals stays grid.</p>
+      <span class="pick">MOST KINETIC</span>
+    </div>
+    <div class="phone">
+      <div class="phone-scroll">
+        <div class="h-thin">Free Delivery over AED 75</div>
+        <div class="h-row">
+          <a class="h-lockup"><span class="badge"></span><span class="sep"></span><span class="word">ORL<span>O</span></span></a>
+          <a class="h-edit"><span class="the">The</span><span class="ed">Edit.</span></a>
+          <span class="h-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></span>
+        </div>
+
+        <section class="hero">
+          <div class="copy">
+            <h1>Objects with <em>character.</em></h1>
+            <p>From the dashboard to the desk — small things that say something.</p>
+            <span class="cta">Browse the Collection</span>
+          </div>
+        </section>
+
+        <div class="sec-head"><div><div class="ttl">Popular Now</div></div><a class="more">See all →</a></div>
+        <section class="marq">
+          <div class="marq-track">
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=300&q=80')"></div><div class="ttl">Camper Van</div><div class="price">AED 145</div></div>
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1567113463300-102a7eb3cb26?w=300&q=80')"></div><div class="ttl">Brass Clock</div><div class="price">AED 89</div></div>
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1517705008128-361805f42e86?w=300&q=80')"></div><div class="ttl">Gramophone Lamp</div><div class="price">AED 210</div></div>
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=300&q=80')"></div><div class="ttl">Polaroid Memo</div><div class="price">AED 65</div></div>
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&q=80')"></div><div class="ttl">Brass Tray</div><div class="price">AED 110</div></div>
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1518733057094-95b53143d2a7?w=300&q=80')"></div><div class="ttl">Telephone</div><div class="price">AED 220</div></div>
+            <!-- duplicate set for seamless loop -->
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=300&q=80')"></div><div class="ttl">Camper Van</div><div class="price">AED 145</div></div>
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1567113463300-102a7eb3cb26?w=300&q=80')"></div><div class="ttl">Brass Clock</div><div class="price">AED 89</div></div>
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1517705008128-361805f42e86?w=300&q=80')"></div><div class="ttl">Gramophone Lamp</div><div class="price">AED 210</div></div>
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=300&q=80')"></div><div class="ttl">Polaroid Memo</div><div class="price">AED 65</div></div>
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&q=80')"></div><div class="ttl">Brass Tray</div><div class="price">AED 110</div></div>
+            <div class="mc"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1518733057094-95b53143d2a7?w=300&q=80')"></div><div class="ttl">Telephone</div><div class="price">AED 220</div></div>
+          </div>
+        </section>
+
+        <div class="cat-band">
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/></svg></div><div class="nm">Desk</div></div>
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg></div><div class="nm">Decor</div></div>
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 7V4h8v3"/></svg></div><div class="nm">Gifts</div></div>
+          <div class="cat"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 18h18M3 12h18M3 6h18"/></svg></div><div class="nm">All</div></div>
+        </div>
+
+        <div class="sec-head"><div><div class="ttl">New Arrivals</div></div><a class="more">See all →</a></div>
+        <div class="grid-2">
+          <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80')"></div><div class="body"><div class="ttl">Atelier Brass Tray</div><div class="price">AED 110</div></div></div>
+          <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=400&q=80')"></div><div class="body"><div class="ttl">Polaroid Frame Set</div><div class="price">AED 75</div></div></div>
+        </div>
+
+        <section class="te">
+          <div class="img"></div>
+          <div class="body">
+            <div class="issue">Issue 09 · Spring 2026</div>
+            <h2>Stories worth <em>the pause.</em></h2>
+            <a class="cta">Read The Edit →</a>
+          </div>
+        </section>
+
+        <div class="acc">
+          <div class="acc-row"><div class="trig">About ORLO<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">What we sell<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">Delivery &amp; service<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+          <div class="acc-row"><div class="trig">Terms &amp; conditions<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div></div>
+        </div>
+
+        <section class="ft">
+          <div class="ft-h">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+          <div class="ft-b">
+            <div>Email <a href="#">info@orlostore.com</a></div>
+            <div>WhatsApp <a href="#">+971 55 547 7206</a></div>
+          </div>
+          <div class="ft-legal"><a>Terms</a><a>Privacy</a><a>Refunds</a><a>Shipping</a></div>
+        </section>
+      </div>
+      <nav class="bn"><a><svg viewBox="0 0 24 24"><path d="M3 12L12 3l9 9"/><path d="M5 10v9h14v-9"/></svg>Home</a><a><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/></svg>Search</a><a><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>Account</a><a><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 14H7L6 7z"/></svg>Bag</a></nav>
+    </div>
+  </div>
+
+</div>
+
+<div class="notes">
+  <h3>Comparing the four</h3>
+  <table>
+    <tr><th>Mockup</th><th>Popular Now</th><th>New Arrivals</th><th>Best for</th></tr>
+    <tr><td><strong>A — Magazine</strong></td><td>Full-width auto-carousel · one item at a time, big image, dots indicator. Reads like a magazine cover. <em>Auto-advances every 3.5s, pauses on touch.</em></td><td>2-col grid (current pattern)</td><td>When you have hero-worthy items you want to showcase one by one</td></tr>
+    <tr><td><strong>B — Boutique</strong></td><td>2-col grid (current)</td><td>Horizontal peek-rail · scroll right, next item peeks from the edge. Hermès / Aesop pattern.</td><td>Encouraging browsing — feels like a curated shelf you swipe through</td></tr>
+    <tr><td><strong>C — Minimal</strong></td><td>Removed</td><td>Removed</td><td>Maximum editorial weight — one "Chapter" of 3 items, then The Edit. Most Hermès, but risks losing product discovery</td></tr>
+    <tr><td><strong>D — Marquee</strong></td><td>Infinite-scroll ribbon · items flow continuously across the screen. Kinetic, draws the eye.</td><td>2-col grid (smaller, 2 items)</td><td>Adding rhythm and motion to a quiet page</td></tr>
+  </table>
+
+  <h3 style="margin-top:24px">Other things in every mockup</h3>
+  <ul>
+    <li><strong>Header</strong> — lockup left, "The Edit." centered, search right (live)</li>
+    <li><strong>Hero</strong> — Camper Van, bottom-left "Objects with character" (live)</li>
+    <li><strong>The Edit teaser</strong> — Variant E split-screen (image left, copy right) — your pick</li>
+    <li><strong>About</strong> — accordion, all closed, hairline rows. SEO copy stays in the DOM for Google but doesn't disturb the reader</li>
+    <li><strong>Footer</strong> — Customer Enquiries, white card on cream (your pick)</li>
+  </ul>
+
+  <p style="margin-top:14px"><strong>My read:</strong> <em>A or B</em> for a working store, <em>C</em> if you want to push hard into the editorial direction (and have the catalogue depth elsewhere — e.g., Shop page), <em>D</em> if you want the homepage to feel alive but at the cost of a quieter Hermès register.</p>
+</div>
+
+<script>
+// Auto-carousel for Mockup A
+document.querySelectorAll('[data-carousel]').forEach(el=>{
+  const track=el.querySelector('.track');
+  const slides=el.querySelectorAll('.slide');
+  const dots=el.querySelectorAll('.dot');
+  const interval=parseInt(el.dataset.interval||'3500',10);
+  let i=0;
+  let timer=null;
+  function go(n){
+    i=(n+slides.length)%slides.length;
+    track.style.transform='translateX('+(-i*100)+'%)';
+    dots.forEach((d,j)=>d.classList.toggle('is-active',j===i));
+  }
+  function start(){timer=setInterval(()=>go(i+1),interval)}
+  function stop(){if(timer){clearInterval(timer);timer=null}}
+  dots.forEach((d,j)=>d.addEventListener('click',()=>{stop();go(j);start()}));
+  el.addEventListener('touchstart',stop,{passive:true});
+  el.addEventListener('touchend',()=>{stop();start()},{passive:true});
+  start();
+});
+</script>
+
+</body>
+</html>
