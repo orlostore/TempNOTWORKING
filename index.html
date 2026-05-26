@@ -39,7 +39,7 @@
     <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="products.min.js?v=11" as="script">
-    <link rel="preload" href="app.min.js?v=29" as="script">
+    <link rel="preload" href="app.min.js?v=30" as="script">
     <!-- Type system: DM Sans body + Cormorant Garamond headings (self-hosted; declarations live in styles.css) -->
     <link rel="preload" href="/fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/dm-sans-v17-latin-500.woff2" as="font" type="font/woff2" crossorigin>
@@ -225,80 +225,86 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 
       /* Shop by Category → editorial pill filters (exact Edit match) */
       #categoryCards { min-height: 0 !important; }
+      /* Categories — Set B vertical layout: hairline-circle icon + caps label below */
       .category-cards {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        align-items: flex-start !important;
-        gap: 10px !important;
-        justify-content: flex-start !important;
-        padding: 4px 0 !important;
-        grid-template-columns: none !important;
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 20px 14px !important;
+        align-items: start !important;
+        padding: 8px 0 !important;
+      }
+      @media (max-width: 600px) {
+        .category-cards { grid-template-columns: repeat(3, 1fr) !important; gap: 16px 10px !important; }
       }
       .category-card,
       .draft-cat-all {
-        flex: 0 0 auto !important;
-        display: inline-flex !important;
+        display: flex !important;
+        flex-direction: column !important;
         align-items: center !important;
-        justify-content: center !important;
-        gap: 0 !important;
-        padding: 8px 18px !important;
-        min-height: 0 !important;
-        height: auto !important;
-        width: auto !important;
+        justify-content: flex-start !important;
+        gap: 10px !important;
+        padding: 4px 2px !important;
         background: transparent !important;
-        border: 1px solid var(--draft-border) !important;
-        border-radius: 999px !important;
+        border: none !important;
+        border-radius: 0 !important;
         box-shadow: none !important;
         cursor: pointer !important;
-        transition: all .2s ease !important;
-        overflow: visible !important;
-        font-family: 'DM Sans', sans-serif !important;
-        font-size: 11px !important;
-        font-weight: 500 !important;
-        letter-spacing: 0.1em !important;
-        text-transform: uppercase !important;
-        color: var(--draft-muted) !important;
-        line-height: 1 !important;
+        text-decoration: none !important;
+        text-align: center !important;
+        transition: opacity .2s ease !important;
       }
       .category-card:hover,
       .draft-cat-all:hover,
       .draft-cat-all.active,
-      .category-card.active {
-        background: var(--primary) !important;
+      .category-card.active { opacity: 1 !important; background: transparent !important; }
+      .category-card-band {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 50px !important;
+        height: 50px !important;
+        border: 1px solid rgba(26,58,82,0.20) !important;
+        border-radius: 50% !important;
+        background: transparent !important;
+        padding: 0 !important;
+        transition: border-color .2s ease, background .2s ease !important;
+      }
+      .category-card-band::before { display: none !important; }
+      .category-card-band svg {
+        width: 24px !important;
+        height: 24px !important;
+        stroke: var(--primary) !important;
+        stroke-width: 1.3 !important;
+        fill: none !important;
+        position: static !important;
+      }
+      .category-card:hover .category-card-band,
+      .category-card.active .category-card-band {
         border-color: var(--primary) !important;
-        color: #ffffff !important;
+        background: var(--primary) !important;
       }
-      [data-theme="dark"] .category-card:hover,
-      [data-theme="dark"] .draft-cat-all:hover,
-      [data-theme="dark"] .draft-cat-all.active,
-      [data-theme="dark"] .category-card.active {
-        background: var(--accent) !important;
-        border-color: var(--accent) !important;
-        color: #ffffff !important;
-      }
-      .category-card:hover .category-card-name,
-      .category-card.active .category-card-name { color: #ffffff !important; }
-      .category-card-band,
-      .category-card svg.category-icon,
-      .category-card .category-card-icon,
+      .category-card:hover .category-card-band svg,
+      .category-card.active .category-card-band svg { stroke: #fff !important; }
       .category-card-name-ar,
       .category-card-count { display: none !important; }
       .category-card-text {
-        display: inline-flex !important;
+        display: flex !important;
         align-items: center !important;
+        justify-content: center !important;
         padding: 0 !important;
         margin: 0 !important;
       }
       .category-card-name {
-        font-size: 11px !important;
-        font-weight: 500 !important;
-        letter-spacing: 0.1em !important;
-        text-transform: uppercase !important;
-        color: inherit !important;
-        line-height: 1 !important;
-        margin: 0 !important;
-        white-space: nowrap !important;
         font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.62rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.18em !important;
+        text-transform: uppercase !important;
+        color: var(--primary) !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+        max-width: 90px !important;
+        text-align: center !important;
       }
 
       /* Term cards — calmer */
@@ -1310,7 +1316,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="app.min.js?v=29" defer></script>
+<script src="app.min.js?v=30" defer></script>
 <script>
 /* ═══ CARD v2 — Hermès card-4 override. Active only on this draft page (body[data-cards="v2"]). Live pages keep legacy cards.
    Wrapped in DOMContentLoaded so the override runs AFTER app.min.js's defer execution

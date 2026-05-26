@@ -394,7 +394,14 @@ function calculateTierPricing(cartItems) {
 
 function saveCart() { localStorage.setItem("cart", JSON.stringify(cart)); }
 function saveDeliveryZone() { localStorage.setItem("deliveryZone", selectedDeliveryZone); }
-function getCategories() { return ["All Products", ...new Set(products.map(p => p.category))]; }
+function getCategories() {
+    const all = new Set();
+    products.forEach(p => {
+        if (p.category) all.add(p.category);
+        if (p.category2) all.add(p.category2);
+    });
+    return ["All Products", ...all];
+}
 
 // Update all cart count displays
 function updateCartCounts() {
@@ -484,6 +491,7 @@ const CATEGORY_ARABIC = {
     'Cleaning':       'التنظيف',
     'Laundry':        'الغسيل',
     'Cars':           'السيارات',
+    'Car Accessories':'إكسسوارات السيارة',
     'Lifestyle':      'أسلوب الحياة',
     'Travel':         'السفر',
     'Fitness':        'اللياقة',
@@ -499,7 +507,7 @@ const CATEGORY_ARABIC = {
 
 function getCategoryArabic(category) {
     if (CATEGORY_ARABIC[category]) return CATEGORY_ARABIC[category];
-    const product = products.find(p => p.category === category);
+    const product = products.find(p => p.category === category || p.category2 === category);
     return product && product.categoryAr ? product.categoryAr : '';
 }
 
@@ -595,7 +603,7 @@ function renderProducts(list, arabicMode) {
 
 function loadProducts(category = "All Products") {
     selectedCategory = category;
-    const list = category === "All Products" ? products : products.filter(p => p.category === category);
+    const list = category === "All Products" ? products : products.filter(p => p.category === category || p.category2 === category);
     renderProducts(applyFiltersAndSort(list));
     updateCategoryButtons();
     updateActiveCategoryChip(category);
@@ -702,7 +710,7 @@ function searchProducts() {
         return;
     }
     if (heroSection) heroSection.classList.add("hidden");
-    const scoped = selectedCategory === "All Products" ? products : products.filter(p => p.category === selectedCategory);
+    const scoped = selectedCategory === "All Products" ? products : products.filter(p => p.category === selectedCategory || p.category2 === selectedCategory);
     const results = scoped.filter(p => p.name.toLowerCase().includes(term) || (p.nameAr && p.nameAr.includes(term)) || p.description.toLowerCase().includes(term) || (p.descriptionAr && p.descriptionAr.toLowerCase().includes(term)) || p.category.toLowerCase().includes(term) || (p.categoryAr && p.categoryAr.includes(term)));
     renderProducts(applyFiltersAndSort(results), isArabic(term));
 }
@@ -1365,6 +1373,8 @@ const CATEGORY_SVG = {
     'Cleaning':     '<path d="M9 6 L9 3 L15 3 L15 6"/><path d="M8 6 L16 6 L17 9 L16.5 10 L16.5 21 L7.5 21 L7.5 10 L7 9 Z"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="3" y1="4" x2="9" y2="4"/><line x1="3" y1="6" x2="9" y2="6"/>',
     'Bedroom':      '<circle cx="12" cy="14" r="6"/><line x1="12" y1="14" x2="12" y2="10.5"/><line x1="12" y1="14" x2="14.5" y2="15.5"/><line x1="7.5" y1="9.5" x2="4.5" y2="6.5"/><line x1="16.5" y1="9.5" x2="19.5" y2="6.5"/><circle cx="3.5" cy="5.5" r="1.5"/><circle cx="20.5" cy="5.5" r="1.5"/><line x1="10" y1="20.5" x2="14" y2="20.5"/>',
     'Cars':         '<path d="M3 17 L3 9 C3 8 4 7 5 7 L19 7 C20 7 21 8 21 9 L21 17"/><line x1="3" y1="11" x2="21" y2="11"/><line x1="3" y1="17" x2="5" y2="17"/><line x1="9" y1="17" x2="15" y2="17"/><line x1="19" y1="17" x2="21" y2="17"/><line x1="9" y1="7" x2="9" y2="11"/><line x1="15" y1="7" x2="15" y2="11"/><circle cx="7" cy="17.5" r="1.5"/><circle cx="17" cy="17.5" r="1.5"/>',
+    'Car Accessories':'<path d="M3 17 L3 9 C3 8 4 7 5 7 L19 7 C20 7 21 8 21 9 L21 17"/><line x1="3" y1="11" x2="21" y2="11"/><line x1="3" y1="17" x2="5" y2="17"/><line x1="9" y1="17" x2="15" y2="17"/><line x1="19" y1="17" x2="21" y2="17"/><line x1="9" y1="7" x2="9" y2="11"/><line x1="15" y1="7" x2="15" y2="11"/><circle cx="7" cy="17.5" r="1.5"/><circle cx="17" cy="17.5" r="1.5"/>',
+    'Home & Living':'<rect x="2.5" y="7" width="19" height="13" rx="1"/><circle cx="7.5" cy="13.5" r="2.6"/><line x1="13" y1="11" x2="19" y2="11"/><line x1="13" y1="13.5" x2="19" y2="13.5"/><line x1="13" y1="16" x2="19" y2="16"/><line x1="6" y1="7" x2="6" y2="4"/><line x1="18" y1="7" x2="18" y2="4"/>',
     'Garden':       '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>',
     'Office':       '<rect x="2" y="3" width="20" height="13" rx="2"/><polyline points="8,21 12,17 16,21"/><line x1="12" y1="17" x2="12" y2="16"/>',
     'Laundry':      '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/>',
@@ -1372,7 +1382,7 @@ const CATEGORY_SVG = {
     'Travel':       '<rect x="1" y="6" width="22" height="16" rx="3"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
     'Kids':         '<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>',
     'Pets':         '<circle cx="7.5" cy="5.5" r="1.5"/><circle cx="17.5" cy="5.5" r="1.5"/><circle cx="5.5" cy="10.5" r="1.5"/><circle cx="19.5" cy="10.5" r="1.5"/><path d="M12 20c-2 2-6.5 1-7-3 0-4 3-6 7-6s7 2 7 6c-.5 4-5 5-7 3z"/>',
-    'Workspace':    '<rect x="2" y="3" width="20" height="13" rx="2"/><polyline points="8,21 12,17 16,21"/><line x1="12" y1="17" x2="12" y2="16"/>',
+    'Workspace':    '<path d="M3 17 C3 17 6 20 12 20 C18 20 21 17 21 17 L19 11 L5 11 Z"/><line x1="5" y1="11" x2="19" y2="11"/><path d="M9 8 C9 6 13 6 13 9 C13 12 16 12 16 8"/>',
     'Home Office':  '<rect x="2" y="3" width="20" height="13" rx="2"/><polyline points="8,21 12,17 16,21"/><line x1="12" y1="17" x2="12" y2="16"/>',
     'Work Space':   '<rect x="2" y="3" width="20" height="13" rx="2"/><polyline points="8,21 12,17 16,21"/><line x1="12" y1="17" x2="12" y2="16"/>',
     'Fitness':      '<line x1="6" y1="12" x2="18" y2="12"/><line x1="6" y1="8" x2="6" y2="16"/><line x1="18" y1="8" x2="18" y2="16"/><line x1="4" y1="9" x2="4" y2="15"/><line x1="20" y1="9" x2="20" y2="15"/>',
@@ -1404,6 +1414,8 @@ const CATEGORY_EMOJI = {
     'Cleaning': '🧹',
     'Bedroom': '🛏️',
     'Cars': '🚐',
+    'Car Accessories': '🚐',
+    'Home & Living': '🏠',
     'Garden': '🌿',
     'Office': '🖥️',
     'Laundry': '👕',
@@ -1518,7 +1530,7 @@ function populateCategories() {
     container.classList.toggle('three-plus', cats.length >= 3);
 
     container.innerHTML = cats.map((cat, i) => {
-        const count = products.filter(p => p.category === cat).length;
+        const count = products.filter(p => p.category === cat || p.category2 === cat).length;
         const catAr = getCategoryArabic(cat);
         const svg = getCategorySVG(cat);
         const bandClass = 'band-col-' + (i % 4);
