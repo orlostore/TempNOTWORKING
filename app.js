@@ -584,21 +584,31 @@ function renderProducts(list, arabicMode) {
                ${safeNameAr ? `<p class="product-title-ar">${safeNameAr}</p>` : ''}`;
 
         return `
-        <div class="product-card ${outOfStock ? 'out-of-stock' : ''}" ${arabicMode ? 'dir="rtl"' : ''}>
-            ${p.featured ? `<span class="badge">${arabicMode ? 'الأكثر مبيعاً' : 'Best Seller'}</span>` : ""}
-            ${outOfStock ? `<span class="badge out-of-stock-badge">${arabicMode ? 'نفذ المخزون' : 'Out of Stock'}</span>` : ""}
-            <a href="product.html?product=${safeSlug}" style="text-decoration:none;">
+        <div class="product-card ${outOfStock ? 'is-soldout' : ''}" ${arabicMode ? 'dir="rtl"' : ''}>
+            <a href="product.html?product=${safeSlug}" style="text-decoration:none;position:relative;display:block;">
                 <div class="product-image">${imageHTML}</div>
+                ${buildBadgeHTML(p, outOfStock)}
             </a>
             <div class="product-info">
                 <a href="product.html?product=${safeSlug}" style="text-decoration:none; color:inherit;">
                     ${titleHTML}
                 </a>
-                <div class="product-price">${formatProductPrice(p, arabicMode)}</div>
+                <div class="product-price">${outOfStock ? '<span class="price-soldout">Sold out</span>' : formatProductPrice(p, arabicMode)}</div>
                 ${buttonHTML}
             </div>
         </div>
     `}).join("");
+}
+
+// Render badges per the locked tag system: Sold out > New > Bestseller, with Handmade as secondary
+function buildBadgeHTML(p, outOfStock) {
+    if (outOfStock) return '<div class="sold-out-strip">Sold out</div>';
+    const primary = p.isNew ? 'New' : (p.featured ? 'Bestseller' : '');
+    const hand = p.handmade === true;
+    if (primary && hand) return `<span class="badge">${primary}<span class="badge-sep">&amp;</span><em>Handmade</em></span>`;
+    if (primary) return `<span class="badge">${primary}</span>`;
+    if (hand) return '<span class="badge"><em>Handmade</em></span>';
+    return '';
 }
 
 function loadProducts(category = "All Products") {
