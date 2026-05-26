@@ -139,3 +139,37 @@ body[data-cards="v2"] .popular-card-price,
 body[data-cards="v2"] .arrival-card-price{font-family:'DM Sans',sans-serif!important;font-size:0.88rem!important;font-weight:400!important;color:#1a3a52!important;letter-spacing:0.01em!important;margin-top:0!important}
 body[data-cards="v2"] .popular-card-badge,
 body[data-cards="v2"] .arrival-card-badge{display:none!important}
+
+/* ═══════════════════════════════════════════════════════════
+   HEADER v2 — centered ORLO lockup (matches login-lockup pattern from cart/login/signup)
+   - Mobile (≤768px): search-icon left · centered lockup · nothing right (bag/login live in bottom-nav)
+   - Desktop (≥769px): search-icon left · centered lockup · account + bag icons right (no bottom-nav on desktop)
+   ═══════════════════════════════════════════════════════════ */
+.hdr-v2{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 16px;background:#fff;border-bottom:1px solid rgba(26,58,82,0.10);position:relative;z-index:100;box-sizing:border-box}
+.hdr-v2-left{justify-self:start;display:flex;gap:2px;min-width:36px}
+.hdr-v2-center{justify-self:center}
+.hdr-v2-right{justify-self:end;display:flex;gap:2px;min-width:36px}
+.hdr-v2-right .hdr-account-link,.hdr-v2-right .hdr-bag-link{display:none}
+@media(min-width:769px){.hdr-v2-right .hdr-account-link,.hdr-v2-right .hdr-bag-link{display:inline-flex}.hdr-v2{padding:16px 32px}}
+.hdr-v2 .hdr-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:transparent;border:none;cursor:pointer;color:#1a3a52;text-decoration:none;position:relative;padding:0}
+.hdr-v2 .hdr-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;display:block}
+.hdr-v2 .hdr-bag-count{position:absolute;top:0;right:0;background:transparent;color:#e76f51;font-family:'DM Sans',sans-serif;font-size:0.66rem;font-weight:700;line-height:1}
+.hdr-v2 .hdr-bag-count:empty{display:none}
+.hdr-v2 .hdr-bag-count:not(:empty):not(:has-text("0")){display:block}
+/* Login-lockup styles — copied verbatim from login.html so the header matches every other page on the site */
+.hdr-v2 .login-lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.hdr-v2 .login-lockup .logo-img{height:40px;width:auto;display:block;flex-shrink:0}
+.hdr-v2 .login-lockup .sep{display:inline-block;width:1px;height:28px;background:rgba(26,58,82,0.25)}
+.hdr-v2 .login-lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.hdr-v2 .login-lockup .wordmark span{color:#e76f51}
+@media(max-width:520px){.hdr-v2 .login-lockup{gap:10px}.hdr-v2 .login-lockup .logo-img{height:32px}.hdr-v2 .login-lockup .sep{height:24px}.hdr-v2 .login-lockup .wordmark{font-size:1.2rem}}
+
+/* Search drawer — slides down from the top when search icon is tapped */
+.hdr-search-drawer{position:fixed;top:0;left:0;right:0;background:#fff;padding:18px 16px;border-bottom:1px solid rgba(26,58,82,0.10);z-index:101;transform:translateY(-100%);transition:transform .3s ease;box-shadow:0 8px 24px rgba(26,58,82,0.10);visibility:hidden}
+body.search-open .hdr-search-drawer{transform:translateY(0);visibility:visible}
+.hdr-search-row{display:flex;align-items:center;gap:12px;max-width:780px;margin:0 auto}
+.hdr-search-row svg{width:18px;height:18px;stroke:#6b6b6b;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.hdr-search-row .search-input{flex:1;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:0.95rem;padding:8px 0;outline:none;color:#1a3a52}
+.hdr-search-row .search-input::placeholder{color:#9aa5ad;font-family:'DM Sans',sans-serif}
+.hdr-search-close{background:none;border:none;font-size:1.6rem;color:#6b6b6b;cursor:pointer;padding:0 6px;line-height:1;font-family:'DM Sans',sans-serif}
+.hdr-search-close:hover{color:#1a3a52}

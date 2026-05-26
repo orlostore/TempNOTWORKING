@@ -79,7 +79,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=48">
+    <link rel="stylesheet" href="styles.css?v=49">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -891,42 +891,30 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 <!-- Draft overlay controls -->
 <button class="draft-theme-toggle" onclick="toggleDraftTheme()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
 <div class="draft-marker">Draft · The Edit look</div>
-<header>
-    <nav>
-        <div class="logo-container">
-            <a href="/"><img src="logo.png" class="logo-img" alt="ORLO Logo"></a>
-        </div>
-        
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-            <span></span><span></span><span></span>
-        </button>
-        
-        <div class="mobile-cart-icon" id="mobileCartIcon">
-            <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> 
-            <span class="cart-count" id="mobileCartCount"></span>
-        </div>
-        
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products... | البحث عن منتجات..." autocomplete="off">
-            <button class="search-btn" id="searchBtn" aria-label="Search"><svg class="inline-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            <div class="search-autocomplete" id="searchAutocomplete"></div>
-        </div>
-        
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#products">Shop<br><span class="arabic-text">تسوق</span></a></li>
-            <li><a href="#about">About<br><span class="arabic-text">من نحن</span></a></li>
-            <li><a href="#contact">Contact<br><span class="arabic-text">اتصل بنا</span></a></li>
-            <li><a href="terms-and-conditions.html">Terms & Conditions<br><span class="arabic-text">الشروط والأحكام</span></a></li>
-            <li><a href="login.html" id="accountLink" class="account-nav-link">Login<br><span class="arabic-text">دخول</span></a></li>
-            <li>
-                <div class="cart-icon" id="cartIcon">
-                    <svg class="inline-icon" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a1 1 0 001 .61h9.72a1 1 0 00.98-.78L23 6H6"/></svg> 
-                    <span class="cart-count" id="cartCount"></span>
-                </div>
-            </li>
-        </ul>
-    </nav>
+<!-- ═══ HEADER v2 — centered ORLO lockup (matches cart/login/signup), search-icon left, bag+account on desktop only ═══ -->
+<header class="hdr-v2">
+    <div class="hdr-v2-left">
+        <button class="hdr-icon" id="searchToggle" aria-label="Search products"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+    </div>
+    <a href="/" class="hdr-v2-center login-lockup">
+        <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO" onerror="this.style.display='none'">
+        <span class="sep"></span>
+        <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+    </a>
+    <div class="hdr-v2-right">
+        <a href="account.html" class="hdr-icon hdr-account-link" id="accountLink" aria-label="Account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="2.8"/><path d="M6 21c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5"/></svg></a>
+        <a href="cart.html" class="hdr-icon hdr-bag-link" aria-label="Bag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 9h13l-1 12.5a.7.7 0 0 1-.7.5H7.2a.7.7 0 0 1-.7-.5L5.5 9z"/><path d="M9 9V6.5a3 3 0 0 1 6 0V9"/></svg><span class="hdr-bag-count" id="cartCount"></span></a>
+    </div>
 </header>
+<!-- Search drawer — slides down when search icon is tapped; keeps id="searchInput" so app.js search/autocomplete continues to work -->
+<div class="hdr-search-drawer" id="searchDrawer" aria-hidden="true">
+    <div class="hdr-search-row">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search products… | البحث عن منتجات…" autocomplete="off">
+        <button class="hdr-search-close" id="searchClose" aria-label="Close search">&times;</button>
+    </div>
+    <div class="search-autocomplete" id="searchAutocomplete"></div>
+</div>
 
 <main>
 <script>
@@ -939,13 +927,26 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       var cartData = JSON.parse(localStorage.getItem('cart') || '[]');
       // Fix: changed .qty to .quantity to match your app.js logic
       var totalCount = cartData.reduce(function(sum, item){ return sum + (item.quantity || 0); }, 0);
-      
+
       var badges = ['cartCount', 'mobileCartCount', 'bottomCartCount'];
       badges.forEach(function(id) {
         var el = document.getElementById(id);
         if (el) el.textContent = totalCount;
       });
     } catch(e) {}
+  })();
+
+  /** Search drawer toggle */
+  (function(){
+    var toggle = document.getElementById('searchToggle');
+    var close = document.getElementById('searchClose');
+    var drawer = document.getElementById('searchDrawer');
+    var input = document.getElementById('searchInput');
+    function open(){ document.body.classList.add('search-open'); if(input) setTimeout(function(){input.focus();},150); if(drawer) drawer.setAttribute('aria-hidden','false'); }
+    function shut(){ document.body.classList.remove('search-open'); if(drawer) drawer.setAttribute('aria-hidden','true'); }
+    if (toggle) toggle.addEventListener('click', open);
+    if (close) close.addEventListener('click', shut);
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') shut(); });
   })();
 </script>
 
