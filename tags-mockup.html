@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>Product tags v2 — locked direction</title>
+<title>Product tags — final system</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -22,65 +22,60 @@
 html,body{background:#eceae5;font-family:'DM Sans',sans-serif;color:var(--navy);-webkit-font-smoothing:antialiased;line-height:1.6}
 
 .page-head{padding:48px 24px 28px;text-align:center;background:var(--cream-darker);border-bottom:1px solid var(--hair)}
+.page-head .badge{display:inline-block;font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.24em;text-transform:uppercase;background:var(--navy);color:#fff;padding:4px 12px;margin-bottom:14px}
 .page-head h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.4rem}
-.page-head p{font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--muted);margin-top:8px;max-width:600px;margin-left:auto;margin-right:auto}
+.page-head p{font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--muted);margin-top:10px;max-width:620px;margin-left:auto;margin-right:auto}
 
 .lab{max-width:1280px;margin:0 auto;padding:32px 16px 60px}
 
-.section-header{padding:40px 0 14px;border-bottom:1px solid var(--hair);margin-bottom:24px}
-.section-header h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.7rem;color:var(--navy)}
-.section-header p{font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--muted);margin-top:4px;line-height:1.6;max-width:720px}
-.section-header .locked{display:inline-block;font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;background:var(--navy);color:#fff;padding:3px 10px;margin-left:10px;vertical-align:middle}
+.section{padding:40px 0 14px;border-bottom:1px solid var(--hair);margin-bottom:24px}
+.section h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.7rem;color:var(--navy)}
+.section h2 .n{font-family:'DM Sans',sans-serif;font-style:normal;font-size:.65rem;letter-spacing:.24em;color:var(--muted);text-transform:uppercase;margin-right:14px;font-weight:500}
+.section p{font-family:'DM Sans',sans-serif;font-size:.86rem;color:var(--muted);margin-top:4px;line-height:1.6;max-width:720px}
 
 .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
 
 .case{background:var(--cream);padding:16px;border:1px solid var(--hair)}
-.case .label{font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.case .label{font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:6px}
 .case .label strong{font-weight:600;color:var(--navy)}
-.case .label .pick{background:var(--coral);color:#fff;font-size:.5rem;letter-spacing:.2em;padding:2px 8px}
 .case .note{font-size:.72rem;color:var(--muted);margin-top:8px;line-height:1.55;font-family:'DM Sans',sans-serif}
 
-/* product card preview */
+/* product card */
 .card{position:relative;background:#fff;overflow:hidden}
 .card .img{aspect-ratio:1/1;background:var(--catalogue) center/cover}
 .card .img.with-bobble{background-image:url('https://images.orlostore.com/bobblehead-dog-figurine/lifestyles.webp')}
 .card .img.with-van{background-image:url('https://images.orlostore.com/vintage-camper-van/lifestyle.webp')}
 .card .img.with-gram{background-image:url('https://images.orlostore.com/vintage-gramophone-ornament/lifestyle.webp')}
 .card .img.with-radio{background-image:url('https://images.orlostore.com/Vintage%20Miniature%20Radio%20%E2%80%93%20Retro%20Red%20Desk%20Decor/lifestyle.webp')}
+.card .img.with-piano{background-image:url('https://images.orlostore.com/vintage-upright-piano-ornament-miniature-ceramic-decor/piano_lifestyle_clean.webp')}
+.card .img.with-cable{background-image:url('https://images.orlostore.com/prodesk-cable-management-kit-300pcs/lifestyle-before-after.webp')}
+.card .img.with-wall{background-image:url('https://images.orlostore.com/dreamer-affirmation-wall-hanging/lifestyle.webp')}
+.card .img.with-magnet{background-image:url('https://images.orlostore.com/dangling-buddies-fridge-magnets/lifestyle.webp')}
 .card .body{padding:10px 4px 0}
 .card .ttl{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.95rem;color:var(--navy);line-height:1.2}
 .card .price{font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--muted);margin-top:3px;letter-spacing:.03em}
 
-/* tag area */
-.tag-area{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:6px;pointer-events:none;z-index:5}
+/* tags */
+.tag-area{position:absolute;top:10px;left:10px;z-index:5;pointer-events:none}
+.tag{background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500;padding:5px 10px;display:inline-flex;align-items:center;gap:7px;border-radius:0}
+.tag em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;letter-spacing:.01em;text-transform:none;line-height:1;display:inline-block}
+.tag .sep{font-weight:300;opacity:.55;letter-spacing:0;font-size:.78rem}
+.tag.outline{background:transparent;color:var(--navy);border:1px solid var(--navy)}
 
-/* ─── LOCKED T3 — navy bg, cream text, rectangle ─── */
-.tag{background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500;padding:5px 10px;display:inline-block;border-radius:0}
-.tag.handmade{background:transparent;color:var(--navy);border:1px solid var(--navy);font-weight:500}
-.tag.coral{background:var(--coral)}
-.tag.italic{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;letter-spacing:.01em;text-transform:none;padding:3px 10px}
+/* sold out strip */
+.strip{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);background:rgba(26,58,82,0.88);color:#fff;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;font-weight:500;padding:9px 12px;text-align:center;backdrop-filter:blur(2px);z-index:6}
 
-/* ─── inline horizontal stacking ─── */
-.tag-area.inline{flex-direction:row;gap:4px;flex-wrap:wrap;max-width:calc(100% - 20px)}
-.tag-combined{display:inline-flex;align-items:center;gap:6px}
-.tag-combined .sep{font-weight:300;opacity:.55;display:inline-block;letter-spacing:0}
-.tag-combined .sep.pipe{font-weight:300;opacity:.4}
-.tag.italic-combined{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;letter-spacing:.01em;text-transform:none;padding:3px 11px}
-
-/* mixed: primary caps + secondary italic Cormorant inside same pill */
-.tag.tag-mixed{padding-right:11px}
-.tag.tag-mixed em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;letter-spacing:.01em;text-transform:none;line-height:1;display:inline-block}
-
-/* separate handmade italic-outline */
-.tag.handmade-italic{background:transparent;border:1px solid var(--navy);padding:3px 9px;color:var(--navy)}
-.tag.handmade-italic em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.78rem;letter-spacing:.01em;text-transform:none;line-height:1}
-
-/* bare italic with no box */
-.bare-italic{background:transparent;color:var(--navy);align-self:center;display:inline-block}
-.bare-italic em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:.85rem;letter-spacing:.01em;line-height:1;text-shadow:0 1px 4px rgba(248,246,242,0.9)}
-
-/* ─── LOCKED S3 — navy strip across middle ─── */
-.strip-soldout{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);background:rgba(26,58,82,0.88);color:#fff;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;font-weight:500;padding:9px 12px;text-align:center;backdrop-filter:blur(2px);z-index:6}
+/* PDP stock caption */
+.pdp-mock{background:var(--cream);padding:24px 20px;border:1px solid var(--hair);max-width:380px;margin:0 auto}
+.pdp-mock .img{aspect-ratio:1/1;background:var(--catalogue) center/cover;margin-bottom:18px}
+.pdp-mock .img.with-piano{background-image:url('https://images.orlostore.com/vintage-upright-piano-ornament-miniature-ceramic-decor/piano_lifestyle_clean.webp')}
+.pdp-mock .img.with-gram{background-image:url('https://images.orlostore.com/vintage-gramophone-ornament/lifestyle.webp')}
+.pdp-mock .name{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;color:var(--navy);line-height:1.1;margin-bottom:6px}
+.pdp-mock .price{font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--navy);letter-spacing:.02em;margin:8px 0}
+.pdp-mock .stock{font-family:'DM Sans',sans-serif;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:4px 0 18px;display:flex;align-items:center;gap:8px}
+.pdp-mock .stock::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#2a7f4e}
+.pdp-mock .stock.low::before{background:#e76f51}
+.pdp-mock .btn{display:inline-block;background:var(--navy);color:#fff;font-family:'DM Sans',sans-serif;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;padding:14px 28px;cursor:pointer}
 
 .notes{max-width:900px;margin:50px auto;padding:24px;font-family:'DM Sans',sans-serif;font-size:.9rem;line-height:1.7;background:#fff;border:1px solid var(--hair);color:var(--navy)}
 .notes h3{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;margin-bottom:10px}
@@ -90,197 +85,144 @@ html,body{background:#eceae5;font-family:'DM Sans',sans-serif;color:var(--navy);
 .notes table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.85rem}
 .notes th,.notes td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--hair);vertical-align:top}
 .notes th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.notes code{background:var(--cream-darker);padding:1px 6px;font-size:.82rem}
 </style>
 </head>
 <body>
 
 <div class="page-head">
-  <h1>Product tags — v2 locked</h1>
-  <p>Shape: navy rectangle (T3). Sold out: navy strip across the image (S3). Below: tag types, low-stock copy options, and clean stacking.</p>
+  <div class="badge">Locked system · v3 final</div>
+  <h1>Product tags — final system</h1>
+  <p>Four tags only. No scarcity. Stock count lives on the PDP, not the card. One visual language: navy rectangle, top-left, DM Sans caps for status, italic Cormorant for character.</p>
 </div>
 
 <div class="lab">
 
   <!-- ============================================================
-       SECTION 01 — All tag types in T3 (locked shape)
+       SECTION 01 — single tag (one qualifier applies)
        ============================================================ -->
-  <div class="section-header">
-    <h2>01 · Each tag type in the locked shape<span class="locked">T3 — locked</span></h2>
-    <p>Same navy rectangle for every tag. Position: top-left, always. No coral pills, no gradients, no green badges.</p>
+  <div class="section">
+    <h2><span class="n">01</span>Single tag</h2>
+    <p>When only one qualifier applies, one tag shows. Top-left, navy on cream-image bg.</p>
   </div>
 
   <div class="row">
     <div class="case"><div class="label"><strong>Bestseller</strong><span>p.featured = true</span></div>
       <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag">Bestseller</span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div></div>
 
-    <div class="case"><div class="label"><strong>New</strong><span>admin-tagged or last 30 days</span></div>
+    <div class="case"><div class="label"><strong>New</strong><span>admin flag or recent</span></div>
       <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag">New</span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
 
-    <div class="case"><div class="label"><strong>Handmade</strong><span>hairline outline, quieter</span></div>
-      <div class="card"><div class="img with-gram"></div><div class="tag-area"><span class="tag handmade">Handmade</span></div><div class="body"><div class="ttl">Brass Gramophone</div><div class="price">AED 75</div></div></div></div>
+    <div class="case"><div class="label"><strong>Handmade only</strong><span>italic Cormorant in box</span></div>
+      <div class="card"><div class="img with-gram"></div><div class="tag-area"><span class="tag"><em>Handmade</em></span></div><div class="body"><div class="ttl">Brass Gramophone</div><div class="price">AED 75</div></div></div></div>
 
-    <div class="case"><div class="label"><strong>Sold out</strong><span>S3 strip — image stays</span></div>
-      <div class="card"><div class="img with-radio"></div><div class="strip-soldout">Sold out</div><div class="body"><div class="ttl">Miniature Radio</div><div class="price">AED 29</div></div></div></div>
+    <div class="case"><div class="label"><strong>Sold out</strong><span>navy strip · image stays full</span></div>
+      <div class="card"><div class="img with-radio"></div><div class="strip">Sold out</div><div class="body"><div class="ttl">Miniature Radio</div><div class="price">AED 29</div></div></div></div>
   </div>
 
   <!-- ============================================================
-       SECTION 02 — LOW STOCK copy options
+       SECTION 02 — two qualifiers — combined into one tag
        ============================================================ -->
-  <div class="section-header">
-    <h2>02 · Low stock — copy options</h2>
-    <p>Same shape (T3). Different word choices. Trigger: <strong>total stock ≤ 5</strong>. Special copy when stock = 1. Pick one — that becomes the system.</p>
+  <div class="section">
+    <h2><span class="n">02</span>Two qualifiers — combined in one tag</h2>
+    <p>Primary (caps DM Sans) · separator · <em>Handmade</em> (italic Cormorant) — all inside one navy box. Typographic contrast carries the hierarchy.</p>
   </div>
 
   <div class="row">
-    <div class="case"><div class="label"><strong>L1 — "Only X left"</strong><span>specific count, Amazon-style</span></div>
-      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag">Only 2 left</span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div>
-      <p class="note">Hardest urgency cue. Honest, specific. Feels Amazon-y though — not very Hermès.</p>
-    </div>
+    <div class="case"><div class="label"><strong>Bestseller · Handmade</strong></div>
+      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag">Bestseller<span class="sep">·</span><em>Handmade</em></span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div></div>
 
-    <div class="case"><div class="label"><strong>L2 — "Few remaining"</strong><span>vague, elegant</span><span class="pick">RECOMMENDED</span></div>
-      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag">Few remaining</span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div>
-      <p class="note">Vague, luxurious. Doesn't pressure. Reads as Hermès / Loewe register.</p>
-    </div>
+    <div class="case"><div class="label"><strong>New · Handmade</strong></div>
+      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag">New<span class="sep">·</span><em>Handmade</em></span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
 
-    <div class="case"><div class="label"><strong>L3 — "Limited"</strong><span>quietest</span></div>
-      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag">Limited</span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div>
-      <p class="note">Most editorial. Could be misread as "limited edition" though.</p>
-    </div>
+    <div class="case"><div class="label"><strong>Bestseller · Handmade — wall hanging</strong></div>
+      <div class="card"><div class="img with-wall"></div><div class="tag-area"><span class="tag">Bestseller<span class="sep">·</span><em>Handmade</em></span></div><div class="body"><div class="ttl">Dreamer Wall Hanging</div><div class="price">AED 49</div></div></div></div>
 
-    <div class="case"><div class="label"><strong>L4 — italic Cormorant</strong><span>most editorial, no caps</span></div>
-      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag italic">Few remaining</span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div>
-      <p class="note">Cormorant italic instead of DM Sans caps. Most lyrical — might be missed at a glance.</p>
-    </div>
+    <div class="case"><div class="label"><strong>New · Handmade — fridge magnet</strong></div>
+      <div class="card"><div class="img with-magnet"></div><div class="tag-area"><span class="tag">New<span class="sep">·</span><em>Handmade</em></span></div><div class="body"><div class="ttl">Dangling Buddies Magnet</div><div class="price">AED 25</div></div></div></div>
   </div>
 
   <!-- ============================================================
-       SECTION 02b — special case: LAST ONE
+       SECTION 03 — no tags (most products will look like this)
        ============================================================ -->
-  <div class="section-header">
-    <h2>02b · Special copy when stock = 1</h2>
-    <p>The "one of one" moment. Carries the handmade story.</p>
+  <div class="section">
+    <h2><span class="n">03</span>No tag — the default</h2>
+    <p>Most cards will have no tag. Cards stay clean — the editorial register depends on restraint, not noise.</p>
   </div>
 
   <div class="row">
-    <div class="case"><div class="label"><strong>"Last one"</strong><span>navy rectangle</span></div>
-      <div class="card"><div class="img with-gram"></div><div class="tag-area"><span class="tag">Last one</span></div><div class="body"><div class="ttl">Brass Gramophone</div><div class="price">AED 75</div></div></div></div>
+    <div class="case"><div class="label"><strong>Plain — utility item</strong></div>
+      <div class="card"><div class="img with-cable"></div><div class="body"><div class="ttl">Cable Management Kit</div><div class="price">AED 79</div></div></div></div>
 
-    <div class="case"><div class="label"><strong>"Last one"</strong><span>coral rectangle (more urgent)</span></div>
-      <div class="card"><div class="img with-gram"></div><div class="tag-area"><span class="tag coral">Last one</span></div><div class="body"><div class="ttl">Brass Gramophone</div><div class="price">AED 75</div></div></div></div>
-
-    <div class="case"><div class="label"><strong>"Last one"</strong><span>italic Cormorant (Hermès)</span><span class="pick">RECOMMENDED</span></div>
-      <div class="card"><div class="img with-gram"></div><div class="tag-area"><span class="tag italic">Last one</span></div><div class="body"><div class="ttl">Brass Gramophone</div><div class="price">AED 75</div></div></div>
-      <p class="note">Italic Cormorant carries the "one of one" sentiment. Quiet, brand-fitting.</p>
+    <div class="case"><div class="label"><strong>Plain — piano (stock = 1 but no badge)</strong></div>
+      <div class="card"><div class="img with-piano"></div><div class="body"><div class="ttl">Vintage Upright Piano</div><div class="price">AED 29</div></div></div>
+      <p class="note">Scarcity intentionally hidden on cards. Customer sees it on the PDP — see Section 04.</p>
     </div>
   </div>
 
   <!-- ============================================================
-       SECTION 03 — clean stacking rules
+       SECTION 04 — PDP: where stock count lives
        ============================================================ -->
-  <div class="section-header">
-    <h2>03 · When two qualifiers apply — clean rules</h2>
-    <p>Simple: <strong>maximum 2 tags</strong>. Primary slot picks one by priority. Handmade is the only one allowed in secondary slot. Below: <strong>vertical stack</strong> (original) vs <strong>inline horizontal</strong> (new).</p>
+  <div class="section">
+    <h2><span class="n">04</span>PDP — stock caption (small, quiet)</h2>
+    <p>On the product detail page, after the customer has tapped through. Small caption with a coloured dot — green when comfortable stock, coral when low. No urgency language, just honest information.</p>
   </div>
 
-  <h3 style="font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:18px 0 12px">Vertical stack — original</h3>
   <div class="row">
-    <div class="case"><div class="label"><strong>Bestseller + Handmade</strong></div>
-      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag">Bestseller</span><span class="tag handmade">Handmade</span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div></div>
-    <div class="case"><div class="label"><strong>Few remaining + Handmade</strong></div>
-      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag">Few remaining</span><span class="tag handmade">Handmade</span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
-  </div>
-
-  <h3 style="font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:32px 0 12px">Inline horizontal — new (one line)</h3>
-  <div class="row">
-
-    <div class="case"><div class="label"><strong>I1 — two tags side by side</strong><span>separate boxes, small gap</span></div>
-      <div class="card"><div class="img with-van"></div><div class="tag-area inline"><span class="tag">Bestseller</span><span class="tag handmade">Handmade</span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
-      <p class="note">Two separate tags on the same row. Clear hierarchy (primary filled, secondary outline). Risk: gets tight on narrow mobile cards.</p>
+    <div class="case"><div class="label"><strong>Comfortable stock (≥ 5)</strong></div>
+      <div class="pdp-mock">
+        <div class="img with-gram"></div>
+        <div class="name">Brass Gramophone <em style="color:var(--muted);font-size:.78rem">قطعة ديكور غرامافون</em></div>
+        <div class="price">AED 75</div>
+        <div class="stock">In stock</div>
+        <span class="btn">Add to bag</span>
+      </div>
     </div>
 
-    <div class="case"><div class="label"><strong>I2 — combined, bullet separator</strong><span>single tag, "·" between</span><span class="pick">RECOMMENDED</span></div>
-      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag tag-combined">Bestseller<span class="sep">·</span>Handmade</span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
-      <p class="note">One tag, both labels inside, divider bullet. Most compact, most cohesive. Hermès uses this pattern for "Made in France · 1837" type strings.</p>
+    <div class="case"><div class="label"><strong>Low stock (1–4)</strong></div>
+      <div class="pdp-mock">
+        <div class="img with-piano"></div>
+        <div class="name">Vintage Upright Piano</div>
+        <div class="price">AED 29</div>
+        <div class="stock low">Only 1 available</div>
+        <span class="btn">Add to bag</span>
+      </div>
+      <p class="note">"Only X available" shown only when stock ≤ 4. Coral dot. Honest, not screaming.</p>
     </div>
-
-    <div class="case"><div class="label"><strong>I3 — combined, vertical bar separator</strong><span>single tag, "|" between</span></div>
-      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag tag-combined">Bestseller<span class="sep pipe">|</span>Handmade</span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div></div>
-
-    <div class="case"><div class="label"><strong>I4 — Few remaining + Handmade (I2 pattern)</strong></div>
-      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag tag-combined">Few remaining<span class="sep">·</span>Handmade</span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
-
-    <div class="case"><div class="label"><strong>I5 — Last one + Handmade (I2 pattern, italic)</strong></div>
-      <div class="card"><div class="img with-gram"></div><div class="tag-area"><span class="tag tag-combined italic-combined">Last one<span class="sep">·</span>Handmade</span></div><div class="body"><div class="ttl">Brass Gramophone</div><div class="price">AED 75</div></div></div></div>
-
-    <div class="case"><div class="label"><strong>I6 — single tag (no Handmade) for comparison</strong></div>
-      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag">Bestseller</span></div><div class="body"><div class="ttl">Cable Management Kit</div><div class="price">AED 79</div></div></div>
-      <p class="note">When no secondary tag applies, single tag stays clean. Same shape across the catalogue.</p>
-    </div>
-
-  </div>
-
-  <h3 style="font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:32px 0 12px">Handmade in italic — typographic contrast</h3>
-  <div class="row">
-
-    <div class="case"><div class="label"><strong>I7 — combined, Handmade italic Cormorant</strong><span>caps + italic inside one tag</span><span class="pick">STRONG</span></div>
-      <div class="card"><div class="img with-van"></div><div class="tag-area"><span class="tag tag-mixed">Bestseller<span class="sep">·</span><em>Handmade</em></span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
-      <p class="note">Primary in DM Sans caps, secondary in italic Cormorant — same tag, two registers. Tells hierarchy by typography alone, no outline needed.</p>
-    </div>
-
-    <div class="case"><div class="label"><strong>I8 — two separate tags, Handmade as italic-outline</strong></div>
-      <div class="card"><div class="img with-van"></div><div class="tag-area inline"><span class="tag">Bestseller</span><span class="tag handmade-italic"><em>Handmade</em></span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
-      <p class="note">Two boxes. Primary navy caps, secondary hairline outline with italic Cormorant inside. More obvious that they're two qualities.</p>
-    </div>
-
-    <div class="case"><div class="label"><strong>I9 — Handmade as italic text only, no box</strong></div>
-      <div class="card"><div class="img with-van"></div><div class="tag-area inline"><span class="tag">Bestseller</span><span class="bare-italic"><em>handmade</em></span></div><div class="body"><div class="ttl">Vintage Camper Van</div><div class="price">AED 145</div></div></div>
-      <p class="note">Quietest. Primary tag stays as a box, Handmade is just italic text floating beside it on cream — looks like a caption. Most Hermès.</p>
-    </div>
-
-    <div class="case"><div class="label"><strong>I10 — Few remaining + italic Handmade</strong></div>
-      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag tag-mixed">Few remaining<span class="sep">·</span><em>Handmade</em></span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
-
-    <div class="case"><div class="label"><strong>I11 — Last one + italic Handmade (whole thing italic)</strong></div>
-      <div class="card"><div class="img with-gram"></div><div class="tag-area"><span class="tag italic-combined">Last one<span class="sep">·</span>Handmade</span></div><div class="body"><div class="ttl">Brass Gramophone</div><div class="price">AED 75</div></div></div>
-      <p class="note">When primary is already italic (Last one), Handmade joins the same italic family — uniform tag.</p>
-    </div>
-
-    <div class="case"><div class="label"><strong>I12 — New + italic Handmade (I7 pattern)</strong></div>
-      <div class="card"><div class="img with-bobble"></div><div class="tag-area"><span class="tag tag-mixed">New<span class="sep">·</span><em>Handmade</em></span></div><div class="body"><div class="ttl">Bobblehead Dog</div><div class="price">AED 89</div></div></div></div>
-
   </div>
 
 </div>
 
 <div class="notes">
-  <h3>Locked decisions</h3>
-  <ul>
-    <li><strong>Shape</strong>: T3 — navy bg, cream text, rectangle. Top-left of image. One visual language for all tags.</li>
-    <li><strong>Sold out</strong>: S3 — navy strip across the middle of the image. Image stays full-strength behind. Cleanest signal.</li>
-  </ul>
-
-  <h3 style="margin-top:24px">Locked so far</h3>
-  <ul>
-    <li><strong>Low-stock copy</strong>: <em>L2 "Few remaining"</em> ✓</li>
-  </ul>
-
-  <h3 style="margin-top:24px">Still to confirm</h3>
-  <ul>
-    <li><strong>Last-one copy</strong>: pick — navy caps · coral caps · italic Cormorant (my pick)</li>
-    <li><strong>Stacking layout</strong>: vertical stack (original) OR <em>inline I2 "Bestseller · Handmade" single tag with bullet</em> (my pick) — see Section 03</li>
-  </ul>
-
-  <h3 style="margin-top:24px">Priority order (which tag wins primary slot)</h3>
+  <h3>The whole system</h3>
   <table>
-    <tr><th>Priority</th><th>Tag</th><th>When</th></tr>
-    <tr><td>1</td><td><strong>Sold out</strong></td><td>quantity = 0 (alone, no Handmade shown)</td></tr>
-    <tr><td>2</td><td><strong>Last one</strong></td><td>total stock = 1</td></tr>
-    <tr><td>3</td><td><strong>Few remaining</strong></td><td>total stock 2–5</td></tr>
-    <tr><td>4</td><td><strong>New</strong></td><td>admin-tagged or recent</td></tr>
-    <tr><td>5</td><td><strong>Bestseller</strong></td><td>p.featured = true</td></tr>
-    <tr><td>—</td><td><strong>Handmade</strong></td><td>secondary slot only, when p.handmade = true</td></tr>
+    <tr><th>Tag</th><th>When</th><th>Where</th></tr>
+    <tr><td><strong>Sold out</strong></td><td>quantity = 0</td><td>Navy strip across image (S3)</td></tr>
+    <tr><td><strong>New</strong></td><td>admin-flagged OR recent</td><td>Top-left navy tag</td></tr>
+    <tr><td><strong>Bestseller</strong></td><td>p.featured = true</td><td>Top-left navy tag</td></tr>
+    <tr><td><strong>Handmade</strong></td><td>p.handmade = true flag</td><td>Italic Cormorant — solo as <em>Handmade</em>, OR combined with primary as <code>Bestseller · <em>Handmade</em></code></td></tr>
+    <tr><td><strong>Stock count</strong></td><td>any quantity > 0</td><td>PDP only — small caption "In stock" / "Only X available" with dot indicator</td></tr>
   </table>
-  <p style="margin-top:14px"><strong>Decision checklist:</strong> ✓ T3 ✓ S3 · pick L1–L4 · pick last-one style · confirm stacking. Then I wire one clean system across the homepage and PDP.</p>
+
+  <h3 style="margin-top:24px">Priority (when multiple apply)</h3>
+  <ol style="padding-left:20px;margin-top:8px">
+    <li><strong>Sold out</strong> — wins all, no other tag shown</li>
+    <li><strong>New</strong> — primary slot</li>
+    <li><strong>Bestseller</strong> — primary slot</li>
+    <li><strong>Handmade</strong> — appears in secondary position (combined or solo if no primary)</li>
+  </ol>
+
+  <h3 style="margin-top:24px">Decisions captured</h3>
+  <ul>
+    <li>✓ Shape: <strong>T3</strong> navy rectangle, top-left</li>
+    <li>✓ Sold out: <strong>S3</strong> navy strip across middle of image</li>
+    <li>✓ Stacking: <strong>I7</strong> single tag with caps + italic inside (typographic contrast)</li>
+    <li>✓ Scarcity badges (Last one / Few remaining) — <strong>dropped</strong>. Catalogue is naturally scarce; badging it would be wallpaper</li>
+    <li>✓ Stock count: <strong>PDP only</strong>, never on cards</li>
+    <li>✓ Handmade alone: italic Cormorant inside a navy box, no caps</li>
+  </ul>
+
+  <p style="margin-top:18px"><strong>Confirm this system and I'll wire it across the homepage cards, the New Arrivals row, the All Products grid, and the PDP.</strong></p>
 </div>
 
 </body>
