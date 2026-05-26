@@ -5301,7 +5301,7 @@
             const container = document.getElementById('heroesList');
             container.innerHTML = '<div style="padding:20px;color:#888;">Loading…</div>';
             try {
-                const res = await fetch('/api/admin/heroes?key=' + encodeURIComponent(authKey));
+                const res = await adminFetch('/api/admin/heroes');
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed to load');
                 heroesList = data.heroes || [];
@@ -5440,7 +5440,7 @@
                 const fd = new FormData();
                 fd.append('file', file);
                 fd.append('name', document.getElementById('heroName').value || 'hero');
-                const res = await fetch('/api/admin/upload-hero?key=' + encodeURIComponent(authKey), { method: 'POST', body: fd });
+                const res = await adminFetch('/api/admin/upload-hero', { method: 'POST', body: fd });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Upload failed');
                 document.getElementById('heroImageUrl').value = data.url;
@@ -5472,8 +5472,8 @@
             btn.disabled = true; btn.textContent = 'Saving…';
             try {
                 const action = id ? 'update' : 'add';
-                const qs = '?key=' + encodeURIComponent(authKey) + '&action=' + action + (id ? '&id=' + id : '');
-                const res = await fetch('/api/admin/heroes' + qs, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+                const qs = '?action=' + action + (id ? '&id=' + id : '');
+                const res = await adminFetch('/api/admin/heroes' + qs, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Save failed');
                 orloToast && orloToast('success', 'Saved', 'Hero saved');
@@ -5488,7 +5488,7 @@
 
         async function activateHero(id) {
             try {
-                const res = await fetch('/api/admin/heroes?key=' + encodeURIComponent(authKey) + '&action=activate&id=' + id, { method: 'POST' });
+                const res = await adminFetch('/api/admin/heroes?action=activate&id=' + id, { method: 'POST' });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed');
                 orloToast && orloToast('success', 'Active', 'Hero is now live');
@@ -5502,7 +5502,7 @@
             const ok = confirm('Delete hero "' + h.name + '"? This cannot be undone.');
             if (!ok) return;
             try {
-                const res = await fetch('/api/admin/heroes?key=' + encodeURIComponent(authKey) + '&action=delete&id=' + id, { method: 'POST' });
+                const res = await adminFetch('/api/admin/heroes?action=delete&id=' + id, { method: 'POST' });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed');
                 orloToast && orloToast('success', 'Deleted', 'Hero removed');
