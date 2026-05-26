@@ -173,7 +173,7 @@ body.search-open .hdr-search-drawer{transform:translateY(0);visibility:visible}
 .hdr-search-close:hover{color:#1a3a52}
 
 /* Hard-override the legacy inline `header { position:fixed }` rule from index.html / draftnewindexR1.html — the new .hdr-v2 should scroll with the page like cart.html / login.html. Selector header.hdr-v2 (0,0,1,1) beats the inline `header` (0,0,0,1). */
-header.hdr-v2{position:static!important;top:auto!important;left:auto!important;right:auto!important;z-index:auto!important;box-shadow:none!important;width:100%!important}
+header.hdr-v2{position:relative!important;top:auto!important;left:auto!important;right:auto!important;z-index:auto!important;box-shadow:none!important;width:100%!important}
 /* Also undo the body padding-top:58px that was compensating for the legacy fixed header */
 body:has(header.hdr-v2){padding-top:0!important}
 
