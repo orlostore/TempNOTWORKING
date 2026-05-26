@@ -955,6 +955,37 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         </a>
     </div>
 </section>
+<script>
+// Hero fallback — fetches active hero config and updates the DOM.
+// Edge worker also rewrites this at SSR; this script is the belt-and-suspenders fallback
+// that ensures the hero reflects current admin state even if worker deploy is lagging.
+(function(){
+    try {
+        fetch('/api/site-config/hero', { cache: 'no-store' })
+            .then(function(r){ return r.json(); })
+            .then(function(data){
+                var h = data && data.hero;
+                if (!h) return;
+                var img = document.getElementById('hero-img');
+                if (img && h.image_url && img.getAttribute('src') !== h.image_url) {
+                    img.setAttribute('src', h.image_url);
+                    if (h.name) img.setAttribute('alt', h.name);
+                }
+                var elTitle = document.getElementById('hero-title');
+                if (elTitle && h.title) elTitle.textContent = h.title;
+                var elSub = document.getElementById('hero-sub');
+                if (elSub && h.subtitle) elSub.textContent = h.subtitle;
+                var elCta = document.getElementById('hero-cta');
+                if (elCta && h.cta_link) elCta.setAttribute('href', h.cta_link);
+                var elCtaEn = document.getElementById('hero-cta-en');
+                if (elCtaEn && h.cta_text) elCtaEn.textContent = h.cta_text;
+                var elCtaAr = document.getElementById('hero-cta-ar');
+                if (elCtaAr && h.cta_text_ar) elCtaAr.textContent = h.cta_text_ar;
+            })
+            .catch(function(){ /* silent — worker may have already rewritten */ });
+    } catch(e){}
+})();
+</script>
 
 
 
