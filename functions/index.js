@@ -1,5 +1,5 @@
 // Cloudflare Pages Function - Homepage SSR Bootstrap
-// Intercepts requests to / and injects product data into HTML
+// Intercepts requests to / and injects product data + active hero into HTML
 // so the browser never needs to make an API call for initial render.
 
 export async function onRequestGet(context) {
@@ -12,53 +12,68 @@ export async function onRequestGet(context) {
         fetch(new URL('/api/site-config/hero', request.url).toString(), { cf: { cacheTtl: -1 } }).catch(() => null)
     ]);
 
-    // If products failed for any reason, return plain HTML (existing behaviour)
-    if (!productsResponse || !productsResponse.ok) {
-        return htmlResponse;
-    }
+    // Debug flags so we can verify worker state from response headers
+    const debug = { products: 'none', hero: 'none', rewroteHero: false };
 
-    let productsData;
-    try {
-        productsData = await productsResponse.json();
-        // Sanity check — must be a non-empty array
-        if (!Array.isArray(productsData) || productsData.length === 0) {
-            return htmlResponse;
+    // --- Products (optional — failure shouldn't block hero rewrite) ---
+    let productsData = null;
+    if (productsResponse && productsResponse.ok) {
+        try {
+            const parsed = await productsResponse.json();
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                productsData = parsed;
+                debug.products = 'ok';
+            } else {
+                debug.products = 'empty';
+            }
+        } catch (e) {
+            debug.products = 'parse-error';
         }
-    } catch (e) {
-        return htmlResponse;
+    } else {
+        debug.products = productsResponse ? `http-${productsResponse.status}` : 'fetch-failed';
     }
 
-    // Active hero (falls back to whatever is hardcoded in index.html if fetch fails)
+    // --- Active hero (independent of products) ---
     let heroData = null;
     if (heroResponse && heroResponse.ok) {
         try {
             const j = await heroResponse.json();
             heroData = j && j.hero ? j.hero : null;
-        } catch (e) { /* ignore */ }
+            debug.hero = heroData ? 'ok' : 'no-hero-field';
+        } catch (e) {
+            debug.hero = 'parse-error';
+        }
+    } else {
+        debug.hero = heroResponse ? `http-${heroResponse.status}` : 'fetch-failed';
     }
 
-    // Safely serialize — prevent </script> injection
-    const safeJson = JSON.stringify(productsData)
-        .replace(/<\/script>/gi, '<\\/script>');
+    // Build a single rewriter and conditionally attach handlers
+    const rewriter = new HTMLRewriter();
 
-    // Find first Popular Now product (mirrors populatePopularNow logic in app.js)
-    const featured = productsData.filter(p => p.featured);
-    let popularList = [...featured];
-    if (popularList.length < 6) {
-        const arrivalIds = new Set([...productsData].sort((a, b) => b.id - a.id).slice(0, 4).map(p => p.id));
-        const filler = productsData.filter(p => !p.featured && !arrivalIds.has(p.id));
-        popularList = popularList.concat(filler.slice(0, 6 - popularList.length));
-    }
-    const lcpProduct = popularList[0];
-    const lcpImageUrl = lcpProduct && lcpProduct.image && lcpProduct.image.startsWith('http')
-        ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/${lcpProduct.image}`
-        : null;
-    // Hero image preload (the actual rendered hero, not the LCP product)
-    const heroImagePreload = heroData && heroData.image_url ? heroData.image_url : null;
+    // Bootstrap data + LCP preload + hero preload — all live in <head>
+    if (productsData || heroData) {
+        const safeJson = productsData
+            ? JSON.stringify(productsData).replace(/<\/script>/gi, '<\\/script>')
+            : null;
 
-    // Inject bootstrap data + LCP preload into <head> + rewrite hero with active config
-    const rewriter = new HTMLRewriter()
-        .on('head', {
+        let lcpImageUrl = null;
+        if (productsData) {
+            const featured = productsData.filter(p => p.featured);
+            let popularList = [...featured];
+            if (popularList.length < 6) {
+                const arrivalIds = new Set([...productsData].sort((a, b) => b.id - a.id).slice(0, 4).map(p => p.id));
+                const filler = productsData.filter(p => !p.featured && !arrivalIds.has(p.id));
+                popularList = popularList.concat(filler.slice(0, 6 - popularList.length));
+            }
+            const lcpProduct = popularList[0];
+            lcpImageUrl = lcpProduct && lcpProduct.image && lcpProduct.image.startsWith('http')
+                ? `https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/${lcpProduct.image}`
+                : null;
+        }
+
+        const heroImagePreload = heroData && heroData.image_url ? heroData.image_url : null;
+
+        rewriter.on('head', {
             element(element) {
                 if (lcpImageUrl) {
                     element.append(
@@ -72,15 +87,19 @@ export async function onRequestGet(context) {
                         { html: true }
                     );
                 }
-                element.prepend(
-                    `<script>window.__BOOTSTRAP_DATA__=${safeJson}</script>`,
-                    { html: true }
-                );
+                if (safeJson) {
+                    element.prepend(
+                        `<script>window.__BOOTSTRAP_DATA__=${safeJson}</script>`,
+                        { html: true }
+                    );
+                }
             }
         });
+    }
 
-    // Hero rewrites — only run if heroData is loaded; otherwise leave the hardcoded defaults
+    // Hero rewrites — run whenever heroData is loaded, regardless of products
     if (heroData) {
+        debug.rewroteHero = true;
         rewriter
             .on('#hero-img', {
                 element(el) {
@@ -125,6 +144,14 @@ export async function onRequestGet(context) {
     transformedResponse.headers.set('CDN-Cache-Control', 'no-store');
     transformedResponse.headers.delete('ETag');
     transformedResponse.headers.delete('Last-Modified');
+    // Debug headers so we can verify the worker is doing what we expect
+    transformedResponse.headers.set('X-Orlo-SSR', 'v2');
+    transformedResponse.headers.set('X-Orlo-Products', debug.products);
+    transformedResponse.headers.set('X-Orlo-Hero', debug.hero);
+    transformedResponse.headers.set('X-Orlo-Hero-Rewrite', debug.rewroteHero ? '1' : '0');
+    if (heroData && heroData.image_url) {
+        transformedResponse.headers.set('X-Orlo-Hero-Src', heroData.image_url);
+    }
 
     return transformedResponse;
 }
