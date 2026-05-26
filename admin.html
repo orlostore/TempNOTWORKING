@@ -5464,10 +5464,8 @@
                 cta_text_ar: document.getElementById('heroCtaTextAr').value.trim(),
                 cta_link: document.getElementById('heroCtaLink').value.trim()
             };
-            if (!payload.name || !payload.image_url) {
-                orloToast && orloToast('error', 'Missing fields', 'Name and image are required');
-                return;
-            }
+            if (!payload.name) { alert('Please enter a name for this hero (e.g. "Spring 2026 — Bobbleheads")'); return; }
+            if (!payload.image_url) { alert('Please upload an image OR paste an image URL'); return; }
             const btn = document.getElementById('heroSaveBtn');
             btn.disabled = true; btn.textContent = 'Saving…';
             try {
@@ -5476,11 +5474,12 @@
                 const res = await adminFetch('/api/admin/heroes' + qs, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Save failed');
-                orloToast && orloToast('success', 'Saved', 'Hero saved');
+                alert('✓ Hero saved. Activate it in the list to push live.');
                 await loadHeroes();
                 showHeroListView();
             } catch (e) {
-                orloToast && orloToast('error', 'Error', e.message || 'Save failed');
+                alert('Save failed: ' + (e.message || 'unknown error'));
+                console.error('saveHero error:', e);
             } finally {
                 btn.disabled = false; btn.textContent = 'Save';
             }
@@ -5491,9 +5490,9 @@
                 const res = await adminFetch('/api/admin/heroes?action=activate&id=' + id, { method: 'POST' });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed');
-                orloToast && orloToast('success', 'Active', 'Hero is now live');
+                alert('✓ Hero is now live. Refresh the homepage to see it.');
                 loadHeroes();
-            } catch (e) { orloToast && orloToast('error', 'Error', e.message); }
+            } catch (e) { alert('Activate failed: ' + (e.message || 'unknown error')); console.error(e); }
         }
 
         async function deleteHero(id) {
@@ -5505,9 +5504,9 @@
                 const res = await adminFetch('/api/admin/heroes?action=delete&id=' + id, { method: 'POST' });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Failed');
-                orloToast && orloToast('success', 'Deleted', 'Hero removed');
+                alert('Hero deleted.');
                 loadHeroes();
-            } catch (e) { orloToast && orloToast('error', 'Error', e.message); }
+            } catch (e) { alert('Delete failed: ' + (e.message || 'unknown error')); console.error(e); }
         }
         // ═════════ END HEROES ═════════
 
