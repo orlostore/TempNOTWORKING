@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home mockup — The Edit + Accordion + Footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1a3a52;
+  --coral:#e76f51;
+  --cream:#f8f6f2;
+  --cream-darker:#efebe3;
+  --muted:#6b6b6b;
+  --hair:rgba(26,58,82,0.10);
+  --hair-soft:rgba(26,58,82,0.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--cream);font-family:'DM Sans',sans-serif;color:var(--navy);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+.page-head{padding:48px 24px 28px;text-align:center;border-bottom:1px solid var(--hair);background:var(--cream-darker)}
+.page-head h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.4rem}
+.page-head p{font-family:'DM Sans',sans-serif;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+
+.section-head{font-family:'DM Sans',sans-serif;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);text-align:center;padding:60px 24px 8px}
+.section-head strong{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.6rem;color:var(--navy);letter-spacing:.01em;text-transform:none;margin-top:8px}
+
+.lab{max-width:880px;margin:0 auto;padding:24px}
+
+/* =============================================================
+   PART 1 — THE EDIT (kill the navy/coral pill, propose 3)
+   ============================================================= */
+.edit-row{margin:32px 0}
+
+/* ── Variant A — Thin editorial strip, hairline rules, no colour */
+.edit-a{background:var(--cream);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:40px 28px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+.edit-a .meta{font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.edit-a h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.2rem;line-height:1.05;color:var(--navy)}
+.edit-a p{font-family:'DM Sans',sans-serif;font-size:.92rem;line-height:1.55;color:var(--muted);max-width:480px}
+.edit-a .cta{font-family:'DM Sans',sans-serif;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--navy);border-bottom:1px solid var(--navy);padding-bottom:4px;display:inline-flex;align-items:center;gap:10px;margin-top:8px}
+.edit-a .cta svg{width:18px;height:10px;stroke:currentColor;stroke-width:1.2;fill:none;stroke-linecap:round}
+
+/* ── Variant B — Magazine: image + editorial copy side by side */
+.edit-b{background:var(--cream);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:36px 28px;display:grid;grid-template-columns:140px 1fr;gap:24px;align-items:center}
+.edit-b .thumb{aspect-ratio:1/1;background:url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80') center/cover;border:1px solid var(--hair)}
+.edit-b .body{display:flex;flex-direction:column;gap:8px}
+.edit-b .issue{font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.edit-b h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.7rem;line-height:1.1;color:var(--navy)}
+.edit-b p{font-family:'DM Sans',sans-serif;font-size:.85rem;line-height:1.55;color:var(--muted)}
+.edit-b .cta{font-family:'DM Sans',sans-serif;font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--navy);margin-top:6px;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;border-bottom:1px solid var(--navy);padding-bottom:3px}
+.edit-b .cta svg{width:16px;height:9px;stroke:currentColor;stroke-width:1.2;fill:none;stroke-linecap:round}
+@media(max-width:540px){.edit-b{grid-template-columns:1fr;text-align:left}.edit-b .thumb{width:100%;aspect-ratio:16/10}}
+
+/* ── Variant C — Centered editorial card, hairlines around (purest Hermès) */
+.edit-c{background:var(--cream);padding:48px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+.edit-c .rule{width:32px;height:1px;background:var(--navy);opacity:.7}
+.edit-c .meta{font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
+.edit-c h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.4rem;line-height:1;color:var(--navy)}
+.edit-c p{font-family:'DM Sans',sans-serif;font-size:.88rem;line-height:1.55;color:var(--muted);max-width:420px}
+.edit-c .cta{font-family:'DM Sans',sans-serif;font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:var(--navy);display:inline-flex;align-items:center;gap:10px;margin-top:6px;border-bottom:1px solid var(--navy);padding-bottom:4px}
+.edit-c .cta svg{width:18px;height:10px;stroke:currentColor;stroke-width:1.2;fill:none;stroke-linecap:round}
+
+/* =============================================================
+   PART 2 — ACCORDION (Hermès chevron pattern)
+   ============================================================= */
+.acc{background:var(--cream);max-width:780px;margin:0 auto;padding:32px 28px 48px}
+.acc-section-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.8rem;color:var(--navy);text-align:left;padding-bottom:6px;display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--hair);margin-bottom:8px}
+.acc-section-title .ar{font-family:'Almarai',sans-serif;font-size:.82rem;color:var(--muted);font-style:normal}
+
+.acc-row{border-bottom:1px solid var(--hair)}
+.acc-trigger{width:100%;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:22px 4px;color:var(--navy);font-family:'DM Sans',sans-serif;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;text-align:left;transition:color .2s}
+.acc-trigger:hover{color:var(--coral)}
+.acc-trigger .chev{width:14px;height:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:14px;transition:transform .35s cubic-bezier(.4,.0,.2,1)}
+.acc-trigger .chev svg{width:14px;height:14px;stroke:var(--navy);fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.acc-row.is-open .acc-trigger .chev{transform:rotate(-180deg)}
+.acc-panel{overflow:hidden;max-height:0;transition:max-height .4s cubic-bezier(.4,.0,.2,1)}
+.acc-panel-inner{padding:4px 4px 26px;font-family:'DM Sans',sans-serif;font-size:.92rem;line-height:1.7;color:var(--navy)}
+.acc-panel-inner p{margin-bottom:12px}
+.acc-panel-inner p:last-child{margin-bottom:0}
+.acc-panel-inner .ar-prose{font-family:'Almarai',sans-serif;font-size:.88rem;line-height:1.85;color:var(--muted);direction:rtl;text-align:right;margin-top:14px;padding-top:14px;border-top:1px solid var(--hair-soft)}
+.acc-panel-inner .lede{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.25rem;line-height:1.4;color:var(--navy);margin-bottom:14px}
+
+/* =============================================================
+   PART 3 — FOOTER (confirm: WHITE card on cream body, hairline)
+   ============================================================= */
+.cs-footer-section{background:#fff;padding:32px 28px;margin-top:32px}
+.cs-footer-inner{max-width:780px;margin:0 auto}
+.cs-heading{font-family:'DM Sans',sans-serif;font-size:.82rem;text-transform:uppercase;letter-spacing:.16em;color:var(--navy);font-weight:500;padding-bottom:14px;border-bottom:1px solid var(--hair);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline}
+.cs-heading .ar{font-family:'Almarai',sans-serif;font-size:.72rem;color:var(--muted);font-weight:400}
+.cs-block{margin-bottom:18px}
+.cs-block-title{font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+.cs-block-content{font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--navy);line-height:1.7}
+.cs-block-content a{color:var(--navy);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(26,58,82,.4)}
+.cs-legal{padding:18px 0 4px;border-top:1px solid var(--hair);display:flex;flex-wrap:wrap;gap:6px 18px;font-family:'DM Sans',sans-serif;font-size:.7rem;color:var(--muted);margin-top:10px}
+
+/* card frames around variants for the lab */
+.spec{margin:42px 0;border-top:1px dashed var(--hair);padding-top:24px}
+.spec-label{font-family:'DM Sans',sans-serif;font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;text-align:center}
+.spec-label strong{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.3rem;color:var(--navy);text-transform:none;letter-spacing:.01em;margin-top:4px}
+.spec-label .pick{display:inline-block;background:var(--coral);color:#fff;font-family:'DM Sans',sans-serif;font-size:.55rem;letter-spacing:.22em;padding:3px 10px;border-radius:2px;margin-top:6px}
+
+.notes{max-width:780px;margin:36px auto 60px;padding:24px;font-family:'DM Sans',sans-serif;font-size:.88rem;line-height:1.7;color:var(--navy);background:#fff;border:1px solid var(--hair)}
+.notes h3{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;margin-bottom:10px}
+.notes ul{padding-left:18px;margin-top:8px}
+.notes li{margin:4px 0}
+.notes em{color:var(--coral);font-style:normal;font-weight:500}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>Homepage mockup</h1>
+  <p>The Edit (no colour) · Accordion · Footer</p>
+</div>
+
+<!-- =========================================================
+     PART 1 — THE EDIT (3 alternatives, no navy/coral pill)
+     ========================================================= -->
+<div class="section-head">PART 01<strong>The Edit — kill the colour, propose</strong></div>
+
+<div class="lab">
+
+  <div class="spec">
+    <div class="spec-label">Variant A<strong>Thin editorial strip</strong></div>
+    <section class="edit-a">
+      <div class="meta">The Edit · ORLO Journal · Issue 09</div>
+      <h2>Stories worth <em>the pause.</em></h2>
+      <p>Gift guides, game-night rituals, and home character — written by the team that curated your shelf.</p>
+      <a class="cta" href="#">Read The Edit <svg viewBox="0 0 24 12"><path d="M2 6h20M16 1l5 5-5 5"/></svg></a>
+    </section>
+  </div>
+
+  <div class="spec">
+    <div class="spec-label">Variant B<strong>Magazine — thumb + copy</strong><span class="pick">RECOMMENDED</span></div>
+    <section class="edit-b">
+      <div class="thumb"></div>
+      <div class="body">
+        <div class="issue">Issue 09 · Spring 2026</div>
+        <h2>Stories worth <em>the pause.</em></h2>
+        <p>Gift guides, game-night rituals, and home character — written by the team that curated your shelf.</p>
+        <a class="cta" href="#">Read The Edit <svg viewBox="0 0 24 12"><path d="M2 6h20M16 1l5 5-5 5"/></svg></a>
+      </div>
+    </section>
+  </div>
+
+  <div class="spec">
+    <div class="spec-label">Variant C<strong>Centered editorial card</strong></div>
+    <section class="edit-c">
+      <span class="rule"></span>
+      <div class="meta">The Edit · Issue 09</div>
+      <h2>Stories worth <em>the pause.</em></h2>
+      <p>Gift guides, game-night rituals, and home character — written by the team that curated your shelf.</p>
+      <a class="cta" href="#">Read The Edit <svg viewBox="0 0 24 12"><path d="M2 6h20M16 1l5 5-5 5"/></svg></a>
+      <span class="rule"></span>
+    </section>
+  </div>
+
+</div>
+
+<!-- =========================================================
+     PART 2 — ACCORDION (Hermès chevron, About + SEO content)
+     ========================================================= -->
+<div class="section-head">PART 02<strong>About — Hermès accordion (click to test)</strong></div>
+
+<div class="acc">
+  <h2 class="acc-section-title">Our Story <span class="ar">قصتنا</span></h2>
+
+  <div class="acc-row is-open">
+    <button class="acc-trigger" type="button" aria-expanded="true">
+      <span>About ORLO</span>
+      <span class="chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </button>
+    <div class="acc-panel" style="max-height:400px">
+      <div class="acc-panel-inner">
+        <p class="lede">A family-owned Dubai brand built around practical essentials we use every day.</p>
+        <p>We curate products that simplify your space and your routine — chosen for quality, usefulness, and clean design. No clutter. No gimmicks. Every order supports a local UAE business built on trust, simplicity, and fair pricing.</p>
+        <div class="ar-prose">اورلو علامة تجارية عائلية من دبي، نختار فيها أدوات أساسية نستخدمها فعلاً في حياتنا اليومية. نؤمن بالبساطة، والجودة العملية، والاختيارات الذكية التي ترتّب مساحتك وتسهّل يومك.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-row">
+    <button class="acc-trigger" type="button" aria-expanded="false">
+      <span>What we sell</span>
+      <span class="chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </button>
+    <div class="acc-panel">
+      <div class="acc-panel-inner">
+        <p>A carefully curated mix of home décor, handmade gifts, and practical everyday essentials — delivered across the UAE.</p>
+        <p>The collection includes handcrafted fridge magnets, miniature vintage figurines (rotary phones, radios, gramophones, televisions), motivational wall hangings, desk and cable management, and small storage objects for every kind of home.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-row">
+    <button class="acc-trigger" type="button" aria-expanded="false">
+      <span>Delivery &amp; service</span>
+      <span class="chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </button>
+    <div class="acc-panel">
+      <div class="acc-panel-inner">
+        <p>Free delivery on orders over <strong>AED&nbsp;75</strong> across all seven Emirates — Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah and Umm Al Quwain.</p>
+        <p>Bilingual support in English and Arabic via WhatsApp at <a href="https://wa.me/971555477206">+971 55 547 7206</a>. Replies within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-row">
+    <button class="acc-trigger" type="button" aria-expanded="false">
+      <span>Why shop at ORLO</span>
+      <span class="chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </button>
+    <div class="acc-panel">
+      <div class="acc-panel-inner">
+        <p>Unique handmade and decorative items you won't find elsewhere in the UAE. Fast shipping from Dubai, bilingual service, and a small catalogue we stand behind — not a sea of dropshipped product.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-row">
+    <button class="acc-trigger" type="button" aria-expanded="false">
+      <span>Terms &amp; conditions</span>
+      <span class="chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </button>
+    <div class="acc-panel">
+      <div class="acc-panel-inner">
+        <p>Read our <a href="terms-of-service.html">full terms of service</a>, <a href="privacy-policy.html">privacy policy</a>, <a href="refund-policy.html">refund policy</a> and <a href="shipping-policy.html">shipping policy</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     PART 3 — FOOTER (confirmed: white on cream body)
+     ========================================================= -->
+<div class="section-head">PART 03<strong>Customer Enquiries — white (confirmed)</strong></div>
+
+<section class="cs-footer-section">
+  <div class="cs-footer-inner">
+    <div class="cs-heading">Customer Enquiries <span class="ar">استفسارات العملاء</span></div>
+    <div class="cs-block">
+      <div class="cs-block-title">Email</div>
+      <div class="cs-block-content"><a href="mailto:info@orlostore.com">info@orlostore.com</a> — reply within 24h</div>
+    </div>
+    <div class="cs-block">
+      <div class="cs-block-title">Online orders</div>
+      <div class="cs-block-content">WhatsApp <a href="https://wa.me/971555477206">+971 55 547 7206</a></div>
+    </div>
+    <div class="cs-legal">
+      <a href="#">Terms</a><a href="#">Privacy</a><a href="#">Refunds</a><a href="#">Shipping</a>
+      <span style="margin-left:auto">© 2026 ORLO Store · Dubai, UAE</span>
+    </div>
+  </div>
+</section>
+
+<div class="notes">
+  <h3>Decisions on the table</h3>
+  <ul>
+    <li><strong>The Edit</strong> — pick A / B / C. <em>Recommended: B</em> (magazine-style, image gives it weight, fits between New Arrivals and About).</li>
+    <li><strong>Accordion</strong> — same pattern as Hermès screenshot. Chevron rotates -180° (counter-clockwise to up) on open, smooth height transition. Replaces the current loud <code>#about</code> + <code>#seo-content</code> sections. Keywords stay in the prose for SEO (handmade gifts, fridge magnets, vintage figurines, cable management, Dubai/UAE cities, AED 75) — Google still indexes the text, reader sees an essay.</li>
+    <li><strong>Footer</strong> — confirmed: white card on cream body, hairline borders. Same as login.</li>
+    <li><strong>SEO/pixel audit</strong> — verified intact: Meta Pixel + TikTok Pixel + CAPI in &lt;head&gt; line 8, all 12 JSON-LD types (Organization, OnlineStore, FAQPage, WebSite, etc), title + description + keywords + canonical = identical to pre-promotion. The only diff vs old is removal of the <code>noindex,nofollow</code> draft block (good thing — that would have blocked Google).</li>
+    <li><strong>Universal footer file</strong> — doesn't exist yet. 13 pages each carry their own copy. Suggest <code>_footer-canonical.html</code> + extend <code>scripts/sync-nav.js</code> the same way. Separate commit after we lock the design.</li>
+  </ul>
+</div>
+
+<script>
+document.querySelectorAll('.acc-trigger').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const row=btn.closest('.acc-row');
+    const panel=row.querySelector('.acc-panel');
+    const open=row.classList.contains('is-open');
+    if(open){
+      panel.style.maxHeight=panel.scrollHeight+'px';
+      requestAnimationFrame(()=>{panel.style.maxHeight='0px'});
+      row.classList.remove('is-open');
+      btn.setAttribute('aria-expanded','false');
+    }else{
+      row.classList.add('is-open');
+      btn.setAttribute('aria-expanded','true');
+      panel.style.maxHeight=panel.scrollHeight+'px';
+    }
+  });
+});
+// init open row
+document.querySelectorAll('.acc-row.is-open .acc-panel').forEach(p=>{p.style.maxHeight=p.scrollHeight+'px'});
+</script>
+
+</body>
+</html>
