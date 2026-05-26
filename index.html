@@ -79,7 +79,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=61">
+    <link rel="stylesheet" href="styles.css?v=62">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -1030,15 +1030,84 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     </a>
 </section>
 
-<section class="about-section" id="about">
-    <div class="contact-container">
-        <h2 class="section-title">Our Story <span class="arabic-inline">قصتنا</span></h2>
-        <div class="story-prose">
-            <p class="contact-text-en">ORLO is a family-owned Dubai brand built around practical essentials we genuinely use every day. We curate products that simplify your space and your routine — thoughtfully chosen for quality, usefulness, and clean design. No clutter. No gimmicks. Every order supports a local UAE business built on trust, simplicity, and fair pricing.</p>
-            <p class="contact-text-ar">اورلو علامة تجارية عائلية من دبي، نختار فيها أدوات أساسية نستخدمها فعلاً في حياتنا اليومية. نؤمن بالبساطة، والجودة العملية، والاختيارات الذكية التي ترتّب مساحتك وتسهّل يومك — بدون تعقيد أو إضافات غير ضرورية. كل طلب منك يدعم مشروعاً إماراتياً محلياً مبنياً على الثقة، والبساطة، والتسعير العادل.</p>
-        </div>
+<!-- About — Hermès accordion · 4 closed rows · SEO copy stays in the DOM for Google -->
+<section class="about-accordion" aria-label="About ORLO">
+
+  <div class="acc-row">
+    <button class="acc-trigger" type="button" aria-expanded="false">
+      <span>About ORLO</span>
+      <span class="acc-chev"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </button>
+    <div class="acc-panel">
+      <div class="acc-panel-inner">
+        <p class="acc-lede">A family-owned Dubai brand built around practical essentials we use every day.</p>
+        <p>We curate products that simplify your space and your routine — chosen for quality, usefulness, and clean design. No clutter. No gimmicks. Every order supports a local UAE business built on trust, simplicity, and fair pricing.</p>
+        <p class="acc-ar">اورلو علامة تجارية عائلية من دبي، نختار فيها أدوات أساسية نستخدمها فعلاً في حياتنا اليومية. نؤمن بالبساطة، والجودة العملية، والاختيارات الذكية التي ترتّب مساحتك وتسهّل يومك — بدون تعقيد أو إضافات غير ضرورية. كل طلب منك يدعم مشروعاً إماراتياً محلياً مبنياً على الثقة، والبساطة، والتسعير العادل.</p>
+      </div>
     </div>
+  </div>
+
+  <div class="acc-row">
+    <button class="acc-trigger" type="button" aria-expanded="false">
+      <span>What we sell</span>
+      <span class="acc-chev"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </button>
+    <div class="acc-panel">
+      <div class="acc-panel-inner">
+        <p>A carefully curated mix of home décor, handmade gifts, and practical everyday essentials, delivered across the UAE. The collection includes handcrafted fridge magnets, miniature vintage figurines (rotary phones, radios, gramophones, televisions), motivational wall hangings, desk and cable management, and small storage objects — something for every kind of home and every occasion.</p>
+        <p class="acc-ar">مجموعة مختارة بعناية من الديكورات المنزلية الفريدة والهدايا اليدوية والأساسيات اليومية العملية، توصيل إلى جميع أنحاء الإمارات. تشمل مغناطيس الثلاجة المصنوعة يدوياً، والمجسمات الكلاسيكية المصغّرة (هواتف دوّارة، راديو، غراموفون، تلفزيونات)، ولوحات الحائط التحفيزية، وأدوات تنظيم الكابلات — شيء لكل بيت ولكل مناسبة.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-row">
+    <button class="acc-trigger" type="button" aria-expanded="false">
+      <span>Delivery &amp; service</span>
+      <span class="acc-chev"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </button>
+    <div class="acc-panel">
+      <div class="acc-panel-inner">
+        <p>Free delivery on orders over <strong>AED 75</strong> across all seven Emirates — Dubai, Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah and Umm Al Quwain. Standard shipping arrives within <strong>2–5 business days</strong>. Payment by card at checkout only — no cash on delivery. Returns accepted within <strong>5 days of the shipping date</strong> in original sealed packaging; return shipping is the customer's responsibility. Received the wrong item or a defective one? Contact us within 24 hours and we'll cover return shipping and refund in full. Bilingual support via WhatsApp at <a href="https://wa.me/971555477206">+971 55 547 7206</a> — replies within 24h.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-row">
+    <button class="acc-trigger" type="button" aria-expanded="false">
+      <span>Why imperfect?</span>
+      <span class="acc-chev"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </button>
+    <div class="acc-panel">
+      <div class="acc-panel-inner">
+        <p>Many ORLO pieces are handcrafted — fridge magnets, miniature figurines, wall hangings. Small variations in colour, texture, brushstroke or finish aren't flaws, they're the proof that a human shaped the object. Each piece is one of one. If you want a uniform machine-made finish, we're probably not the right shop for you. If you love the small marks of making, you're home.</p>
+      </div>
+    </div>
+  </div>
+
 </section>
+
+<script>
+(function(){
+  document.querySelectorAll('.about-accordion .acc-trigger').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var row = btn.closest('.acc-row');
+      var panel = row.querySelector('.acc-panel');
+      var open = row.classList.contains('is-open');
+      if (open) {
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+        requestAnimationFrame(function(){ panel.style.maxHeight = '0px'; });
+        row.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+      } else {
+        row.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+        panel.addEventListener('transitionend', function once(){ panel.style.maxHeight = 'none'; panel.removeEventListener('transitionend', once); });
+      }
+    });
+  });
+})();
+</script>
 
 
 
@@ -1062,31 +1131,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </div>
 
 
-<!-- SEO Content Section -->
-<section class="about-section" id="seo-content">
-    <div class="contact-container">
-        <h2 class="section-title">ORLO Store <span class="arabic-inline">متجر أورلو</span></h2>
-        <div class="contact-box">
-            <p class="contact-text-en">ORLO Store is a Dubai-based online shop offering a carefully curated mix of <strong>unique home décor</strong>, <strong>handmade gifts</strong>, and <strong>practical everyday essentials</strong> — all delivered across the UAE.</p>
-            <p class="contact-text-en">Our collection includes <strong>handcrafted fridge magnets</strong>, <strong>miniature vintage figurines</strong> (rotary phones, radios, gramophones, TVs), <strong>motivational wall hangings</strong>, and <strong>cable management solutions</strong> — something for every home and every occasion.</p>
-            <p class="contact-text-en">We ship across all Emirates with <strong>free delivery on orders over AED 75</strong>. Bilingual support in English and Arabic via WhatsApp.</p>
-            <p class="contact-text-en" style="margin-top:1.2rem;"><strong>Why Shop at ORLO?</strong></p>
-            <p class="contact-text-en">• <strong>Free delivery</strong> on orders over AED 75 across all UAE<br>
-            • <strong>Unique handmade and decorative items</strong> you won't find elsewhere<br>
-            • <strong>Fast shipping from Dubai</strong> with WhatsApp support<br>
-            • <strong>Bilingual service</strong> in English and Arabic</p>
-
-            <p class="contact-text-ar" style="margin-top:1.5rem;">متجر أورلو الإلكتروني مقره دبي، يقدم مجموعة مختارة بعناية من الديكورات المنزلية الفريدة والهدايا اليدوية والأساسيات اليومية العملية — مع توصيل إلى جميع أنحاء الإمارات.</p>
-            <p class="contact-text-ar">تشمل مجموعتنا مغناطيس الثلاجة المصنوعة يدوياً، والمجسمات الكلاسيكية المصغّرة (هواتف دوّارة، راديو، غراموفون، تلفزيونات)، ولوحات الحائط التحفيزية، وأدوات تنظيم الكابلات — شيء لكل بيت ولكل مناسبة.</p>
-            <p class="contact-text-ar">نوصّل إلى جميع الإمارات مع توصيل مجاني للطلبات التي تتجاوز 75 درهماً، مع دعم ثنائي اللغة بالعربية والإنجليزية عبر واتساب.</p>
-            <p class="contact-text-ar" style="margin-top:1.2rem;"><strong>لماذا تتسوق من أورلو؟</strong></p>
-            <p class="contact-text-ar">• توصيل مجاني للطلبات فوق 75 درهم لجميع الإمارات<br>
-            • منتجات فريدة يدوية وديكورية لن تجدها في مكان آخر<br>
-            • شحن سريع من دبي مع دعم عبر واتساب<br>
-            • خدمة ثنائية اللغة بالعربية والإنجليزية</p>
-        </div>
-    </div>
-</section>
+<!-- SEO content folded into the accordion above (see #about-accordion 'What we sell' row). Keeping FAQ schema below for Google rich results. -->
 
 <!-- FAQ Schema for Google Rich Results -->
 <script type="application/ld+json">
