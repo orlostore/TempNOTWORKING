@@ -201,3 +201,7 @@ body:has(header.hdr-v2){padding-top:0!important}
 .pdp-stock-caption.low::before{background:#e76f51}
 .pdp-stock-caption.soldout{color:#1a3a52;font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:400;font-size:1rem;letter-spacing:0;text-transform:none}
 .pdp-stock-caption.soldout::before{display:none}
+/* ─── Tag containment + mobile shrink ─── */
+.product-card .badge,.popular-slide .badge,.arrival-card .badge,body[data-cards="v2"] .card-img .badge{max-width:calc(100% - 24px);box-sizing:border-box;white-space:nowrap}
+.product-card .sold-out-strip,.popular-slide .sold-out-strip,.arrival-card .sold-out-strip,body[data-cards="v2"] .card-img .sold-out-strip{max-width:100%;box-sizing:border-box}
+@media(max-width:600px){.product-card .badge,.popular-slide .badge,.arrival-card .badge,body[data-cards="v2"] .card-img .badge{font-size:.55rem;letter-spacing:.16em;padding:5px 9px;gap:6px}.product-card .badge em,.popular-slide .badge em,.arrival-card .badge em,body[data-cards="v2"] .card-img .badge em{font-size:.82rem}.product-card .badge .badge-sep,.popular-slide .badge .badge-sep,.arrival-card .badge .badge-sep,body[data-cards="v2"] .card-img .badge .badge-sep{font-size:.78rem}.product-card .sold-out-strip,.popular-slide .sold-out-strip,.arrival-card .sold-out-strip,body[data-cards="v2"] .card-img .sold-out-strip{font-size:.55rem;letter-spacing:.2em;padding:5px 8px}}
