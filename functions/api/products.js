@@ -57,9 +57,10 @@ export async function onRequestGet(context) {
 async function fetchFromD1(DB) {
     const [productsResult, variantsResult, tiersResult] = await Promise.all([
 
-        // Query 1: Products (with sort_order fallback)
+        // Query 1: Products (with sort_order + category2 fallbacks)
         DB.prepare(`
-            SELECT id, slug, name, nameAr, category, categoryAr, price, cost, quantity,
+            SELECT id, slug, name, nameAr, category, categoryAr, category2, category2Ar,
+                   price, cost, quantity,
                    description, descriptionAr, mainImage, image2, image3, image4, image5,
                    image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                    specifications, specificationsAr, featured,
@@ -69,7 +70,9 @@ async function fetchFromD1(DB) {
             ORDER BY sort_order ASC, id DESC
         `).all().catch(() =>
             DB.prepare(`
-                SELECT id, slug, name, nameAr, category, categoryAr, price, cost, quantity,
+                SELECT id, slug, name, nameAr, category, categoryAr,
+                       '' as category2, '' as category2Ar,
+                       price, cost, quantity,
                        description, descriptionAr, mainImage, image2, image3, image4, image5,
                        image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                        specifications, specificationsAr, featured,
@@ -142,6 +145,8 @@ async function fetchFromD1(DB) {
             nameAr: row.nameAr,
             category: row.category,
             categoryAr: row.categoryAr,
+            category2: row.category2 || '',
+            category2Ar: row.category2Ar || '',
             price: row.price,
             cost: row.cost || 0,
             quantity: row.quantity,

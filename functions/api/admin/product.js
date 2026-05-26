@@ -28,21 +28,27 @@ export async function onRequestPost(context) {
     const DB = env.DB;
 
     try {
+        // Idempotent schema migration — add secondary category columns if missing
+        try { await DB.prepare('ALTER TABLE products ADD COLUMN category2 TEXT').run(); } catch(e) { /* already exists */ }
+        try { await DB.prepare('ALTER TABLE products ADD COLUMN category2Ar TEXT').run(); } catch(e) { /* already exists */ }
+
         const data = await request.json();
 
         if (action === 'add') {
             const result = await DB.prepare(`
                 INSERT INTO products (
-                    slug, name, nameAr, category, categoryAr, price, cost, quantity,
+                    slug, name, nameAr, category, categoryAr, category2, category2Ar,
+                    price, cost, quantity,
                     description, descriptionAr, mainImage, image2, image3, image4, image5,
                     image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                     specifications, specificationsAr, featured,
                     wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
                     material, materialAr, pairings
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `).bind(
                 data.slug, data.name, data.nameAr || '',
                 data.category || '', data.categoryAr || '',
+                data.category2 || '', data.category2Ar || '',
                 data.price, data.cost || 0, data.quantity || 0,
                 data.description || '', data.descriptionAr || '',
                 bumpImageUrl(data.mainImage), bumpImageUrl(data.image2), bumpImageUrl(data.image3),
@@ -91,6 +97,7 @@ export async function onRequestPost(context) {
             await DB.prepare(`
                 UPDATE products SET
                     slug = ?, name = ?, nameAr = ?, category = ?, categoryAr = ?,
+                    category2 = ?, category2Ar = ?,
                     price = ?, cost = ?, quantity = ?, description = ?, descriptionAr = ?,
                     mainImage = ?, image2 = ?, image3 = ?, image4 = ?, image5 = ?,
                     image6 = ?, image7 = ?, image8 = ?,
@@ -103,6 +110,7 @@ export async function onRequestPost(context) {
             `).bind(
                 data.slug, data.name, data.nameAr || '',
                 data.category || '', data.categoryAr || '',
+                data.category2 || '', data.category2Ar || '',
                 data.price, data.cost || 0, data.quantity,
                 data.description || '', data.descriptionAr || '',
                 bumpImageUrl(data.mainImage), bumpImageUrl(data.image2), bumpImageUrl(data.image3),
