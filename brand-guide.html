@@ -462,8 +462,20 @@ ffmpeg -y -i source.mp3 -t 16 -af "volume=0.7,afade=t=out:st=14.5:d=1.5" \
 
     <h3>Fonts (locked, no substitutes)</h3>
     <ul>
-      <li><strong>English: DM Sans</strong> — weights 500, 700, 800. Same family the site uses.</li>
-      <li><strong>Arabic: Almarai</strong> — weights 400, 700, 800. <strong>The ONLY Arabic font for ORLO.</strong> Never use Noto Kufi, never use Tajawal, never use system Arabic.</li>
+      <li><strong>English — DM Sans</strong> · weights 500, 700, 800. Used for: system captions, taglines, CTAs, URL, trust badges, all-caps tracked labels. The "voice of the brand" font.</li>
+      <li><strong>English — Cormorant Garamond italic</strong> · weights 300, 400 (italic only). Used for: <strong>product names, scene headlines, editorial pull-quotes, the "Edit" wordmark</strong>. This is the same italic serif the site uses on product cards and hero titles — it's what makes the brand read as <em>magazine</em>, not e-commerce. Use it whenever a product is being named or a scene is making a poetic statement (not a system message).</li>
+      <li><strong>Arabic — Almarai</strong> · weights 400, 700, 800. <strong>The ONLY Arabic font for ORLO.</strong> Never Noto Kufi, never Tajawal, never system Arabic.</li>
+      <li><strong>When to choose which (English):</strong>
+        <ul style="margin-top:6px">
+          <li>"QUALITY IS A CLICK AWAY" → DM Sans 500, all-caps, tracked (system tagline)</li>
+          <li>"Vintage Camper Van" → Cormorant Garamond italic 300 (product name, editorial)</li>
+          <li>"COMING SOON" → DM Sans 800 (system label in the navy pill)</li>
+          <li>"Meet the Buddies" → Cormorant Garamond italic 400 (editorial scene headline)</li>
+          <li>"Free Delivery" / trust badge labels → DM Sans 500 (functional system text)</li>
+          <li>"orlostore.com" → DM Sans 700 (functional URL)</li>
+        </ul>
+      </li>
+      <li><strong>Mixing in one scene:</strong> never use Cormorant italic + DM Sans on the same line. Stack them — Cormorant italic for the editorial headline, DM Sans below it (smaller) for the support line or AR translation cue.</li>
       <li><strong>Critical render note:</strong> when generating frames in Python/PIL, use <em>raw Arabic strings with Almarai directly</em>. Do NOT use <code>arabic_reshaper</code> + <code>python-bidi</code> — Almarai handles RTL and letter-joining natively via OpenType. Double-processing reverses the letters.</li>
       <li><strong>Separator:</strong> if a punctuation separator is needed in Arabic, use the Arabic comma <code>،</code> not the Latin mid-dot <code>·</code> (mid-dot renders as a tofu box in Arabic).</li>
     </ul>
@@ -473,7 +485,7 @@ ffmpeg -y -i source.mp3 -t 16 -af "volume=0.7,afade=t=out:st=14.5:d=1.5" \
       <tr><th>Time</th><th>Beat</th></tr>
       <tr><td>0.0–1.5s</td><td>Logo intro — ORLO logo fades in centred on cream background, ~360 px wide. Short coral divider draws under it.</td></tr>
       <tr><td>1.5–2.0s</td><td>Logo shrinks and parks at top-left corner (125 × 125 px, anchored ~50px from edges). It stays there at 100% opacity for the rest of the video — <strong>never toggle it off during headlines</strong>.</td></tr>
-      <tr><td>2.0–14.0s</td><td>Main scene — concept-dependent (product reveal, silhouette tease, walk-on animation, before/after wipe).</td></tr>
+      <tr><td>2.0–14.0s</td><td>Main scene — concept-dependent (product reveal, silhouette tease, walk-on animation, before/after wipe). <strong>Scene headlines and product names use Cormorant Garamond italic.</strong> System messages within the scene (price, "NEW", "SOLD OUT") use DM Sans.</td></tr>
       <tr><td>14.0–16.0s</td><td>End card (locked layout, see below).</td></tr>
     </table>
 
