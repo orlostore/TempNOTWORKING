@@ -370,9 +370,55 @@ Aspect ratio: 1:1 square, 1080 × 1080.</pre>
     <p style="margin-top:14px;font-size:.85rem;color:var(--muted)">Cloudinary on the live site handles re-encoding automatically — upload the largest version (1600 × 1600) and let the CDN serve the right size to each surface.</p>
   </section>
 
-  <!-- 7. File naming -->
+  <!-- 9. Dimension / spec card -->
   <section>
-    <h2><span class="n">09</span><span>File naming</span></h2>
+    <h2><span class="n">09</span><span>Dimension / spec card</span></h2>
+    <p>Some products (toys, decor, miniatures) benefit from a small <strong>spec card</strong> showing length × width × height. This is a <em>variant</em> of the clean catalogue image (type A) — same exact background, same lighting, with discreet dimension annotations added on top.</p>
+
+    <h3>Visual standard</h3>
+    <ul>
+      <li><strong>Background:</strong> warm beige <code style="background:var(--cream-darker);padding:1px 5px;font-size:.78rem">#E5DCCF</code>, same as the catalogue card. <strong>Never white</strong> — white reads marketplace, breaks brand register.</li>
+      <li><strong>Annotation lines:</strong> thin navy hairlines (<code style="background:var(--cream-darker);padding:1px 5px;font-size:.78rem">#1A3A52</code>, 1 px), with small arrow caps at each end. Lines run alongside the product, not over it.</li>
+      <li><strong>Numbers:</strong> DM Sans, weight 400, navy, all-caps, ~14 px on a 2000 px square. Format: <code>12 CM</code> or <code>12 × 6 × 5 CM</code>.</li>
+      <li><strong>Caption strip (optional, bottom):</strong> Cormorant italic 300, navy, ~22 px on 2000 sq, format <em>"Dimensions · L 12 cm × W 6 cm × H 5 cm"</em>.</li>
+      <li><strong>Where it shows:</strong> PDP image #2 or #3 in the scroll, IG carousel slide 2 (slide 1 = catalogue, slide 2 = spec), TikTok product details overlay.</li>
+    </ul>
+
+    <h3>Generation workflow — two options</h3>
+    <p><strong>Recommended:</strong> Gemini generates the clean catalogue image, then you overlay the numbers/lines in Canva, Figma, or any image editor — using the brand fonts (DM Sans for numbers, Cormorant italic for the caption). Why: Gemini renders text unreliably for precise numbers, so trusting it to print "12 cm" can give you "1Z cm" or "I2 c.m." Overlaying manually = guaranteed accuracy.</p>
+    <p><strong>Faster but less precise:</strong> ask Gemini directly. Use the prompt below, fill in <code>[LENGTH/WIDTH/HEIGHT]</code> with your actual numbers. Check the output carefully — re-prompt if any digit is wrong.</p>
+
+    <h3>Gemini prompt — spec card (attach the clean catalogue image)</h3>
+    <pre class="prompt-box">I'm attaching a clean catalogue product photograph on a warm beige #E5DCCF background. Use this exact image as the base — do NOT redraw, restyle, or alter the product or background in any way.
+
+Add a discreet technical dimension overlay to this image, in the style of a Hermès or Aesop product spec page:
+
+— A thin navy hairline (colour #1A3A52, 1 px wide) running horizontally below the product, with small arrow caps at both ends, indicating the LENGTH. Label the line with the text "[LENGTH] CM" in DM Sans, weight 400, navy #1A3A52, all uppercase, ~14 px size, positioned just below the line, centred.
+
+— A thin navy hairline running vertically to the right of the product, with small arrow caps at both ends, indicating the HEIGHT. Label with "[HEIGHT] CM" in the same font and colour.
+
+— (Optional, if product has depth) a third thin navy hairline at a slight diagonal indicating WIDTH/DEPTH, labelled "[WIDTH] CM".
+
+— Bottom strip caption, centred under the product: "Dimensions · L [LENGTH] cm × W [WIDTH] cm × H [HEIGHT] cm" in Cormorant Garamond italic, weight 300, navy #1A3A52, ~22 px size.
+
+Keep everything else identical to the attached image. The beige background, the product, the lighting, the shadow — unchanged. Only add the annotations.
+
+CRITICAL — do NOT add: no white background swap, no grey, no rulers, no grid, no measurement icons, no second product view, no exploded diagram, no props, no text other than the three dimension labels and the caption strip, no watermarks, no logos.
+
+Aspect ratio: 1:1 square, 2000 × 2000 px.</pre>
+
+    <h3>Quick reference values (when you fill in the brackets)</h3>
+    <ul>
+      <li><strong>Use centimetres only</strong> (cm), never inches — UAE-first.</li>
+      <li>Round to whole numbers unless the half matters (so <code>12 cm</code>, not <code>12.3 cm</code>).</li>
+      <li>Order is always <strong>Length × Width × Height</strong> (L × W × H), front-to-back × side-to-side × top-to-bottom.</li>
+      <li>If the product is essentially flat (a magnet, a card), use <strong>L × W</strong> only and drop the height line.</li>
+    </ul>
+  </section>
+
+  <!-- 10. File naming -->
+  <section>
+    <h2><span class="n">10</span><span>File naming</span></h2>
     <p>Use kebab-case, English, no spaces. Helps both SEO and our backup organisation.</p>
     <ul>
       <li><code style="background:var(--cream-darker);padding:2px 6px">vintage-camper-van-red-01.jpg</code></li>
