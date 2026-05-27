@@ -480,31 +480,14 @@ ffmpeg -y -i source.mp3 -t 16 -af "volume=0.7,afade=t=out:st=14.5:d=1.5" \
       <li><strong>Separator:</strong> if a punctuation separator is needed in Arabic, use the Arabic comma <code>،</code> not the Latin mid-dot <code>·</code> (mid-dot renders as a tofu box in Arabic).</li>
     </ul>
 
-    <h3>Logo (LOCKED — use the proper version with UAE flag + tagline)</h3>
-    <p>The ORLO logo used in <strong>every video</strong> is the navy organic-blob lockup with the UAE flag medallion at top, cream textured "ORLO" wordmark, and <em>"QUALITY IS A CLICK AWAY"</em> handwritten beneath. <strong>Not the wordmark-only header version.</strong></p>
+    <h3>Logo (LOCKED — use the site logo, no variants)</h3>
+    <p>The ORLO logo used in <strong>every video</strong> is the same logo the site header uses — navy organic-blob lockup, cream textured "ORLO" wordmark, coral textured dot above. No UAE flag, no "QUALITY IS A CLICK AWAY" baked into the lockup (the tagline appears separately as DM Sans text on the end card).</p>
     <ul>
-      <li><strong>File:</strong> <code>logos/png/Color logo - with flag and tagline.png</code> (800 × 800, transparent background, ~565 KB).</li>
-      <li><strong>Composition</strong> (don't rebuild — use this exact file):
-        <ul style="margin-top:6px">
-          <li>Navy <code style="background:var(--cream-darker);padding:1px 5px">#1A3A52</code> organic blob (slightly irregular, not a perfect circle — this is intentional, hand-drawn feel)</li>
-          <li>UAE flag inside a small textured circle at top of the blob</li>
-          <li>"ORLO" wordmark in cream with subtle ink-grain texture and a black hand-drawn outline</li>
-          <li><em>"QUALITY IS A CLICK AWAY"</em> in cream, hand-drawn sans, sits centred under "ORLO"</li>
-        </ul>
-      </li>
-      <li><strong>Intro size:</strong> 360 × 360 px on the 1080 × 1920 frame, centred at y ≈ 760.</li>
-      <li><strong>Corner-parked size:</strong> 125 × 125 px (during main scenes), anchored 50 px from top-left.</li>
-      <li><strong>End-card size:</strong> 340 × 340 px, centred horizontally, y ≈ 280.</li>
-      <li><strong>NEVER:</strong>
-        <ul style="margin-top:6px">
-          <li>Strip the UAE flag — that's the licensed-store signal. The flag stays.</li>
-          <li>Strip the tagline beneath "ORLO" — it's part of the lockup.</li>
-          <li>Recolour the flag (red/green/black/white only).</li>
-          <li>Re-render the logo from scratch — use the PNG file, don't redraw in code.</li>
-          <li>Make white pixels transparent — if applying opacity, multiply the alpha channel only. Reducing all RGB will eat the cream letters.</li>
-        </ul>
-      </li>
-      <li><strong>Header lockup (different — for the website only):</strong> the site header uses the simpler ORL[O with coral dot] wordmark, no flag, no tagline. That's intentional — videos need the full trust signal (flag + tagline) because they live outside the site; the site itself doesn't.</li>
+      <li><strong>File:</strong> <code>logos/png/Color logo - no background.png</code> (or the SVG equivalent).</li>
+      <li><strong>Intro size:</strong> ~360 × 360 px on the 1080 × 1920 frame, centred at y ≈ 760.</li>
+      <li><strong>Corner-parked size:</strong> ~125 × 125 px (during main scenes), anchored 50 px from top-left.</li>
+      <li><strong>End-card size:</strong> ~340 × 340 px, centred horizontally, y ≈ 280.</li>
+      <li><strong>NEVER</strong> re-render the logo from code, recolour the dot, or make white pixels transparent — if applying opacity, multiply the alpha channel only.</li>
     </ul>
 
     <h3>Standard 16-second timeline</h3>
