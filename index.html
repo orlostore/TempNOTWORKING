@@ -1349,12 +1349,14 @@ document.addEventListener('DOMContentLoaded', function(){
       var safeName = esc(p.name||''), safeNameAr = esc(p.nameAr||''), safeSlug = encodeURIComponent(p.slug||'');
       var pdpHref = 'product.html?product='+safeSlug;
 
-      // Collect every image URL the product carries (image, image2..image8) — for the in-card swipe carousel.
+      // Collect every image URL the product carries — for the in-card swipe carousel.
+      // /api/products serialises them as p.images (array of mainImage + image2..image8 filtered to Boolean).
+      // Fall back to p.image (legacy single field) if the array isn't present.
       var imgs = [];
-      for (var k = 0; k < 8; k++) {
-        var key = k === 0 ? 'image' : 'image' + (k+1);
-        var src = p[key];
-        if (src && typeof src === 'string' && src.indexOf('http') === 0) imgs.push(src);
+      if (Array.isArray(p.images) && p.images.length > 0) {
+        imgs = p.images.filter(function(s){ return s && typeof s === 'string' && s.indexOf('http') === 0; });
+      } else if (p.image && typeof p.image === 'string' && p.image.indexOf('http') === 0) {
+        imgs = [p.image];
       }
       var imgsHTML;
       if (imgs.length === 0) {
