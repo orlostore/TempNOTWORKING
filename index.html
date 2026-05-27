@@ -785,6 +785,39 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         .cs-footer-section .cs-legal .sep{color:#c0c8ce}
         .cs-footer-section .cs-copyright{margin-top:14px;font-family:'DM Sans',sans-serif;font-size:0.65rem;color:#9aa5ad;letter-spacing:0.02em;padding-bottom:8px}
         @media(max-width:576px){.cs-footer-section{padding:22px 18px}}
+
+        /* ═══════════════════════════════════════════════════════════════
+           DESKTOP-ONLY HERO REFINEMENTS  (≥769px)  — mobile rules untouched
+           Goals: (1) fit hero inside viewport (was 16/10 = 1200px tall on 1920w)
+                  (2) crop the flatlay so subject fills the frame (no dead wall/desk)
+                  (3) caption overlay is legible on light image areas
+                  (4) FREE DELIVERY strip below hero (Hermès rhythm)
+                  (5) kill the draft marker
+           ═══════════════════════════════════════════════════════════════ */
+        @media (min-width: 769px) {
+            .draft-marker { display: none !important; }
+
+            .orlo-hero-v2 { max-height: 78vh; }
+            .orlo-hero-v2-img {
+                aspect-ratio: 21 / 9 !important;
+                max-height: 78vh;
+                object-position: center 62%;
+            }
+            .orlo-hero-v2-overlay {
+                padding: 52px 64px;
+                background: linear-gradient(180deg, rgba(0,0,0,0) 28%, rgba(0,0,0,0.45) 65%, rgba(0,0,0,0.85) 100%);
+            }
+            .orlo-hero-v2-title {
+                font-size: clamp(36px, 4.2vw, 56px) !important;
+                text-shadow: 0 2px 14px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.4);
+            }
+            .orlo-hero-v2-sub {
+                text-shadow: 0 1px 10px rgba(0,0,0,0.55), 0 1px 2px rgba(0,0,0,0.4);
+            }
+
+            /* FREE DELIVERY strip removed on desktop (mobile keeps it) */
+            .hdr-thin-banner { display: none !important; }
+        }
     </style>
 </head>
 <body data-cards="v2">
