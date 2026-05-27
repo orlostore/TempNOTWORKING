@@ -101,7 +101,7 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
     <div class="tag">ORLO Store · Dubai</div>
     <h1>Product Image <em>Guide.</em></h1>
     <p>How to shoot clean catalogue images and generate editorial lifestyle images (via Gemini) so they look consistent across the site, Instagram, and TikTok.</p>
-    <div class="ver">Version 03 · 2026 · with Gemini lifestyle prompts</div>
+    <div class="ver">Version 04 · 2026 · with strict catalogue prompt</div>
   </header>
 
   <!-- 1. Background -->
@@ -174,12 +174,47 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
     <p style="margin-top:18px;font-size:.85rem;color:var(--muted)">Beige canvas = catalogue (type A). Lifestyle (type B) is generated via Gemini — see section 04 for prompt templates.</p>
   </section>
 
-  <!-- 4. Gemini lifestyle prompts -->
+  <!-- 4. Gemini prompts -->
   <section>
-    <h2><span class="n">04</span><span>Gemini lifestyle prompts</span></h2>
+    <h2><span class="n">04</span><span>Gemini prompts (catalogue &amp; lifestyle)</span></h2>
+    <p>Both image types can be generated with Gemini / Imagen if studio shots aren't available. Catalogue (type A) needs a <strong>strict, restrictive</strong> prompt — Gemini's default behaviour is to add storytelling and props, which kills the clean grid. Lifestyle (type B) is more permissive but still bounded.</p>
+
+    <h3 style="margin-top:24px">A — Catalogue prompt (strict — copy verbatim)</h3>
+    <p style="font-size:.85rem;color:var(--muted);max-width:640px">Replace <code>[PRODUCT]</code> with a short physical description. <strong>Do not soften the "MUST NOT" list — that's the entire reason this works.</strong> Gemini will sneak props back in the moment you remove an item from the forbidden list.</p>
+    <pre class="prompt-box">Studio product photograph of [PRODUCT — e.g., a vintage red metal Volkswagen Beetle toy with hippie flower decals].
+
+Background: a completely flat, solid, untextured single colour fill — #E5DCCF (warm pale taupe, Hermès beige, RGB 229 220 207) — filling 100% of the frame edge to edge. The subject is the ONLY thing in the image.
+
+Lighting: soft, even, top-down studio lighting. Gentle natural contact shadow directly beneath the subject. No other shadows, no light streaks, no window light, no sun beams, no atmosphere, no haze, no dust motes.
+
+Composition: subject centred, sharp, fully in focus, ~15–18% padding on all sides. Photorealistic, fine detail, true colour.
+
+Aspect ratio: 1:1 square, 2000 × 2000 px.
+
+CRITICAL — these MUST NOT appear in the image:
+no desk, no table, no surface, no marble, no wood, no fabric, no carpet, no curtains,
+no window, no skyline, no city, no architecture, no room, no walls,
+no plants, no terracotta pot, no flowers, no leaves,
+no sunglasses, no books, no maps, no jewelry, no rings, no coins,
+no shadows on the background plane, no gradient on the background, no vignette, no texture,
+no props of any kind, no styling, no second object, no people, no hands,
+no text, no border, no frame, no signature, no logo, no watermark,
+no lifestyle context, no scene, no story.
+
+The subject is alone in a void of solid beige.</pre>
+
+    <h3>Common drift — what Gemini does wrong, and how to push back</h3>
+    <ul>
+      <li><strong>"Just make it brighter"</strong> → Gemini adds windows, skylines, more props. <em>Fix:</em> re-emphasise "solid flat untextured #E5DCCF, no scene, no window."</li>
+      <li><strong>Marble or wood surface sneaks in</strong> → cold, modern-apartment feel. <em>Fix:</em> add "no surface, no marble, no wood" to the forbidden list explicitly.</li>
+      <li><strong>Drop shadow under product is gradient, not contact</strong> → looks Photoshop-fake. <em>Fix:</em> "soft natural contact shadow only, directly under the subject, no gradient halo."</li>
+      <li><strong>Background colour shifts pink/green/yellow</strong> → wrong taupe. <em>Fix:</em> "exact colour #E5DCCF — neither pinkish nor greenish, warm neutral pale taupe."</li>
+      <li><strong>Lifestyle drift</strong> (props, curtains, sunglasses, sunflowers) → Gemini interprets "product photo" as "flatlay." <em>Fix:</em> the full MUST NOT list, item by item. Don't shorten it.</li>
+    </ul>
+
+    <h3 style="margin-top:28px">B — Lifestyle prompt — master template</h3>
     <p>Lifestyle images (type B — Popular Now carousel, hero, The Edit, Stories, Reels, TikTok) are generated with Gemini / Imagen. Paste a template, replace [BRACKETED] parts with your product details, and request the 1:1 square first. Then re-prompt the same scene at 9:16 (1080 × 1920) for IG Stories &amp; Reels and TikTok — keeps the same image across platforms.</p>
 
-    <h3>Master template — paste this, swap brackets</h3>
     <pre class="prompt-box">A high-end editorial lifestyle photograph of a [PRODUCT NAME — short description], in the style of a Hermès or Aesop catalogue page.
 
 Setting: [SCENE — e.g., on a vintage wooden writing desk beside an open paper notebook and a brass paperweight].
@@ -313,6 +348,7 @@ Aspect ratio: 1:1 square, 1080 × 1080.</pre>
           <li>Drop shadows added in editing — keep it natural</li>
           <li>Text or stickers in the image itself (overlay them in IG instead)</li>
           <li>Multiple busy props — one hero subject only</li>
+          <li><strong>For AI-generated catalogue shots specifically:</strong> no marble or stone surfaces (reads cold/modern, wrong register), no city skylines through windows (says "Dubai apartment" not "ORLO object"), no sunflowers / dried flowers / terracotta pots as props (Gemini default flatlay clichés), no curtain / window-light effects (catalogue should be flat top-down studio)</li>
         </ul>
       </div>
     </div>
