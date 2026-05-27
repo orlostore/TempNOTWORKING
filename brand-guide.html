@@ -101,7 +101,7 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
     <div class="tag">ORLO Store · Dubai</div>
     <h1>Product Image <em>Guide.</em></h1>
     <p>How to shoot clean catalogue images and generate editorial lifestyle images (via Gemini) so they look consistent across the site, Instagram, and TikTok.</p>
-    <div class="ver">Version 04 · 2026 · with strict catalogue prompt</div>
+    <div class="ver">Version 05 · 2026 · with video / Reels / TikTok spec</div>
   </header>
 
   <!-- 1. Background -->
@@ -428,9 +428,129 @@ Aspect ratio: 1:1 square, 2000 × 2000 px.</pre>
     </ul>
   </section>
 
+  <!-- 11. Video — Reels / TikTok / Stories -->
+  <section>
+    <h2><span class="n">10</span><span>Video — Reels, TikTok &amp; Stories</span></h2>
+    <p>Vertical short-form video on Instagram Reels, TikTok, and IG Stories is the most powerful surface ORLO has. The format is locked so every reel feels like the same brand — the colour, the type, the end card. Concepts vary; the frame around them doesn't.</p>
+
+    <h3>Video specs (locked)</h3>
+    <table>
+      <tr><th>Spec</th><th>Value</th></tr>
+      <tr><td>Resolution</td><td><strong>1080 × 1920</strong> (vertical 9:16)</td></tr>
+      <tr><td>Frame rate</td><td>30 fps</td></tr>
+      <tr><td>Duration</td><td><strong>15–16 seconds</strong> (target 16s, never over 20s)</td></tr>
+      <tr><td>Codec</td><td>H.264 (libx264) · yuv420p · CRF 20 · preset medium</td></tr>
+      <tr><td>Audio</td><td>AAC 192k · trimmed to 16s · volume 70% · 1.5s fade-out at 14.5s</td></tr>
+      <tr><td>Output</td><td>MP4 with <code>+faststart</code> moov atom for fast IG/TT upload</td></tr>
+    </table>
+    <pre class="prompt-box">ffmpeg -y -framerate 30 -i frames/f_%04d.jpg -i audio.aac \
+  -c:v libx264 -pix_fmt yuv420p -crf 20 -preset medium \
+  -c:a aac -b:a 192k -shortest -movflags +faststart output.mp4
+
+# Audio treatment (trim + fade):
+ffmpeg -y -i source.mp3 -t 16 -af "volume=0.7,afade=t=out:st=14.5:d=1.5" \
+  -acodec aac -b:a 192k audio.aac</pre>
+
+    <h3>Palette (matches the site exactly — no separate "video palette")</h3>
+    <ul>
+      <li><strong>Cream background</strong> <code style="background:var(--cream-darker);padding:1px 5px">#F8F6F2</code> — the same cream the page uses. Never a different shade for video.</li>
+      <li><strong>Navy</strong> <code style="background:var(--cream-darker);padding:1px 5px">#1A3A52</code> — primary text, divider lines, pills.</li>
+      <li><strong>Coral / Orange</strong> <code style="background:var(--cream-darker);padding:1px 5px">#E76F51</code> — accent, CTAs, URL, Arabic tagline, trust circles.</li>
+      <li><strong>Grey</strong> <code style="background:var(--cream-darker);padding:1px 5px">#A0A5AA</code> — secondary captions / Arabic descriptions in trust badges.</li>
+      <li><strong>Dark warm</strong> <code style="background:var(--cream-darker);padding:1px 5px">#14100C</code> — only for mystery / silhouette tease scenes, never as default bg.</li>
+    </ul>
+
+    <h3>Fonts (locked, no substitutes)</h3>
+    <ul>
+      <li><strong>English: DM Sans</strong> — weights 500, 700, 800. Same family the site uses.</li>
+      <li><strong>Arabic: Almarai</strong> — weights 400, 700, 800. <strong>The ONLY Arabic font for ORLO.</strong> Never use Noto Kufi, never use Tajawal, never use system Arabic.</li>
+      <li><strong>Critical render note:</strong> when generating frames in Python/PIL, use <em>raw Arabic strings with Almarai directly</em>. Do NOT use <code>arabic_reshaper</code> + <code>python-bidi</code> — Almarai handles RTL and letter-joining natively via OpenType. Double-processing reverses the letters.</li>
+      <li><strong>Separator:</strong> if a punctuation separator is needed in Arabic, use the Arabic comma <code>،</code> not the Latin mid-dot <code>·</code> (mid-dot renders as a tofu box in Arabic).</li>
+    </ul>
+
+    <h3>Standard 16-second timeline</h3>
+    <table>
+      <tr><th>Time</th><th>Beat</th></tr>
+      <tr><td>0.0–1.5s</td><td>Logo intro — ORLO logo fades in centred on cream background, ~360 px wide. Short coral divider draws under it.</td></tr>
+      <tr><td>1.5–2.0s</td><td>Logo shrinks and parks at top-left corner (125 × 125 px, anchored ~50px from edges). It stays there at 100% opacity for the rest of the video — <strong>never toggle it off during headlines</strong>.</td></tr>
+      <tr><td>2.0–14.0s</td><td>Main scene — concept-dependent (product reveal, silhouette tease, walk-on animation, before/after wipe).</td></tr>
+      <tr><td>14.0–16.0s</td><td>End card (locked layout, see below).</td></tr>
+    </table>
+
+    <h3>End card — LOCKED design (every video, no variations)</h3>
+    <p>Cream <code style="background:var(--cream-darker);padding:1px 5px">#F8F6F2</code> background, elements stacked top to bottom:</p>
+    <ol style="padding-left:20px;line-height:1.85;font-size:.92rem">
+      <li>ORLO logo, 340 × 340 px, centred horizontally, y ≈ 280.</li>
+      <li><strong>EN tagline:</strong> "QUALITY IS A CLICK AWAY" — DM Sans 500, 44pt, navy <code style="background:var(--cream-darker);padding:1px 5px">#1A3A52</code>, letter-spaced 5 px.</li>
+      <li><strong>Coral divider:</strong> 140 × 3 px centred under the EN tagline.</li>
+      <li><strong>AR tagline:</strong> "الجودة على بُعد نقرة" — Almarai 800, 54pt, coral <code style="background:var(--cream-darker);padding:1px 5px">#E76F51</code>.</li>
+      <li><strong>(Conditional) Navy COMING SOON pill</strong> — only for unreleased products. 720 × 100 px, border-radius 50. Inside: "COMING SOON" (DM Sans 800, 44pt, coral) · separator dot (cream) · "قريباً" (Almarai 800, 44pt, coral). <strong>Released products skip this entirely.</strong></li>
+      <li><strong>URL:</strong> "orlostore.com" — DM Sans 700, 54pt, coral.</li>
+      <li><strong>Trust badges row</strong> at bottom (y ≈ H – 340), three columns equally spaced:
+        <ul style="margin-top:6px">
+          <li>🛻 <strong>Free Delivery</strong> / <em>توصيل مجاني</em> — truck pictogram</li>
+          <li>🔒 <strong>Secure Payment</strong> / <em>دفع آمن</em> — padlock pictogram</li>
+          <li>🇦🇪 <strong>Licensed UAE Store</strong> / <em>متجر مرخّص</em> — UAE flag / storefront pictogram</li>
+        </ul>
+        Each: coral circle outline (radius 44, stroke 4), custom-drawn SVG/PIL pictogram inside (NEVER letter placeholders like "F"/"S"/"L"), EN label below (DM Sans 500, 32pt, navy, max 2 lines), AR label (Almarai 700, 30pt, grey <code style="background:var(--cream-darker);padding:1px 5px">#A0A5AA</code>).
+      </li>
+    </ol>
+
+    <h3>Visual rules (LOCKED — every video)</h3>
+    <ul>
+      <li><strong>Hard cuts only.</strong> No crossfades between scenes. Crossfades read as travel-vlog, not editorial.</li>
+      <li><strong>Logo rock-solid throughout</strong> at 100% opacity once parked in the corner.</li>
+      <li><strong>UAE flag colours intact</strong> inside the logo — never desaturate, never re-tint.</li>
+      <li><strong>Almarai is the only Arabic font.</strong> Repeated for emphasis.</li>
+      <li><strong>Silhouettes for tease/reveal</strong> are pure black (<code style="background:var(--cream-darker);padding:1px 5px">#000</code>) on cream — no grey, no transparency tricks.</li>
+      <li><strong>Bilingual everywhere:</strong> every headline that appears in EN gets an AR line directly below it. Same beat, same screen time, same weight.</li>
+      <li><strong>Pacing:</strong> 15–16 seconds total. Don't overstuff. If a concept needs more, cut a scene.</li>
+    </ul>
+
+    <h3>Caption format for IG &amp; TikTok (bilingual, interleaved)</h3>
+    <pre class="prompt-box">[English line 1]
+[Arabic translation of line 1]
+
+[English line 2]
+[Arabic translation of line 2]
+
+[English line 3 mentioning orlostore.com]
+[Arabic translation of line 3]
+
+🚚 Free delivery above 75 AED | توصيل مجاني للطلبات فوق 75 درهم
+🔒 Secure checkout | دفع آمن
+🇦🇪 Licensed UAE store | متجر مرخّص في الإمارات
+
+#[hashtag1] #[hashtag2] #[hashtag3] #OrloStore #QualityIsAClickAway</pre>
+    <ul>
+      <li>EN line first, AR translation directly below — no "scroll for English" patterns.</li>
+      <li><strong>Exactly 5 hashtags</strong>, all English (Arabic hashtags don't get used on UAE IG/TT).</li>
+      <li>Last two are <strong>always</strong>: <code>#OrloStore #QualityIsAClickAway</code>. First three vary by concept.</li>
+      <li>Three trust-badge lines are always present — same emoji, same EN | AR pairs.</li>
+    </ul>
+
+    <h3>Past video reference series (tone &amp; concepts already used — don't repeat)</h3>
+    <ul>
+      <li><strong>Red Camper Van</strong> — "Red Wasn't You?" hook, released</li>
+      <li><strong>Blue Camper Van</strong> — released</li>
+      <li><strong>Vespa</strong> — Italian Riviera concept, <em>Festa Italiana</em> soundtrack, released</li>
+      <li><strong>Dangling Buddies (4 bobbleheads)</strong> — Pink Panther polka, dark-to-cream silhouette reveal + bounce-walk-onto-fridge, coming soon</li>
+    </ul>
+    <p style="font-size:.85rem;color:var(--muted)"><strong>Never repeat a concept.</strong> Every new reel must do something the previous ones didn't — different motion, different scene, different audio register.</p>
+
+    <h3>Production toolchain</h3>
+    <ul>
+      <li>Python 3 + <code>Pillow</code> (PIL) + <code>numpy</code> + <code>opencv-python</code> for frame compositing</li>
+      <li>Render frame-by-frame as JPGs at quality 92 into <code>frames/</code> (480 frames at 30fps × 16s)</li>
+      <li>Encode with the ffmpeg command above</li>
+      <li>Audio mixing handled separately (polka bed + synthesized SFX), exported to <code>audio.aac</code> before final encode</li>
+    </ul>
+    <p style="font-size:.85rem;color:var(--muted)">Source code from the buddies reel (frame renderer + audio mixer + SFX library) lives in the project handoff archive — reusable across new concepts by swapping the main-scene logic and the audio track.</p>
+  </section>
+
   <!-- 10. File naming -->
   <section>
-    <h2><span class="n">10</span><span>File naming</span></h2>
+    <h2><span class="n">11</span><span>File naming</span></h2>
     <p>Use kebab-case, English, no spaces. Helps both SEO and our backup organisation.</p>
     <ul>
       <li><code style="background:var(--cream-darker);padding:2px 6px">vintage-camper-van-red-01.jpg</code></li>
