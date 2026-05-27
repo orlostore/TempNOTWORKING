@@ -3,7 +3,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Your Cart — ORLO Store</title>
 <meta name="robots" content="noindex,nofollow">
-<link rel="stylesheet" href="styles.css?v=81">
+<link rel="stylesheet" href="styles.css?v=82">
 <!-- Bootstrap product data so renderCartPage can resolve cart items to product info -->
 <script src="products.min.js?v=24"></script>
 <style>
@@ -585,7 +585,7 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
     }
     return p.quantity || 0;
   }
-  function mutateQty(id, delta, vid) {
+  function mutateQty(id, delta, vid, clickedBtn) {
     var c = getCart();
     var idx = findItemIndex(c, id, vid);
     if (idx < 0) return;
@@ -596,12 +596,34 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
       var stock = stockFor(id, vid);
       var cap = Math.min(10, stock);  // 10-per-product limit AND admin-managed stock
       if (delta > 0 && newQty > cap) {
-        // Hit the cap — surface an editorial toast so the unresponsive + button is explained.
-        // (Was previously calling showOrloToast which never existed — silent failure.)
-        if (typeof orloToast === 'function') {
-          var msg = stock < 10 ? 'Only ' + stock + ' left in stock.' : 'Limit of 10 per order.';
-          var msgAr = stock < 10 ? 'متبقي ' + stock + ' فقط في المخزون.' : 'الحد الأقصى ١٠ لكل طلب.';
-          orloToast('warning', msg, msgAr, 3500);
+        // Inline tooltip anchored to the qty stepper that was just pressed —
+        // travels with the cart row when the page scrolls, scoped to one item
+        // so repeated presses dedupe naturally (refreshes existing tooltip
+        // instead of stacking).
+        var msg = stock < 10 ? 'Only ' + stock + ' left in stock.' : 'Limit of 10 per order.';
+        var msgAr = stock < 10 ? 'متبقي ' + stock + ' فقط في المخزون.' : 'الحد الأقصى ١٠ لكل طلب.';
+        if (clickedBtn && clickedBtn.closest) {
+          var controls = clickedBtn.closest('.cart-item-controls');
+          if (controls) {
+            var existing = controls.querySelector('.limit-tooltip.cart-inline');
+            if (existing) {
+              existing.querySelector('.tooltip-text-en').textContent = msg;
+              existing.querySelector('.tooltip-text-ar').textContent = msgAr;
+              clearTimeout(existing._timer);
+            } else {
+              var tip = document.createElement('div');
+              tip.className = 'limit-tooltip cart-inline';
+              tip.innerHTML =
+                '<button class="close-btn" type="button" aria-label="Dismiss">×</button>' +
+                '<span class="tooltip-text-en">' + msg + '</span>' +
+                '<span class="tooltip-accent"></span>' +
+                '<span class="tooltip-text-ar">' + msgAr + '</span>';
+              tip.querySelector('.close-btn').onclick = function(){ tip.remove(); };
+              controls.appendChild(tip);
+              existing = tip;
+            }
+            existing._timer = setTimeout(function(){ if (existing.parentElement) existing.remove(); }, 3500);
+          }
         }
         return;
       }
@@ -662,8 +684,8 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
       if (!id) return;
       var idVal = isNaN(Number(id)) ? id : Number(id);
       var vidVal = vid ? (isNaN(Number(vid)) ? vid : Number(vid)) : undefined;
-      if (act === 'inc') mutateQty(idVal, 1, vidVal);
-      else if (act === 'dec') mutateQty(idVal, -1, vidVal);
+      if (act === 'inc') mutateQty(idVal, 1, vidVal, t);
+      else if (act === 'dec') mutateQty(idVal, -1, vidVal, t);
       else if (act === 'rm') mutateRemove(idVal, vidVal);
       return;
     }
