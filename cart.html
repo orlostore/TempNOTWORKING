@@ -537,7 +537,7 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
         sticky.innerHTML = '' +
           '<div class="checkout-btn-row">' +
             '<button class="checkout-btn" id="payByCardBtn" style="flex:1">' + SVG_CARD +
-              '<div class="checkout-btn-text">Pay by card<span class="ar">الدفع بالبطاقة</span></div>' +
+              '<div class="checkout-btn-text">Checkout<span class="ar">الدفع</span></div>' +
             '</button>' +
           '</div>';
       } else {
@@ -610,6 +610,37 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
     updateBottomNav();
   }
 
+  // Lock both checkout buttons and swap the clicked button's label to a loading state.
+  // Prevents double-clicks and signals "we're working" during the stock-check + Stripe round-trip.
+  // English-only loading text per request — no Arabic in the transient state.
+  // Safety: auto-unlock after 15s in case the underlying checkout() throws and never navigates,
+  // so the user can retry instead of being stuck behind a frozen button.
+  function lockCheckoutButtons(clickedId, loadingText) {
+    var ids = ['payByCardBtn', 'signInBtn', 'asGuestBtn'];
+    var originals = {};
+    ids.forEach(function(id) {
+      var btn = document.getElementById(id);
+      if (!btn) return;
+      btn.disabled = true;
+      btn.style.opacity = '0.55';
+      btn.style.cursor = 'wait';
+      var label = btn.querySelector('.checkout-btn-text');
+      if (label) originals[id] = label.innerHTML;
+      if (id === clickedId && label) label.innerHTML = loadingText;
+    });
+    setTimeout(function() {
+      ids.forEach(function(id) {
+        var btn = document.getElementById(id);
+        if (!btn || !btn.disabled) return; // already navigated or unlocked
+        btn.disabled = false;
+        btn.style.opacity = '';
+        btn.style.cursor = '';
+        var label = btn.querySelector('.checkout-btn-text');
+        if (label && originals[id]) label.innerHTML = originals[id];
+      });
+    }, 15000);
+  }
+
   // Delegated event handlers for qty stepper + remove + checkout
   document.addEventListener('click', function(ev){
     var t = ev.target.closest('[data-act]');
@@ -625,12 +656,16 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
       else if (act === 'rm') mutateRemove(idVal, vidVal);
       return;
     }
-    if (ev.target.closest('#asGuestBtn') || ev.target.closest('#payByCardBtn')) {
+    var guest = ev.target.closest('#asGuestBtn');
+    var payByCard = ev.target.closest('#payByCardBtn');
+    if (guest || payByCard) {
+      lockCheckoutButtons(guest ? 'asGuestBtn' : 'payByCardBtn', 'Verifying stock&hellip;');
       if (typeof checkout === 'function') checkout();
       else window.location.href = 'login.html?redirect=' + encodeURIComponent('cart.html');
       return;
     }
     if (ev.target.closest('#signInBtn')) {
+      lockCheckoutButtons('signInBtn', 'Loading&hellip;');
       window.location.href = 'login.html?redirect=' + encodeURIComponent('cart.html');
       return;
     }
