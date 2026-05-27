@@ -1416,8 +1416,9 @@ document.addEventListener('DOMContentLoaded', function(){
     initCardSwipe(grid);
   };
 
-  // Hermès in-card swipe: horizontal drag changes image, vertical scroll passes through,
-  // tap (no drag detected) still navigates to PDP. Dots reflect position; only one tooltip per card.
+  // Hermès in-card swipe — pointer events (matches Popular Now carousel, which already works on Chrome Android).
+  // touch-action: pan-y on the track keeps native vertical page-scroll; JS owns horizontal motion.
+  // Tap (no drag detected) still navigates to PDP via the parent <a>.
   function initCardSwipe(grid){
     grid.querySelectorAll('.card-img[data-img-count]').forEach(function(cardImg){
       if (cardImg._swipeInited) return;
@@ -1428,7 +1429,7 @@ document.addEventListener('DOMContentLoaded', function(){
       var dots = cardImg.querySelectorAll('.card-img-dots span');
       var link = cardImg.closest('.card-link');
       var index = 0;
-      var startX = 0, startY = 0, dx = 0, dy = 0, swiping = false, swiped = false;
+      var sx = 0, sy = 0, dx = 0, swiping = false, swiped = false;
 
       function go(n){
         index = Math.max(0, Math.min(count - 1, n));
@@ -1437,40 +1438,26 @@ document.addEventListener('DOMContentLoaded', function(){
         dots.forEach(function(d, i){ d.classList.toggle('active', i === index); });
       }
 
-      cardImg.addEventListener('touchstart', function(e){
-        var t = e.touches[0];
-        startX = t.clientX; startY = t.clientY;
-        dx = 0; dy = 0;
-        swiping = true; swiped = false;
-      }, {passive:true});
-
-      // touchmove must be NON-passive on Chrome Android so we can preventDefault()
-      // the moment horizontal motion is confirmed — otherwise the browser hijacks the
-      // gesture for native page scroll and stops firing touchmove/touchend.
-      cardImg.addEventListener('touchmove', function(e){
-        if (!swiping) return;
-        var t = e.touches[0];
-        dx = t.clientX - startX;
-        dy = Math.abs(t.clientY - startY);
-        // Threshold: 10px horizontal AND mostly-horizontal motion = treat as swipe
-        if (Math.abs(dx) > 10 && Math.abs(dx) > dy * 1.2) {
-          swiped = true;
-          if (e.cancelable) e.preventDefault();
-        }
-      }, {passive:false});
-
-      cardImg.addEventListener('touchend', function(){
-        swiping = false;
-        if (!swiped) return;
-        if (Math.abs(dx) > 40) {
-          go(dx < 0 ? index + 1 : index - 1);
-        } else {
-          go(index); // snap back if drag wasn't deep enough
-        }
+      cardImg.addEventListener('pointerdown', function(e){
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        sx = e.clientX; sy = e.clientY;
+        dx = 0; swiping = true; swiped = false;
       });
-      cardImg.addEventListener('touchcancel', function(){ swiping = false; });
+      cardImg.addEventListener('pointermove', function(e){
+        if (!swiping) return;
+        dx = e.clientX - sx;
+        var dy = Math.abs(e.clientY - sy);
+        if (Math.abs(dx) > 14 && Math.abs(dx) > dy * 1.4) swiped = true;
+      });
+      cardImg.addEventListener('pointerup', function(){
+        if (!swiping) return;
+        swiping = false;
+        if (swiped && Math.abs(dx) > 40) go(dx < 0 ? index + 1 : index - 1);
+        else if (swiped) go(index); // snap back
+      });
+      cardImg.addEventListener('pointercancel', function(){ swiping = false; });
 
-      // Block the parent <a> from firing PDP navigation when a swipe just ended
+      // Block the parent <a> from navigating when a swipe just ended (capture phase, same as Popular Now)
       if (link) {
         link.addEventListener('click', function(ev){
           if (swiped) { ev.preventDefault(); ev.stopPropagation(); swiped = false; }
