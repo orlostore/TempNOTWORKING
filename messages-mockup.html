@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Messages & Validation — Mockup</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a3a52;-webkit-font-smoothing:antialiased;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 20px 80px}
+.head{text-align:center;border-bottom:1px solid rgba(26,58,82,0.10);padding-bottom:24px;margin-bottom:32px}
+.head h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.6rem;line-height:1.05}
+.head h1 em{color:#e76f51}
+.head p{font-size:.88rem;color:#6b6b6b;margin-top:10px;max-width:680px;margin-left:auto;margin-right:auto}
+
+.section{margin-top:42px;background:#fff;border:1px solid rgba(26,58,82,0.10);padding:28px 28px 18px}
+.section h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.7rem;border-bottom:1px solid rgba(26,58,82,0.10);padding-bottom:12px;margin-bottom:16px;display:flex;align-items:baseline;gap:12px}
+.section h2 .n{font-family:'DM Sans',sans-serif;font-size:.65rem;letter-spacing:.24em;color:#9aa5ad;text-transform:uppercase;font-weight:500}
+.section h2 em{color:#e76f51}
+.section .desc{font-size:.86rem;color:#6b6b6b;margin-bottom:18px}
+
+.status{display:inline-block;padding:2px 10px;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-left:8px;vertical-align:middle}
+.status.good{background:#eaf6ee;color:#2a7f4e}
+.status.bad{background:#fdecec;color:#c33}
+.status.neutral{background:#f0f0f0;color:#666}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:10px}
+@media(max-width:760px){.row{grid-template-columns:1fr}}
+.cell{padding:22px 18px;border:1px solid rgba(26,58,82,0.10);min-height:140px;position:relative;background:#f8f6f2}
+.cell-tag{position:absolute;top:8px;left:10px;font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
+.cell-body{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+
+/* ===== Native browser validation tooltip (BEFORE — login form) ===== */
+.native-form{padding:14px 0}
+.native-form label{display:block;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:#1a3a52;font-weight:500;margin-bottom:6px}
+.native-form .input-row{position:relative;padding-bottom:6px;border-bottom:1px solid rgba(26,58,82,0.15)}
+.native-form input{width:100%;border:0;background:transparent;font-family:'DM Sans',sans-serif;font-size:.95rem;color:#1a3a52;padding:4px 0;outline:none}
+.native-tooltip{position:absolute;top:38px;left:20px;background:#fff;border:1px solid #ccc;box-shadow:0 4px 14px rgba(0,0,0,.15);padding:12px 14px;font-family:system-ui,sans-serif;font-size:.78rem;color:#222;border-radius:4px;display:flex;align-items:center;gap:8px}
+.native-tooltip::before{content:'';position:absolute;top:-8px;left:18px;width:16px;height:16px;background:#fff;transform:rotate(45deg);border-top:1px solid #ccc;border-left:1px solid #ccc}
+.native-tooltip .ico{width:22px;height:22px;background:#f60;color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700}
+
+/* ===== Proposed inline form error (AFTER) — branded ===== */
+.brand-form{padding:14px 0}
+.brand-form label{display:block;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:#1a3a52;font-weight:500;margin-bottom:6px;display:flex;justify-content:space-between}
+.brand-form label .ar{font-family:'Almarai',sans-serif;font-size:.7rem;color:#9aa5ad;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
+.brand-form .input-row{padding-bottom:6px;border-bottom:1.5px solid #e76f51}
+.brand-form .input-row.ok{border-bottom-color:rgba(26,58,82,0.15)}
+.brand-form input{width:100%;border:0;background:transparent;font-family:'DM Sans',sans-serif;font-size:.95rem;color:#1a3a52;padding:4px 0;outline:none}
+.brand-err{font-family:'DM Sans',sans-serif;font-size:.72rem;color:#e76f51;margin-top:6px;display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-weight:500;letter-spacing:.01em}
+.brand-err .ar{font-family:'Almarai',sans-serif;font-size:.7rem;color:#9aa5ad;direction:rtl;font-weight:400}
+
+/* ===== PDP qty-stepper "Only X left in stock" inline popup (existing) ===== */
+.pdp-mock{background:#1a3a52;color:#fff;border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:center;gap:14px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;letter-spacing:.06em;position:relative;width:280px;margin:0 auto;text-transform:uppercase}
+.pdp-mock .qty-btn{width:28px;height:28px;background:rgba(255,255,255,0.16);border:0;color:#fff;font-size:18px;border-radius:50%;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.pdp-tip{position:absolute;bottom:62px;right:0;background:#fff;border:1px solid rgba(26,58,82,0.10);box-shadow:0 8px 24px rgba(0,0,0,0.10);padding:10px 32px 10px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.78rem;color:#1a3a52;display:flex;flex-direction:column;gap:2px;min-width:220px;text-transform:none;letter-spacing:0;font-weight:400}
+.pdp-tip .en{color:#1a3a52;font-weight:500}
+.pdp-tip .en strong{color:#e76f51}
+.pdp-tip .ar{font-family:'Almarai',sans-serif;font-size:.74rem;color:#9aa5ad;direction:rtl}
+.pdp-tip .close{position:absolute;top:6px;right:8px;width:18px;height:18px;border-radius:50%;background:rgba(26,58,82,0.08);border:0;font-size:11px;color:#1a3a52;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* ===== orloToast (existing top-right) ===== */
+.toast-wrap{position:relative;width:340px;margin:0 auto}
+.orlo-toast{display:flex;align-items:flex-start;gap:14px;padding:14px 38px 14px 16px;border-radius:12px;background:#fff;border:1px solid rgba(26,58,82,0.10);box-shadow:0 10px 30px rgba(0,0,0,0.12);font-family:'DM Sans',sans-serif;position:relative}
+.orlo-toast .ico{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;color:#fff}
+.orlo-toast .ico.warning{background:#e76f51}
+.orlo-toast .ico.success{background:#2a7f4e}
+.orlo-toast .ico.error{background:#c33}
+.orlo-toast .body .title{font-size:.85rem;font-weight:500;color:#1a3a52;line-height:1.3}
+.orlo-toast .body .msg{font-size:.78rem;color:#6b6b6b;margin-top:2px;line-height:1.5}
+.orlo-toast .body .msg .ar{display:block;font-family:'Almarai',sans-serif;color:#9aa5ad;direction:rtl;font-size:.74rem;margin-top:2px}
+.orlo-toast .close{position:absolute;top:6px;right:8px;width:18px;height:18px;border-radius:50%;background:rgba(26,58,82,0.06);border:0;font-size:12px;color:#1a3a52;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* ===== Cart qty stepper (current — BROKEN, no message at all) ===== */
+.cart-stepper-mock{display:flex;align-items:center;gap:10px;justify-content:center}
+.cart-qty{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(26,58,82,0.20);border-radius:12px;padding:3px 8px;height:32px}
+.cart-qty button{width:20px;height:20px;border-radius:50%;background:transparent;border:none;color:#1a3a52;font-size:14px;cursor:pointer}
+.cart-qty .num{font-size:14px;min-width:18px;text-align:center;font-weight:500}
+.cart-err-inline{position:relative;padding-top:36px}
+.cart-tip{position:absolute;top:0;left:50%;transform:translateX(-50%);background:#fff;border:1px solid rgba(26,58,82,0.10);box-shadow:0 8px 24px rgba(0,0,0,0.10);padding:8px 28px 8px 12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.74rem;color:#1a3a52;display:flex;flex-direction:column;gap:2px;min-width:220px}
+.cart-tip strong{color:#e76f51}
+.cart-tip .ar{font-family:'Almarai',sans-serif;font-size:.7rem;color:#9aa5ad;direction:rtl}
+.cart-tip .close{position:absolute;top:4px;right:6px;width:16px;height:16px;border-radius:50%;background:rgba(26,58,82,0.08);border:0;font-size:10px;color:#1a3a52;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+
+.foot{margin-top:38px;padding:22px 28px;background:#fff;border:1px solid rgba(26,58,82,0.10);font-size:.86rem;line-height:1.65}
+.foot strong{color:#1a3a52}
+.foot ul{padding-left:20px;margin-top:8px}
+.foot li{margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="head">
+  <h1>Messages & <em>Validation.</em></h1>
+  <p>Audit of every "something happened — tell the user" surface across the site. Three live patterns, one broken path, one unbranded native fallback. Proposal: unify per category.</p>
+</header>
+
+<!-- ─── 1. FORM VALIDATION ─── -->
+<div class="section">
+  <h2><span class="n">01</span><span>Form validation</span><em>(login / signup / forgot / reset / verify-email)</em><span class="status bad">native, unbranded</span></h2>
+  <div class="desc">HTML5 browser-default tooltips. English only, system-ui font, no brand colour, can't be CSS'd (UA shadow DOM). Breaks the editorial register on every auth page.</div>
+
+  <div class="row">
+    <div class="cell">
+      <div class="cell-tag">Before · browser native</div>
+      <div class="cell-body">
+        <div class="native-form">
+          <label>EMAIL</label>
+          <div class="input-row"><input value="rha" readonly></div>
+          <div class="native-tooltip"><span class="ico">!</span>Please include an '@' in the email address.</div>
+        </div>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="cell-tag">After · inline branded</div>
+      <div class="cell-body">
+        <div class="brand-form">
+          <label>EMAIL<span class="ar">البريد الإلكتروني</span></label>
+          <div class="input-row"><input value="rha" readonly></div>
+          <div class="brand-err"><span>Please enter a valid email address</span><span class="ar">يرجى إدخال بريد صالح</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 2. PDP QTY STEPPER STOCK / LIMIT MESSAGE ─── -->
+<div class="section">
+  <h2><span class="n">02</span><span>PDP qty stepper stock-limit popup</span><em>("Only X left in stock", "Limit of 10 per order")</em><span class="status good">branded, works</span></h2>
+  <div class="desc">Inline popup appearing above the +/- buttons when the customer tries to exceed available stock or the per-order cap. Already bilingual, on-brand. Keep as the reference for any other "you can't add more" message anywhere.</div>
+
+  <div class="row">
+    <div class="cell">
+      <div class="cell-tag">Before · current (keep as-is)</div>
+      <div class="cell-body" style="padding-top:90px">
+        <div class="pdp-mock">
+          <div class="pdp-tip">
+            <button class="close">×</button>
+            <span class="en">Only <strong>1</strong> left in stock</span>
+            <span class="ar">متبقي ١ فقط في المخزون</span>
+          </div>
+          <button class="qty-btn">−</button>
+          <span style="color:#fff;font-weight:600">1</span>
+          <button class="qty-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="cell-tag">After · same (proposed: no change)</div>
+      <div class="cell-body" style="padding-top:90px">
+        <div class="pdp-mock">
+          <div class="pdp-tip">
+            <button class="close">×</button>
+            <span class="en">Only <strong>1</strong> left in stock</span>
+            <span class="ar">متبقي ١ فقط في المخزون</span>
+          </div>
+          <button class="qty-btn">−</button>
+          <span style="color:#fff;font-weight:600">1</span>
+          <button class="qty-btn">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 3. ORLO TOAST (top-right) ─── -->
+<div class="section">
+  <h2><span class="n">03</span><span>orloToast</span><em>(account page, checkout errors, order actions)</em><span class="status good">branded, works</span></h2>
+  <div class="desc">Top-right floating toast with icon + title + bilingual message. Used for system events ("Order cancelled", "Return submitted", "Address error"). Already on-brand — keep as the system-event channel.</div>
+
+  <div class="row">
+    <div class="cell">
+      <div class="cell-tag">Before · current (keep as-is)</div>
+      <div class="cell-body">
+        <div class="toast-wrap">
+          <div class="orlo-toast">
+            <div class="ico success">✓</div>
+            <div class="body">
+              <div class="title">Order cancelled.</div>
+              <div class="msg">Refund initiated to your card — 5-7 business days.<span class="ar">تم بدء الاسترداد إلى بطاقتك — ٥-٧ أيام عمل.</span></div>
+            </div>
+            <button class="close">×</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="cell-tag">After · same (proposed: no change)</div>
+      <div class="cell-body">
+        <div class="toast-wrap">
+          <div class="orlo-toast">
+            <div class="ico success">✓</div>
+            <div class="body">
+              <div class="title">Order cancelled.</div>
+              <div class="msg">Refund initiated to your card — 5-7 business days.<span class="ar">تم بدء الاسترداد إلى بطاقتك — ٥-٧ أيام عمل.</span></div>
+            </div>
+            <button class="close">×</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 4. CART QTY LIMIT — BROKEN ─── -->
+<div class="section">
+  <h2><span class="n">04</span><span>Cart qty stepper stock-limit message</span><em>(when bumping + past stock or past 10)</em><span class="status bad">silently broken</span></h2>
+  <div class="desc"><strong>Bug confirmed:</strong> cart.html line 591–593 calls <code>showOrloToast()</code> (function name typo — should be <code>orloToast</code>) AND the page doesn't include the <code>#orloToastContainer</code> div that orloToast renders into. So when the customer tries to bump qty past the stock or 10-item cap, the button just doesn't respond — no message at all. Two-line fix.</div>
+
+  <div class="row">
+    <div class="cell">
+      <div class="cell-tag">Before · NOTHING happens · users wonder why button is dead</div>
+      <div class="cell-body" style="padding-top:18px">
+        <div class="cart-stepper-mock">
+          <div class="cart-qty">
+            <button>−</button>
+            <span class="num">3</span>
+            <button>+</button>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:.74rem;color:#c33;margin-top:14px;font-style:italic">(silent failure — no toast, no tooltip, no anything)</div>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="cell-tag">After · same inline tooltip as PDP</div>
+      <div class="cell-body" style="padding-top:18px">
+        <div class="cart-stepper-mock cart-err-inline">
+          <div class="cart-tip">
+            <button class="close">×</button>
+            <span>Only <strong>3</strong> left in stock</span>
+            <span class="ar">متبقي ٣ فقط في المخزون</span>
+          </div>
+          <div class="cart-qty">
+            <button>−</button>
+            <span class="num">3</span>
+            <button>+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PROPOSAL TABLE ─── -->
+<div class="foot">
+  <strong>Proposal — three message channels, each with one rule:</strong>
+  <ul>
+    <li><strong>Inline-under-field</strong> (form validation) — login / signup / forgot-password / reset-password / verify-email. Replaces every native browser tooltip with branded bilingual text under the offending field, coral underline accent on the input. ~40 lines per form.</li>
+    <li><strong>Inline-floating-tooltip</strong> (stock / limit messages near a qty control) — PDP qty stepper (already works) AND cart qty stepper (currently broken). Fix cart to use the same pattern: 5-line patch to cart.html's <code>mutateQty()</code> — replace the dead <code>showOrloToast</code> call with a small DOM-injected tooltip identical to the PDP one.</li>
+    <li><strong>Top-right toast</strong> (orloToast) — system events: order cancelled, return submitted, address error, payment failed, etc. Already works on pages that include the container. Keep as-is.</li>
+  </ul>
+  <p style="margin-top:14px"><strong>No mockup file modifies live code.</strong> When you approve, the work is: (a) build the inline-form-validation system on login/signup/forgot/reset/verify, (b) fix the cart qty-limit tooltip. Each is an independent commit.</p>
+</div>
+
+</div>
+</body>
+</html>
