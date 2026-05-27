@@ -79,7 +79,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=83">
+    <link rel="stylesheet" href="styles.css?v=84">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -1409,7 +1409,10 @@ document.addEventListener('DOMContentLoaded', function(){
       }
       var price = isOOS ? '<span class="price-soldout">Sold out</span>' : (p.price ? 'AED '+Number(p.price).toFixed(2) : '');
       return '<div class="card'+(isOOS?' oos is-soldout':'')+'">'+
-        '<a href="'+pdpHref+'" class="card-link" draggable="false"><div class="card-img" data-img-count="'+imgs.length+'">'+imgHTML+badge+dotsHTML+'</div></a>'+
+        // .card-link is a plain <div> (not <a>) so Chrome Android can't hijack swipe gestures for native link drag.
+        // JS click handler in initCardSwipe navigates to PDP on tap when !swiped. The .card-info <a> below still
+        // carries the real link for SEO / accessibility / right-click "open in new tab".
+        '<div class="card-link" data-href="'+pdpHref+'"><div class="card-img" data-img-count="'+imgs.length+'">'+imgHTML+badge+dotsHTML+'</div></div>'+
         '<div class="card-info">'+
           '<a href="'+pdpHref+'" class="card-info-text">'+
             '<div class="card-name">'+safeName+'</div>'+
@@ -1468,11 +1471,13 @@ document.addEventListener('DOMContentLoaded', function(){
       });
       cardImg.addEventListener('pointercancel', function(){ swiping = false; });
 
-      // Block the parent <a> from navigating when a swipe just ended (capture phase, same as Popular Now)
-      if (link) {
+      // On a real tap (no drag detected), navigate to PDP via JS — replaces the old <a> behaviour
+      // which Chrome Android was hijacking for native link drag, breaking the 2nd+ swipe.
+      if (link && link.dataset && link.dataset.href) {
         link.addEventListener('click', function(ev){
-          if (swiped) { ev.preventDefault(); ev.stopPropagation(); swiped = false; }
-        }, true);
+          if (swiped) { swiped = false; return; } // just-completed swipe — eat the click, don't navigate
+          window.location.href = link.dataset.href;
+        });
       }
     });
   }
