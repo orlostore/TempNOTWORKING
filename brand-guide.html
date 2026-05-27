@@ -172,6 +172,16 @@ th{background:var(--cream-darker);font-family:'DM Sans',sans-serif;font-size:.62
       </div>
     </div>
     <p style="margin-top:18px;font-size:.85rem;color:var(--muted)">Beige canvas = catalogue (type A). Lifestyle (type B) is generated via Gemini — see section 04 for prompt templates.</p>
+
+    <h3 style="margin-top:32px">Homepage hero — generate TWO sizes, not one</h3>
+    <p>The homepage hero is cropped very differently on desktop vs mobile. If you generate one size and let CSS crop the other, you lose 50–60% of the subject. Always produce <strong>two source images per active hero campaign</strong>, same scene / same lighting / same palette — different composition.</p>
+    <table>
+      <tr><th>Surface</th><th>Aspect</th><th>Pixel size</th><th>Composition</th></tr>
+      <tr><td><strong>Desktop hero</strong></td><td>21 : 9 (cinematic wide)</td><td><strong>2400 × 1029</strong></td><td>Subject fills the centre horizontal band — frame is wide, short. Caption sits bottom-left over a darker zone.</td></tr>
+      <tr><td><strong>Mobile hero</strong></td><td>4 : 5 (portrait)</td><td><strong>1080 × 1350</strong></td><td>Subject centred, more headroom + footroom. Caption sits in the lower third.</td></tr>
+    </table>
+    <p style="margin-top:14px;font-size:.85rem;color:var(--muted)"><strong>Gemini workflow:</strong> generate the desktop 2400 × 1029 first (cinematic wide). Then re-prompt: <em>"same scene, same subject, same lighting and palette — recompose as 4:5 portrait 1080 × 1350, subject centred, more headroom and footroom for caption space."</em> Upload both into the Heroes admin — the site picks the right one based on viewport.</p>
+    <p style="margin-top:10px;font-size:.85rem;color:var(--muted)"><strong>Why not 16:9?</strong> 16:9 at 1920w forces a 1080px-tall hero — taller than most laptop viewports (1080p, 1440p in browser chrome). You'd have to scroll to see the rest of the page. 21:9 fits comfortably under the fold.</p>
   </section>
 
   <!-- 4. Gemini prompts -->
