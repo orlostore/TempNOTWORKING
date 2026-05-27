@@ -20,7 +20,6 @@ const TARGETS = [
   'forgot-password.html', 'reset-password.html', 'verify-email.html',
   'success.html', 'cancel.html', 'track.html',
   'terms-and-conditions.html',
-  'draftnewindex.html', 'draftnewindexR1.html',
 ];
 
 function extract(file) {
