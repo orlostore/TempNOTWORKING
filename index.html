@@ -1409,7 +1409,7 @@ document.addEventListener('DOMContentLoaded', function(){
       }
       var price = isOOS ? '<span class="price-soldout">Sold out</span>' : (p.price ? 'AED '+Number(p.price).toFixed(2) : '');
       return '<div class="card'+(isOOS?' oos is-soldout':'')+'">'+
-        '<a href="'+pdpHref+'" class="card-link"><div class="card-img" data-img-count="'+imgs.length+'">'+imgHTML+badge+dotsHTML+'</div></a>'+
+        '<a href="'+pdpHref+'" class="card-link" draggable="false"><div class="card-img" data-img-count="'+imgs.length+'">'+imgHTML+badge+dotsHTML+'</div></a>'+
         '<div class="card-info">'+
           '<a href="'+pdpHref+'" class="card-info-text">'+
             '<div class="card-name">'+safeName+'</div>'+
