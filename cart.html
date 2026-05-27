@@ -463,7 +463,7 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
         var meta = [];
         if (item.variantName) meta.push('<div>' + escHTML(item.variantName) + '</div>');
         var priceHtml = tierUnit
-          ? '<div class="cart-item-price"><span style="text-decoration:line-through;color:#9aa5ad;font-weight:400;margin-right:6px;">' + fmtAed(originalUnit * item.quantity) + '</span>' + fmtAed(lineTotal) + '</div>'
+          ? '<div class="cart-item-price"><div style="text-decoration:line-through;color:#9aa5ad;font-weight:400;font-size:0.78em;line-height:1.1;margin-bottom:3px;">' + fmtAed(originalUnit * item.quantity) + '</div><div style="line-height:1.1;">' + fmtAed(lineTotal) + '</div></div>'
           : '<div class="cart-item-price">' + fmtAed(lineTotal) + '</div>';
         var slug = (item.slug || (p && p.slug)) || '';
         var pdpHref = slug ? 'product.html?product=' + encodeURIComponent(slug) : null;
