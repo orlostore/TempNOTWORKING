@@ -12,7 +12,7 @@ const START_MARKER = '<!-- ═══ ORLO BOTTOM NAV';
 const END_MARKER = '<!-- ═══ /ORLO BOTTOM NAV ═══ -->';
 
 const TARGETS = [
-  'index.html', 'shop.html',
+  'index.html',
   'product.html', 'product1.html',
   'cart.html',
   'account.html',

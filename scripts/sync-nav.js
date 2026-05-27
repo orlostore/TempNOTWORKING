@@ -16,7 +16,7 @@ const END_MARKER = '<!-- ═══ /ORLO BOTTOM NAV ═══ -->';
 
 // Customer-facing pages — exact list, no globbing so mockups stay untouched.
 const TARGETS = [
-  'index.html', 'shop.html',
+  'index.html',
   'product.html', 'product1.html',
   'cart.html',
   'account.html',
