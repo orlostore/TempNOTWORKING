@@ -363,6 +363,19 @@
         .btn-danger { background: var(--danger); color: white; }
         .btn-danger:hover { background: #c82333; }
         .btn-small { padding: 6px 12px; font-size: 0.8rem; }
+
+        /* Product image type picker (clean/dimensions/lifestyle) */
+        .product-type-btn {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 4px; padding: 12px 6px; min-height: 64px;
+            background: #fff; border: 1px solid #ddd; border-radius: 8px;
+            font-size: 1.1rem; cursor: pointer; transition: all 0.15s ease;
+            font-family: inherit;
+        }
+        .product-type-btn span { font-size: 0.72rem; color: #1a3a52; font-weight: 600; letter-spacing: 0.04em; }
+        .product-type-btn:hover { border-color: #1a3a52; background: #f8f6f2; }
+        .product-type-btn.suggested { border-color: #e76f51; border-width: 2px; background: #fff8f3; }
+        .product-type-btn.suggested span { color: #e76f51; }
         .btn-outline {
             background: transparent;
             border: 2px solid var(--primary);
@@ -2030,6 +2043,41 @@
 
                 <div class="form-section">
                     <div class="form-section-title">Images <span style="font-weight:400;font-size:0.8rem;color:#888;">(Paste Google Drive links - auto-converts)</span></div>
+
+                    <!-- Direct R2 upload — additive, does not affect URL paste fields -->
+                    <div id="productUploadPanel" style="background:#f8f6f2;border:1px solid #e5dccf;border-radius:8px;padding:14px 16px;margin-bottom:16px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                            <div style="font-size:0.82rem;font-weight:600;color:#1a3a52;">📤 Upload to Cloudflare</div>
+                            <div style="font-size:0.7rem;color:#888;">Auto-fills the next empty image slot below</div>
+                        </div>
+
+                        <div id="productUploadBody">
+                            <input type="file" id="productUploadFile" accept="image/jpeg,image/webp,image/png" style="display:none;" onchange="onProductImagePicked(event)">
+                            <button type="button" class="btn btn-secondary" id="productUploadPickBtn" onclick="document.getElementById('productUploadFile').click()" style="width:100%;padding:12px;font-size:0.88rem;">
+                                Choose image from device
+                            </button>
+                            <div id="productUploadHint" style="font-size:0.72rem;color:#888;margin-top:8px;text-align:center;line-height:1.5;">
+                                JPG / WebP / PNG · max 4 MB · stored at <code style="background:#fff;padding:1px 5px;border-radius:3px;">products/&lt;slug&gt;/</code>
+                            </div>
+                        </div>
+
+                        <!-- Type picker (hidden until file is picked) -->
+                        <div id="productUploadTypeRow" style="display:none;margin-top:12px;">
+                            <div style="font-size:0.74rem;color:#1a3a52;margin-bottom:8px;font-weight:600;letter-spacing:0.04em;">
+                                Image type — <span id="productUploadPickedName" style="font-weight:400;color:#666;"></span>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+                                <button type="button" class="product-type-btn" data-type="clean" onclick="confirmProductImageType('clean')">🧾<br><span>Clean</span></button>
+                                <button type="button" class="product-type-btn" data-type="dimensions" onclick="confirmProductImageType('dimensions')">📐<br><span>Dimensions</span></button>
+                                <button type="button" class="product-type-btn" data-type="lifestyle" onclick="confirmProductImageType('lifestyle')">🎬<br><span>Lifestyle</span></button>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-small" onclick="cancelProductImagePick()" style="width:100%;margin-top:8px;font-size:0.74rem;">Cancel</button>
+                        </div>
+
+                        <!-- Status -->
+                        <div id="productUploadStatus" style="display:none;margin-top:12px;padding:10px 12px;border-radius:6px;font-size:0.78rem;line-height:1.5;"></div>
+                    </div>
+
                     <div class="form-group">
                         <label>Main Image URL</label>
                         <input type="text" id="formMainImage" placeholder="https://drive.google.com/..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
@@ -3032,8 +3080,19 @@
             document.getElementById('variantsContainer').innerHTML = '';
             document.getElementById('tiersContainer').innerHTML = '';
             renderPairingsPicker(null);
+            resetProductUploadPanel();
             document.getElementById('productModal').classList.add('active');
             document.getElementById('formName').focus();
+        }
+
+        function resetProductUploadPanel() {
+            try {
+                _pendingProductFile = null;
+                const f = document.getElementById('productUploadFile'); if (f) f.value = '';
+                const row = document.getElementById('productUploadTypeRow'); if (row) row.style.display = 'none';
+                const btn = document.getElementById('productUploadPickBtn'); if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+                setProductUploadStatus('', '');
+            } catch (e) {}
         }
 
         // Considered alongside — interactive picker (avoids the user having to type/remember slugs).
@@ -3127,7 +3186,9 @@
         function openEditModal(id) {
             const product = products.find(p => p.id === id);
             if (!product) return;
-            
+
+            resetProductUploadPanel();
+
             document.getElementById('modalTitle').innerHTML = 'Edit Product';
             document.getElementById('editId').value = id;
             
@@ -3512,6 +3573,145 @@
             setTimeout(() => {
                 convertGoogleDriveUrl(input);
             }, 10);
+        }
+
+        // ---- Product image direct-upload to R2 ----
+        // Additive: never touches existing URL fields except to fill an empty slot on success.
+        const PRODUCT_IMAGE_FIELDS = ['formMainImage','formImage2','formImage3','formImage4','formImage5','formImage6','formImage7','formImage8'];
+
+        function productImageSlots() {
+            return PRODUCT_IMAGE_FIELDS.map(id => document.getElementById(id)).filter(Boolean);
+        }
+        function findFirstEmptyImageSlot() {
+            return productImageSlots().find(el => !el.value.trim()) || null;
+        }
+        function detectImageTypeFromUrl(url) {
+            // Returns 'clean' | 'dimensions' | 'lifestyle' | null based on filename convention
+            if (!url) return null;
+            const m = url.toLowerCase().match(/-(clean|dimensions|lifestyle)-(\d+)/);
+            return m ? m[1] : null;
+        }
+        function nextSeqForType(type) {
+            // Scan current URL fields, find max NN for that type+slug, return next
+            let max = 0;
+            productImageSlots().forEach(el => {
+                const u = (el.value || '').toLowerCase();
+                const re = new RegExp('-' + type + '-(\\d+)\\.', 'i');
+                const m = u.match(re);
+                if (m) {
+                    const n = parseInt(m[1], 10);
+                    if (n > max) max = n;
+                }
+            });
+            return max + 1;
+        }
+        function suggestedTypeForNextUpload() {
+            const existing = productImageSlots().map(el => detectImageTypeFromUrl(el.value)).filter(Boolean);
+            if (!existing.includes('clean')) return 'clean';
+            if (!existing.includes('dimensions')) return 'dimensions';
+            return 'lifestyle';
+        }
+        function getCurrentSlug() {
+            const el = document.getElementById('formSlug');
+            return el ? (el.value || '').trim() : '';
+        }
+        function setProductUploadStatus(html, kind) {
+            const box = document.getElementById('productUploadStatus');
+            if (!box) return;
+            if (!html) { box.style.display = 'none'; box.innerHTML = ''; return; }
+            box.style.display = '';
+            box.innerHTML = html;
+            const c = kind === 'ok' ? '#2a7f4e' : (kind === 'err' ? '#c33' : '#1a3a52');
+            const bg = kind === 'ok' ? '#eaf6ee' : (kind === 'err' ? '#fdecec' : '#f0f4f8');
+            box.style.color = c;
+            box.style.background = bg;
+            box.style.border = '1px solid ' + (kind === 'ok' ? '#bfe2c9' : kind === 'err' ? '#f5c0c0' : '#cfd8e0');
+        }
+
+        let _pendingProductFile = null;
+
+        function onProductImagePicked(e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+
+            const slug = getCurrentSlug();
+            if (!slug) {
+                setProductUploadStatus('⚠ Type the product name first so a slug can be generated.', 'err');
+                e.target.value = '';
+                return;
+            }
+            if (file.size > 4 * 1024 * 1024) {
+                setProductUploadStatus('⚠ ' + (file.size/1024).toFixed(0) + 'KB exceeds 4MB limit.', 'err');
+                e.target.value = '';
+                return;
+            }
+            if (!findFirstEmptyImageSlot()) {
+                setProductUploadStatus('⚠ All 8 image slots are full — clear one to upload more.', 'err');
+                e.target.value = '';
+                return;
+            }
+
+            _pendingProductFile = file;
+            document.getElementById('productUploadPickedName').textContent = file.name;
+            document.getElementById('productUploadTypeRow').style.display = '';
+            document.getElementById('productUploadPickBtn').disabled = true;
+            document.getElementById('productUploadPickBtn').style.opacity = '0.5';
+
+            // Highlight the suggested type
+            const suggested = suggestedTypeForNextUpload();
+            document.querySelectorAll('.product-type-btn').forEach(b => {
+                b.classList.toggle('suggested', b.dataset.type === suggested);
+            });
+            setProductUploadStatus('', '');
+        }
+
+        function cancelProductImagePick() {
+            _pendingProductFile = null;
+            document.getElementById('productUploadFile').value = '';
+            document.getElementById('productUploadTypeRow').style.display = 'none';
+            document.getElementById('productUploadPickBtn').disabled = false;
+            document.getElementById('productUploadPickBtn').style.opacity = '';
+            setProductUploadStatus('', '');
+        }
+
+        async function confirmProductImageType(type) {
+            if (!_pendingProductFile) return;
+            const file = _pendingProductFile;
+            const slug = getCurrentSlug();
+            const seq = nextSeqForType(type);
+
+            document.getElementById('productUploadTypeRow').style.display = 'none';
+            setProductUploadStatus('Uploading <strong>' + slug + '-' + type + '-' + String(seq).padStart(2,'0') + '</strong>…', 'info');
+
+            const fd = new FormData();
+            fd.append('file', file);
+            fd.append('slug', slug);
+            fd.append('type', type);
+            fd.append('seq', String(seq));
+
+            try {
+                const res = await adminFetch('/api/admin/upload-product-image', { method: 'POST', body: fd });
+                const data = await res.json();
+                if (!res.ok || !data.success) throw new Error(data.error || 'Upload failed');
+
+                // Fill the next empty slot — preserves any existing URLs
+                const slot = findFirstEmptyImageSlot();
+                if (slot) {
+                    slot.value = data.url;
+                    // Fire input event so any listeners (e.g. preview) react
+                    slot.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+
+                const slotLabel = slot ? slot.previousElementSibling && slot.previousElementSibling.textContent : 'image slot';
+                setProductUploadStatus('✓ Saved as <code>' + data.filename + '</code> → filled <strong>' + slotLabel + '</strong>', 'ok');
+            } catch (err) {
+                setProductUploadStatus('✗ ' + (err.message || 'Upload failed'), 'err');
+            } finally {
+                _pendingProductFile = null;
+                document.getElementById('productUploadFile').value = '';
+                document.getElementById('productUploadPickBtn').disabled = false;
+                document.getElementById('productUploadPickBtn').style.opacity = '';
+            }
         }
         
         function extractAndConvertGoogleDriveUrl(url) {
