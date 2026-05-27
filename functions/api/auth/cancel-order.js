@@ -150,10 +150,34 @@ export async function onRequestPost(context) {
             return Response.json({ error: 'Payment is still processing. Please wait a few minutes and try again.' }, { status: 400 });
         }
 
-        // Restore inventory
-        if (session.metadata?.cart_items) {
+        // Restore inventory — supports both new compact format (cart_items_n + chunks)
+        // and the legacy single-JSON cart_items field.
+        let cartItems = [];
+        const meta = session.metadata || {};
+        if (meta.cart_items_n) {
             try {
-                const cartItems = JSON.parse(session.metadata.cart_items);
+                const n = parseInt(meta.cart_items_n, 10);
+                let enc = '';
+                for (let i = 0; i < n; i++) enc += meta[`cart_items_${i}`] || '';
+                cartItems = enc.split(';').filter(Boolean).map(part => {
+                    const [slug, qty, vid] = part.split('|');
+                    return {
+                        slug,
+                        quantity: parseInt(qty, 10),
+                        variantId: vid ? parseInt(vid, 10) : null
+                    };
+                });
+            } catch (e) { console.error('Compact cart_items decode failed', e); }
+        }
+        if (cartItems.length === 0 && meta.cart_items) {
+            try {
+                cartItems = JSON.parse(meta.cart_items);
+            } catch (e) {
+                console.error('Legacy cart_items JSON parse failed', e);
+            }
+        }
+        if (cartItems.length > 0) {
+            try {
                 for (const item of cartItems) {
                     if (item.variantId) {
                         await DB.prepare('UPDATE product_variants SET quantity = quantity + ? WHERE id = ?')

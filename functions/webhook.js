@@ -61,11 +61,38 @@ export async function onRequestPost(context) {
             }
 
             // === DEDUCT INVENTORY ===
+            // Decode cart_items metadata. Supports two formats:
+            //   1. New compact: cart_items_n + cart_items_0..n-1 (pipe-delimited chunks)
+            //   2. Legacy: cart_items (single JSON blob) — for in-flight orders predating the
+            //      Stripe-metadata-500-char fix. Drop this branch ~3 months after deploy.
             let cartItems = [];
-            if (session.metadata && session.metadata.cart_items) {
+            const meta = session.metadata || {};
+            if (meta.cart_items_n) {
                 try {
-                    cartItems = JSON.parse(session.metadata.cart_items);
+                    const n = parseInt(meta.cart_items_n, 10);
+                    let enc = '';
+                    for (let i = 0; i < n; i++) enc += meta[`cart_items_${i}`] || '';
+                    cartItems = enc.split(';').filter(Boolean).map(part => {
+                        const [slug, qty, vid] = part.split('|');
+                        return {
+                            slug,
+                            quantity: parseInt(qty, 10),
+                            variantId: vid ? parseInt(vid, 10) : null
+                        };
+                    });
+                } catch (e) { console.error('Compact cart_items decode failed', e); }
+            }
+            if (cartItems.length === 0 && meta.cart_items) {
+                try {
+                    cartItems = JSON.parse(meta.cart_items);
+                } catch (e) {
+                    console.error('Legacy cart_items JSON parse failed', e);
+                }
+            }
 
+            // Deduct inventory for whichever format produced items.
+            if (cartItems.length > 0) {
+                try {
                     for (const item of cartItems) {
                         if (item.variantId) {
                             await DB.prepare(

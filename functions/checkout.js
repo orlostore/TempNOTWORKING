@@ -392,12 +392,25 @@ function buildStripeBody(lineItems, siteUrl, zone, subtotal, deliveryFee, cart, 
         params.append('customer_email', customerEmail);
     }
 
-    // Store cart data for webhook to deduct inventory (includes variantId)
-    params.append('metadata[cart_items]', JSON.stringify(cart.map(item => ({
-        slug: item.slug,
-        quantity: item.quantity,
-        variantId: item.variantId || null
-    }))));
+    // Store cart data for webhook to deduct inventory (includes variantId).
+    // Stripe caps each metadata value at 500 chars — JSON serialisation blows
+    // past that for 8+ items. Use a compact pipe-delimited encoding and split
+    // across multiple metadata keys when needed.
+    //   Format: slug|qty|vid;slug|qty|vid;...   (empty vid = "")
+    //   Keys:   metadata[cart_items_n] = chunk count
+    //           metadata[cart_items_0..n-1] = up to 480 chars each
+    const cartEncoded = cart.map(item =>
+        `${item.slug}|${item.quantity}|${item.variantId || ''}`
+    ).join(';');
+    const CART_CHUNK = 480; // safety margin under Stripe's 500-char metadata limit
+    const cartChunks = [];
+    for (let i = 0; i < cartEncoded.length; i += CART_CHUNK) {
+        cartChunks.push(cartEncoded.slice(i, i + CART_CHUNK));
+    }
+    cartChunks.forEach((chunk, i) => {
+        params.append(`metadata[cart_items_${i}]`, chunk);
+    });
+    params.append('metadata[cart_items_n]', String(cartChunks.length));
 
     lineItems.forEach((item, index) => {
         params.append(`line_items[${index}][price_data][currency]`, item.price_data.currency);
