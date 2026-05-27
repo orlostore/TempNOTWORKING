@@ -357,11 +357,12 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   }
   /* Re-establish the white card backgrounds we want */
   .mobile-product-header,.mobile-carousel-container,.mobile-details-section,.product-details{background:#fff!important}
-  /* Dots — overlay on image at center-bottom (Hermès) */
+  /* Dots — overlay on image at center-bottom (Hermès). mix-blend-mode: difference + white
+     gives auto-contrast against any underlying photo, matches homepage cards exactly. */
   .mobile-carousel-box{position:relative!important}
-  .mobile-dots{position:absolute!important;bottom:12px!important;left:50%!important;transform:translateX(-50%)!important;background:transparent!important;padding:0!important;z-index:5!important;display:flex!important;gap:6px!important;width:auto!important}
-  .mobile-dots > *{background:rgba(26,58,82,0.25)!important;width:6px!important;height:6px!important;border-radius:50%!important}
-  .mobile-dots > *.active{background:#1a3a52!important}
+  .mobile-dots{position:absolute!important;bottom:12px!important;left:50%!important;transform:translateX(-50%)!important;background:transparent!important;padding:0!important;z-index:5!important;display:flex!important;gap:6px!important;width:auto!important;mix-blend-mode:difference!important}
+  .mobile-dots > *{background:#fff!important;width:6px!important;height:6px!important;border-radius:50%!important;opacity:0.55!important;transition:opacity .25s ease!important}
+  .mobile-dots > *.active{background:#fff!important;opacity:1!important}
 
   /* Disable footer auto-hide on scroll (product.js adds .nav-hidden — revert it) */
   .mobile-bottom-nav.nav-hidden,.nav-hidden{transform:none!important;opacity:1!important;display:flex!important;visibility:visible!important;pointer-events:auto!important}
