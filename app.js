@@ -1502,34 +1502,46 @@ function initPopularCarousel(root) {
     const interval = parseInt(root.dataset.interval || '5000', 10);
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let i = 0, timer = null, wrapping = false;
+    // Step distance in pixels — accounts for any slide width (100% mobile, 50% desktop, gap between, etc.)
+    function step() {
+        if (realSlides.length > 1) return realSlides[1].offsetLeft - realSlides[0].offsetLeft;
+        return realSlides[0] ? realSlides[0].offsetWidth : 0;
+    }
     // Infinite-loop: when reaching the clone (index = total), animate to it then silently snap to 0
     function go(n) {
         if (wrapping || total < 2) return;
+        const s = step();
         if (n >= total) {
-            // forward wrap: animate to clone position
             i = total;
-            track.style.transform = 'translateX(' + (-total * 100) + '%)';
+            track.style.transform = 'translateX(' + (-total * s) + 'px)';
             wrapping = true;
         } else if (n < 0) {
-            // backward wrap: snap silently to clone, then animate to last real
             track.style.transition = 'none';
-            track.style.transform = 'translateX(' + (-total * 100) + '%)';
-            track.offsetHeight; // force reflow
+            track.style.transform = 'translateX(' + (-total * s) + 'px)';
+            track.offsetHeight;
             track.style.transition = '';
             i = total - 1;
             requestAnimationFrame(() => {
-                track.style.transform = 'translateX(' + (-i * 100) + '%)';
+                track.style.transform = 'translateX(' + (-i * s) + 'px)';
             });
         } else {
             i = n;
-            track.style.transform = 'translateX(' + (-i * 100) + '%)';
+            track.style.transform = 'translateX(' + (-i * s) + 'px)';
         }
         dots.forEach((d, j) => d.classList.toggle('is-active', j === (i % total)));
     }
+    // Recompute position on viewport changes so the active slide stays anchored
+    window.addEventListener('resize', () => {
+        const s = step();
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(' + (-i * s) + 'px)';
+        track.offsetHeight;
+        track.style.transition = '';
+    });
     track.addEventListener('transitionend', () => {
         if (wrapping) {
             track.style.transition = 'none';
-            track.style.transform = 'translateX(0)';
+            track.style.transform = 'translateX(0px)';
             track.offsetHeight;
             track.style.transition = '';
             i = 0;
