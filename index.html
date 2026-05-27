@@ -835,18 +835,14 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
             /* Bag count stays clipped to the SVG, not the label */
             .hdr-v2 .hdr-bag-link { position: relative; }
 
-            /* Popular Now carousel — was full-bleed square = 1920px tall on 1920w.
-               Cap container width + tighten the slide image aspect so it sits like
-               an editorial card centered in the viewport, not a dominating block.
-               Mobile carousel keeps full-bleed square. */
+            /* Popular Now carousel — keep SQUARE per brand, just cap the size so
+               it doesn't dominate the desktop fold (was 1920×1920 full-bleed).
+               Centered editorial card, ~74% of a 1080p viewport. Mobile untouched. */
             #popular-now .popular-carousel {
-                max-width: 1100px !important;
+                max-width: 800px !important;
                 margin: 0 auto !important;
             }
-            #popular-now .popular-slide-img {
-                aspect-ratio: 16 / 10 !important;
-                max-height: 68vh;
-            }
+            /* aspect-ratio stays 1/1 from the default rule */
         }
         /* Default (mobile + everything <769px): labels hidden — header is untouched */
         .hdr-label { display: none; }
