@@ -27,10 +27,10 @@ You are building a vertical reel/TikTok video for ORLO Store. This spec OVERRIDE
 - **End-card size:** 340 × 340 px, centred horizontally, y ≈ 220
 - NEVER make white pixels transparent — only multiply the alpha channel if applying opacity
 
-## Coral accent line — TWO places, different rules
-- **INTRO (0.0–1.5s):** coral divider 140 × 3 px, **CENTRED HORIZONTALLY** below the centered intro logo. Centered. Not left-aligned.
-- **CORNER-PARKED (scenes 2.0–14.0s):** coral mini-line 60 × 3 px, **LEFT-ALIGNED with the corner logo's left edge**, ~10 px below the 125×125 logo. Brand signature on every scene.
-- These are different. Don't confuse them.
+## Coral accent line — TWO places, same alignment rule (both CENTERED under their logo)
+- **INTRO (0.0–1.5s):** coral divider 140 × 3 px, **CENTRED HORIZONTALLY** below the centered intro logo (centered with the logo's visual centre).
+- **CORNER-PARKED (scenes 2.0–14.0s):** coral mini-line 60 × 3 px, **CENTERED UNDER the corner logo** (centered with the 125×125 logo's visual centre, ~x=113 in 1080-wide output coords), ~10 px below the logo. Persistent brand signature on every scene.
+- Both lines are centered relative to their logo. Don't left-align either one.
 
 ## Scene headlines — typography (LOCKED v3)
 - **English:** Cormorant Garamond italic, **weight 500**, 72–80pt, navy `#1A3A52`, line-height 1.15
@@ -96,6 +96,7 @@ DO NOT start rendering until the concept is confirmed. Render all 480 frames in 
 - Almarai scene headlines: 700 **@ 88% opacity** (was 700 at 100% — too bold vs italic English)
 - EN+AR cadence: stacked → **sequential beats**
 - Intro coral line: explicitly **CENTERED** under intro logo (was left-aligned by mistake)
+- Corner-park coral line: **CENTERED** under corner logo (v3 originally said left-aligned — overridden, both lines now centered for visual consistency)
 - Price: DM Sans 800 92pt coral → **Cormorant italic 500 64pt navy** (editorial, not marketing)
 - AR tagline on end card: 800 coral → **700 navy** (reduce coral, balance weight)
 - URL on end card: coral 44pt → **navy 36pt** (reduce coral, hierarchy)
