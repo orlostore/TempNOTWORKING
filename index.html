@@ -779,10 +779,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         body[data-cards="v2"] .card-img-dots { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; pointer-events: none; z-index: 3; }
         body[data-cards="v2"] .card-img-dots span { width: 5px; height: 5px; border-radius: 50%; background: rgba(26,58,82,0.30); transition: background .25s ease, width .25s ease; }
         body[data-cards="v2"] .card-img-dots span.active { background: #1a3a52; width: 16px; border-radius: 3px; }
-        /* Desktop has no touch — hide dots, no swipe functionality there */
-        @media (hover: hover) {
-          body[data-cards="v2"] .card-img-dots { display: none; }
-        }
+        /* Dots always visible — Hermès shows them on desktop too as a passive cue.
+           (Earlier @media (hover: hover) hide rule removed because it was firing on
+           Android Chrome devices that report stylus capability — exact reason the
+           dots vanished after cache purge.) */
 
         /* ═══ UNIFIED FOOTER (Customer Enquiries) — mirrors cart / login / signup pages ═══ */
         .cs-footer-section{background:#fff;padding:28px 32px;margin-top:var(--section-gap)}
