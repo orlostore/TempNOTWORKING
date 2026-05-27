@@ -207,16 +207,23 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 
       /* Shop by Category → editorial pill filters (exact Edit match) */
       #categoryCards { min-height: 0 !important; }
-      /* Categories — Set B vertical layout: hairline-circle icon + caps label below */
+      /* Categories — flex (not grid) so an incomplete last row centers instead of hanging left */
       .category-cards {
-        display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 20px 14px !important;
-        align-items: start !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 22px 18px !important;
         padding: 8px 0 !important;
       }
+      .category-card,
+      .draft-cat-all {
+        flex: 0 0 calc(25% - 14px) !important;
+        max-width: 110px !important;
+      }
       @media (max-width: 600px) {
-        .category-cards { grid-template-columns: repeat(3, 1fr) !important; gap: 16px 10px !important; }
+        .category-cards { gap: 20px 12px !important; }
+        .category-card,
+        .draft-cat-all { flex: 0 0 calc(33.333% - 8px) !important; max-width: 96px !important; }
       }
       .category-card,
       .draft-cat-all {
@@ -280,12 +287,12 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         font-family: 'DM Sans', sans-serif !important;
         font-size: 0.62rem !important;
         font-weight: 500 !important;
-        letter-spacing: 0.18em !important;
+        letter-spacing: 0.16em !important;
         text-transform: uppercase !important;
         color: var(--primary) !important;
-        line-height: 1.2 !important;
+        line-height: 1.35 !important;
         margin: 0 !important;
-        max-width: 90px !important;
+        max-width: 100% !important;
         text-align: center !important;
       }
 
@@ -1517,8 +1524,17 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
     if (container.querySelector('.draft-cat-all')) return;
     var all = document.createElement('button');
     all.type = 'button';
-    all.className = 'draft-cat-all active';
-    all.textContent = 'All';
+    all.className = 'draft-cat-all category-card active';
+    all.innerHTML =
+      '<div class="category-card-band">' +
+        '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+          '<rect x="4" y="4" width="7" height="7" rx="0.5"/>' +
+          '<rect x="13" y="4" width="7" height="7" rx="0.5"/>' +
+          '<rect x="4" y="13" width="7" height="7" rx="0.5"/>' +
+          '<rect x="13" y="13" width="7" height="7" rx="0.5"/>' +
+        '</svg>' +
+      '</div>' +
+      '<div class="category-card-text"><div class="category-card-name">All</div></div>';
     all.addEventListener('click', function(){
       setActive(all);
       var products = document.getElementById('products');
@@ -1528,7 +1544,7 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
       }, 300);
     });
     container.insertBefore(all, container.firstChild);
-    container.querySelectorAll('.category-card').forEach(function(card){
+    container.querySelectorAll('.category-card:not(.draft-cat-all)').forEach(function(card){
       card.addEventListener('click', function(){ setActive(card); });
     });
   }
