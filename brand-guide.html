@@ -389,23 +389,25 @@ Aspect ratio: 1:1 square, 1080 × 1080.</pre>
     <p><strong>Faster but less precise:</strong> ask Gemini directly. Use the prompt below, fill in <code>[LENGTH/WIDTH/HEIGHT]</code> with your actual numbers. Check the output carefully — re-prompt if any digit is wrong.</p>
 
     <h3>Gemini prompt — spec card (attach the clean catalogue image)</h3>
+    <p style="font-size:.85rem;color:var(--muted);max-width:640px"><strong>Before pasting:</strong> replace the three numbers below (<code>LENGTH_CM</code>, <code>WIDTH_CM</code>, <code>HEIGHT_CM</code>) with your actual values — just the numerals, e.g. <code>12</code>. <strong>Do not wrap them in brackets, quotes, or anything else</strong> — Gemini will literally render whatever characters you give it.</p>
     <pre class="prompt-box">I'm attaching a clean catalogue product photograph on a warm beige #E5DCCF background. Use this exact image as the base — do NOT redraw, restyle, or alter the product or background in any way.
 
 Add a discreet technical dimension overlay to this image, in the style of a Hermès or Aesop product spec page:
 
-— A thin navy hairline (colour #1A3A52, 1 px wide) running horizontally below the product, with small arrow caps at both ends, indicating the LENGTH. Label the line with the text "[LENGTH] CM" in DM Sans, weight 400, navy #1A3A52, all uppercase, ~14 px size, positioned just below the line, centred.
+— A thin navy hairline (colour #1A3A52, 1 px wide) running horizontally below the product, with small arrow caps at both ends, indicating the LENGTH. Label the line with the text "LENGTH_CM CM" in DM Sans, weight 400, navy #1A3A52, all uppercase, ~14 px size, positioned just below the line, centred. The label must be the number followed by the word CM — for example "24 CM" — with no brackets, no quotes, no extra punctuation.
 
-— A thin navy hairline running vertically to the right of the product, with small arrow caps at both ends, indicating the HEIGHT. Label with "[HEIGHT] CM" in the same font and colour.
+— A thin navy hairline running vertically to the right of the product, with small arrow caps at both ends, indicating the HEIGHT. Label with "HEIGHT_CM CM" in the same font and colour, again just the number followed by CM, no brackets or punctuation around it.
 
-— (Optional, if product has depth) a third thin navy hairline at a slight diagonal indicating WIDTH/DEPTH, labelled "[WIDTH] CM".
+— (Optional, if product has depth) a third thin navy hairline at a slight diagonal indicating WIDTH/DEPTH, labelled "WIDTH_CM CM" — same rule, number followed by CM only.
 
-— Bottom strip caption, centred under the product: "Dimensions · L [LENGTH] cm × W [WIDTH] cm × H [HEIGHT] cm" in Cormorant Garamond italic, weight 300, navy #1A3A52, ~22 px size.
+— Bottom strip caption, centred under the product: "Dimensions · L LENGTH_CM cm × W WIDTH_CM cm × H HEIGHT_CM cm" in Cormorant Garamond italic, weight 300, navy #1A3A52, ~22 px size. Substitute the numerals directly — no brackets, no quotes around the numbers in the final caption.
 
 Keep everything else identical to the attached image. The beige background, the product, the lighting, the shadow — unchanged. Only add the annotations.
 
-CRITICAL — do NOT add: no white background swap, no grey, no rulers, no grid, no measurement icons, no second product view, no exploded diagram, no props, no text other than the three dimension labels and the caption strip, no watermarks, no logos.
+CRITICAL — do NOT add: no white background swap, no grey, no rulers, no grid, no measurement icons, no second product view, no exploded diagram, no props, no text other than the three dimension labels and the caption strip, no watermarks, no logos, no square brackets [ ], no curly braces { }, no angle brackets &lt; &gt;, no quotation marks around the numbers.
 
 Aspect ratio: 1:1 square, 2000 × 2000 px.</pre>
+    <p style="font-size:.78rem;color:var(--muted);max-width:640px;margin-top:8px"><strong>Worked example:</strong> for a Beetle that is 24 cm long × 9 cm wide × 9 cm tall, every <code>LENGTH_CM</code> becomes <code>24</code>, every <code>WIDTH_CM</code> becomes <code>9</code>, every <code>HEIGHT_CM</code> becomes <code>9</code>. The labels in the final image then read <em>"24 CM", "9 CM", "9 CM"</em> and the caption reads <em>"Dimensions · L 24 cm × W 9 cm × H 9 cm"</em>.</p>
 
     <h3>Quick reference values (when you fill in the brackets)</h3>
     <ul>
