@@ -537,7 +537,7 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
         sticky.innerHTML = '' +
           '<div class="checkout-btn-row">' +
             '<button class="checkout-btn" id="payByCardBtn" style="flex:1">' + SVG_CARD +
-              '<div class="checkout-btn-text">Checkout<span class="ar">الدفع</span></div>' +
+              '<div class="checkout-btn-text">Checkout</div>' +
             '</button>' +
           '</div>';
       } else {
@@ -660,13 +660,24 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
     var payByCard = ev.target.closest('#payByCardBtn');
     if (guest || payByCard) {
       lockCheckoutButtons(guest ? 'asGuestBtn' : 'payByCardBtn', 'Verifying stock&hellip;');
-      if (typeof checkout === 'function') checkout();
-      else window.location.href = 'login.html?redirect=' + encodeURIComponent('cart.html');
+      // Yield to the browser so the swapped label paints BEFORE checkout()
+      // starts its synchronous prep work. Without this, fast networks fire
+      // the redirect before any frame renders.
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          if (typeof checkout === 'function') checkout();
+          else window.location.href = 'login.html?redirect=' + encodeURIComponent('cart.html');
+        });
+      });
       return;
     }
     if (ev.target.closest('#signInBtn')) {
       lockCheckoutButtons('signInBtn', 'Loading&hellip;');
-      window.location.href = 'login.html?redirect=' + encodeURIComponent('cart.html');
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          window.location.href = 'login.html?redirect=' + encodeURIComponent('cart.html');
+        });
+      });
       return;
     }
   });
