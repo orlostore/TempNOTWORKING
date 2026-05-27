@@ -1335,6 +1335,7 @@
                 <button class="btn btn-primary" onclick="openAddModal()">+ Add Product</button>
                 <button class="btn btn-secondary" onclick="refreshProducts()">Refresh</button>
                 <button class="btn btn-secondary" onclick="openHeroesModal()" title="Manage homepage hero / banner">🖼️ Heroes</button>
+                <button class="btn btn-secondary" onclick="openSpecPromptModal()" title="Generate Gemini dimension overlay prompt for any product">📐 Spec Prompt</button>
                 <a class="btn btn-secondary" href="brand-guide.html" target="_blank" rel="noopener" title="Product image guide — site, IG, TikTok specs + blank canvas templates">📐 Brand Guide</a>
             </div>
         </header>
@@ -2303,6 +2304,76 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spec Prompt modal: generates a ready-to-paste Gemini prompt for any product's dimension card -->
+    <div class="modal-overlay" id="specPromptModal">
+        <div class="modal" style="max-width:1040px;">
+            <div class="modal-header">
+                <h2>📐 Spec Prompt — Gemini dimension overlay</h2>
+                <button class="modal-close" onclick="closeSpecPromptModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0;">
+
+                <!-- Inline how-to panel -->
+                <div style="background:#f8f6f2;padding:14px 22px;border-bottom:1px solid #eee;font-size:0.78rem;line-height:1.6;color:#444;">
+                    <strong style="color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;font-size:0.7rem;">How to use</strong><br>
+                    1. Fill in the product description + L × W × H (in cm).
+                    2. Click <strong>Copy prompt</strong>.
+                    3. In Gemini, <strong>attach the clean catalogue image</strong> of the product (warm beige #E5DCCF bg, no props) and paste the prompt.
+                    4. Gemini returns the same image with the dimensions overlaid in navy hairlines + DM Sans labels — all brand standards locked.
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:0;">
+                    <!-- Form -->
+                    <div style="padding:20px 22px;border-right:1px solid #eee;">
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label for="specProduct" style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Product description</label>
+                            <textarea id="specProduct" rows="3" placeholder="e.g. vintage red metal Volkswagen Beetle toy with hippie flower decals" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:0.88rem;font-family:inherit;resize:vertical;" oninput="updateSpecPrompt()"></textarea>
+                            <div class="form-hint" style="font-size:0.7rem;color:#888;margin-top:4px;">A short physical description — colour, material, style. No marketing copy.</div>
+                        </div>
+
+                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+                            <div class="form-group">
+                                <label for="specL" style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Length (cm)</label>
+                                <input type="number" id="specL" min="0" step="1" placeholder="24" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:0.88rem;text-align:center;" oninput="updateSpecPrompt()">
+                            </div>
+                            <div class="form-group">
+                                <label for="specW" style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Width (cm)</label>
+                                <input type="number" id="specW" min="0" step="1" placeholder="9" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:0.88rem;text-align:center;" oninput="updateSpecPrompt()">
+                            </div>
+                            <div class="form-group">
+                                <label for="specH" style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Height (cm)</label>
+                                <input type="number" id="specH" min="0" step="1" placeholder="9" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:0.88rem;text-align:center;" oninput="updateSpecPrompt()">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.85rem;color:#1a3a52;">
+                                <input type="checkbox" id="specFlat" onchange="updateSpecPrompt()" style="width:16px;height:16px;cursor:pointer;">
+                                <span>Flat product — skip height (for magnets, cards, posters)</span>
+                            </label>
+                        </div>
+
+                        <div style="padding:12px 14px;background:#f8f6f2;border-left:3px solid #e76f51;font-size:0.74rem;line-height:1.6;color:#555;">
+                            <strong style="color:#1a3a52;">Brand standards (locked, do not change in the prompt):</strong>
+                            Beige bg #E5DCCF · Navy hairlines #1A3A52, 1 px · Labels in DM Sans 400, uppercase · Caption in Cormorant Garamond italic 300 · No brackets / quotes around numbers · cm only · 1:1 square 2000 × 2000.
+                        </div>
+                    </div>
+
+                    <!-- Output -->
+                    <div style="padding:20px 22px;display:flex;flex-direction:column;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                            <label for="specPromptOut" style="font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;">Generated prompt</label>
+                            <button class="btn btn-primary btn-small" type="button" id="specCopyBtn" onclick="copySpecPrompt()" style="font-size:0.78rem;">Copy prompt</button>
+                        </div>
+                        <textarea id="specPromptOut" readonly style="flex:1;min-height:380px;width:100%;padding:14px 16px;border:1px solid #ddd;border-radius:6px;font-size:0.78rem;line-height:1.55;font-family:'DM Sans',monospace;background:#fafafa;color:#222;resize:vertical;white-space:pre-wrap;"></textarea>
+                        <div style="font-size:0.72rem;color:#888;margin-top:8px;line-height:1.55;">After Gemini returns the image, verify the numbers came out as digits (not "1Z" or "I2") and the background is still beige. If anything looks off, ask Gemini once: <em>"same image — fix the [issue] only, keep everything else identical."</em></div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -5288,6 +5359,77 @@
             loadHeroes();
         }
         function closeHeroesModal() { document.getElementById('heroesModal').classList.remove('active'); }
+
+        // --- Spec Prompt modal — generates ready-to-paste Gemini dimension-overlay prompt ---
+        function openSpecPromptModal() {
+            document.getElementById('specPromptModal').classList.add('active');
+            updateSpecPrompt();
+        }
+        function closeSpecPromptModal() { document.getElementById('specPromptModal').classList.remove('active'); }
+
+        function buildSpecPrompt(product, L, W, H, flat) {
+            const desc = (product || '').trim() || 'the product';
+            const lNum = (L === '' || L == null) ? 'LENGTH' : String(L);
+            const wNum = (W === '' || W == null) ? 'WIDTH' : String(W);
+            const hNum = (H === '' || H == null) ? 'HEIGHT' : String(H);
+
+            const heightBlock = flat ? '' :
+`— A thin navy hairline running vertically to the right of the product, with small arrow caps at both ends, indicating the HEIGHT. Label with "${hNum} CM" in DM Sans weight 400, navy #1A3A52, all uppercase, ~14 px size, rotated 90 degrees so it reads vertically. The label is the number followed by CM only — no brackets, no quotes, no extra punctuation.
+
+`;
+
+            const captionDims = flat
+                ? `L ${lNum} cm × W ${wNum} cm`
+                : `L ${lNum} cm × W ${wNum} cm × H ${hNum} cm`;
+
+            return `I'm attaching a clean catalogue product photograph of ${desc} on a warm beige #E5DCCF background. Use this exact image as the base — do NOT redraw, restyle, recolour, or alter the product or background in any way. Only add the dimension annotations described below.
+
+Add a discreet technical dimension overlay in the style of a Hermès or Aesop product spec page. The brand standards below are locked — apply them exactly, do not substitute fonts, colours, or styling:
+
+— A thin navy hairline (colour #1A3A52, 1 px wide) running horizontally just below the product, from one end to the other, with small arrow caps at both ends, indicating the LENGTH. Label the line with the text "${lNum} CM" in DM Sans weight 400, navy #1A3A52, all uppercase, ~14 px size, positioned just below the line, centred. The label is the number followed by CM only — no brackets, no quotes, no extra punctuation.
+
+${heightBlock}— A thin navy hairline at a slight diagonal beneath the front of the product, with small arrow caps, indicating the WIDTH (depth side-to-side). Label with "${wNum} CM" in the same font, colour, and size — number followed by CM only.
+
+— Bottom strip caption, centred under the product: "Dimensions · ${captionDims}" in Cormorant Garamond italic, weight 300, navy #1A3A52, ~22 px size. The numerals appear directly in the caption with no brackets or quotes around them.
+
+Keep everything else identical to the attached image: the beige #E5DCCF background, the product, the lighting, the soft natural contact shadow — all unchanged. Only add the annotations.
+
+CRITICAL — do NOT include any of the following: no white background swap, no grey, no rulers, no grid lines, no measurement icons, no second product view, no exploded diagram, no props, no text other than the dimension labels and the caption strip, no watermarks, no logos, no square brackets [ ], no curly braces { }, no angle brackets < >, no quotation marks around the numbers.
+
+Aspect ratio: 1:1 square, 2000 × 2000 px.`;
+        }
+
+        function updateSpecPrompt() {
+            const product = document.getElementById('specProduct').value;
+            const L = document.getElementById('specL').value;
+            const W = document.getElementById('specW').value;
+            const H = document.getElementById('specH').value;
+            const flat = document.getElementById('specFlat').checked;
+            document.getElementById('specPromptOut').value = buildSpecPrompt(product, L, W, H, flat);
+        }
+
+        function copySpecPrompt() {
+            const out = document.getElementById('specPromptOut');
+            const btn = document.getElementById('specCopyBtn');
+            out.select();
+            out.setSelectionRange(0, 99999);
+            let ok = false;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(out.value);
+                    ok = true;
+                } else {
+                    ok = document.execCommand('copy');
+                }
+            } catch (e) { ok = false; }
+            const original = btn.textContent;
+            btn.textContent = ok ? '✓ Copied!' : 'Copy failed — select manually';
+            btn.style.background = ok ? '#2a7f4e' : '#c33';
+            setTimeout(() => {
+                btn.textContent = original;
+                btn.style.background = '';
+            }, 1800);
+        }
         function showHeroListView() {
             document.getElementById('heroesListView').style.display = '';
             document.getElementById('heroEditView').style.display = 'none';
