@@ -773,7 +773,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         /* In-card image swipe with dots — Hermès convention. Mobile-only (dots hidden on desktop).
            The track holds N images side-by-side at 100% each; translate slides between them.
            Dots overlay bottom-centre, very subtle until interaction. */
-        body[data-cards="v2"] .card-img { position: relative; overflow: hidden; touch-action: pan-y; }
+        /* Swipe container — same rules apply to product cards (.card-img) and New Arrivals (.arrival-card-img) */
+        body[data-cards="v2"] .card-img,
+        body[data-cards="v2"] .arrival-card-img { position: relative; overflow: hidden; touch-action: pan-y; display: block !important; }
         body[data-cards="v2"] .card-img-track { display: flex; width: 100%; height: 100%; will-change: transform; touch-action: pan-y; }
         body[data-cards="v2"] .card-img-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
         body[data-cards="v2"] .card-img-dots { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; pointer-events: none; z-index: 3; }
@@ -1430,14 +1432,17 @@ document.addEventListener('DOMContentLoaded', function(){
   // touch-action: pan-y on the track keeps native vertical page-scroll; JS owns horizontal motion.
   // Tap (no drag detected) still navigates to PDP via the parent <a>.
   function initCardSwipe(grid){
-    grid.querySelectorAll('.card-img[data-img-count]').forEach(function(cardImg){
+    // Generic: any element with data-img-count is a swipe container (works for both
+    // product cards .card-img AND New Arrivals .arrival-card-img).
+    grid.querySelectorAll('[data-img-count]').forEach(function(cardImg){
       if (cardImg._swipeInited) return;
       var count = parseInt(cardImg.dataset.imgCount, 10);
       if (!count || count < 2) return;
       cardImg._swipeInited = true;
       var track = cardImg.querySelector('.card-img-track');
       var dots = cardImg.querySelectorAll('.card-img-dots span');
-      var link = cardImg.closest('.card-link');
+      // .card-link wraps homepage product cards; .arrival-card wraps New Arrivals
+      var link = cardImg.closest('.card-link, .arrival-card');
       var index = 0;
       var sx = 0, sy = 0, dx = 0, swiping = false, swiped = false;
 
@@ -1506,6 +1511,75 @@ document.addEventListener('DOMContentLoaded', function(){
   setTimeout(rerenderIfEmpty, 1000);
   setTimeout(rerenderIfEmpty, 1500);
   setTimeout(rerenderIfEmpty, 2500);
+
+  /* ═══ NEW ARRIVALS — same swipe carousel as homepage product cards.
+     Override populateNewArrivals so each arrival card uses .card-img-track + .card-img-dots
+     inside .arrival-card-img, and wraps in a <div class="arrival-card" data-href> instead
+     of <a href> (same anti-link-drag fix). initCardSwipe handles both grids generically. */
+  window.populateNewArrivals = function(){
+    var grid = document.getElementById('newArrivalsGrid');
+    if (!grid || typeof products === 'undefined' || !products.length) return;
+    var sorted = products.slice().sort(function(a,b){ return b.id - a.id; });
+    var nonFeatured = sorted.filter(function(p){ return !p.featured; });
+    var list = nonFeatured.length >= 4 ? nonFeatured.slice(0, 4) : sorted.slice(0, 4);
+
+    grid.innerHTML = list.map(function(p, i){
+      var safeName = esc(p.name||''), safeNameAr = esc(p.nameAr||''), safeSlug = encodeURIComponent(p.slug||'');
+      var pdpHref = 'product.html?product='+safeSlug;
+
+      var imgs = [];
+      if (Array.isArray(p.images) && p.images.length > 0) {
+        imgs = p.images.filter(function(s){ return s && typeof s === 'string' && s.indexOf('http') === 0; });
+      } else if (p.image && typeof p.image === 'string' && p.image.indexOf('http') === 0) {
+        imgs = [p.image];
+      }
+      var imgsHTML;
+      if (imgs.length === 0) {
+        imgsHTML = '<div style="background:#efeae0;flex:0 0 100%;width:100%;height:100%"></div>';
+      } else {
+        imgsHTML = imgs.map(function(src, idx){
+          var rawSrc = esc(src);
+          var cdnSrc = 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/' + rawSrc;
+          var attrs = idx === 0
+            ? 'fetchpriority="' + (i === 0 ? 'high' : 'auto') + '"'
+            : 'loading="lazy"';
+          return '<img src="'+cdnSrc+'" alt="'+safeName+'" width="400" height="400" onerror="this.onerror=null;this.src=\''+rawSrc+'\'" '+attrs+'>';
+        }).join('');
+      }
+      var trackHTML = '<div class="card-img-track">'+imgsHTML+'</div>';
+      var dotsHTML = imgs.length > 1
+        ? '<div class="card-img-dots" aria-hidden="true">' + imgs.map(function(_, idx){
+            return '<span class="' + (idx === 0 ? 'active' : '') + '"></span>';
+          }).join('') + '</div>'
+        : '';
+      var isOOS = 0 === (p.totalStock != null ? p.totalStock : p.quantity);
+      var badge = (typeof buildBadgeHTML === 'function') ? buildBadgeHTML(p, isOOS) : '';
+      var price = (typeof formatProductPrice === 'function') ? formatProductPrice(p, false) : (p.price ? 'AED '+Number(p.price).toFixed(2) : '');
+
+      return '<div class="arrival-card" data-href="'+pdpHref+'">'+
+        '<div class="arrival-card-img" data-img-count="'+imgs.length+'">'+trackHTML+badge+dotsHTML+'</div>'+
+        '<div class="arrival-card-info">'+
+          '<div class="arrival-card-name">'+safeName+'</div>'+
+          (safeNameAr ? '<div class="arrival-card-name-ar">'+safeNameAr+'</div>' : '')+
+          '<div class="arrival-card-price">'+price+'</div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+
+    initCardSwipe(grid);
+  };
+
+  function rerenderNewArrivalsIfEmpty(){
+    var grid = document.getElementById('newArrivalsGrid');
+    if (!grid || grid.children.length > 0) return;
+    window.populateNewArrivals();
+  }
+  rerenderNewArrivalsIfEmpty();
+  setTimeout(rerenderNewArrivalsIfEmpty, 100);
+  setTimeout(rerenderNewArrivalsIfEmpty, 500);
+  setTimeout(rerenderNewArrivalsIfEmpty, 1000);
+  setTimeout(rerenderNewArrivalsIfEmpty, 1500);
+  setTimeout(rerenderNewArrivalsIfEmpty, 2500);
 });
 </script>
 <script>
