@@ -28,25 +28,13 @@
     <link rel="preload" href="/fonts/dm-sans-v17-latin-500.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/cormorant-garamond-v21-latin-300.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/cormorant-garamond-v21-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="styles.css?v=75">
+    <link rel="stylesheet" href="styles.css?v=76">
     <!-- ═══════════════════════════════════════════════════════════
          EDIT-LOOK OVERLAY — matches draftnewindex.html cosmetically.
          Page-scoped only. Safe to remove for revert.
          ═══════════════════════════════════════════════════════════ -->
     <script>
-    (function(){
-      try {
-        var saved = localStorage.getItem('orlo_draft_theme');
-        if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-      } catch(e){}
-      window.toggleDraftTheme = function(){
-        var html = document.documentElement;
-        var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        if (next === 'dark') html.setAttribute('data-theme', 'dark');
-        else html.removeAttribute('data-theme');
-        try { localStorage.setItem('orlo_draft_theme', next); } catch(e){}
-      };
-    })();
+    // dark-mode toggle removed — site is light-only
     </script>
     <style id="edit-overlay">
       :root{
@@ -57,14 +45,6 @@
         --draft-text: #1a1a1a;
         --draft-muted: #6b6b6b;
         --draft-border: rgba(26,58,82,0.10);
-      }
-      [data-theme="dark"]{
-        --bg: #0d1f2d;
-        --surface: #15293d;
-        --draft-text: #f0ece4;
-        --draft-muted: #8a9baa;
-        --draft-border: rgba(255,255,255,0.10);
-        --primary: #f0ece4;
       }
       html, body { background: var(--bg) !important; transition: background .4s ease, color .4s ease; }
       body { color: var(--draft-text) !important; font-family: 'DM Sans', system-ui, -apple-system, sans-serif !important; line-height: 1.6; padding:0 !important; margin:0 !important; font-variant-numeric: lining-nums; }
@@ -142,12 +122,7 @@
       .footer-terms-strip a:hover { opacity: 1; text-decoration: underline; }
       .footer-terms-strip span { opacity: 0.4; }
 
-      /* Dark mode toggle button */
-      .draft-theme-toggle { position: fixed; bottom: 78px; right: 14px; width: 38px; height: 38px; border-radius: 50%; background: var(--primary); border: 0; cursor: pointer; z-index: 1500; box-shadow: 0 4px 14px rgba(0,0,0,0.18); transition: transform .2s ease; }
-      .draft-theme-toggle::before { content: ''; display: block; width: 18px; height: 18px; margin: 10px auto; background: var(--surface); border-radius: 50%; box-shadow: inset -4px -4px 0 0 var(--primary); transition: background .3s ease, box-shadow .3s ease; }
-      [data-theme="dark"] .draft-theme-toggle::before { box-shadow: inset -4px -4px 0 0 var(--surface); background: var(--draft-text); }
-      .draft-theme-toggle:hover { transform: translateY(-2px); }
-      @media (min-width: 769px) { .draft-theme-toggle { bottom: 18px; } }
+      /* dark-mode toggle removed — site is light-only */
 
       /* Mobile */
       @media (max-width: 576px) {
@@ -206,7 +181,7 @@
     </style>
 </head>
 <body>
-<button class="draft-theme-toggle" onclick="toggleDraftTheme()" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+<!-- dark-mode toggle button removed -->
 
 <style>
 .tc-nav{padding:14px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(26,58,82,0.10);background:#fff}

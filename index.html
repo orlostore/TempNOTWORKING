@@ -79,25 +79,19 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=75">
+    <link rel="stylesheet" href="styles.css?v=76">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
          ═══════════════════════════════════════════════════════════ -->
     <script>
-    (function(){
-      try {
-        var saved = localStorage.getItem('orlo_draft_theme');
-        if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-      } catch(e){}
-      window.toggleDraftTheme = function(){
-        var html = document.documentElement;
-        var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        if (next === 'dark') html.setAttribute('data-theme', 'dark');
-        else html.removeAttribute('data-theme');
-        try { localStorage.setItem('orlo_draft_theme', next); } catch(e){}
-      };
-    })();
+    // dark-mode toggle removed — site is light-only (Hermès / Aesop editorial register)
+    // one-time cleanup: clear any stale localStorage flag + strip a leftover data-theme attribute,
+    // so users who'd enabled dark on an earlier build immediately see the correct light layout
+    try {
+        localStorage.removeItem('orlo_draft_theme');
+        document.documentElement.removeAttribute('data-theme');
+    } catch(e){}
     </script>
     <style id="draft-overlay">
       :root{
@@ -110,20 +104,11 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         --draft-muted: #6b6b6b;
         --draft-border: rgba(26,58,82,0.10);
       }
-      [data-theme="dark"]{
-        --bg: #0d1f2d;
-        --surface: #15293d;
-        --draft-text: #f0ece4;
-        --draft-muted: #8a9baa;
-        --draft-border: rgba(255,255,255,0.10);
-        --primary: #f0ece4;
-      }
 
       html, body { background: var(--bg) !important; transition: background .4s ease, color .4s ease; }
       body { color: var(--draft-text) !important; font-family: 'DM Sans', system-ui, -apple-system, sans-serif !important; }
 
       header { background: var(--surface) !important; transition: background .4s ease; border-bottom: 1px solid var(--draft-border); }
-      [data-theme="dark"] header { box-shadow: 0 2px 8px rgba(0,0,0,0.35); }
 
       /* Editorial typography for English headings */
       .hero-headline h1,
@@ -154,9 +139,6 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         font-size: clamp(26px, 3vw, 40px) !important;
         color: var(--primary) !important;
       }
-      [data-theme="dark"] .homepage-section-title,
-      [data-theme="dark"] .section-title,
-      [data-theme="dark"] .all-products-title { color: var(--draft-text) !important; }
 
       /* Keep Arabic on Almarai and balanced in weight */
       .arabic-text, .arabic-inline, [lang="ar"] {
@@ -195,7 +177,6 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .product-card { border: 1px solid var(--draft-border) !important; box-shadow: 0 4px 18px rgba(26,58,82,0.06) !important; background: var(--surface) !important; transition: transform .25s ease, box-shadow .25s ease !important; }
       .product-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(26,58,82,0.12) !important; }
       .product-title { color: var(--primary) !important; }
-      [data-theme="dark"] .product-title { color: var(--draft-text) !important; }
 
       /* Buttons: uppercase, letter-spaced, intentional */
       .hero-cta, .mobile-hero-cta {
@@ -322,7 +303,6 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         font-size: 12px !important;
         color: var(--primary) !important;
       }
-      [data-theme="dark"] .term-title { color: var(--draft-text) !important; }
 
       /* Trust strip on dark gradient hero: NO bar — items float on gradient */
       .hero-trust-badges {
@@ -365,10 +345,6 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         color: var(--primary) !important;
         border-bottom: 1px solid var(--draft-border) !important;
       }
-      [data-theme="dark"] .mobile-promo-banner {
-        background: var(--bg) !important;
-        color: var(--draft-text) !important;
-      }
 
       /* Mobile trust strip — blend into the page, no white card */
       .mobile-trust-section {
@@ -378,12 +354,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         box-shadow: none !important;
         margin: 4px 12px 8px !important;
       }
-      [data-theme="dark"] .mobile-trust-section { background: transparent !important; }
       .mobile-trust-section .trust-item { color: var(--primary) !important; }
       .mobile-trust-section .trust-item .arabic-text { color: var(--draft-muted) !important; }
       .mobile-trust-section .trust-icon { stroke: var(--primary) !important; }
-      [data-theme="dark"] .mobile-trust-section .trust-item { color: var(--draft-text) !important; }
-      [data-theme="dark"] .mobile-trust-section .trust-icon { stroke: var(--draft-text) !important; }
 
       /* Free Delivery box — solid white, readable colors on gradient */
       .hero-delivery-box {
@@ -402,46 +375,8 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .about-section, .contact-section, .terms-section { padding: 3.5rem 1rem !important; }
 
       /* Dark mode surface overrides for cards */
-      [data-theme="dark"] .product-card,
-      [data-theme="dark"] .popular-card,
-      [data-theme="dark"] .arrival-card,
-      [data-theme="dark"] .term-card,
-      [data-theme="dark"] .contact-box,
-      [data-theme="dark"] .mobile-carousel-box,
-      [data-theme="dark"] .hero-trust-badges,
-      [data-theme="dark"] .trust-badges-row,
-      [data-theme="dark"] .category-card,
-      [data-theme="dark"] .sort-arrow-btn {
-        background: var(--surface) !important;
-        color: var(--draft-text) !important;
-        border: 1px solid var(--draft-border) !important;
-        box-shadow: 0 6px 24px rgba(0,0,0,0.35) !important;
-      }
       /* Carousel cards — Popular Now uses .popular-card, New Arrivals uses .arrival-card */
-      [data-theme="dark"] .popular-card-img,
-      [data-theme="dark"] .arrival-card-img { background: var(--surface) !important; }
-      [data-theme="dark"] .popular-card-name,
-      [data-theme="dark"] .arrival-card-name { color: var(--draft-text) !important; }
-      [data-theme="dark"] .popular-card-name-ar,
-      [data-theme="dark"] .arrival-card-name-ar { color: var(--draft-muted) !important; }
-      [data-theme="dark"] .popular-card-price,
-      [data-theme="dark"] .arrival-card-price { color: var(--draft-text) !important; }
       /* All Products card text in dark mode */
-      [data-theme="dark"] .product-title-ar { color: var(--draft-muted) !important; }
-      [data-theme="dark"] .product-price { color: var(--draft-text) !important; }
-      [data-theme="dark"] .contact-text-en,
-      [data-theme="dark"] .contact-text-ar,
-      [data-theme="dark"] .contact-detail,
-      [data-theme="dark"] .trust-item,
-      [data-theme="dark"] .trust-badge-item { color: var(--draft-text) !important; }
-      [data-theme="dark"] .hero-delivery-box { background: rgba(19,36,53,0.92) !important; color: var(--draft-text) !important; }
-      [data-theme="dark"] footer { background: #0a1822 !important; color: rgba(255,255,255,0.55) !important; }
-      [data-theme="dark"] .mobile-bottom-nav { background: var(--surface) !important; border-top: 1px solid var(--draft-border) !important; }
-      [data-theme="dark"] .mobile-bottom-nav svg { stroke: var(--draft-text) !important; }
-      [data-theme="dark"] .nav-label { color: var(--draft-muted) !important; }
-      [data-theme="dark"] .mobile-promo-banner { background: var(--surface) !important; color: var(--draft-text) !important; border-bottom: 1px solid var(--draft-border) !important; }
-      [data-theme="dark"] .search-input { background: var(--surface) !important; color: var(--draft-text) !important; border-color: var(--draft-border) !important; }
-      [data-theme="dark"] .nav-links a { color: var(--draft-text) !important; }
 
       /* Terms section inherits page background (was hardcoded grey) */
       .terms-section { background: transparent !important; }
@@ -490,26 +425,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         }
       }
 
-      /* Theme toggle floating button */
-      .draft-theme-toggle {
-        position: fixed; top: 14px; right: 14px;
-        width: 46px; height: 26px; border-radius: 13px;
-        background: var(--primary); border: none; cursor: pointer;
-        z-index: 2000; transition: background .3s ease;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      }
-      [data-theme="dark"] .draft-theme-toggle { background: var(--accent); }
-      .draft-theme-toggle::after {
-        content: ''; position: absolute; top: 3px; left: 3px;
-        width: 20px; height: 20px; border-radius: 50%;
-        background: #fff; transition: transform .3s ease;
-      }
-      [data-theme="dark"] .draft-theme-toggle::after { transform: translateX(20px); }
-      @media (max-width: 900px) {
-        .draft-theme-toggle { top: 68px; right: 10px; width: 40px; height: 22px; }
-        .draft-theme-toggle::after { width: 16px; height: 16px; }
-        [data-theme="dark"] .draft-theme-toggle::after { transform: translateX(18px); }
-      }
+      /* dark-mode toggle removed — site is light-only */
 
       /* The Edit teaser */
       .edit-teaser {
@@ -612,10 +528,6 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         direction: rtl;
         margin: 0 0 1.2rem 0 !important;
       }
-      [data-theme="dark"] .about-section .contact-text-en,
-      [data-theme="dark"] .about-section .contact-text-ar {
-        color: var(--draft-text) !important;
-      }
 
       /* Contact — cream, no card, hairline divider on top */
       .contact-section {
@@ -669,10 +581,6 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         line-height: 1.9 !important;
         text-align: right !important;
         direction: rtl;
-        color: var(--draft-text) !important;
-      }
-      [data-theme="dark"] #seo-content .contact-text-en,
-      [data-theme="dark"] #seo-content .contact-text-ar {
         color: var(--draft-text) !important;
       }
 

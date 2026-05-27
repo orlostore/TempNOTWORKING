@@ -18,17 +18,13 @@ body:has(.cart-sidebar.active) .early-price-bottom{display:none}
    looks consistent regardless of the host page's :root palette.
    ═══════════════════════════════════════════════════════════ */
 .cart-sidebar{--primary:#1a3a52;--accent:#e76f51;--bg:#f8f6f2;--surface:#ffffff;--draft-text:#1a1a1a;--draft-muted:#6b6b6b;--draft-border:rgba(26,58,82,0.10)}
-[data-theme="dark"] .cart-sidebar{--primary:#e76f51;--accent:#e76f51;--bg:#0d1f2d;--surface:#15293d;--draft-text:#f0ece4;--draft-muted:#8a9baa;--draft-border:rgba(255,255,255,0.10)}
 .cart-sidebar{width:440px;right:-440px;border-radius:16px 0 0 16px;box-shadow:-8px 0 32px rgba(26,58,82,0.12);background:var(--surface);border-left:1px solid var(--draft-border)}
 .cart-sidebar.active{right:0}
-[data-theme="dark"] .cart-sidebar{box-shadow:-8px 0 32px rgba(0,0,0,0.4)}
 .cart-header{background:var(--primary);padding:1rem 1.4rem;border-bottom:none}
 .cart-header h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.25rem;letter-spacing:-0.01em;color:#fff}
 .cart-header h2 span{font-family:'Almarai',sans-serif;font-weight:400;font-size:0.95rem;opacity:0.85;margin-left:8px}
 .cart-items{padding:0.6rem 1.4rem 0.4rem;background:linear-gradient(var(--surface) 30%, rgba(255,255,255,0)) center top / 100% 30px no-repeat,linear-gradient(rgba(255,255,255,0), var(--surface) 70%) center bottom / 100% 30px no-repeat,radial-gradient(farthest-side at 50% 0, rgba(26,58,82,0.18), transparent 70%) center top / 100% 12px no-repeat,radial-gradient(farthest-side at 50% 100%, rgba(26,58,82,0.18), transparent 70%) center bottom / 100% 12px no-repeat;background-color:var(--surface);background-attachment:local,local,scroll,scroll}
-[data-theme="dark"] .cart-items{background:linear-gradient(var(--surface) 30%, rgba(0,0,0,0)) center top / 100% 30px no-repeat,linear-gradient(rgba(0,0,0,0), var(--surface) 70%) center bottom / 100% 30px no-repeat,radial-gradient(farthest-side at 50% 0, rgba(0,0,0,0.35), transparent 70%) center top / 100% 12px no-repeat,radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,0.35), transparent 70%) center bottom / 100% 12px no-repeat;background-color:var(--surface);background-attachment:local,local,scroll,scroll}
 .cart-footer{background:var(--bg);border-top:1px solid var(--draft-border);padding:0.3rem 1.4rem}
-[data-theme="dark"] .cart-footer{background:#0d1f2d}
 .cart-total{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.35rem;letter-spacing:-0.01em;color:var(--draft-text);margin-bottom:0.9rem}
 .cart-sidebar #stripeBtn,.cart-sidebar #stripeBtnGuest{background:var(--primary);color:#fff;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;padding:0.95rem 1rem;transition:filter .2s ease, transform .2s ease}
 .cart-sidebar #stripeBtn .arabic-text,.cart-sidebar #stripeBtnGuest .arabic-text{text-transform:none;letter-spacing:0}
@@ -42,14 +38,11 @@ body:has(.cart-sidebar.active) .early-price-bottom{display:none}
 .cart-items > div[id^="cartItem-"] button[onclick^="updateQuantity"]{background:var(--bg);color:var(--draft-text);border:1px solid var(--draft-border);border-radius:6px;font-family:'DM Sans',sans-serif;transition:background .2s ease}
 .cart-items > div[id^="cartItem-"] button[onclick^="updateQuantity"]:hover{background:var(--draft-border)}
 .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"]{background:transparent;color:var(--primary);border:1px solid var(--draft-border);border-radius:50%;width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;transition:border-color .2s ease, color .2s ease}
-[data-theme="dark"] .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"]{color:var(--draft-text)}
 .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"]:hover{border-color:var(--accent);color:var(--accent)}
 .cart-items > div[id^="cartItem-"] button[onclick^="removeFromCart"] svg{width:14px;height:14px}
 .cart-sidebar .checkout-card{background:var(--surface);border:1px solid var(--draft-border);border-radius:14px;box-shadow:0 2px 10px rgba(26,58,82,0.08);padding:14px;overflow:visible}
-[data-theme="dark"] .cart-sidebar .checkout-card{background:var(--surface);border-color:rgba(255,255,255,0.10)}
 .cart-sidebar .checkout-card > div{background:transparent;border-radius:0;border:none;box-shadow:none}
 .cart-sidebar .checkout-card-header{color:var(--primary);font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;letter-spacing:-0.01em;padding:0 0 10px 0;text-align:center}
-[data-theme="dark"] .cart-sidebar .checkout-card-header{color:var(--draft-text)}
 .cart-sidebar .checkout-card-header span{font-family:'Almarai',sans-serif;color:var(--draft-muted);font-size:0.78rem;opacity:1;margin-left:6px;font-weight:400}
 .cart-sidebar .checkout-card-buttons{display:flex;gap:8px;padding:0}
 .cart-sidebar .cart-summary{background:transparent;border:none;border-radius:8px;padding:0.15rem 0.75rem 0.125rem}
@@ -64,7 +57,7 @@ body:has(.cart-sidebar.active) .early-price-bottom{display:none}
 .cart-sidebar .checkout-card-buttons{padding-top:18px;gap:10px}
 /* Bigger, calmer buttons */
 .cart-sidebar #stripeBtn,.cart-sidebar #stripeBtnGuest{padding:16px 16px!important;font-size:0.82rem!important;letter-spacing:0.12em!important}
-@media (max-width: 514.56px){.cart-sidebar{width:100%;right:-100%;border-radius:0;top:0;bottom:0;height:auto}.cart-sidebar.active{right:0}.cart-checkout-fixed{display:block;position:absolute;top:auto;bottom:85px;left:0;right:0;background:var(--bg);border-top:1px solid var(--draft-border);border-bottom:none;box-shadow:0 -2px 8px rgba(26,58,82,0.08);z-index:10;padding:10px 14px 0 14px}.cart-footer{padding-bottom:220px;padding-top:0.25rem}.cart-sidebar:not(:has(.checkout-card)) .cart-footer{padding-bottom:140px}[data-theme="dark"] .cart-checkout-fixed{background:#0d1f2d}}
+@media (max-width: 514.56px){.cart-sidebar{width:100%;right:-100%;border-radius:0;top:0;bottom:0;height:auto}.cart-sidebar.active{right:0}.cart-checkout-fixed{display:block;position:absolute;top:auto;bottom:85px;left:0;right:0;background:var(--bg);border-top:1px solid var(--draft-border);border-bottom:none;box-shadow:0 -2px 8px rgba(26,58,82,0.08);z-index:10;padding:10px 14px 0 14px}.cart-footer{padding-bottom:220px;padding-top:0.25rem}.cart-sidebar:not(:has(.checkout-card)) .cart-footer{padding-bottom:140px}}
 
 /* ═══════════════════════════════════════════════════════════
    ORLO BOTTOM NAV (canonical · Variant D + coral pin · Apple HIG + Material 3)
