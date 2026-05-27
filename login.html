@@ -229,8 +229,10 @@
         .login-form-group input::placeholder { color: #a8a8a8; }
         .login-form-group input.error { border-bottom-color: #dc3545; }
 
-        .form-error { color: #dc3545; font-size: 0.78rem; margin-top: 6px; display: none; font-family: 'DM Sans', sans-serif; }
-        .form-error.show { display: block; }
+        .form-error { color: #e76f51; font-size: 0.74rem; margin-top: 8px; display: none; font-family: 'DM Sans', sans-serif; font-weight: 500; letter-spacing: 0.01em; align-items: baseline; justify-content: space-between; gap: 14px; }
+        .form-error .ar { font-family: 'Almarai', sans-serif; font-size: 0.7rem; color: #9aa5ad; direction: rtl; font-weight: 400; }
+        .form-error.show { display: flex; }
+        input.error, input.error:focus { border-bottom-color: #e76f51 !important; }
 
         .password-input-wrap { position: relative; }
         .password-input-wrap input { padding-right: 36px; }
@@ -444,7 +446,7 @@
     </section>
 
     <section class="login-form-section">
-        <form id="loginForm" onsubmit="handleLogin(event)">
+        <form id="loginForm" novalidate onsubmit="handleLogin(event)">
             <div id="alertBox"></div>
 
             <div class="login-form-group">
@@ -510,7 +512,7 @@
             const input = document.getElementById(field);
             const error = document.getElementById(field + 'Error');
             input.classList.add('error');
-            error.textContent = message;
+            error.innerHTML = message;
             error.classList.add('show');
         }
 
@@ -523,8 +525,9 @@
             const remember = document.getElementById('remember').checked;
 
             let hasError = false;
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', 'Please enter a valid email'); hasError = true; }
-            if (password.length < 1) { showError('password', 'Please enter your password'); hasError = true; }
+            if (!email) { showError('email', '<span>Please enter your email</span><span class="ar">يرجى إدخال البريد الإلكتروني</span>'); hasError = true; }
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', '<span>Please enter a valid email address</span><span class="ar">يرجى إدخال بريد صالح</span>'); hasError = true; }
+            if (password.length < 1) { showError('password', '<span>Please enter your password</span><span class="ar">يرجى إدخال كلمة المرور</span>'); hasError = true; }
             if (hasError) return;
 
             const btn = document.getElementById('submitBtn');

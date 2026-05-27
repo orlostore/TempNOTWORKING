@@ -229,8 +229,10 @@
         .signup-form-group input::placeholder { color: #a8a8a8; }
         .signup-form-group input.error { border-bottom-color: #dc3545; }
 
-        .form-error { color: #dc3545; font-size: 0.78rem; margin-top: 6px; display: none; font-family: 'DM Sans', sans-serif; }
-        .form-error.show { display: block; }
+        .form-error { color: #e76f51; font-size: 0.74rem; margin-top: 8px; display: none; font-family: 'DM Sans', sans-serif; font-weight: 500; letter-spacing: 0.01em; align-items: baseline; justify-content: space-between; gap: 14px; }
+        .form-error .ar { font-family: 'Almarai', sans-serif; font-size: 0.7rem; color: #9aa5ad; direction: rtl; font-weight: 400; }
+        .form-error.show { display: flex; }
+        input.error, input.error:focus { border-bottom-color: #e76f51 !important; }
 
         .password-input-wrap { position: relative; }
         .password-input-wrap input { padding-right: 36px; }
@@ -431,7 +433,7 @@
     </section>
 
     <section class="signup-form-section">
-        <form id="signupForm" onsubmit="handleSignup(event)">
+        <form id="signupForm" novalidate onsubmit="handleSignup(event)">
             <div id="alertBox"></div>
 
             <div class="signup-form-group">
@@ -516,7 +518,7 @@
             const input = document.getElementById(field);
             const error = document.getElementById(field + 'Error');
             input.classList.add('error');
-            error.textContent = message;
+            error.innerHTML = message;
             error.classList.add('show');
         }
 
@@ -530,10 +532,11 @@
             const confirmPassword = document.getElementById('confirmPassword').value;
 
             let hasError = false;
-            if (name.length < 2) { showError('name', 'Name is too short'); hasError = true; }
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', 'Please enter a valid email'); hasError = true; }
-            if (password.length < 8) { showError('password', 'Min 8 characters'); hasError = true; }
-            if (password !== confirmPassword) { showError('confirmPassword', 'Passwords do not match'); hasError = true; }
+            if (name.length < 2) { showError('name', '<span>Please enter your name</span><span class="ar">يرجى إدخال الاسم</span>'); hasError = true; }
+            if (!email) { showError('email', '<span>Please enter your email</span><span class="ar">يرجى إدخال البريد الإلكتروني</span>'); hasError = true; }
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', '<span>Please enter a valid email address</span><span class="ar">يرجى إدخال بريد صالح</span>'); hasError = true; }
+            if (password.length < 8) { showError('password', '<span>At least 8 characters</span><span class="ar">٨ أحرف على الأقل</span>'); hasError = true; }
+            if (password !== confirmPassword) { showError('confirmPassword', '<span>Passwords don\'t match</span><span class="ar">كلمتا المرور غير متطابقتين</span>'); hasError = true; }
             if (hasError) return;
 
             const btn = document.getElementById('submitBtn');
