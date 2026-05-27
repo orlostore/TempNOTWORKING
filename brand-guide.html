@@ -490,6 +490,46 @@ ffmpeg -y -i source.mp3 -t 16 -af "volume=0.7,afade=t=out:st=14.5:d=1.5" \
       <li><strong>NEVER</strong> re-render the logo from code, recolour the dot, or make white pixels transparent — if applying opacity, multiply the alpha channel only.</li>
     </ul>
 
+    <h3>End card — LOCKED design (every video, no variations)</h3>
+    <p>Cream <code style="background:var(--cream-darker);padding:1px 5px">#F8F6F2</code> background, elements stacked top to bottom:</p>
+    <ol style="padding-left:20px;line-height:1.85;font-size:.92rem">
+      <li>ORLO logo, 340 × 340 px, centred horizontally, y ≈ 220.</li>
+      <li><strong>EN tagline:</strong> "QUALITY IS A CLICK AWAY" — DM Sans 500, 44pt, navy <code style="background:var(--cream-darker);padding:1px 5px">#1A3A52</code>, letter-spaced 5 px.</li>
+      <li><strong>Coral divider:</strong> 140 × 3 px centred under the EN tagline.</li>
+      <li><strong>AR tagline:</strong> "الجودة على بُعد نقرة" — Almarai 800, 54pt, coral <code style="background:var(--cream-darker);padding:1px 5px">#E76F51</code>.</li>
+      <li><strong>PRICE (mandatory):</strong> the product price in coral DM Sans 800, ~92pt, centred. Format: <code>AED 84</code>. Sits in the visual centre of the lower half. This is the commercial signal — never skip it.</li>
+      <li><strong>SHOP NOW pill (mandatory):</strong> navy <code style="background:var(--cream-darker);padding:1px 5px">#1A3A52</code> rounded pill, 720 × 110 px, border-radius 55. Inside, centred: "SHOP NOW" (DM Sans 800, 44pt, coral) · separator dot (cream) · "تسوّق الآن" (Almarai 800, 44pt, coral). <strong>Every video gets this pill</strong> — released or unreleased. For unreleased products, the pill text becomes "COMING SOON · قريباً" (same dimensions, same colours).</li>
+      <li><strong>URL:</strong> "orlostore.com" — DM Sans 700, 44pt, coral. Sits just below the pill.</li>
+      <li><strong>Trust badges row</strong> at bottom (y ≈ H – 340), three columns equally spaced — truck / lock / UAE flag, coral circle outlines, EN labels (DM Sans 500, 32pt, navy), AR labels (Almarai 700, 30pt, grey <code style="background:var(--cream-darker);padding:1px 5px">#A0A5AA</code>).</li>
+    </ol>
+    <p style="font-size:.85rem;color:var(--muted);margin-top:8px"><strong>Why price + SHOP NOW pill are mandatory:</strong> ORLO is a Dubai e-commerce shop, not a luxury brand selling intent. The viewer needs to know the cost and where to go next within the first second of the end card. Editorial register in the scenes, commercial signal at the close.</p>
+
+    <h3>Scene headlines — typography (locked, refined)</h3>
+    <ul>
+      <li><strong>English headline:</strong> Cormorant Garamond italic, <strong>weight 400</strong> (not 300 — more body, crisper at scale), <strong>72–80pt</strong>, navy <code style="background:var(--cream-darker);padding:1px 5px">#1A3A52</code>, line-height 1.15.</li>
+      <li><strong>Arabic headline:</strong> Almarai 700, <strong>60–66pt</strong>, navy, line-height 1.4.</li>
+      <li><strong>Max 2 lines.</strong> If your copy needs 3 lines, shorten the copy — don't shrink the type.</li>
+      <li><strong>Position:</strong> upper-left, x ≈ 60, y ≈ 240. Left-aligned. Max-width 880px so it never crowds the right edge.</li>
+      <li><strong>NO text-shadow, NO drop-shadow.</strong> If contrast is weak against the image, soften the image with a subtle radial light vignette behind the text — don't apply blur or glow to the type itself (that's what creates the "blurry" look).</li>
+    </ul>
+
+    <h3>Coral accent line — relocated</h3>
+    <p>The small coral underline that used to sit under the headline now sits under the <strong>corner-parked logo</strong> at top-left as a persistent brand signature on every scene:</p>
+    <ul>
+      <li><strong>Dimensions:</strong> 60 × 3 px, coral <code style="background:var(--cream-darker);padding:1px 5px">#E76F51</code>.</li>
+      <li><strong>Position:</strong> directly below the 125 × 125 corner logo, left-aligned with the logo's left edge, ~10 px below the logo.</li>
+      <li><strong>Never:</strong> under headline text, under product, under price. One coral line per scene, anchored to the logo.</li>
+    </ul>
+
+    <h3>Render sharpness — preventing the "blurry" look</h3>
+    <ul>
+      <li><strong>Render frames at 2× internal resolution then downsample.</strong> Render the canvas at 2160 × 3840 with text at corresponding sizes, then resize to 1080 × 1920 with <code>Image.LANCZOS</code> before saving. The downsample produces a crisper edge than rendering directly at 1080.</li>
+      <li><strong>PIL <code>ImageDraw.text()</code>:</strong> default antialiasing is fine — don't disable it. Use <code>fill</code> as a 3-tuple <code>(R,G,B)</code>, not a 4-tuple with alpha &lt; 255 (semi-transparent text looks soft).</li>
+      <li><strong>Use Cormorant Garamond italic weight 400, not 300.</strong> Weight 300 is too thin for large reel headlines — strokes break apart at the resampling step.</li>
+      <li><strong>JPEG quality 95</strong> for frame export (was 92). Tiny size increase, noticeably crisper.</li>
+      <li><strong>H.264 CRF 18</strong> (was 20) for the final encode — slightly larger file, but the type stays crisp.</li>
+    </ul>
+
     <h3>Standard 16-second timeline</h3>
     <table>
       <tr><th>Time</th><th>Beat</th></tr>
@@ -498,25 +538,6 @@ ffmpeg -y -i source.mp3 -t 16 -af "volume=0.7,afade=t=out:st=14.5:d=1.5" \
       <tr><td>2.0–14.0s</td><td>Main scene — concept-dependent (product reveal, silhouette tease, walk-on animation, before/after wipe). <strong>Scene headlines and product names use Cormorant Garamond italic.</strong> System messages within the scene (price, "NEW", "SOLD OUT") use DM Sans.</td></tr>
       <tr><td>14.0–16.0s</td><td>End card (locked layout, see below).</td></tr>
     </table>
-
-    <h3>End card — LOCKED design (every video, no variations)</h3>
-    <p>Cream <code style="background:var(--cream-darker);padding:1px 5px">#F8F6F2</code> background, elements stacked top to bottom:</p>
-    <ol style="padding-left:20px;line-height:1.85;font-size:.92rem">
-      <li>ORLO logo, 340 × 340 px, centred horizontally, y ≈ 280.</li>
-      <li><strong>EN tagline:</strong> "QUALITY IS A CLICK AWAY" — DM Sans 500, 44pt, navy <code style="background:var(--cream-darker);padding:1px 5px">#1A3A52</code>, letter-spaced 5 px.</li>
-      <li><strong>Coral divider:</strong> 140 × 3 px centred under the EN tagline.</li>
-      <li><strong>AR tagline:</strong> "الجودة على بُعد نقرة" — Almarai 800, 54pt, coral <code style="background:var(--cream-darker);padding:1px 5px">#E76F51</code>.</li>
-      <li><strong>(Conditional) Navy COMING SOON pill</strong> — only for unreleased products. 720 × 100 px, border-radius 50. Inside: "COMING SOON" (DM Sans 800, 44pt, coral) · separator dot (cream) · "قريباً" (Almarai 800, 44pt, coral). <strong>Released products skip this entirely.</strong></li>
-      <li><strong>URL:</strong> "orlostore.com" — DM Sans 700, 54pt, coral.</li>
-      <li><strong>Trust badges row</strong> at bottom (y ≈ H – 340), three columns equally spaced:
-        <ul style="margin-top:6px">
-          <li>🛻 <strong>Free Delivery</strong> / <em>توصيل مجاني</em> — truck pictogram</li>
-          <li>🔒 <strong>Secure Payment</strong> / <em>دفع آمن</em> — padlock pictogram</li>
-          <li>🇦🇪 <strong>Licensed UAE Store</strong> / <em>متجر مرخّص</em> — UAE flag / storefront pictogram</li>
-        </ul>
-        Each: coral circle outline (radius 44, stroke 4), custom-drawn SVG/PIL pictogram inside (NEVER letter placeholders like "F"/"S"/"L"), EN label below (DM Sans 500, 32pt, navy, max 2 lines), AR label (Almarai 700, 30pt, grey <code style="background:var(--cream-darker);padding:1px 5px">#A0A5AA</code>).
-      </li>
-    </ol>
 
     <h3>Visual rules (LOCKED — every video)</h3>
     <ul>
