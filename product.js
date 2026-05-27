@@ -84,8 +84,9 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
     tooltip.id = 'limitTooltip';
     tooltip.className = 'limit-tooltip';
     tooltip.innerHTML = `
-      <button class="close-btn" onclick="closeLimitTooltip()">✕</button>
-      ${messageEn}
+      <button class="close-btn" onclick="closeLimitTooltip()">×</button>
+      <span class="tooltip-text-en">${messageEn}</span>
+      <span class="tooltip-accent"></span>
       <span class="tooltip-text-ar">${messageAr}</span>
     `;
 

@@ -3,7 +3,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Your Cart — ORLO Store</title>
 <meta name="robots" content="noindex,nofollow">
-<link rel="stylesheet" href="styles.css?v=80">
+<link rel="stylesheet" href="styles.css?v=81">
 <!-- Bootstrap product data so renderCartPage can resolve cart items to product info -->
 <script src="products.min.js?v=24"></script>
 <style>
@@ -145,6 +145,7 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
 }
 </style></head>
 <body>
+<div class="orlo-toast-container" id="orloToastContainer" aria-live="polite" aria-atomic="true"></div>
 
 <!-- ═══ HEADER (lockup + back to shop) ═══════════════ -->
 <nav class="login-nav">
@@ -595,10 +596,12 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Almarai',sans-serif;color:#1
       var stock = stockFor(id, vid);
       var cap = Math.min(10, stock);  // 10-per-product limit AND admin-managed stock
       if (delta > 0 && newQty > cap) {
-        // Hit the cap — toast the user so the unresponsive + button is explained, then bail
-        if (typeof showOrloToast === 'function') {
-          var msg = stock < 10 ? 'Only ' + stock + ' left in stock' : 'Limit of 10 per order';
-          showOrloToast(msg, '', 'warning', 3000);
+        // Hit the cap — surface an editorial toast so the unresponsive + button is explained.
+        // (Was previously calling showOrloToast which never existed — silent failure.)
+        if (typeof orloToast === 'function') {
+          var msg = stock < 10 ? 'Only ' + stock + ' left in stock.' : 'Limit of 10 per order.';
+          var msgAr = stock < 10 ? 'متبقي ' + stock + ' فقط في المخزون.' : 'الحد الأقصى ١٠ لكل طلب.';
+          orloToast('warning', msg, msgAr, 3500);
         }
         return;
       }
