@@ -79,7 +79,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=86">
+    <link rel="stylesheet" href="styles.css?v=85">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -779,16 +779,16 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         body[data-cards="v2"] .card-img-track { display: flex; width: 100%; height: 100%; will-change: transform; touch-action: pan-y; }
         body[data-cards="v2"] .card-img-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
         /* Dots — matches PDP .mobile-dots register exactly (6px circle, no pill expansion).
-           White dot + subtle dark drop-shadow (Net-a-Porter / Mr Porter pattern) reads softer
-           than mix-blend-mode chroma shifts and keeps the dot readable on any image. */
+           mix-blend-mode: difference with white = auto-contrast against any underlying image.
+           White on dark photo XORs bright; white on cream photo XORs dark. Always visible. */
         body[data-cards="v2"] .card-img-dots {
           position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
           display: flex; gap: 6px; pointer-events: none; z-index: 3;
+          mix-blend-mode: difference;
         }
         body[data-cards="v2"] .card-img-dots span {
           width: 6px; height: 6px; border-radius: 50%;
-          background: #fff; opacity: 0.65;
-          box-shadow: 0 0 4px rgba(0,0,0,0.35);
+          background: #fff; opacity: 0.55;
           transition: opacity .25s ease;
         }
         body[data-cards="v2"] .card-img-dots span.active { opacity: 1; }
