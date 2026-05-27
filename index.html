@@ -773,7 +773,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         /* In-card image swipe with dots — Hermès convention. Mobile-only (dots hidden on desktop).
            The track holds N images side-by-side at 100% each; translate slides between them.
            Dots overlay bottom-centre, very subtle until interaction. */
-        body[data-cards="v2"] .card-img { position: relative; overflow: hidden; }
+        body[data-cards="v2"] .card-img { position: relative; overflow: hidden; touch-action: pan-y; }
         body[data-cards="v2"] .card-img-track { display: flex; width: 100%; height: 100%; will-change: transform; touch-action: pan-y; }
         body[data-cards="v2"] .card-img-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
         body[data-cards="v2"] .card-img-dots { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; pointer-events: none; z-index: 3; }
@@ -1448,11 +1448,11 @@ document.addEventListener('DOMContentLoaded', function(){
         dots.forEach(function(d, i){ d.classList.toggle('active', i === index); });
       }
 
+      // No setPointerCapture — the <a> is gone, so we don't need to claim the gesture against
+      // native link-drag. On Chrome Android, calling setPointerCapture during an active CSS
+      // transition can silently fail and drop the entire next gesture (per Gemini round 3).
       cardImg.addEventListener('pointerdown', function(e){
         if (e.pointerType === 'mouse' && e.button !== 0) return;
-        // Claim the gesture so Chrome Android doesn't hand the 2nd/3rd swipe to the
-        // parent <a>'s native link-drag (the reason the 1st swipe worked but the rest didn't).
-        try { cardImg.setPointerCapture(e.pointerId); } catch(_){}
         sx = e.clientX; sy = e.clientY;
         dx = 0; swiping = true; swiped = false;
       });
@@ -1460,38 +1460,52 @@ document.addEventListener('DOMContentLoaded', function(){
         if (!swiping) return;
         dx = e.clientX - sx;
         var dy = Math.abs(e.clientY - sy);
-        if (Math.abs(dx) > 14 && Math.abs(dx) > dy * 1.4) swiped = true;
+        if (Math.abs(dx) > 10 && Math.abs(dx) > dy * 1.2) swiped = true;
       });
-      cardImg.addEventListener('pointerup', function(e){
+      cardImg.addEventListener('pointerup', function(){
         if (!swiping) return;
         swiping = false;
-        try { cardImg.releasePointerCapture(e.pointerId); } catch(_){}
-        if (swiped && Math.abs(dx) > 40) go(dx < 0 ? index + 1 : index - 1);
-        else if (swiped) go(index); // snap back
+        if (swiped) {
+          if (Math.abs(dx) > 40) go(dx < 0 ? index + 1 : index - 1);
+          else go(index); // snap back
+        }
       });
-      cardImg.addEventListener('pointercancel', function(){ swiping = false; });
+      cardImg.addEventListener('pointercancel', function(){
+        swiping = false;
+        go(index); // re-settle in case touch was interrupted mid-drag
+      });
 
-      // On a real tap (no drag detected), navigate to PDP via JS — replaces the old <a> behaviour
-      // which Chrome Android was hijacking for native link drag, breaking the 2nd+ swipe.
-      if (link && link.dataset && link.dataset.href) {
+      // Tap-to-navigate (replaces the old <a href> behaviour) in capture phase.
+      if (link) {
         link.addEventListener('click', function(ev){
-          if (swiped) { swiped = false; return; } // just-completed swipe — eat the click, don't navigate
-          window.location.href = link.dataset.href;
-        });
+          if (swiped) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            swiped = false;
+          } else {
+            var href = link.getAttribute('data-href');
+            if (href) window.location.href = href;
+          }
+        }, true);
       }
     });
   }
-  // Force a re-render now and at intervals — covers the case where legacy renderProducts fired before our override + the async fetch that may complete after DOMContentLoaded
-  function rerender(){
+  // Watchdog: only re-render if the grid is EMPTY. Never blow away active user state
+  // (transforms, dot indices, mid-swipe gesture binding) — that was the reason swipes
+  // appeared to "stick" after the first one (per Gemini round 3).
+  function rerenderIfEmpty(){
+    var grid = document.getElementById('productsGrid');
+    if (!grid || grid.children.length > 0) return;
     if (typeof products !== 'undefined' && Array.isArray(products) && products.length){
       window.renderProducts(products, document.documentElement.lang === 'ar');
     }
   }
-  rerender();
-  setTimeout(rerender, 200);
-  setTimeout(rerender, 500);
-  setTimeout(rerender, 1200);
-  setTimeout(rerender, 2500);
+  rerenderIfEmpty();
+  setTimeout(rerenderIfEmpty, 100);
+  setTimeout(rerenderIfEmpty, 500);
+  setTimeout(rerenderIfEmpty, 1000);
+  setTimeout(rerenderIfEmpty, 1500);
+  setTimeout(rerenderIfEmpty, 2500);
 });
 </script>
 <script>
