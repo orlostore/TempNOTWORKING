@@ -1447,6 +1447,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
       cardImg.addEventListener('pointerdown', function(e){
         if (e.pointerType === 'mouse' && e.button !== 0) return;
+        // Claim the gesture so Chrome Android doesn't hand the 2nd/3rd swipe to the
+        // parent <a>'s native link-drag (the reason the 1st swipe worked but the rest didn't).
+        try { cardImg.setPointerCapture(e.pointerId); } catch(_){}
         sx = e.clientX; sy = e.clientY;
         dx = 0; swiping = true; swiped = false;
       });
@@ -1456,9 +1459,10 @@ document.addEventListener('DOMContentLoaded', function(){
         var dy = Math.abs(e.clientY - sy);
         if (Math.abs(dx) > 14 && Math.abs(dx) > dy * 1.4) swiped = true;
       });
-      cardImg.addEventListener('pointerup', function(){
+      cardImg.addEventListener('pointerup', function(e){
         if (!swiping) return;
         swiping = false;
+        try { cardImg.releasePointerCapture(e.pointerId); } catch(_){}
         if (swiped && Math.abs(dx) > 40) go(dx < 0 ? index + 1 : index - 1);
         else if (swiped) go(index); // snap back
       });
