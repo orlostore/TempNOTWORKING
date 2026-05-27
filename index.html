@@ -817,7 +817,26 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 
             /* FREE DELIVERY strip removed on desktop (mobile keeps it) */
             .hdr-thin-banner { display: none !important; }
+
+            /* Header utility icons get visible text labels on desktop only
+               (Hermès register — Search / Account / Bag inline). Mobile untouched. */
+            .hdr-v2-utility { gap: 22px !important; }
+            .hdr-v2 .hdr-icon { width: auto !important; padding: 6px 4px !important; gap: 8px !important; }
+            .hdr-v2 .hdr-icon .hdr-label {
+                display: inline !important;
+                font-family: 'DM Sans', sans-serif;
+                font-size: 0.72rem;
+                font-weight: 500;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: #1a3a52;
+                line-height: 1;
+            }
+            /* Bag count stays clipped to the SVG, not the label */
+            .hdr-v2 .hdr-bag-link { position: relative; }
         }
+        /* Default (mobile + everything <769px): labels hidden — header is untouched */
+        .hdr-label { display: none; }
     </style>
 </head>
 <body data-cards="v2">
@@ -833,9 +852,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     </a>
     <span class="hdr-edit-mark" aria-label="The Edit (coming soon)" style="pointer-events:none;cursor:default"><span class="the">The</span><span class="edit">Edit.</span></span>
     <div class="hdr-v2-utility">
-        <button class="hdr-icon" id="searchToggle" aria-label="Search products"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
-        <a href="account.html" class="hdr-icon hdr-account-link" id="accountLink" aria-label="Account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="2.8"/><path d="M6 21c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5"/></svg></a>
-        <a href="cart.html" class="hdr-icon hdr-bag-link" aria-label="Bag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 9h13l-1 12.5a.7.7 0 0 1-.7.5H7.2a.7.7 0 0 1-.7-.5L5.5 9z"/><path d="M9 9V6.5a3 3 0 0 1 6 0V9"/></svg><span class="hdr-bag-count" id="cartCount"></span></a>
+        <button class="hdr-icon" id="searchToggle" aria-label="Search products"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span class="hdr-label">Search</span></button>
+        <a href="account.html" class="hdr-icon hdr-account-link" id="accountLink" aria-label="Account"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="2.8"/><path d="M6 21c0-3 2.7-5.5 6-5.5s6 2.5 6 5.5"/></svg><span class="hdr-label">Account</span></a>
+        <a href="cart.html" class="hdr-icon hdr-bag-link" aria-label="Bag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 9h13l-1 12.5a.7.7 0 0 1-.7.5H7.2a.7.7 0 0 1-.7-.5L5.5 9z"/><path d="M9 9V6.5a3 3 0 0 1 6 0V9"/></svg><span class="hdr-bag-count" id="cartCount"></span><span class="hdr-label">Bag</span></a>
     </div>
 </header>
 <!-- Search drawer — slides down when search icon is tapped; keeps id="searchInput" so app.js search/autocomplete continues to work -->
