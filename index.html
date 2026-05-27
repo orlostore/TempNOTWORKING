@@ -763,6 +763,20 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         /* Popular Now title — centered per Hermès spotlight register (other section titles stay left-aligned) */
         #popular-now .homepage-section-title { text-align: center; }
 
+        /* In-card image swipe with dots — Hermès convention. Mobile-only (dots hidden on desktop).
+           The track holds N images side-by-side at 100% each; translate slides between them.
+           Dots overlay bottom-centre, very subtle until interaction. */
+        body[data-cards="v2"] .card-img { position: relative; overflow: hidden; }
+        body[data-cards="v2"] .card-img-track { display: flex; width: 100%; will-change: transform; touch-action: pan-y; }
+        body[data-cards="v2"] .card-img-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; display: block; }
+        body[data-cards="v2"] .card-img-dots { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; pointer-events: none; z-index: 3; }
+        body[data-cards="v2"] .card-img-dots span { width: 5px; height: 5px; border-radius: 50%; background: rgba(26,58,82,0.30); transition: background .25s ease, width .25s ease; }
+        body[data-cards="v2"] .card-img-dots span.active { background: #1a3a52; width: 16px; border-radius: 3px; }
+        /* Desktop has no touch — hide dots, no swipe functionality there */
+        @media (hover: hover) {
+          body[data-cards="v2"] .card-img-dots { display: none; }
+        }
+
         /* ═══ UNIFIED FOOTER (Customer Enquiries) — mirrors cart / login / signup pages ═══ */
         .cs-footer-section{background:#fff;padding:28px 32px;margin-top:var(--section-gap)}
         .cs-footer-inner{max-width:780px;margin:0 auto}
@@ -1334,13 +1348,36 @@ document.addEventListener('DOMContentLoaded', function(){
     grid.innerHTML = list.map(function(p, i){
       var safeName = esc(p.name||''), safeNameAr = esc(p.nameAr||''), safeSlug = encodeURIComponent(p.slug||'');
       var pdpHref = 'product.html?product='+safeSlug;
-      var isUrl = p.image && p.image.indexOf('http')===0;
-      var rawSrc = isUrl ? esc(p.image) : '';
-      var cdnSrc = rawSrc ? 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/'+rawSrc : '';
-      var imgAttrs = i<4 ? 'fetchpriority="'+(i===0?'high':'auto')+'"' : 'loading="lazy"';
-      var imgHTML = isUrl
-        ? '<img src="'+cdnSrc+'" alt="'+safeName+'" width="400" height="400" onerror="this.onerror=null;this.src=\''+rawSrc+'\'" '+imgAttrs+'>'
-        : '<div style="background:#efeae0"></div>';
+
+      // Collect every image URL the product carries (image, image2..image8) — for the in-card swipe carousel.
+      var imgs = [];
+      for (var k = 0; k < 8; k++) {
+        var key = k === 0 ? 'image' : 'image' + (k+1);
+        var src = p[key];
+        if (src && typeof src === 'string' && src.indexOf('http') === 0) imgs.push(src);
+      }
+      var imgsHTML;
+      if (imgs.length === 0) {
+        imgsHTML = '<div style="background:#efeae0;flex:0 0 100%;width:100%;height:100%"></div>';
+      } else {
+        imgsHTML = imgs.map(function(src, idx){
+          var rawSrc = esc(src);
+          var cdnSrc = 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_400,h_400,f_auto,q_auto/' + rawSrc;
+          var attrs;
+          if (idx === 0) {
+            attrs = i < 4 ? 'fetchpriority="' + (i === 0 ? 'high' : 'auto') + '"' : 'loading="lazy"';
+          } else {
+            attrs = 'loading="lazy"';
+          }
+          return '<img src="'+cdnSrc+'" alt="'+safeName+'" width="400" height="400" onerror="this.onerror=null;this.src=\''+rawSrc+'\'" '+attrs+'>';
+        }).join('');
+      }
+      var imgHTML = '<div class="card-img-track">'+imgsHTML+'</div>';
+      var dotsHTML = imgs.length > 1
+        ? '<div class="card-img-dots" aria-hidden="true">' + imgs.map(function(_, idx){
+            return '<span class="' + (idx === 0 ? 'active' : '') + '"></span>';
+          }).join('') + '</div>'
+        : '';
       var stock = p.totalStock!==undefined ? p.totalStock : (p.quantity||0);
       var isOOS = stock === 0;
       var badge = '';
@@ -1363,7 +1400,7 @@ document.addEventListener('DOMContentLoaded', function(){
       }
       var price = isOOS ? '<span class="price-soldout">Sold out</span>' : (p.price ? 'AED '+Number(p.price).toFixed(2) : '');
       return '<div class="card'+(isOOS?' oos is-soldout':'')+'">'+
-        '<a href="'+pdpHref+'" class="card-link"><div class="card-img">'+imgHTML+badge+'</div></a>'+
+        '<a href="'+pdpHref+'" class="card-link"><div class="card-img" data-img-count="'+imgs.length+'">'+imgHTML+badge+dotsHTML+'</div></a>'+
         '<div class="card-info">'+
           '<a href="'+pdpHref+'" class="card-info-text">'+
             '<div class="card-name">'+safeName+'</div>'+
@@ -1373,7 +1410,64 @@ document.addEventListener('DOMContentLoaded', function(){
         '</div>'+
       '</div>';
     }).join('');
+    // After render, wire the in-card swipe carousel on every multi-image card (mobile / touch only).
+    initCardSwipe(grid);
   };
+
+  // Hermès in-card swipe: horizontal drag changes image, vertical scroll passes through,
+  // tap (no drag detected) still navigates to PDP. Dots reflect position; only one tooltip per card.
+  function initCardSwipe(grid){
+    grid.querySelectorAll('.card-img[data-img-count]').forEach(function(cardImg){
+      if (cardImg._swipeInited) return;
+      var count = parseInt(cardImg.dataset.imgCount, 10);
+      if (!count || count < 2) return;
+      cardImg._swipeInited = true;
+      var track = cardImg.querySelector('.card-img-track');
+      var dots = cardImg.querySelectorAll('.card-img-dots span');
+      var link = cardImg.closest('.card-link');
+      var index = 0;
+      var startX = 0, startY = 0, dx = 0, dy = 0, swiping = false, swiped = false;
+
+      function go(n){
+        index = Math.max(0, Math.min(count - 1, n));
+        track.style.transition = 'transform .35s ease';
+        track.style.transform = 'translateX(-' + (index * 100) + '%)';
+        dots.forEach(function(d, i){ d.classList.toggle('active', i === index); });
+      }
+
+      cardImg.addEventListener('touchstart', function(e){
+        var t = e.touches[0];
+        startX = t.clientX; startY = t.clientY;
+        dx = 0; dy = 0;
+        swiping = true; swiped = false;
+      }, {passive:true});
+
+      cardImg.addEventListener('touchmove', function(e){
+        if (!swiping) return;
+        var t = e.touches[0];
+        dx = t.clientX - startX;
+        dy = Math.abs(t.clientY - startY);
+        // Threshold of 14px horizontal AND mostly-horizontal motion = treat as swipe
+        if (Math.abs(dx) > 14 && Math.abs(dx) > dy * 1.4) swiped = true;
+      }, {passive:true});
+
+      cardImg.addEventListener('touchend', function(){
+        swiping = false;
+        if (!swiped) return;
+        if (Math.abs(dx) > 50) {
+          go(dx < 0 ? index + 1 : index - 1);
+        }
+      });
+      cardImg.addEventListener('touchcancel', function(){ swiping = false; });
+
+      // Block the parent <a> from firing PDP navigation when a swipe just ended
+      if (link) {
+        link.addEventListener('click', function(ev){
+          if (swiped) { ev.preventDefault(); ev.stopPropagation(); swiped = false; }
+        }, true);
+      }
+    });
+  }
   // Force a re-render now and at intervals — covers the case where legacy renderProducts fired before our override + the async fetch that may complete after DOMContentLoaded
   function rerender(){
     if (typeof products !== 'undefined' && Array.isArray(products) && products.length){
