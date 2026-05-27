@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pill Consistency — Mockups</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a3a52;-webkit-font-smoothing:antialiased;line-height:1.6}
+.wrap{max-width:1280px;margin:0 auto;padding:48px 24px 96px}
+.head{text-align:center;border-bottom:1px solid rgba(26,58,82,0.10);padding-bottom:28px;margin-bottom:40px}
+.head h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:3rem;line-height:1.05}
+.head h1 em{color:#e76f51}
+.head p{font-family:'DM Sans',sans-serif;font-size:.92rem;color:#6b6b6b;margin-top:14px;max-width:640px;margin-left:auto;margin-right:auto}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:8px}
+@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.col{background:#fff;border:1px solid rgba(26,58,82,0.10);padding:28px 26px}
+.col h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.6rem;border-bottom:1px solid rgba(26,58,82,0.10);padding-bottom:12px;margin-bottom:22px}
+.col h2 em{color:#e76f51}
+.row{margin:22px 0;padding:18px 0;border-top:1px solid rgba(26,58,82,0.06)}
+.row:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.row-label{font-family:'DM Sans',sans-serif;font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline}
+.row-label .dims{font-size:.6rem;letter-spacing:.04em;text-transform:none;color:#9aa5ad}
+.surface{background:#f8f6f2;padding:18px 14px;display:flex;align-items:center;justify-content:center;min-height:80px}
+
+/* ─── EXISTING STYLES (LEFT COLUMN — as currently on the live site) ─── */
+.existing-cart-stepper{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(26,58,82,0.20);border-radius:12px;padding:3px 8px;height:32px}
+.existing-cart-stepper button{width:20px;height:20px;border-radius:50%;background:transparent;border:none;color:#1a3a52;font-size:14px;cursor:pointer;padding:0;line-height:1;font-family:inherit}
+.existing-cart-stepper .num{font-size:14px;min-width:18px;text-align:center;font-weight:500}
+
+.existing-pdp-stepper{display:flex;align-items:stretch;justify-content:center;width:175px;height:48px;background:linear-gradient(135deg,#e76f51 0%,#d55f43 100%);border:1.5px solid #c9603e;border-radius:12px;overflow:hidden;color:#fff;font-family:'DM Sans',sans-serif}
+.existing-pdp-stepper button{flex:1;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;font-weight:600}
+.existing-pdp-stepper .num{flex:1;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;border-left:1px solid rgba(255,255,255,0.18);border-right:1px solid rgba(255,255,255,0.18)}
+
+.existing-card-stepper{display:flex;align-items:stretch;justify-content:center;width:180px;height:38px;background:linear-gradient(135deg,#e76f51 0%,#d55f43 100%);border:1.5px solid #c9603e;border-radius:12px;overflow:hidden;color:#fff;font-family:'DM Sans',sans-serif}
+.existing-card-stepper button{flex:1;background:transparent;border:none;color:#fff;font-size:16px;cursor:pointer;font-weight:600}
+.existing-card-stepper .num{flex:1;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;border-left:1px solid rgba(255,255,255,0.18);border-right:1px solid rgba(255,255,255,0.18)}
+
+.existing-checkout-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;background:#1a3a52;color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.12em;cursor:pointer;text-transform:uppercase}
+
+/* ─── UNIFIED STYLE (RIGHT COLUMN — everything matches the modified cart stepper register) ─── */
+/* Editorial pill: white fill, navy 1px outline, 12px radius — same shape language everywhere */
+.unified-stepper{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(26,58,82,0.20);border-radius:12px;padding:3px 8px;height:32px}
+.unified-stepper.h-md{height:38px;padding:4px 10px;gap:10px}
+.unified-stepper.h-lg{height:48px;padding:6px 14px;gap:14px}
+.unified-stepper button{width:20px;height:20px;border-radius:50%;background:transparent;border:none;color:#1a3a52;font-size:14px;cursor:pointer;padding:0;line-height:1;font-family:inherit}
+.unified-stepper.h-md button{width:24px;height:24px;font-size:16px}
+.unified-stepper.h-lg button{width:28px;height:28px;font-size:18px}
+.unified-stepper .num{font-size:14px;min-width:18px;text-align:center;font-weight:500}
+.unified-stepper.h-md .num{font-size:15px;min-width:24px}
+.unified-stepper.h-lg .num{font-size:17px;min-width:28px}
+
+.unified-checkout-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 24px;background:#fff;color:#1a3a52;border:1px solid rgba(26,58,82,0.20);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.12em;cursor:pointer;text-transform:uppercase}
+.unified-checkout-btn.primary{background:#1a3a52;color:#fff;border-color:#1a3a52}
+
+/* Notes panel */
+.notes{margin-top:48px;padding:24px 28px;background:#fff;border:1px solid rgba(26,58,82,0.10)}
+.notes h3{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;margin-bottom:14px}
+.notes p,.notes li{font-family:'DM Sans',sans-serif;font-size:.88rem;line-height:1.7;color:#1a3a52}
+.notes ul{padding-left:20px;margin-top:10px}
+.notes li{margin:6px 0}
+.notes code{background:#f8f6f2;padding:2px 8px;border-radius:4px;font-size:.82rem;font-family:'DM Sans',sans-serif}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="head">
+    <h1>Pill <em>Consistency.</em></h1>
+    <p>Side-by-side: every quantity stepper and round-rect button on the site, rendered as it lives today (left) and as it would look if unified to the cart-stepper register (right).</p>
+  </header>
+
+  <div class="cols">
+
+    <!-- LEFT: EXISTING -->
+    <div class="col">
+      <h2>Existing — <em>different per surface</em></h2>
+
+      <div class="row">
+        <div class="row-label"><span>Cart page</span><span class="dims">h 32 · r 12 · white outline</span></div>
+        <div class="surface">
+          <div class="existing-cart-stepper">
+            <button>−</button>
+            <span class="num">1</span>
+            <button>+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-label"><span>PDP buybox (desktop)</span><span class="dims">h 48 · r 12 · coral gradient</span></div>
+        <div class="surface">
+          <div class="existing-pdp-stepper">
+            <button>−</button>
+            <span class="num">1</span>
+            <button>+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-label"><span>Product card (transformed)</span><span class="dims">h 38 · r 12 · coral gradient</span></div>
+        <div class="surface">
+          <div class="existing-card-stepper">
+            <button>−</button>
+            <span class="num">1</span>
+            <button>+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-label"><span>Cart Sign In / As Guest</span><span class="dims">r 8 · navy fill · DM Sans 0.78rem</span></div>
+        <div class="surface" style="gap:12px">
+          <button class="existing-checkout-btn">🔒 SIGN IN</button>
+          <button class="existing-checkout-btn">👤 AS GUEST</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: UNIFIED -->
+    <div class="col">
+      <h2>Unified — <em>cart stepper register everywhere</em></h2>
+
+      <div class="row">
+        <div class="row-label"><span>Cart page</span><span class="dims">h 32 · r 12 · white outline (UNCHANGED)</span></div>
+        <div class="surface">
+          <div class="unified-stepper">
+            <button>−</button>
+            <span class="num">1</span>
+            <button>+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-label"><span>PDP buybox (desktop)</span><span class="dims">h 48 · r 12 · white outline (was coral)</span></div>
+        <div class="surface">
+          <div class="unified-stepper h-lg">
+            <button>−</button>
+            <span class="num">1</span>
+            <button>+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-label"><span>Product card (transformed)</span><span class="dims">h 38 · r 12 · white outline (was coral)</span></div>
+        <div class="surface">
+          <div class="unified-stepper h-md">
+            <button>−</button>
+            <span class="num">1</span>
+            <button>+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-label"><span>Cart Sign In / As Guest</span><span class="dims">r 12 (was 8) · keep navy primary + cream secondary for variety</span></div>
+        <div class="surface" style="gap:12px">
+          <button class="unified-checkout-btn primary">🔒 SIGN IN</button>
+          <button class="unified-checkout-btn">👤 AS GUEST</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="notes">
+    <h3>Trade-offs</h3>
+    <p><strong>Existing (left)</strong> uses two visual languages on purpose: the editorial cart stepper (subtle, calm) for managing items already in the cart, vs. the coral CTA stepper (loud, brand-coloured) on product cards + PDP where the customer is being asked to act. The split signals "you've decided" vs. "decide now."</p>
+    <p><strong>Unified (right)</strong> applies the modified cart-stepper register everywhere — white fill, navy outline, 12px radius — only the height changes per context (32 / 38 / 48). Pros: one identity, more refined, very Hermès. Cons: loses the coral "you just added something!" affordance on product cards, which was helping signal "this item is now in your cart."</p>
+    <ul>
+      <li>If you go unified, the product card needs <em>another</em> signal that the item was added — maybe a small coral dot next to the quantity number, or a brief coral pulse animation when first transformed.</li>
+      <li>The radius (12px) is now consistent across all steppers regardless of which direction you choose — that part's already done.</li>
+      <li>SIGN IN / AS GUEST currently use 8px radius. Raising to 12px aligns them with the steppers; keeping at 8px keeps them feeling like separate decision buttons (slightly different shape language). Mild preference for 12px.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
