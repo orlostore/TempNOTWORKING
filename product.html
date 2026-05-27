@@ -103,7 +103,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #popularScroll{min-height:240px}
 #newArrivalsGrid{min-height:240px}
   </style>
-  <link rel="stylesheet" href="styles.css?v=85">
+  <link rel="stylesheet" href="styles.css?v=86">
   <style>
       .inline-icon { width: 1em; height: 1em; vertical-align: -0.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; display: inline-block; }
       .close-cart svg, .gallery-close svg { width: 1.2rem; height: 1.2rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
@@ -357,11 +357,11 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   }
   /* Re-establish the white card backgrounds we want */
   .mobile-product-header,.mobile-carousel-container,.mobile-details-section,.product-details{background:#fff!important}
-  /* Dots — overlay on image at center-bottom (Hermès). mix-blend-mode: difference + white
-     gives auto-contrast against any underlying photo, matches homepage cards exactly. */
+  /* Dots — overlay on image at center-bottom (Hermès). White + subtle dark drop-shadow
+     keeps dots readable on any photo without the chroma shift of mix-blend-mode. */
   .mobile-carousel-box{position:relative!important}
-  .mobile-dots{position:absolute!important;bottom:12px!important;left:50%!important;transform:translateX(-50%)!important;background:transparent!important;padding:0!important;z-index:5!important;display:flex!important;gap:6px!important;width:auto!important;mix-blend-mode:difference!important}
-  .mobile-dots > *{background:#fff!important;width:6px!important;height:6px!important;border-radius:50%!important;opacity:0.55!important;transition:opacity .25s ease!important}
+  .mobile-dots{position:absolute!important;bottom:12px!important;left:50%!important;transform:translateX(-50%)!important;background:transparent!important;padding:0!important;z-index:5!important;display:flex!important;gap:6px!important;width:auto!important}
+  .mobile-dots > *{background:#fff!important;width:6px!important;height:6px!important;border-radius:50%!important;opacity:0.65!important;box-shadow:0 0 4px rgba(0,0,0,0.35)!important;transition:opacity .25s ease!important}
   .mobile-dots > *.active{background:#fff!important;opacity:1!important}
 
   /* Disable footer auto-hide on scroll (product.js adds .nav-hidden — revert it) */
