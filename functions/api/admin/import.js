@@ -138,7 +138,14 @@ export async function onRequestGet(context) {
                 errors.push({ slug: row.slug, error: e.message });
             }
         }
-        
+
+        // Invalidate the public products KV cache so the next /api/products read
+        // rebuilds from D1 and includes the newly imported rows. Without this,
+        // newly-imported products are invisible to PDP / reorder for up to 5min.
+        if (env.PRODUCTS_CACHE && (imported > 0 || updated > 0)) {
+            try { await env.PRODUCTS_CACHE.delete('all_products_data'); } catch (e) { /* non-fatal */ }
+        }
+
         return new Response(JSON.stringify({
             success: true,
             imported: imported,

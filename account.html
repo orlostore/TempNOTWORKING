@@ -1207,7 +1207,10 @@
             if (btn) { btn.disabled = true; btn.innerHTML = 'Adding…'; }
 
             try {
-                const res = await fetch('/api/products');
+                // cache: 'no-store' is critical here — mobile Chrome was hanging onto an older
+                // /api/products response from before the most recent products were added,
+                // making reorder think they were "no longer available". PDP already uses this flag.
+                const res = await fetch('/api/products', { cache: 'no-store' });
                 if (!res.ok) throw new Error('Failed to fetch products');
                 const products = await res.json();
 
@@ -1223,16 +1226,16 @@
                     const variantName = parts.length > 1 ? parts.slice(1).join(' — ').trim() : null;
 
                     const product = products.find(p => p.name === productName);
-                    if (!product) { skipped.push(item.name + ' [DEBUG:not_found productsLen=' + products.length + ' lookingFor="' + productName + '"]'); continue; }
+                    if (!product) { skipped.push(item.name); continue; }
 
                     let variant = null;
                     if (variantName && product.variants && product.variants.length > 0) {
                         variant = product.variants.find(v => v.name === variantName);
-                        if (!variant) { skipped.push(item.name + ' [DEBUG:variant_not_found vName="' + variantName + '"]'); continue; }
+                        if (!variant) { skipped.push(item.name); continue; }
                     }
 
                     const stockQty = variant ? variant.quantity : product.quantity;
-                    if (stockQty === 0) { skipped.push(item.name + ' [DEBUG:stock_zero qty=' + product.quantity + ' totalStock=' + product.totalStock + ']'); continue; }
+                    if (stockQty === 0) { skipped.push(item.name); continue; }
 
                     const existing = variant
                         ? cart.find(c => c.id === product.id && c.variantId === variant.id)
@@ -1241,7 +1244,7 @@
                     const currentInCart = existing ? existing.quantity : 0;
                     const maxAllowed = Math.min(10, stockQty);
                     const canAdd = Math.min(item.quantity, maxAllowed - currentInCart);
-                    if (canAdd <= 0) { skipped.push(item.name + ' [DEBUG:canAdd=' + canAdd + ' itemQty=' + item.quantity + ' inCart=' + currentInCart + ' stock=' + stockQty + ']'); continue; }
+                    if (canAdd <= 0) { skipped.push(item.name); continue; }
 
                     if (existing) {
                         existing.quantity += canAdd;
