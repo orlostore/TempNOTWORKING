@@ -1408,11 +1408,8 @@ document.addEventListener('DOMContentLoaded', function(){
         bag = '<button class="card-bag" aria-label="Add to bag" onclick="'+act+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></button>';
       }
       var price = isOOS ? '<span class="price-soldout">Sold out</span>' : (p.price ? 'AED '+Number(p.price).toFixed(2) : '');
-      // TEMP DIAGNOSTIC: tells us at a glance if the v2 render override ran AND how many images each product has.
-      // Remove once dots/swipe are confirmed working.
-      var dbg = '<div style="position:absolute;top:6px;right:6px;background:#1a3a52;color:#fff;font:600 9px/1 monospace;padding:3px 5px;letter-spacing:0;z-index:9;pointer-events:none">v2 · imgs='+imgs.length+'</div>';
       return '<div class="card'+(isOOS?' oos is-soldout':'')+'">'+
-        '<a href="'+pdpHref+'" class="card-link"><div class="card-img" data-img-count="'+imgs.length+'">'+imgHTML+badge+dotsHTML+dbg+'</div></a>'+
+        '<a href="'+pdpHref+'" class="card-link"><div class="card-img" data-img-count="'+imgs.length+'">'+imgHTML+badge+dotsHTML+'</div></a>'+
         '<div class="card-info">'+
           '<a href="'+pdpHref+'" class="card-info-text">'+
             '<div class="card-name">'+safeName+'</div>'+
