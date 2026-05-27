@@ -55,24 +55,34 @@ function escapeHTML(str) {
  * @param {number} [duration=4000]
  */
 function orloToast(type, title, msg, duration) {
-    duration = duration || 4000;
+    // Editorial register: no coloured circle icon, no progress bar.
+    // State is signalled by the coloured left-border + coloured accent rule
+    // under the italic title. 4th arg accepts a number (duration in ms) or
+    // an options object { mini: true, duration: ms }. Mini = single italic
+    // line, no body, no accent rule \u2014 for trivial confirmations.
+    var miniMode = false;
+    var dur = 4000;
+    if (typeof duration === 'number') dur = duration;
+    else if (typeof duration === 'object' && duration !== null) {
+        miniMode = !!duration.mini;
+        if (typeof duration.duration === 'number') dur = duration.duration;
+    }
     const container = document.getElementById('orloToastContainer');
     if (!container) return;
-    const icons = { success: '\u2713', error: '\u2717', warning: '!' };
     const toast = document.createElement('div');
-    toast.className = 'orlo-toast';
+    toast.className = 'orlo-toast ' + (type || '') + (miniMode ? ' mini' : '');
+    var bodyInner = '<div class="orlo-toast-title">' + escapeHTML(title) + '</div>';
+    if (!miniMode && msg) {
+        bodyInner +=
+            '<div class="orlo-toast-accent"></div>' +
+            '<div class="orlo-toast-msg">' + escapeHTML(msg).replace(/\n/g, '<br>') + '</div>';
+    }
     toast.innerHTML =
-        '<div class="orlo-toast-icon ' + type + '">' + (icons[type] || '') + '</div>' +
-        '<div class="orlo-toast-body">' +
-            '<div class="orlo-toast-title">' + escapeHTML(title) + '</div>' +
-            '<div class="orlo-toast-msg">' + escapeHTML(msg).replace(/\n/g, '<br>') + '</div>' +
-        '</div>' +
-        '<button class="orlo-toast-close" aria-label="Close">\u00d7</button>' +
-        '<div class="orlo-toast-progress ' + type + '" style="animation-duration:' + duration + 'ms"></div>';
+        '<div class="orlo-toast-body">' + bodyInner + '</div>' +
+        '<button class="orlo-toast-close" aria-label="Close">\u00d7</button>';
     toast.querySelector('.orlo-toast-close').onclick = function() { removeOrloToast(toast); };
     container.appendChild(toast);
-    var timer = setTimeout(function() { removeOrloToast(toast); }, duration);
-    toast._timer = timer;
+    toast._timer = setTimeout(function() { removeOrloToast(toast); }, dur);
 }
 
 function removeOrloToast(toast) {
