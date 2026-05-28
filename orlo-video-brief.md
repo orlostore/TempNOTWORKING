@@ -1,4 +1,4 @@
-# ORLO REEL — UPDATED SPEC (v3 elevation — May 2026)
+# ORLO REEL — UPDATED SPEC (v3.1 — price-on-cover, May 2026)
 
 You are building a vertical reel/TikTok video for ORLO Store. This spec OVERRIDES anything from prior conversations. Follow exactly.
 
@@ -68,13 +68,32 @@ Cream `#F8F6F2` background, stacked top to bottom:
 - 1.5–2.0s: Logo shrinks to top-left corner park; coral mini-line appears left-aligned under it
 - 2.0–6.0s: Main scene, EN headline (Cormorant italic 500, 72–80pt navy, upper-left, max 2 lines)
 - 6.0–10.0s: Same scene continues, headline swaps to AR (Almarai 700 @ 88% opacity, 60–66pt navy)
-- 10.0–14.0s: Optional second beat or product detail close-up
+- **10.0–14.0s: Price-reveal beat (also the IG/TikTok cover-pick window). See section below.**
 - 14.0–16.0s: End card (v3 layout above)
+
+## Price-reveal beat — 10.0–14.0s (NEW in v3.1)
+This beat exists so the still-frame **cover** that IG and TikTok show on the feed includes the price. Without it, viewers scroll past without ever seeing what the product costs.
+
+- Headline area is **cleared** — no EN, no AR text. Let the product breathe.
+- Product is shown clean (same scene continuing, or a close-up — your choice per concept).
+- **Price element appears at frame 10.0s** and holds steady until 14.0s.
+
+**Price treatment (LOCKED — Hermès register, NOT a marketing badge):**
+- **Coral hairline divider** — 80 × 2 px, coral `#E76F51`, centred horizontally on the price column.
+- **Price text** — "AED 119" — **Cormorant Garamond italic 500**, **72pt**, navy `#1A3A52`. Centred under the hairline. The numerals appear directly — no brackets, no quotes, no currency badge box.
+- **Tiny AR price echo** (optional but recommended) — "د.إ ١١٩" — Almarai 700 @ 70% opacity, 32pt, navy, **directly below the EN price**, centred. The Arabic numerals are Eastern Arabic (٠١٢٣٤٥٦٧٨٩), not Latin.
+- **Vertical placement**: price column centred horizontally, vertical centre at y ≈ 1400 (lower-third of frame so the product still has the upper two-thirds for the hero shot).
+- **No background, no card, no shadow, no border.** The price sits naked on the scene like a printed magazine price tag.
+
+**Cover-pick guidance for IG / TikTok upload:**
+- IG: when uploading the Reel, set the cover frame to **~12.0s** (mid-price-reveal). The cover thumbnail on the feed will show product + price + corner-parked logo.
+- TikTok: same — slide the cover picker to ~12.0s.
+- This produces a single cover image where a passive scroller already knows: brand, product, price, and that it's bilingual.
 
 ## Visual rules (LOCKED)
 - Hard cuts only — no crossfades between scenes
 - Logo rock-solid throughout at 100% opacity once parked
-- **NO price during scenes** — price lives only on end card
+- **Price appears ONLY in the 10–14s price-reveal beat and on the end card.** Never in the 2–10s headline beats.
 - **NO CTA text during scenes** — CTA lives only in the end-card pill
 - Bilingual SEQUENTIAL (see above) — never stacked at headline sizes
 - Pacing: 15–16s. Don't overstuff.
@@ -90,6 +109,10 @@ Cream `#F8F6F2` background, stacked top to bottom:
 DO NOT start rendering until the concept is confirmed. Render all 480 frames in one go.
 
 ---
+
+## v3.1 changelog vs v3
+- **NEW: Price-reveal beat at 10–14s** with locked Hermès-register treatment (coral hairline + Cormorant italic 500 navy + optional Eastern-Arabic numeral echo). This is the IG/TikTok cover-pick window — viewer sees product + price on the feed thumbnail without playing the video.
+- "NO price during scenes" rule relaxed to "NO price in the 2–10s headline beats" — price is now allowed (and required) in the 10–14s reveal.
 
 ## v3 changelog vs v2
 - Cormorant italic weight **300 → 500** (was breaking at downsample, looked thin vs Arabic)
