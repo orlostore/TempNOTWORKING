@@ -9,28 +9,30 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
     <style>html{opacity:0;transition:opacity .15s}</style>
     <script>Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,1500)})]).then(function(){document.documentElement.style.opacity='1'})</script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --primary: #2c4a5c;
-            --accent: #e07856;
-            --accent-hover: #c96644;
+            --primary: #1a3a52;
+            --accent: #e76f51;
+            --accent-hover: #d05e42;
             --success: #28a745;
             --warning: #ffc107;
             --danger: #dc3545;
-            --bg: #f8f9fa;
+            --bg: #f8f6f2;
             --white: #ffffff;
-            --text: #333;
-            --text-light: #666;
-            --border: #e0e0e0;
+            --text: #1a3a52;
+            --text-light: #6b6b6b;
+            --soft: #9aa5ad;
+            --hairline: #e4ddd1;
+            --border: rgba(26,58,82,0.10);
         }
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'DM Sans', 'Segoe UI', Arial, sans-serif;
             background: var(--bg);
             min-height: 100vh;
             color: var(--text);
@@ -38,35 +40,41 @@
         
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
-        /* Header */
+        /* Header — site-matched lockup (small logo + hairline + Cormorant wordmark) */
         header {
-            background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 12px;
+            background: var(--white);
+            color: var(--primary);
+            padding: 14px 28px;
             margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(44, 74, 92, 0.3);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 12px;
         }
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .header-brand img {
-            width: 50px;
-            height: 50px;
-        }
-        .header-brand h1 {
+        .header-brand { display: flex; align-items: center; gap: 14px; }
+        .header-brand .logo-img { height: 40px; width: auto; display: block; flex-shrink: 0; }
+        .header-brand .sep { width: 1px; height: 28px; background: rgba(26,58,82,0.25); display: inline-block; }
+        .header-brand .wordmark {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
             font-size: 1.4rem;
-            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--primary);
+            line-height: 1;
         }
-        .header-brand span {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            font-weight: 400;
+        .header-brand .wordmark span { color: var(--accent); }
+        .header-brand .tagline {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-left: 14px;
+            padding-left: 14px;
+            border-left: 1px solid var(--border);
         }
         .header-actions { display: flex; gap: 10px; }
         
@@ -75,26 +83,27 @@
             display: flex;
             gap: 0;
             margin-bottom: 25px;
-            background: white;
-            border-radius: 12px;
+            background: var(--white);
+            border: 1px solid var(--border);
             padding: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
         .tab {
-            padding: 12px 30px;
+            padding: 12px 24px;
             border: none;
             background: transparent;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
             color: var(--text-light);
-            border-radius: 8px;
             transition: all 0.2s;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .tab:hover { background: #f0f0f0; }
+        .tab:hover { background: rgba(26,58,82,0.04); color: var(--primary); }
         .tab.active {
             background: var(--primary);
             color: white;
@@ -356,8 +365,8 @@
         }
         .btn-primary { background: var(--accent); color: white; }
         .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
-        .btn-secondary { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.25); }
+        .btn-secondary { background: transparent; color: var(--primary); border: 1px solid rgba(26,58,82,0.20); }
+        .btn-secondary:hover { background: rgba(26,58,82,0.04); border-color: var(--primary); }
         .btn-success { background: var(--success); color: white; }
         .btn-success:hover { background: #218838; }
         .btn-danger { background: var(--danger); color: white; }
@@ -472,7 +481,11 @@
             gap: 15px;
         }
         .table-header h2 {
-            font-size: 1.1rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-weight: 500;
             color: var(--primary);
             display: flex;
             align-items: center;
@@ -749,37 +762,53 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Auth screen */
+        /* Auth screen — site-matched editorial lockup */
         .auth-screen {
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--primary) 0%, #1e3d4d 100%);
+            background: var(--bg);
             padding: 20px;
         }
         .auth-box {
-            background: white;
-            padding: 50px 40px;
-            border-radius: 16px;
+            background: var(--white);
+            padding: 48px 40px 40px;
+            border: 1px solid var(--border);
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             max-width: 400px;
             width: 100%;
         }
-        .auth-box img {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
+        .auth-box .lockup {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 28px;
         }
-        .auth-box h1 {
-            margin-bottom: 10px;
+        .auth-box .lockup .logo-img { height: 48px; width: auto; display: block; }
+        .auth-box .lockup .sep { width: 1px; height: 32px; background: rgba(26,58,82,0.25); display: inline-block; }
+        .auth-box .lockup .wordmark {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.7rem;
+            letter-spacing: 0.1em;
             color: var(--primary);
-            font-size: 1.5rem;
+            line-height: 1;
+        }
+        .auth-box .lockup .wordmark span { color: var(--accent); }
+        .auth-box h1 {
+            margin: 0 0 10px;
+            color: var(--text-light);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            font-weight: 500;
         }
         .auth-box p {
             color: var(--text-light);
-            margin-bottom: 25px;
+            margin-bottom: 28px;
             font-size: 0.9rem;
         }
         .auth-box input {
@@ -1320,8 +1349,12 @@
     <!-- Auth Screen -->
     <div class="auth-screen" id="authScreen">
         <div class="auth-box">
-            <img src="logo.png" alt="ORLO" onerror="this.style.display='none'">
-            <h1>ORLO Admin</h1>
+            <div class="lockup">
+                <img src="logo.png" alt="ORLO" class="logo-img" onerror="this.style.display='none'">
+                <div class="sep"></div>
+                <div class="wordmark">ORL<span>O</span></div>
+            </div>
+            <h1>Admin Access</h1>
             <p>Enter your admin key to continue</p>
             <input type="password" id="authKey" placeholder="Admin Key">
             <button class="btn btn-primary" onclick="authenticate()">Login</button>
@@ -1333,11 +1366,10 @@
     <div class="container" id="adminPanel" style="display:none;">
         <header>
             <div class="header-brand">
-                <img src="logo.png" alt="ORLO" onerror="this.outerHTML='<span style=font-size:2rem>📦</span>'">
-                <div>
-                    <h1>ORLO Admin</h1>
-                    <span>Inventory Management System</span>
-                </div>
+                <img src="logo.png" alt="ORLO" class="logo-img" onerror="this.style.display='none'">
+                <div class="sep"></div>
+                <div class="wordmark">ORL<span>O</span></div>
+                <div class="tagline">Admin</div>
             </div>
             <div class="header-actions">
                 <div id="headerDateTime" style="text-align:right;font-size:0.8rem;opacity:0.9;line-height:1.4;"></div>
@@ -1347,34 +1379,34 @@
                 </div>
                 <button class="btn btn-primary" onclick="openAddModal()">+ Add Product</button>
                 <button class="btn btn-secondary" onclick="refreshProducts()">Refresh</button>
-                <button class="btn btn-secondary" onclick="openHeroesModal()" title="Manage homepage hero / banner">🖼️ Heroes</button>
-                <button class="btn btn-secondary" onclick="openSpecPromptModal()" title="Generate Gemini dimension overlay prompt for any product">📐 Spec Prompt</button>
-                <button class="btn btn-secondary" onclick="openCleanCataloguePromptModal()" title="Generate Gemini prompt to clean raw photos: remove background + place on warm beige #E5DCCF + WebP output">🪞 Clean Catalogue</button>
-                <button class="btn btn-secondary" onclick="openLifestylePromptModal()" title="Generate Gemini editorial lifestyle prompt — product in a styled scene for Popular Now / hero / IG / TikTok">🎬 Lifestyle</button>
-                <a class="btn btn-secondary" href="brand-guide.html" target="_blank" rel="noopener" title="Product image guide — site, IG, TikTok specs + blank canvas templates">📐 Brand Guide</a>
-                <a class="btn btn-secondary" href="orlo-video-brief.md" target="_blank" rel="noopener" title="Copy-paste brief for a fresh Claude chat to build a Reel / TikTok — locked v3 spec">🎬 Video Brief</a>
+                <button class="btn btn-secondary" onclick="openHeroesModal()" title="Manage homepage hero / banner">Heroes</button>
+                <button class="btn btn-secondary" onclick="openSpecPromptModal()" title="Generate Gemini dimension overlay prompt for any product">Spec Prompt</button>
+                <button class="btn btn-secondary" onclick="openCleanCataloguePromptModal()" title="Generate Gemini prompt to clean raw photos: remove background + place on warm beige #E5DCCF + WebP output">Clean Catalogue</button>
+                <button class="btn btn-secondary" onclick="openLifestylePromptModal()" title="Generate Gemini editorial lifestyle prompt — product in a styled scene for Popular Now / hero / IG / TikTok">Lifestyle</button>
+                <a class="btn btn-secondary" href="brand-guide.html" target="_blank" rel="noopener" title="Product image guide — site, IG, TikTok specs + blank canvas templates">Brand Guide</a>
+                <a class="btn btn-secondary" href="orlo-video-brief.md" target="_blank" rel="noopener" title="Copy-paste brief for a fresh Claude chat to build a Reel / TikTok — locked v3 spec">Video Brief</a>
             </div>
         </header>
 
         <!-- Delivery Fees -->
         <div style="display:flex;gap:15px;margin-bottom:20px;flex-wrap:wrap;">
             <div style="background:white;border-radius:10px;padding:14px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:10px;">
-                <label style="font-weight:600;font-size:0.85rem;color:var(--text);white-space:nowrap;">🏙️ City Area Fee</label>
+                <label style="font-weight:600;font-size:0.85rem;color:var(--text);white-space:nowrap;">City Area Fee</label>
                 <input type="number" id="deliveryFeeCity" step="0.01" min="0" placeholder="0" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;font-weight:600;text-align:center;" oninput="saveDeliveryFees()">
                 <span style="font-size:0.8rem;color:var(--text-light);">AED</span>
             </div>
             <div style="background:white;border-radius:10px;padding:14px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:10px;">
-                <label style="font-weight:600;font-size:0.85rem;color:var(--text);white-space:nowrap;">🏜️ Rural Area Fee</label>
+                <label style="font-weight:600;font-size:0.85rem;color:var(--text);white-space:nowrap;">Rural Area Fee</label>
                 <input type="number" id="deliveryFeeRural" step="0.01" min="0" placeholder="0" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;font-weight:600;text-align:center;" oninput="saveDeliveryFees()">
                 <span style="font-size:0.8rem;color:var(--text-light);">AED</span>
             </div>
             <div style="background:white;border-radius:10px;padding:14px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:10px;">
-                <label style="font-weight:600;font-size:0.85rem;color:var(--text);white-space:nowrap;">📦 Unified Delivery Charge</label>
+                <label style="font-weight:600;font-size:0.85rem;color:var(--text);white-space:nowrap;">Unified Delivery Charge</label>
                 <input type="number" id="unifiedDeliveryCharge" step="0.01" min="0" placeholder="0" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;font-weight:600;text-align:center;" oninput="saveDeliveryFees()">
                 <span style="font-size:0.8rem;color:var(--text-light);">AED</span>
             </div>
             <div style="background:white;border-radius:10px;padding:14px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:10px;">
-                <label style="font-weight:600;font-size:0.85rem;color:var(--text);white-space:nowrap;">🎁 Free Delivery Threshold</label>
+                <label style="font-weight:600;font-size:0.85rem;color:var(--text);white-space:nowrap;">Free Delivery Threshold</label>
                 <input type="number" id="freeDeliveryThreshold" step="0.01" min="0" placeholder="75" style="width:80px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;font-weight:600;text-align:center;" oninput="saveDeliveryFees()">
                 <span style="font-size:0.8rem;color:var(--text-light);">AED</span>
             </div>
@@ -1413,13 +1445,13 @@
 
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('products')">📦 Products</button>
-            <button class="tab" onclick="switchTab('orders')">📋 Orders <span class="tab-badge" id="pendingOrdersBadge">0</span></button>
-            <button class="tab" onclick="switchTab('analytics')">📊 Analytics</button>
-            <button class="tab" onclick="switchTab('activity')">📝 Activity</button>
-            <button class="tab" onclick="switchTab('stripe')">💳 Stripe Fees</button>
-            <button class="tab" onclick="switchTab('delivery')">🚚 Delivery Fees</button>
-            <button class="tab" onclick="switchTab('settings')">⚙️ Settings</button>
+            <button class="tab active" onclick="switchTab('products')">Products</button>
+            <button class="tab" onclick="switchTab('orders')">Orders <span class="tab-badge" id="pendingOrdersBadge">0</span></button>
+            <button class="tab" onclick="switchTab('analytics')">Analytics</button>
+            <button class="tab" onclick="switchTab('activity')">Activity</button>
+            <button class="tab" onclick="switchTab('stripe')">Stripe Fees</button>
+            <button class="tab" onclick="switchTab('delivery')">Delivery Fees</button>
+            <button class="tab" onclick="switchTab('settings')">Settings</button>
         </div>
 
         <!-- Products Tab -->
@@ -1499,13 +1531,13 @@
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>📦 Product</label>
+                    <label>Product</label>
                     <select id="productFilter" onchange="applyFilters()">
                         <option value="all">All Products</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>🚚 Shipping</label>
+                    <label>Shipping</label>
                     <select id="shippingFilter" onchange="applyFilters()">
                         <option value="all">All Orders</option>
                         <option value="paid">Customer Paid</option>
@@ -1513,7 +1545,7 @@
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>📋 Status</label>
+                    <label>Status</label>
                     <select id="statusFilter" onchange="applyFilters()">
                         <option value="all">All Statuses</option>
                         <option value="pending">Pending</option>
@@ -1533,46 +1565,46 @@
             <!-- Summary Stats -->
             <div class="stats" id="orderStats">
                 <div class="stat-card">
-                    <h3>📈 Revenue</h3>
+                    <h3>Revenue</h3>
                     <div class="value" id="statRevenue">AED 0</div>
                 </div>
                 <div class="stat-card">
-                    <h3>💰 Cost</h3>
+                    <h3>Cost</h3>
                     <div class="value" id="statCost">AED 0</div>
                 </div>
                 <div class="stat-card">
-                    <h3>🚚 Shipping Profit</h3>
+                    <h3>Shipping Profit</h3>
                     <div class="value" id="statShipping">AED 0</div>
                     <div style="font-size:0.7rem;color:#888;margin-top:2px;">
                         <span id="statShipCollected">0</span> collected · <span id="statShipCost">0</span> cost · <span id="statShipRefundLoss" style="color:#dc3545;">0</span> refund loss
                     </div>
                 </div>
                 <div class="stat-card success">
-                    <h3>✨ Net Profit</h3>
+                    <h3>Net Profit</h3>
                     <div class="value" id="statProfit">AED 0</div>
                     <div style="font-size:0.7rem;color:#888;margin-top:2px;" id="statProfitBreakdown"></div>
                 </div>
                 <div class="stat-card">
-                    <h3>📦 Orders</h3>
+                    <h3>Orders</h3>
                     <div class="value" id="statTotalOrders">0</div>
                 </div>
                 <div class="stat-card warning">
-                    <h3>⏳ Pending</h3>
+                    <h3>Pending</h3>
                     <div class="value" id="statPendingOrders">0</div>
                 </div>
             </div>
 
             <!-- View Toggle -->
             <div class="view-toggle">
-                <button class="view-btn active" onclick="switchView('orders')">📋 Orders</button>
-                <button class="view-btn" onclick="switchView('products')">📦 By Product</button>
-                <button class="view-btn" onclick="switchView('shipping')">🚚 Shipping</button>
+                <button class="view-btn active" onclick="switchView('orders')">Orders</button>
+                <button class="view-btn" onclick="switchView('products')">By Product</button>
+                <button class="view-btn" onclick="switchView('shipping')">Shipping</button>
             </div>
 
             <!-- Orders View -->
             <div id="ordersView" class="dashboard-view active">
                 <div class="table-header" style="background:white; border-radius:12px 12px 0 0; margin-bottom:0;">
-                    <h2>📋 Orders</h2>
+                    <h2>Orders</h2>
                     <span id="ordersCount">0 orders</span>
                 </div>
                 <div id="ordersContainer">
@@ -1586,7 +1618,7 @@
             <!-- Products View -->
             <div id="productsView" class="dashboard-view">
                 <div class="table-header" style="background:white; border-radius:12px 12px 0 0; margin-bottom:0;">
-                    <h2>📦 Sales by Product</h2>
+                    <h2>Sales by Product</h2>
                 </div>
                 <div class="products-table" style="border-radius:0 0 12px 12px;">
                     <table>
@@ -1610,7 +1642,7 @@
             <!-- Shipping View -->
             <div id="shippingView" class="dashboard-view">
                 <div class="table-header" style="background:white; border-radius:12px 12px 0 0; margin-bottom:0;">
-                    <h2>🚚 Shipping Summary</h2>
+                    <h2>Shipping Summary</h2>
                 </div>
                 <div class="shipping-summary">
                     <div class="shipping-cards">
@@ -1706,7 +1738,7 @@
 
             <!-- Profit Margin Ranking -->
             <div class="analytics-section">
-                <h2>💰 Profit Margin Ranking</h2>
+                <h2>Profit Margin Ranking</h2>
                 <div class="analytics-grid">
                     <div class="analytics-chart-box">
                         <h3>Margin % by Product</h3>
@@ -1724,7 +1756,7 @@
 
             <!-- Stock Turnover -->
             <div class="analytics-section">
-                <h2>📦 Stock Turnover</h2>
+                <h2>Stock Turnover</h2>
                 <div class="analytics-grid">
                     <div class="analytics-chart-box">
                         <h3>Units Sold vs Current Stock</h3>
@@ -1790,7 +1822,7 @@
         <!-- Stripe Fees Tab -->
         <div class="tab-content" id="stripeTab">
             <div class="settings-section">
-                <h3>💳 Stripe Fee Configuration</h3>
+                <h3>Stripe Fee Configuration</h3>
                 <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:20px;">
                     Configure Stripe processing fees to accurately calculate minimum selling prices.
                     <br>Formula: <strong>(percentage% + fixed fee) × tax multiplier</strong>
@@ -1824,7 +1856,7 @@
 
             <!-- Stripe Fees Per Order Breakdown -->
             <div class="settings-section" style="margin-top:20px;">
-                <h3>💳 Stripe Fees Per Order</h3>
+                <h3>Stripe Fees Per Order</h3>
                 <div style="display:flex;gap:15px;margin-bottom:15px;flex-wrap:wrap;">
                     <div class="shipping-card" style="flex:1;min-width:150px;">
                         <h4>Total Orders</h4>
@@ -1883,7 +1915,7 @@
         <div class="tab-content" id="settingsTab">
             <!-- Notification Emails -->
             <div class="settings-section">
-                <h3>📧 Order Notification Emails</h3>
+                <h3>Order Notification Emails</h3>
                 <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:15px;">
                     Get an email alert when a new order comes in. Add up to 3 emails.
                 </p>
@@ -1903,7 +1935,7 @@
 
             <!-- Browser Notifications -->
             <div class="settings-section">
-                <h3>🔔 Browser Notifications</h3>
+                <h3>Browser Notifications</h3>
                 <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:15px;">
                     Get desktop alerts for new orders when this tab is open. Checks every 60 seconds.
                 </p>
@@ -1911,9 +1943,41 @@
                 <span id="notifStatus" style="font-size:0.85rem;color:var(--text-light);margin-left:10px;"></span>
             </div>
 
+            <!-- Send Test Email -->
+            <div class="settings-section">
+                <h3>Send Test Email</h3>
+                <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:15px;">
+                    Fire any of the 12 transactional templates to an inbox with sample data — no real order/return/auth event triggered.
+                    Useful for inspecting the live design in real mail clients (Gmail, Apple Mail, Outlook).
+                </p>
+                <div class="settings-row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                    <select id="testEmailTemplate" style="padding:10px 14px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:0.88rem;min-width:240px;">
+                        <optgroup label="Customer">
+                            <option value="orderConfirmed">Order Confirmed</option>
+                            <option value="shipped">Order Shipped</option>
+                            <option value="cancelled">Order Cancelled</option>
+                            <option value="returnApproved">Return Approved</option>
+                            <option value="returnRejected">Return Request Update</option>
+                            <option value="refund">Refund Processed</option>
+                            <option value="returnInitiated">Return Initiated</option>
+                            <option value="verify">Verify Email</option>
+                            <option value="reset">Password Reset</option>
+                            <option value="guestToAccount">Guest → Account</option>
+                        </optgroup>
+                        <optgroup label="Admin">
+                            <option value="newOrder">New Order</option>
+                            <option value="returnRequest">Return Request</option>
+                        </optgroup>
+                    </select>
+                    <input type="email" id="testEmailTo" placeholder="to@yourinbox.com" style="flex:1;min-width:240px;padding:10px 14px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:0.88rem;">
+                    <button class="btn btn-primary btn-small" onclick="sendTestEmail()">Send Sample</button>
+                </div>
+                <p id="testEmailStatus" style="font-size:0.82rem;color:var(--text-light);margin-top:10px;min-height:1.2em;"></p>
+            </div>
+
             <!-- Admin Users (Super Admin only) -->
             <div class="settings-section" id="userManagementSection" style="display:none;">
-                <h3>👥 Admin Users</h3>
+                <h3>Admin Users</h3>
                 <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:15px;">
                     Add team members with their own login keys. Only the super admin (master key) can manage users.
                 </p>
@@ -2070,9 +2134,9 @@
                                 Image type — <span id="productUploadPickedName" style="font-weight:400;color:#666;"></span>
                             </div>
                             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-                                <button type="button" class="product-type-btn" data-type="clean" onclick="confirmProductImageType('clean')">🧾<br><span>Clean</span></button>
-                                <button type="button" class="product-type-btn" data-type="dimensions" onclick="confirmProductImageType('dimensions')">📐<br><span>Dimensions</span></button>
-                                <button type="button" class="product-type-btn" data-type="lifestyle" onclick="confirmProductImageType('lifestyle')">🎬<br><span>Lifestyle</span></button>
+                                <button type="button" class="product-type-btn" data-type="clean" onclick="confirmProductImageType('clean')"><span>Clean</span></button>
+                                <button type="button" class="product-type-btn" data-type="dimensions" onclick="confirmProductImageType('dimensions')"><span>Dimensions</span></button>
+                                <button type="button" class="product-type-btn" data-type="lifestyle" onclick="confirmProductImageType('lifestyle')"><span>Lifestyle</span></button>
                             </div>
                             <button type="button" class="btn btn-secondary btn-small" onclick="cancelProductImagePick()" style="width:100%;margin-top:8px;font-size:0.74rem;">Cancel</button>
                         </div>
@@ -2085,7 +2149,7 @@
                         <label>Main Image URL</label>
                         <div style="display:flex;gap:8px;align-items:stretch;">
                             <input type="text" id="formMainImage" placeholder="https://drive.google.com/..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
-                            <button type="button" onclick="deleteR2Image('formMainImage')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️ Delete</button>
+                            <button type="button" onclick="deleteR2Image('formMainImage')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">Delete</button>
                         </div>
                         <label style="display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer;font-size:0.82rem;color:#1a3a52;font-weight:400;">
                             <input type="checkbox" id="formMainImageMirror" style="width:16px;height:16px;cursor:pointer;">
@@ -2097,14 +2161,14 @@
                             <label>Image 2 URL</label>
                             <div style="display:flex;gap:8px;align-items:stretch;">
                                 <input type="text" id="formImage2" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
-                                <button type="button" onclick="deleteR2Image('formImage2')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                                <button type="button" onclick="deleteR2Image('formImage2')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">Delete</button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Image 3 URL</label>
                             <div style="display:flex;gap:8px;align-items:stretch;">
                                 <input type="text" id="formImage3" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
-                                <button type="button" onclick="deleteR2Image('formImage3')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                                <button type="button" onclick="deleteR2Image('formImage3')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -2113,14 +2177,14 @@
                             <label>Image 4 URL</label>
                             <div style="display:flex;gap:8px;align-items:stretch;">
                                 <input type="text" id="formImage4" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
-                                <button type="button" onclick="deleteR2Image('formImage4')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                                <button type="button" onclick="deleteR2Image('formImage4')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">Delete</button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Image 5 URL</label>
                             <div style="display:flex;gap:8px;align-items:stretch;">
                                 <input type="text" id="formImage5" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
-                                <button type="button" onclick="deleteR2Image('formImage5')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                                <button type="button" onclick="deleteR2Image('formImage5')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -2129,14 +2193,14 @@
                             <label>Image 6 URL</label>
                             <div style="display:flex;gap:8px;align-items:stretch;">
                                 <input type="text" id="formImage6" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
-                                <button type="button" onclick="deleteR2Image('formImage6')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                                <button type="button" onclick="deleteR2Image('formImage6')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">Delete</button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Image 7 URL</label>
                             <div style="display:flex;gap:8px;align-items:stretch;">
                                 <input type="text" id="formImage7" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
-                                <button type="button" onclick="deleteR2Image('formImage7')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                                <button type="button" onclick="deleteR2Image('formImage7')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -2144,7 +2208,7 @@
                         <label>Image 8 URL</label>
                         <div style="display:flex;gap:8px;align-items:stretch;">
                             <input type="text" id="formImage8" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
-                            <button type="button" onclick="deleteR2Image('formImage8')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                            <button type="button" onclick="deleteR2Image('formImage8')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -2515,7 +2579,7 @@
     <div class="modal-overlay" id="lifestylePromptModal">
         <div class="modal" style="max-width:1040px;">
             <div class="modal-header">
-                <h2>🎬 Lifestyle Prompt — editorial scene (Hermès / Aesop register)</h2>
+                <h2>Lifestyle Prompt — editorial scene (Hermès / Aesop register)</h2>
                 <button class="modal-close" onclick="closeLifestylePromptModal()">&times;</button>
             </div>
             <div class="modal-body" style="padding:0;">
@@ -4978,6 +5042,11 @@
         let analyticsOrders = [];
         let analyticsLoaded = false;
         const analyticsCharts = {};
+        // Chart.js global defaults — match site typography.
+        if (typeof Chart !== 'undefined') {
+            Chart.defaults.font.family = "'DM Sans', 'Segoe UI', Arial, sans-serif";
+            Chart.defaults.color = '#6b6b6b';
+        }
 
         async function loadAnalytics() {
             if (analyticsLoaded && analyticsOrders.length) {
@@ -5209,7 +5278,7 @@
                         ctx.lineTo(chart.chartArea.right, y80);
                         ctx.stroke();
                         ctx.fillStyle = '#dc3545';
-                        ctx.font = '11px Inter, sans-serif';
+                        ctx.font = "11px 'DM Sans', sans-serif";
                         ctx.fillText('80%', chart.chartArea.right + 4, y80 + 4);
                         ctx.restore();
                     }
@@ -5687,6 +5756,37 @@
                 }
                 updateNotifStatus();
             });
+        }
+
+        async function sendTestEmail() {
+            const template = document.getElementById('testEmailTemplate').value;
+            const to = document.getElementById('testEmailTo').value.trim();
+            const status = document.getElementById('testEmailStatus');
+            if (!to || !to.includes('@')) {
+                status.textContent = 'Enter a valid email address.';
+                status.style.color = 'var(--danger)';
+                return;
+            }
+            status.textContent = 'Sending…';
+            status.style.color = 'var(--text-light)';
+            try {
+                const res = await fetch('/api/admin/test-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem('adminKey') },
+                    body: JSON.stringify({ template, to }),
+                });
+                const data = await res.json();
+                if (res.ok && data.ok) {
+                    status.textContent = '✓ Sent to ' + to + ' (Resend id: ' + data.id + ')';
+                    status.style.color = 'var(--success)';
+                } else {
+                    status.textContent = 'Failed: ' + (data.error || 'Unknown error');
+                    status.style.color = 'var(--danger)';
+                }
+            } catch (err) {
+                status.textContent = 'Network error: ' + err.message;
+                status.style.color = 'var(--danger)';
+            }
         }
 
         function updateNotifStatus() {
