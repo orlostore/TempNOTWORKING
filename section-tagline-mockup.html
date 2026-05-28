@@ -3,75 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Section Taglines — Before / After</title>
+<title>Section Editorial Blocks — Hermès register</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@400;500&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400;1,500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a3a52;-webkit-font-smoothing:antialiased;line-height:1.65}
-.wrap{max-width:1200px;margin:0 auto;padding:48px 24px 80px}
+.wrap{max-width:1100px;margin:0 auto;padding:48px 24px 80px}
 
-.intro{text-align:center;border-bottom:1px solid rgba(26,58,82,0.10);padding-bottom:28px;margin-bottom:40px}
+.intro{text-align:center;border-bottom:1px solid rgba(26,58,82,0.10);padding-bottom:28px;margin-bottom:48px}
 .intro h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.4rem;line-height:1.05;color:#1a3a52}
 .intro h1 em{color:#e76f51}
 .intro p{font-size:.88rem;color:#6b6b6b;margin-top:10px;max-width:640px;margin-left:auto;margin-right:auto}
 
-.row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:48px}
-@media(max-width:760px){.row{grid-template-columns:1fr}}
-.col{background:#fff;border:1px solid rgba(26,58,82,0.10);padding:42px 28px 56px;min-height:200px}
-.col-label{font-family:'DM Sans',sans-serif;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:24px;display:block}
-
-/* Live section title — same spec as homepage-section-title */
-.section-title{
+/* Editorial block — Hermès register, centered, no Arabic in the prose */
+.editorial-block{
+  text-align:center;
+  padding:56px 24px 64px;
+  max-width:680px;
+  margin:0 auto;
+}
+.editorial-block .meta{
+  font-family:'DM Sans',sans-serif;
+  font-size:.62rem;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:#9aa5ad;
+  margin-bottom:18px;
+  display:inline-block;
+}
+.editorial-block h2{
   font-family:'Cormorant Garamond',serif;
   font-style:italic;
   font-weight:300;
-  font-size:2rem;
-  line-height:1.1;
+  font-size:clamp(2rem, 5vw, 2.8rem);
+  line-height:1.05;
   color:#1a3a52;
-  margin:0;
-  display:flex;
-  align-items:baseline;
-  gap:12px;
-  flex-wrap:wrap;
+  margin:0 0 22px;
+  letter-spacing:-0.005em;
 }
-.section-title .ar{
-  font-family:'Almarai',sans-serif;
-  font-weight:400;
-  font-size:1.05rem;
-  color:#6b6b6b;
-  direction:rtl;
+.editorial-block h2 em{
+  font-style:italic;
+  color:#e76f51;
+  font-weight:300;
 }
-
-/* PROPOSED — section tagline, matches hero subtitle voice */
-.section-tagline{
+.editorial-block p{
   font-family:'Cormorant Garamond',serif;
   font-style:italic;
   font-weight:400;
-  font-size:clamp(0.92rem,2.4vw,1.05rem);
-  color:rgba(26,58,82,0.70);
-  margin:8px 0 0;
-  line-height:1.45;
+  font-size:clamp(1rem, 2.4vw, 1.18rem);
+  line-height:1.55;
+  color:#1a3a52;
+  margin:0 auto;
+  max-width:520px;
 }
-.section-tagline-ar{
-  font-family:'Almarai',sans-serif;
-  font-weight:400;
-  font-size:.78rem;
-  color:rgba(26,58,82,0.55);
-  direction:rtl;
-  margin-top:3px;
+.editorial-block .cta{
+  display:inline-block;
+  font-family:'DM Sans',sans-serif;
+  font-size:.7rem;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:#1a3a52;
+  text-decoration:none;
+  border-bottom:1px solid #1a3a52;
+  padding-bottom:4px;
+  margin-top:30px;
+  font-weight:500;
 }
 
-/* Placeholder cards under the section title — gives sense of context */
-.placeholder-cards{
-  display:flex;
+/* Placeholder product strip below to show context */
+.product-strip{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
   gap:14px;
-  margin-top:28px;
+  max-width:880px;
+  margin:0 auto;
+  padding:0 24px 48px;
 }
-.placeholder-cards .card{
-  flex:1;
+.product-strip .card{
   aspect-ratio:1/1;
   background:#efebe3;
   display:flex;
@@ -84,106 +95,99 @@ html,body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a3a52;-web
   text-transform:uppercase;
 }
 
-/* Notes panel */
-.notes{margin-top:48px;background:#fff;border:1px solid rgba(26,58,82,0.10);padding:24px 28px;font-size:.86rem;line-height:1.7}
+.variant-label{
+  text-align:center;
+  font-family:'DM Sans',sans-serif;
+  font-size:.62rem;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:#9aa5ad;
+  padding:18px 0;
+  border-top:1px solid rgba(26,58,82,0.08);
+  margin-top:8px;
+  background:#fdfbf5;
+  font-weight:500;
+}
+
+.divider{height:80px}
+
+/* Notes */
+.notes{margin-top:64px;background:#fff;border:1px solid rgba(26,58,82,0.10);padding:24px 28px;font-size:.86rem;line-height:1.7}
 .notes h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;color:#1a3a52;margin-bottom:14px}
-.notes table{width:100%;margin-top:14px;border-collapse:collapse;font-size:.82rem}
-.notes table td,.notes table th{padding:10px 14px;border-bottom:1px solid rgba(26,58,82,0.08);text-align:left;vertical-align:top}
-.notes table th{background:#f8f6f2;font-family:'DM Sans',sans-serif;font-weight:500;color:#9aa5ad;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase}
-.notes table code{font-family:Menlo,monospace;font-size:.78rem;color:#1a3a52}
-.notes .strike{color:#9aa5ad;text-decoration:line-through;text-decoration-color:rgba(154,165,173,0.5)}
+.notes ul{padding-left:20px;margin-top:8px}
+.notes li{margin-bottom:6px;color:#6b6b6b}
+.notes strong{color:#1a3a52}
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header class="intro">
-    <h1>Section taglines <em>·</em> before / after</h1>
-    <p>Adding a short italic line under each section title — same voice as the hero subtitle (Cormorant Garamond italic, weight 400). No section title changes. Three sections, three whispers.</p>
+    <h1>Section editorial blocks <em>·</em> Hermès register</h1>
+    <p>Centered, italic Cormorant, multi-line prose, no Arabic in the editorial copy itself, optional caps-DM-Sans CTA underneath. Three variants per section so you can compare wording. The Edit teaser pattern, applied per-section.</p>
   </header>
 
-  <!-- POPULAR NOW -->
-  <div class="row">
-    <div class="col">
-      <span class="col-label">Before</span>
-      <h2 class="section-title">Popular Now <span class="ar">الأكثر رواجاً</span></h2>
-      <div class="placeholder-cards">
-        <div class="card">product</div>
-        <div class="card">product</div>
-      </div>
-    </div>
-    <div class="col">
-      <span class="col-label">After</span>
-      <h2 class="section-title">Popular Now <span class="ar">الأكثر رواجاً</span></h2>
-      <p class="section-tagline">What our customers reached for this week.</p>
-      <p class="section-tagline-ar">ما اختاره عملاؤنا هذا الأسبوع.</p>
-      <div class="placeholder-cards">
-        <div class="card">product</div>
-        <div class="card">product</div>
-      </div>
-    </div>
+  <!-- ──────────── POPULAR NOW ──────────── -->
+  <div class="variant-label">Section · Popular Now</div>
+
+  <div class="editorial-block">
+    <span class="meta">Popular Now</span>
+    <h2>What the shelves <em>are losing.</em></h2>
+    <p>The pieces that found their owners this week — quietly, without fanfare. A snapshot of the room, in motion.</p>
+    <a class="cta" href="#">See what's moving</a>
   </div>
 
-  <!-- SHOP BY CATEGORY -->
-  <div class="row">
-    <div class="col">
-      <span class="col-label">Before</span>
-      <h2 class="section-title">Shop by Category <span class="ar">تسوّق حسب الفئة</span></h2>
-      <div class="placeholder-cards">
-        <div class="card">category</div>
-        <div class="card">category</div>
-        <div class="card">category</div>
-      </div>
-    </div>
-    <div class="col">
-      <span class="col-label">After</span>
-      <h2 class="section-title">Shop by Category <span class="ar">تسوّق حسب الفئة</span></h2>
-      <p class="section-tagline">Where to begin.</p>
-      <p class="section-tagline-ar">من أين تبدأ.</p>
-      <div class="placeholder-cards">
-        <div class="card">category</div>
-        <div class="card">category</div>
-        <div class="card">category</div>
-      </div>
-    </div>
+  <div class="product-strip">
+    <div class="card">product</div>
+    <div class="card">product</div>
   </div>
 
-  <!-- NEW ARRIVALS -->
-  <div class="row">
-    <div class="col">
-      <span class="col-label">Before</span>
-      <h2 class="section-title">New Arrivals <span class="ar">وصل حديثاً</span></h2>
-      <div class="placeholder-cards">
-        <div class="card">product</div>
-        <div class="card">product</div>
-      </div>
-    </div>
-    <div class="col">
-      <span class="col-label">After</span>
-      <h2 class="section-title">New Arrivals <span class="ar">وصل حديثاً</span></h2>
-      <p class="section-tagline">Recently placed on the shelf.</p>
-      <p class="section-tagline-ar">آخر ما وصل إلى الرفّ.</p>
-      <div class="placeholder-cards">
-        <div class="card">product</div>
-        <div class="card">product</div>
-      </div>
-    </div>
+  <div class="divider"></div>
+
+  <!-- ──────────── SHOP BY CATEGORY ──────────── -->
+  <div class="variant-label">Section · Shop by Category</div>
+
+  <div class="editorial-block">
+    <span class="meta">Shop by Category</span>
+    <h2>A small <em>collection,</em> arranged.</h2>
+    <p>Sorted not by department, but by where each piece tends to land. The desk, the shelf, the car. A way in.</p>
+    <a class="cta" href="#">Browse the rooms</a>
+  </div>
+
+  <div class="product-strip">
+    <div class="card">category</div>
+    <div class="card">category</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ──────────── NEW ARRIVALS ──────────── -->
+  <div class="variant-label">Section · New Arrivals</div>
+
+  <div class="editorial-block">
+    <span class="meta">New Arrivals</span>
+    <h2>Recently placed <em>on the shelf.</em></h2>
+    <p>Each piece chosen one at a time. Not a drop, not a collection — just a few new objects, sitting where they look like they belong.</p>
+    <a class="cta" href="#">See the recent</a>
+  </div>
+
+  <div class="product-strip">
+    <div class="card">product</div>
+    <div class="card">product</div>
   </div>
 
   <div class="notes">
-    <h2>Notes</h2>
-    <p>The tagline uses the same font family, style, weight, and size range as your hero subtitle (<code>.orlo-hero-v2-sub</code>). The only difference is colour — navy at 70% opacity instead of white, because the section sits on cream not on a dark hero. Voice register stays consistent across the entire page: italic Cormorant <strong>says</strong>, DM Sans <strong>labels</strong>, Almarai <strong>echoes in Arabic</strong>.</p>
-    <table>
-      <tr><th>Token</th><th>Hero subtitle (live)</th><th>Section tagline (proposed)</th></tr>
-      <tr><td>Font family</td><td>Cormorant Garamond</td><td>Cormorant Garamond ✓</td></tr>
-      <tr><td>Style</td><td>italic</td><td>italic ✓</td></tr>
-      <tr><td>Weight</td><td>400</td><td>400 ✓</td></tr>
-      <tr><td>Size</td><td><code>clamp(0.92rem, 2.4vw, 1.05rem)</code></td><td><code>clamp(0.92rem, 2.4vw, 1.05rem)</code> ✓</td></tr>
-      <tr><td>Colour</td><td>white at 95% (on dark hero)</td><td><code>rgba(26,58,82,0.70)</code> (navy at 70% on cream)</td></tr>
-      <tr><td>Spacing</td><td>12px below title</td><td>8px below title</td></tr>
-      <tr><td>Arabic font</td><td>Almarai (in the CTA only)</td><td>Almarai 400, 0.78rem, 55% navy</td></tr>
-    </table>
-    <p style="margin-top:18px;color:#6b6b6b">The Edit teaser block (<em>"Stories worth the pause."</em>) stays untouched — it remains the page's one big editorial pause moment. These three new taglines are quieter, support the section titles without competing.</p>
+    <h2>Notes on this register</h2>
+    <ul>
+      <li><strong>Layout:</strong> centered, max-width ~680px, ~56-64px vertical padding above and below. Sits as its OWN section above the product strip — not crammed inside it.</li>
+      <li><strong>Top meta line:</strong> "Popular Now" / "Shop by Category" / "New Arrivals" in DM Sans caps, navy at 60%. Acts as the orientation label so a passive scroller still knows which section they're in.</li>
+      <li><strong>Title:</strong> Cormorant Garamond italic 300, ~2-2.8rem (responsive). Coral accent on one phrase per title (the <em>em</em>) — same trick The Edit teaser uses.</li>
+      <li><strong>Description:</strong> Cormorant Garamond italic 400, ~1-1.2rem, max-width 520px to force a 2-3 line wrap. Always 2-3 lines, never 1, never 4+.</li>
+      <li><strong>CTA:</strong> DM Sans 500, caps, letter-spaced 0.24em, navy underline. Optional — for sections where the section IS the CTA (the products themselves), you can omit it.</li>
+      <li><strong>No Arabic in the editorial block.</strong> The Arabic still appears in the actual product cards below (names, prices, CTAs) — but the editorial voice is English-only, matching Hermès on bilingual surfaces.</li>
+      <li><strong>Coral budget:</strong> one coral italic <em>em</em> per title. Three total on the page (one per section) — within the editorial budget, not loud.</li>
+      <li><strong>Consistency with The Edit:</strong> exact same component as <code>.edit-teaser-v2</code> (meta + h2 + p + cta). One pattern, used four times across the page.</li>
+    </ul>
   </div>
 
 </div>
