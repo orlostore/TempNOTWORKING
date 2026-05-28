@@ -64,13 +64,17 @@ const EMAIL_FOOTER_HTML = `<!-- ═══ ORLO EMAIL FOOTER — canonical block.
 <!-- ═══ /ORLO EMAIL FOOTER ═══ -->`;
 
 // ─── Site-matched header lockup (mirrors .hdr-v2 .login-lockup from styles.css) ──
+// Wordmark rendered as PNG from the actual Cormorant Garamond 600 woff2 so it's pixel-identical
+// to what the site shows — no font-loading or weight-fallback variation across mail clients.
+// Hairline border-bottom uses rgba(26,58,82,0.10), matching .login-nav exactly.
 function siteHeader(origin) {
     const logoUrl = `${origin}/logo.png`;
-    return `<tr><td style="background:${C.white};border-bottom:1px solid ${C.hairline};padding:14px 32px;">
+    const wordmarkUrl = `${origin}/icons/orlo-wordmark.png`;
+    return `<tr><td style="background:${C.white};border-bottom:1px solid rgba(26,58,82,0.10);padding:14px 32px;">
         <table cellpadding="0" cellspacing="0" border="0" role="presentation"><tr>
-            <td style="vertical-align:middle;"><img src="${logoUrl}" alt="ORLO" height="40" width="40" style="display:block;height:40px;width:40px;border:0;"></td>
+            <td style="vertical-align:middle;"><img src="${logoUrl}" alt="ORLO" height="40" style="display:block;height:40px;width:auto;border:0;"></td>
             <td style="vertical-align:middle;padding:0 14px;"><div style="width:1px;height:28px;background:rgba(26,58,82,0.25);font-size:1px;line-height:1px;">&nbsp;</div></td>
-            <td style="vertical-align:middle;font-family:${F_SERIF};font-weight:400;font-size:22px;letter-spacing:0.1em;color:${C.navy};line-height:1;">ORL<span style="color:${C.coral};">O</span></td>
+            <td style="vertical-align:middle;"><img src="${wordmarkUrl}" alt="ORLO" height="22" style="display:block;height:22px;width:auto;border:0;"></td>
         </tr></table>
     </td></tr>`;
 }
