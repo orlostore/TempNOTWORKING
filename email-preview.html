@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Email templates — Before / After</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@400;500;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a3a52;-webkit-font-smoothing:antialiased;line-height:1.6}
+.page{max-width:1400px;margin:0 auto;padding:40px 20px 80px}
+.intro{text-align:center;border-bottom:1px solid rgba(26,58,82,0.10);padding-bottom:28px;margin-bottom:36px}
+.intro h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.4rem;line-height:1.05}
+.intro h1 em{color:#e76f51}
+.intro p{font-size:.88rem;color:#6b6b6b;margin-top:10px;max-width:760px;margin-left:auto;margin-right:auto}
+
+.note{background:#fff;border:1px solid rgba(26,58,82,0.10);border-left:2px solid #e76f51;padding:14px 20px;margin:0 0 36px;font-size:.86rem;line-height:1.65;color:#1a3a52}
+.note strong{color:#1a3a52}
+
+.email-group{margin-bottom:64px}
+.email-group h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.8rem;color:#1a3a52;text-align:center;margin-bottom:6px}
+.email-group .meta{text-align:center;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:24px}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:920px){.compare{grid-template-columns:1fr}}
+.side{background:#fff;border:1px solid rgba(26,58,82,0.10);padding:14px 14px 18px}
+.side-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500}
+.side-label.before{color:#c33}
+.side-label.after{color:#2a7f4e}
+.side iframe{display:block;width:100%;border:1px solid rgba(26,58,82,0.06);background:#fff;height:720px}
+
+.diff{background:#fff;border:1px solid rgba(26,58,82,0.10);padding:20px 24px;margin-top:48px;font-size:.86rem;line-height:1.7}
+.diff h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;color:#1a3a52;margin-bottom:14px}
+.diff table{width:100%;margin-top:8px;border-collapse:collapse;font-size:.82rem}
+.diff td,.diff th{padding:9px 12px;border-bottom:1px solid rgba(26,58,82,0.08);text-align:left;vertical-align:top}
+.diff th{background:#f8f6f2;font-family:'DM Sans',sans-serif;font-weight:500;color:#9aa5ad;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase}
+.diff code{font-family:Menlo,monospace;font-size:.78rem;color:#1a3a52}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="intro">
+    <h1>Email templates <em>·</em> before / after</h1>
+    <p>Same parameter API, same copy, same triggers — only the visual register changes from the v1 marketing look (dark navy gradient header, coral pill, Inter font, big emoji) to v2 editorial (cream surface, Cormorant Garamond italic, thin coral hairline, navy minimal pill, no shadows or rounded corners).</p>
+  </header>
+
+  <div class="note">
+    <strong>Stripe receipts are NOT in this preview.</strong> Stripe sends its own receipt + invoice PDFs directly (the dark-navy "Receipt from ORLO Store" email with PDF attachments) — those live in the Stripe Dashboard and can only be customised there (logo + brand color + footer text). They're separate from the templates here.
+  </div>
+
+  <!-- ─────────── 1. Order Confirmed ─────────── -->
+  <div class="email-group">
+    <div class="meta">Customer · Order Confirmed (Stripe webhook)</div>
+    <h2>Order Confirmed!</h2>
+    <div class="compare">
+      <div class="side">
+        <div class="side-label"><span class="before">Before — v1</span><span>customerEmail()</span></div>
+        <iframe id="orderOld" title="Old Order Confirmed"></iframe>
+      </div>
+      <div class="side">
+        <div class="side-label"><span class="after">After — v2</span><span>customerEmail()</span></div>
+        <iframe id="orderNew" title="New Order Confirmed"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── 2. Verify Email ─────────── -->
+  <div class="email-group">
+    <div class="meta">Customer · Email Verification (Signup)</div>
+    <h2>Verify Your Email</h2>
+    <div class="compare">
+      <div class="side">
+        <div class="side-label"><span class="before">Before — v1</span><span>customerEmail()</span></div>
+        <iframe id="verifyOld" title="Old Verify Email"></iframe>
+      </div>
+      <div class="side">
+        <div class="side-label"><span class="after">After — v2</span><span>customerEmail()</span></div>
+        <iframe id="verifyNew" title="New Verify Email"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── 3. Order Cancelled ─────────── -->
+  <div class="email-group">
+    <div class="meta">Customer · Order Cancelled (refund initiated)</div>
+    <h2>Order Cancelled</h2>
+    <div class="compare">
+      <div class="side">
+        <div class="side-label"><span class="before">Before — v1</span><span>customerEmail()</span></div>
+        <iframe id="cancelOld" title="Old Cancel"></iframe>
+      </div>
+      <div class="side">
+        <div class="side-label"><span class="after">After — v2</span><span>customerEmail()</span></div>
+        <iframe id="cancelNew" title="New Cancel"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── 4. New Order (admin) ─────────── -->
+  <div class="email-group">
+    <div class="meta">Admin · New Order (you)</div>
+    <h2>New Order — admin notification</h2>
+    <div class="compare">
+      <div class="side">
+        <div class="side-label"><span class="before">Before — v1</span><span>adminEmail()</span></div>
+        <iframe id="adminOld" title="Old Admin"></iframe>
+      </div>
+      <div class="side">
+        <div class="side-label"><span class="after">After — v2</span><span>adminEmail()</span></div>
+        <iframe id="adminNew" title="New Admin"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="diff">
+    <h2>What changes — visual register only, no copy changes</h2>
+    <table>
+      <tr><th>Element</th><th>Before — v1 (marketing)</th><th>After — v2 (editorial)</th></tr>
+      <tr><td>Page background</td><td><code>#f0f2f5</code> light grey</td><td><code>#f8f6f2</code> cream (matches site)</td></tr>
+      <tr><td>Card surface</td><td>White, <code>border-radius:12px</code>, drop shadow</td><td>Cream <code>#fdfbf5</code>, hairline border, square corners, no shadow</td></tr>
+      <tr><td>Header strip</td><td>Dark navy gradient block with white logo + "ORLO STORE" caps subtitle</td><td>Just the logo centred on cream + a thin coral hairline as brand signature (Hermès convention)</td></tr>
+      <tr><td>Title</td><td>Inter 700, 20px, navy</td><td>Cormorant Garamond italic 400, 30px, navy</td></tr>
+      <tr><td>Body</td><td>Inter 400, 15px, mid-grey</td><td>Cormorant Garamond italic 400, 17px, navy 90%</td></tr>
+      <tr><td>Arabic body</td><td>Same Inter italic in Arabic? (no — Almarai falls back to Arial in v1)</td><td>Almarai 400, 14px, muted navy — RTL right-aligned</td></tr>
+      <tr><td>Info box</td><td>Light grey background, 3px coral left border, generic</td><td>Cream surface, 2px coral left border, italic Cormorant copy (matches site .limit-tooltip)</td></tr>
+      <tr><td>Emoji icon</td><td>48px giant emoji above title</td><td>22px small + muted, sits just above title — system note, not focal point</td></tr>
+      <tr><td>CTA button</td><td>Coral pill (#e07856), 14px Inter 600, white text, 35px padding</td><td>Navy pill (#1a3a52), 12px DM Sans 500 caps, letter-spaced 0.22em, cream text — same register as homepage SHOP NOW pill</td></tr>
+      <tr><td>Footer</td><td>Light grey strip, 11px "© ORLO Store \| info@orlostore.com"</td><td>Cream strip, hairline divide, "ORLO &middot; orlostore.com" DM Sans caps, letter-spaced</td></tr>
+      <tr><td>Web fonts</td><td>Inter + Almarai via Google Fonts @import</td><td>Cormorant Garamond + DM Sans + Almarai via Google Fonts @import (with Georgia / Tahoma fallbacks)</td></tr>
+    </table>
+    <p style="margin-top:18px;color:#6b6b6b">The function signatures stay identical — <code>customerEmail({origin, icon, titleEn, bodyEn, bodyAr, infoBoxEn, infoBoxAr, ctaUrl, ctaText, ...})</code> — so all 11 callers (webhook.js, ship-order.js, return flows, auth flows, etc.) work without changes. The legacy parameters <code>ctaColor</code>, <code>infoBoxBg</code>, <code>infoBoxBorder</code> are accepted for back-compat but quietly ignored in v2 so the editorial look stays consistent across every email.</p>
+  </div>
+
+</div>
+
+<script>
+// ─── Sample content ─────────────────────────────────────────────────
+const SAMPLES = {
+    order: {
+        icon: '🛍️',
+        titleEn: 'Order Confirmed!',
+        bodyEn: 'Thank you for your order, Rami. We will start preparing your items right away.',
+        bodyAr: 'شكراً لطلبك يا رامي. سنبدأ بتجهيز منتجاتك على الفور.',
+        infoBoxEn: 'Order #7X6CQJE5 · Classic Vintage Charm Bug × 1 · AED 119.00 · Delivery to Dubai 2-5 business days',
+        infoBoxAr: 'طلب رقم 7X6CQJE5 · خنفساء كلاسيكية عتيقة × 1 · 119 درهم · توصيل دبي 2-5 أيام عمل',
+        ctaUrl: '#',
+        ctaText: 'Track Your Order',
+    },
+    verify: {
+        icon: '✉️',
+        titleEn: 'Verify Your Email',
+        bodyEn: 'Welcome to ORLO. Tap the button below to verify your email address — link expires in 24 hours.',
+        bodyAr: 'مرحباً بك في أورلو. اضغط الزر أدناه لتأكيد بريدك الإلكتروني — الرابط ينتهي خلال ٢٤ ساعة.',
+        ctaUrl: '#',
+        ctaText: 'Verify Email',
+        fallbackUrl: 'https://orlostore.com/verify-email.html?token=abc123xyz',
+    },
+    cancel: {
+        icon: '❌',
+        titleEn: 'Order Cancelled',
+        bodyEn: 'Your order has been cancelled and a refund has been initiated. It will appear on your card within 5-7 business days.',
+        bodyAr: 'تم إلغاء طلبك وبدء عملية الاسترداد. سيظهر المبلغ في بطاقتك خلال ٥-٧ أيام عمل.',
+        infoBoxEn: 'Order #7X6CQJE5 · AED 119.00 refunded to card ending 8639',
+        infoBoxAr: 'طلب رقم 7X6CQJE5 · 119 درهم مسترد للبطاقة المنتهية بـ 8639',
+    },
+    admin: {
+        icon: '🛒',
+        titleEn: 'New Order — AED 119.00 from Rami Habash',
+        bodyHtml: `<table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;margin:0 0 14px;"><tr><td style="padding:12px 14px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:6px;">Customer</div><div style="font-size:15px;color:#1a3a52;font-weight:500;">Rami Habash</div><a href="mailto:rhabash@hotmail.com" style="font-size:13px;color:#1a3a52;text-decoration:underline;">rhabash@hotmail.com</a></td></tr></table><table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;margin:0 0 14px;"><tr><td style="padding:12px 14px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:6px;">Total</div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:24px;color:#1a3a52;">AED 119.00</div></td></tr></table><table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;margin:0 0 14px;"><tr><td style="padding:12px 14px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Items</div><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="font-size:14px;color:#1a3a52;padding:4px 0;">Classic Vintage Charm Bug</td><td style="font-size:14px;color:#6b6b6b;padding:4px 0;text-align:right;">× 1</td></tr></table></td></tr></table><table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:18px auto 0;"><tr><td style="background:#1a3a52;border-radius:999px;"><a href="#" style="display:inline-block;padding:12px 28px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#fff;text-decoration:none;">Open Admin Panel</a></td></tr></table>`,
+    },
+};
+
+// ─── v1 (current production) renderers ─────────────────────────────
+function renderOldCustomer(s) {
+    const logoUrl = 'https://orlostore.com/logo.png';
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Almarai:wght@400;700&display=swap');body{margin:0}</style></head><body style="margin:0;padding:0;">
+    <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+            <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 35px 30px; text-align: center;">
+                <img src="${logoUrl}" alt="ORLO Store" style="width: 65px; height: 65px; margin-bottom: 10px;">
+                <div style="color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 600; letter-spacing: 1.5px;">ORLO STORE</div>
+            </div>
+            <div style="padding: 35px 30px; text-align: center;">
+                ${s.icon ? `<div style="font-size: 48px; line-height: 1; margin-bottom: 15px;">${s.icon}</div>` : ''}
+                <h2 style="color: #2c4a5c; margin: 0 0 12px; font-size: 20px; font-weight: 700;">${s.titleEn}</h2>
+                <p style="color: #555; font-size: 15px; line-height: 1.7; margin: 0 0 6px;">${s.bodyEn}</p>
+                ${s.bodyAr ? `<p style="color: #888; font-size: 14px; line-height: 1.6; margin: 0 0 25px; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">${s.bodyAr}</p>` : ''}
+                ${s.infoBoxEn ? `<div style="background: #ececec; border-radius: 10px; padding: 18px 20px; margin-bottom: 25px; border-left: 3px solid #2c4a5c; text-align: left;">
+                    <p style="margin: 0; font-size: 14px; color: #555;">${s.infoBoxEn}</p>
+                    ${s.infoBoxAr ? `<p style="margin: 6px 0 0; font-size: 13px; color: #888; font-family: 'Almarai', Arial, sans-serif; direction: rtl; text-align: right;">${s.infoBoxAr}</p>` : ''}
+                </div>` : ''}
+                ${s.ctaUrl ? `<div style="text-align: center; margin: 25px 0;">
+                    <a href="${s.ctaUrl}" style="background: #e07856; color: white; padding: 14px 35px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; display: inline-block;">${s.ctaText}</a>
+                </div>` : ''}
+                ${s.fallbackUrl ? `<p style="color: #999; font-size: 12px; line-height: 1.5; margin: 15px 0 0;">If the button doesn't work, copy and paste this link:<br><a href="${s.fallbackUrl}" style="color: #e07856; word-break: break-all;">${s.fallbackUrl}</a></p>` : ''}
+                <p style="color: #999; font-size: 12px; margin: 20px 0 0;">Questions? Contact us at <a href="mailto:info@orlostore.com" style="color: #e07856;">info@orlostore.com</a></p>
+            </div>
+            <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #eee;">
+                <p style="color: #aaa; font-size: 11px; margin: 0;">&copy; ORLO Store | info@orlostore.com</p>
+            </div>
+        </div>
+    </div></body></html>`;
+}
+
+function renderOldAdmin(s) {
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');body{margin:0}</style></head><body style="margin:0;padding:0;">
+    <div style="font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 40px 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+            <div style="background: linear-gradient(135deg, #2c4a5c 0%, #1e3545 100%); padding: 30px 25px; text-align: center;">
+                <div style="font-size: 36px; margin-bottom: 8px;">${s.icon}</div>
+                <div style="color: #fff; font-size: 18px; font-weight: 700;">${s.titleEn}</div>
+            </div>
+            <div style="padding: 25px 20px;">${s.bodyHtml}</div>
+            <div style="background: #f8f9fa; padding: 15px 20px; text-align: center; border-top: 1px solid #eee;">
+                <p style="color: #aaa; font-size: 11px; margin: 0;">ORLO Store &mdash; Admin Notification</p>
+            </div>
+        </div>
+    </div></body></html>`;
+}
+
+// ─── v2 (proposed editorial) renderers ─────────────────────────────
+const C = { cream: '#f8f6f2', surface: '#fdfbf5', navy: '#1a3a52', navy90: '#1e3e57', coral: '#e76f51', muted: '#6b6b6b', hairline: '#e4ddd1' };
+const F_SERIF = `'Cormorant Garamond', Georgia, 'Times New Roman', serif`;
+const F_SANS  = `'DM Sans', 'Segoe UI', Arial, sans-serif`;
+const F_AR    = `'Almarai', Tahoma, Arial, sans-serif`;
+
+function renderNewCustomer(s) {
+    const logoUrl = 'https://orlostore.com/logo.png';
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500;700&family=Almarai:wght@400;700&display=swap');body{margin:0}</style></head><body style="margin:0;padding:0;background:${C.cream};">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${C.cream};border-collapse:collapse;">
+        <tr><td align="center" style="padding:40px 16px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;width:100%;background:${C.surface};border:1px solid ${C.hairline};border-collapse:collapse;">
+                <tr><td align="center" style="padding:36px 32px 22px;">
+                    <img src="${logoUrl}" alt="ORLO Store" width="60" height="60" style="display:inline-block;width:60px;height:60px;border:0;">
+                    <div style="width:60px;height:1.5px;background:${C.coral};margin:14px auto 0;line-height:1px;font-size:1px;">&nbsp;</div>
+                </td></tr>
+                <tr><td style="padding:8px 36px 32px;">
+                    ${s.icon ? `<div style="font-size:22px;line-height:1;margin:0 0 14px;opacity:0.85;">${s.icon}</div>` : ''}
+                    <h1 style="margin:0 0 18px;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:30px;line-height:1.15;color:${C.navy};letter-spacing:-0.005em;">${s.titleEn}</h1>
+                    <p style="margin:0 0 20px;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:17px;line-height:1.55;color:${C.navy90};">${s.bodyEn}</p>
+                    ${s.bodyAr ? `<p style="color:${C.muted};font-size:14px;line-height:1.65;margin:0 0 24px;font-family:${F_AR};direction:rtl;text-align:right;">${s.bodyAr}</p>` : ''}
+                    ${s.infoBoxEn ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 28px;border-collapse:collapse;">
+                        <tr><td style="background:${C.surface};border:1px solid ${C.hairline};border-left:2px solid ${C.coral};padding:16px 20px;">
+                            <p style="margin:0;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:15px;line-height:1.5;color:${C.navy};">${s.infoBoxEn}</p>
+                            ${s.infoBoxAr ? `<p style="margin:6px 0 0;font-family:${F_AR};font-size:13px;line-height:1.6;color:${C.muted};direction:rtl;text-align:right;">${s.infoBoxAr}</p>` : ''}
+                        </td></tr>
+                    </table>` : ''}
+                    ${s.ctaUrl ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:8px auto 24px;border-collapse:collapse;">
+                        <tr><td align="center" style="border-radius:999px;background:${C.navy};">
+                            <a href="${s.ctaUrl}" style="display:inline-block;padding:14px 32px;font-family:${F_SANS};font-size:12px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#ffffff;text-decoration:none;border-radius:999px;">${s.ctaText}</a>
+                        </td></tr>
+                    </table>` : ''}
+                    ${s.fallbackUrl ? `<p style="color:${C.muted};font-size:12px;line-height:1.55;margin:8px 0 0;font-family:${F_SANS};">If the button doesn't work, copy and paste this link:<br><a href="${s.fallbackUrl}" style="color:${C.navy};word-break:break-all;text-decoration:underline;">${s.fallbackUrl}</a></p>` : ''}
+                    <p style="margin:24px 0 0;padding-top:20px;border-top:1px solid ${C.hairline};font-family:${F_SANS};font-size:12px;line-height:1.6;color:${C.muted};">
+                        Questions? <a href="mailto:info@orlostore.com" style="color:${C.navy};text-decoration:underline;">info@orlostore.com</a>
+                    </p>
+                </td></tr>
+                <tr><td align="center" style="padding:18px 32px 26px;background:${C.cream};border-top:1px solid ${C.hairline};">
+                    <p style="margin:0;font-family:${F_SANS};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${C.muted};font-weight:500;">ORLO &middot; orlostore.com</p>
+                </td></tr>
+            </table>
+        </td></tr>
+    </table></body></html>`;
+}
+
+function renderNewAdmin(s) {
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500;700&display=swap');body{margin:0}</style></head><body style="margin:0;padding:0;background:${C.cream};">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${C.cream};border-collapse:collapse;">
+        <tr><td align="center" style="padding:40px 16px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="640" style="max-width:640px;width:100%;background:${C.surface};border:1px solid ${C.hairline};border-collapse:collapse;">
+                <tr><td style="padding:26px 32px 18px;border-bottom:1px solid ${C.hairline};">
+                    <p style="margin:0 0 6px;font-family:${F_SANS};font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:${C.muted};font-weight:500;">Admin notification &middot; ${s.icon}</p>
+                    <h1 style="margin:0;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:24px;line-height:1.2;color:${C.navy};">${s.titleEn}</h1>
+                </td></tr>
+                <tr><td style="padding:24px 32px 28px;font-family:${F_SANS};font-size:14px;line-height:1.6;color:${C.navy};">${s.bodyHtml}</td></tr>
+                <tr><td align="center" style="padding:14px 32px 22px;background:${C.cream};border-top:1px solid ${C.hairline};">
+                    <p style="margin:0;font-family:${F_SANS};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${C.muted};font-weight:500;">ORLO Admin</p>
+                </td></tr>
+            </table>
+        </td></tr>
+    </table></body></html>`;
+}
+
+// ─── Wire iframes ──────────────────────────────────────────────────
+document.getElementById('orderOld').srcdoc = renderOldCustomer(SAMPLES.order);
+document.getElementById('orderNew').srcdoc = renderNewCustomer(SAMPLES.order);
+document.getElementById('verifyOld').srcdoc = renderOldCustomer(SAMPLES.verify);
+document.getElementById('verifyNew').srcdoc = renderNewCustomer(SAMPLES.verify);
+document.getElementById('cancelOld').srcdoc = renderOldCustomer(SAMPLES.cancel);
+document.getElementById('cancelNew').srcdoc = renderNewCustomer(SAMPLES.cancel);
+document.getElementById('adminOld').srcdoc  = renderOldAdmin(SAMPLES.admin);
+document.getElementById('adminNew').srcdoc  = renderNewAdmin(SAMPLES.admin);
+</script>
+</body>
+</html>
