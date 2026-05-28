@@ -37,11 +37,15 @@ const EMAIL_FOOTER_HTML = `<!-- ═══ ORLO EMAIL FOOTER — canonical block.
     </div>
     <table cellpadding="0" cellspacing="0" border="0" role="presentation"><tr>
         <td style="font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;padding-right:14px;vertical-align:middle;">Follow</td>
-        <td style="padding-right:8px;vertical-align:middle;">
-            <a href="https://instagram.com/orlostore" style="display:inline-block;padding:6px 14px;border:1px solid rgba(26,58,82,0.20);border-radius:999px;font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#1a3a52;text-decoration:none;font-weight:500;">Instagram</a>
+        <td style="padding-right:10px;vertical-align:middle;">
+            <a href="https://instagram.com/orlostore" aria-label="Instagram" style="display:inline-block;width:28px;height:28px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;text-align:center;line-height:28px;text-decoration:none;">
+                <img src="https://orlostore.com/icons/instagram.png" alt="Instagram" width="14" height="14" style="width:14px;height:14px;vertical-align:middle;border:0;display:inline-block;">
+            </a>
         </td>
         <td style="vertical-align:middle;">
-            <a href="https://tiktok.com/@shoporlo" style="display:inline-block;padding:6px 14px;border:1px solid rgba(26,58,82,0.20);border-radius:999px;font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#1a3a52;text-decoration:none;font-weight:500;">TikTok</a>
+            <a href="https://tiktok.com/@shoporlo" aria-label="TikTok" style="display:inline-block;width:28px;height:28px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;text-align:center;line-height:28px;text-decoration:none;">
+                <img src="https://orlostore.com/icons/tiktok.png" alt="TikTok" width="14" height="14" style="width:14px;height:14px;vertical-align:middle;border:0;display:inline-block;">
+            </a>
         </td>
     </tr></table>
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e4ddd1;font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:10px;letter-spacing:0.04em;color:#6b6b6b;line-height:1.85;">
