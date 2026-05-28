@@ -1350,6 +1350,7 @@
                 <button class="btn btn-secondary" onclick="openHeroesModal()" title="Manage homepage hero / banner">🖼️ Heroes</button>
                 <button class="btn btn-secondary" onclick="openSpecPromptModal()" title="Generate Gemini dimension overlay prompt for any product">📐 Spec Prompt</button>
                 <button class="btn btn-secondary" onclick="openCleanCataloguePromptModal()" title="Generate Gemini prompt to clean raw photos: remove background + place on warm beige #E5DCCF + WebP output">🪞 Clean Catalogue</button>
+                <button class="btn btn-secondary" onclick="openLifestylePromptModal()" title="Generate Gemini editorial lifestyle prompt — product in a styled scene for Popular Now / hero / IG / TikTok">🎬 Lifestyle</button>
                 <a class="btn btn-secondary" href="brand-guide.html" target="_blank" rel="noopener" title="Product image guide — site, IG, TikTok specs + blank canvas templates">📐 Brand Guide</a>
                 <a class="btn btn-secondary" href="orlo-video-brief.md" target="_blank" rel="noopener" title="Copy-paste brief for a fresh Claude chat to build a Reel / TikTok — locked v3 spec">🎬 Video Brief</a>
             </div>
@@ -2475,6 +2476,79 @@
                         </div>
                         <textarea id="cleanPromptOut" readonly style="flex:1;min-height:380px;width:100%;padding:14px 16px;border:1px solid #ddd;border-radius:6px;font-size:0.78rem;line-height:1.55;font-family:'DM Sans',monospace;background:#fafafa;color:#222;resize:vertical;white-space:pre-wrap;"></textarea>
                         <div style="font-size:0.72rem;color:#888;margin-top:8px;line-height:1.55;">After Gemini returns the image, verify the background is solid flat #E5DCCF (not a gradient), the product itself is pixel-identical to the source, and the file is WebP. If anything looks off, ask Gemini once: <em>"same image — fix the [issue] only, keep everything else identical."</em></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Lifestyle Prompt modal: editorial scene generation for Popular Now / hero / IG / TikTok -->
+    <div class="modal-overlay" id="lifestylePromptModal">
+        <div class="modal" style="max-width:1040px;">
+            <div class="modal-header">
+                <h2>🎬 Lifestyle Prompt — editorial scene (Hermès / Aesop register)</h2>
+                <button class="modal-close" onclick="closeLifestylePromptModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0;">
+
+                <div style="background:#f8f6f2;padding:14px 22px;border-bottom:1px solid #eee;font-size:0.78rem;line-height:1.6;color:#444;">
+                    <strong style="color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;font-size:0.7rem;">How to use</strong><br>
+                    1. Fill in the product description + a setting (the scene/surroundings — keep it editorial, no people).
+                    2. Pick the composition placement and the target aspect ratio.
+                    3. Click <strong>Copy prompt</strong>.
+                    4. In Gemini / Imagen, paste — no image attachment needed (this is generation, not editing). Use the same scene with both ratios for cross-platform consistency (square for site / IG feed, 9:16 for Stories / Reels / TikTok).
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:0;">
+                    <!-- Form -->
+                    <div style="padding:20px 22px;border-right:1px solid #eee;">
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label for="lifestyleProduct" style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Product description</label>
+                            <textarea id="lifestyleProduct" rows="2" placeholder="e.g. vintage tin model camper van in red and cream" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:0.88rem;font-family:inherit;resize:vertical;" oninput="updateLifestylePrompt()"></textarea>
+                            <div class="form-hint" style="font-size:0.7rem;color:#888;margin-top:4px;">Same short physical description as catalogue — colour, material, style.</div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label for="lifestyleScene" style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Scene / setting</label>
+                            <textarea id="lifestyleScene" rows="3" placeholder="e.g. on top of an open vintage paper map spread across a worn oak desk, beside an old brass magnifying glass and a small leather-bound notebook" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:0.88rem;font-family:inherit;resize:vertical;" oninput="updateLifestylePrompt()"></textarea>
+                            <div class="form-hint" style="font-size:0.7rem;color:#888;margin-top:4px;">Where the product sits and what's around it. Keep it natural and editorial — no people, no hands, no text, no competing props.</div>
+                        </div>
+
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+                            <div class="form-group">
+                                <label for="lifestylePlacement" style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Composition</label>
+                                <select id="lifestylePlacement" onchange="updateLifestylePrompt()" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:0.88rem;background:#fff;">
+                                    <option value="centred">Centred</option>
+                                    <option value="centred slightly right">Centred slightly right</option>
+                                    <option value="bottom-left third">Bottom-left third</option>
+                                    <option value="bottom-right third">Bottom-right third</option>
+                                    <option value="on a wooden surface">On a wooden surface</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="lifestyleRatio" style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Aspect ratio</label>
+                                <select id="lifestyleRatio" onchange="updateLifestylePrompt()" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:0.88rem;background:#fff;">
+                                    <option value="square">1:1 square — 1080 × 1080 (site / IG feed)</option>
+                                    <option value="vertical">9:16 vertical — 1080 × 1920 (Stories / Reels / TikTok)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="padding:12px 14px;background:#f8f6f2;border-left:3px solid #e76f51;font-size:0.74rem;line-height:1.6;color:#555;">
+                            <strong style="color:#1a3a52;">Brand standards (locked):</strong>
+                            Warm cream / beige / soft taupe palette · Soft diffused window light · No people, hands, text, watermarks · One small navy or muted coral accent allowed if natural to the scene · Late morning or late afternoon quality · Slight film grain · WebP output.
+                        </div>
+                    </div>
+
+                    <!-- Output -->
+                    <div style="padding:20px 22px;display:flex;flex-direction:column;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                            <label for="lifestylePromptOut" style="font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;">Generated prompt</label>
+                            <button class="btn btn-primary btn-small" type="button" id="lifestyleCopyBtn" onclick="copyLifestylePrompt()" style="font-size:0.78rem;">Copy prompt</button>
+                        </div>
+                        <textarea id="lifestylePromptOut" readonly style="flex:1;min-height:380px;width:100%;padding:14px 16px;border:1px solid #ddd;border-radius:6px;font-size:0.78rem;line-height:1.55;font-family:'DM Sans',monospace;background:#fafafa;color:#222;resize:vertical;white-space:pre-wrap;"></textarea>
+                        <div style="font-size:0.72rem;color:#888;margin-top:8px;line-height:1.55;">Tip: generate the square (1:1) version first, then switch the dropdown to 9:16 and copy again — Gemini will keep the same scene with vertical headroom for Stories / Reels / TikTok. Three full worked examples are in the <a href="brand-guide.html#prompts" target="_blank" style="color:#e76f51;">brand guide</a>.</div>
                     </div>
                 </div>
 
@@ -5728,6 +5802,73 @@ CRITICAL — do NOT include any of the following: no props, no text, no labels, 
         function copyCleanCataloguePrompt() {
             const out = document.getElementById('cleanPromptOut');
             const btn = document.getElementById('cleanCopyBtn');
+            out.select();
+            out.setSelectionRange(0, 99999);
+            let ok = false;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(out.value);
+                    ok = true;
+                } else {
+                    ok = document.execCommand('copy');
+                }
+            } catch (e) { ok = false; }
+            const original = btn.textContent;
+            btn.textContent = ok ? '✓ Copied!' : 'Copy failed — select manually';
+            btn.style.background = ok ? '#2a7f4e' : '#c33';
+            setTimeout(() => {
+                btn.textContent = original;
+                btn.style.background = '';
+            }, 1800);
+        }
+
+        // --- Lifestyle Prompt modal — editorial scene generation for Popular Now / hero / IG / TikTok ---
+        function openLifestylePromptModal() {
+            document.getElementById('lifestylePromptModal').classList.add('active');
+            updateLifestylePrompt();
+        }
+        function closeLifestylePromptModal() { document.getElementById('lifestylePromptModal').classList.remove('active'); }
+
+        function buildLifestylePrompt(product, scene, placement, ratio) {
+            const desc = (product || '').trim() || '[PRODUCT NAME — short description]';
+            const sceneText = (scene || '').trim() || '[SCENE — e.g. on a vintage wooden writing desk beside an open paper notebook and a brass paperweight]';
+            const placementText = placement || 'centred';
+            const isVertical = ratio === 'vertical';
+            const aspect = isVertical
+                ? '9:16 vertical, 1080 × 1920'
+                : '1:1 square, 1080 × 1080';
+            const compositionNote = isVertical
+                ? 'Product occupies about 50–60% of frame height. Leave headroom at the top and footroom at the bottom so the scene reads naturally in vertical Stories / Reels / TikTok format.'
+                : 'Product occupies about 60–70% of frame. Leave breathing room at the top and one side so the same image can be cropped to 9:16 vertical for Stories.';
+
+            return `A high-end editorial lifestyle photograph of a ${desc}, in the style of a Hermès or Aesop catalogue page.
+
+Setting: ${sceneText}.
+
+Background tones: warm cream, beige, and muted natural neutrals (cream #F8F6F2, warm beige #E5DCCF, soft taupe). No saturated colours. A small navy or muted coral accent on a single detail is allowed if natural to the scene.
+
+Lighting: soft, diffused natural daylight from one side (window light), gentle shadow falling away from the product. Late morning quality. No harsh contrast, no flash.
+
+Composition: subject placed ${placementText}. ${compositionNote}
+
+Atmosphere: quiet, considered, editorial — like a printed magazine page. Slight film grain. No people. No hands. No text overlays. No watermarks. No props that compete with the product.
+
+Photorealistic, sharp focus on the product, soft natural shadow, fine detail.
+
+Aspect ratio: ${aspect}. Output format: WebP, ~90% quality.`;
+        }
+
+        function updateLifestylePrompt() {
+            const product = document.getElementById('lifestyleProduct').value;
+            const scene = document.getElementById('lifestyleScene').value;
+            const placement = document.getElementById('lifestylePlacement').value;
+            const ratio = document.getElementById('lifestyleRatio').value;
+            document.getElementById('lifestylePromptOut').value = buildLifestylePrompt(product, scene, placement, ratio);
+        }
+
+        function copyLifestylePrompt() {
+            const out = document.getElementById('lifestylePromptOut');
+            const btn = document.getElementById('lifestyleCopyBtn');
             out.select();
             out.setSelectionRange(0, 99999);
             let ok = false;
