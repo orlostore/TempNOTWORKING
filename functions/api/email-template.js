@@ -38,13 +38,13 @@ const EMAIL_FOOTER_HTML = `<!-- ═══ ORLO EMAIL FOOTER — canonical block.
     <table cellpadding="0" cellspacing="0" border="0" role="presentation"><tr>
         <td style="font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;padding-right:14px;vertical-align:middle;">Follow</td>
         <td style="padding-right:10px;vertical-align:middle;">
-            <a href="https://instagram.com/orlostore" aria-label="Instagram" style="display:inline-block;width:28px;height:28px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;text-align:center;line-height:28px;text-decoration:none;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a3a52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#1a3a52"/></svg>
+            <a href="https://instagram.com/orlostore" aria-label="Instagram" style="display:inline-block;width:32px;height:32px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;text-align:center;line-height:32px;text-decoration:none;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a3a52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#1a3a52"/></svg>
             </a>
         </td>
         <td style="vertical-align:middle;">
-            <a href="https://tiktok.com/@shoporlo" aria-label="TikTok" style="display:inline-block;width:28px;height:28px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;text-align:center;line-height:28px;text-decoration:none;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1a3a52" style="vertical-align:middle;"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg>
+            <a href="https://tiktok.com/@shoporlo" aria-label="TikTok" style="display:inline-block;width:32px;height:32px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;text-align:center;line-height:32px;text-decoration:none;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#1a3a52" style="vertical-align:middle;"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg>
             </a>
         </td>
     </tr></table>
