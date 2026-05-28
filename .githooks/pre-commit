@@ -49,3 +49,11 @@ if [ -f scripts/verify-footer.js ]; then
     exit 1
   }
 fi
+
+# Verify the canonical email footer hasn't drifted between the production template + preview mockup.
+if [ -f scripts/verify-email-footer.js ]; then
+  node scripts/verify-email-footer.js >&2 || {
+    echo "pre-commit: email-footer drift — run \`node scripts/sync-email-footer.js\` then re-stage." >&2
+    exit 1
+  }
+fi
