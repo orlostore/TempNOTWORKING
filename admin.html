@@ -5770,9 +5770,9 @@
             status.textContent = 'Sending…';
             status.style.color = 'var(--text-light)';
             try {
-                const res = await fetch('/api/admin/test-email', {
+                const res = await adminFetch('/api/admin/test-email', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem('adminKey') },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ template, to }),
                 });
                 const data = await res.json();
