@@ -40,26 +40,26 @@
         
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
-        /* Header — site-matched lockup (small logo + hairline + Cormorant wordmark) */
+        /* Header — site-matched lockup (matches .login-nav proportions) */
         header {
             background: var(--white);
             color: var(--primary);
-            padding: 14px 28px;
-            margin-bottom: 25px;
+            padding: 10px 24px;
+            margin-bottom: 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border);
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
-        .header-brand { display: flex; align-items: center; gap: 14px; }
-        .header-brand .logo-img { height: 40px; width: auto; display: block; flex-shrink: 0; }
-        .header-brand .sep { width: 1px; height: 28px; background: rgba(26,58,82,0.25); display: inline-block; }
+        .header-brand { display: flex; align-items: center; gap: 12px; }
+        .header-brand .logo-img { height: 32px; width: auto; display: block; flex-shrink: 0; }
+        .header-brand .sep { width: 1px; height: 22px; background: rgba(26,58,82,0.25); display: inline-block; }
         .header-brand .wordmark {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 600;
-            font-size: 1.4rem;
+            font-size: 1.15rem;
             letter-spacing: 0.1em;
             color: var(--primary);
             line-height: 1;
@@ -67,16 +67,18 @@
         .header-brand .wordmark span { color: var(--accent); }
         .header-brand .tagline {
             font-family: 'DM Sans', sans-serif;
-            font-size: 0.62rem;
+            font-size: 0.58rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--text-light);
             font-weight: 500;
-            margin-left: 14px;
-            padding-left: 14px;
+            margin-left: 10px;
+            padding-left: 10px;
             border-left: 1px solid var(--border);
         }
-        .header-actions { display: flex; gap: 10px; }
+        .header-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        header .btn { padding: 7px 14px; font-size: 0.78rem; }
+        header .btn-primary { font-weight: 500; }
         
         /* Tabs */
         .tabs {
@@ -869,9 +871,11 @@
                 text-align: center;
             }
             .header-brand { justify-content: center; gap: 10px; }
-            .header-brand .logo-img { height: 32px; }
-            .header-brand .wordmark { font-size: 1.2rem; }
+            .header-brand .logo-img { height: 28px; }
+            .header-brand .wordmark { font-size: 1.05rem; }
             .header-brand .tagline { display: none; }
+            header { padding: 8px 18px; }
+            header .btn { padding: 6px 12px; font-size: 0.74rem; }
             .header-actions {
                 width: 100%;
                 justify-content: center;
