@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Footer — Before / After</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@400;500;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a3a52;-webkit-font-smoothing:antialiased;line-height:1.6}
+.page{max-width:1200px;margin:0 auto;padding:40px 20px 80px}
+.intro{text-align:center;border-bottom:1px solid rgba(26,58,82,0.10);padding-bottom:28px;margin-bottom:40px}
+.intro h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.4rem;line-height:1.05}
+.intro h1 em{color:#e76f51}
+.intro p{font-size:.88rem;color:#6b6b6b;margin-top:10px;max-width:660px;margin-left:auto;margin-right:auto}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:36px}
+@media(max-width:920px){.compare{grid-template-columns:1fr}}
+.col{background:#fff;border:1px solid rgba(26,58,82,0.10);padding:0}
+.col-label{display:flex;justify-content:space-between;align-items:baseline;padding:14px 22px;background:#fdfbf5;border-bottom:1px solid rgba(26,58,82,0.10);font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500}
+.col-label.before span:first-child{color:#c33}
+.col-label.after  span:first-child{color:#2a7f4e}
+
+/* ─── Shared footer styles (used by BOTH variants, copied from styles.css) ─── */
+.cs-footer-section{background:#fff;padding:28px 32px;margin:0}
+.cs-footer-inner{max-width:780px;margin:0 auto}
+.cs-footer-section .cs-heading{font-family:'DM Sans',sans-serif;font-size:.82rem;text-transform:uppercase;letter-spacing:.16em;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.cs-footer-section .cs-heading .ar{font-family:'Almarai',sans-serif;font-size:.72rem;color:#6b6b6b;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
+.cs-footer-section .cs-block{margin-bottom:18px}
+.cs-footer-section .cs-block:last-child{margin-bottom:0}
+.cs-footer-section .cs-block-title{font-family:'DM Sans',sans-serif;font-size:.7rem;color:#6b6b6b;font-weight:500;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:baseline;gap:10px}
+.cs-footer-section .cs-block-title .muted{font-family:'Almarai',sans-serif;font-size:.66rem;color:#9aa5ad;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
+.cs-footer-section .cs-block-content{font-family:'DM Sans',sans-serif;font-size:.92rem;color:#1a3a52;line-height:1.7}
+.cs-footer-section .cs-block-content a{color:#1a3a52;text-decoration:underline;text-decoration-color:rgba(26,58,82,0.30);text-underline-offset:3px}
+.cs-footer-section .cs-block-content a:hover{text-decoration-color:#e76f51;color:#e76f51}
+.cs-footer-section .cs-block-content .muted{color:#9aa5ad;font-size:.82rem;margin-left:8px}
+.cs-footer-section .social-row{display:flex;align-items:center;gap:14px}
+.cs-footer-section .social-row .label-en{font-family:'DM Sans',sans-serif;font-size:.7rem;color:#6b6b6b;font-weight:500;letter-spacing:.18em;text-transform:uppercase}
+.cs-footer-section .social-row .icons{display:inline-flex;gap:10px}
+.cs-footer-section .social-link{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;color:#1a3a52;text-decoration:none}
+.cs-footer-section .social-link svg{width:14px;height:14px}
+.cs-footer-section .social-link:hover{color:#e76f51;border-color:#e76f51}
+.legal-footer{padding:20px 32px 6px;text-align:center;font-family:'DM Sans',sans-serif;font-size:.74rem;letter-spacing:.06em;color:#6b6b6b;line-height:2}
+.legal-footer a{color:#6b6b6b;text-decoration:none}
+.legal-footer a:hover{color:#1a3a52;text-decoration:underline;text-decoration-color:rgba(26,58,82,0.30);text-underline-offset:3px}
+.legal-footer .sep{margin:0 8px;color:#c4bfb4}
+.legal-copyright{padding:6px 32px 24px;text-align:center;font-family:'DM Sans',sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
+
+.diff{margin-top:36px;background:#fff;border:1px solid rgba(26,58,82,0.10);padding:20px 24px;font-size:.86rem;line-height:1.7}
+.diff h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;color:#1a3a52;margin-bottom:14px}
+.diff ul{padding-left:20px}
+.diff li{margin-bottom:6px;color:#6b6b6b}
+.diff strong{color:#1a3a52}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="intro">
+    <h1>Footer <em>·</em> before / after</h1>
+    <p>Removes the two Arabic echoes inside Customer Enquiries (heading + Online Orders title) — everything else preserved. Legal nav (T&amp;C / Privacy / Returns / Shipping / Exchange) stays. Once approved, this becomes the canonical footer synced to all 14 pages.</p>
+  </header>
+
+  <div class="compare">
+
+    <!-- ─── BEFORE — current production footer (with Arabic echoes) ─── -->
+    <div class="col">
+      <div class="col-label before"><span>Before</span><span>14 pages, with Arabic</span></div>
+      <div class="cs-footer-section">
+        <div class="cs-footer-inner">
+          <div class="cs-heading">Customer Enquiries<span class="ar">استفسارات العملاء</span></div>
+          <div class="cs-block">
+            <div class="cs-block-title">Email</div>
+            <div class="cs-block-content">
+              <a href="mailto:info@orlostore.com">info@orlostore.com</a>
+              <span class="muted">Reply within 24h</span>
+            </div>
+          </div>
+          <div class="cs-block">
+            <div class="cs-block-title">Online orders<span class="muted">الطلبات عبر الإنترنت</span></div>
+            <div class="cs-block-content">
+              WhatsApp: <a href="https://wa.me/971555477206">+971 55 547 7206</a>
+              <span class="muted">Everyday 9am – 9pm</span>
+            </div>
+          </div>
+          <div class="cs-block">
+            <div class="social-row">
+              <span class="label-en">Follow us</span>
+              <span class="icons">
+                <a href="https://instagram.com/orlostore" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+                <a href="https://tiktok.com/@orlostore" class="social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg></a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="legal-footer">
+        <a href="terms-and-conditions.html#terms">Terms &amp; Conditions</a>
+        <span class="sep">·</span>
+        <a href="terms-and-conditions.html#privacy">Privacy</a>
+        <span class="sep">·</span>
+        <a href="terms-and-conditions.html#returns">Returns</a>
+        <span class="sep">·</span>
+        <a href="terms-and-conditions.html#shipping">Shipping</a>
+        <span class="sep">·</span>
+        <a href="terms-and-conditions.html#exchange">Exchange</a>
+      </nav>
+      <div class="legal-copyright">© ORLO 2026 · All rights reserved.</div>
+    </div>
+
+    <!-- ─── AFTER — Arabic dropped, everything else preserved ─── -->
+    <div class="col">
+      <div class="col-label after"><span>After</span><span>1 canonical, English only</span></div>
+      <div class="cs-footer-section">
+        <div class="cs-footer-inner">
+          <div class="cs-heading" style="justify-content:flex-start;">Customer Enquiries</div>
+          <div class="cs-block">
+            <div class="cs-block-title">Email</div>
+            <div class="cs-block-content">
+              <a href="mailto:info@orlostore.com">info@orlostore.com</a>
+              <span class="muted">Reply within 24h</span>
+            </div>
+          </div>
+          <div class="cs-block">
+            <div class="cs-block-title">Online orders</div>
+            <div class="cs-block-content">
+              WhatsApp: <a href="https://wa.me/971555477206">+971 55 547 7206</a>
+              <span class="muted">Everyday 9am – 9pm</span>
+            </div>
+          </div>
+          <div class="cs-block">
+            <div class="social-row">
+              <span class="label-en">Follow us</span>
+              <span class="icons">
+                <a href="https://instagram.com/orlostore" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+                <a href="https://tiktok.com/@orlostore" class="social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 6.3a4.8 4.8 0 0 1-3.8-2.1V15a5.7 5.7 0 1 1-5.7-5.7v3a2.7 2.7 0 1 0 2.7 2.7V2h3a4.8 4.8 0 0 0 3.8 4.3v0Z"/></svg></a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav class="legal-footer">
+        <a href="terms-and-conditions.html#terms">Terms &amp; Conditions</a>
+        <span class="sep">·</span>
+        <a href="terms-and-conditions.html#privacy">Privacy</a>
+        <span class="sep">·</span>
+        <a href="terms-and-conditions.html#returns">Returns</a>
+        <span class="sep">·</span>
+        <a href="terms-and-conditions.html#shipping">Shipping</a>
+        <span class="sep">·</span>
+        <a href="terms-and-conditions.html#exchange">Exchange</a>
+      </nav>
+      <div class="legal-copyright">© ORLO 2026 · All rights reserved.</div>
+    </div>
+
+  </div>
+
+  <div class="diff">
+    <h2>What changes</h2>
+    <ul>
+      <li><strong>Customer Enquiries heading:</strong> drops the Arabic echo "<code>استفسارات العملاء</code>". The English heading sits alone, left-aligned (no longer flex space-between with an empty right side).</li>
+      <li><strong>Online orders label:</strong> drops the Arabic muted "<code>الطلبات عبر الإنترنت</code>" next to "Online orders".</li>
+      <li><strong>Email, WhatsApp number, Reply within 24h, Everyday 9am – 9pm:</strong> unchanged.</li>
+      <li><strong>Follow us:</strong> unchanged. Same Instagram + TikTok SVG icons in hairline circles.</li>
+      <li><strong>Legal nav (T&amp;C / Privacy / Returns / Shipping / Exchange):</strong> unchanged, all 5 links preserved.</li>
+      <li><strong>Copyright:</strong> unchanged.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
