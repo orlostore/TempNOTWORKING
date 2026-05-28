@@ -24,19 +24,19 @@ const FONTS_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Corm
 // Do NOT hand-edit between the markers below.
 const EMAIL_FOOTER_HTML = `<!-- ═══ ORLO EMAIL FOOTER — canonical block. Do NOT hand-edit. Synced via scripts/sync-email-footer.js. ═══ -->
 <tr><td style="background:#f8f6f2;padding:28px 28px 22px;">
-    <div style="font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#1a3a52;font-weight:500;padding-bottom:12px;border-bottom:1px solid #e4ddd1;margin-bottom:16px;">Customer Enquiries</div>
-    <div style="font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:13px;line-height:1.7;color:#1a3a52;margin-bottom:6px;">
-        <span style="color:#6b6b6b;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-right:8px;">Email</span>
+    <div style="font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#1a3a52;font-weight:500;padding-bottom:12px;border-bottom:1px solid #e4ddd1;margin-bottom:16px;">Customer Enquiries</div>
+    <div style="font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:16px;line-height:1.7;color:#1a3a52;margin-bottom:6px;">
+        <span style="color:#6b6b6b;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-right:8px;">Email</span>
         <a href="mailto:info@orlostore.com" style="color:#1a3a52;text-decoration:underline;">info@orlostore.com</a>
-        <span style="color:#9aa5ad;margin-left:6px;font-size:12px;">Reply within 24h</span>
+        <span style="color:#9aa5ad;margin-left:6px;font-size:14px;">Reply within 24h</span>
     </div>
-    <div style="font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:13px;line-height:1.7;color:#1a3a52;margin-bottom:14px;">
-        <span style="color:#6b6b6b;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-right:8px;">Online orders</span>
+    <div style="font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:16px;line-height:1.7;color:#1a3a52;margin-bottom:14px;">
+        <span style="color:#6b6b6b;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-right:8px;">Online orders</span>
         <a href="https://wa.me/971555477206" style="color:#1a3a52;text-decoration:underline;">+971 55 547 7206</a>
-        <span style="color:#9aa5ad;margin-left:6px;font-size:12px;">Everyday 9am – 6pm</span>
+        <span style="color:#9aa5ad;margin-left:6px;font-size:14px;">Everyday 9am – 6pm</span>
     </div>
     <table cellpadding="0" cellspacing="0" border="0" role="presentation"><tr>
-        <td style="font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;padding-right:14px;vertical-align:middle;">Follow</td>
+        <td style="font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#6b6b6b;font-weight:500;padding-right:14px;vertical-align:middle;">Follow</td>
         <td style="padding-right:10px;vertical-align:middle;">
             <a href="https://instagram.com/orlostore" aria-label="Instagram" style="display:inline-block;width:28px;height:28px;border:1px solid rgba(26,58,82,0.20);border-radius:50%;text-align:center;line-height:28px;text-decoration:none;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a3a52" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#1a3a52"/></svg>
@@ -48,7 +48,7 @@ const EMAIL_FOOTER_HTML = `<!-- ═══ ORLO EMAIL FOOTER — canonical block.
             </a>
         </td>
     </tr></table>
-    <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e4ddd1;font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:10px;letter-spacing:0.04em;color:#6b6b6b;line-height:1.85;">
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e4ddd1;font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:12px;letter-spacing:0.04em;color:#6b6b6b;line-height:1.85;">
         <a href="https://orlostore.com/terms-and-conditions.html#terms" style="color:#6b6b6b;text-decoration:none;">Terms &amp; Conditions</a>
         <span style="color:#c0c8ce;margin:0 8px;">&middot;</span>
         <a href="https://orlostore.com/terms-and-conditions.html#privacy" style="color:#6b6b6b;text-decoration:none;">Privacy</a>
@@ -59,7 +59,7 @@ const EMAIL_FOOTER_HTML = `<!-- ═══ ORLO EMAIL FOOTER — canonical block.
         <span style="color:#c0c8ce;margin:0 8px;">&middot;</span>
         <a href="https://orlostore.com/terms-and-conditions.html#exchange" style="color:#6b6b6b;text-decoration:none;">Exchange</a>
     </div>
-    <div style="margin-top:10px;font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:10px;color:#9aa5ad;letter-spacing:0.02em;">&copy; ORLO 2026 &middot; All rights reserved.</div>
+    <div style="margin-top:10px;font-family:'DM Sans','Segoe UI',Arial,sans-serif;font-size:11px;color:#9aa5ad;letter-spacing:0.02em;">&copy; ORLO 2026 &middot; All rights reserved.</div>
 </td></tr>
 <!-- ═══ /ORLO EMAIL FOOTER ═══ -->`;
 
@@ -136,13 +136,13 @@ export function customerEmail({
         : '';
 
     const arHtml = bodyAr
-        ? `<p style="margin:0 0 26px;font-family:${F_AR};font-weight:400;font-size:13px;line-height:1.65;color:${C.soft};direction:rtl;text-align:right;">${bodyAr}</p>`
+        ? `<p style="margin:0 0 26px;font-family:${F_AR};font-weight:400;font-size:15px;line-height:1.65;color:${C.soft};direction:rtl;text-align:right;">${bodyAr}</p>`
         : '';
 
     const infoBoxHtml = infoBoxEn
         ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 28px;border-collapse:collapse;">
             <tr><td style="background:${boxBg};border:1px solid ${C.hairline};border-left:2px solid ${boxBorder};padding:16px 20px;">
-                <p style="margin:0;font-family:${F_SANS};font-size:14px;line-height:1.6;color:${C.navy};">${infoBoxEn}</p>
+                <p style="margin:0;font-family:${F_SANS};font-size:16px;line-height:1.6;color:${C.navy};">${infoBoxEn}</p>
                 ${infoBoxAr ? `<p style="margin:8px 0 0;font-family:${F_AR};font-size:12px;line-height:1.55;color:${C.soft};direction:rtl;text-align:right;">${infoBoxAr}</p>` : ''}
             </td></tr>
         </table>`
@@ -160,7 +160,7 @@ export function customerEmail({
         ? `<p style="color:${C.soft};font-size:11px;line-height:1.55;margin:6px 0 0;font-family:${F_SANS};text-align:center;">If the button doesn't work, copy and paste:<br><a href="${fallbackUrl}" style="color:${C.navy};word-break:break-all;text-decoration:underline;">${fallbackUrl}</a></p>`
         : '';
 
-    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${FONTS_IMPORT}body{margin:0}</style></head><body style="margin:0;padding:0;background:${C.cream};-webkit-text-size-adjust:100%;">
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${FONTS_IMPORT}body{margin:0}body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}</style></head><body style="margin:0;padding:0;background:${C.cream};-webkit-text-size-adjust:100%;">
 ${preheaderHtml}
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${C.cream};border-collapse:collapse;">
     <tr><td align="center" style="padding:32px 16px;">
@@ -210,7 +210,7 @@ export function adminEmail({
         ? `<div style="display:none;font-size:1px;color:${C.cream};line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">${preheader}</div>`
         : '';
 
-    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${FONTS_IMPORT}body{margin:0}</style></head><body style="margin:0;padding:0;background:${C.cream};-webkit-text-size-adjust:100%;">
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${FONTS_IMPORT}body{margin:0}body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}</style></head><body style="margin:0;padding:0;background:${C.cream};-webkit-text-size-adjust:100%;">
 ${preheaderHtml}
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${C.cream};border-collapse:collapse;">
     <tr><td align="center" style="padding:32px 16px;">
@@ -220,7 +220,7 @@ ${preheaderHtml}
                 <p style="margin:0 0 8px;font-family:${F_SANS};font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:${C.soft};font-weight:500;">${metaLabel || 'ADMIN NOTIFICATION'}</p>
                 <h1 style="margin:0;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:24px;line-height:1.2;color:${C.navy};">${titleEn}</h1>
             </td></tr>
-            <tr><td style="padding:14px 32px 28px;background:${C.white};font-family:${F_SANS};font-size:14px;line-height:1.6;color:${C.navy};">${bodyHtml}</td></tr>
+            <tr><td style="padding:14px 32px 28px;background:${C.white};font-family:${F_SANS};font-size:16px;line-height:1.6;color:${C.navy};">${bodyHtml}</td></tr>
             ${EMAIL_FOOTER_HTML}
         </table>
     </td></tr>
