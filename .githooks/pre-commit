@@ -41,3 +41,11 @@ if [ -f scripts/verify-nav.js ]; then
     exit 1
   }
 fi
+
+# Verify the canonical Customer Enquiries footer hasn't drifted across pages.
+if [ -f scripts/verify-footer.js ]; then
+  node scripts/verify-footer.js >&2 || {
+    echo "pre-commit: footer drift — run \`node scripts/sync-footer.js\` then re-stage." >&2
+    exit 1
+  }
+fi
