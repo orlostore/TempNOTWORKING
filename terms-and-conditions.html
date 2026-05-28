@@ -79,7 +79,7 @@
 
       /* ═══ UNIFIED FOOTER (Customer Enquiries) — managed by scripts/sync-footer.js ═══ */
       .cs-footer-section{background:#fff;padding:28px 32px;margin-top:30px}
-      .cs-footer-section .cs-footer-inner{max-width:560px;margin:0 auto}
+      .cs-footer-inner{max-width:780px;margin:0 auto}
       .cs-footer-section .cs-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.16em;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
       .cs-footer-section .cs-heading .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#6b6b6b;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
       .cs-footer-section .cs-block{margin-bottom:18px}
@@ -303,11 +303,8 @@ body{padding-top:0!important}
   </div>
 </section>
 
-<!-- CUSTOMER ENQUIRIES (mirrors cart.html: Email + WhatsApp + Follow) -->
-<section class="policy-section" id="contact">
-  <div class="policy-section-inner">
-    <!-- ═══ ORLO FOOTER — canonical block. Do NOT hand-edit per-page. Run `node scripts/sync-footer.js` to propagate. ═══ -->
-<section class="cs-footer-section">
+<!-- ═══ ORLO FOOTER — canonical block. Do NOT hand-edit per-page. Run `node scripts/sync-footer.js` to propagate. ═══ -->
+<section class="cs-footer-section" id="contact">
   <div class="cs-footer-inner">
     <div class="cs-heading">Customer Enquiries</div>
     <div class="cs-block">
@@ -348,9 +345,6 @@ body{padding-top:0!important}
   </div>
 </section>
 <!-- ═══ /ORLO FOOTER ═══ -->
-
-  </div>
-</section>
 
 <section class="tc-bottom-card">
   <div class="tc-bottom-card-inner">
@@ -468,7 +462,7 @@ body{padding-top:0!important}
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="app.min.js?v=36" defer></script>
+<script src="app.min.js?v=37" defer></script>
 <script>
 function updateAccountLink() {
     const token = localStorage.getItem('orlo_token') || sessionStorage.getItem('orlo_token');
