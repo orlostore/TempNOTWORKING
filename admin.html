@@ -2083,7 +2083,10 @@
 
                     <div class="form-group">
                         <label>Main Image URL</label>
-                        <input type="text" id="formMainImage" placeholder="https://drive.google.com/..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                        <div style="display:flex;gap:8px;align-items:stretch;">
+                            <input type="text" id="formMainImage" placeholder="https://drive.google.com/..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
+                            <button type="button" onclick="deleteR2Image('formMainImage')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️ Delete</button>
+                        </div>
                         <label style="display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer;font-size:0.82rem;color:#1a3a52;font-weight:400;">
                             <input type="checkbox" id="formMainImageMirror" style="width:16px;height:16px;cursor:pointer;">
                             <span>Mirror this image horizontally <span style="color:#888;font-size:0.74rem;">— flip left/right so the product faces the same direction as the other cards on the homepage grid. Cover image only; other images stay as-is.</span></span>
@@ -2092,36 +2095,57 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Image 2 URL</label>
-                            <input type="text" id="formImage2" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                            <div style="display:flex;gap:8px;align-items:stretch;">
+                                <input type="text" id="formImage2" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
+                                <button type="button" onclick="deleteR2Image('formImage2')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Image 3 URL</label>
-                            <input type="text" id="formImage3" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                            <div style="display:flex;gap:8px;align-items:stretch;">
+                                <input type="text" id="formImage3" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
+                                <button type="button" onclick="deleteR2Image('formImage3')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Image 4 URL</label>
-                            <input type="text" id="formImage4" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                            <div style="display:flex;gap:8px;align-items:stretch;">
+                                <input type="text" id="formImage4" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
+                                <button type="button" onclick="deleteR2Image('formImage4')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Image 5 URL</label>
-                            <input type="text" id="formImage5" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                            <div style="display:flex;gap:8px;align-items:stretch;">
+                                <input type="text" id="formImage5" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
+                                <button type="button" onclick="deleteR2Image('formImage5')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Image 6 URL</label>
-                            <input type="text" id="formImage6" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                            <div style="display:flex;gap:8px;align-items:stretch;">
+                                <input type="text" id="formImage6" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
+                                <button type="button" onclick="deleteR2Image('formImage6')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Image 7 URL</label>
-                            <input type="text" id="formImage7" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                            <div style="display:flex;gap:8px;align-items:stretch;">
+                                <input type="text" id="formImage7" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
+                                <button type="button" onclick="deleteR2Image('formImage7')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Image 8 URL</label>
-                        <input type="text" id="formImage8" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                        <div style="display:flex;gap:8px;align-items:stretch;">
+                            <input type="text" id="formImage8" placeholder="https://..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)" style="flex:1;">
+                            <button type="button" onclick="deleteR2Image('formImage8')" title="Permanently delete this image from Cloudflare R2" style="padding:0 14px;background:transparent;border:1px solid #ddd;border-radius:6px;color:#c33;cursor:pointer;font-size:0.78rem;white-space:nowrap;">🗑️</button>
+                        </div>
                     </div>
                 </div>
 
@@ -3709,6 +3733,57 @@
             setTimeout(() => {
                 convertGoogleDriveUrl(input);
             }, 10);
+        }
+
+        // ---- Delete a product image from R2 (and clear the input) ----
+        async function deleteR2Image(fieldId) {
+            const input = document.getElementById(fieldId);
+            if (!input) return;
+            const url = (input.value || '').trim();
+            if (!url) {
+                orloToast('warning', 'Empty field.', 'Nothing to delete — this image slot is already empty.');
+                return;
+            }
+            // Only R2-hosted URLs can be deleted from R2. Drive / Cloudinary URLs just get cleared.
+            const isR2 = url.startsWith('https://images.orlostore.com/products/');
+            if (!isR2) {
+                const ok = await orloConfirm({
+                    type: 'warn',
+                    title: 'Not an R2 image',
+                    msg: 'This URL is not hosted on Cloudflare R2 (it is a Drive / external link). Clearing the field only — the original file stays on its host.\nهذا الرابط غير مستضاف على R2 — سيتم إفراغ الحقل فقط.',
+                    confirmText: 'Clear field',
+                    cancelText: 'Cancel'
+                });
+                if (ok) { input.value = ''; input.dispatchEvent(new Event('input')); }
+                return;
+            }
+            // Confirm permanent delete
+            const ok = await orloConfirm({
+                type: 'danger',
+                title: 'Delete from R2?',
+                msg: 'This permanently deletes the file from Cloudflare R2 and clears the URL from the form. The image cannot be recovered.\nسيؤدي ذلك إلى حذف الصورة نهائياً من R2 — لا يمكن استعادتها.',
+                confirmText: 'Delete permanently',
+                cancelText: 'Cancel'
+            });
+            if (!ok) return;
+
+            try {
+                const res = await adminFetch('/api/admin/delete-product-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+                const data = await res.json();
+                if (!res.ok || data.error) {
+                    orloToast('error', 'Delete failed.', data.error || 'Could not delete image. Please try again.');
+                    return;
+                }
+                input.value = '';
+                input.dispatchEvent(new Event('input'));
+                orloToast('success', 'Image deleted.', 'Removed from R2 and cleared from the form. Save the product to persist.\nتم الحذف — احفظ المنتج لتأكيد التغيير.');
+            } catch (e) {
+                orloToast('error', 'Delete failed.', e.message || 'Network error.');
+            }
         }
 
         // ---- Product image direct-upload to R2 ----
