@@ -112,10 +112,10 @@ export async function onRequestPost(context) {
             }
 
             // === SEND RECEIPT EMAIL ===
-            const customerEmail = session.customer_details?.email || session.customer_email;
+            const custEmailAddr = session.customer_details?.email || session.customer_email;
             const paymentIntentId = session.payment_intent;
 
-            if (customerEmail && paymentIntentId) {
+            if (custEmailAddr && paymentIntentId) {
                 const piResponse = await fetch(`https://api.stripe.com/v1/payment_intents/${paymentIntentId}`, {
                     method: 'GET',
                     headers: {
@@ -133,15 +133,15 @@ export async function onRequestPost(context) {
                             'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                        body: `receipt_email=${encodeURIComponent(customerEmail)}`
+                        body: `receipt_email=${encodeURIComponent(custEmailAddr)}`
                     });
 
-                    console.log(`Receipt sent to: ${customerEmail}`);
+                    console.log(`Receipt sent to: ${custEmailAddr}`);
                 }
             }
 
             // === SEND ORDER CONFIRMATION EMAIL TO CUSTOMER ===
-            if (env.RESEND_API_KEY && customerEmail) {
+            if (env.RESEND_API_KEY && custEmailAddr) {
                 try {
                     const origin = env.SITE_URL || new URL(request.url).origin;
                     const customerName = session.customer_details?.name || 'there';
@@ -200,12 +200,12 @@ export async function onRequestPost(context) {
 
                     await sendEmail({
                         apiKey: env.RESEND_API_KEY,
-                        to: customerEmail,
+                        to: custEmailAddr,
                         subject: `Order Confirmed! | تأكيد الطلب — ${currency} ${total}`,
                         html: confirmHtml,
                         text: confirmText,
                     });
-                    console.log(`Order confirmation sent to: ${customerEmail}`);
+                    console.log(`Order confirmation sent to: ${custEmailAddr}`);
                 } catch (e) {
                     console.error('Order confirmation email error (non-blocking):', e);
                 }
@@ -245,7 +245,7 @@ export async function onRequestPost(context) {
                             <div style="background:#f8f9fa;border-radius:8px;padding:15px;margin-bottom:15px;">
                                 <div style="font-size:12px;color:#888;text-transform:uppercase;margin-bottom:4px;">Customer</div>
                                 <div style="font-size:16px;font-weight:600;color:#333;">${customerName}</div>
-                                <div style="font-size:13px;color:#666;">${customerEmail || 'N/A'}</div>
+                                <div style="font-size:13px;color:#666;">${custEmailAddr || 'N/A'}</div>
                             </div>
                             <div style="background:#f8f9fa;border-radius:8px;padding:15px;margin-bottom:15px;">
                                 <div style="font-size:12px;color:#888;text-transform:uppercase;margin-bottom:4px;">Total</div>
@@ -354,7 +354,7 @@ export async function onRequestPost(context) {
                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
                     ).bind(
                         session.id,
-                        customerEmail || '',
+                        custEmailAddr || '',
                         session.customer_details?.name || '',
                         session.customer_details?.phone || '',
                         session.amount_total || 0,
@@ -403,8 +403,8 @@ export async function onRequestPost(context) {
 
                     // Hashed PII for higher Event Match Quality
                     const userData = {};
-                    if (customerEmail) {
-                        const emHash = await hashSHA256(customerEmail.toLowerCase().trim());
+                    if (custEmailAddr) {
+                        const emHash = await hashSHA256(custEmailAddr.toLowerCase().trim());
                         userData.em = [emHash];
                         // external_id MUST equal what the browser Pixel sends so dedup works.
                         // analytics.js sends raw email as external_id; Meta hashes both — they match.
