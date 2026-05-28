@@ -812,8 +812,14 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           margin: 0 auto;
           max-width: 520px;
         }
-        /* When a section uses the editorial block, hide the old plain title in that section */
-        .homepage-section:has(.section-editorial) > .homepage-section-inner > .homepage-section-title { display: none; }
+        /* When a section uses the editorial block, hide the old plain title in that section.
+           Covers both .homepage-section > .homepage-section-inner > h2 AND the All Products container which
+           has the title as a direct sibling of the editorial block. */
+        .homepage-section:has(.section-editorial) > .homepage-section-inner > .homepage-section-title,
+        #products:has(.section-editorial) > .all-products-title { display: none; }
+        /* When a category filter is active (breadcrumb is shown), hide the All Products editorial too
+           — the page is in browse-results mode, not curation mode. */
+        #products:has(#categoryBreadcrumb:not([style*="none"])) > .section-editorial { display: none; }
 
         /* In-card image swipe with dots — Hermès convention. Mobile-only (dots hidden on desktop).
            The track holds N images side-by-side at 100% each; translate slides between them.
@@ -1100,6 +1106,11 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 <div class="container" id="products">
     <nav class="breadcrumb category-breadcrumb" id="categoryBreadcrumb" aria-label="Breadcrumb" style="display:none;"></nav>
     <h2 class="homepage-section-title all-products-title">All Products <span class="arabic-inline">جميع المنتجات</span></h2>
+    <div class="section-editorial">
+        <span class="meta">All Products</span>
+        <h2>Every object, <em>in one place.</em></h2>
+        <p>The whole shelf, gathered for browsing. Filter by room, or simply wander.</p>
+    </div>
     <div class="price-sort-arrows" id="priceSortArrows">
         <button class="sort-arrow-btn" id="sortPriceAsc" title="Price: Low to High">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
