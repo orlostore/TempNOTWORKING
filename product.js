@@ -736,7 +736,7 @@ async function initProductPage() {
       gallery.innerHTML = `
         <div class="image-gallery">
           <div class="main-image-container">
-            <img id="mainImage" src="${cdnUrl(pickInitialImage(product))}" alt="${product.name}" class="main-product-image" fetchpriority="high" width="500" height="500">
+            <img id="mainImage" src="${cdnUrl(pickInitialImage(product))}" alt="${product.name}" class="main-product-image${product.mainImageMirror ? ' is-mirrored' : ''}" fetchpriority="high" width="500" height="500">
             <div class="zoom-hint">🔍 Click to zoom</div>
           </div>
           ${thumbnailsHTML}
@@ -795,7 +795,7 @@ async function initProductPage() {
       const initial = pickInitialImage(product);
       mobileCarousel.innerHTML = product.images.map((img, index) => `
         <div class="mobile-carousel-slide" data-index="${index}">
-          <img src="${index === 0 ? cdnUrl(initial) : img}" alt="${product.name} ${index + 1}" width="400" height="400" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
+          <img src="${index === 0 ? cdnUrl(initial) : img}" alt="${product.name} ${index + 1}" width="400" height="400" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}${index === 0 && product.mainImageMirror ? ' class="is-mirrored"' : ''}>
         </div>
       `).join('');
       

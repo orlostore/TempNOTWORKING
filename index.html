@@ -39,7 +39,7 @@
     <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="products.min.js?v=11" as="script">
-    <link rel="preload" href="app.min.js?v=35" as="script">
+    <link rel="preload" href="app.min.js?v=36" as="script">
     <!-- Type system: DM Sans body + Cormorant Garamond headings (self-hosted; declarations live in styles.css) -->
     <link rel="preload" href="/fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/dm-sans-v17-latin-500.woff2" as="font" type="font/woff2" crossorigin>
@@ -79,7 +79,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 #newArrivalsGrid{min-height:240px}
 #categoryCards{min-height:200px}
     </style>
-    <link rel="stylesheet" href="styles.css?v=85">
+    <link rel="stylesheet" href="styles.css?v=86">
     <!-- ═══════════════════════════════════════════════════════════
          DRAFT OVERLAY — cosmetic only. Lives inside this file only.
          Does NOT modify styles.css or any other page. Safe to delete.
@@ -1349,7 +1349,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="app.min.js?v=35" defer></script>
+<script src="app.min.js?v=36" defer></script>
 <script>
 /* ═══ CARD v2 — Hermès card-4 override. Active only on this draft page (body[data-cards="v2"]). Live pages keep legacy cards.
    Wrapped in DOMContentLoaded so the override runs AFTER app.min.js's defer execution
@@ -1391,7 +1391,9 @@ document.addEventListener('DOMContentLoaded', function(){
           } else {
             attrs = 'loading="lazy"';
           }
-          return '<img src="'+cdnSrc+'" alt="'+safeName+'" width="400" height="400" onerror="this.onerror=null;this.src=\''+rawSrc+'\'" '+attrs+'>';
+          // mirror only the COVER (idx 0) when the product has mainImageMirror set
+          var cls = (idx === 0 && p.mainImageMirror) ? ' class="is-mirrored"' : '';
+          return '<img src="'+cdnSrc+'" alt="'+safeName+'" width="400" height="400" onerror="this.onerror=null;this.src=\''+rawSrc+'\'" '+attrs+cls+'>';
         }).join('');
       }
       var imgHTML = '<div class="card-img-track">'+imgsHTML+'</div>';
@@ -1554,7 +1556,9 @@ document.addEventListener('DOMContentLoaded', function(){
           var attrs = idx === 0
             ? 'fetchpriority="' + (i === 0 ? 'high' : 'auto') + '"'
             : 'loading="lazy"';
-          return '<img src="'+cdnSrc+'" alt="'+safeName+'" width="400" height="400" onerror="this.onerror=null;this.src=\''+rawSrc+'\'" '+attrs+'>';
+          // mirror only the COVER (idx 0) when the product has mainImageMirror set
+          var cls = (idx === 0 && p.mainImageMirror) ? ' class="is-mirrored"' : '';
+          return '<img src="'+cdnSrc+'" alt="'+safeName+'" width="400" height="400" onerror="this.onerror=null;this.src=\''+rawSrc+'\'" '+attrs+cls+'>';
         }).join('');
       }
       var trackHTML = '<div class="card-img-track">'+imgsHTML+'</div>';

@@ -2084,6 +2084,10 @@
                     <div class="form-group">
                         <label>Main Image URL</label>
                         <input type="text" id="formMainImage" placeholder="https://drive.google.com/..." onpaste="handleImagePaste(this)" oninput="convertGoogleDriveUrl(this)">
+                        <label style="display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer;font-size:0.82rem;color:#1a3a52;font-weight:400;">
+                            <input type="checkbox" id="formMainImageMirror" style="width:16px;height:16px;cursor:pointer;">
+                            <span>Mirror this image horizontally <span style="color:#888;font-size:0.74rem;">— flip left/right so the product faces the same direction as the other cards on the homepage grid. Cover image only; other images stay as-is.</span></span>
+                        </label>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -3336,6 +3340,7 @@
             document.getElementById('formDescription').value = product.description || '';
             document.getElementById('formDescriptionAr').value = product.descriptionAr || '';
             document.getElementById('formMainImage').value = product.image || '';
+            document.getElementById('formMainImageMirror').checked = !!product.mainImageMirror;
             document.getElementById('formImage2').value = product.images && product.images[1] || '';
             document.getElementById('formImage3').value = product.images && product.images[2] || '';
             document.getElementById('formImage4').value = product.images && product.images[3] || '';
@@ -3515,6 +3520,7 @@
                 description: document.getElementById('formDescription').value.trim(),
                 descriptionAr: document.getElementById('formDescriptionAr').value.trim(),
                 mainImage: document.getElementById('formMainImage').value.trim(),
+                mainImageMirror: document.getElementById('formMainImageMirror').checked ? 1 : 0,
                 image2: document.getElementById('formImage2').value.trim(),
                 image3: document.getElementById('formImage3').value.trim(),
                 image4: document.getElementById('formImage4').value.trim(),

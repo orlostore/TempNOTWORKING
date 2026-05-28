@@ -85,6 +85,9 @@ body:has(.cart-sidebar.active) .early-price-bottom{display:none}
    Activated only when <body data-cards="v2"> is present (drafts: draftnewindex.html / draftnewindexR1.html).
    Live pages without the flag keep the legacy .product-card rendering — zero risk to production.
    ═══════════════════════════════════════════════════════════ */
+/* Mirror toggle — applied to cover image only when product.mainImageMirror=1. Pure CSS flip,
+   non-destructive (file in R2 is unchanged), reversible by unchecking the box in admin. */
+img.is-mirrored { transform: scaleX(-1); }
 body[data-cards="v2"] .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:32px 16px}
 body[data-cards="v2"] .card{background:transparent;position:relative}
 body[data-cards="v2"] .card-link{display:block;text-decoration:none;color:inherit;cursor:pointer}

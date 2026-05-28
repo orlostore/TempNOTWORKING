@@ -33,6 +33,7 @@ export async function onRequestPost(context) {
         try { await DB.prepare('ALTER TABLE products ADD COLUMN category2Ar TEXT').run(); } catch(e) { /* already exists */ }
         try { await DB.prepare('ALTER TABLE products ADD COLUMN handmade INTEGER DEFAULT 0').run(); } catch(e) { /* already exists */ }
         try { await DB.prepare('ALTER TABLE products ADD COLUMN isNew INTEGER DEFAULT 0').run(); } catch(e) { /* already exists */ }
+        try { await DB.prepare('ALTER TABLE products ADD COLUMN mainImageMirror INTEGER DEFAULT 0').run(); } catch(e) { /* already exists */ }
 
         const data = await request.json();
 
@@ -41,19 +42,20 @@ export async function onRequestPost(context) {
                 INSERT INTO products (
                     slug, name, nameAr, category, categoryAr, category2, category2Ar,
                     price, cost, quantity,
-                    description, descriptionAr, mainImage, image2, image3, image4, image5,
+                    description, descriptionAr, mainImage, mainImageMirror, image2, image3, image4, image5,
                     image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                     specifications, specificationsAr, featured, handmade, isNew,
                     wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
                     material, materialAr, pairings
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `).bind(
                 data.slug, data.name, data.nameAr || '',
                 data.category || '', data.categoryAr || '',
                 data.category2 || '', data.category2Ar || '',
                 data.price, data.cost || 0, data.quantity || 0,
                 data.description || '', data.descriptionAr || '',
-                bumpImageUrl(data.mainImage), bumpImageUrl(data.image2), bumpImageUrl(data.image3),
+                bumpImageUrl(data.mainImage), data.mainImageMirror ? 1 : 0,
+                bumpImageUrl(data.image2), bumpImageUrl(data.image3),
                 bumpImageUrl(data.image4), bumpImageUrl(data.image5), bumpImageUrl(data.image6),
                 bumpImageUrl(data.image7), bumpImageUrl(data.image8),
                 data.colors || '', data.colorsAr || '',
@@ -101,7 +103,7 @@ export async function onRequestPost(context) {
                     slug = ?, name = ?, nameAr = ?, category = ?, categoryAr = ?,
                     category2 = ?, category2Ar = ?,
                     price = ?, cost = ?, quantity = ?, description = ?, descriptionAr = ?,
-                    mainImage = ?, image2 = ?, image3 = ?, image4 = ?, image5 = ?,
+                    mainImage = ?, mainImageMirror = ?, image2 = ?, image3 = ?, image4 = ?, image5 = ?,
                     image6 = ?, image7 = ?, image8 = ?,
                     colors = ?, colorsAr = ?, packaging = ?, packagingAr = ?,
                     specifications = ?, specificationsAr = ?,
@@ -116,7 +118,8 @@ export async function onRequestPost(context) {
                 data.category2 || '', data.category2Ar || '',
                 data.price, data.cost || 0, data.quantity,
                 data.description || '', data.descriptionAr || '',
-                bumpImageUrl(data.mainImage), bumpImageUrl(data.image2), bumpImageUrl(data.image3),
+                bumpImageUrl(data.mainImage), data.mainImageMirror ? 1 : 0,
+                bumpImageUrl(data.image2), bumpImageUrl(data.image3),
                 bumpImageUrl(data.image4), bumpImageUrl(data.image5), bumpImageUrl(data.image6),
                 bumpImageUrl(data.image7), bumpImageUrl(data.image8),
                 data.colors || '', data.colorsAr || '',
