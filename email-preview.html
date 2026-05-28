@@ -207,27 +207,27 @@ const ORDER_REF = '7X6CQJE5';
 const ORIGIN = 'https://orlostore.com';
 
 const SAMPLES = {
-    orderConf: { icon:'✅', titleEn:"Order Confirmed!", bodyEn:"Hi Rami, thank you for your order! We've received your payment and your order is being prepared.", bodyAr:"مرحباً Rami، شكراً لطلبك! تم استلام الدفع وجارٍ تجهيز طلبك.", infoBoxEn:"<strong>What's next?</strong> We'll send you another email when your order has been dispatched.", ctaUrl:`${ORIGIN}/account.html`, ctaText:"View My Orders | عرض طلباتي" },
-    shipped:   { icon:'🚚', titleEn:"Your Order Has Been Dispatched!", bodyEn:"Hi Rami, great news! Your order has been dispatched and is heading your way.", bodyAr:"مرحباً، تم شحن طلبك وهو في الطريق إليك!", infoBoxEn:"<strong>Estimated Delivery:</strong> 2-5 business days across UAE", ctaUrl:`${ORIGIN}/track?awb=XYZ`, ctaText:"Track My Order | تتبع طلبي" },
-    cancel:    { icon:'❌', titleEn:"Order Cancelled", bodyEn:"Hi Rami, your order has been cancelled as requested.", bodyAr:"مرحباً، تم إلغاء طلبك بناءً على طلبك.", infoBoxEn:"<strong>Refund:</strong> A full refund of AED 119.00 has been initiated. It will appear on your card within 5-7 business days." },
-    retApp:    { icon:'✅', titleEn:"Return Approved", bodyEn:`Hi Rami, your return request for order #${ORDER_REF} has been approved.`, bodyAr:`تمت الموافقة على طلب الإرجاع لطلبك #${ORDER_REF}.`, infoBoxEn:"<strong>Next steps:</strong> Please ship the item back to us. Return shipping costs are the customer's responsibility as per our terms. Once we receive and inspect the item, we will process your refund." },
-    retRej:    { icon:'📋', titleEn:"Return Request Update", bodyEn:`Hi Rami, unfortunately we are unable to approve the return for order #${ORDER_REF}.`, bodyAr:`للأسف لم نتمكن من الموافقة على إرجاع الطلب #${ORDER_REF}.`, infoBoxEn:"<strong>Reason:</strong> Item shows signs of use. Returns must be unopened in original sealed packaging per our terms." },
-    refund:    { icon:'💸', titleEn:"Refund Processed", bodyEn:`Hi Rami, a full refund has been issued for order #${ORDER_REF}.`, bodyAr:`تم إصدار استرداد كامل لطلبك #${ORDER_REF}.`, infoBoxEn:"The refund will appear on your card within <strong>5-7 business days</strong>." },
-    retInit:   { icon:'🔄', titleEn:"Return Initiated", bodyEn:`Hi Rami, a return has been initiated for your order #${ORDER_REF}.`, bodyAr:`تم بدء عملية إرجاع لطلبك #${ORDER_REF}.`, infoBoxEn:"<strong>Reason:</strong> Wrong item received<br><br><strong>Next steps:</strong> Please ship the item back to us. Once we receive and inspect the item, we will process your refund." },
-    verify:    { titleEn:"Welcome, Rami!", bodyEn:"Thank you for creating an account with ORLO Store. Please verify your email address by clicking the button below:", bodyAr:"شكراً لإنشاء حساب في متجر أورلو. يرجى تأكيد بريدك الإلكتروني بالضغط على الزر أدناه:", ctaUrl:`${ORIGIN}/verify?token=abc`, ctaText:"Verify Email | تأكيد البريد", fallbackUrl:`${ORIGIN}/verify?token=abc123xyz` },
-    reset:     { icon:'🔑', titleEn:"Password Reset", bodyEn:"Hi Rami, we received a request to reset your password. Click the button below:", bodyAr:"مرحباً Rami، تلقينا طلباً لإعادة تعيين كلمة المرور. اضغط على الزر أدناه:", ctaUrl:`${ORIGIN}/reset?token=abc`, ctaText:"Reset Password | إعادة التعيين", fallbackUrl:`${ORIGIN}/reset?token=abc` },
-    guest:     { titleEn:"Welcome, Rami!", bodyEn:"Your account has been created. Here are your login details:", bodyAr:"تم إنشاء حسابك. يرجى تغيير كلمة المرور بعد أول تسجيل دخول.", ctaUrl:`${ORIGIN}/verify?token=abc`, ctaText:"Verify Email | تأكيد البريد" },
+    orderConf: { metaLabel:"ORDER · CONFIRMED", titleEn:"Order Confirmed!", bodyEn:"Hi Rami, thank you for your order! We've received your payment and your order is being prepared.", bodyAr:"مرحباً Rami، شكراً لطلبك! تم استلام الدفع وجارٍ تجهيز طلبك.", infoBoxEn:"<strong>What's next?</strong> We'll send you another email when your order has been dispatched.", ctaUrl:`${ORIGIN}/account.html`, ctaText:"View My Orders" },
+    shipped:   { metaLabel:"ORDER · DISPATCHED", titleEn:"Your Order Has Been Dispatched!", bodyEn:"Hi Rami, great news! Your order has been dispatched and is heading your way.", bodyAr:"مرحباً، تم شحن طلبك وهو في الطريق إليك!", infoBoxEn:"<strong>Estimated Delivery:</strong> 2-5 business days across UAE", ctaUrl:`${ORIGIN}/track?awb=XYZ`, ctaText:"Track My Order" },
+    cancel:    { metaLabel:"ORDER · CANCELLED", titleEn:"Order Cancelled", bodyEn:"Hi Rami, your order has been cancelled as requested.", bodyAr:"مرحباً، تم إلغاء طلبك بناءً على طلبك.", infoBoxEn:"<strong>Refund:</strong> A full refund of AED 119.00 has been initiated. It will appear on your card within 5-7 business days." },
+    retApp:    { metaLabel:"RETURN · APPROVED", titleEn:"Return Approved", bodyEn:`Hi Rami, your return request for order #${ORDER_REF} has been approved.`, bodyAr:`تمت الموافقة على طلب الإرجاع لطلبك #${ORDER_REF}.`, infoBoxEn:"<strong>Next steps:</strong> Please ship the item back to us. Return shipping costs are the customer's responsibility as per our terms. Once we receive and inspect the item, we will process your refund." },
+    retRej:    { metaLabel:"RETURN · UPDATE", titleEn:"Return Request Update", bodyEn:`Hi Rami, unfortunately we are unable to approve the return for order #${ORDER_REF}.`, bodyAr:`للأسف لم نتمكن من الموافقة على إرجاع الطلب #${ORDER_REF}.`, infoBoxEn:"<strong>Reason:</strong> Item shows signs of use. Returns must be unopened in original sealed packaging per our terms." },
+    refund:    { metaLabel:"RETURN · REFUNDED", titleEn:"Refund Processed", bodyEn:`Hi Rami, a full refund has been issued for order #${ORDER_REF}.`, bodyAr:`تم إصدار استرداد كامل لطلبك #${ORDER_REF}.`, infoBoxEn:"The refund will appear on your card within <strong>5-7 business days</strong>." },
+    retInit:   { metaLabel:"RETURN · INITIATED", titleEn:"Return Initiated", bodyEn:`Hi Rami, a return has been initiated for your order #${ORDER_REF}.`, bodyAr:`تم بدء عملية إرجاع لطلبك #${ORDER_REF}.`, infoBoxEn:"<strong>Reason:</strong> Wrong item received<br><br><strong>Next steps:</strong> Please ship the item back to us. Once we receive and inspect the item, we will process your refund." },
+    verify:    { metaLabel:"ACCOUNT · VERIFICATION", titleEn:"Welcome, Rami!", bodyEn:"Thank you for creating an account with ORLO Store. Please verify your email address by clicking the button below.", bodyAr:"شكراً لإنشاء حساب في متجر أورلو. يرجى تأكيد بريدك الإلكتروني بالضغط على الزر أدناه.", ctaUrl:`${ORIGIN}/verify?token=abc`, ctaText:"Verify Email", fallbackUrl:`${ORIGIN}/verify?token=abc123xyz` },
+    reset:     { metaLabel:"ACCOUNT · PASSWORD", titleEn:"Password Reset", bodyEn:"Hi Rami, we received a request to reset your password. Click the button below.", bodyAr:"مرحباً Rami، تلقينا طلباً لإعادة تعيين كلمة المرور. اضغط على الزر أدناه.", ctaUrl:`${ORIGIN}/reset?token=abc`, ctaText:"Reset Password", fallbackUrl:`${ORIGIN}/reset?token=abc` },
+    guest:     { metaLabel:"ACCOUNT · WELCOME", titleEn:"Welcome, Rami!", bodyEn:"Your account has been created. Here are your login details.", bodyAr:"تم إنشاء حسابك. يرجى تغيير كلمة المرور بعد أول تسجيل دخول.", ctaUrl:`${ORIGIN}/verify?token=abc`, ctaText:"Verify Email" },
 };
 
 const ADMIN_NEW_ORDER = {
-    icon: '🛒',
+    metaLabel: "ADMIN · NEW ORDER",
     titleEn: "New Order — AED 119.00 from Rami Habash",
-    bodyHtml: `<div style="margin:0 0 14px;padding:12px 14px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:6px;">Customer</div><div style="font-size:15px;color:#1a3a52;font-weight:500;">Rami Habash</div><a href="mailto:rhabash@hotmail.com" style="font-size:13px;color:#1a3a52;text-decoration:underline;">rhabash@hotmail.com</a></div><div style="margin:0 0 14px;padding:12px 14px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:6px;">Total</div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:24px;color:#1a3a52;">AED 119.00</div></div><div style="margin:0 0 14px;padding:12px 14px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Items</div><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="font-size:14px;color:#1a3a52;padding:4px 0;">Classic Vintage Charm Bug</td><td style="font-size:14px;color:#6b6b6b;padding:4px 0;text-align:right;">× 1</td></tr></table></div><table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:18px auto 0;"><tr><td style="background:#1a3a52;border-radius:999px;"><a href="#" style="display:inline-block;padding:12px 28px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#fff;text-decoration:none;">Open Admin Panel</a></td></tr></table>`,
+    bodyHtml: `<div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Customer</div><div style="font-family:'DM Sans',Arial,sans-serif;font-size:15px;color:#1a3a52;font-weight:500;">Rami Habash</div><a href="mailto:rhabash@hotmail.com" style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;color:#1a3a52;text-decoration:underline;">rhabash@hotmail.com</a></div><div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Total</div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:28px;color:#1a3a52;line-height:1.1;">AED 119.00</div></div><div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:10px;">Items</div><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="font-family:'DM Sans',Arial,sans-serif;font-size:14px;color:#1a3a52;padding:4px 0;">Classic Vintage Charm Bug</td><td style="font-family:'DM Sans',Arial,sans-serif;font-size:14px;color:#6b6b6b;padding:4px 0;text-align:right;">× 1</td></tr></table></div><table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:22px auto 0;"><tr><td style="background:#1a3a52;border-radius:999px;"><a href="#" style="display:inline-block;padding:13px 30px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#fff;text-decoration:none;">Open Admin Panel</a></td></tr></table>`,
 };
 const ADMIN_RET_REQ = {
-    icon: '🔄',
-    titleEn: "New Return Request — Order #7X6CQJE5",
-    bodyHtml: `<div style="margin:0 0 14px;padding:12px 14px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:6px;">Customer</div><div style="font-size:15px;color:#1a3a52;font-weight:500;">Rami Habash</div><a href="mailto:rhabash@hotmail.com" style="font-size:13px;color:#1a3a52;text-decoration:underline;">rhabash@hotmail.com</a></div><div style="margin:0 0 14px;padding:12px 14px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:6px;">Reason</div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:15px;color:#1a3a52;line-height:1.5;">Item arrived with a small chip on the rear bumper.</div></div><div style="margin:0 0 14px;padding:12px 14px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Order</div><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="font-size:14px;color:#1a3a52;padding:4px 0;">Classic Vintage Charm Bug</td><td style="font-size:14px;color:#6b6b6b;padding:4px 0;text-align:right;">AED 119.00</td></tr></table></div><table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:18px auto 0;"><tr><td style="background:#1a3a52;border-radius:999px;"><a href="#" style="display:inline-block;padding:12px 28px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#fff;text-decoration:none;">Review Return</a></td></tr></table>`,
+    metaLabel: "ADMIN · NEW RETURN REQUEST",
+    titleEn: "Return Request — Order #7X6CQJE5",
+    bodyHtml: `<div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Customer</div><div style="font-family:'DM Sans',Arial,sans-serif;font-size:15px;color:#1a3a52;font-weight:500;">Rami Habash</div><a href="mailto:rhabash@hotmail.com" style="font-family:'DM Sans',Arial,sans-serif;font-size:13px;color:#1a3a52;text-decoration:underline;">rhabash@hotmail.com</a></div><div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Reason</div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:16px;color:#1a3a52;line-height:1.5;">Item arrived with a small chip on the rear bumper.</div></div><div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:10px;">Order</div><table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td style="font-family:'DM Sans',Arial,sans-serif;font-size:14px;color:#1a3a52;padding:4px 0;">Classic Vintage Charm Bug</td><td style="font-family:'DM Sans',Arial,sans-serif;font-size:14px;color:#6b6b6b;padding:4px 0;text-align:right;">AED 119.00</td></tr></table></div><table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:22px auto 0;"><tr><td style="background:#1a3a52;border-radius:999px;"><a href="#" style="display:inline-block;padding:13px 30px;font-family:'DM Sans',Arial,sans-serif;font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#fff;text-decoration:none;">Review Return</a></td></tr></table>`,
 };
 
 // ─── v1 (current production) renderers ─────────────────────────────
@@ -276,8 +276,10 @@ function renderOldAdmin(s) {
     </div></body></html>`;
 }
 
-// ─── v2 (proposed editorial) renderers ─────────────────────────────
-const C = { cream:'#f8f6f2', surface:'#fdfbf5', navy:'#1a3a52', navy90:'#1e3e57', coral:'#e76f51', muted:'#6b6b6b', hairline:'#e4ddd1' };
+// ─── v3 (editorial — site-matched, no emojis, white card, tight Arabic) ─────
+// Tokens copied directly from styles.css: cream page bg / white card / navy primary /
+// coral accent / muted body / soft (Arabic + meta labels) / hairline rule.
+const C = { cream:'#f8f6f2', white:'#ffffff', navy:'#1a3a52', navy90:'#1e3e57', coral:'#e76f51', muted:'#6b6b6b', soft:'#9aa5ad', hairline:'#e4ddd1', boxBg:'#fdfbf5' };
 const F_SERIF = `'Cormorant Garamond',Georgia,'Times New Roman',serif`;
 const F_SANS  = `'DM Sans','Segoe UI',Arial,sans-serif`;
 const F_AR    = `'Almarai',Tahoma,Arial,sans-serif`;
@@ -287,33 +289,37 @@ function renderNewCustomer(s) {
     return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500;700&family=Almarai:wght@400;700&display=swap');body{margin:0}</style></head><body style="margin:0;padding:0;background:${C.cream};">
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${C.cream};border-collapse:collapse;">
         <tr><td align="center" style="padding:40px 16px;">
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;width:100%;background:${C.surface};border:1px solid ${C.hairline};border-collapse:collapse;">
-                <tr><td align="center" style="padding:36px 32px 22px;">
-                    <img src="${logoUrl}" alt="ORLO Store" width="60" height="60" style="display:inline-block;width:60px;height:60px;border:0;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;width:100%;background:${C.white};border:1px solid ${C.hairline};border-collapse:collapse;">
+                <tr><td align="center" style="padding:36px 32px 18px;background:${C.white};border-bottom:1px solid ${C.hairline};">
+                    <img src="${logoUrl}" alt="ORLO Store" width="56" height="56" style="display:inline-block;width:56px;height:56px;border:0;">
                     <div style="width:60px;height:1.5px;background:${C.coral};margin:14px auto 0;line-height:1px;font-size:1px;">&nbsp;</div>
                 </td></tr>
-                <tr><td style="padding:8px 36px 32px;">
-                    ${s.icon?`<div style="font-size:22px;line-height:1;margin:0 0 14px;opacity:0.85;">${s.icon}</div>`:''}
-                    <h1 style="margin:0 0 18px;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:30px;line-height:1.15;color:${C.navy};letter-spacing:-0.005em;">${s.titleEn}</h1>
-                    <p style="margin:0 0 20px;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:17px;line-height:1.55;color:${C.navy90};">${s.bodyEn}</p>
-                    ${s.bodyAr?`<p style="color:${C.muted};font-size:14px;line-height:1.65;margin:0 0 24px;font-family:${F_AR};direction:rtl;text-align:right;">${s.bodyAr}</p>`:''}
+                ${s.metaLabel?`<tr><td align="center" style="padding:22px 32px 0;background:${C.white};">
+                    <p style="margin:0;font-family:${F_SANS};font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:${C.soft};font-weight:500;">${s.metaLabel}</p>
+                </td></tr>`:''}
+                <tr><td style="padding:14px 36px 32px;background:${C.white};">
+                    <h1 style="margin:0 0 22px;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:32px;line-height:1.1;color:${C.navy};letter-spacing:-0.005em;text-align:center;">${s.titleEn}</h1>
+                    <p style="margin:0 0 16px;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:17px;line-height:1.6;color:${C.navy};">${s.bodyEn}</p>
+                    ${s.bodyAr?`<p style="margin:0 0 26px;font-family:${F_AR};font-weight:400;font-size:13px;line-height:1.65;color:${C.soft};direction:rtl;text-align:right;">${s.bodyAr}</p>`:''}
                     ${s.infoBoxEn?`<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 28px;border-collapse:collapse;">
-                        <tr><td style="background:${C.surface};border:1px solid ${C.hairline};border-left:2px solid ${C.coral};padding:16px 20px;">
-                            <p style="margin:0;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:15px;line-height:1.5;color:${C.navy};">${s.infoBoxEn}</p>
+                        <tr><td style="background:${C.white};border:1px solid ${C.hairline};border-left:2px solid ${C.coral};padding:16px 20px;">
+                            <p style="margin:0;font-family:${F_SANS};font-size:14px;line-height:1.6;color:${C.navy};">${s.infoBoxEn}</p>
                         </td></tr>
                     </table>`:''}
-                    ${s.ctaUrl?`<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:8px auto 24px;border-collapse:collapse;">
+                    ${s.ctaUrl?`<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:6px auto 22px;border-collapse:collapse;">
                         <tr><td align="center" style="border-radius:999px;background:${C.navy};">
-                            <a href="${s.ctaUrl}" style="display:inline-block;padding:14px 32px;font-family:${F_SANS};font-size:12px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#ffffff;text-decoration:none;border-radius:999px;">${s.ctaText}</a>
+                            <a href="${s.ctaUrl}" style="display:inline-block;padding:14px 34px;font-family:${F_SANS};font-size:11px;font-weight:500;letter-spacing:0.24em;text-transform:uppercase;color:#ffffff;text-decoration:none;border-radius:999px;">${s.ctaText}</a>
                         </td></tr>
                     </table>`:''}
-                    ${s.fallbackUrl?`<p style="color:${C.muted};font-size:12px;line-height:1.55;margin:8px 0 0;font-family:${F_SANS};">If the button doesn't work, copy and paste this link:<br><a href="${s.fallbackUrl}" style="color:${C.navy};word-break:break-all;text-decoration:underline;">${s.fallbackUrl}</a></p>`:''}
-                    <p style="margin:24px 0 0;padding-top:20px;border-top:1px solid ${C.hairline};font-family:${F_SANS};font-size:12px;line-height:1.6;color:${C.muted};">
+                    ${s.fallbackUrl?`<p style="color:${C.soft};font-size:11px;line-height:1.55;margin:6px 0 0;font-family:${F_SANS};text-align:center;">If the button doesn't work, copy and paste:<br><a href="${s.fallbackUrl}" style="color:${C.navy};word-break:break-all;text-decoration:underline;">${s.fallbackUrl}</a></p>`:''}
+                </td></tr>
+                <tr><td align="center" style="padding:18px 32px;background:${C.white};border-top:1px solid ${C.hairline};">
+                    <p style="margin:0;font-family:${F_SANS};font-size:11px;color:${C.muted};">
                         Questions? <a href="mailto:info@orlostore.com" style="color:${C.navy};text-decoration:underline;">info@orlostore.com</a>
                     </p>
                 </td></tr>
-                <tr><td align="center" style="padding:18px 32px 26px;background:${C.cream};border-top:1px solid ${C.hairline};">
-                    <p style="margin:0;font-family:${F_SANS};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${C.muted};font-weight:500;">ORLO &middot; orlostore.com</p>
+                <tr><td align="center" style="padding:18px 32px 24px;background:${C.cream};">
+                    <p style="margin:0;font-family:${F_SANS};font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:${C.soft};font-weight:500;">ORLO &middot; orlostore.com</p>
                 </td></tr>
             </table>
         </td></tr>
@@ -323,14 +329,14 @@ function renderNewAdmin(s) {
     return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;700&display=swap');body{margin:0}</style></head><body style="margin:0;padding:0;background:${C.cream};">
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${C.cream};border-collapse:collapse;">
         <tr><td align="center" style="padding:40px 16px;">
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="640" style="max-width:640px;width:100%;background:${C.surface};border:1px solid ${C.hairline};border-collapse:collapse;">
-                <tr><td style="padding:26px 32px 18px;border-bottom:1px solid ${C.hairline};">
-                    <p style="margin:0 0 6px;font-family:${F_SANS};font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:${C.muted};font-weight:500;">Admin notification &middot; ${s.icon}</p>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="640" style="max-width:640px;width:100%;background:${C.white};border:1px solid ${C.hairline};border-collapse:collapse;">
+                <tr><td style="padding:28px 32px 18px;background:${C.white};border-bottom:1px solid ${C.hairline};">
+                    <p style="margin:0 0 8px;font-family:${F_SANS};font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:${C.soft};font-weight:500;">${s.metaLabel||'ADMIN NOTIFICATION'}</p>
                     <h1 style="margin:0;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:24px;line-height:1.2;color:${C.navy};">${s.titleEn}</h1>
                 </td></tr>
-                <tr><td style="padding:24px 32px 28px;font-family:${F_SANS};font-size:14px;line-height:1.6;color:${C.navy};">${s.bodyHtml}</td></tr>
-                <tr><td align="center" style="padding:14px 32px 22px;background:${C.cream};border-top:1px solid ${C.hairline};">
-                    <p style="margin:0;font-family:${F_SANS};font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:${C.muted};font-weight:500;">ORLO Admin</p>
+                <tr><td style="padding:24px 32px 28px;background:${C.white};font-family:${F_SANS};font-size:14px;line-height:1.6;color:${C.navy};">${s.bodyHtml}</td></tr>
+                <tr><td align="center" style="padding:16px 32px 22px;background:${C.cream};">
+                    <p style="margin:0;font-family:${F_SANS};font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:${C.soft};font-weight:500;">ORLO ADMIN</p>
                 </td></tr>
             </table>
         </td></tr>
