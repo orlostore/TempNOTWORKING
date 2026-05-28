@@ -1349,6 +1349,7 @@
                 <button class="btn btn-secondary" onclick="refreshProducts()">Refresh</button>
                 <button class="btn btn-secondary" onclick="openHeroesModal()" title="Manage homepage hero / banner">🖼️ Heroes</button>
                 <button class="btn btn-secondary" onclick="openSpecPromptModal()" title="Generate Gemini dimension overlay prompt for any product">📐 Spec Prompt</button>
+                <button class="btn btn-secondary" onclick="openCleanCataloguePromptModal()" title="Generate Gemini prompt to clean raw photos: remove background + place on warm beige #E5DCCF + WebP output">🪞 Clean Catalogue</button>
                 <a class="btn btn-secondary" href="brand-guide.html" target="_blank" rel="noopener" title="Product image guide — site, IG, TikTok specs + blank canvas templates">📐 Brand Guide</a>
                 <a class="btn btn-secondary" href="orlo-video-brief.md" target="_blank" rel="noopener" title="Copy-paste brief for a fresh Claude chat to build a Reel / TikTok — locked v3 spec">🎬 Video Brief</a>
             </div>
@@ -2420,6 +2421,60 @@
                         </div>
                         <textarea id="specPromptOut" readonly style="flex:1;min-height:380px;width:100%;padding:14px 16px;border:1px solid #ddd;border-radius:6px;font-size:0.78rem;line-height:1.55;font-family:'DM Sans',monospace;background:#fafafa;color:#222;resize:vertical;white-space:pre-wrap;"></textarea>
                         <div style="font-size:0.72rem;color:#888;margin-top:8px;line-height:1.55;">After Gemini returns the image, verify the numbers came out as digits (not "1Z" or "I2") and the background is still beige. If anything looks off, ask Gemini once: <em>"same image — fix the [issue] only, keep everything else identical."</em></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Clean Catalogue Prompt modal: removes raw photo bg + places product on warm beige #E5DCCF + WebP output -->
+    <div class="modal-overlay" id="cleanCataloguePromptModal">
+        <div class="modal" style="max-width:1040px;">
+            <div class="modal-header">
+                <h2>🪞 Clean Catalogue Prompt — raw photo → ORLO beige + WebP</h2>
+                <button class="modal-close" onclick="closeCleanCataloguePromptModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0;">
+
+                <div style="background:#f8f6f2;padding:14px 22px;border-bottom:1px solid #eee;font-size:0.78rem;line-height:1.6;color:#444;">
+                    <strong style="color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;font-size:0.7rem;">How to use</strong><br>
+                    1. Fill in the product description (colour, material, style — no marketing copy).
+                    2. Click <strong>Copy prompt</strong>.
+                    3. In Gemini, <strong>attach the raw product photograph</strong> and paste the prompt.
+                    4. Gemini returns a 2000 × 2000 WebP image with the product on the locked warm beige #E5DCCF background, soft contact shadow under it, ready to upload.
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:0;">
+                    <!-- Form -->
+                    <div style="padding:20px 22px;border-right:1px solid #eee;">
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label for="cleanProduct" style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Product description</label>
+                            <textarea id="cleanProduct" rows="3" placeholder="e.g. vintage red metal Volkswagen Beetle toy with hippie flower decals" style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:0.88rem;font-family:inherit;resize:vertical;" oninput="updateCleanCataloguePrompt()"></textarea>
+                            <div class="form-hint" style="font-size:0.7rem;color:#888;margin-top:4px;">A short physical description — colour, material, style. No marketing copy.</div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.85rem;color:#1a3a52;">
+                                <input type="checkbox" id="cleanShadow" checked onchange="updateCleanCataloguePrompt()" style="width:16px;height:16px;cursor:pointer;">
+                                <span>Soft natural contact shadow under product (Hermès register)</span>
+                            </label>
+                        </div>
+
+                        <div style="padding:12px 14px;background:#f8f6f2;border-left:3px solid #e76f51;font-size:0.74rem;line-height:1.6;color:#555;">
+                            <strong style="color:#1a3a52;">Brand standards (locked):</strong>
+                            Beige bg #E5DCCF · Pure flat colour, no gradient · No props, text, watermarks, borders, or vignettes · Product unchanged (lighting, colour, proportions identical) · 1:1 square 2000 × 2000 · WebP format, ~90% quality.
+                        </div>
+                    </div>
+
+                    <!-- Output -->
+                    <div style="padding:20px 22px;display:flex;flex-direction:column;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                            <label for="cleanPromptOut" style="font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;">Generated prompt</label>
+                            <button class="btn btn-primary btn-small" type="button" id="cleanCopyBtn" onclick="copyCleanCataloguePrompt()" style="font-size:0.78rem;">Copy prompt</button>
+                        </div>
+                        <textarea id="cleanPromptOut" readonly style="flex:1;min-height:380px;width:100%;padding:14px 16px;border:1px solid #ddd;border-radius:6px;font-size:0.78rem;line-height:1.55;font-family:'DM Sans',monospace;background:#fafafa;color:#222;resize:vertical;white-space:pre-wrap;"></textarea>
+                        <div style="font-size:0.72rem;color:#888;margin-top:8px;line-height:1.55;">After Gemini returns the image, verify the background is solid flat #E5DCCF (not a gradient), the product itself is pixel-identical to the source, and the file is WebP. If anything looks off, ask Gemini once: <em>"same image — fix the [issue] only, keep everything else identical."</em></div>
                     </div>
                 </div>
 
@@ -5597,7 +5652,7 @@ Keep everything else identical to the attached image: the beige #E5DCCF backgrou
 
 CRITICAL — do NOT include any of the following: no white background swap, no grey, no rulers, no grid lines, no measurement icons, no second product view, no exploded diagram, no props, no text other than the dimension labels and the caption strip, no watermarks, no logos, no square brackets [ ], no curly braces { }, no angle brackets < >, no quotation marks around the numbers.
 
-Aspect ratio: 1:1 square, 2000 × 2000 px.`;
+Aspect ratio: 1:1 square, 2000 × 2000 px. Output as WebP, ~90% quality.`;
         }
 
         function updateSpecPrompt() {
@@ -5631,6 +5686,68 @@ Aspect ratio: 1:1 square, 2000 × 2000 px.`;
                 btn.style.background = '';
             }, 1800);
         }
+
+        // --- Clean Catalogue Prompt modal — raw photo → product on warm beige #E5DCCF + WebP ---
+        function openCleanCataloguePromptModal() {
+            document.getElementById('cleanCataloguePromptModal').classList.add('active');
+            updateCleanCataloguePrompt();
+        }
+        function closeCleanCataloguePromptModal() { document.getElementById('cleanCataloguePromptModal').classList.remove('active'); }
+
+        function buildCleanCataloguePrompt(product, withShadow) {
+            const desc = (product || '').trim() || 'the product';
+            const shadowLine = withShadow
+                ? `Add a soft, natural contact shadow directly beneath the product, as if it sits on the beige surface under diffuse daylight from above. The shadow should be soft-edged, warm grey, low opacity (~25%), and only directly under and slightly behind the product — not a hard cast shadow, not a vignette around the product, not symmetrical.`
+                : `Do not add any shadow at all. The product should appear cleanly placed on the beige background with no shadow, halo, or vignette of any kind.`;
+
+            return `I'm attaching a raw product photograph of ${desc}. Your job is to clean this image and output an ORLO catalogue version: same product, on our locked warm beige catalogue background, in WebP format.
+
+Apply these steps exactly, do not substitute colours or interpretations:
+
+— Remove the existing background completely. Replace it with a SOLID, FLAT warm beige fill, hex #E5DCCF (RGB 229 220 207). The background must be one uniform colour across the entire canvas — no gradient, no vignette, no texture, no second tone, no off-white edges, no white border, no shadow of the original background bleeding through.
+
+— Keep the product itself pixel-identical to the source: same colour, same materials, same proportions, same lighting on the product, same fine detail, same camera angle. Do NOT redraw, restyle, recolour, or smooth the product. Do NOT alter its perspective. If parts of the product were cut off in the original, keep the exact same crop — do not invent or extend the product.
+
+— ${shadowLine}
+
+— Centre the product in the frame with comfortable breathing room on all sides (roughly 12–15% margin to the nearest edge of the product). The product should not touch the edge of the canvas.
+
+— Aspect ratio: 1:1 square, 2000 × 2000 px.
+
+— Output format: WebP, ~90% quality.
+
+CRITICAL — do NOT include any of the following: no props, no text, no labels, no watermarks, no logos, no rulers, no measurement lines, no dimension annotations, no second product view, no exploded diagram, no white background, no grey background, no gradient on the beige, no border or frame around the image, no vignette, no decorative elements of any kind. The only things in the output image are: the warm beige background + the product + (optionally) its soft contact shadow.`;
+        }
+
+        function updateCleanCataloguePrompt() {
+            const product = document.getElementById('cleanProduct').value;
+            const withShadow = document.getElementById('cleanShadow').checked;
+            document.getElementById('cleanPromptOut').value = buildCleanCataloguePrompt(product, withShadow);
+        }
+
+        function copyCleanCataloguePrompt() {
+            const out = document.getElementById('cleanPromptOut');
+            const btn = document.getElementById('cleanCopyBtn');
+            out.select();
+            out.setSelectionRange(0, 99999);
+            let ok = false;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(out.value);
+                    ok = true;
+                } else {
+                    ok = document.execCommand('copy');
+                }
+            } catch (e) { ok = false; }
+            const original = btn.textContent;
+            btn.textContent = ok ? '✓ Copied!' : 'Copy failed — select manually';
+            btn.style.background = ok ? '#2a7f4e' : '#c33';
+            setTimeout(() => {
+                btn.textContent = original;
+                btn.style.background = '';
+            }, 1800);
+        }
+
         function showHeroListView() {
             document.getElementById('heroesListView').style.display = '';
             document.getElementById('heroEditView').style.display = 'none';

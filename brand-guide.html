@@ -369,15 +369,15 @@ Aspect ratio: 1:1 square, 1080 × 1080.</pre>
     <h2><span class="n">08</span><span>Export specs</span></h2>
     <table>
       <tr><th>Use</th><th>Dimensions</th><th>Format</th><th>Quality</th></tr>
-      <tr><td>Site cards &amp; carousel</td><td>1080 × 1080</td><td>JPG, sRGB</td><td>85% · &lt; 300 KB</td></tr>
-      <tr><td>Product page (hero)</td><td>1600 × 1600</td><td>JPG, sRGB</td><td>85% · &lt; 500 KB</td></tr>
-      <tr><td>IG feed (square)</td><td>1080 × 1080</td><td>JPG</td><td>90%</td></tr>
-      <tr><td>IG feed (portrait)</td><td>1080 × 1350</td><td>JPG</td><td>90%</td></tr>
-      <tr><td>IG Stories / Reels</td><td>1080 × 1920</td><td>JPG / MP4</td><td>90%</td></tr>
-      <tr><td>TikTok</td><td>1080 × 1920</td><td>JPG / MP4</td><td>90%</td></tr>
-      <tr><td>Site OG (share)</td><td>1200 × 630</td><td>JPG</td><td>85%</td></tr>
+      <tr><td>Site cards &amp; carousel</td><td>1080 × 1080</td><td>WebP, sRGB</td><td>90% · &lt; 200 KB</td></tr>
+      <tr><td>Product page (hero)</td><td>1600 × 1600</td><td>WebP, sRGB</td><td>90% · &lt; 350 KB</td></tr>
+      <tr><td>IG feed (square)</td><td>1080 × 1080</td><td>WebP / JPG fallback</td><td>90%</td></tr>
+      <tr><td>IG feed (portrait)</td><td>1080 × 1350</td><td>WebP / JPG fallback</td><td>90%</td></tr>
+      <tr><td>IG Stories / Reels</td><td>1080 × 1920</td><td>WebP / MP4</td><td>90%</td></tr>
+      <tr><td>TikTok</td><td>1080 × 1920</td><td>WebP / MP4</td><td>90%</td></tr>
+      <tr><td>Site OG (share)</td><td>1200 × 630</td><td>JPG (OG spec)</td><td>85%</td></tr>
     </table>
-    <p style="margin-top:14px;font-size:.85rem;color:var(--muted)">Cloudinary on the live site handles re-encoding automatically — upload the largest version (1600 × 1600) and let the CDN serve the right size to each surface.</p>
+    <p style="margin-top:14px;font-size:.85rem;color:var(--muted)">WebP is now the default upload format — smaller files, same visual quality. Cloudinary on the live site still re-encodes per browser, but starting from WebP means smaller source files in R2 and faster cold-cache loads. The one exception is OG share images: Facebook still prefers JPG for link previews.</p>
   </section>
 
   <!-- 9. Dimension / spec card -->
