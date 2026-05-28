@@ -3736,35 +3736,33 @@
         }
 
         // ---- Delete a product image from R2 (and clear the input) ----
+        // Uses admin's local showConfirm/showToast (not orloConfirm/orloToast which only
+        // live in customer-facing app.min.js — calling them here would throw silently).
         async function deleteR2Image(fieldId) {
             const input = document.getElementById(fieldId);
             if (!input) return;
             const url = (input.value || '').trim();
             if (!url) {
-                orloToast('warning', 'Empty field.', 'Nothing to delete — this image slot is already empty.');
+                showToast('Nothing to delete — this image slot is already empty.', 'warning');
                 return;
             }
             // Only R2-hosted URLs can be deleted from R2. Drive / Cloudinary URLs just get cleared.
             const isR2 = url.startsWith('https://images.orlostore.com/products/');
             if (!isR2) {
-                const ok = await orloConfirm({
-                    type: 'warn',
-                    title: 'Not an R2 image',
-                    msg: 'This URL is not hosted on Cloudflare R2 (it is a Drive / external link). Clearing the field only — the original file stays on its host.\nهذا الرابط غير مستضاف على R2 — سيتم إفراغ الحقل فقط.',
-                    confirmText: 'Clear field',
-                    cancelText: 'Cancel'
-                });
+                const ok = await showConfirm(
+                    'Not an R2 image',
+                    'This URL is not hosted on Cloudflare R2 (it is a Drive / external link). Clearing the field only — the original file stays on its host.',
+                    { icon: '⚠️', okText: 'Clear field', okClass: 'btn-primary' }
+                );
                 if (ok) { input.value = ''; input.dispatchEvent(new Event('input')); }
                 return;
             }
             // Confirm permanent delete
-            const ok = await orloConfirm({
-                type: 'danger',
-                title: 'Delete from R2?',
-                msg: 'This permanently deletes the file from Cloudflare R2 and clears the URL from the form. The image cannot be recovered.\nسيؤدي ذلك إلى حذف الصورة نهائياً من R2 — لا يمكن استعادتها.',
-                confirmText: 'Delete permanently',
-                cancelText: 'Cancel'
-            });
+            const ok = await showConfirm(
+                'Delete from R2?',
+                'This permanently deletes the file from Cloudflare R2 and clears the URL from the form. The image cannot be recovered.',
+                { icon: '🗑️', okText: 'Delete permanently', okClass: 'btn-danger' }
+            );
             if (!ok) return;
 
             try {
@@ -3775,14 +3773,14 @@
                 });
                 const data = await res.json();
                 if (!res.ok || data.error) {
-                    orloToast('error', 'Delete failed.', data.error || 'Could not delete image. Please try again.');
+                    showToast('Delete failed: ' + (data.error || 'unknown error'), 'error');
                     return;
                 }
                 input.value = '';
                 input.dispatchEvent(new Event('input'));
-                orloToast('success', 'Image deleted.', 'Removed from R2 and cleared from the form. Save the product to persist.\nتم الحذف — احفظ المنتج لتأكيد التغيير.');
+                showToast('Image deleted from R2 and cleared. Save the product to persist.', 'success');
             } catch (e) {
-                orloToast('error', 'Delete failed.', e.message || 'Network error.');
+                showToast('Delete failed: ' + (e.message || 'network error'), 'error');
             }
         }
 
