@@ -150,6 +150,8 @@
         <div class="hero-eyebrow">Payment Cancelled</div>
         <h1>Your cart<br><em>waits.</em></h1>
         <p>Everything is right where you left it — pick up whenever you're ready. No charges were made.</p>
+        <p class="ar">سلّتك تنتظر.</p>
+        <p class="ar-tag">كل شيء كما تركته — أكمل وقتما تشاء. لم يتم خصم أي مبلغ.</p>
     </section>
 
     <section class="cancel-body">
@@ -164,11 +166,11 @@
         </div>
 
         <div class="cta-wrap">
-            <a href="/" id="retryBtn" class="btn-primary">Return to checkout</a>
+            <a href="/" id="retryBtn" class="btn-primary">Return to checkout<span class="ar">العودة للدفع</span></a>
         </div>
 
         <div class="help-block">
-            <span class="help-label">Need help?</span>
+            <span class="help-label">Need help?<span class="ar">تحتاج مساعدة؟</span></span>
             <a href="mailto:info@orlostore.com" class="help-email">info@orlostore.com</a>
         </div>
 
@@ -222,7 +224,7 @@
                 retryBtn.href = lastProduct + (lastProduct.indexOf('?') > -1 ? '&' : '?') + 'openCart=true';
             } else {
                 // No cart items — change CTA to "Continue browsing"
-                retryBtn.innerHTML = 'Continue browsing';
+                retryBtn.innerHTML = 'Continue browsing<span class="ar">متابعة التسوق</span>';
                 retryBtn.href = '/';
             }
         })();
