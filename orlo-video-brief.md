@@ -1,4 +1,4 @@
-# ORLO REEL — UPDATED SPEC (v3.1 — price-on-cover, May 2026)
+# ORLO REEL — UPDATED SPEC (v3.2 — price legibility, May 2026)
 
 You are building a vertical reel/TikTok video for ORLO Store. This spec OVERRIDES anything from prior conversations. Follow exactly.
 
@@ -80,10 +80,11 @@ This beat exists so the still-frame **cover** that IG and TikTok show on the fee
 
 **Price treatment (LOCKED — Hermès register, NOT a marketing badge):**
 - **Coral hairline divider** — 80 × 2 px, coral `#E76F51`, centred horizontally on the price column.
-- **Price text** — "AED 119" — **Cormorant Garamond italic 500**, **72pt**, navy `#1A3A52`. Centred under the hairline. The numerals appear directly — no brackets, no quotes, no currency badge box.
-- **Tiny AR price echo** (optional but recommended) — "د.إ ١١٩" — Almarai 700 @ 70% opacity, 32pt, navy, **directly below the EN price**, centred. The Arabic numerals are Eastern Arabic (٠١٢٣٤٥٦٧٨٩), not Latin.
+- **Price text** — "AED 119" — **Cormorant Garamond italic 500, 80pt, navy `#1A3A52` at 100% opacity**. Centred under the hairline. The numerals appear directly — no brackets, no quotes, no currency badge box.
+- **NO Arabic price echo.** AED is universally understood in UAE — adding "د.إ ١١٩" creates redundant overlay text and breaks the editorial Hermès register. The English price alone, in Cormorant italic, IS the price treatment.
 - **Vertical placement**: price column centred horizontally, vertical centre at y ≈ 1400 (lower-third of frame so the product still has the upper two-thirds for the hero shot).
-- **No background, no card, no shadow, no border.** The price sits naked on the scene like a printed magazine price tag.
+- **No background, no card, no shadow, no border on the type itself.** The price sits naked on the scene like a printed magazine price tag.
+- **Background legibility — REQUIRED for warm / wood / light-beige scenes:** if the scene behind the price column lacks contrast against navy type (typical for wood-top, beige-wall, cream-on-cream compositions), apply a **cream `#F8F6F2` radial vignette at ~30% opacity, ~500px radius, soft falloff**, centred on the price column. Soften the SCENE behind the price — NEVER apply text-shadow, drop-shadow, or glow on the type itself. The price stays solid Cormorant italic; the vignette gives it a subtle cream halo so the navy reads cleanly at thumbnail scale. This stays consistent with the global "never blur type" rule.
 
 **Cover-pick guidance for IG / TikTok upload:**
 - IG: when uploading the Reel, set the cover frame to **~12.0s** (mid-price-reveal). The cover thumbnail on the feed will show product + price + corner-parked logo.
@@ -109,6 +110,12 @@ This beat exists so the still-frame **cover** that IG and TikTok show on the fee
 DO NOT start rendering until the concept is confirmed. Render all 480 frames in one go.
 
 ---
+
+## v3.2 changelog vs v3.1
+- **Arabic price echo REMOVED.** v3.1 said "optional but recommended"; v3.2 says explicitly DO NOT use. AED is universally understood in UAE; the Arabic line (د.إ ١١٩) created redundant overlay text and broke the editorial register. The English price alone, in Cormorant italic, IS the price treatment.
+- **Price size bumped 72pt → 80pt.** Observed legibility issue on warm/wood scene backgrounds where 72pt navy was getting lost at thumbnail scale.
+- **Price opacity locked at 100%** (was implicit, now explicit). No semi-transparency on the price text — it must be solid, pure navy.
+- **Required cream radial vignette behind price on warm/wood/light backgrounds** — soften the SCENE, not the type. Keeps the "never blur type" rule intact while solving real-world contrast failures on wood-top / cream-wall product shots.
 
 ## v3.1 changelog vs v3
 - **NEW: Price-reveal beat at 10–14s** with locked Hermès-register treatment (coral hairline + Cormorant italic 500 navy + optional Eastern-Arabic numeral echo). This is the IG/TikTok cover-pick window — viewer sees product + price on the feed thumbnail without playing the video.
