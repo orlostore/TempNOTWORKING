@@ -1741,10 +1741,13 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
     el.classList.add('active');
   }
 
+  // Keep observing forever — populateCategories() can re-render the container
+  // later (e.g. when products.js syncProductState detects data drift after an
+  // admin save). buildAllPill() has its own duplicate-guard so re-firing is
+  // safe; we just need the observer to stay alive so the ALL pill comes back.
   var obs = new MutationObserver(function(){
     if (container.querySelector('.category-card')) {
       buildAllPill();
-      obs.disconnect();
     }
   });
   obs.observe(container, { childList: true });
