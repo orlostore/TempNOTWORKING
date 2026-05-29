@@ -65,7 +65,7 @@ async function fetchFromD1(DB) {
                    image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                    specifications, specificationsAr, featured, handmade, isNew,
                    wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
-                   material, materialAr, sort_order, pairings
+                   material, materialAr, sort_order, pairings, collection_name
             FROM products
             ORDER BY sort_order ASC, id DESC
         `).all().catch(() =>
