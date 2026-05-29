@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-cards="v2">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bobblehead Family — Variant Mockup</title>
+<title>The Bobbleheads — Variant Mockup</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,500&family=DM+Sans:wght@400;500;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
@@ -37,9 +37,9 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
 /* Right column — product info */
 .info{display:flex;flex-direction:column;gap:20px}
 
-/* Family badge — the curation telegraph */
-.family-badge{display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.24em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
-.family-badge::before{content:'';display:inline-block;width:18px;height:1px;background:#e76f51}
+/* Small eyebrow above title (replaces the family badge — no word "family", just position-in-set) */
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.24em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
+.eyebrow::before{content:'';display:inline-block;width:18px;height:1px;background:#e76f51}
 
 /* Title — Cormorant italic editorial */
 .title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:2.6rem;line-height:1.05;color:#1a3a52;letter-spacing:-0.01em;transition:opacity .25s ease}
@@ -52,17 +52,29 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
 /* Hero blurb — italic descriptor under title */
 .hero-blurb{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.05rem;color:#6b6b6b;line-height:1.55;transition:opacity .25s ease}
 
-/* Variant picker */
-.variants{padding-top:10px;border-top:1px solid rgba(26,58,82,0.10)}
-.variants-label{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}
-.variants-label .count{color:#9aa5ad}
-.variant-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.variant-card{background:#fff;border:1px solid rgba(26,58,82,0.10);padding:8px;display:flex;flex-direction:column;gap:6px;cursor:pointer;text-decoration:none;transition:border-color .2s, transform .15s ease}
-.variant-card:hover{border-color:#1a3a52;transform:translateY(-1px)}
-.variant-card.active{border-color:#1a3a52;border-width:1.5px}
-.variant-thumb{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;color:#1a3a52;opacity:0.5}
-.variant-card.active .variant-thumb{opacity:1}
-.variant-name{font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;color:#1a3a52;font-weight:500;text-align:center;line-height:1.2}
+/* THE BOBBLEHEADS — inline picker section */
+.bobbleheads-inline{padding-top:18px;border-top:1px solid rgba(26,58,82,0.10)}
+.section-heading{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline}
+.section-heading .count{color:#9aa5ad}
+.bobbleheads-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+
+/* V2 product card (mirrors body[data-cards="v2"] from styles.css — same DOM structure, same look) */
+.card{background:transparent;position:relative;cursor:pointer;text-decoration:none;color:inherit;transition:transform .15s ease}
+.card:hover{transform:translateY(-2px)}
+.card .card-img{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid rgba(26,58,82,0.06)}
+.card .card-img-glyph{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:2.8rem;color:#1a3a52;opacity:0.35;transition:opacity .25s ease;letter-spacing:-0.02em}
+.card.is-current .card-img-glyph{opacity:0.9}
+.card.is-current .card-img{border-color:#1a3a52;border-width:1.5px}
+.card .card-name{font-family:'DM Sans',sans-serif;font-size:0.92rem;color:#1a3a52;font-weight:400;line-height:1.3;margin:8px 0 2px}
+.card .card-name-ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#9aa5ad;direction:rtl;text-align:left;line-height:1.4;margin-bottom:5px}
+.card .card-price{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#1a3a52;font-weight:400;letter-spacing:0.01em}
+.card.is-current .card-name{font-weight:500}
+
+/* When card is in the inline (right-column) picker, slightly tighter */
+.bobbleheads-row .card .card-img-glyph{font-size:2rem}
+.bobbleheads-row .card .card-name{font-size:0.78rem;letter-spacing:0.02em;margin:6px 0 1px}
+.bobbleheads-row .card .card-name-ar{font-size:0.62rem;margin-bottom:3px}
+.bobbleheads-row .card .card-price{font-size:0.78rem}
 
 /* Description */
 .description{padding-top:18px;border-top:1px solid rgba(26,58,82,0.10);transition:opacity .25s ease}
@@ -79,21 +91,13 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
 .add-to-cart{background:#1a3a52;color:#fff;border:none;padding:18px 24px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:filter .2s}
 .add-to-cart:hover{filter:brightness(0.88)}
 
-/* Family cross-link section — bottom of page */
-.family-section{background:#fff;border-top:1px solid rgba(26,58,82,0.10);padding:48px 32px;margin-top:48px}
-.family-section-inner{max-width:1100px;margin:0 auto}
-.family-section-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;letter-spacing:0.16em;text-transform:uppercase;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:20px;display:flex;justify-content:space-between;align-items:baseline}
-.family-section-heading .count{color:#9aa5ad;font-size:0.72rem}
-.family-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-@media(max-width:780px){.family-row{grid-template-columns:repeat(2,1fr)}}
-.family-item{background:#f8f6f2;border:1px solid rgba(26,58,82,0.10);padding:18px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-decoration:none;transition:border-color .2s, transform .15s}
-.family-item:hover{border-color:#1a3a52;transform:translateY(-2px)}
-.family-item.current{border-color:#1a3a52;border-width:1.5px}
-.family-item-thumb{aspect-ratio:1/1;background:#fff;border:1px solid rgba(26,58,82,0.10);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:2.2rem;color:#1a3a52;opacity:0.5}
-.family-item.current .family-item-thumb{opacity:1}
-.family-item-name{font-family:'DM Sans',sans-serif;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:#1a3a52;font-weight:500}
-.family-item-price{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.92rem;color:#6b6b6b}
-.family-item.current .family-item-name::after{content:' · CURRENT';color:#9aa5ad;font-size:0.7em;letter-spacing:0.14em}
+/* THE BOBBLEHEADS — full grid section at the bottom (uses the SAME v2 cards, larger) */
+.bobbleheads-section{background:#fff;border-top:1px solid rgba(26,58,82,0.10);padding:48px 32px;margin-top:48px}
+.bobbleheads-section-inner{max-width:1100px;margin:0 auto}
+.bobbleheads-section-heading{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.8rem;color:#1a3a52;margin-bottom:6px;letter-spacing:-0.005em}
+.bobbleheads-section-sub{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(26,58,82,0.10)}
+.bobbleheads-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media(max-width:780px){.bobbleheads-grid{grid-template-columns:repeat(2,1fr);gap:14px}}
 
 /* Page-level note for the mockup viewer */
 .mockup-note{background:#fff;border-left:2px solid #e76f51;padding:14px 18px;margin:24px auto 0;max-width:1100px;font-size:0.82rem;color:#1a3a52;line-height:1.5}
@@ -112,7 +116,7 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
 </nav>
 
 <div class="mockup-note">
-    <strong>Mockup:</strong> tap any thumbnail in the <em>Choose a member</em> row to see the whole page swap — title, blurb, price, hero image, description, even the "current" highlight in the family section below. Each variant IS its own product underneath; the page is just the unified frame.
+    <strong>Mockup:</strong> updated — no word "family" anywhere customer-facing. The cards (both the inline row on the right + the section at the bottom) use the EXACT v2 product card style from styles.css that already runs on your homepage. Same DOM shape (<code>.card · .card-img · .card-name · .card-price</code>), same fonts, no new visual.
 </div>
 
 <main class="product-page">
@@ -133,7 +137,7 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
     <!-- RIGHT: info -->
     <div class="info">
 
-        <div class="family-badge" id="familyBadge">Bobblehead Family · 1 of 4</div>
+        <div class="eyebrow" id="eyebrow">One of four</div>
 
         <h1 class="title" id="title">Corgi <em>Bobblehead</em></h1>
 
@@ -144,28 +148,36 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
             <span class="price-note">FREE UAE DELIVERY OVER 75</span>
         </div>
 
-        <!-- Variant picker -->
-        <div class="variants">
-            <div class="variants-label">
-                <span>Choose a member</span>
-                <span class="count">4 in family</span>
+        <!-- The Bobbleheads — inline row in the buy column (uses v2 cards) -->
+        <div class="bobbleheads-inline">
+            <div class="section-heading">
+                <span>The Bobbleheads</span>
+                <span class="count">4 designs</span>
             </div>
-            <div class="variant-grid" id="variantGrid">
-                <a class="variant-card active" data-key="corgi">
-                    <div class="variant-thumb">C</div>
-                    <div class="variant-name">Corgi</div>
+            <div class="bobbleheads-row" id="bobbleheadsInline">
+                <a class="card is-current" data-key="corgi">
+                    <div class="card-img"><div class="card-img-glyph">C</div></div>
+                    <div class="card-name">Corgi</div>
+                    <div class="card-name-ar">كورجي</div>
+                    <div class="card-price">AED 89</div>
                 </a>
-                <a class="variant-card" data-key="schnauzer">
-                    <div class="variant-thumb">S</div>
-                    <div class="variant-name">Schnauzer</div>
+                <a class="card" data-key="schnauzer">
+                    <div class="card-img"><div class="card-img-glyph">S</div></div>
+                    <div class="card-name">Schnauzer</div>
+                    <div class="card-name-ar">شناوزر</div>
+                    <div class="card-price">AED 89</div>
                 </a>
-                <a class="variant-card" data-key="frenchie">
-                    <div class="variant-thumb">F</div>
-                    <div class="variant-name">French Bulldog</div>
+                <a class="card" data-key="frenchie">
+                    <div class="card-img"><div class="card-img-glyph">F</div></div>
+                    <div class="card-name">French Bulldog</div>
+                    <div class="card-name-ar">بولدوغ فرنسي</div>
+                    <div class="card-price">AED 95</div>
                 </a>
-                <a class="variant-card" data-key="pug">
-                    <div class="variant-thumb">P</div>
-                    <div class="variant-name">Pug</div>
+                <a class="card" data-key="pug">
+                    <div class="card-img"><div class="card-img-glyph">P</div></div>
+                    <div class="card-name">Pug</div>
+                    <div class="card-name-ar">بَغ</div>
+                    <div class="card-price">AED 89</div>
                 </a>
             </div>
         </div>
@@ -196,33 +208,35 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
     </div>
 </main>
 
-<!-- Cross-link "Others in this family" section -->
-<section class="family-section">
-    <div class="family-section-inner">
-        <div class="family-section-heading">
-            <span>The Bobblehead Family</span>
-            <span class="count">4 designs · curated together</span>
-        </div>
-        <div class="family-row" id="familyRow">
-            <a class="family-item current" data-key="corgi">
-                <div class="family-item-thumb">C</div>
-                <div class="family-item-name">Corgi</div>
-                <div class="family-item-price">AED 89</div>
+<!-- The Bobbleheads — large grid section at the bottom (same v2 cards, larger) -->
+<section class="bobbleheads-section">
+    <div class="bobbleheads-section-inner">
+        <div class="bobbleheads-section-heading">The Bobbleheads</div>
+        <div class="bobbleheads-section-sub">Four designs · browse all</div>
+        <div class="bobbleheads-grid" id="bobbleheadsGrid">
+            <a class="card is-current" data-key="corgi">
+                <div class="card-img"><div class="card-img-glyph">C</div></div>
+                <div class="card-name">Corgi Bobblehead</div>
+                <div class="card-name-ar">دمية الكورجي</div>
+                <div class="card-price">AED 89</div>
             </a>
-            <a class="family-item" data-key="schnauzer">
-                <div class="family-item-thumb">S</div>
-                <div class="family-item-name">Schnauzer</div>
-                <div class="family-item-price">AED 89</div>
+            <a class="card" data-key="schnauzer">
+                <div class="card-img"><div class="card-img-glyph">S</div></div>
+                <div class="card-name">Schnauzer Bobblehead</div>
+                <div class="card-name-ar">دمية الشناوزر</div>
+                <div class="card-price">AED 89</div>
             </a>
-            <a class="family-item" data-key="frenchie">
-                <div class="family-item-thumb">F</div>
-                <div class="family-item-name">French Bulldog</div>
-                <div class="family-item-price">AED 95</div>
+            <a class="card" data-key="frenchie">
+                <div class="card-img"><div class="card-img-glyph">F</div></div>
+                <div class="card-name">French Bulldog Bobblehead</div>
+                <div class="card-name-ar">دمية البولدوغ الفرنسي</div>
+                <div class="card-price">AED 95</div>
             </a>
-            <a class="family-item" data-key="pug">
-                <div class="family-item-thumb">P</div>
-                <div class="family-item-name">Pug</div>
-                <div class="family-item-price">AED 89</div>
+            <a class="card" data-key="pug">
+                <div class="card-img"><div class="card-img-glyph">P</div></div>
+                <div class="card-name">Pug Bobblehead</div>
+                <div class="card-name-ar">دمية البَغ</div>
+                <div class="card-price">AED 89</div>
             </a>
         </div>
     </div>
@@ -233,7 +247,7 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
 const VARIANTS = {
     corgi: {
         title: 'Corgi <em>Bobblehead</em>',
-        familyBadge: 'Bobblehead Family · 1 of 4',
+        eyebrow: 'One of four',
         blurb: 'A small loyal head, nodding along to your morning commute.',
         price: 'AED 89',
         glyph: 'Corgi',
@@ -246,7 +260,7 @@ const VARIANTS = {
     },
     schnauzer: {
         title: 'Schnauzer <em>Bobblehead</em>',
-        familyBadge: 'Bobblehead Family · 2 of 4',
+        eyebrow: 'Two of four',
         blurb: 'A small grey philosopher who has seen enough traffic to know.',
         price: 'AED 89',
         glyph: 'Schnauzer',
@@ -259,7 +273,7 @@ const VARIANTS = {
     },
     frenchie: {
         title: 'French Bulldog <em>Bobblehead</em>',
-        familyBadge: 'Bobblehead Family · 3 of 4',
+        eyebrow: 'Three of four',
         blurb: 'A small dignified bat-eared traveller, ready for the boulevard.',
         price: 'AED 95',
         glyph: 'Frenchie',
@@ -272,7 +286,7 @@ const VARIANTS = {
     },
     pug: {
         title: 'Pug <em>Bobblehead</em>',
-        familyBadge: 'Bobblehead Family · 4 of 4',
+        eyebrow: 'Four of four',
         blurb: 'A small wrinkled philosopher, settling in for the commute.',
         price: 'AED 89',
         glyph: 'Pug',
@@ -288,55 +302,33 @@ const VARIANTS = {
 function setVariant(key) {
     const v = VARIANTS[key];
     if (!v) return;
-
-    // Title + family badge
     document.getElementById('title').innerHTML = v.title;
-    document.getElementById('familyBadge').textContent = v.familyBadge;
-
-    // Hero blurb
+    document.getElementById('eyebrow').textContent = v.eyebrow;
     document.getElementById('heroBlurb').textContent = v.blurb;
-
-    // Price
     document.getElementById('priceAmount').textContent = v.price;
     document.getElementById('addToCart').textContent = `Add to Cart · ${v.price}`;
-
-    // Hero image area (glyph + background)
     document.getElementById('heroGlyph').textContent = v.glyph;
     document.getElementById('heroMain').style.background = v.bg;
-
-    // Description — replace all paragraphs
     const desc = document.getElementById('description');
     desc.innerHTML = v.description.map(p => `<p>${p}</p>`).join('');
 
-    // Update active variant card
-    document.querySelectorAll('.variant-card').forEach(card => {
-        card.classList.toggle('active', card.dataset.key === key);
-    });
-    // Update active family-section item
-    document.querySelectorAll('.family-item').forEach(item => {
-        item.classList.toggle('current', item.dataset.key === key);
+    document.querySelectorAll('.card').forEach(card => {
+        card.classList.toggle('is-current', card.dataset.key === key);
     });
 
-    // Update browser URL (mock — would actually navigate in production)
     history.replaceState(null, '', `?product=${key}-bobblehead`);
 }
 
-// Wire up variant cards
-document.querySelectorAll('.variant-card').forEach(card => {
+document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', (e) => {
         e.preventDefault();
         setVariant(card.dataset.key);
+        if (card.closest('.bobbleheads-grid')) {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
     });
 });
-// Wire up family-section items
-document.querySelectorAll('.family-item').forEach(item => {
-    item.addEventListener('click', (e) => {
-        e.preventDefault();
-        setVariant(item.dataset.key);
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    });
-});
-// Optional: respond to URL param on load
+
 const urlKey = new URLSearchParams(window.location.search).get('variant');
 if (urlKey && VARIANTS[urlKey]) setVariant(urlKey);
 </script>
