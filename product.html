@@ -192,6 +192,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   @media(min-width:769px){.considered-alongside .ca-grid{grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:22px 18px;max-width:760px}}
   .considered-alongside .ca-card{display:block;text-decoration:none;color:inherit;background:transparent;border:none;padding:0;overflow:hidden;border-radius:0;font-family:'DM Sans',sans-serif!important}
   .considered-alongside .ca-img{aspect-ratio:1/1;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;margin-bottom:10px}
+  /* Item 5 — current product in collection band: navy hairline border on the image to indicate "you're here" */
+  .considered-alongside .ca-card-active .ca-img{border:1px solid #1a3a52}
+  .considered-alongside .ca-card-active .ca-name{font-weight:500!important}
   .considered-alongside .ca-img img{width:100%;height:100%;object-fit:cover;display:block}
   .considered-alongside .ca-meta{padding:0;text-align:left;background:transparent}
   .considered-alongside .ca-name{font-family:'DM Sans',sans-serif!important;font-size:0.86rem!important;font-weight:400!important;color:#1a3a52;line-height:1.35;margin-bottom:4px}
@@ -853,24 +856,56 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
   function render(){
     var section = document.getElementById('consideredAlongside');
     var grid = document.getElementById('caGrid');
+    var heading = section ? section.querySelector('.ca-heading') : null;
     if (!section || !grid) return;
     var current = findCurrentProduct();
-    if (!current || !current.pairings || !current.pairings.length) {
+    if (!current) {
       section.hidden = true;
       return;
     }
-    var paired = current.pairings
-      .map(function(slug){ return products.find(function(p){ return p.slug === slug; }); })
-      .filter(function(p){ return p && p.id; });
-    if (!paired.length) {
-      section.hidden = true;
-      return;
+
+    // Item 5 — Collection mode: if the current product has a collectionName, show all
+    // products that share it (including the current one with an 'active' state).
+    // Falls back to the existing "Considered alongside" pairings behaviour when the
+    // product has no collection set.
+    var collectionName = (current.collectionName || '').trim();
+    var siblings = [];
+    if (collectionName) {
+      var normCol = collectionName.toLowerCase();
+      siblings = products.filter(function(p){
+        return p && p.id && (p.collectionName || '').trim().toLowerCase() === normCol;
+      });
     }
-    grid.innerHTML = paired.map(function(p){
+    var isCollectionMode = siblings.length > 1;
+
+    var list;
+    if (isCollectionMode) {
+      // Title becomes the collection name (Cormorant italic — same .ca-heading style).
+      if (heading) heading.textContent = collectionName;
+      list = siblings;
+    } else {
+      // Pairings fallback — original behaviour.
+      if (!current.pairings || !current.pairings.length) {
+        section.hidden = true;
+        return;
+      }
+      var paired = current.pairings
+        .map(function(slug){ return products.find(function(p){ return p.slug === slug; }); })
+        .filter(function(p){ return p && p.id; });
+      if (!paired.length) {
+        section.hidden = true;
+        return;
+      }
+      if (heading) heading.innerHTML = 'Considered alongside<span class="ca-heading-ar">يُختار معه</span>';
+      list = paired;
+    }
+
+    grid.innerHTML = list.map(function(p){
+      var isCurrent = isCollectionMode && p.id === current.id;
       var img = imageOf(p);
       var imgTag = img ? '<img src="' + cdnUrl(img) + '" alt="' + (p.name || '').replace(/"/g,'&quot;') + '" loading="lazy">' : '';
       var price = p.price ? 'AED ' + Number(p.price).toFixed(2) : '';
-      return '<a class="ca-card" href="/product?product=' + encodeURIComponent(p.slug) + '">' +
+      return '<a class="ca-card' + (isCurrent ? ' ca-card-active' : '') + '" href="/product?product=' + encodeURIComponent(p.slug) + '"' + (isCurrent ? ' aria-current="page"' : '') + '>' +
         '<div class="ca-img">' + imgTag + '</div>' +
         '<div class="ca-meta">' +
           '<div class="ca-name">' + (p.name || '').replace(/</g,'&lt;') + '</div>' +
