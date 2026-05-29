@@ -46,3 +46,7 @@ ALTER TABLE products ADD COLUMN pairings TEXT DEFAULT '';
 -- Comparison/grouping is case-insensitive (handled in render), so "The Bobbleheads" and "the bobbleheads"
 -- are treated as the same collection.
 ALTER TABLE products ADD COLUMN collection_name TEXT DEFAULT '';
+
+-- Blurb — short italic sentence shown under the product title on the product page (Cormorant italic register).
+-- Empty string means no blurb line renders. Per-product field — each collection sibling has its own voice.
+ALTER TABLE products ADD COLUMN blurb TEXT DEFAULT '';

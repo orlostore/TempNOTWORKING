@@ -2058,6 +2058,11 @@
                             <datalist id="collectionNamesList"></datalist>
                             <div class="form-hint">Type a new collection name or pick from existing. Products with the same collection cluster on the index and show a cream "collection band" on each member's product page. Leave blank for standalone products.</div>
                         </div>
+                        <div class="form-group" style="grid-column:1/-1">
+                            <label>Blurb <span style="font-weight:400;color:#888;font-size:0.78rem">(optional — short italic sentence under the title, e.g. "A small loyal head, nodding along to your morning commute.")</span></label>
+                            <textarea id="formBlurb" rows="2" placeholder='e.g. A small loyal head, nodding along to your morning commute.' style="resize:vertical"></textarea>
+                            <div class="form-hint">One sentence, sets the voice of the product. Renders in Cormorant italic between the title and the price. Leave blank to skip.</div>
+                        </div>
                     </div>
                 </div>
 
@@ -3467,6 +3472,7 @@
             document.getElementById('formMaterial').value = product.material || '';
             document.getElementById('formMaterialAr').value = product.materialAr || '';
             document.getElementById('formCollectionName').value = product.collectionName || '';
+            document.getElementById('formBlurb').value = product.blurb || '';
 
             // Variants
             document.getElementById('variantsContainer').innerHTML = '';
@@ -3663,6 +3669,7 @@
                 material: document.getElementById('formMaterial').value.trim(),
                 materialAr: document.getElementById('formMaterialAr').value.trim(),
                 collectionName: document.getElementById('formCollectionName').value.trim(),
+                blurb: document.getElementById('formBlurb').value.trim(),
                 variants: getVariantsFromForm(),
                 pricingTiers: getTiersFromForm()
             };

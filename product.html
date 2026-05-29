@@ -37,7 +37,7 @@
   <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="products.min.js?v=11" as="script">
-  <link rel="preload" href="product.min.js?v=31" as="script">
+  <link rel="preload" href="product.min.js?v=32" as="script">
   <link rel="preload" href="app.min.js?v=39" as="script">
   <script>
   if(sessionStorage.getItem('orlo_checkout_pending')){sessionStorage.removeItem('orlo_checkout_pending');window.location.replace('cancel.html');}
@@ -147,6 +147,25 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   /* Price — match v2 card price exactly */
   #productPrice,.price{font-family:'DM Sans',sans-serif!important;font-size:0.88rem!important;color:#1a3a52!important;font-weight:400!important;letter-spacing:0.01em!important}
   #mobileProductPrice,.mobile-price{font-family:'DM Sans',sans-serif!important;font-size:0.82rem!important;color:#1a3a52!important;font-weight:400!important;letter-spacing:0.01em!important}
+
+  /* Per-product blurb (item 6) — short italic sentence between title and price. Hidden when empty. */
+  .product-blurb{font-family:'Cormorant Garamond',serif!important;font-style:italic!important;font-weight:400!important;font-size:1.02rem!important;color:#6b6b6b!important;line-height:1.55!important;margin:0 0 12px!important}
+  .product-blurb:empty{display:none!important}
+
+  /* Inline collection picker (item 5b) — sits between price and variant/cart. v2 mini cards in a row.
+     Only rendered when product is in a collection with siblings. */
+  .collection-picker:empty{display:none!important}
+  .collection-picker{margin:0 0 16px!important}
+  .collection-picker .cp-heading{font-family:'DM Sans',sans-serif!important;font-size:0.62rem!important;letter-spacing:0.22em!important;text-transform:uppercase!important;color:#6b6b6b!important;font-weight:500!important;margin-bottom:12px!important;display:flex!important;justify-content:space-between!important;align-items:baseline!important}
+  .collection-picker .cp-heading .cp-count{color:#9aa5ad!important;font-weight:500!important}
+  .collection-picker .cp-row{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(72px,1fr))!important;gap:10px!important}
+  .collection-picker .cp-card{display:block!important;text-decoration:none!important;color:inherit!important;background:transparent!important;cursor:pointer!important;transition:transform .15s ease!important}
+  .collection-picker .cp-card:hover{transform:translateY(-2px)!important}
+  .collection-picker .cp-card-img{width:100%!important;aspect-ratio:1/1!important;overflow:hidden!important;background:#fff!important;border:1px solid rgba(26,58,82,0.06)!important;display:flex!important;align-items:center!important;justify-content:center!important;margin-bottom:6px!important}
+  .collection-picker .cp-card-img img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important}
+  .collection-picker .cp-card-name{font-family:'DM Sans',sans-serif!important;font-size:0.72rem!important;color:#1a3a52!important;font-weight:400!important;line-height:1.3!important;letter-spacing:0.01em!important}
+  .collection-picker .cp-card.is-current .cp-card-img{border-color:#1a3a52!important;border-width:1.5px!important}
+  .collection-picker .cp-card.is-current .cp-card-name{font-weight:500!important}
 
   /* Section labels (Description, Specifications) — match site editorial caps register.
      Almarai in fallback so Arabic labels (المواصفات etc.) route to Almarai, never system Noto/Tajawal. */
@@ -429,9 +448,11 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     <div class="product-details">
       <h1 id="productTitle"></h1>
       <p class="product-title-ar" id="productTitleAr"></p>
+      <p class="product-blurb" id="productBlurb"></p>
       <div class="price" id="productPrice"></div>
       <div class="product-category" id="productCategory"></div>
       <div class="early-price" id="earlyPriceDesktop"></div>
+      <div id="collectionPickerDesktop" class="collection-picker"></div>
       <div id="pricingTiersDesktop"></div>
       <div id="variantSelectorDesktop"></div>
       <div class="product-buybox">
@@ -460,7 +481,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   <div class="mobile-product-header">
     <h1 class="mobile-product-title" id="mobileProductTitle"></h1>
     <p class="mobile-product-title-ar arabic-text" id="mobileProductTitleAr"></p>
+    <p class="mobile-blurb product-blurb" id="mobileBlurb"></p>
     <div class="mobile-price" id="mobileProductPrice"></div>
+    <div id="collectionPickerMobile" class="collection-picker"></div>
     <span class="mobile-product-category" id="mobileProductCategory"></span>
     <div class="early-price" id="earlyPriceMobile"></div>
   </div>
@@ -634,7 +657,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="product.min.js?v=31" defer></script>
+<script src="product.min.js?v=32" defer></script>
 <script src="app.min.js?v=39" defer></script>
 <script>
 function updateAccountLink() {

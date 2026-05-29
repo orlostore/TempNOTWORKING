@@ -495,6 +495,10 @@ async function initProductPage() {
   document.getElementById("productTitle").innerText = product.name;
   const titleArEl = document.getElementById("productTitleAr");
   if (titleArEl) titleArEl.innerText = product.nameAr || '';
+  // Blurb (item 6) + inline collection picker (item 5b)
+  const blurbEl = document.getElementById("productBlurb");
+  if (blurbEl) blurbEl.innerText = (product.blurb || '').trim();
+  _renderCollectionPicker('collectionPickerDesktop', product);
   document.getElementById("productCategory").innerHTML = product.category + shareHTML;
 
   let descriptionHTML = '';
@@ -761,6 +765,10 @@ async function initProductPage() {
   // MOBILE VERSION
   document.getElementById("mobileProductTitle").innerText = product.name;
   document.getElementById("mobileProductTitleAr").innerText = product.nameAr || '';
+  // Blurb (item 6) + inline collection picker (item 5b)
+  const mobBlurbEl = document.getElementById("mobileBlurb");
+  if (mobBlurbEl) mobBlurbEl.innerText = (product.blurb || '').trim();
+  _renderCollectionPicker('collectionPickerMobile', product);
   document.getElementById("mobileProductCategory").innerHTML = product.category + shareHTML;
   // Hermès-style: always show the base price right under the title (for every product type).
   const mobilePriceEl = document.getElementById("mobileProductPrice");
@@ -1809,6 +1817,37 @@ function _getTierBasePrice(product) {
   const sv = window._selectedVariant;
   if (sv && sv.price > 0) return sv.price;
   return product.price;
+}
+
+// Item 5b — Inline collection picker. Renders the v2 mini-card row for collection siblings
+// into the given container. The card for the current product is marked .is-current. Empty when:
+// (a) product has no collectionName, (b) products array isn't loaded yet, (c) only one sibling
+// matches (a collection of one isn't a collection).
+function _renderCollectionPicker(containerId, product) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const colName = (product && product.collectionName || '').trim();
+  if (!colName) { container.innerHTML = ''; return; }
+  if (typeof products === 'undefined' || !Array.isArray(products)) { container.innerHTML = ''; return; }
+  const norm = colName.toLowerCase();
+  const siblings = products.filter(p => p && p.id && (p.collectionName || '').trim().toLowerCase() === norm);
+  if (siblings.length < 2) { container.innerHTML = ''; return; }
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const cardsHTML = siblings.map(p => {
+    const isCurrent = p.id === product.id;
+    const imgUrl = p.image && typeof p.image === 'string' && p.image.indexOf('http') === 0
+      ? 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_300,h_300,f_auto,q_auto/' + esc(p.image)
+      : '';
+    const imgTag = imgUrl ? '<img src="' + imgUrl + '" alt="' + esc(p.name || '') + '" loading="lazy">' : '';
+    return '<a class="cp-card' + (isCurrent ? ' is-current' : '') + '" href="product.html?product=' + encodeURIComponent(p.slug) + '"' + (isCurrent ? ' aria-current="page"' : '') + '>' +
+      '<div class="cp-card-img">' + imgTag + '</div>' +
+      '<div class="cp-card-name">' + esc(p.name || '') + '</div>' +
+    '</a>';
+  }).join('');
+  const countLabel = siblings.length + ' designs';
+  container.innerHTML =
+    '<div class="cp-heading"><span>' + esc(colName) + '</span><span class="cp-count">' + countLabel + '</span></div>' +
+    '<div class="cp-row">' + cardsHTML + '</div>';
 }
 
 function renderPricingTiers(containerId, product) {
