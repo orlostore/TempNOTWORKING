@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-cards="v2">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Index — Collection Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,500&family=DM+Sans:wght@400;500;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;color:#1a3a52;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+/* Site-matched header lockup (same as current homepage) */
+.nav{background:#fff;border-bottom:1px solid rgba(26,58,82,0.10);padding:14px 32px;display:flex;justify-content:space-between;align-items:center}
+.lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.lockup .logo-img{width:40px;height:40px;border-radius:50%;background:#1a3a52;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:0.85rem;letter-spacing:0.08em}
+.lockup .sep{width:1px;height:28px;background:rgba(26,58,82,0.25)}
+.lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.lockup .wordmark span{color:#e76f51}
+
+/* Page title row (mirrors home section heading) */
+.page-title-row{max-width:1200px;margin:0 auto;padding:40px 32px 24px;display:flex;justify-content:space-between;align-items:baseline}
+.page-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.4rem;color:#1a3a52;letter-spacing:-0.01em}
+.page-count{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
+
+/* Product grid (mirrors current homepage layout — 4 columns desktop, 2 mobile) */
+.products-grid{max-width:1200px;margin:0 auto;padding:0 32px 48px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+@media(max-width:780px){.products-grid{grid-template-columns:repeat(2,1fr);gap:16px;padding:0 20px 32px}}
+
+/* V2 product card — EXACT same structure as on the live homepage */
+.card{background:transparent;position:relative;cursor:pointer;text-decoration:none;color:inherit;transition:transform .15s ease}
+.card:hover{transform:translateY(-3px)}
+.card .card-img{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid rgba(26,58,82,0.06)}
+.card .card-img-glyph{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:3.4rem;color:#1a3a52;opacity:0.38;letter-spacing:-0.02em}
+.card .card-name{font-family:'DM Sans',sans-serif;font-size:0.92rem;color:#1a3a52;font-weight:400;line-height:1.3;margin:8px 0 2px}
+.card .card-name-ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#9aa5ad;direction:rtl;text-align:left;line-height:1.4;margin-bottom:5px}
+.card .card-price{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#1a3a52;font-weight:400;letter-spacing:0.01em}
+
+/* THE COLLECTION CUE — a single small caps line under the price.
+   This is the ONLY visual addition vs the live homepage. */
+.card .card-collection{font-family:'DM Sans',sans-serif;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-top:6px;padding-top:6px;border-top:1px solid rgba(26,58,82,0.06);display:flex;align-items:center;gap:6px}
+.card .card-collection::before{content:'';display:inline-block;width:10px;height:1px;background:#e76f51;flex-shrink:0}
+
+/* Page-level note for the mockup viewer */
+.mockup-note{background:#fff;border-left:2px solid #e76f51;padding:14px 18px;margin:16px auto 0;max-width:1200px;font-size:0.82rem;color:#1a3a52;line-height:1.5}
+.mockup-note strong{color:#1a3a52}
+.mockup-note code{font-family:Menlo,monospace;background:#f8f6f2;padding:1px 5px;font-size:0.85em;border:1px solid rgba(26,58,82,0.10)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="#" class="lockup">
+        <div class="logo-img">O</div>
+        <div class="sep"></div>
+        <div class="wordmark">ORL<span>O</span></div>
+    </a>
+</nav>
+
+<div class="mockup-note">
+    <strong>Mockup — homepage with the bobbleheads collection:</strong> the cards are <em>exactly</em> the current v2 cards. Markup is unchanged (<code>.card · .card-img · .card-name · .card-name-ar · .card-price</code>). The ONLY visual addition is a tiny caps line under the price showing the collection — for products that belong to one. Standalone products (the Beetle, the gramophone, etc.) just show the existing card with no collection line. Bobblehead cards naturally cluster because they share <code>collection_id="the-bobbleheads"</code>; the catalog renderer keeps members of the same collection adjacent. Customer sees: 4 distinct bobblehead cards (each its own product, own URL, own page), each with the small collection cue at the bottom telegraphing "this is part of a set of 4".
+</div>
+
+<div class="page-title-row">
+    <div class="page-title">Shop</div>
+    <div class="page-count">6 products</div>
+</div>
+
+<div class="products-grid">
+
+    <!-- Bobblehead 1 — Corgi -->
+    <a class="card">
+        <div class="card-img"><div class="card-img-glyph">C</div></div>
+        <div class="card-name">Corgi Bobblehead</div>
+        <div class="card-name-ar">دمية الكورجي</div>
+        <div class="card-price">AED 89</div>
+        <div class="card-collection">The Bobbleheads · 1 of 4</div>
+    </a>
+
+    <!-- Bobblehead 2 — Schnauzer -->
+    <a class="card">
+        <div class="card-img"><div class="card-img-glyph">S</div></div>
+        <div class="card-name">Schnauzer Bobblehead</div>
+        <div class="card-name-ar">دمية الشناوزر</div>
+        <div class="card-price">AED 89</div>
+        <div class="card-collection">The Bobbleheads · 2 of 4</div>
+    </a>
+
+    <!-- Bobblehead 3 — French Bulldog -->
+    <a class="card">
+        <div class="card-img"><div class="card-img-glyph">F</div></div>
+        <div class="card-name">French Bulldog Bobblehead</div>
+        <div class="card-name-ar">دمية البولدوغ الفرنسي</div>
+        <div class="card-price">AED 95</div>
+        <div class="card-collection">The Bobbleheads · 3 of 4</div>
+    </a>
+
+    <!-- Bobblehead 4 — Pug -->
+    <a class="card">
+        <div class="card-img"><div class="card-img-glyph">P</div></div>
+        <div class="card-name">Pug Bobblehead</div>
+        <div class="card-name-ar">دمية البَغ</div>
+        <div class="card-price">AED 89</div>
+        <div class="card-collection">The Bobbleheads · 4 of 4</div>
+    </a>
+
+    <!-- Standalone product — Beetle figurine — NO collection cue -->
+    <a class="card">
+        <div class="card-img"><div class="card-img-glyph">B</div></div>
+        <div class="card-name">Vintage Beetle Figurine</div>
+        <div class="card-name-ar">دمية الخنفساء العتيقة</div>
+        <div class="card-price">AED 119</div>
+    </a>
+
+    <!-- Standalone product — Gramophone — NO collection cue -->
+    <a class="card">
+        <div class="card-img"><div class="card-img-glyph">G</div></div>
+        <div class="card-name">Vintage Gramophone Decor</div>
+        <div class="card-name-ar">ديكور الغرامافون العتيق</div>
+        <div class="card-price">AED 149</div>
+    </a>
+
+</div>
+
+</body>
+</html>

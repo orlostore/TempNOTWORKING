@@ -53,10 +53,10 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
 .hero-blurb{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.05rem;color:#6b6b6b;line-height:1.55;transition:opacity .25s ease}
 
 /* THE BOBBLEHEADS — inline picker section */
-.bobbleheads-inline{padding-top:18px;border-top:1px solid rgba(26,58,82,0.10)}
+.collection-inline{padding-top:18px;border-top:1px solid rgba(26,58,82,0.10)}
 .section-heading{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline}
 .section-heading .count{color:#9aa5ad}
-.bobbleheads-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.collection-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 
 /* V2 product card (mirrors body[data-cards="v2"] from styles.css — same DOM structure, same look) */
 .card{background:transparent;position:relative;cursor:pointer;text-decoration:none;color:inherit;transition:transform .15s ease}
@@ -71,10 +71,10 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
 .card.is-current .card-name{font-weight:500}
 
 /* When card is in the inline (right-column) picker, slightly tighter */
-.bobbleheads-row .card .card-img-glyph{font-size:2rem}
-.bobbleheads-row .card .card-name{font-size:0.78rem;letter-spacing:0.02em;margin:6px 0 1px}
-.bobbleheads-row .card .card-name-ar{font-size:0.62rem;margin-bottom:3px}
-.bobbleheads-row .card .card-price{font-size:0.78rem}
+.collection-row .card .card-img-glyph{font-size:2rem}
+.collection-row .card .card-name{font-size:0.78rem;letter-spacing:0.02em;margin:6px 0 1px}
+.collection-row .card .card-name-ar{font-size:0.62rem;margin-bottom:3px}
+.collection-row .card .card-price{font-size:0.78rem}
 
 /* Description */
 .description{padding-top:18px;border-top:1px solid rgba(26,58,82,0.10);transition:opacity .25s ease}
@@ -92,12 +92,12 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
 .add-to-cart:hover{filter:brightness(0.88)}
 
 /* THE BOBBLEHEADS — full grid section at the bottom (uses the SAME v2 cards, larger) */
-.bobbleheads-section{background:#fff;border-top:1px solid rgba(26,58,82,0.10);padding:48px 32px;margin-top:48px}
-.bobbleheads-section-inner{max-width:1100px;margin:0 auto}
-.bobbleheads-section-heading{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.8rem;color:#1a3a52;margin-bottom:6px;letter-spacing:-0.005em}
-.bobbleheads-section-sub{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(26,58,82,0.10)}
-.bobbleheads-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-@media(max-width:780px){.bobbleheads-grid{grid-template-columns:repeat(2,1fr);gap:14px}}
+.collection-section{background:#fff;border-top:1px solid rgba(26,58,82,0.10);padding:48px 32px;margin-top:48px}
+.collection-section-inner{max-width:1100px;margin:0 auto}
+.collection-section-heading{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.8rem;color:#1a3a52;margin-bottom:6px;letter-spacing:-0.005em}
+.collection-section-sub{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(26,58,82,0.10)}
+.collection-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+@media(max-width:780px){.collection-grid{grid-template-columns:repeat(2,1fr);gap:14px}}
 
 /* Page-level note for the mockup viewer */
 .mockup-note{background:#fff;border-left:2px solid #e76f51;padding:14px 18px;margin:24px auto 0;max-width:1100px;font-size:0.82rem;color:#1a3a52;line-height:1.5}
@@ -149,12 +149,12 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
         </div>
 
         <!-- The Bobbleheads — inline row in the buy column (uses v2 cards) -->
-        <div class="bobbleheads-inline">
+        <div class="collection-inline">
             <div class="section-heading">
                 <span>The Bobbleheads</span>
                 <span class="count">4 designs</span>
             </div>
-            <div class="bobbleheads-row" id="bobbleheadsInline">
+            <div class="collection-row" id="collectionInline">
                 <a class="card is-current" data-key="corgi">
                     <div class="card-img"><div class="card-img-glyph">C</div></div>
                     <div class="card-name">Corgi</div>
@@ -209,11 +209,11 @@ html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;c
 </main>
 
 <!-- The Bobbleheads — large grid section at the bottom (same v2 cards, larger) -->
-<section class="bobbleheads-section">
-    <div class="bobbleheads-section-inner">
-        <div class="bobbleheads-section-heading">The Bobbleheads</div>
-        <div class="bobbleheads-section-sub">Four designs · browse all</div>
-        <div class="bobbleheads-grid" id="bobbleheadsGrid">
+<section class="collection-section">
+    <div class="collection-section-inner">
+        <div class="collection-section-heading">The Bobbleheads</div>
+        <div class="collection-section-sub">Four designs · browse all</div>
+        <div class="collection-grid" id="collectionGrid">
             <a class="card is-current" data-key="corgi">
                 <div class="card-img"><div class="card-img-glyph">C</div></div>
                 <div class="card-name">Corgi Bobblehead</div>
@@ -323,7 +323,7 @@ document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', (e) => {
         e.preventDefault();
         setVariant(card.dataset.key);
-        if (card.closest('.bobbleheads-grid')) {
+        if (card.closest('.collection-grid')) {
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
     });
