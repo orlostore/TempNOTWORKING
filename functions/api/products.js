@@ -65,7 +65,7 @@ async function fetchFromD1(DB) {
                    image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                    specifications, specificationsAr, featured, handmade, isNew,
                    wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
-                   material, materialAr, sort_order, pairings
+                   material, materialAr, sort_order, pairings, collection_name
             FROM products
             ORDER BY sort_order ASC, id DESC
         `).all().catch(() =>
@@ -78,7 +78,7 @@ async function fetchFromD1(DB) {
                        specifications, specificationsAr, featured,
                        0 as handmade, 0 as isNew,
                        wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
-                       material, materialAr, 0 as sort_order, '' as pairings
+                       material, materialAr, 0 as sort_order, '' as pairings, '' as collection_name
                 FROM products
                 ORDER BY id DESC
             `).all()
@@ -175,6 +175,7 @@ async function fetchFromD1(DB) {
             baseTypeAr: row.baseTypeAr || '',
             material: row.material || '',
             materialAr: row.materialAr || '',
+            collectionName: row.collection_name || '',
             variants,
             pricingTiers: tiersMap[row.id] || []
         };

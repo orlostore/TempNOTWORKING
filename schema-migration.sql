@@ -40,3 +40,9 @@ ALTER TABLE products ADD COLUMN sort_order INTEGER DEFAULT 0;
 
 -- Considered alongside — pipe-separated slugs of complementary products (powers the PDP pairings section)
 ALTER TABLE products ADD COLUMN pairings TEXT DEFAULT '';
+
+-- Collection — free-text collection name (e.g. "The Bobbleheads") that groups products on the index
+-- and powers the cream collection band on each member's product page. Empty string for standalone products.
+-- Comparison/grouping is case-insensitive (handled in render), so "The Bobbleheads" and "the bobbleheads"
+-- are treated as the same collection.
+ALTER TABLE products ADD COLUMN collection_name TEXT DEFAULT '';
