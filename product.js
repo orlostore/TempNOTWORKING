@@ -811,7 +811,9 @@ async function initProductPage() {
       mobileDots.innerHTML = product.images.map((_, index) => `
         <div class="mobile-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>
       `).join('');
-      
+
+      _renderMobileThumbs(product.images);
+
       setupMobileCarousel();
       setupGalleryOverlay(product);
     }
@@ -1502,19 +1504,69 @@ function openEnhancedLightbox(product, startIndex) {
 function setupMobileCarousel() {
   const carousel = document.getElementById('mobileCarousel');
   const dots = document.querySelectorAll('.mobile-dot');
-  
+  const thumbs = document.querySelectorAll('.m-thumb');
+
   carousel.addEventListener('scroll', () => {
     const scrollLeft = carousel.scrollLeft;
     const slideWidth = carousel.offsetWidth;
     const currentIndex = Math.round(scrollLeft / slideWidth);
     dots.forEach((dot, index) => dot.classList.toggle('active', index === currentIndex));
+    thumbs.forEach((thumb, index) => thumb.classList.toggle('active', index === currentIndex));
   });
-  
+
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
       carousel.scrollTo({ left: index * carousel.offsetWidth, behavior: 'smooth' });
     });
   });
+
+  thumbs.forEach((thumb, index) => {
+    thumb.addEventListener('click', () => {
+      carousel.scrollTo({ left: index * carousel.offsetWidth, behavior: 'smooth' });
+    });
+  });
+}
+
+// Derive an image label (e.g. 'CLEAN', 'DIMENSIONS', 'LIFESTYLE') from the filename. Keywords are checked
+// in order; first match wins. Falls back to empty string if no keyword is present.
+function _deriveImageLabel(url) {
+  if (!url) return '';
+  const lower = String(url).toLowerCase();
+  const keywords = [
+    ['lifestyle', 'LIFESTYLE'],
+    ['dimensions', 'DIMENSIONS'],
+    ['dimension', 'DIMENSIONS'],
+    ['clean', 'CLEAN'],
+    ['hero', 'HERO'],
+    ['detail', 'DETAIL'],
+    ['packaging', 'PACKAGING'],
+    ['side', 'SIDE'],
+    ['top', 'TOP'],
+    ['use', 'IN USE']
+  ];
+  for (let i = 0; i < keywords.length; i++) {
+    if (lower.indexOf(keywords[i][0]) !== -1) return keywords[i][1];
+  }
+  return '';
+}
+
+// Render the image-type thumbnails row below the mobile dots. One small thumbnail per image, derived
+// label below each. Wired to the carousel by setupMobileCarousel (click scrolls; scroll updates active).
+// Hidden via CSS when the container is empty (single-image products).
+function _renderMobileThumbs(images) {
+  const container = document.getElementById('mobileThumbs');
+  if (!container) return;
+  if (!Array.isArray(images) || images.length < 2) { container.innerHTML = ''; return; }
+  const cdnBase = 'https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_200,h_200,f_auto,q_auto/';
+  container.innerHTML = images.map((img, idx) => {
+    const label = _deriveImageLabel(img) || 'VIEW ' + (idx + 1);
+    const cdnSrc = (img && typeof img === 'string' && img.indexOf('http') === 0) ? cdnBase + img : '';
+    const imgTag = cdnSrc ? '<img src="' + cdnSrc + '" alt="" loading="lazy">' : '';
+    return '<button class="m-thumb' + (idx === 0 ? ' active' : '') + '" data-thumb-index="' + idx + '" type="button" aria-label="View ' + label + '">' +
+      '<div class="m-thumb-img">' + imgTag + '</div>' +
+      '<div class="m-thumb-label">' + label + '</div>' +
+    '</button>';
+  }).join('');
 }
 
 function setupGalleryOverlay(product) {
