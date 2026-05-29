@@ -37,7 +37,7 @@
   <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="products.min.js?v=11" as="script">
-  <link rel="preload" href="product.min.js?v=33" as="script">
+  <link rel="preload" href="product.min.js?v=32" as="script">
   <link rel="preload" href="app.min.js?v=39" as="script">
   <script>
   if(sessionStorage.getItem('orlo_checkout_pending')){sessionStorage.removeItem('orlo_checkout_pending');window.location.replace('cancel.html');}
@@ -151,23 +151,6 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   /* Per-product blurb (item 6) — short italic sentence between title and price. Hidden when empty. */
   .product-blurb{font-family:'Cormorant Garamond',serif!important;font-style:italic!important;font-weight:400!important;font-size:1.02rem!important;color:#6b6b6b!important;line-height:1.55!important;margin:0 0 12px!important}
   .product-blurb:empty{display:none!important}
-
-  /* Section divider hairlines around the collection picker (per locked order). */
-  .section-divider{border:none!important;border-top:1px solid rgba(26,58,82,0.10)!important;margin:18px 0!important;padding:0!important;height:0!important}
-  /* Hide the divider when the adjacent picker is empty (non-collection products). */
-  .collection-picker:empty + .section-divider-picker-bottom{display:none!important}
-  .section-divider-picker-top:has(+ .collection-picker:empty){display:none!important}
-
-  /* Image type thumbnails — sit right below mobile dots. Each thumb is a small image preview
-     with a label (CLEAN / DIMENSIONS / LIFESTYLE / etc.) derived from the filename. */
-  .mobile-thumbs{display:flex;gap:8px;padding:10px 16px 0;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .mobile-thumbs:empty{display:none}
-  .m-thumb{flex:0 0 auto;width:64px;background:transparent;border:none;padding:0;cursor:pointer;font-family:'DM Sans',sans-serif}
-  .m-thumb-img{width:64px;height:64px;background:#fff;border:1px solid rgba(26,58,82,0.10);overflow:hidden;display:flex;align-items:center;justify-content:center;transition:border-color .15s}
-  .m-thumb-img img{width:100%;height:100%;object-fit:cover;display:block}
-  .m-thumb-label{margin-top:5px;font-size:0.56rem;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;text-align:center;line-height:1.2;transition:color .15s}
-  .m-thumb.active .m-thumb-img{border-color:#1a3a52;border-width:1.5px}
-  .m-thumb.active .m-thumb-label{color:#1a3a52}
 
   /* Inline collection picker (item 5b) — sits between price and variant/cart. v2 mini cards in a row.
      Only rendered when product is in a collection with siblings. */
@@ -467,12 +450,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       <p class="product-title-ar" id="productTitleAr"></p>
       <p class="product-blurb" id="productBlurb"></p>
       <div class="price" id="productPrice"></div>
-      <hr class="section-divider section-divider-picker-top">
-      <div id="collectionPickerDesktop" class="collection-picker"></div>
-      <hr class="section-divider section-divider-picker-bottom">
-      <div id="productDescription"></div>
       <div class="product-category" id="productCategory"></div>
       <div class="early-price" id="earlyPriceDesktop"></div>
+      <div id="collectionPickerDesktop" class="collection-picker"></div>
       <div id="pricingTiersDesktop"></div>
       <div id="variantSelectorDesktop"></div>
       <div class="product-buybox">
@@ -485,6 +465,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           </div>
         </div>
       </div>
+      <div id="productDescription"></div>
     </div>
   </div>
 </div>
@@ -496,20 +477,17 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       <div class="mobile-carousel" id="mobileCarousel"></div>
     </div>
     <div class="mobile-dots" id="mobileDots"></div>
-    <div class="mobile-thumbs" id="mobileThumbs"></div>
   </div>
   <div class="mobile-product-header">
     <h1 class="mobile-product-title" id="mobileProductTitle"></h1>
     <p class="mobile-product-title-ar arabic-text" id="mobileProductTitleAr"></p>
     <p class="mobile-blurb product-blurb" id="mobileBlurb"></p>
     <div class="mobile-price" id="mobileProductPrice"></div>
-    <hr class="section-divider section-divider-picker-top">
     <div id="collectionPickerMobile" class="collection-picker"></div>
-    <hr class="section-divider section-divider-picker-bottom">
-    <div class="mobile-details-section" id="mobileDetailsSection"></div>
     <span class="mobile-product-category" id="mobileProductCategory"></span>
     <div class="early-price" id="earlyPriceMobile"></div>
   </div>
+  <div class="mobile-details-section" id="mobileDetailsSection"></div>
   <div id="variantSelectorMobile"></div>
   <div id="pricingTiersMobile"></div>
   <div class="mobile-buybox-compact" style="display:none !important;">
@@ -679,7 +657,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="product.min.js?v=33" defer></script>
+<script src="product.min.js?v=32" defer></script>
 <script src="app.min.js?v=39" defer></script>
 <script>
 function updateAccountLink() {
