@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bobblehead Family — Variant Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,500&family=DM+Sans:wght@400;500;700&family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#f8f6f2;font-family:'DM Sans','Segoe UI',Arial,sans-serif;color:#1a3a52;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+/* Site-matched header lockup */
+.nav{background:#fff;border-bottom:1px solid rgba(26,58,82,0.10);padding:14px 32px;display:flex;justify-content:space-between;align-items:center}
+.lockup{display:inline-flex;align-items:center;gap:14px;text-decoration:none}
+.lockup .logo-img{width:40px;height:40px;border-radius:50%;background:#1a3a52;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:0.85rem;letter-spacing:0.08em}
+.lockup .sep{width:1px;height:28px;background:rgba(26,58,82,0.25)}
+.lockup .wordmark{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;letter-spacing:0.1em;color:#1a3a52;line-height:1}
+.lockup .wordmark span{color:#e76f51}
+.nav .back{font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6b6b;text-decoration:none}
+
+/* Page layout */
+.product-page{max-width:1100px;margin:0 auto;padding:40px 32px;display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start}
+@media(max-width:780px){.product-page{grid-template-columns:1fr;gap:24px;padding:24px 20px}}
+
+/* Hero image area */
+.hero-stack{display:flex;flex-direction:column;gap:12px}
+.hero-main{aspect-ratio:1/1;background:#fff;border:1px solid rgba(26,58,82,0.10);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;transition:background .35s ease}
+.hero-glyph{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:6rem;color:#1a3a52;opacity:0.18;letter-spacing:-0.03em;transition:opacity .35s ease}
+.hero-context{position:absolute;bottom:18px;left:24px;font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
+.thumb-row{display:flex;gap:12px}
+.thumb{flex:1;aspect-ratio:1/1;background:#fff;border:1px solid rgba(26,58,82,0.10);display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:#9aa5ad;font-weight:500;cursor:pointer;transition:border-color .2s, color .2s}
+.thumb.active{border-color:#1a3a52;color:#1a3a52}
+.thumb:hover{border-color:#1a3a52;color:#1a3a52}
+
+/* Right column — product info */
+.info{display:flex;flex-direction:column;gap:20px}
+
+/* Family badge — the curation telegraph */
+.family-badge{display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.24em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
+.family-badge::before{content:'';display:inline-block;width:18px;height:1px;background:#e76f51}
+
+/* Title — Cormorant italic editorial */
+.title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:2.6rem;line-height:1.05;color:#1a3a52;letter-spacing:-0.01em;transition:opacity .25s ease}
+.title em{color:#e76f51;font-style:italic}
+
+/* Price */
+.price{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:1.6rem;color:#1a3a52;letter-spacing:0.02em;display:flex;align-items:baseline;gap:10px;transition:opacity .25s ease}
+.price .price-note{font-family:'DM Sans',sans-serif;font-style:normal;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
+
+/* Hero blurb — italic descriptor under title */
+.hero-blurb{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.05rem;color:#6b6b6b;line-height:1.55;transition:opacity .25s ease}
+
+/* Variant picker */
+.variants{padding-top:10px;border-top:1px solid rgba(26,58,82,0.10)}
+.variants-label{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}
+.variants-label .count{color:#9aa5ad}
+.variant-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.variant-card{background:#fff;border:1px solid rgba(26,58,82,0.10);padding:8px;display:flex;flex-direction:column;gap:6px;cursor:pointer;text-decoration:none;transition:border-color .2s, transform .15s ease}
+.variant-card:hover{border-color:#1a3a52;transform:translateY(-1px)}
+.variant-card.active{border-color:#1a3a52;border-width:1.5px}
+.variant-thumb{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;color:#1a3a52;opacity:0.5}
+.variant-card.active .variant-thumb{opacity:1}
+.variant-name{font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;color:#1a3a52;font-weight:500;text-align:center;line-height:1.2}
+
+/* Description */
+.description{padding-top:18px;border-top:1px solid rgba(26,58,82,0.10);transition:opacity .25s ease}
+.description p{font-size:0.95rem;color:#1a3a52;line-height:1.7;margin-bottom:12px}
+
+/* Specs */
+.specs{padding-top:18px;border-top:1px solid rgba(26,58,82,0.10)}
+.specs-label{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#6b6b6b;font-weight:500;margin-bottom:10px}
+.specs ul{list-style:none;padding:0;font-size:0.85rem;color:#1a3a52;line-height:1.9}
+.specs li::before{content:'·';color:#e76f51;margin-right:10px;font-weight:700}
+
+/* CTA */
+.cta{display:flex;flex-direction:column;gap:8px;padding-top:6px}
+.add-to-cart{background:#1a3a52;color:#fff;border:none;padding:18px 24px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:filter .2s}
+.add-to-cart:hover{filter:brightness(0.88)}
+
+/* Family cross-link section — bottom of page */
+.family-section{background:#fff;border-top:1px solid rgba(26,58,82,0.10);padding:48px 32px;margin-top:48px}
+.family-section-inner{max-width:1100px;margin:0 auto}
+.family-section-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;letter-spacing:0.16em;text-transform:uppercase;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:20px;display:flex;justify-content:space-between;align-items:baseline}
+.family-section-heading .count{color:#9aa5ad;font-size:0.72rem}
+.family-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:780px){.family-row{grid-template-columns:repeat(2,1fr)}}
+.family-item{background:#f8f6f2;border:1px solid rgba(26,58,82,0.10);padding:18px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-decoration:none;transition:border-color .2s, transform .15s}
+.family-item:hover{border-color:#1a3a52;transform:translateY(-2px)}
+.family-item.current{border-color:#1a3a52;border-width:1.5px}
+.family-item-thumb{aspect-ratio:1/1;background:#fff;border:1px solid rgba(26,58,82,0.10);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:2.2rem;color:#1a3a52;opacity:0.5}
+.family-item.current .family-item-thumb{opacity:1}
+.family-item-name{font-family:'DM Sans',sans-serif;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:#1a3a52;font-weight:500}
+.family-item-price{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.92rem;color:#6b6b6b}
+.family-item.current .family-item-name::after{content:' · CURRENT';color:#9aa5ad;font-size:0.7em;letter-spacing:0.14em}
+
+/* Page-level note for the mockup viewer */
+.mockup-note{background:#fff;border-left:2px solid #e76f51;padding:14px 18px;margin:24px auto 0;max-width:1100px;font-size:0.82rem;color:#1a3a52;line-height:1.5}
+.mockup-note strong{color:#1a3a52}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+    <a href="#" class="lockup">
+        <div class="logo-img">O</div>
+        <div class="sep"></div>
+        <div class="wordmark">ORL<span>O</span></div>
+    </a>
+    <a href="#" class="back">← BACK</a>
+</nav>
+
+<div class="mockup-note">
+    <strong>Mockup:</strong> tap any thumbnail in the <em>Choose a member</em> row to see the whole page swap — title, blurb, price, hero image, description, even the "current" highlight in the family section below. Each variant IS its own product underneath; the page is just the unified frame.
+</div>
+
+<main class="product-page">
+
+    <!-- LEFT: image stack -->
+    <div class="hero-stack">
+        <div class="hero-main" id="heroMain">
+            <div class="hero-glyph" id="heroGlyph">Corgi</div>
+            <div class="hero-context">CLEAN · DASHBOARD CONTEXT</div>
+        </div>
+        <div class="thumb-row">
+            <div class="thumb active" data-img="clean">Clean</div>
+            <div class="thumb" data-img="dimensions">Dimensions</div>
+            <div class="thumb" data-img="lifestyle">Lifestyle</div>
+        </div>
+    </div>
+
+    <!-- RIGHT: info -->
+    <div class="info">
+
+        <div class="family-badge" id="familyBadge">Bobblehead Family · 1 of 4</div>
+
+        <h1 class="title" id="title">Corgi <em>Bobblehead</em></h1>
+
+        <div class="hero-blurb" id="heroBlurb">A small loyal head, nodding along to your morning commute.</div>
+
+        <div class="price" id="price">
+            <span id="priceAmount">AED 89</span>
+            <span class="price-note">FREE UAE DELIVERY OVER 75</span>
+        </div>
+
+        <!-- Variant picker -->
+        <div class="variants">
+            <div class="variants-label">
+                <span>Choose a member</span>
+                <span class="count">4 in family</span>
+            </div>
+            <div class="variant-grid" id="variantGrid">
+                <a class="variant-card active" data-key="corgi">
+                    <div class="variant-thumb">C</div>
+                    <div class="variant-name">Corgi</div>
+                </a>
+                <a class="variant-card" data-key="schnauzer">
+                    <div class="variant-thumb">S</div>
+                    <div class="variant-name">Schnauzer</div>
+                </a>
+                <a class="variant-card" data-key="frenchie">
+                    <div class="variant-thumb">F</div>
+                    <div class="variant-name">French Bulldog</div>
+                </a>
+                <a class="variant-card" data-key="pug">
+                    <div class="variant-thumb">P</div>
+                    <div class="variant-name">Pug</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="description" id="description">
+            <p>The Corgi sits low and bright on your dashboard — ears up, chest forward, with the slightly imperious composure only a corgi knows how to carry.</p>
+            <p>Below the head, a brass-weighted spring. Every speed bump, every red-light stop, every gentle accel out of a parking lot — the corgi nods with you. Restrained enthusiasm. Patient company.</p>
+            <p>For the commute that needs a little softening. For the dashboard that has been too empty for too long.</p>
+        </div>
+
+        <!-- Specs -->
+        <div class="specs">
+            <div class="specs-label">Specification</div>
+            <ul>
+                <li>Hand-painted resin, ~9.5 cm tall</li>
+                <li>Brass-weighted spring neck — smooth, slow recoil</li>
+                <li>Free-standing, holds steady at cruising speed</li>
+                <li>Hand-finished in small batches</li>
+            </ul>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta">
+            <button class="add-to-cart" id="addToCart">Add to Cart · AED 89</button>
+        </div>
+
+    </div>
+</main>
+
+<!-- Cross-link "Others in this family" section -->
+<section class="family-section">
+    <div class="family-section-inner">
+        <div class="family-section-heading">
+            <span>The Bobblehead Family</span>
+            <span class="count">4 designs · curated together</span>
+        </div>
+        <div class="family-row" id="familyRow">
+            <a class="family-item current" data-key="corgi">
+                <div class="family-item-thumb">C</div>
+                <div class="family-item-name">Corgi</div>
+                <div class="family-item-price">AED 89</div>
+            </a>
+            <a class="family-item" data-key="schnauzer">
+                <div class="family-item-thumb">S</div>
+                <div class="family-item-name">Schnauzer</div>
+                <div class="family-item-price">AED 89</div>
+            </a>
+            <a class="family-item" data-key="frenchie">
+                <div class="family-item-thumb">F</div>
+                <div class="family-item-name">French Bulldog</div>
+                <div class="family-item-price">AED 95</div>
+            </a>
+            <a class="family-item" data-key="pug">
+                <div class="family-item-thumb">P</div>
+                <div class="family-item-name">Pug</div>
+                <div class="family-item-price">AED 89</div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+// Each variant IS its own product — own title, blurb, description, price, hero color
+const VARIANTS = {
+    corgi: {
+        title: 'Corgi <em>Bobblehead</em>',
+        familyBadge: 'Bobblehead Family · 1 of 4',
+        blurb: 'A small loyal head, nodding along to your morning commute.',
+        price: 'AED 89',
+        glyph: 'Corgi',
+        bg: '#fff',
+        description: [
+            'The Corgi sits low and bright on your dashboard — ears up, chest forward, with the slightly imperious composure only a corgi knows how to carry.',
+            'Below the head, a brass-weighted spring. Every speed bump, every red-light stop, every gentle accel out of a parking lot — the corgi nods with you. Restrained enthusiasm. Patient company.',
+            'For the commute that needs a little softening. For the dashboard that has been too empty for too long.'
+        ]
+    },
+    schnauzer: {
+        title: 'Schnauzer <em>Bobblehead</em>',
+        familyBadge: 'Bobblehead Family · 2 of 4',
+        blurb: 'A small grey philosopher who has seen enough traffic to know.',
+        price: 'AED 89',
+        glyph: 'Schnauzer',
+        bg: '#fafaf7',
+        description: [
+            'The Schnauzer sits straight-backed, beard immaculate, with the careful gravity of a creature who takes its station seriously.',
+            'Brass-weighted spring under the head, smooth slow recoil — no frantic bouncing, no theatre. A dignified nod, as if acknowledging the traffic light has finally turned green.',
+            'For the driver who would like a witness, and would prefer that witness to be discreet.'
+        ]
+    },
+    frenchie: {
+        title: 'French Bulldog <em>Bobblehead</em>',
+        familyBadge: 'Bobblehead Family · 3 of 4',
+        blurb: 'A small dignified bat-eared traveller, ready for the boulevard.',
+        price: 'AED 95',
+        glyph: 'Frenchie',
+        bg: '#fbf9f4',
+        description: [
+            'The Frenchie sits low and wide, ears tall as flags, with the composure of a creature who knows it is already photographed.',
+            'The spring neck gives a soft, considered nod — never bouncy. The kind of motion you only catch from the corner of your eye, the way a Frenchie actually moves.',
+            'For the cabin that wants a little Parisian sigh.'
+        ]
+    },
+    pug: {
+        title: 'Pug <em>Bobblehead</em>',
+        familyBadge: 'Bobblehead Family · 4 of 4',
+        blurb: 'A small wrinkled philosopher, settling in for the commute.',
+        price: 'AED 89',
+        glyph: 'Pug',
+        bg: '#fbf8f3',
+        description: [
+            'The Pug sits with the soft solemnity of a creature who has decided that this is its dashboard now, and that you should take comfort in that fact.',
+            'A small, slow nod from the brass-weighted spring — patient, unbothered, faintly amused. The Pug does not perform for traffic.',
+            'For the long drive that wants quiet company and no opinions.'
+        ]
+    }
+};
+
+function setVariant(key) {
+    const v = VARIANTS[key];
+    if (!v) return;
+
+    // Title + family badge
+    document.getElementById('title').innerHTML = v.title;
+    document.getElementById('familyBadge').textContent = v.familyBadge;
+
+    // Hero blurb
+    document.getElementById('heroBlurb').textContent = v.blurb;
+
+    // Price
+    document.getElementById('priceAmount').textContent = v.price;
+    document.getElementById('addToCart').textContent = `Add to Cart · ${v.price}`;
+
+    // Hero image area (glyph + background)
+    document.getElementById('heroGlyph').textContent = v.glyph;
+    document.getElementById('heroMain').style.background = v.bg;
+
+    // Description — replace all paragraphs
+    const desc = document.getElementById('description');
+    desc.innerHTML = v.description.map(p => `<p>${p}</p>`).join('');
+
+    // Update active variant card
+    document.querySelectorAll('.variant-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.key === key);
+    });
+    // Update active family-section item
+    document.querySelectorAll('.family-item').forEach(item => {
+        item.classList.toggle('current', item.dataset.key === key);
+    });
+
+    // Update browser URL (mock — would actually navigate in production)
+    history.replaceState(null, '', `?product=${key}-bobblehead`);
+}
+
+// Wire up variant cards
+document.querySelectorAll('.variant-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+        e.preventDefault();
+        setVariant(card.dataset.key);
+    });
+});
+// Wire up family-section items
+document.querySelectorAll('.family-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+        e.preventDefault();
+        setVariant(item.dataset.key);
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+});
+// Optional: respond to URL param on load
+const urlKey = new URLSearchParams(window.location.search).get('variant');
+if (urlKey && VARIANTS[urlKey]) setVariant(urlKey);
+</script>
+
+</body>
+</html>
