@@ -1752,10 +1752,6 @@ function renderVariantSelector(containerId, product, isMobile) {
   if (isMobile) {
     container.innerHTML = `
       <div class="variant-section" style="padding: 0 16px;">
-        <div class="variant-label">
-          <span>Choose Design | <span class="arabic-text">اختر التصميم</span></span>
-          <span class="variant-selected-name" id="${prefix}-selectedName"></span>
-        </div>
         <div class="scroll-wrapper">
           <button class="scroll-arrow scroll-arrow-left" data-dir="-1" aria-label="Scroll left">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -1800,10 +1796,6 @@ function renderVariantSelector(containerId, product, isMobile) {
   } else {
     container.innerHTML = `
       <div class="variant-section">
-        <div class="variant-label">
-          <span>Choose Design | <span class="arabic-text">اختر التصميم</span></span>
-          <span class="variant-selected-name" id="${prefix}-selectedName"></span>
-        </div>
         <div class="variant-grid">${tilesHTML}</div>
       </div>
     `;
