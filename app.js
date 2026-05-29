@@ -708,7 +708,35 @@ function applyFiltersAndSort(list) {
         filtered = [...filtered].sort((a, b) => b.price - a.price);
     }
     // default: featured first (already sorted from API)
-    return filtered;
+    // Cluster collection siblings adjacent: when a product has a collectionName,
+    // its siblings (same name, case-insensitive) are pulled to sit immediately
+    // after it. Products with no collectionName keep their position.
+    return clusterByCollection(filtered);
+}
+
+// Cluster products by collectionName so members of the same collection appear
+// adjacent in the grid. Stable: respects the order of the input list — each
+// product's first occurrence determines where its cluster anchors, and siblings
+// follow in their original order.
+function clusterByCollection(list) {
+    if (!list || list.length < 2) return list;
+    const norm = s => (s || '').trim().toLowerCase();
+    const result = [];
+    const placed = new Set();
+    for (const p of list) {
+        if (placed.has(p.id)) continue;
+        result.push(p);
+        placed.add(p.id);
+        const col = norm(p.collectionName);
+        if (!col) continue;
+        for (const sibling of list) {
+            if (!placed.has(sibling.id) && norm(sibling.collectionName) === col) {
+                result.push(sibling);
+                placed.add(sibling.id);
+            }
+        }
+    }
+    return result;
 }
 
 function isArabic(text) {
