@@ -39,7 +39,7 @@
     <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="products.min.js?v=11" as="script">
-    <link rel="preload" href="app.min.js?v=38" as="script">
+    <link rel="preload" href="app.min.js?v=39" as="script">
     <!-- Type system: DM Sans body + Cormorant Garamond headings (self-hosted; declarations live in styles.css) -->
     <link rel="preload" href="/fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/dm-sans-v17-latin-500.woff2" as="font" type="font/woff2" crossorigin>
@@ -73,6 +73,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 .product-image{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:#fff}
 .product-info{padding:.75rem;display:flex;flex-direction:column;flex:1}
 .product-title{font-weight:600;color:var(--primary);margin:.4rem 0 .3rem;font-size:1.01rem;min-height:2.2rem}
+/* Collection cue line under price for products that belong to a collection (item 4). */
+.product-collection{font-family:'DM Sans',sans-serif;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-top:6px;padding-top:6px;border-top:1px solid rgba(26,58,82,0.06);display:flex;align-items:center;gap:6px}
+.product-collection::before{content:'';display:inline-block;width:10px;height:1px;background:#e76f51;flex-shrink:0}
 #products{min-height:800px}
 #productsGrid{min-height:600px}
 #popularScroll{min-height:240px}
@@ -1422,7 +1425,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="app.min.js?v=38" defer></script>
+<script src="app.min.js?v=39" defer></script>
 <script>
 /* ═══ CARD v2 — Hermès card-4 override. Active only on this draft page (body[data-cards="v2"]). Live pages keep legacy cards.
    Wrapped in DOMContentLoaded so the override runs AFTER app.min.js's defer execution

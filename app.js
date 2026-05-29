@@ -604,6 +604,7 @@ function renderProducts(list, arabicMode) {
                     ${titleHTML}
                 </a>
                 <div class="product-price">${outOfStock ? '<span class="price-soldout">Sold out</span>' : formatProductPrice(p, arabicMode)}</div>
+                ${p.collectionName && p.collectionName.trim() ? `<div class="product-collection">${escapeHTML(p.collectionName.trim().toUpperCase())}</div>` : ''}
                 ${buttonHTML}
             </div>
         </div>
