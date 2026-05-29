@@ -1838,7 +1838,7 @@ function renderPricingTiers(containerId, product) {
     return `
       <div class="tier-item ${isActive ? 'active' : ''} ${isLast && tiers.length > 1 ? 'best-deal' : ''}" data-min-qty="${t.minQty}" data-discount="${discountPct}">
         <div class="tier-row-top"><span class="tier-qty">${qtyLabel}</span><span class="tier-price">AED ${tierPrice.toFixed(2)}</span></div>
-        <div class="tier-row-bottom">each${discountPct > 0 ? ` · <span class="tier-save">Save ${Math.round(discountPct)}%</span>` : ''}</div>
+        <div class="tier-row-bottom">EACH${discountPct > 0 ? ` · <span class="tier-save">SAVE ${Math.round(discountPct)}%</span>` : ''}</div>
       </div>
     `;
   }).join('');

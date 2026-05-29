@@ -37,7 +37,7 @@
   <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="products.min.js?v=11" as="script">
-  <link rel="preload" href="product.min.js?v=30" as="script">
+  <link rel="preload" href="product.min.js?v=31" as="script">
   <link rel="preload" href="app.min.js?v=37" as="script">
   <script>
   if(sessionStorage.getItem('orlo_checkout_pending')){sessionStorage.removeItem('orlo_checkout_pending');window.location.replace('cancel.html');}
@@ -294,10 +294,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .tier-item.best-deal{background:transparent!important}
   .tier-row-top{display:flex!important;flex-direction:column!important;align-items:center!important;gap:4px!important;margin-bottom:6px!important}
   .tier-qty{font-family:'DM Sans',sans-serif!important;font-size:0.7rem!important;color:#6b6b6b!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;background:none!important;padding:0!important;border:none!important}
-  .tier-price{font-family:'DM Sans',sans-serif!important;font-size:0.95rem!important;color:#1a3a52!important;font-weight:500!important;background:none!important;padding:0!important;border:none!important}
-  .tier-item.active .tier-price{color:#1a3a52!important;font-weight:500!important}
-  .tier-row-bottom{font-family:'DM Sans',sans-serif!important;font-size:0.65rem!important;color:#9aa5ad!important;letter-spacing:0.04em!important;text-transform:lowercase!important;background:none!important}
-  .tier-save{color:#6b6b6b!important;font-weight:500!important;background:none!important;padding:0!important}
+  .tier-price{font-family:'DM Sans',sans-serif!important;font-size:0.88rem!important;color:#1a3a52!important;font-weight:400!important;letter-spacing:0.01em!important;background:none!important;padding:0!important;border:none!important}
+  .tier-item.active .tier-price{color:#1a3a52!important;font-weight:400!important}
+  .tier-row-bottom{font-family:'DM Sans',sans-serif!important;font-size:0.62rem!important;color:#9aa5ad!important;font-weight:500!important;letter-spacing:0.18em!important;text-transform:uppercase!important;line-height:1.4!important;background:none!important}
+  .tier-save{color:#9aa5ad!important;font-weight:500!important;background:none!important;padding:0!important}
   /* Tier container: grid, auto-fit, max 4 per row, cells auto-adjust width */
   #pricingTiersDesktop > div:first-child,#pricingTiersMobile > div:first-child{display:grid!important;grid-template-columns:repeat(auto-fit, minmax(max(80px, calc(25% - 6px)), 1fr))!important;border-top:1px solid rgba(26,58,82,0.10)!important;border-bottom:1px solid rgba(26,58,82,0.10)!important;background:transparent!important;gap:0!important}
   .tier-item{min-width:0!important;max-width:none!important;outline:none!important;border-left:1px solid rgba(26,58,82,0.06)!important}
@@ -307,7 +307,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .tier-item[data-discount="0"] .tier-row-bottom,
   .tier-item[data-discount="0.0"] .tier-row-bottom{font-size:0!important;line-height:1.4!important;color:transparent!important}
   .tier-item[data-discount="0"] .tier-row-bottom::after,
-  .tier-item[data-discount="0.0"] .tier-row-bottom::after{content:'each';font-size:0.65rem!important;color:#9aa5ad!important;letter-spacing:0.04em!important;display:inline-block}
+  .tier-item[data-discount="0.0"] .tier-row-bottom::after{content:'EACH';font-size:0.62rem!important;color:#9aa5ad!important;font-weight:500!important;letter-spacing:0.18em!important;text-transform:uppercase!important;display:inline-block}
+
+  /* Tier price size: match main price on mobile (0.88rem desktop / 0.82rem mobile) */
+  @media(max-width:576px){.tier-price{font-size:0.82rem!important}}
 
   /* ═════════ Variant selector — strip the busy "shopping-card" feel ═════════ */
   /* Kill the magnifier overlay and "In Stock" label clutter */
@@ -628,7 +631,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="product.min.js?v=30" defer></script>
+<script src="product.min.js?v=31" defer></script>
 <script src="app.min.js?v=37" defer></script>
 <script>
 function updateAccountLink() {
