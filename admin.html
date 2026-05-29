@@ -2052,6 +2052,12 @@
                             <label>Secondary Category (Arabic)</label>
                             <input type="text" id="formCategory2Ar" placeholder="e.g. هدايا" dir="rtl" style="font-family: 'Almarai', sans-serif;">
                         </div>
+                        <div class="form-group" style="grid-column:1/-1">
+                            <label>Collection <span style="font-weight:400;color:#888;font-size:0.78rem">(optional — groups products together on the homepage, e.g. "The Bobbleheads")</span></label>
+                            <input type="text" id="formCollectionName" list="collectionNamesList" placeholder='e.g. The Bobbleheads' autocomplete="off">
+                            <datalist id="collectionNamesList"></datalist>
+                            <div class="form-hint">Type a new collection name or pick from existing. Products with the same collection cluster on the index and show a cream "collection band" on each member's product page. Leave blank for standalone products.</div>
+                        </div>
                     </div>
                 </div>
 
@@ -3460,6 +3466,7 @@
             document.getElementById('formBaseTypeAr').value = product.baseTypeAr || '';
             document.getElementById('formMaterial').value = product.material || '';
             document.getElementById('formMaterialAr').value = product.materialAr || '';
+            document.getElementById('formCollectionName').value = product.collectionName || '';
 
             // Variants
             document.getElementById('variantsContainer').innerHTML = '';
@@ -3493,6 +3500,22 @@
             sel.innerHTML = '<option value="">-- Select category --</option>' + optHTML + '<option value="__new__">+ New category...</option>';
             const sel2 = document.getElementById('formCategory2Select');
             if (sel2) sel2.innerHTML = '<option value="">-- None --</option>' + optHTML + '<option value="__new__">+ New category...</option>';
+        }
+
+        // Populate the <datalist> bound to #formCollectionName with existing collection names.
+        // Comparison is case-insensitive so 'the bobbleheads' and 'The Bobbleheads' collapse to one option.
+        function buildCollectionDatalist() {
+            const dl = document.getElementById('collectionNamesList');
+            if (!dl) return;
+            const seen = new Map(); // key: lowercased, value: original casing
+            (products || []).forEach(p => {
+                const name = (p.collectionName || '').trim();
+                if (!name) return;
+                const key = name.toLowerCase();
+                if (!seen.has(key)) seen.set(key, name);
+            });
+            const names = Array.from(seen.values()).sort((a, b) => a.localeCompare(b));
+            dl.innerHTML = names.map(n => `<option value="${n.replace(/"/g, '&quot;')}"></option>`).join('');
         }
 
         function onCategorySelect() {
@@ -3539,6 +3562,7 @@
 
         function setCategoryDropdown(category, category2) {
             buildCategoryDropdown();
+            buildCollectionDatalist();
 
             // Primary
             const sel = document.getElementById('formCategorySelect');
@@ -3638,6 +3662,7 @@
                 baseTypeAr: document.getElementById('formBaseTypeAr').value.trim(),
                 material: document.getElementById('formMaterial').value.trim(),
                 materialAr: document.getElementById('formMaterialAr').value.trim(),
+                collectionName: document.getElementById('formCollectionName').value.trim(),
                 variants: getVariantsFromForm(),
                 pricingTiers: getTiersFromForm()
             };

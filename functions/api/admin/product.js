@@ -34,6 +34,7 @@ export async function onRequestPost(context) {
         try { await DB.prepare('ALTER TABLE products ADD COLUMN handmade INTEGER DEFAULT 0').run(); } catch(e) { /* already exists */ }
         try { await DB.prepare('ALTER TABLE products ADD COLUMN isNew INTEGER DEFAULT 0').run(); } catch(e) { /* already exists */ }
         try { await DB.prepare('ALTER TABLE products ADD COLUMN mainImageMirror INTEGER DEFAULT 0').run(); } catch(e) { /* already exists */ }
+        try { await DB.prepare("ALTER TABLE products ADD COLUMN collection_name TEXT DEFAULT ''").run(); } catch(e) { /* already exists */ }
 
         const data = await request.json();
 
@@ -46,8 +47,8 @@ export async function onRequestPost(context) {
                     image6, image7, image8, colors, colorsAr, packaging, packagingAr,
                     specifications, specificationsAr, featured, handmade, isNew,
                     wattage, voltage, plugType, plugTypeAr, baseType, baseTypeAr,
-                    material, materialAr, pairings
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    material, materialAr, pairings, collection_name
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `).bind(
                 data.slug, data.name, data.nameAr || '',
                 data.category || '', data.categoryAr || '',
@@ -66,7 +67,7 @@ export async function onRequestPost(context) {
                 data.plugType || '', data.plugTypeAr || '',
                 data.baseType || '', data.baseTypeAr || '',
                 data.material || '', data.materialAr || '',
-                data.pairings || ''
+                data.pairings || '', (data.collectionName || '').trim()
             ).run();
 
             const newProduct = await DB.prepare('SELECT id FROM products WHERE slug = ?').bind(data.slug).first();
@@ -110,7 +111,7 @@ export async function onRequestPost(context) {
                     featured = ?, handmade = ?, isNew = ?,
                     wattage = ?, voltage = ?, plugType = ?, plugTypeAr = ?,
                     baseType = ?, baseTypeAr = ?, material = ?, materialAr = ?,
-                    pairings = ?
+                    pairings = ?, collection_name = ?
                 WHERE id = ?
             `).bind(
                 data.slug, data.name, data.nameAr || '',
@@ -130,7 +131,7 @@ export async function onRequestPost(context) {
                 data.plugType || '', data.plugTypeAr || '',
                 data.baseType || '', data.baseTypeAr || '',
                 data.material || '', data.materialAr || '',
-                data.pairings || '',
+                data.pairings || '', (data.collectionName || '').trim(),
                 id
             ).run();
 
