@@ -840,11 +840,13 @@ async function initProductPage() {
     const mobileDeliveryEl = document.querySelector('.mobile-delivery-info');
     if (mobileDeliveryEl) mobileDeliveryEl.remove();
 
-    // Move variant selector right after carousel (inline, no sticky)
+    // Move variant selector right after the title/price header (Hermès order:
+    // image → title → price → variants → details). Was previously moved to right
+    // after the carousel which placed variants ABOVE the title — wrong order.
     const variantSelector = document.getElementById('variantSelectorMobile');
-    const carouselContainer = document.querySelector('.mobile-carousel-container');
-    if (variantSelector && carouselContainer) {
-      carouselContainer.after(variantSelector);
+    const mobileHeader = document.querySelector('.mobile-product-header');
+    if (variantSelector && mobileHeader) {
+      mobileHeader.after(variantSelector);
     }
 
     // Position earlyPriceMobile as sticky bottom buy box (keeps its existing design)
