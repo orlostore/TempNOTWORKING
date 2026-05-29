@@ -762,15 +762,15 @@ async function initProductPage() {
   document.getElementById("mobileProductTitle").innerText = product.name;
   document.getElementById("mobileProductTitleAr").innerText = product.nameAr || '';
   document.getElementById("mobileProductCategory").innerHTML = product.category + shareHTML;
-  // Hide standalone price when tiers are present (dynamic bar replaces it)
+  // Hermès-style: always show the base price right under the title (for every product type).
   const mobilePriceEl = document.getElementById("mobileProductPrice");
-  if (hasTiers) {
-    mobilePriceEl.parentElement.style.display = 'none';
-  } else if (hasVariants) {
-    // Price already shown in early price box — hide price section in buybox
-    mobilePriceEl.parentElement.style.display = 'none';
-  } else {
-    mobilePriceEl.innerText = "AED " + product.price;
+  if (mobilePriceEl) {
+    if (product.price) {
+      mobilePriceEl.innerText = "AED " + Number(product.price).toFixed(2);
+      mobilePriceEl.style.display = '';
+    } else {
+      mobilePriceEl.style.display = 'none';
+    }
   }
 
   // === VARIANT SELECTOR (Mobile) ===
