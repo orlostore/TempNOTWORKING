@@ -565,15 +565,16 @@ async function initProductPage() {
   descriptionHTML += buildExtraSpecsHTML(product);
 
   document.getElementById("productDescription").innerHTML = descriptionHTML;
-  // Hide standalone price when pricing tiers are present (dynamic bar replaces it)
+  // Hermès-style: ALWAYS show a clean price right under the title for every product type
+  // (variant, tier, or simple). Tier bar + variant bar stay below for pricing detail.
   const productPriceEl = document.getElementById("productPrice");
-  if (hasTiers) {
-    productPriceEl.style.display = 'none';
-  } else if (hasVariants) {
-    // Price already visible in sticky early-price bar — hide duplicate in buybox
-    productPriceEl.style.display = 'none';
-  } else {
-    productPriceEl.innerText = "AED " + Number(product.price).toFixed(2);
+  if (productPriceEl) {
+    if (product.price) {
+      productPriceEl.innerText = "AED " + Number(product.price).toFixed(2);
+      productPriceEl.style.display = '';
+    } else {
+      productPriceEl.style.display = 'none';
+    }
   }
 
   // Stock caption — quiet "In stock" / "Only N available" with dot indicator (per locked tag system)
