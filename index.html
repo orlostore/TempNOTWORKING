@@ -74,8 +74,8 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 .product-info{padding:.75rem;display:flex;flex-direction:column;flex:1}
 .product-title{font-weight:600;color:var(--primary);margin:.4rem 0 .3rem;font-size:1.01rem;min-height:2.2rem}
 /* Collection cue line under price for products that belong to a collection (item 4). */
-.product-collection{font-family:'DM Sans',sans-serif;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-top:6px;padding-top:6px;border-top:1px solid rgba(26,58,82,0.06);display:flex;align-items:center;gap:6px}
-.product-collection::before{content:'';display:inline-block;width:10px;height:1px;background:#e76f51;flex-shrink:0}
+.card .card-collection{font-family:'DM Sans',sans-serif;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-top:6px;padding-top:6px;border-top:1px solid rgba(26,58,82,0.06);display:flex;align-items:center;gap:6px}
+.card .card-collection::before{content:'';display:inline-block;width:10px;height:1px;background:#e76f51;flex-shrink:0}
 #products{min-height:800px}
 #productsGrid{min-height:600px}
 #popularScroll{min-height:240px}
@@ -1499,6 +1499,10 @@ document.addEventListener('DOMContentLoaded', function(){
         bag = '<button class="card-bag" aria-label="Add to bag" onclick="'+act+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></button>';
       }
       var price = isOOS ? '<span class="price-soldout">Sold out</span>' : (p.price ? 'AED '+Number(p.price).toFixed(2) : '');
+      // Collection cue line (item 4) — tiny caps tag under the price for products with a collectionName set.
+      var collectionHTML = (p.collectionName && String(p.collectionName).trim())
+        ? '<div class="card-collection">'+esc(String(p.collectionName).trim().toUpperCase())+'</div>'
+        : '';
       return '<div class="card'+(isOOS?' oos is-soldout':'')+'">'+
         // .card-link is a plain <div> (not <a>) so Chrome Android can't hijack swipe gestures for native link drag.
         // JS click handler in initCardSwipe navigates to PDP on tap when !swiped. The .card-info <a> below still
@@ -1509,6 +1513,7 @@ document.addEventListener('DOMContentLoaded', function(){
             '<div class="card-name">'+safeName+'</div>'+
             (safeNameAr ? '<div class="card-name-ar">'+safeNameAr+'</div>' : '')+
             '<div class="card-price">'+price+'</div>'+
+            collectionHTML+
           '</a>'+bag+
         '</div>'+
       '</div>';
