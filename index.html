@@ -634,7 +634,20 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       .homepage-section  { padding: var(--section-gap) 0 0; }
       .container#products{ padding-top: var(--section-gap); padding-bottom: 0; margin-top: 0; }
       .edit-teaser-v2    { margin: var(--section-gap) 0 0; }
-      .about-accordion   { margin: var(--section-gap) auto 0; }
+      .about-accordion   { margin: var(--section-gap) 0 0; max-width: none; padding: 0; }
+
+      /* Align About + Footer content with the cards container above.
+         Section backgrounds (cream / white) stay full-width for visual rhythm;
+         inner content wraps in a .container-width max so it lines up with the cards. */
+      .about-accordion .acc-row,
+      .cs-footer-section .cs-footer-inner {
+        max-width: calc(1180px - 2 * 1.34rem);
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 0;
+        padding-right: 0;
+        box-sizing: border-box;
+      }
     </style>
     <!-- End draft overlay -->
     <script>
@@ -865,7 +878,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
            dots vanished after cache purge.) */
 
         /* ═══ UNIFIED FOOTER (Customer Enquiries) — mirrors cart / login / signup pages ═══ */
-        .cs-footer-section{background:#fff;padding:28px 32px;margin-top:var(--section-gap)}
+        .cs-footer-section{background:#fff;padding:28px 0;margin-top:var(--section-gap)}
         .cs-footer-inner{max-width:780px;margin:0 auto}
         .cs-footer-section .cs-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.16em;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
         .cs-footer-section .cs-heading .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#6b6b6b;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
