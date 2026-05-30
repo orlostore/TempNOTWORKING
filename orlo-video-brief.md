@@ -1,4 +1,4 @@
-# ORLO REEL — UPDATED SPEC (v3.2 — price legibility, May 2026)
+# ORLO REEL — UPDATED SPEC (v3.3 — pre-render checks + tighter price vignette, May 2026)
 
 You are building a vertical reel/TikTok video for ORLO Store. This spec OVERRIDES anything from prior conversations. Follow exactly.
 
@@ -6,6 +6,18 @@ You are building a vertical reel/TikTok video for ORLO Store. This spec OVERRIDE
 - 1080 × 1920, 30fps, 16s, H.264, CRF 18, AAC 192k, +faststart MP4
 - Audio: trim to 16s, volume 0.7, 1.5s fade-out at 14.5s
 - **Render frames at 2160 × 3840 (2×) then downsample to 1080 × 1920 with PIL `Image.LANCZOS`.** Non-negotiable — produces crisp type. JPEG quality 95 for frame export.
+
+## Pre-render verification — NON-NEGOTIABLE (added v3.3)
+Before exporting a single frame, verify these. If any check fails, **STOP and report back to the project owner before rendering** — do not silently work around it.
+
+1. **Aspect ratio:** the output MUST be **native 1080 × 1920 (9:16)** edge-to-edge. **Letterboxing is forbidden** — no black bars top/bottom, no padding, no 16:9 source stretched into 9:16. If your source assets are 16:9, ASK for 9:16 versions; do not letterbox.
+2. **Logo file:** the ORLO logo must be the **real official logo file** supplied by the project owner (navy organic blob + coral textured dot + cream "ORLO" wordmark). If the logo file is not in the brief package, **STOP and ask for it**. Do NOT:
+   - Generate a logo from scratch.
+   - Use a placeholder or stand-in logo.
+   - Use an AI-rendered approximation of the logo.
+   - Recolour, restyle, redraw, or modify the supplied logo in any way.
+   Any reel rendered without the real official logo file is rejected on sight.
+3. **Source product photo:** verify it is the actual product hero / lifestyle shot supplied by the project owner. If missing, ask before rendering.
 
 ## Palette (use exactly)
 - Cream bg: `#F8F6F2`
@@ -84,7 +96,9 @@ This beat exists so the still-frame **cover** that IG and TikTok show on the fee
 - **NO Arabic price echo.** AED is universally understood in UAE — adding "د.إ ١١٩" creates redundant overlay text and breaks the editorial Hermès register. The English price alone, in Cormorant italic, IS the price treatment.
 - **Vertical placement**: price column centred horizontally, vertical centre at y ≈ 1400 (lower-third of frame so the product still has the upper two-thirds for the hero shot).
 - **No background, no card, no shadow, no border on the type itself.** The price sits naked on the scene like a printed magazine price tag.
-- **Background legibility — REQUIRED for warm / wood / light-beige scenes:** if the scene behind the price column lacks contrast against navy type (typical for wood-top, beige-wall, cream-on-cream compositions), apply a **cream `#F8F6F2` radial vignette at ~30% opacity, ~500px radius, soft falloff**, centred on the price column. Soften the SCENE behind the price — NEVER apply text-shadow, drop-shadow, or glow on the type itself. The price stays solid Cormorant italic; the vignette gives it a subtle cream halo so the navy reads cleanly at thumbnail scale. This stays consistent with the global "never blur type" rule.
+- **Background legibility — REQUIRED for warm / wood / light-beige scenes (tightened v3.3):** if the scene behind the price column lacks contrast against navy type (typical for wood-top, beige-wall, brass-prop, cream-on-cream compositions), apply a **cream `#F8F6F2` radial vignette at 55–60% opacity, ~700px radius, soft falloff**, centred on the price column. v3.2 specified 30% / 500px — real-world output showed the price still getting lost on warm/wood scenes with brass or fabric props sitting under the price column. The bumped numbers soften a larger zone of the scene without touching the type.
+- **Avoid the price column landing on busy props.** If a prop (binoculars, books, brass instrument, knot of fabric) sits at y ≈ 1400 directly under where the price will render, **shift the price up by ~150–200px** so the digits float over a calmer area of the scene. The lower-third placement is a default, not a rule — readability wins.
+- Soften the SCENE behind the price — NEVER apply text-shadow, drop-shadow, or glow on the type itself. The price stays solid Cormorant italic; the vignette gives it a subtle cream halo so the navy reads cleanly at thumbnail scale. This stays consistent with the global "never blur type" rule.
 
 **Cover-pick guidance for IG / TikTok upload:**
 - IG: when uploading the Reel, set the cover frame to **~12.0s** (mid-price-reveal). The cover thumbnail on the feed will show product + price + corner-parked logo.
@@ -110,6 +124,11 @@ This beat exists so the still-frame **cover** that IG and TikTok show on the fee
 DO NOT start rendering until the concept is confirmed. Render all 480 frames in one go.
 
 ---
+
+## v3.3 changelog vs v3.2
+- **Added Pre-render verification block** — three explicit STOP-and-report-back checks before any rendering: (a) native 9:16 aspect ratio (no letterboxing), (b) real official ORLO logo file (no AI-generated stand-ins, no placeholders), (c) real source product photo. Triggered by a v3.2 reel that came back letterboxed AND with a placeholder-style logo — both should have been caught before frames were committed.
+- **Price-reveal vignette bumped: 30% → 55–60% opacity, 500px → 700px radius.** Real-world output showed navy "AED 149" getting lost on a warm wood + brass-binocular scene with the v3.2 numbers. Larger and stronger vignette softens a bigger zone without violating the "never blur type" rule.
+- **Price column position now defaultable, not fixed:** if a busy prop (binoculars, books, brass instrument, fabric knot) sits exactly under the price's y ≈ 1400 landing, shift the price up by 150–200px to a calmer area of the scene. Readability wins over rigid placement.
 
 ## v3.2 changelog vs v3.1
 - **Arabic price echo REMOVED.** v3.1 said "optional but recommended"; v3.2 says explicitly DO NOT use. AED is universally understood in UAE; the Arabic line (د.إ ١١٩) created redundant overlay text and broke the editorial register. The English price alone, in Cormorant italic, IS the price treatment.
