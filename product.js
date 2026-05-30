@@ -100,8 +100,8 @@ function showProductPageMaxLimitMessage(productId, maxAllowed) {
         || document.querySelector('.mobile-cart-section');
     } else {
       anchor = document.getElementById(`transformedBtn-${productId}`)
-        || document.querySelector('#earlyCartDesktop')
-        || document.querySelector('.early-price');
+        || document.querySelector('#addToCartBtn')
+        || document.querySelector('.product-buybox');
     }
 
     if (!anchor) return;
@@ -239,8 +239,9 @@ function resetToAddButton(productId) {
           ? `<button class="mobile-add-to-cart" id="earlyCartMobile"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`
           : `<button class="mobile-add-to-cart" id="earlyCartMobile"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
       } else {
-        // Desktop: three-column bar uses stacked bilingual
-        transformed.outerHTML = `<button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
+        // Desktop: button now lives in .product-buybox (not .early-price), so this branch is unreachable.
+        // Kept for defence-in-depth — fall back to the static buybox button shape.
+        transformed.outerHTML = `<button class="add-to-cart-btn" id="addToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
       }
     } else {
       const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
@@ -295,8 +296,8 @@ function resetToAddButton(productId) {
     return true;
   };
 
-  // Re-attach click handlers — both variant and non-variant use earlyCartDesktop
-  const desktopBtn = document.getElementById('earlyCartDesktop');
+  // Re-attach click handlers — desktop uses #addToCartBtn (in .product-buybox), mobile keeps its sticky bar button
+  const desktopBtn = document.getElementById('addToCartBtn');
   const mobileBtn = hasVariants ? document.getElementById('mobileAddToCartBtn') : document.getElementById('earlyCartMobile');
   if (desktopBtn) desktopBtn.onclick = handler;
   if (mobileBtn) mobileBtn.onclick = handler;
@@ -622,11 +623,10 @@ async function initProductPage() {
     const displayPrice = variantDisplayPrice || product.price;
     const priceEn = `AED ${Number(displayPrice).toFixed(2)}`;
     const priceAr = `${Number(displayPrice).toFixed(2)} درهم`;
-    // Desktop: same three-column bar as non-variant (Cart | Price | Delivery)
+    // Desktop sticky bar — Price | Delivery only. CTA lives in .product-buybox.
     if (earlyPriceDesktop) {
       earlyPriceDesktop.innerHTML = `
         <div class="early-price-row early-price-desktop-bar">
-          <button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
           <div class="price-col">
             <span class="early-price-en">${priceEn}</span>
             <span class="early-price-ar arabic-text">${priceAr}</span>
@@ -667,7 +667,6 @@ async function initProductPage() {
     const nvPriceArD = `${Number(product.price).toFixed(2)} درهم`;
     const earlyHTMLDesktop = `
       <div class="early-price-row early-price-desktop-bar">
-        <button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
         <div class="price-col">
           <span class="early-price-en">${nvPriceEnD}</span>
           <span class="early-price-ar arabic-text">${nvPriceArD}</span>
@@ -750,11 +749,8 @@ async function initProductPage() {
     }
   }
 
-  // Desktop button: both variant and non-variant use earlyCartDesktop in the bar
-  let desktopAddBtn = document.getElementById("earlyCartDesktop");
-  // Hide the buybox — delivery & cart are in the bar
-  const buybox = document.querySelector('.product-buybox');
-  if (buybox) buybox.style.display = 'none';
+  // Desktop CTA lives in .product-buybox (#addToCartBtn). Sticky bar shows price + delivery only.
+  let desktopAddBtn = document.getElementById("addToCartBtn");
   if (isOutOfStock && desktopAddBtn) {
     desktopAddBtn.innerHTML = '<span class="btn-en">Out of Stock</span><span class="btn-ar arabic-text">نفد المخزون</span>';
     desktopAddBtn.disabled = true;
@@ -2082,8 +2078,8 @@ function selectVariant(variantId, productId, prefix) {
     if (priceRowAr) priceRowAr.textContent = priceAr;
   });
 
-  // Enable Add to Cart buttons (desktop uses earlyCartDesktop, mobile uses mobileAddToCartBtn)
-  const desktopBtn = document.getElementById('earlyCartDesktop');
+  // Enable Add to Cart buttons (desktop uses #addToCartBtn in .product-buybox, mobile uses mobileAddToCartBtn)
+  const desktopBtn = document.getElementById('addToCartBtn');
   const mobileBtn = document.getElementById('mobileAddToCartBtn');
 
   [desktopBtn, mobileBtn].forEach(btn => {
@@ -2116,8 +2112,8 @@ function selectVariant(variantId, productId, prefix) {
     // Reset to "Add to Cart" if not in cart — check if currently transformed
     const desktopTransformed = document.querySelector('.desktop-product .product-btn-transformed');
     if (desktopTransformed) {
-      desktopTransformed.outerHTML = `<button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
-      const newBtn = document.getElementById('earlyCartDesktop');
+      desktopTransformed.outerHTML = `<button class="add-to-cart-btn" id="addToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
+      const newBtn = document.getElementById('addToCartBtn');
       if (newBtn) {
         newBtn.onclick = function() {
           if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, window._selectedVariant);
@@ -2200,21 +2196,17 @@ function productVariantQtyChange(productId, variantId, change) {
     // Reset buttons back to "Add to Cart"
     document.querySelectorAll(`[id="transformedBtn-${productId}"]`).forEach(el => {
       const isMobile = el.closest('.mobile-product-page') !== null;
-      const isEarlyPrice = el.closest('.early-price') !== null;
       const isBottomBar = el.closest('.early-price-bottom') !== null;
-      if (!isMobile && isEarlyPrice) {
-        // Desktop: restore inline bar button
-        el.outerHTML = `<button class="inline-add-to-cart" id="earlyCartDesktop"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
-      } else if (isMobile && isBottomBar) {
+      if (isMobile && isBottomBar) {
         el.outerHTML = `<button class="mobile-add-to-cart" id="mobileAddToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
       } else {
-        const btnId = isMobile ? 'mobileAddToCartBtn' : 'earlyCartDesktop';
-        const btnClass = isMobile ? 'mobile-add-to-cart' : 'inline-add-to-cart';
+        const btnId = isMobile ? 'mobileAddToCartBtn' : 'addToCartBtn';
+        const btnClass = isMobile ? 'mobile-add-to-cart' : 'add-to-cart-btn';
         el.outerHTML = `<button class="${btnClass}" id="${btnId}"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>`;
       }
     });
     // Re-attach handlers
-    const newDesktopBtn = document.getElementById('earlyCartDesktop');
+    const newDesktopBtn = document.getElementById('addToCartBtn');
     const newMobileBtn = document.getElementById('mobileAddToCartBtn');
     if (newDesktopBtn) newDesktopBtn.onclick = function() {
       if (addToCartHandlerRef()) transformToQtyButtonVariant(this, product, window._selectedVariant);
