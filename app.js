@@ -1365,7 +1365,7 @@ function toggleMobileMenu() {
                 <a href="${base}#shop" onclick="closeMobileMenu()">
                     <span class="menu-num">01</span>
                     <div class="menu-icon-box"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
-                    <div class="menu-text"><span class="menu-en">Shop</span><span class="menu-ar">تسوق</span></div>
+                    <div class="menu-text"><span class="menu-en" style="font-style:normal">Shop</span><span class="menu-ar">تسوق</span></div>
                 </a>
                 <a href="${base}#about" onclick="closeMobileMenu()">
                     <span class="menu-num">02</span>
