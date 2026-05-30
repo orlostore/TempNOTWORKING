@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success page preview | ORLO</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:'DM Sans';src:url('/fonts/dm-sans-v17-latin-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+        @font-face{font-family:'Cormorant Garamond';src:url('/fonts/cormorant-garamond-v21-latin-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+        @font-face{font-family:'Almarai';src:url('/fonts/almarai-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background:#f8f6f2; font-family:'DM Sans',sans-serif; color:#1a1a1a; min-height:100vh; padding:0; margin:0; font-variant-numeric:lining-nums; font-feature-settings:"lnum" 1; }
+
+        @keyframes fadeSlideIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+
+        /* Banner at the top so user knows this is a preview */
+        .preview-banner { background:#1a3a52; color:#fff; text-align:center; padding:10px 16px; font-family:'DM Sans',sans-serif; font-size:0.78rem; letter-spacing:0.04em; }
+        .preview-banner strong { color:#e76f51; }
+
+        /* ── LOCKUP NAV ── */
+        .success-nav { padding:14px 32px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(26,58,82,0.10); background:#fff; }
+        .success-lockup { display:inline-flex; align-items:center; gap:14px; text-decoration:none; }
+        .success-lockup .logo-img { height:40px; width:auto; display:block; flex-shrink:0; }
+        .success-lockup .sep { display:inline-block; width:1px; height:28px; background:rgba(26,58,82,0.25); }
+        .success-lockup .wordmark { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.4rem; letter-spacing:0.1em; color:#1a3a52; line-height:1; }
+        .success-lockup .wordmark span { color:#e76f51; }
+        .success-nav .back { font-family:'DM Sans',sans-serif; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:#6b6b6b; text-decoration:none; transition:color .2s; }
+
+        /* ── HERO ── */
+        .success-hero { padding:60px 32px 36px; max-width:900px; margin:0 auto; border-bottom:1px solid rgba(26,58,82,0.10); animation:fadeSlideIn 0.4s ease-out; }
+        .success-hero .hero-eyebrow { font-family:'DM Sans',sans-serif; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:#e76f51; font-weight:500; margin-bottom:14px; display:block; }
+        .success-hero h1 { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(48px,7vw,84px); line-height:0.95; letter-spacing:-0.02em; color:#1a3a52; margin-bottom:10px; }
+        .success-hero h1 em { color:#e76f51; font-style:italic; font-weight:400; }
+        .success-hero p { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:#6b6b6b; max-width:420px; line-height:1.6; }
+        .success-hero p.ar { font-family:'Almarai',sans-serif; font-size:1rem; direction:rtl; margin-top:14px; font-style:normal; color:#6b6b6b; line-height:1.6; max-width:420px; }
+        .success-hero p.ar-tag { font-family:'Almarai',sans-serif; font-size:0.85rem; direction:rtl; margin-top:4px; font-style:normal; color:#6b6b6b; line-height:1.7; max-width:420px; }
+
+        /* ── BODY ── */
+        .success-body { padding:48px 32px; max-width:540px; margin:0 auto; }
+
+        /* Order number */
+        .order-no { text-align:center; margin-bottom:36px; padding-bottom:32px; border-bottom:1px solid rgba(26,58,82,0.08); }
+        .order-no .label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; margin-bottom:10px; font-weight:500; }
+        .order-no .number { font-family:'Cormorant Garamond',serif; font-weight:400; font-style:italic; font-size:1.6rem; color:#1a3a52; letter-spacing:0.02em; word-break:break-all; }
+
+        /* Items */
+        .items { margin-bottom:36px; }
+        .items-label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; margin-bottom:18px; font-weight:500; display:flex; justify-content:space-between; align-items:baseline; }
+        .items-label .ar { font-family:'Almarai',sans-serif; letter-spacing:0; text-transform:none; font-size:0.78rem; color:#9aa5ad; }
+        .order-item { display:flex; align-items:center; gap:16px; padding:14px 0; border-bottom:1px solid rgba(26,58,82,0.06); }
+        .order-item:last-child { border-bottom:none; }
+        .order-item-img { width:48px; height:48px; border-radius:6px; background:#f5f0e8; flex-shrink:0; object-fit:cover; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-style:italic; color:#9aa5ad; font-size:1.1rem; }
+        .order-item-details { flex:1; min-width:0; }
+        .order-item-name { font-family:'DM Sans',sans-serif; font-size:0.92rem; color:#1a1a1a; font-weight:400; line-height:1.3; display:block; margin-bottom:4px; }
+        .order-item-qty { font-family:'DM Sans',sans-serif; font-size:0.72rem; color:#9aa5ad; letter-spacing:0.04em; }
+        .order-item-price { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; color:#1a3a52; flex-shrink:0; }
+
+        /* Totals */
+        .totals { padding-top:18px; border-top:1px solid rgba(26,58,82,0.08); margin-top:8px; }
+        .order-subtotal-row, .order-total-row { display:flex; justify-content:space-between; align-items:baseline; padding:6px 0; font-family:'DM Sans',sans-serif; font-size:0.88rem; color:#6b6b6b; }
+        .order-subtotal-row .ar, .order-total-row .ar { font-family:'Almarai',sans-serif; font-size:0.75rem; margin-left:8px; color:#9aa5ad; font-weight:400; }
+        .order-total-row { padding-top:18px; margin-top:10px; border-top:1px solid rgba(26,58,82,0.12); font-size:1.05rem; color:#1a3a52; font-weight:500; }
+        .order-total-row #orderTotal { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.5rem; font-weight:400; }
+
+        /* Delivery estimate */
+        .delivery { text-align:center; padding:32px 0; border-top:1px solid rgba(26,58,82,0.08); border-bottom:1px solid rgba(26,58,82,0.08); margin-bottom:32px; }
+        .delivery-label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; margin-bottom:10px; font-weight:500; }
+        .delivery-dates-en { font-family:'Cormorant Garamond',serif; font-weight:400; font-style:italic; font-size:1.4rem; color:#1a3a52; letter-spacing:-0.005em; }
+        .delivery-ar { font-family:'Almarai',sans-serif; font-size:0.85rem; color:#6b6b6b; direction:rtl; margin-top:8px; display:block; }
+
+        /* Primary CTA */
+        .cta-wrap { text-align:center; margin-bottom:32px; }
+        .btn-primary { display:inline-block; padding:16px 36px; background:#1a3a52; color:#fff; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-weight:500; font-size:0.82rem; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; text-decoration:none; transition:filter .2s, transform .2s; }
+        .btn-primary .ar { font-family:'Almarai',sans-serif; font-size:0.72rem; margin-left:6px; text-transform:none; letter-spacing:0; font-weight:400; opacity:0.85; }
+
+        /* Help block */
+        .help-block { text-align:center; padding-top:24px; border-top:1px solid rgba(26,58,82,0.08); }
+        .help-label { font-family:'DM Sans',sans-serif; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:#9aa5ad; font-weight:500; margin-bottom:8px; display:block; }
+        .help-label .ar { font-family:'Almarai',sans-serif; font-size:0.72rem; margin-left:6px; text-transform:none; letter-spacing:0; font-weight:400; }
+        .help-email { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:#1a3a52; text-decoration:none; border-bottom:1px solid rgba(26,58,82,0.20); }
+
+        @media (max-width:680px){
+            .success-nav { padding:12px 20px; }
+            .success-lockup { gap:10px; }
+            .success-lockup .logo-img { height:32px; }
+            .success-lockup .sep { height:24px; }
+            .success-lockup .wordmark { font-size:1.2rem; }
+            .success-hero { padding:36px 24px 24px; }
+            .success-body { padding:32px 20px; }
+            .order-no .number { font-size:1.35rem; }
+            .delivery-dates-en { font-size:1.2rem; }
+            .order-total-row #orderTotal { font-size:1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preview-banner">
+        <strong>PREVIEW</strong> — this is what the success page looks like with sample data. Real visitors land here after Stripe payment succeeds.
+    </div>
+
+    <nav class="success-nav">
+        <a href="/" class="success-lockup">
+            <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO">
+            <span class="sep"></span>
+            <span class="wordmark" aria-hidden="true">ORL<span>O</span></span>
+        </a>
+        <a href="/" class="back">← Back to Shop</a>
+    </nav>
+
+    <section class="success-hero">
+        <div class="hero-eyebrow">Order Confirmed</div>
+        <h1>Thank<br><em>you.</em></h1>
+        <p>Your order is in — we'll have it on its way to you shortly.</p>
+        <p class="ar">شكراً لك.</p>
+        <p class="ar-tag">تم استلام طلبك — سنحرص على وصوله إليك قريباً.</p>
+    </section>
+
+    <section class="success-body">
+
+        <div class="order-no">
+            <div class="label">Order No.</div>
+            <div class="number">№ 7X6CQJE5</div>
+        </div>
+
+        <div class="items">
+            <div class="items-label">Your order<span class="ar">طلبك</span></div>
+
+            <div class="order-item">
+                <div class="order-item-img">C</div>
+                <div class="order-item-details">
+                    <span class="order-item-name">Classic Vintage Charm Bug</span>
+                    <span class="order-item-qty">Qty 1</span>
+                </div>
+                <span class="order-item-price">AED 119.00</span>
+            </div>
+            <div class="order-item">
+                <div class="order-item-img">P</div>
+                <div class="order-item-details">
+                    <span class="order-item-name">Vintage Crimson Phaeton</span>
+                    <span class="order-item-qty">Qty 1</span>
+                </div>
+                <span class="order-item-price">AED 149.00</span>
+            </div>
+
+            <div class="totals">
+                <div class="order-subtotal-row">
+                    <span>Subtotal<span class="ar">المجموع الفرعي</span></span>
+                    <span>AED 268.00</span>
+                </div>
+                <div class="order-subtotal-row">
+                    <span>Delivery<span class="ar">التوصيل</span></span>
+                    <span>AED 18.00</span>
+                </div>
+                <div class="order-total-row">
+                    <span>Total<span class="ar">الإجمالي</span></span>
+                    <span id="orderTotal">AED 286.00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="delivery">
+            <div class="delivery-label">Arriving</div>
+            <div class="delivery-dates-en">2 – 5 business days</div>
+            <div class="delivery-ar">٢ – ٥ أيام عمل</div>
+        </div>
+
+        <div class="cta-wrap">
+            <a href="/" class="btn-primary">Continue browsing</a>
+        </div>
+
+        <div class="help-block">
+            <span class="help-label">Need help?<span class="ar">تحتاج مساعدة؟</span></span>
+            <a href="mailto:info@orlostore.com" class="help-email">info@orlostore.com</a>
+        </div>
+
+    </section>
+
+</body>
+</html>
