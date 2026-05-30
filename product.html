@@ -139,6 +139,14 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   /* Image area — no cream tile, blend with page */
   .product-gallery,.mobile-carousel-box,.mobile-carousel{background:transparent!important;border:none!important;box-shadow:none!important;border-radius:0!important}
 
+  /* Flatten the gallery images themselves — match homepage card aesthetic.
+     styles.css gives the hero 14px rounding and each thumbnail 10px + 1.5px
+     border + white fill. We override to zero curves / zero border / no fill
+     so the gallery reads as flat editorial like everywhere else. */
+  .main-image-container,.main-product-image{border-radius:0!important}
+  .thumbnail{border-radius:0!important;border:none!important;background:transparent!important}
+  .thumbnail.active{border:none!important;outline:1.5px solid #1a3a52!important;outline-offset:-1.5px!important}
+
   /* Product titles — DM Sans not Cormorant for editorial calm */
   #productTitle,.mobile-product-title{font-family:'DM Sans',sans-serif!important;font-weight:400!important;font-size:1.2rem!important;color:#1a3a52!important;line-height:1.3!important;letter-spacing:0!important;margin-bottom:6px!important}
   #productTitleAr,.mobile-product-title-ar{font-family:'Almarai',sans-serif!important;font-size:0.72rem!important;color:#9aa5ad!important;direction:rtl!important;text-align:left!important;line-height:1.4!important;margin-bottom:14px!important}
