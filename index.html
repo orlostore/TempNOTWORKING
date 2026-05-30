@@ -793,6 +793,11 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           max-width: 680px;
           margin: 0 auto;
         }
+        /* Desktop: tighten the gap between the meta row (ALL PRODUCTS / PRICE) above and the headline,
+           so the two read as one editorial block instead of feeling stranded across whitespace. */
+        @media (min-width: 769px) {
+          .section-editorial { padding-top: 16px; padding-bottom: 32px; }
+        }
         .section-editorial .meta {
           font-family: 'DM Sans', sans-serif;
           font-size: .62rem;
