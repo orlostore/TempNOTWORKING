@@ -139,6 +139,20 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   /* Image area — no cream tile, blend with page */
   .product-gallery,.mobile-carousel-box,.mobile-carousel{background:transparent!important;border:none!important;box-shadow:none!important;border-radius:0!important}
 
+  /* Tablet (769-968px) only: the two-column desktop grid (.product-page) stacks to
+     a single column at <=968px. styles.css keeps min-height: 1100/1200 on the
+     container as a CLS reservation for the two-column layout — when stacked,
+     that min-height creates a huge empty gap between the gallery and the
+     product details. Neutralise it for tablet only. Mobile (<=768) hides the
+     whole desktop-product layout anyway, so it's unaffected; desktop (>968)
+     keeps the CLS reservation. */
+  @media (min-width: 769px) and (max-width: 968px) {
+    .product-page-container.desktop-product,
+    .product-page {
+      min-height: 0 !important;
+    }
+  }
+
   /* Flatten the gallery images themselves — match homepage card aesthetic.
      styles.css gives the hero 14px rounding and each thumbnail 10px + 1.5px
      border + white fill. We override to zero curves / zero border / no fill
