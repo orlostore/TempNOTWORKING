@@ -49,7 +49,7 @@ export async function onRequestPost(context) {
                     bodyEn: `Hi ${customer.name}, we received a request to reset your password. Click the button below:`,
                     bodyAr: `مرحباً ${customer.name}، تلقينا طلباً لإعادة تعيين كلمة المرور. اضغط على الزر أدناه:`,
                     ctaUrl: resetUrl,
-                    ctaText: 'Reset Password | إعادة التعيين',
+                    ctaText: 'Reset Password',
                     fallbackUrl: resetUrl,
                     extraHtml: '<p style="color: #999; font-size: 12px; margin: 10px 0 0;">This link expires in 1 hour. If you didn\'t request this, ignore this email.</p>',
                     preheader: 'Reset your ORLO Store password. This link expires in 1 hour.',

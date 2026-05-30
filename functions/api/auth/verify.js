@@ -88,7 +88,7 @@ export async function onRequestPost(context) {
                 bodyEn: 'Please verify your email address by clicking the button below:',
                 bodyAr: 'يرجى تأكيد بريدك الإلكتروني بالضغط على الزر أدناه:',
                 ctaUrl: verifyUrl,
-                ctaText: 'Verify Email | تأكيد البريد',
+                ctaText: 'Verify Email',
                 fallbackUrl: verifyUrl,
                 preheader: 'Verify your email address to complete your ORLO Store registration.',
             });

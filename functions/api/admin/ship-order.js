@@ -201,7 +201,7 @@ export async function onRequestPost(context) {
                 infoBoxEn: '<strong>Estimated Delivery:</strong> 2-5 business days across UAE',
                 infoBoxAr: 'التوصيل المتوقع: ٢-٥ أيام عمل',
                 ctaUrl: zajelRef ? `${origin}/track?awb=${encodeURIComponent(zajelRef)}&email=${encodeURIComponent(custEmail)}` : `${origin}/account.html`,
-                ctaText: 'Track My Order | تتبع طلبي',
+                ctaText: 'Track My Order',
                 ctaColor: '#e07856',
                 extraHtml: trackingHtml + itemsTableHtml,
                 preheader: zajelRef

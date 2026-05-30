@@ -61,7 +61,7 @@ export async function onRequestPost(context) {
                     bodyEn: 'Thank you for creating an account with ORLO Store. Please verify your email address by clicking the button below:',
                     bodyAr: 'شكراً لإنشاء حساب في متجر أورلو. يرجى تأكيد بريدك الإلكتروني بالضغط على الزر أدناه:',
                     ctaUrl: verifyUrl,
-                    ctaText: 'Verify Email | تأكيد البريد',
+                    ctaText: 'Verify Email',
                     fallbackUrl: verifyUrl,
                     preheader: 'Please verify your email to activate your ORLO Store account.',
                 });

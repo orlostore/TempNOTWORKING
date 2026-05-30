@@ -103,7 +103,7 @@ export async function onRequestPost(context) {
                     bodyEn: 'Your account has been created. Here are your login details:',
                     bodyAr: 'تم إنشاء حسابك. يرجى تغيير كلمة المرور بعد أول تسجيل دخول.',
                     ctaUrl: verifyUrl,
-                    ctaText: 'Verify Email | تأكيد البريد',
+                    ctaText: 'Verify Email',
                     fallbackUrl: verifyUrl,
                     extraHtml: credentialsHtml,
                     preheader: 'Your ORLO Store account is ready. Here are your login details.',

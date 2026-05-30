@@ -177,7 +177,7 @@ export async function onRequestPost(context) {
                         infoBoxEn: '<strong>What\'s next?</strong> We\'ll send you another email when your order has been dispatched.',
                         infoBoxAr: 'سنرسل لك بريداً آخر عندما يتم شحن طلبك.',
                         ctaUrl: `${origin}/account.html`,
-                        ctaText: 'View My Orders | عرض طلباتي',
+                        ctaText: 'View My Orders',
                         ctaColor: '#2c4a5c',
                         extraHtml: customerItemsHtml,
                         preheader: `Order confirmed! Thank you for shopping with ORLO Store. Total: ${currency} ${total}`,
