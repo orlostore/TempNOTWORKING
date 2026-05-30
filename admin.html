@@ -1975,6 +1975,7 @@
                     </select>
                     <input type="email" id="testEmailTo" placeholder="to@yourinbox.com" style="flex:1;min-width:240px;padding:10px 14px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:0.88rem;">
                     <button class="btn btn-primary btn-small" onclick="sendTestEmail()">Send Sample</button>
+                    <button class="btn btn-secondary btn-small" onclick="sendAllTestEmails()" title="Loop through every template and send each to this address — useful for visual comparison in your inbox">Send All 12</button>
                 </div>
                 <p id="testEmailStatus" style="font-size:0.82rem;color:var(--text-light);margin-top:10px;min-height:1.2em;"></p>
             </div>
@@ -5821,6 +5822,53 @@
                 }
             } catch (err) {
                 status.textContent = 'Network error: ' + err.message;
+                status.style.color = 'var(--danger)';
+            }
+        }
+
+        // Loop through every template option in the dropdown and fire each one.
+        // ~400ms delay between sends to stay polite to Resend's rate limits.
+        // Progress + final tally surface in the same #testEmailStatus line as the single-send button.
+        async function sendAllTestEmails() {
+            const to = document.getElementById('testEmailTo').value.trim();
+            const status = document.getElementById('testEmailStatus');
+            if (!to || !to.includes('@')) {
+                status.textContent = 'Enter a valid email address.';
+                status.style.color = 'var(--danger)';
+                return;
+            }
+            const templates = Array.from(document.getElementById('testEmailTemplate').options).map(o => o.value).filter(Boolean);
+            if (!templates.length) {
+                status.textContent = 'No templates found.';
+                status.style.color = 'var(--danger)';
+                return;
+            }
+            const total = templates.length;
+            let sent = 0, failed = 0;
+            const failedNames = [];
+            status.style.color = 'var(--text-light)';
+            for (let i = 0; i < templates.length; i++) {
+                const tmpl = templates[i];
+                status.textContent = 'Sending ' + (i + 1) + ' of ' + total + '…  (' + tmpl + ')';
+                try {
+                    const res = await adminFetch('/api/admin/test-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ template: tmpl, to }),
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.ok) { sent++; } else { failed++; failedNames.push(tmpl); }
+                } catch (err) {
+                    failed++; failedNames.push(tmpl);
+                }
+                // Small spacing between sends so Resend doesn't reject for burst rate.
+                if (i < templates.length - 1) await new Promise(r => setTimeout(r, 400));
+            }
+            if (failed === 0) {
+                status.textContent = '✓ All ' + total + ' sent to ' + to + '.';
+                status.style.color = 'var(--success)';
+            } else {
+                status.textContent = '⚠ Sent ' + sent + ' of ' + total + '. Failed: ' + failedNames.join(', ');
                 status.style.color = 'var(--danger)';
             }
         }
