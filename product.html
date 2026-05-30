@@ -157,6 +157,14 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     .product-page {
       align-content: start !important;
     }
+    /* The actual gap source — gallery has aspect-ratio:1/1 + min-height:500px
+       in styles.css. On 820px viewport that forces a 777×777 square; the image
+       is only 500×500 centred so the rest is empty cream space. Size to content. */
+    .product-gallery,
+    #gallery {
+      aspect-ratio: auto !important;
+      min-height: 0 !important;
+    }
   }
 
   /* Flatten the gallery images themselves — match homepage card aesthetic.
