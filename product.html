@@ -202,12 +202,11 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
      stepper fills the row. When .atc-split-vb is added as a sibling, the stepper
      shrinks to 45% (flex:9) via the :has() rule above. */
   .product-buybox .atc-row .product-btn-transformed,.product-buybox .atc-row .grid-qty-control{background-color:#1a3a52!important;background-image:none!important;border-radius:8px!important;overflow:hidden!important;height:56px!important;width:100%!important;max-width:100%!important;min-width:0!important;display:flex!important;flex-direction:row!important;align-items:stretch!important;margin:0!important;flex:1 1 auto!important}
-  /* −/+ buttons — soft highlight from bottom fading up. No rectangular bg —
-     a subtle linear-gradient that lifts the glyph off the navy without looking
-     like a stuck-on tile. */
-  .product-buybox .atc-row .grid-qty-btn{background-color:transparent!important;background-image:linear-gradient(to top, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0) 100%)!important;color:#fff!important;border:none!important;width:56px!important;flex:0 0 56px!important;font-family:'DM Sans',sans-serif!important;font-size:1.2rem!important;font-weight:400!important;cursor:pointer!important;transition:background-image .15s!important}
-  .product-buybox .atc-row .grid-qty-btn:hover{background-image:linear-gradient(to top, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0) 100%)!important}
-  .product-buybox .atc-row .grid-qty-btn:active{background-image:linear-gradient(to top, rgba(255,255,255,0.36) 0%, rgba(255,255,255,0.14) 50%, rgba(255,255,255,0) 100%)!important}
+  /* −/+ buttons — match the mobile sticky bar exactly: flat rgba(255,255,255,0.10)
+     overlay on the navy, white glyphs. No gradient, no inset shadow. */
+  .product-buybox .atc-row .grid-qty-btn{background-color:rgba(255,255,255,0.10)!important;background-image:none!important;color:#fff!important;border:none!important;width:56px!important;flex:0 0 56px!important;font-family:'DM Sans',sans-serif!important;font-size:1.2rem!important;font-weight:400!important;cursor:pointer!important;transition:background-color .15s!important}
+  .product-buybox .atc-row .grid-qty-btn:hover{background-color:rgba(255,255,255,0.18)!important}
+  .product-buybox .atc-row .grid-qty-btn:active{background-color:rgba(255,255,255,0.26)!important}
   .product-buybox .atc-row .grid-qty-display{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;color:#fff!important;font-family:'DM Sans',sans-serif!important;font-size:0.95rem!important;font-weight:500!important;letter-spacing:0.02em!important;background-color:transparent!important;cursor:pointer!important}
 
   /* Delivery info — tone down */
