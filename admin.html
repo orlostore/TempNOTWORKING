@@ -566,20 +566,21 @@
         
         .actions { display: flex; gap: 8px; }
 
-        /* Best Seller star toggle */
+        /* Featured toggle — minimal bookmark (replaced the star) */
         .bestseller-toggle {
             background: none;
             border: none;
-            font-size: 1.3rem;
             cursor: pointer;
-            padding: 2px 4px;
-            border-radius: 6px;
+            padding: 4px;
+            border-radius: 4px;
             transition: all 0.2s;
-            line-height: 1;
-            filter: grayscale(100%) opacity(0.35);
+            line-height: 0;
+            color: #c0c8ce;
         }
-        .bestseller-toggle:hover { transform: scale(1.15); filter: grayscale(0%) opacity(1); }
-        .bestseller-toggle.active { filter: grayscale(0%) opacity(1); }
+        .bestseller-toggle svg { width: 18px; height: 18px; display: block; fill: none; stroke: currentColor; stroke-width: 1.6; }
+        .bestseller-toggle:hover { color: #1a3a52; background: rgba(26,58,82,0.04); }
+        .bestseller-toggle.active { color: #1a3a52; }
+        .bestseller-toggle.active svg { fill: currentColor; stroke: currentColor; }
         .bestseller-toggle.saving { opacity: 0.4; pointer-events: none; }
 
         .reorder-arrows {
@@ -1384,6 +1385,8 @@
                 <button class="btn btn-primary" onclick="openAddModal()">+ Add Product</button>
                 <button class="btn btn-secondary" onclick="refreshProducts()">Refresh</button>
                 <button class="btn btn-secondary" onclick="openHeroesModal()" title="Manage homepage hero / banner">Heroes</button>
+                <button class="btn btn-secondary" onclick="openPopularNowModal()" title="Curate which products appear in the Popular Now band on the homepage">Popular Now</button>
+                <button class="btn btn-secondary" onclick="openCollectionsModal()" title="Manage product collections — group products together on the homepage and PDP">Collections</button>
                 <button class="btn btn-secondary" onclick="openSpecPromptModal()" title="Generate Gemini dimension overlay prompt for any product">Spec Prompt</button>
                 <button class="btn btn-secondary" onclick="openCleanCataloguePromptModal()" title="Generate Gemini prompt to clean raw photos: remove background + place on warm beige #E5DCCF + WebP output">Clean Catalogue</button>
                 <button class="btn btn-secondary" onclick="openLifestylePromptModal()" title="Generate Gemini editorial lifestyle prompt — product in a styled scene for Popular Now / hero / IG / TikTok">Lifestyle</button>
@@ -1503,7 +1506,7 @@
                             <th style="width:50px;">#</th>
                             <th>Image</th>
                             <th>Product</th>
-                            <th style="width:40px;text-align:center;" title="Best Seller">&#11088;</th>
+                            <th style="width:40px;text-align:center;font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:#9aa5ad;font-weight:500;" title="Featured / Popular Now">Pop</th>
                             <th>Category</th>
                             <th>Price</th>
                             <th>Stock</th>
@@ -2467,6 +2470,76 @@
         </div>
     </div>
 
+    <!-- Popular Now curation modal — bird's-eye view of all featured products -->
+    <div class="modal-overlay" id="popularNowModal">
+        <div class="modal" style="max-width:780px;">
+            <div class="modal-header">
+                <h2>Popular Now — curated band on the homepage</h2>
+                <button class="modal-close" onclick="closePopularNowModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0;">
+                <div style="background:#f8f6f2;padding:14px 22px;border-bottom:1px solid #eee;font-size:0.78rem;line-height:1.6;color:#444;">
+                    Tick any product to add it to the <strong>Popular Now</strong> carousel on the homepage. Untick to remove. Changes save instantly. Max 6 items recommended.
+                </div>
+                <div style="padding:14px 22px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+                    <input type="text" id="popularSearchInput" placeholder="Search products by name…" style="flex:1;min-width:200px;padding:8px 12px;border:1px solid #ddd;font-family:inherit;font-size:0.85rem;background:#fff;">
+                    <span id="popularCountBadge" style="font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:#9aa5ad;font-weight:500;">0 in popular now</span>
+                </div>
+                <div id="popularNowList" style="max-height:520px;overflow-y:auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collections curation modal — manage which products belong to which collection -->
+    <div class="modal-overlay" id="collectionsModal">
+        <div class="modal" style="max-width:840px;">
+            <div class="modal-header">
+                <h2>Collections — group products on the homepage</h2>
+                <button class="modal-close" onclick="closeCollectionsModal()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0;">
+                <div style="background:#f8f6f2;padding:14px 22px;border-bottom:1px solid #eee;font-size:0.78rem;line-height:1.6;color:#444;">
+                    <strong>Collections</strong> group products together — they cluster on the homepage and appear in a "collection band" on each member's product page. Pick a collection on the left to manage its members, or create a new one.
+                </div>
+                <div style="display:grid;grid-template-columns:240px 1fr;min-height:480px;">
+                    <!-- Left rail — existing collections -->
+                    <div style="border-right:1px solid #eee;background:#fafafa;">
+                        <div style="padding:14px 18px;border-bottom:1px solid #eee;">
+                            <input type="text" id="collectionNewInput" placeholder="+ New collection name" style="width:100%;padding:8px 10px;border:1px solid #ddd;font-family:inherit;font-size:0.82rem;background:#fff;">
+                            <button class="btn btn-primary btn-small" style="width:100%;margin-top:8px;" onclick="createNewCollection()">Create collection</button>
+                        </div>
+                        <div id="collectionsList" style="padding:8px 0;max-height:440px;overflow-y:auto;"></div>
+                    </div>
+                    <!-- Right rail — members of the selected collection -->
+                    <div>
+                        <div id="collectionMembersHeader" style="padding:14px 22px;border-bottom:1px solid #eee;display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                            <h3 id="collectionMembersTitle" style="margin:0;font-size:1.05rem;color:#1a3a52;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;"></h3>
+                            <button class="btn btn-secondary btn-small" onclick="openAddToCollection()">+ Add product</button>
+                        </div>
+                        <div id="collectionEmpty" style="padding:60px 22px;text-align:center;color:#9aa5ad;font-size:0.88rem;">Pick a collection on the left, or create a new one above.</div>
+                        <div id="collectionMembersList" style="max-height:440px;overflow-y:auto;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add-product-to-collection picker (overlays on top of Collections modal) -->
+    <div class="modal-overlay" id="addToCollectionModal">
+        <div class="modal" style="max-width:600px;">
+            <div class="modal-header">
+                <h2>Add product to <span id="addToCollectionName" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;"></span></h2>
+                <button class="modal-close" onclick="closeAddToCollection()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding:0;">
+                <div style="padding:14px 22px;border-bottom:1px solid #eee;">
+                    <input type="text" id="addToCollectionSearch" placeholder="Search products to add…" style="width:100%;padding:8px 12px;border:1px solid #ddd;font-family:inherit;font-size:0.85rem;background:#fff;">
+                </div>
+                <div id="addToCollectionList" style="max-height:440px;overflow-y:auto;"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Spec Prompt modal: generates a ready-to-paste Gemini prompt for any product's dimension card -->
     <div class="modal-overlay" id="specPromptModal">
         <div class="modal" style="max-width:1040px;">
@@ -2844,7 +2917,7 @@
                             <div class="product-slug">${p.slug}</div>
                         </td>
                         <td style="text-align:center;">
-                            <button class="bestseller-toggle ${p.featured ? 'active' : ''}" onclick="toggleFeatured(${p.id}, this)" title="${p.featured ? 'Remove from Best Sellers' : 'Mark as Best Seller'}">&#11088;</button>
+                            <button class="bestseller-toggle ${p.featured ? 'active' : ''}" onclick="toggleFeatured(${p.id}, this)" title="${p.featured ? 'Remove from Popular Now' : 'Add to Popular Now'}" aria-label="${p.featured ? 'Remove from Popular Now' : 'Add to Popular Now'}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
                         </td>
                         <td>${p.category ? `<span class="category-tag">${p.category}</span>` : '-'}</td>
                         <td><span class="price-tag">AED ${p.price}</span></td>
@@ -5952,6 +6025,279 @@
             loadHeroes();
         }
         function closeHeroesModal() { document.getElementById('heroesModal').classList.remove('active'); }
+
+        // ═════════ POPULAR NOW curation modal ═════════
+        // Lists every product with a tick to add/remove from Popular Now (toggles the `featured` flag).
+        // Reuses the existing toggleFeatured() flow — instant save, optimistic UI.
+        function openPopularNowModal() {
+            document.getElementById('popularNowModal').classList.add('active');
+            renderPopularNowList();
+            const search = document.getElementById('popularSearchInput');
+            if (search) { search.value = ''; search.oninput = () => renderPopularNowList(search.value.trim().toLowerCase()); }
+        }
+        function closePopularNowModal() { document.getElementById('popularNowModal').classList.remove('active'); }
+
+        function renderPopularNowList(filter) {
+            const container = document.getElementById('popularNowList');
+            const badge = document.getElementById('popularCountBadge');
+            if (!container) return;
+            const list = (products || []).slice().sort((a,b) => (b.featured?1:0) - (a.featured?1:0) || (a.name||'').localeCompare(b.name||''));
+            const filtered = filter ? list.filter(p => (p.name||'').toLowerCase().includes(filter) || (p.slug||'').toLowerCase().includes(filter)) : list;
+            const featuredCount = (products || []).filter(p => p.featured).length;
+            if (badge) badge.textContent = featuredCount + ' in popular now';
+            if (!filtered.length) { container.innerHTML = '<div style="padding:40px 22px;text-align:center;color:#9aa5ad;font-size:0.88rem;">No products match.</div>'; return; }
+            container.innerHTML = filtered.map(p => {
+                const img = (p.image && p.image.indexOf('http') === 0) ? p.image : '';
+                const imgTag = img ? '<img src="https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_80,h_80,f_auto,q_auto/' + img + '" alt="" style="width:40px;height:40px;object-fit:cover;background:#f5f0e8;flex-shrink:0;">' : '<div style="width:40px;height:40px;background:#f5f0e8;flex-shrink:0;"></div>';
+                const active = !!p.featured;
+                return '<label data-product-id="' + p.id + '" style="display:flex;align-items:center;gap:14px;padding:10px 22px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background .15s;' + (active ? 'background:rgba(26,58,82,0.03);' : '') + '">' +
+                    '<input type="checkbox" ' + (active ? 'checked' : '') + ' onchange="togglePopularFromModal(' + p.id + ', this)" style="width:18px;height:18px;cursor:pointer;flex-shrink:0;">' +
+                    imgTag +
+                    '<div style="flex:1;min-width:0;"><div style="font-family:\'DM Sans\',sans-serif;font-size:0.92rem;color:#1a3a52;font-weight:' + (active ? '500' : '400') + ';line-height:1.3;">' + escapeAttr(p.name || '') + '</div><div style="font-family:\'DM Sans\',sans-serif;font-size:0.72rem;color:#9aa5ad;letter-spacing:0.04em;">' + escapeAttr(p.category || '') + '</div></div>' +
+                    '<div style="font-family:\'DM Sans\',sans-serif;font-size:0.78rem;color:#1a3a52;font-weight:500;flex-shrink:0;">AED ' + (Number(p.price) || 0).toFixed(2) + '</div>' +
+                '</label>';
+            }).join('');
+        }
+
+        async function togglePopularFromModal(productId, checkbox) {
+            const newVal = checkbox.checked ? 1 : 0;
+            checkbox.disabled = true;
+            try {
+                const res = await adminFetch('/api/admin/product?action=toggle-featured&id=' + productId, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ featured: newVal }),
+                });
+                if (res.ok) {
+                    const product = products.find(p => p.id === productId);
+                    if (product) product.featured = !!newVal;
+                    renderPopularNowList(document.getElementById('popularSearchInput').value.trim().toLowerCase());
+                    // also refresh the main table row's star/bookmark
+                    const tableBtn = document.querySelector('#productsBody button.bestseller-toggle[onclick*="' + productId + '"]');
+                    if (tableBtn) tableBtn.classList.toggle('active', !!newVal);
+                } else {
+                    checkbox.checked = !checkbox.checked;
+                }
+            } catch (e) {
+                checkbox.checked = !checkbox.checked;
+            } finally {
+                checkbox.disabled = false;
+            }
+        }
+
+        // ═════════ COLLECTIONS curation modal ═════════
+        // Left rail: every existing collection_name (auto-derived from products).
+        // Right rail: members of the selected collection + Add/Remove controls.
+        // Add/Remove writes to product.collectionName via the existing /api/admin/product?action=update.
+        let _selectedCollection = '';
+        let _addToCollectionFilter = '';
+
+        function openCollectionsModal() {
+            document.getElementById('collectionsModal').classList.add('active');
+            _selectedCollection = '';
+            renderCollectionsList();
+            renderCollectionMembers();
+            const newInput = document.getElementById('collectionNewInput');
+            if (newInput) newInput.value = '';
+        }
+        function closeCollectionsModal() { document.getElementById('collectionsModal').classList.remove('active'); }
+
+        function _getUniqueCollections() {
+            const seen = new Map();
+            (products || []).forEach(p => {
+                const name = (p.collectionName || '').trim();
+                if (!name) return;
+                const key = name.toLowerCase();
+                if (!seen.has(key)) seen.set(key, name);
+            });
+            return Array.from(seen.values()).sort((a,b) => a.localeCompare(b));
+        }
+
+        function renderCollectionsList() {
+            const container = document.getElementById('collectionsList');
+            if (!container) return;
+            const collections = _getUniqueCollections();
+            if (!collections.length) { container.innerHTML = '<div style="padding:24px 18px;text-align:center;color:#9aa5ad;font-size:0.82rem;line-height:1.5;">No collections yet. Type a name above and add your first product.</div>'; return; }
+            container.innerHTML = collections.map(name => {
+                const count = (products || []).filter(p => (p.collectionName || '').trim().toLowerCase() === name.toLowerCase()).length;
+                const active = name.toLowerCase() === _selectedCollection.toLowerCase();
+                return '<div onclick="selectCollection(\'' + escapeAttr(name).replace(/'/g, "\\'") + '\')" style="padding:10px 18px;cursor:pointer;border-left:3px solid ' + (active ? '#1a3a52' : 'transparent') + ';background:' + (active ? '#fff' : 'transparent') + ';transition:background .15s;">' +
+                    '<div style="font-family:\'DM Sans\',sans-serif;font-size:0.88rem;color:#1a3a52;font-weight:' + (active ? '500' : '400') + ';">' + escapeAttr(name) + '</div>' +
+                    '<div style="font-family:\'DM Sans\',sans-serif;font-size:0.7rem;color:#9aa5ad;letter-spacing:0.06em;margin-top:2px;">' + count + ' ' + (count === 1 ? 'product' : 'products') + '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function selectCollection(name) {
+            _selectedCollection = name;
+            renderCollectionsList();
+            renderCollectionMembers();
+        }
+
+        function renderCollectionMembers() {
+            const header = document.getElementById('collectionMembersHeader');
+            const empty = document.getElementById('collectionEmpty');
+            const list = document.getElementById('collectionMembersList');
+            if (!_selectedCollection) {
+                header.style.display = 'none';
+                empty.style.display = '';
+                list.innerHTML = '';
+                return;
+            }
+            header.style.display = 'flex';
+            empty.style.display = 'none';
+            document.getElementById('collectionMembersTitle').textContent = _selectedCollection;
+            const members = (products || []).filter(p => (p.collectionName || '').trim().toLowerCase() === _selectedCollection.toLowerCase());
+            if (!members.length) {
+                list.innerHTML = '<div style="padding:40px 22px;text-align:center;color:#9aa5ad;font-size:0.88rem;">Collection is empty — add a product to get started.</div>';
+                return;
+            }
+            list.innerHTML = members.map(p => {
+                const img = (p.image && p.image.indexOf('http') === 0) ? p.image : '';
+                const imgTag = img ? '<img src="https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_80,h_80,f_auto,q_auto/' + img + '" alt="" style="width:40px;height:40px;object-fit:cover;background:#f5f0e8;flex-shrink:0;">' : '<div style="width:40px;height:40px;background:#f5f0e8;flex-shrink:0;"></div>';
+                return '<div style="display:flex;align-items:center;gap:14px;padding:10px 22px;border-bottom:1px solid #f0f0f0;">' +
+                    imgTag +
+                    '<div style="flex:1;min-width:0;"><div style="font-family:\'DM Sans\',sans-serif;font-size:0.92rem;color:#1a3a52;font-weight:400;line-height:1.3;">' + escapeAttr(p.name || '') + '</div><div style="font-family:\'DM Sans\',sans-serif;font-size:0.72rem;color:#9aa5ad;letter-spacing:0.04em;">AED ' + (Number(p.price) || 0).toFixed(2) + '</div></div>' +
+                    '<button class="btn btn-secondary btn-small" onclick="removeFromCollection(' + p.id + ')" style="flex-shrink:0;">Remove</button>' +
+                '</div>';
+            }).join('');
+        }
+
+        async function createNewCollection() {
+            const input = document.getElementById('collectionNewInput');
+            const name = (input.value || '').trim();
+            if (!name) { input.focus(); return; }
+            _selectedCollection = name;
+            input.value = '';
+            renderCollectionsList();
+            renderCollectionMembers();
+            openAddToCollection();
+        }
+
+        async function _saveProductCollectionName(productId, newCollectionName) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return false;
+            // Build the full update payload from the existing product — server replaces the whole row.
+            const data = {
+                slug: product.slug,
+                name: product.name,
+                nameAr: product.nameAr || '',
+                category: product.category || '',
+                categoryAr: product.categoryAr || '',
+                category2: product.category2 || '',
+                category2Ar: product.category2Ar || '',
+                price: product.price,
+                cost: product.cost || 0,
+                quantity: product.quantity || 0,
+                description: product.description || '',
+                descriptionAr: product.descriptionAr || '',
+                mainImage: product.image || '',
+                mainImageMirror: product.mainImageMirror ? 1 : 0,
+                image2: (product.images || [])[1] || '',
+                image3: (product.images || [])[2] || '',
+                image4: (product.images || [])[3] || '',
+                image5: (product.images || [])[4] || '',
+                image6: (product.images || [])[5] || '',
+                image7: (product.images || [])[6] || '',
+                image8: (product.images || [])[7] || '',
+                colors: product.colors || '',
+                colorsAr: product.colorsAr || '',
+                packaging: product.packaging || '',
+                packagingAr: product.packagingAr || '',
+                specifications: (product.specifications || []).join(' | '),
+                specificationsAr: (product.specificationsAr || []).join(' | '),
+                pairings: (product.pairings || []).join(' | '),
+                featured: product.featured ? 1 : 0,
+                handmade: product.handmade ? 1 : 0,
+                isNew: product.isNew ? 1 : 0,
+                wattage: product.wattage || '',
+                voltage: product.voltage || '',
+                plugType: product.plugType || '',
+                plugTypeAr: product.plugTypeAr || '',
+                baseType: product.baseType || '',
+                baseTypeAr: product.baseTypeAr || '',
+                material: product.material || '',
+                materialAr: product.materialAr || '',
+                collectionName: newCollectionName,
+                blurb: product.blurb || '',
+                variants: product.variants || [],
+                pricingTiers: product.pricingTiers || [],
+            };
+            try {
+                const res = await adminFetch('/api/admin/product?action=update&id=' + productId, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+                if (!res.ok) return false;
+                product.collectionName = newCollectionName;
+                return true;
+            } catch (e) { return false; }
+        }
+
+        async function removeFromCollection(productId) {
+            if (!confirm('Remove this product from "' + _selectedCollection + '"?')) return;
+            const ok = await _saveProductCollectionName(productId, '');
+            if (ok) {
+                renderCollectionsList();
+                renderCollectionMembers();
+            } else {
+                alert('Failed to update. Please try again.');
+            }
+        }
+
+        function openAddToCollection() {
+            document.getElementById('addToCollectionName').textContent = _selectedCollection;
+            document.getElementById('addToCollectionModal').classList.add('active');
+            _addToCollectionFilter = '';
+            const search = document.getElementById('addToCollectionSearch');
+            if (search) {
+                search.value = '';
+                search.oninput = () => { _addToCollectionFilter = search.value.trim().toLowerCase(); renderAddToCollectionList(); };
+            }
+            renderAddToCollectionList();
+        }
+        function closeAddToCollection() { document.getElementById('addToCollectionModal').classList.remove('active'); }
+
+        function renderAddToCollectionList() {
+            const container = document.getElementById('addToCollectionList');
+            if (!container) return;
+            // Show only products NOT already in this collection (any collection or empty).
+            const norm = _selectedCollection.toLowerCase();
+            const eligible = (products || []).filter(p => (p.collectionName || '').trim().toLowerCase() !== norm);
+            const filtered = _addToCollectionFilter ? eligible.filter(p => (p.name||'').toLowerCase().includes(_addToCollectionFilter) || (p.slug||'').toLowerCase().includes(_addToCollectionFilter)) : eligible;
+            if (!filtered.length) { container.innerHTML = '<div style="padding:40px 22px;text-align:center;color:#9aa5ad;font-size:0.88rem;">All products are either in this collection or no match.</div>'; return; }
+            container.innerHTML = filtered.map(p => {
+                const img = (p.image && p.image.indexOf('http') === 0) ? p.image : '';
+                const imgTag = img ? '<img src="https://res.cloudinary.com/djxcdmc1g/image/fetch/c_fill,w_80,h_80,f_auto,q_auto/' + img + '" alt="" style="width:40px;height:40px;object-fit:cover;background:#f5f0e8;flex-shrink:0;">' : '<div style="width:40px;height:40px;background:#f5f0e8;flex-shrink:0;"></div>';
+                const currentCol = (p.collectionName || '').trim();
+                const currentBadge = currentCol ? '<div style="font-family:\'DM Sans\',sans-serif;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:#e76f51;font-weight:500;margin-top:2px;">Currently: ' + escapeAttr(currentCol) + '</div>' : '';
+                return '<div style="display:flex;align-items:center;gap:14px;padding:10px 22px;border-bottom:1px solid #f0f0f0;">' +
+                    imgTag +
+                    '<div style="flex:1;min-width:0;"><div style="font-family:\'DM Sans\',sans-serif;font-size:0.9rem;color:#1a3a52;line-height:1.3;">' + escapeAttr(p.name || '') + '</div>' + currentBadge + '</div>' +
+                    '<button class="btn btn-primary btn-small" onclick="addToCollectionConfirm(' + p.id + ')" style="flex-shrink:0;">Add</button>' +
+                '</div>';
+            }).join('');
+        }
+
+        async function addToCollectionConfirm(productId) {
+            const product = products.find(p => p.id === productId);
+            const wasIn = (product && (product.collectionName || '').trim()) || '';
+            if (wasIn && wasIn.toLowerCase() !== _selectedCollection.toLowerCase()) {
+                if (!confirm('"' + product.name + '" is currently in "' + wasIn + '". Move it to "' + _selectedCollection + '"?')) return;
+            }
+            const ok = await _saveProductCollectionName(productId, _selectedCollection);
+            if (ok) {
+                renderAddToCollectionList();
+                renderCollectionsList();
+                renderCollectionMembers();
+            } else {
+                alert('Failed to update. Please try again.');
+            }
+        }
+
+        // Small helper used by the new modals — same escaping behaviour the rest of the file uses
+        function escapeAttr(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
         // --- Spec Prompt modal — generates ready-to-paste Gemini dimension-overlay prompt ---
         function openSpecPromptModal() {
