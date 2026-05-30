@@ -261,6 +261,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   /* Collection mode: heading centres above the centred card grid (both viewports).
      Pairings mode keeps its left-aligned curatorial-sidebar look. */
   .considered-alongside.is-collection .ca-heading{text-align:center}
+  /* Coral "Collection" suffix on collection-mode headings — mirrors the homepage
+     editorial titles ("Every object, in one place.") where the second clause is
+     italic coral. .ca-heading is already italic Cormorant, so we only colour the em. */
+  .considered-alongside.is-collection .ca-heading em{font-style:italic;color:#e76f51;font-weight:400}
   .considered-alongside .ca-heading .ca-heading-ar{display:none}
   .considered-alongside .ca-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}
   @media(min-width:769px){.considered-alongside .ca-grid{grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:22px 18px;max-width:760px}}
@@ -1014,8 +1018,10 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
 
     var list;
     if (isCollectionMode) {
-      // Title becomes the collection name (Cormorant italic — same .ca-heading style).
-      if (heading) heading.textContent = collectionName;
+      // Title becomes "<Collection Name> Collection" — collection name in Cormorant
+      // italic (the default .ca-heading style), the word "Collection" in coral italic
+      // (mirrors the homepage editorial titles like "Every object, in one place.").
+      if (heading) heading.innerHTML = collectionName + '<em> Collection</em>';
       // Mark the section so CSS can centre the heading above the centred card grid.
       section.classList.add('is-collection');
       list = siblings;
