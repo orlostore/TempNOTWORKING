@@ -272,8 +272,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .considered-alongside .ca-price{font-family:'DM Sans',sans-serif!important;font-size:0.8rem!important;color:#6b6b6b;letter-spacing:0.02em;font-weight:400!important}
 
   /* ═════════ FOOTER (Customer Enquiries) — same as other pages ═════════ */
-  .cs-footer-section{background:#fff;padding:28px 32px;margin-top:30px}
-  .cs-footer-inner{max-width:780px;margin:0 auto}
+  /* Footer aligns with .product-page-container (max-width 1180px, padding 0 1.34rem)
+     so the footer content lines up with the gallery / details / collection band above. */
+  .cs-footer-section{background:#fff;padding:28px 0;margin-top:30px}
+  .cs-footer-inner{max-width:1180px;margin:0 auto;padding:0 1.34rem;box-sizing:border-box}
   .cs-footer-section .cs-heading{font-family:'DM Sans',sans-serif;font-size:0.82rem;text-transform:uppercase;letter-spacing:0.16em;color:#1a3a52;font-weight:500;padding-bottom:14px;border-bottom:1px solid rgba(26,58,82,0.10);margin-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px}
   .cs-footer-section .cs-heading .ar{font-family:'Almarai',sans-serif;font-size:0.72rem;color:#6b6b6b;text-transform:none;letter-spacing:0;font-weight:400;direction:rtl}
   .cs-footer-section .cs-block{margin-bottom:18px}
