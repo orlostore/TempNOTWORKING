@@ -171,27 +171,41 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
      Almarai in fallback so Arabic labels (المواصفات etc.) route to Almarai, never system Noto/Tajawal. */
   .product-desc-label,.mobile-detail-label{font-family:'DM Sans','Almarai',sans-serif!important;font-size:0.62rem!important;font-weight:500!important;color:#9aa5ad!important;text-transform:uppercase!important;letter-spacing:0.22em!important;margin-bottom:10px!important}
 
-  /* ADD TO CART — match cart's checkout pill style (height + typography).
-     Selector uses .product-buybox prefix (specificity 0,2,0) so it beats the
-     `.product-details *` "KILL EVERY GREY" rule below (specificity 0,1,0).
-     Desktop: compact 280px width so it matches the qty-stepper after add.
-     Mobile (.mobile-add-to-cart) stays full-width inside its sticky bar. */
-  .product-buybox .add-to-cart-btn{width:280px!important;max-width:100%!important;padding:16px 16px!important;background-color:#1a3a52!important;background-image:none!important;color:#fff!important;border:none!important;border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.82rem!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;cursor:pointer!important;height:56px!important;min-height:56px!important;line-height:1!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;transition:filter .2s!important;margin:0!important}
+  /* ATC row — the 280px-wide pill container. Holds the CTA button OR the
+     [View Bag | Stepper] split when item is in cart. Flex row so siblings sit side-by-side. */
+  .product-buybox .atc-row{width:280px!important;max-width:100%!important;display:flex!important;flex-direction:row!important;align-items:stretch!important;gap:0!important;height:56px!important}
+
+  /* ADD TO CART — fills the .atc-row, matches cart's checkout pill style.
+     Selectors use .product-buybox prefix (specificity 0,2,0) to beat the
+     `.product-details *` "KILL EVERY GREY" rule below (specificity 0,1,0). */
+  .product-buybox .atc-row .add-to-cart-btn{width:100%!important;max-width:100%!important;padding:16px 16px!important;background-color:#1a3a52!important;background-image:none!important;color:#fff!important;border:none!important;border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.82rem!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;cursor:pointer!important;height:56px!important;min-height:56px!important;line-height:1!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;transition:filter .2s!important;margin:0!important}
   .mobile-add-to-cart{width:100%!important;padding:16px 16px!important;background-color:#1a3a52!important;background-image:none!important;color:#fff!important;border:none!important;border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.82rem!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;cursor:pointer!important;min-height:56px!important;line-height:1!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;transition:filter .2s!important;margin:0!important}
+
+  /* View Bag pill — left 55% of the row when split is present (matches mobile sticky bar) */
+  .product-buybox .atc-row .atc-split-vb{flex:11 1 0!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;background-color:#1a3a52!important;background-image:none!important;color:#fff!important;border:none!important;border-radius:8px 0 0 8px!important;font-family:'DM Sans',sans-serif!important;font-size:0.82rem!important;font-weight:500!important;letter-spacing:0.12em!important;text-transform:uppercase!important;cursor:pointer!important;text-decoration:none!important;height:56px!important;min-height:56px!important;max-height:56px!important;border-right:1px solid rgba(255,255,255,0.18)!important;padding:0 10px!important;box-sizing:border-box!important;line-height:1!important;white-space:nowrap!important;width:auto!important;min-width:0!important;transition:filter .2s, transform .2s!important}
+  .product-buybox .atc-row .atc-split-vb:hover{filter:brightness(0.88)!important;transform:translateY(-1px)!important}
+  .product-buybox .atc-row .atc-split-vb svg{width:16px!important;height:18px!important;flex-shrink:0!important;stroke:#fff!important;fill:none!important;stroke-width:1.6!important;stroke-linecap:round!important;stroke-linejoin:round!important;position:static!important}
+  .product-buybox .atc-row .atc-split-vb .vb-count{background-color:#e76f51!important;background-image:none!important;color:#fff!important;font-size:0.88rem!important;font-weight:700!important;min-width:26px!important;height:26px!important;padding:0 7px!important;border-radius:13px!important;display:flex!important;align-items:center!important;justify-content:center!important;letter-spacing:0!important;line-height:1!important;flex-shrink:0!important;font-family:'DM Sans',sans-serif!important;position:static!important;margin:0!important}
+  .product-buybox .atc-row .atc-split-vb .vb-count:empty{display:none!important}
+
+  /* When split is present, stepper takes the remaining 45% (right side, rounded only on right) */
+  .product-buybox .atc-row:has(.atc-split-vb) .product-btn-transformed,
+  .product-buybox .atc-row:has(.atc-split-vb) .grid-qty-control{flex:9 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;border-radius:0 8px 8px 0!important}
+  .product-buybox .atc-row:has(.atc-split-vb) .grid-qty-btn{width:38px!important;flex:0 0 38px!important}
   .product-buybox .add-to-cart-btn:hover,.mobile-add-to-cart:hover{filter:brightness(0.88)!important}
   .product-buybox .add-to-cart-btn .btn-en,.mobile-add-to-cart .btn-en{font-weight:500}
   .product-buybox .add-to-cart-btn .btn-ar,.mobile-add-to-cart .btn-ar{font-family:'Almarai',sans-serif!important;font-size:0.7rem!important;text-transform:none!important;letter-spacing:0!important;font-weight:400!important;opacity:0.85!important;display:none!important}
 
   /* Desktop qty stepper — the button transforms to this 3-piece "− [qty] +" control
      after add-to-cart. Same .product-details * killer reaches it too, so we use the
-     .product-buybox prefix to win on specificity. Constrained to 280px wide and
-     left-aligned so the button proportions match the mobile bar (~56px buttons +
-     middle qty) instead of a 859px stretched-out bar with tiny edge buttons. */
-  .product-buybox .product-btn-transformed,.product-buybox .grid-qty-control{background-color:#1a3a52!important;background-image:none!important;border-radius:8px!important;overflow:hidden!important;height:56px!important;width:280px!important;max-width:100%!important;min-width:0!important;display:flex!important;flex-direction:row!important;align-items:stretch!important;margin:0!important}
-  .product-buybox .grid-qty-btn{background-color:rgba(255,255,255,0.10)!important;background-image:none!important;color:#fff!important;border:none!important;width:56px!important;flex:0 0 56px!important;font-family:'DM Sans',sans-serif!important;font-size:1.1rem!important;cursor:pointer!important;transition:background-color .15s!important}
-  .product-buybox .grid-qty-btn:hover{background-color:rgba(255,255,255,0.18)!important}
-  .product-buybox .grid-qty-btn:active{background-color:rgba(255,255,255,0.26)!important}
-  .product-buybox .grid-qty-display{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;color:#fff!important;font-family:'DM Sans',sans-serif!important;font-size:0.95rem!important;font-weight:500!important;letter-spacing:0.02em!important;background-color:transparent!important;cursor:pointer!important}
+     .product-buybox prefix to win on specificity. Lives inside .atc-row (280px wide),
+     stepper fills the row. When .atc-split-vb is added as a sibling, the stepper
+     shrinks to 45% (flex:9) via the :has() rule above. */
+  .product-buybox .atc-row .product-btn-transformed,.product-buybox .atc-row .grid-qty-control{background-color:#1a3a52!important;background-image:none!important;border-radius:8px!important;overflow:hidden!important;height:56px!important;width:100%!important;max-width:100%!important;min-width:0!important;display:flex!important;flex-direction:row!important;align-items:stretch!important;margin:0!important;flex:1 1 auto!important}
+  .product-buybox .atc-row .grid-qty-btn{background-color:rgba(255,255,255,0.10)!important;background-image:none!important;color:#fff!important;border:none!important;width:56px!important;flex:0 0 56px!important;font-family:'DM Sans',sans-serif!important;font-size:1.1rem!important;cursor:pointer!important;transition:background-color .15s!important}
+  .product-buybox .atc-row .grid-qty-btn:hover{background-color:rgba(255,255,255,0.18)!important}
+  .product-buybox .atc-row .grid-qty-btn:active{background-color:rgba(255,255,255,0.26)!important}
+  .product-buybox .atc-row .grid-qty-display{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;color:#fff!important;font-family:'DM Sans',sans-serif!important;font-size:0.95rem!important;font-weight:500!important;letter-spacing:0.02em!important;background-color:transparent!important;cursor:pointer!important}
 
   /* Delivery info — tone down */
   .delivery-info,.mobile-delivery-info{font-family:'DM Sans',sans-serif!important;font-size:0.72rem!important;color:#6b6b6b!important;text-align:center!important;margin-top:14px!important;letter-spacing:0.02em!important}
@@ -471,7 +485,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
       <div id="pricingTiersDesktop"></div>
       <div id="variantSelectorDesktop"></div>
       <div class="product-buybox">
-        <button class="add-to-cart-btn" id="addToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
+        <div class="atc-row">
+          <button class="add-to-cart-btn" id="addToCartBtn"><span class="btn-en">Add to Cart</span><span class="btn-ar arabic-text">أضف إلى السلة</span></button>
+        </div>
         <div class="delivery-info">
           <div class="delivery-item">
             <span class="delivery-icon"><svg class="inline-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
@@ -861,6 +877,59 @@ document.addEventListener('DOMContentLoaded', updateAccountLink);
   setTimeout(function(){ syncSplit(); attachObs(); }, 200);
   setTimeout(function(){ syncSplit(); attachObs(); }, 500);
   setTimeout(function(){ syncSplit(); attachObs(); }, 1500);
+})();
+</script>
+
+<script>
+/* ═══ Option G (desktop) — View Bag (55%) + Stepper (45%) split inside .product-buybox .atc-row
+   Mirrors the mobile sticky-bar pattern at lines 803-865 but targeting the desktop wrapper.
+   Same self-contained MutationObserver + re-entry guard. Same coral count badge wired to
+   total cart count. View Bag link goes to /cart.html. */
+(function(){
+  var _inSync = false;
+  function syncSplitDesktop(){
+    if (_inSync) return;
+    _inSync = true;
+    try {
+      var row = document.querySelector('.product-buybox .atc-row');
+      if (!row) return;
+      var stepper = row.querySelector('.grid-qty-control.product-btn-transformed');
+      var vb = row.querySelector('.atc-split-vb');
+      if (!stepper) {
+        if (vb) vb.remove();
+        return;
+      }
+      var total = 0;
+      try {
+        var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        total = cart.reduce(function(s,i){ return s + (i.quantity || 0); }, 0);
+      } catch(e){}
+      var totalStr = total > 0 ? String(total) : '';
+      if (vb) {
+        var badge = vb.querySelector('.vb-count');
+        if (badge && badge.textContent !== totalStr) badge.textContent = totalStr;
+      } else {
+        vb = document.createElement('a');
+        vb.className = 'atc-split-vb';
+        vb.href = '/cart.html';
+        vb.setAttribute('aria-label', 'View bag');
+        vb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>View Bag<span class="vb-count">' + totalStr + '</span>';
+        row.insertBefore(vb, stepper);
+      }
+    } finally { _inSync = false; }
+  }
+  function attachObsDesktop(){
+    var row = document.querySelector('.product-buybox .atc-row');
+    if (!row || row._splitObsAttached) return;
+    row._splitObsAttached = true;
+    new MutationObserver(syncSplitDesktop).observe(row, { childList: true, subtree: true, characterData: true });
+  }
+  syncSplitDesktop(); attachObsDesktop();
+  document.addEventListener('DOMContentLoaded', function(){ syncSplitDesktop(); attachObsDesktop(); });
+  setTimeout(function(){ syncSplitDesktop(); attachObsDesktop(); }, 50);
+  setTimeout(function(){ syncSplitDesktop(); attachObsDesktop(); }, 200);
+  setTimeout(function(){ syncSplitDesktop(); attachObsDesktop(); }, 500);
+  setTimeout(function(){ syncSplitDesktop(); attachObsDesktop(); }, 1500);
 })();
 </script>
 
