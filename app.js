@@ -1852,25 +1852,22 @@ window.onload = () => {
         });
     }
 
-    // Price sort arrow buttons
-    var sortAscBtn = document.getElementById('sortPriceAsc');
-    var sortDescBtn = document.getElementById('sortPriceDesc');
-    function updateSortArrows() {
-        if (sortAscBtn) sortAscBtn.classList.toggle('active', activeSort === 'price-asc');
-        if (sortDescBtn) sortDescBtn.classList.toggle('active', activeSort === 'price-desc');
-    }
-    if (sortAscBtn) {
-        sortAscBtn.addEventListener('click', function() {
-            activeSort = activeSort === 'price-asc' ? 'default' : 'price-asc';
-            updateSortArrows();
-            var term = document.getElementById('searchInput').value.trim();
-            if (term) { searchProducts(); } else { loadProducts(selectedCategory); }
-        });
-    }
-    if (sortDescBtn) {
-        sortDescBtn.addEventListener('click', function() {
-            activeSort = activeSort === 'price-desc' ? 'default' : 'price-desc';
-            updateSortArrows();
+    // Price sort — single 3-state toggle in the All Products eyebrow row.
+    // Tap cycles default -> asc -> desc -> default. data-state on the button
+    // drives the visual (which arrow is highlighted) via CSS.
+    var sortToggle = document.getElementById('priceSortToggle');
+    if (sortToggle) {
+        sortToggle.addEventListener('click', function() {
+            if (activeSort === 'price-asc') {
+                activeSort = 'price-desc';
+            } else if (activeSort === 'price-desc') {
+                activeSort = 'default';
+            } else {
+                activeSort = 'price-asc';
+            }
+            sortToggle.dataset.state = activeSort === 'price-asc' ? 'asc'
+                                     : activeSort === 'price-desc' ? 'desc'
+                                     : 'default';
             var term = document.getElementById('searchInput').value.trim();
             if (term) { searchProducts(); } else { loadProducts(selectedCategory); }
         });

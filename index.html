@@ -39,7 +39,7 @@
     <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="products.min.js?v=11" as="script">
-    <link rel="preload" href="app.min.js?v=42" as="script">
+    <link rel="preload" href="app.min.js?v=43" as="script">
     <!-- Type system: DM Sans body + Cormorant Garamond headings (self-hosted; declarations live in styles.css) -->
     <link rel="preload" href="/fonts/dm-sans-v17-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/dm-sans-v17-latin-500.woff2" as="font" type="font/woff2" crossorigin>
@@ -824,6 +824,19 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
            — the page is in browse-results mode, not curation mode. */
         #products:has(#categoryBreadcrumb:not([style*="none"])) > .section-editorial { display: none; }
 
+        /* Price sort toggle in the All Products eyebrow row — scoped to #products so the
+           other sections (Popular Now, New Arrivals, Shop by Category) keep their editorial
+           blocks untouched. */
+        #products .ed-meta-row{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px}
+        #products .ed-meta-row .meta{margin:0}
+        #products .price-sort-toggle{background:transparent;border:none;padding:4px 0;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:color .15s}
+        #products .price-sort-toggle:hover{color:#1a3a52}
+        #products .price-sort-toggle .ps-arrow{font-size:0.78rem;line-height:1;letter-spacing:0;color:#c0c8ce;font-weight:500;transition:color .15s;display:inline-block}
+        #products .price-sort-toggle[data-state="asc"] .ps-arrow-asc{color:#1a3a52;font-weight:700}
+        #products .price-sort-toggle[data-state="asc"]{color:#1a3a52}
+        #products .price-sort-toggle[data-state="desc"] .ps-arrow-desc{color:#1a3a52;font-weight:700}
+        #products .price-sort-toggle[data-state="desc"]{color:#1a3a52}
+
         /* In-card image swipe with dots — Hermès convention. Mobile-only (dots hidden on desktop).
            The track holds N images side-by-side at 100% each; translate slides between them.
            Dots overlay bottom-centre, very subtle until interaction. */
@@ -1110,19 +1123,16 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     <nav class="breadcrumb category-breadcrumb" id="categoryBreadcrumb" aria-label="Breadcrumb" style="display:none;"></nav>
     <h2 class="homepage-section-title all-products-title">All Products <span class="arabic-inline">جميع المنتجات</span></h2>
     <div class="section-editorial">
-        <span class="meta">All Products</span>
+        <div class="ed-meta-row">
+            <span class="meta">All Products</span>
+            <button class="price-sort-toggle" id="priceSortToggle" type="button" aria-label="Sort by price" data-state="default">
+                <span class="ps-label">Price</span>
+                <span class="ps-arrow ps-arrow-asc" aria-hidden="true">↑</span>
+                <span class="ps-arrow ps-arrow-desc" aria-hidden="true">↓</span>
+            </button>
+        </div>
         <h2>Every object, <em>in one place.</em></h2>
         <p>The whole shelf, gathered for browsing. Filter by room, or simply wander.</p>
-    </div>
-    <div class="price-sort-arrows" id="priceSortArrows">
-        <button class="sort-arrow-btn" id="sortPriceAsc" title="Price: Low to High">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
-            <span>Price</span>
-        </button>
-        <button class="sort-arrow-btn" id="sortPriceDesc" title="Price: High to Low">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            <span>Price</span>
-        </button>
     </div>
     <div class="products-grid" id="productsGrid"></div>
 </div>
@@ -1425,7 +1435,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="app.min.js?v=42" defer></script>
+<script src="app.min.js?v=43" defer></script>
 <script>
 /* ═══ CARD v2 — Hermès card-4 override. Active only on this draft page (body[data-cards="v2"]). Live pages keep legacy cards.
    Wrapped in DOMContentLoaded so the override runs AFTER app.min.js's defer execution
