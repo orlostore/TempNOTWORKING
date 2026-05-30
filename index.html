@@ -801,9 +801,12 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           /* Bump the editorial headline + eyebrow + sort sizes on wide viewports.
              Mobile sizes untouched. Affects Popular Now, Shop by Category, New Arrivals, All Products. */
           .section-editorial h2 { font-size: clamp(3rem, 5.5vw, 3.6rem); }
-          .section-editorial .meta { font-size: 0.72rem; }
+          .section-editorial .meta { font-size: 0.8rem; }
           #products .ed-meta-row .meta,
-          #products .price-sort-toggle { font-size: 0.72rem; }
+          #products .price-sort-toggle { font-size: 0.8rem; }
+          /* Letter-spacing consistency — price-sort was the odd one at 0.22em while every
+             other .meta on the page uses 0.28em. Match it so the eyebrow row reads as one band. */
+          #products .price-sort-toggle { letter-spacing: 0.28em; }
 
           /* Break the All Products meta-row out of the .section-editorial 680px container
              so ALL PRODUCTS lines up with the first card's left edge and PRICE ↑↓ with
