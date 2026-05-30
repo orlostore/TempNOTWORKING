@@ -188,10 +188,8 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .product-buybox .atc-row .atc-split-vb .vb-count{background-color:#e76f51!important;background-image:none!important;color:#fff!important;font-size:0.88rem!important;font-weight:700!important;min-width:26px!important;height:26px!important;padding:0 7px!important;border-radius:13px!important;display:flex!important;align-items:center!important;justify-content:center!important;letter-spacing:0!important;line-height:1!important;flex-shrink:0!important;font-family:'DM Sans',sans-serif!important;position:static!important;margin:0!important}
   .product-buybox .atc-row .atc-split-vb .vb-count:empty{display:none!important}
 
-  /* When split is present, stepper takes the remaining 45% (right side, rounded only on right) */
-  .product-buybox .atc-row:has(.atc-split-vb) .product-btn-transformed,
-  .product-buybox .atc-row:has(.atc-split-vb) .grid-qty-control{flex:9 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;border-radius:0 8px 8px 0!important}
-  .product-buybox .atc-row:has(.atc-split-vb) .grid-qty-btn{width:38px!important;flex:0 0 38px!important}
+  /* :has(.atc-split-vb) overrides come AFTER the defaults below so they actually win the cascade.
+     See further down — moved to end of this block. */
   .product-buybox .add-to-cart-btn:hover,.mobile-add-to-cart:hover{filter:brightness(0.88)!important}
   .product-buybox .add-to-cart-btn .btn-en,.mobile-add-to-cart .btn-en{font-weight:500}
   .product-buybox .add-to-cart-btn .btn-ar,.mobile-add-to-cart .btn-ar{font-family:'Almarai',sans-serif!important;font-size:0.7rem!important;text-transform:none!important;letter-spacing:0!important;font-weight:400!important;opacity:0.85!important;display:none!important}
@@ -208,6 +206,13 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   .product-buybox .atc-row .grid-qty-btn:hover{background-color:rgba(255,255,255,0.18)!important}
   .product-buybox .atc-row .grid-qty-btn:active{background-color:rgba(255,255,255,0.26)!important}
   .product-buybox .atc-row .grid-qty-display{flex:1 1 auto!important;display:flex!important;align-items:center!important;justify-content:center!important;color:#fff!important;font-family:'DM Sans',sans-serif!important;font-size:0.95rem!important;font-weight:500!important;letter-spacing:0.02em!important;background-color:transparent!important;cursor:pointer!important}
+
+  /* ── SPLIT state overrides — placed LAST so they win the cascade against the defaults above.
+     When the View Bag pill is injected as a sibling, stepper shrinks to 45% (flex:9) and its
+     buttons shrink to 38px each so View Bag (flex:11) has room to breathe. ── */
+  .product-buybox .atc-row:has(.atc-split-vb) .product-btn-transformed,
+  .product-buybox .atc-row:has(.atc-split-vb) .grid-qty-control{flex:9 1 0!important;width:auto!important;min-width:0!important;max-width:none!important;border-radius:0 8px 8px 0!important}
+  .product-buybox .atc-row:has(.atc-split-vb) .grid-qty-btn{width:38px!important;flex:0 0 38px!important}
 
   /* Delivery info — tone down */
   .delivery-info,.mobile-delivery-info{font-family:'DM Sans',sans-serif!important;font-size:0.72rem!important;color:#6b6b6b!important;text-align:center!important;margin-top:14px!important;letter-spacing:0.02em!important}
