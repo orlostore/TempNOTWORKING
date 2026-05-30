@@ -150,6 +150,12 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     .product-page-container.desktop-product,
     .product-page {
       min-height: 0 !important;
+      height: auto !important;
+    }
+    /* Belt-and-braces: even if min-height leaked back in, prevent grid rows
+       from stretching to fill it. Rows stay sized to their content. */
+    .product-page {
+      align-content: start !important;
     }
   }
 
