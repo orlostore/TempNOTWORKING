@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ORLO — Sort Control Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@400;500;700&family=Almarai:wght@400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f8f6f2;font-family:'DM Sans',sans-serif;color:#1a3a52;line-height:1.5;-webkit-font-smoothing:antialiased;padding:32px 0 80px}
+
+.page-head{max-width:1200px;margin:0 auto 32px;padding:0 24px}
+.page-head h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:2.4rem;color:#1a3a52;letter-spacing:-0.01em;margin-bottom:8px}
+.page-head p{font-size:0.92rem;color:#6b6b6b;max-width:680px;line-height:1.6}
+
+.grid{max-width:1200px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:24px}
+
+.option{background:#fff;border:1px solid rgba(26,58,82,0.10);overflow:hidden;display:flex;flex-direction:column}
+.option-head{padding:18px 20px 14px;border-bottom:1px solid rgba(26,58,82,0.08)}
+.option-head h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.4rem;color:#1a3a52;margin-bottom:4px}
+.option-head .label{font-family:'DM Sans',sans-serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500}
+.option-head .note{font-size:0.82rem;color:#6b6b6b;line-height:1.5;margin-top:6px}
+
+/* Preview frame — simulates a slice of the product listing page */
+.preview{background:#f8f6f2;padding:20px 16px 14px;min-height:280px}
+.preview .section-title-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;gap:12px}
+.preview .section-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:1.1rem;color:#1a3a52}
+.preview .cards-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.preview .card-mock{background:#fff;border:1px solid rgba(26,58,82,0.08);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.8rem;color:#1a3a52;opacity:0.32}
+
+/* ───── OPTION A: Single Sort-by dropdown (Apple style) ───── */
+.a-sort-pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(26,58,82,0.20);border-radius:24px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:0.74rem;color:#1a3a52;cursor:pointer;letter-spacing:0.02em}
+.a-sort-pill .a-sort-label{color:#9aa5ad;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;font-size:0.62rem}
+.a-sort-pill .a-sort-value{font-weight:500;font-size:0.78rem}
+.a-sort-pill .a-sort-caret{width:10px;height:10px;border-right:1.5px solid #1a3a52;border-bottom:1.5px solid #1a3a52;transform:rotate(45deg);margin-left:2px;margin-top:-3px}
+
+/* ───── OPTION B: Quiet text link (Hermès style) ───── */
+.b-sort-text{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;cursor:pointer;border-bottom:1px solid rgba(154,165,173,0.4);padding-bottom:2px;transition:color .15s,border-color .15s}
+.b-sort-text:hover{color:#1a3a52;border-color:#1a3a52}
+.b-sort-text-arrows{display:inline-block;margin-left:4px;color:#e76f51;font-weight:600}
+
+/* ───── OPTION C: Inline segmented control ───── */
+.c-segment{display:inline-flex;background:rgba(26,58,82,0.04);border-radius:6px;padding:3px}
+.c-segment-btn{padding:6px 14px;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.06em;color:#6b6b6b;font-weight:500;border:none;background:transparent;cursor:pointer;border-radius:4px;transition:background .2s,color .2s}
+.c-segment-btn.active{background:#fff;color:#1a3a52;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+
+/* ───── OPTION D: Two arrow icons only (minimal) ───── */
+.d-arrows{display:inline-flex;gap:10px;align-items:center}
+.d-arrow{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(26,58,82,0.20);border-radius:50%;cursor:pointer;color:#1a3a52;background:transparent;transition:border-color .15s,color .15s}
+.d-arrow:hover{border-color:#1a3a52}
+.d-arrow.active{border-color:#1a3a52;background:#1a3a52;color:#fff}
+.d-arrow svg{width:14px;height:14px}
+.d-arrow-label{font-family:'DM Sans',sans-serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-right:4px}
+
+/* ───── OPTION E: Filter & Sort drawer trigger (Net-a-Porter) ───── */
+.e-trigger{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid rgba(26,58,82,0.25);padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;color:#1a3a52;font-weight:500;cursor:pointer;transition:background .15s}
+.e-trigger:hover{background:rgba(26,58,82,0.04)}
+.e-trigger svg{width:14px;height:14px}
+.e-trigger .e-count{background:#1a3a52;color:#fff;width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:500;letter-spacing:0;margin-left:4px}
+
+/* ───── OPTION F: Inline chip toggles (filter-bar feel) ───── */
+.f-chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.f-chip{padding:6px 12px;border:1px solid rgba(26,58,82,0.15);border-radius:18px;font-family:'DM Sans',sans-serif;font-size:0.66rem;letter-spacing:0.06em;color:#6b6b6b;font-weight:500;cursor:pointer;background:#fff;transition:all .15s}
+.f-chip:hover{border-color:#1a3a52}
+.f-chip.active{background:#1a3a52;color:#fff;border-color:#1a3a52}
+.f-chip-label{font-family:'DM Sans',sans-serif;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-right:4px}
+
+/* ───── OPTION G: Dropdown opened state (showing menu) ───── */
+.g-pill{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #1a3a52;border-radius:24px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:0.74rem;color:#1a3a52;cursor:pointer;position:relative;letter-spacing:0.02em}
+.g-pill .a-sort-value{font-weight:500}
+.g-pill .a-sort-caret{width:8px;height:8px;border-right:1.5px solid #1a3a52;border-bottom:1.5px solid #1a3a52;transform:rotate(45deg);margin-left:4px;margin-top:-3px}
+.g-menu{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid rgba(26,58,82,0.15);box-shadow:0 6px 24px rgba(26,58,82,0.10);border-radius:8px;padding:6px;min-width:200px;z-index:5}
+.g-menu-item{padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:0.74rem;color:#1a3a52;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:8px;transition:background .15s}
+.g-menu-item:hover{background:rgba(26,58,82,0.04)}
+.g-menu-item.selected{background:rgba(26,58,82,0.06);font-weight:500}
+.g-menu-item .check{width:14px;color:#e76f51;font-weight:600}
+
+/* ───── OPTION H: Nothing — no sort UI ───── */
+.h-nothing{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.92rem;color:#9aa5ad;letter-spacing:-0.005em}
+
+/* Right-aligned utility */
+.right{display:flex;justify-content:flex-end;align-items:center}
+.between{display:flex;justify-content:space-between;align-items:center;gap:14px}
+
+/* Reco strip at bottom of each card */
+.option-reco{padding:10px 20px;border-top:1px solid rgba(26,58,82,0.08);background:#fafaf7;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.option-reco .pros{font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#1a7a34;font-weight:500}
+.option-reco .cons{font-family:'DM Sans',sans-serif;font-size:0.7rem;color:#b55035;font-weight:500}
+
+.toplabel{display:inline-block;margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>Sort control — mockups</h1>
+  <p>Each card below shows a different way to handle "Sort by price" above the All Products grid. Same context (a row of 2 product cards underneath) so you can compare in situ. Pick one; I'll wire it in.</p>
+</div>
+
+<div class="grid">
+
+  <!-- ───── A: Single Sort-by dropdown (Apple style) ───── -->
+  <div class="option">
+    <div class="option-head">
+      <span class="label toplabel">Option A</span>
+      <h2>Single "Sort by" pill</h2>
+      <p class="note">One pill in the top right. Tap → opens a dropdown of options. Familiar from Apple, IKEA, every e-commerce site.</p>
+    </div>
+    <div class="preview">
+      <div class="section-title-row">
+        <span class="section-title">All Products</span>
+        <span class="a-sort-pill">
+          <span class="a-sort-label">Sort</span>
+          <span class="a-sort-value">Featured</span>
+          <span class="a-sort-caret"></span>
+        </span>
+      </div>
+      <div class="cards-row">
+        <div class="card-mock">A</div>
+        <div class="card-mock">B</div>
+      </div>
+    </div>
+    <div class="option-reco">
+      <span class="pros">+ Universally understood</span>
+      <span class="cons">— Slightly utilitarian</span>
+    </div>
+  </div>
+
+  <!-- ───── B: Quiet text link (Hermès style) ───── -->
+  <div class="option">
+    <div class="option-head">
+      <span class="label toplabel">Option B</span>
+      <h2>Quiet text link</h2>
+      <p class="note">No pill, no button. Just small caps text that toggles asc/desc. Closest to your editorial register.</p>
+    </div>
+    <div class="preview">
+      <div class="section-title-row">
+        <span class="section-title">All Products</span>
+        <span class="b-sort-text">Sort by price <span class="b-sort-text-arrows">↑↓</span></span>
+      </div>
+      <div class="cards-row">
+        <div class="card-mock">A</div>
+        <div class="card-mock">B</div>
+      </div>
+    </div>
+    <div class="option-reco">
+      <span class="pros">+ Most editorial</span>
+      <span class="cons">— Easy to miss</span>
+    </div>
+  </div>
+
+  <!-- ───── C: Inline segmented control ───── -->
+  <div class="option">
+    <div class="option-head">
+      <span class="label toplabel">Option C</span>
+      <h2>Segmented control</h2>
+      <p class="note">Three options in one switch — Featured / Low / High. Always visible, one tap to pick. Apple settings pattern.</p>
+    </div>
+    <div class="preview">
+      <div class="section-title-row">
+        <span class="section-title">All Products</span>
+        <div class="c-segment">
+          <button class="c-segment-btn active">Featured</button>
+          <button class="c-segment-btn">Low</button>
+          <button class="c-segment-btn">High</button>
+        </div>
+      </div>
+      <div class="cards-row">
+        <div class="card-mock">A</div>
+        <div class="card-mock">B</div>
+      </div>
+    </div>
+    <div class="option-reco">
+      <span class="pros">+ One tap, no menu</span>
+      <span class="cons">— Takes up more space</span>
+    </div>
+  </div>
+
+  <!-- ───── D: Two arrow icons only ───── -->
+  <div class="option">
+    <div class="option-head">
+      <span class="label toplabel">Option D</span>
+      <h2>Minimal arrows</h2>
+      <p class="note">Just two tiny circle buttons with an up/down arrow. Click one to sort that way. Extremely quiet, won't clip.</p>
+    </div>
+    <div class="preview">
+      <div class="section-title-row">
+        <span class="section-title">All Products</span>
+        <div class="d-arrows">
+          <span class="d-arrow-label">Price</span>
+          <button class="d-arrow" title="Low to high"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <button class="d-arrow active" title="High to low"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 15 12 9 18 15"/></svg></button>
+        </div>
+      </div>
+      <div class="cards-row">
+        <div class="card-mock">A</div>
+        <div class="card-mock">B</div>
+      </div>
+    </div>
+    <div class="option-reco">
+      <span class="pros">+ Tiny, won't clip</span>
+      <span class="cons">— Less obvious as "sort"</span>
+    </div>
+  </div>
+
+  <!-- ───── E: Filter & Sort drawer (Net-a-Porter) ───── -->
+  <div class="option">
+    <div class="option-head">
+      <span class="label toplabel">Option E</span>
+      <h2>Sort &amp; Filter drawer</h2>
+      <p class="note">Single trigger that opens a slide-in panel from the right. Most extensible — add category filters / price range / stock toggle later.</p>
+    </div>
+    <div class="preview">
+      <div class="section-title-row">
+        <span class="section-title">All Products</span>
+        <button class="e-trigger">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
+          Sort &amp; Filter
+        </button>
+      </div>
+      <div class="cards-row">
+        <div class="card-mock">A</div>
+        <div class="card-mock">B</div>
+      </div>
+    </div>
+    <div class="option-reco">
+      <span class="pros">+ Future-proof (filters)</span>
+      <span class="cons">— More work to build</span>
+    </div>
+  </div>
+
+  <!-- ───── F: Inline chip toggles ───── -->
+  <div class="option">
+    <div class="option-head">
+      <span class="label toplabel">Option F</span>
+      <h2>Chip toggles</h2>
+      <p class="note">Three pills sitting in a row. Each one toggleable. Same idea as segmented control but more breathing room.</p>
+    </div>
+    <div class="preview">
+      <div class="section-title-row">
+        <span class="section-title">All Products</span>
+      </div>
+      <div class="f-chips" style="margin-bottom:14px">
+        <span class="f-chip-label">Sort</span>
+        <button class="f-chip active">Featured</button>
+        <button class="f-chip">↑ Low to High</button>
+        <button class="f-chip">↓ High to Low</button>
+      </div>
+      <div class="cards-row">
+        <div class="card-mock">A</div>
+        <div class="card-mock">B</div>
+      </div>
+    </div>
+    <div class="option-reco">
+      <span class="pros">+ Open by default</span>
+      <span class="cons">— Big footprint</span>
+    </div>
+  </div>
+
+  <!-- ───── G: Open dropdown (showing menu state) ───── -->
+  <div class="option">
+    <div class="option-head">
+      <span class="label toplabel">Option G</span>
+      <h2>Dropdown — open state</h2>
+      <p class="note">What option A looks like when tapped. Three options listed, current selection ticked. Tap outside to close.</p>
+    </div>
+    <div class="preview" style="min-height:340px">
+      <div class="section-title-row">
+        <span class="section-title">All Products</span>
+        <span class="g-pill">
+          <span class="a-sort-value">Price: Low to High</span>
+          <span class="a-sort-caret" style="transform:rotate(225deg);margin-top:1px"></span>
+          <div class="g-menu">
+            <div class="g-menu-item"><span class="check">&nbsp;</span> Featured</div>
+            <div class="g-menu-item selected"><span class="check">✓</span> Price: Low to High</div>
+            <div class="g-menu-item"><span class="check">&nbsp;</span> Price: High to Low</div>
+            <div class="g-menu-item"><span class="check">&nbsp;</span> Newest first</div>
+          </div>
+        </span>
+      </div>
+      <div class="cards-row" style="margin-top:54px">
+        <div class="card-mock">A</div>
+        <div class="card-mock">B</div>
+      </div>
+    </div>
+    <div class="option-reco">
+      <span class="pros">+ Clear selection state</span>
+      <span class="cons">— Same as A, just shown open</span>
+    </div>
+  </div>
+
+  <!-- ───── H: Nothing ───── -->
+  <div class="option">
+    <div class="option-head">
+      <span class="label toplabel">Option H</span>
+      <h2>No sort at all</h2>
+      <p class="note">Just curated order. ~20 products on the site — most editorial brands at this scale don't let users re-sort. Removes a whole UI layer.</p>
+    </div>
+    <div class="preview">
+      <div class="section-title-row">
+        <span class="section-title">All Products</span>
+        <span class="h-nothing">curated order</span>
+      </div>
+      <div class="cards-row">
+        <div class="card-mock">A</div>
+        <div class="card-mock">B</div>
+      </div>
+    </div>
+    <div class="option-reco">
+      <span class="pros">+ Zero UI, full editorial</span>
+      <span class="cons">— No user control</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
