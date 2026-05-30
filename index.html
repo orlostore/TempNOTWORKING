@@ -825,13 +825,26 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           /* Break the All Products meta-row out of the .section-editorial 680px container
              so ALL PRODUCTS lines up with the first card's left edge and PRICE ↑↓ with
              the last card's right edge. Editorial stays centered at 680px; meta-row alone
-             extends to the products container's content width. */
+             extends to match the products container's actual content area.
+             Two media queries to handle the tablet padding inset correctly:
+             • Tablet (769-1180): .container has tablet padding 1.34rem each side, so cards
+               sit at min(viewport, max-width) - 2.68rem. Meta-row must match that exactly.
+             • Desktop (>1180): no tablet padding, cards span the full max-width 1138.5px. */
           #products .section-editorial > .ed-meta-row {
-            width: min(calc(1180px - 2 * 1.34rem), calc(100vw - 2.68rem));
             max-width: none;
             position: relative;
             left: 50%;
             transform: translateX(-50%);
+          }
+        }
+        @media (min-width: 769px) and (max-width: 1180px) {
+          #products .section-editorial > .ed-meta-row {
+            width: min(calc(100vw - 2.68rem), calc(1180px - 4 * 1.34rem));
+          }
+        }
+        @media (min-width: 1181px) {
+          #products .section-editorial > .ed-meta-row {
+            width: calc(1180px - 2 * 1.34rem);
           }
         }
         .section-editorial .meta {
