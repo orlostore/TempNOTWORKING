@@ -181,8 +181,10 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 
   /* Desktop qty stepper — the button transforms to this 3-piece "− [qty] +" control
      after add-to-cart. Same .product-details * killer reaches it too, so we use the
-     .product-buybox prefix to win on specificity. Matches the navy ATC styling. */
-  .product-buybox .product-btn-transformed,.product-buybox .grid-qty-control{background-color:#1a3a52!important;background-image:none!important;border-radius:8px!important;overflow:hidden!important;height:56px!important;width:100%!important;max-width:none!important;min-width:0!important;display:flex!important;flex-direction:row!important;align-items:stretch!important;margin:0!important}
+     .product-buybox prefix to win on specificity. Constrained to 280px wide and
+     left-aligned so the button proportions match the mobile bar (~56px buttons +
+     middle qty) instead of a 859px stretched-out bar with tiny edge buttons. */
+  .product-buybox .product-btn-transformed,.product-buybox .grid-qty-control{background-color:#1a3a52!important;background-image:none!important;border-radius:8px!important;overflow:hidden!important;height:56px!important;width:280px!important;max-width:100%!important;min-width:0!important;display:flex!important;flex-direction:row!important;align-items:stretch!important;margin:0!important}
   .product-buybox .grid-qty-btn{background-color:rgba(255,255,255,0.10)!important;background-image:none!important;color:#fff!important;border:none!important;width:56px!important;flex:0 0 56px!important;font-family:'DM Sans',sans-serif!important;font-size:1.1rem!important;cursor:pointer!important;transition:background-color .15s!important}
   .product-buybox .grid-qty-btn:hover{background-color:rgba(255,255,255,0.18)!important}
   .product-buybox .grid-qty-btn:active{background-color:rgba(255,255,255,0.26)!important}
