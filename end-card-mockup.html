@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ORLO End Card — logo treatment samples</title>
+<title>ORLO End Card — A vs C, reduced</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+<!-- Both italic AND upright Cormorant loaded so the wordmark can sit upright -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap" rel="stylesheet">
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -43,12 +44,22 @@
         margin: 0 auto;
         line-height: 1.6;
     }
+    .page-head .note {
+        margin-top: 18px;
+        display: inline-block;
+        padding: 8px 18px;
+        background: rgba(231,111,81,0.08);
+        border-left: 2px solid #e76f51;
+        font-size: 0.82rem;
+        color: #6b7780;
+        text-align: left;
+    }
 
     .samples {
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        gap: 40px;
+        gap: 60px;
         flex-wrap: wrap;
         max-width: 1500px;
         margin: 0 auto;
@@ -60,25 +71,28 @@
         letter-spacing: 0.22em;
         text-transform: uppercase;
         color: #9aa5ad;
-        margin-top: 8px;
+        margin-top: 10px;
         font-weight: 500;
     }
     .sample .sub {
         font-family: 'Cormorant Garamond', serif;
         font-style: italic;
         font-weight: 500;
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         color: #1a3a52;
         margin-top: 14px;
     }
-    .sample .pros {
+    .sample .spec {
         margin-top: 8px;
         font-size: 0.78rem;
         color: #6b7780;
-        line-height: 1.5;
-        max-width: 380px;
-        margin-left: auto;
-        margin-right: auto;
+        line-height: 1.6;
+    }
+    .sample .spec code {
+        background: rgba(26,58,82,0.05);
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-size: 0.74rem;
     }
 
     /* ── Frame (1080×1920, ×0.4 on screen) ── */
@@ -92,63 +106,50 @@
         flex-shrink: 0;
     }
 
-    /* ── Logo Treatment A: badge alone ── */
-    .logo-badge {
+    /* ── SAMPLE A: badge alone, reduced ──
+       Was 170×170 on 1080 (68px screen). Now 110×110 (44px screen). */
+    .logo-badge-small {
         position: absolute;
-        top: 44px;
+        top: 58px;
         left: 50%;
         transform: translateX(-50%);
-        width: 68px;
-        height: 68px;
+        width: 44px;
+        height: 44px;
         object-fit: contain;
     }
 
-    /* ── Logo Treatment B: serif wordmark alone ── */
-    .logo-wordmark {
-        position: absolute;
-        top: 64px;
-        left: 0; right: 0;
-        text-align: center;
-        font-family: 'Cormorant Garamond', serif;
-        font-weight: 500;
-        font-size: 26px;
-        letter-spacing: 0.18em;
-        color: #1a3a52;
-        line-height: 1;
-    }
-    .logo-wordmark .o-coral { color: #e76f51; }
-
-    /* ── Logo Treatment C: lock-up (badge + divider + wordmark) ── */
+    /* ── SAMPLE C: lock-up, reduced, upright wordmark ── */
     .logo-lockup {
         position: absolute;
-        top: 56px;
+        top: 64px;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 9px;
     }
     .logo-lockup img {
-        width: 52px;
-        height: 52px;
+        width: 36px;       /* 90 on 1080 — was 130 */
+        height: 36px;
         object-fit: contain;
     }
     .logo-lockup .divider {
         width: 1px;
-        height: 36px;
+        height: 24px;
         background: rgba(26,58,82,0.25);
     }
     .logo-lockup .wordmark {
         font-family: 'Cormorant Garamond', serif;
+        font-style: normal;          /* explicit: NOT italic — that was the bug */
         font-weight: 500;
-        font-size: 22px;
-        letter-spacing: 0.18em;
+        font-size: 15px;             /* 38pt on 1080 — was 55pt */
+        letter-spacing: 0.16em;
         color: #1a3a52;
         line-height: 1;
     }
     .logo-lockup .wordmark .o-coral { color: #e76f51; }
 
-    /* ── Shared end-card chrome (identical across all three) ── */
+    /* ── Shared end-card chrome below the logo ── */
     .ec-hero {
         position: absolute;
         top: 140px;
@@ -239,7 +240,7 @@
         letter-spacing: 0.02em;
     }
 
-    .recommendation {
+    .footer-note {
         max-width: 900px;
         margin: 60px auto 0;
         padding: 22px 30px;
@@ -249,7 +250,7 @@
         line-height: 1.7;
         color: #1a3a52;
     }
-    .recommendation strong {
+    .footer-note strong {
         font-weight: 600;
         letter-spacing: 0.04em;
         text-transform: uppercase;
@@ -262,16 +263,19 @@
 </head>
 <body>
     <div class="page-head">
-        <div class="eyebrow">logo treatment — three options</div>
-        <h1>Which mark sits at the top?</h1>
-        <p>Same end card, same product, same everything below the logo. Only the brand mark at the top changes. Pick one to lock into the spec.</p>
+        <div class="eyebrow">A vs C · both reduced</div>
+        <h1>Pick one to lock</h1>
+        <p>Two options at smaller sizes. Wordmark in C is now <strong>upright</strong>, not italic — that was a font-import bug, fixed.</p>
+        <div class="note">
+            Sample B (wordmark alone) dropped per your call — narrowing to A or C.
+        </div>
     </div>
 
     <div class="samples">
-        <!-- SAMPLE A: BADGE ALONE -->
+        <!-- SAMPLE A: badge alone, smaller -->
         <div class="sample">
             <div class="frame">
-                <img src="logo.png" alt="ORLO" class="logo-badge">
+                <img src="logo.png" alt="ORLO" class="logo-badge-small">
                 <div class="ec-hero"><div class="swatch">Vintage Beetle</div></div>
                 <div class="ec-name">Vintage Beetle</div>
                 <div class="ec-price">AED 119</div>
@@ -280,29 +284,12 @@
                 <div class="ec-url">orlostore.com</div>
                 <div class="ec-handle">@orlostore</div>
             </div>
-            <div class="caption">Sample A</div>
+            <div class="caption">Sample A · reduced</div>
             <div class="sub">Badge alone</div>
-            <div class="pros">Hand-drawn navy circle with coral sun. Matches your IG/TikTok profile pic. Most "social-native".</div>
+            <div class="spec">badge <code>110 × 110</code> on 1080<br>(was <code>170 × 170</code> — down ~35%)</div>
         </div>
 
-        <!-- SAMPLE B: WORDMARK ALONE -->
-        <div class="sample">
-            <div class="frame">
-                <div class="logo-wordmark">ORL<span class="o-coral">O</span></div>
-                <div class="ec-hero"><div class="swatch">Vintage Beetle</div></div>
-                <div class="ec-name">Vintage Beetle</div>
-                <div class="ec-price">AED 119</div>
-                <div class="ec-divider"></div>
-                <div class="ec-pill">Shop Now</div>
-                <div class="ec-url">orlostore.com</div>
-                <div class="ec-handle">@orlostore</div>
-            </div>
-            <div class="caption">Sample B</div>
-            <div class="sub">Wordmark alone</div>
-            <div class="pros">Clean Cormorant serif with the coral O. Editorial register. Reads like a magazine masthead.</div>
-        </div>
-
-        <!-- SAMPLE C: LOCK-UP (BADGE + DIVIDER + WORDMARK) -->
+        <!-- SAMPLE C: lock-up, reduced, upright wordmark -->
         <div class="sample">
             <div class="frame">
                 <div class="logo-lockup">
@@ -318,15 +305,15 @@
                 <div class="ec-url">orlostore.com</div>
                 <div class="ec-handle">@orlostore</div>
             </div>
-            <div class="caption">Sample C</div>
-            <div class="sub">Lock-up (both)</div>
-            <div class="pros">Site-header consistency — same composite mark people see on orlostore.com. Most brand weight, also the busiest.</div>
+            <div class="caption">Sample C · reduced</div>
+            <div class="sub">Lock-up (badge + wordmark)</div>
+            <div class="spec">badge <code>90 × 90</code> · wordmark <code>38pt</code> upright Cormorant<br>(was <code>130 × 130</code> / <code>55pt</code> italic by accident — down ~30%)</div>
         </div>
     </div>
 
-    <div class="recommendation">
-        <strong>My read</strong>
-        Sample A for the end card. The badge is the social-native asset (it's also your IG/TT profile pic, so people see "navy circle" and immediately know ORLO). The lock-up (C) is built for horizontal contexts — site nav, email header, business cards — and feels cramped in a 9:16 frame. The wordmark alone (B) is elegant but loses the hand-drawn warmth that's part of your identity. Pick A and we lock it.
+    <div class="footer-note">
+        <strong>What's locked in both</strong>
+        Logo sits in the top safe area (centred, between y≈110 and y≈280 on 1080). Cormorant italic name, calm DM Sans 32pt price, navy Shop Now pill, footer URL + handle. Per-video variables stay just three: hero photo, name, price.
     </div>
 </body>
 </html>
