@@ -813,11 +813,14 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
           .section-editorial { padding-top: 16px; padding-bottom: 32px; }
 
           /* Bump the editorial headline + eyebrow + sort sizes on wide viewports.
-             Mobile sizes untouched. Affects Popular Now, Shop by Category, New Arrivals, All Products. */
-          .section-editorial h2 { font-size: clamp(3rem, 5.5vw, 3.6rem); }
-          .section-editorial .meta { font-size: 0.8rem; }
+             Mobile sizes untouched. Affects Popular Now, Shop by Category, New Arrivals, All Products.
+             NOTE: the base .section-editorial h2 / .meta rules sit ~40 lines below this block in
+             source order. Without !important, the base rules (same specificity, later source)
+             would win and these bumps would never apply. Keep !important. */
+          .section-editorial h2 { font-size: clamp(3rem, 5.5vw, 3.6rem) !important; }
+          .section-editorial .meta { font-size: 0.8rem !important; }
           #products .ed-meta-row .meta,
-          #products .price-sort-toggle { font-size: 0.8rem; }
+          #products .price-sort-toggle { font-size: 0.8rem !important; }
           /* Letter-spacing consistency — price-sort was the odd one at 0.22em while every
              other .meta on the page uses 0.28em. Match it so the eyebrow row reads as one band. */
           #products .price-sort-toggle { letter-spacing: 0.28em; }
