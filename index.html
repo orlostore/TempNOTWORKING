@@ -648,6 +648,20 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
         padding-right: 0;
         box-sizing: border-box;
       }
+
+      /* Tablet / iPad range — mirror mobile's horizontal padding so the cards,
+         card grids, about list and footer don't touch the screen edges.
+         Doesn't run on phone (<769) or desktop (>1180) — both have their own
+         inset already (mobile via existing rules; desktop via .container max-width centering). */
+      @media (min-width: 769px) and (max-width: 1180px) {
+        .container,
+        .homepage-section-inner,
+        .about-accordion .acc-row,
+        .cs-footer-section .cs-footer-inner {
+          padding-left: 1.34rem;
+          padding-right: 1.34rem;
+        }
+      }
     </style>
     <!-- End draft overlay -->
     <script>
