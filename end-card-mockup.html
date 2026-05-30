@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ORLO End Card — generalized spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'DM Sans', sans-serif;
+        background: #ece8e0;
+        min-height: 100vh;
+        padding: 40px 20px 80px;
+        color: #1a3a52;
+    }
+    .page-head {
+        max-width: 1200px;
+        margin: 0 auto 40px;
+        text-align: center;
+    }
+    .page-head h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 2.4rem;
+        color: #1a3a52;
+        margin-bottom: 12px;
+    }
+    .page-head p {
+        font-size: 0.95rem;
+        color: #6b7780;
+        max-width: 640px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+    .stage {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 60px;
+        flex-wrap: wrap;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       END CARD — locked 9:16 frame, 1080×1920 source
+       Scaled to 432×768 on screen (×0.4) so you see the real
+       proportions without scrolling. Per-video variables: hero
+       photo, product name, price. Everything else is locked.
+       ────────────────────────────────────────────────────────── */
+    .frame {
+        width: 432px;       /* 1080 × 0.4 */
+        height: 768px;      /* 1920 × 0.4 */
+        background: #f8f6f2;
+        position: relative;
+        box-shadow: 0 12px 40px rgba(26,58,82,0.18);
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    /* All bands use the same horizontal centering pattern.
+       Numbers below are scaled (1080→432, 1920→768) so what you
+       see on screen is exactly what renders at full res. */
+
+    /* ORLO wordmark — band 200-280 → scaled 80-112 */
+    .ec-wordmark {
+        position: absolute;
+        top: 80px; left: 0; right: 0;
+        text-align: center;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 600;
+        font-size: 12.8px;       /* 32pt × 0.4 */
+        letter-spacing: 0.4em;
+        color: #1a3a52;
+    }
+
+    /* Hero — band 320-1140 → scaled 128-456 */
+    .ec-hero {
+        position: absolute;
+        top: 128px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 288px;            /* 720 × 0.4 */
+        height: 288px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .ec-hero img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+    /* Placeholder swatch — for the mockup when no real product loads */
+    .ec-hero-placeholder {
+        width: 70%;
+        height: 70%;
+        background: linear-gradient(135deg, #e4ddd1 0%, #d4cab8 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        font-weight: 500;
+        color: #9aa5ad;
+        font-size: 0.85rem;
+    }
+
+    /* Product name — band 1200-1260 → scaled 480-504 */
+    .ec-name {
+        position: absolute;
+        top: 480px;
+        left: 0; right: 0;
+        text-align: center;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 500;
+        font-size: 15.2px;       /* 38pt × 0.4 */
+        color: #1a3a52;
+        letter-spacing: 0.01em;
+    }
+
+    /* Price — band 1300-1360 → scaled 520-544 */
+    .ec-price {
+        position: absolute;
+        top: 520px;
+        left: 0; right: 0;
+        text-align: center;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 600;
+        font-size: 17.6px;       /* 44pt × 0.4 */
+        color: #1a3a52;
+        letter-spacing: 0.01em;
+    }
+
+    /* Hairline divider — sits just above the pill, ties name+price into a block */
+    .ec-divider {
+        position: absolute;
+        top: 580px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 48px;
+        height: 1px;
+        background: rgba(26,58,82,0.20);
+    }
+
+    /* Shop Now pill — band 1460-1560 → scaled 584-624 */
+    .ec-pill {
+        position: absolute;
+        top: 600px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 11px 38px;       /* (28×0.4)w / (10×0.4)v scaled */
+        background: #1a3a52;
+        color: #f8f6f2;
+        border-radius: 999px;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 500;
+        font-size: 9.6px;        /* 24pt × 0.4 */
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+    }
+
+    /* URL — band 1660-1700 → scaled 664-680 */
+    .ec-url {
+        position: absolute;
+        top: 664px;
+        left: 0; right: 0;
+        text-align: center;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 400;
+        font-size: 8.8px;        /* 22pt × 0.4 */
+        color: #9aa5ad;
+        letter-spacing: 0.02em;
+    }
+
+    /* Handle — band 1700-1740 → scaled 680-696 */
+    .ec-handle {
+        position: absolute;
+        top: 690px;
+        left: 0; right: 0;
+        text-align: center;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 400;
+        font-size: 7.2px;        /* 18pt × 0.4 */
+        color: #b8c0c7;
+        letter-spacing: 0.02em;
+    }
+
+    /* ── Spec panel beside the frame ── */
+    .spec {
+        max-width: 460px;
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+    .spec h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 1.5rem;
+        margin-bottom: 18px;
+        color: #1a3a52;
+    }
+    .spec table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.82rem;
+        margin-bottom: 20px;
+    }
+    .spec th, .spec td {
+        text-align: left;
+        padding: 8px 10px;
+        border-bottom: 1px solid rgba(26,58,82,0.10);
+        vertical-align: top;
+    }
+    .spec th {
+        font-weight: 600;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #9aa5ad;
+    }
+    .spec td:first-child { color: #6b7780; font-size: 0.78rem; white-space: nowrap; }
+    .spec .vars {
+        background: rgba(231,111,81,0.06);
+        border-left: 2px solid #e76f51;
+        padding: 14px 18px;
+        margin-top: 18px;
+        font-size: 0.85rem;
+    }
+    .spec .vars strong { color: #e76f51; letter-spacing: 0.05em; font-size: 0.72rem; text-transform: uppercase; }
+    .spec .locked {
+        background: rgba(26,58,82,0.04);
+        border-left: 2px solid #1a3a52;
+        padding: 14px 18px;
+        margin-top: 12px;
+        font-size: 0.85rem;
+    }
+    .spec .locked strong { color: #1a3a52; letter-spacing: 0.05em; font-size: 0.72rem; text-transform: uppercase; }
+
+    /* ── Variant row at the bottom: same frame, different products ── */
+    .variants {
+        max-width: 1400px;
+        margin: 60px auto 0;
+        text-align: center;
+    }
+    .variants h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 1.5rem;
+        margin-bottom: 28px;
+        color: #1a3a52;
+    }
+    .variants .row {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+    .variants .mini { transform: scale(0.65); transform-origin: top center; margin-bottom: -260px; }
+</style>
+</head>
+<body>
+    <div class="page-head">
+        <h1>End Card — generalized spec</h1>
+        <p>One locked frame. Three things change per video: <strong>hero photo</strong>, <strong>name</strong>, <strong>price</strong>. Everything else stays exactly as drawn.</p>
+    </div>
+
+    <div class="stage">
+        <!-- The frame, at 0.4× scale (so 1080×1920 → 432×768 on screen) -->
+        <div class="frame">
+            <div class="ec-wordmark">O R L O</div>
+            <div class="ec-hero">
+                <div class="ec-hero-placeholder">hero photo</div>
+            </div>
+            <div class="ec-name">Vintage Beetle</div>
+            <div class="ec-price">AED 119</div>
+            <div class="ec-divider"></div>
+            <div class="ec-pill">Shop Now</div>
+            <div class="ec-url">orlostore.com</div>
+            <div class="ec-handle">@orlostore</div>
+        </div>
+
+        <!-- Spec panel -->
+        <div class="spec">
+            <h2>Locked frame · 1080 × 1920</h2>
+            <table>
+                <thead><tr><th>Band (px)</th><th>Element</th><th>Type</th></tr></thead>
+                <tbody>
+                    <tr><td>200&ndash;280</td><td>ORLO wordmark</td><td>DM Sans 600 · 32pt · ls 0.4em · navy</td></tr>
+                    <tr><td>320&ndash;1140</td><td>Product hero</td><td>720 × 720 max, centered, on cream</td></tr>
+                    <tr><td>1200&ndash;1260</td><td>Product name</td><td>DM Sans 500 · 38pt · navy</td></tr>
+                    <tr><td>1300&ndash;1360</td><td>Price</td><td>DM Sans 600 · 44pt · navy</td></tr>
+                    <tr><td>1450</td><td>Hairline (120px wide)</td><td>navy 20% · ties name + price into a block</td></tr>
+                    <tr><td>1500&ndash;1560</td><td>Shop Now pill</td><td>DM Sans 500 · 24pt · cream on navy · pill radius</td></tr>
+                    <tr><td>1660&ndash;1700</td><td>orlostore.com</td><td>DM Sans 400 · 22pt · soft grey</td></tr>
+                    <tr><td>1720&ndash;1740</td><td>@orlostore</td><td>DM Sans 400 · 18pt · lighter grey</td></tr>
+                </tbody>
+            </table>
+
+            <div class="vars">
+                <strong>Per-video variables (3 only)</strong><br>
+                Hero photo · Product name (1–2 words) · Price
+            </div>
+
+            <div class="locked">
+                <strong>Locked forever</strong><br>
+                Background cream <code>#f8f6f2</code> · ORLO wordmark · pill copy + colour · URL · handle · all typography · all spacing · all band positions
+            </div>
+        </div>
+    </div>
+
+    <!-- Variant row: same template, different products -->
+    <div class="variants">
+        <h2>Same template, three products</h2>
+        <div class="row">
+            <div class="mini">
+                <div class="frame">
+                    <div class="ec-wordmark">O R L O</div>
+                    <div class="ec-hero"><div class="ec-hero-placeholder">Beetle</div></div>
+                    <div class="ec-name">Vintage Beetle</div>
+                    <div class="ec-price">AED 119</div>
+                    <div class="ec-divider"></div>
+                    <div class="ec-pill">Shop Now</div>
+                    <div class="ec-url">orlostore.com</div>
+                    <div class="ec-handle">@orlostore</div>
+                </div>
+            </div>
+            <div class="mini">
+                <div class="frame">
+                    <div class="ec-wordmark">O R L O</div>
+                    <div class="ec-hero"><div class="ec-hero-placeholder">Mustang</div></div>
+                    <div class="ec-name">Cherry Mustang</div>
+                    <div class="ec-price">AED 159</div>
+                    <div class="ec-divider"></div>
+                    <div class="ec-pill">Shop Now</div>
+                    <div class="ec-url">orlostore.com</div>
+                    <div class="ec-handle">@orlostore</div>
+                </div>
+            </div>
+            <div class="mini">
+                <div class="frame">
+                    <div class="ec-wordmark">O R L O</div>
+                    <div class="ec-hero"><div class="ec-hero-placeholder">Camera</div></div>
+                    <div class="ec-name">Brass Camera</div>
+                    <div class="ec-price">AED 89</div>
+                    <div class="ec-divider"></div>
+                    <div class="ec-pill">Shop Now</div>
+                    <div class="ec-url">orlostore.com</div>
+                    <div class="ec-handle">@orlostore</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
