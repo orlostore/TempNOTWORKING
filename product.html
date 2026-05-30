@@ -251,6 +251,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 
   /* ═════════ CONSIDERED ALONGSIDE — paired products section ═════════ */
   .considered-alongside{background:#f8f6f2;padding:42px 22px 36px;margin:0}
+  /* Desktop: more breathing room above the collection band heading — it was
+     sitting awkwardly close to the gallery thumbnails on wide viewports. */
+  @media(min-width:769px){.considered-alongside{padding-top:72px;padding-bottom:56px}}
   .considered-alongside[hidden]{display:none!important}
   .considered-alongside .ca-inner{max-width:760px;margin:0 auto}
   .considered-alongside .ca-heading{font-family:'Cormorant Garamond',serif!important;font-style:italic!important;font-weight:400!important;font-size:2rem!important;color:#1a3a52;text-align:left;letter-spacing:0.005em;margin:0 0 28px;line-height:1.1}
