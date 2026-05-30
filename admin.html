@@ -365,10 +365,21 @@
             align-items: center;
             gap: 6px;
         }
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #0f2638; transform: translateY(-1px); }
         .btn-secondary { background: transparent; color: var(--primary); border: 1px solid rgba(26,58,82,0.20); }
         .btn-secondary:hover { background: rgba(26,58,82,0.04); border-color: var(--primary); }
+
+        /* Toolbar grouping — hairline dividers + overflow menu (best practice, ORLO calm register) */
+        .toolbar-divider { display:inline-block; width:1px; height:22px; background:rgba(26,58,82,0.15); margin:0 4px; vertical-align:middle; flex-shrink:0; }
+        .toolbar-more { position:relative; display:inline-block }
+        .toolbar-more .btn { display:inline-flex; align-items:center; gap:6px }
+        .toolbar-more .caret { display:inline-block; width:6px; height:6px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(45deg); margin-top:-3px; margin-left:2px }
+        .more-menu { position:absolute; top:calc(100% + 6px); right:0; background:#fff; border:1px solid rgba(26,58,82,0.15); box-shadow:0 6px 24px rgba(26,58,82,0.10); border-radius:6px; padding:6px; min-width:220px; z-index:100; display:none }
+        .more-menu.active { display:block }
+        .more-item { display:block; width:100%; padding:9px 14px; font-family:'DM Sans',sans-serif; font-size:0.82rem; color:#1a3a52; background:transparent; border:none; cursor:pointer; text-align:left; text-decoration:none; border-radius:4px; transition:background .12s }
+        .more-item:hover { background:rgba(26,58,82,0.04) }
+        .more-separator { height:1px; background:rgba(26,58,82,0.08); margin:6px 4px }
         .btn-success { background: var(--success); color: white; }
         .btn-success:hover { background: #218838; }
         .btn-danger { background: var(--danger); color: white; }
@@ -1384,14 +1395,22 @@
                 </div>
                 <button class="btn btn-primary" onclick="openAddModal()">+ Add Product</button>
                 <button class="btn btn-secondary" onclick="refreshProducts()">Refresh</button>
+                <span class="toolbar-divider"></span>
                 <button class="btn btn-secondary" onclick="openHeroesModal()" title="Manage homepage hero / banner">Heroes</button>
                 <button class="btn btn-secondary" onclick="openPopularNowModal()" title="Curate which products appear in the Popular Now band on the homepage">Popular Now</button>
                 <button class="btn btn-secondary" onclick="openCollectionsModal()" title="Manage product collections — group products together on the homepage and PDP">Collections</button>
-                <button class="btn btn-secondary" onclick="openSpecPromptModal()" title="Generate Gemini dimension overlay prompt for any product">Spec Prompt</button>
-                <button class="btn btn-secondary" onclick="openCleanCataloguePromptModal()" title="Generate Gemini prompt to clean raw photos: remove background + place on warm beige #E5DCCF + WebP output">Clean Catalogue</button>
-                <button class="btn btn-secondary" onclick="openLifestylePromptModal()" title="Generate Gemini editorial lifestyle prompt — product in a styled scene for Popular Now / hero / IG / TikTok">Lifestyle</button>
-                <a class="btn btn-secondary" href="brand-guide.html" target="_blank" rel="noopener" title="Product image guide — site, IG, TikTok specs + blank canvas templates">Brand Guide</a>
-                <a class="btn btn-secondary" href="orlo-video-brief.md" target="_blank" rel="noopener" title="Copy-paste brief for a fresh Claude chat to build a Reel / TikTok — locked v3 spec">Video Brief</a>
+                <span class="toolbar-divider"></span>
+                <div class="toolbar-more">
+                    <button class="btn btn-secondary" onclick="toggleMoreMenu(event)" title="More tools — prompts, brand guide, video brief">More <span class="caret"></span></button>
+                    <div class="more-menu" id="moreMenu">
+                        <button class="more-item" onclick="closeMoreMenu(); openSpecPromptModal();" title="Generate Gemini dimension overlay prompt for any product">Spec Prompt</button>
+                        <button class="more-item" onclick="closeMoreMenu(); openCleanCataloguePromptModal();" title="Generate Gemini prompt to clean raw photos: remove background + place on warm beige #E5DCCF + WebP output">Clean Catalogue</button>
+                        <button class="more-item" onclick="closeMoreMenu(); openLifestylePromptModal();" title="Generate Gemini editorial lifestyle prompt — product in a styled scene for Popular Now / hero / IG / TikTok">Lifestyle</button>
+                        <div class="more-separator"></div>
+                        <a class="more-item" href="brand-guide.html" target="_blank" rel="noopener" title="Product image guide — site, IG, TikTok specs + blank canvas templates">Brand Guide</a>
+                        <a class="more-item" href="orlo-video-brief.md" target="_blank" rel="noopener" title="Copy-paste brief for a fresh Claude chat to build a Reel / TikTok">Video Brief</a>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -6013,6 +6032,20 @@
                 timeEl.textContent += ' (stale)';
             }, 300000);
         }
+
+        // ═════════ TOOLBAR overflow menu ═════════
+        function toggleMoreMenu(e) {
+            if (e) e.stopPropagation();
+            document.getElementById('moreMenu').classList.toggle('active');
+        }
+        function closeMoreMenu() {
+            const menu = document.getElementById('moreMenu');
+            if (menu) menu.classList.remove('active');
+        }
+        document.addEventListener('click', (e) => {
+            const more = e.target.closest('.toolbar-more');
+            if (!more) closeMoreMenu();
+        });
 
         // ═════════ HEROES (homepage banner) admin ═════════
         let heroesList = [];
