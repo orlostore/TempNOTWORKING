@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ORLO End Card — v2 typography pass</title>
+<title>ORLO End Card — v3 locked spec</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
@@ -16,9 +16,18 @@
         color: #1a3a52;
     }
     .page-head {
-        max-width: 1200px;
+        max-width: 1100px;
         margin: 0 auto 40px;
         text-align: center;
+    }
+    .page-head .eyebrow {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: #9aa5ad;
+        margin-bottom: 8px;
+        font-weight: 500;
     }
     .page-head h1 {
         font-family: 'Cormorant Garamond', serif;
@@ -31,38 +40,19 @@
     .page-head p {
         font-size: 0.95rem;
         color: #6b7780;
-        max-width: 720px;
+        max-width: 700px;
         margin: 0 auto;
         line-height: 1.6;
     }
+
     .stage {
         display: flex;
         justify-content: center;
         align-items: flex-start;
         gap: 60px;
         flex-wrap: wrap;
-        max-width: 1500px;
+        max-width: 1400px;
         margin: 0 auto;
-    }
-    .option-block {
-        text-align: center;
-    }
-    .option-label {
-        font-family: 'DM Sans', sans-serif;
-        font-size: 0.72rem;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: #9aa5ad;
-        margin-bottom: 6px;
-        font-weight: 500;
-    }
-    .option-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-style: italic;
-        font-weight: 500;
-        font-size: 1.35rem;
-        color: #1a3a52;
-        margin-bottom: 20px;
     }
 
     /* ──────────────────────────────────────────────────────────
@@ -78,22 +68,23 @@
         flex-shrink: 0;
     }
 
-    /* Wordmark — unchanged */
-    .ec-wordmark {
+    /* Logo badge — real ORLO mark, sized understated.
+       170px on 1080 source → 68px on 432 screen frame.
+       Top edge at 110px on 1080 → 44px on screen. */
+    .ec-logo {
         position: absolute;
-        top: 80px; left: 0; right: 0;
-        text-align: center;
-        font-family: 'DM Sans', sans-serif;
-        font-weight: 600;
-        font-size: 12.8px;
-        letter-spacing: 0.4em;
-        color: #1a3a52;
+        top: 44px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 68px;
+        height: 68px;
+        object-fit: contain;
     }
 
-    /* Hero — unchanged */
+    /* Hero — band 320-1140 → scaled 128-456 (unchanged) */
     .ec-hero {
         position: absolute;
-        top: 128px;
+        top: 140px;
         left: 50%;
         transform: translateX(-50%);
         width: 288px;
@@ -117,52 +108,34 @@
         font-size: 0.85rem;
     }
 
-    /* ── v2A: all DM Sans, calmer ────────────────────────────── */
-    .v2a .ec-name {
+    /* Name — Cormorant italic (Option B confirmed) */
+    .ec-name {
         position: absolute;
-        top: 480px; left: 0; right: 0;
-        text-align: center;
-        font-family: 'DM Sans', sans-serif;
-        font-weight: 500;
-        font-size: 14.4px;       /* 36pt × 0.4 */
-        color: #1a3a52;
-        letter-spacing: 0.01em;
-    }
-    .v2a .ec-price {
-        position: absolute;
-        top: 514px; left: 0; right: 0;
-        text-align: center;
-        font-family: 'DM Sans', sans-serif;
-        font-weight: 500;            /* 600 → 500 calmer */
-        font-size: 12.8px;          /* 44pt → 32pt */
-        color: #1a3a52;
-        letter-spacing: 0.02em;
-    }
-
-    /* ── v2B: Cormorant italic name (editorial flourish) ──────── */
-    .v2b .ec-name {
-        position: absolute;
-        top: 472px; left: 0; right: 0;
+        top: 480px;
+        left: 0; right: 0;
         text-align: center;
         font-family: 'Cormorant Garamond', serif;
         font-style: italic;
         font-weight: 500;
-        font-size: 18.4px;          /* 46pt — Cormorant reads smaller than DM Sans at same px */
+        font-size: 18.4px;          /* 46pt @ 1080 */
         color: #1a3a52;
         letter-spacing: 0.005em;
     }
-    .v2b .ec-price {
+
+    /* Price — calm DM Sans */
+    .ec-price {
         position: absolute;
-        top: 516px; left: 0; right: 0;
+        top: 520px;
+        left: 0; right: 0;
         text-align: center;
         font-family: 'DM Sans', sans-serif;
         font-weight: 500;
-        font-size: 12.8px;          /* same calmed price as v2a */
+        font-size: 12.8px;          /* 32pt @ 1080 */
         color: #1a3a52;
         letter-spacing: 0.02em;
     }
 
-    /* Hairline — same in both */
+    /* Hairline */
     .ec-divider {
         position: absolute;
         top: 568px;
@@ -173,7 +146,7 @@
         background: rgba(26,58,82,0.20);
     }
 
-    /* Pill — same in both */
+    /* Shop Now pill */
     .ec-pill {
         position: absolute;
         top: 594px;
@@ -185,133 +158,197 @@
         border-radius: 999px;
         font-family: 'DM Sans', sans-serif;
         font-weight: 500;
-        font-size: 9.6px;           /* 24pt × 0.4 */
+        font-size: 9.6px;
         letter-spacing: 0.04em;
         white-space: nowrap;
     }
 
-    /* Footer — BUMPED in both */
+    /* Footer — bumped per v2 */
     .ec-url {
         position: absolute;
-        top: 670px;                 /* dropped a touch for breathing room */
+        top: 670px;
         left: 0; right: 0;
         text-align: center;
         font-family: 'DM Sans', sans-serif;
         font-weight: 400;
-        font-size: 10.4px;          /* 22pt → 26pt */
-        color: #6b7780;             /* darker for legibility */
+        font-size: 10.4px;          /* 26pt @ 1080 */
+        color: #6b7780;
         letter-spacing: 0.02em;
     }
     .ec-handle {
         position: absolute;
-        top: 700px;                 /* spaced 30px below url (was 26px) */
+        top: 700px;
         left: 0; right: 0;
         text-align: center;
         font-family: 'DM Sans', sans-serif;
         font-weight: 400;
-        font-size: 9.2px;           /* 18pt → 23pt */
-        color: #9aa5ad;             /* a step lighter than url */
+        font-size: 9.2px;           /* 23pt @ 1080 */
+        color: #9aa5ad;
         letter-spacing: 0.02em;
     }
 
-    /* Comparison panel below */
-    .compare {
-        max-width: 1100px;
-        margin: 60px auto 0;
-        padding: 28px 36px;
-        background: rgba(255,255,255,0.55);
-        border-radius: 8px;
-        border-left: 2px solid #1a3a52;
+    /* Spec panel */
+    .spec {
+        max-width: 500px;
+        font-size: 0.9rem;
+        line-height: 1.7;
     }
-    .compare h3 {
+    .spec h2 {
         font-family: 'Cormorant Garamond', serif;
         font-style: italic;
         font-weight: 500;
-        font-size: 1.4rem;
-        margin-bottom: 14px;
+        font-size: 1.5rem;
+        margin-bottom: 18px;
         color: #1a3a52;
     }
-    .compare table {
+    .spec table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
+        margin-bottom: 20px;
     }
-    .compare th, .compare td {
+    .spec th, .spec td {
         text-align: left;
-        padding: 9px 14px;
-        border-bottom: 1px solid rgba(26,58,82,0.08);
+        padding: 8px 10px;
+        border-bottom: 1px solid rgba(26,58,82,0.10);
+        vertical-align: top;
     }
-    .compare th {
+    .spec th {
+        font-weight: 600;
         font-size: 0.7rem;
         text-transform: uppercase;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.1em;
         color: #9aa5ad;
-        font-weight: 600;
     }
-    .compare td:first-child {
+    .spec td:first-child { color: #6b7780; font-size: 0.78rem; white-space: nowrap; }
+    .spec .vars {
+        background: rgba(231,111,81,0.06);
+        border-left: 2px solid #e76f51;
+        padding: 14px 18px;
+        margin-top: 18px;
+        font-size: 0.85rem;
+    }
+    .spec .vars strong { color: #e76f51; letter-spacing: 0.05em; font-size: 0.72rem; text-transform: uppercase; }
+    .spec .locked {
+        background: rgba(26,58,82,0.04);
+        border-left: 2px solid #1a3a52;
+        padding: 14px 18px;
+        margin-top: 12px;
+        font-size: 0.85rem;
+    }
+    .spec .locked strong { color: #1a3a52; letter-spacing: 0.05em; font-size: 0.72rem; text-transform: uppercase; }
+
+    /* Variant row */
+    .variants {
+        max-width: 1400px;
+        margin: 60px auto 0;
+        text-align: center;
+    }
+    .variants h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
         font-weight: 500;
+        font-size: 1.5rem;
+        margin-bottom: 28px;
         color: #1a3a52;
-        white-space: nowrap;
     }
-    .compare .was { color: #9aa5ad; text-decoration: line-through; }
-    .compare .now { color: #1a3a52; font-weight: 500; }
-    .compare .same { color: #6b7780; font-style: italic; font-size: 0.8rem; }
+    .variants .row {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+    .variants .mini { transform: scale(0.65); transform-origin: top center; margin-bottom: -260px; }
 </style>
 </head>
 <body>
     <div class="page-head">
-        <h1>End Card — typography v2</h1>
-        <p>Two options side-by-side. Both calm the price + bump the footer. They differ on the name: <strong>v2A</strong> stays all DM Sans for a clean modern read; <strong>v2B</strong> brings Cormorant italic on the name as the editorial flourish — the ORLO signature on emotional moments.</p>
+        <div class="eyebrow">v3 · locked spec</div>
+        <h1>End Card — final</h1>
+        <p>Real ORLO logo at top (understated, ~16% of frame width). Cormorant italic name, calm DM Sans price, navy Shop Now pill, bumped footer. Three variables per video: <strong>hero · name · price</strong>.</p>
     </div>
 
     <div class="stage">
-        <!-- v2A: all DM Sans, calmer everything -->
-        <div class="option-block">
-            <div class="option-label">Option A</div>
-            <div class="option-title">All DM Sans · calmer</div>
-            <div class="frame v2a">
-                <div class="ec-wordmark">O R L O</div>
-                <div class="ec-hero"><div class="ec-hero-placeholder">Beetle</div></div>
-                <div class="ec-name">Vintage Beetle</div>
-                <div class="ec-price">AED 119</div>
-                <div class="ec-divider"></div>
-                <div class="ec-pill">Shop Now</div>
-                <div class="ec-url">orlostore.com</div>
-                <div class="ec-handle">@orlostore</div>
-            </div>
+        <!-- The locked frame -->
+        <div class="frame">
+            <img src="logo.png" alt="ORLO" class="ec-logo">
+            <div class="ec-hero"><div class="ec-hero-placeholder">hero photo</div></div>
+            <div class="ec-name">Vintage Beetle</div>
+            <div class="ec-price">AED 119</div>
+            <div class="ec-divider"></div>
+            <div class="ec-pill">Shop Now</div>
+            <div class="ec-url">orlostore.com</div>
+            <div class="ec-handle">@orlostore</div>
         </div>
 
-        <!-- v2B: Cormorant italic name, calm DM Sans price -->
-        <div class="option-block">
-            <div class="option-label">Option B</div>
-            <div class="option-title">Cormorant italic name · ORLO signature</div>
-            <div class="frame v2b">
-                <div class="ec-wordmark">O R L O</div>
-                <div class="ec-hero"><div class="ec-hero-placeholder">Beetle</div></div>
-                <div class="ec-name">Vintage Beetle</div>
-                <div class="ec-price">AED 119</div>
-                <div class="ec-divider"></div>
-                <div class="ec-pill">Shop Now</div>
-                <div class="ec-url">orlostore.com</div>
-                <div class="ec-handle">@orlostore</div>
+        <!-- Spec panel -->
+        <div class="spec">
+            <h2>Locked frame · 1080 × 1920</h2>
+            <table>
+                <thead><tr><th>Band (px @ 1080)</th><th>Element</th><th>Spec</th></tr></thead>
+                <tbody>
+                    <tr><td>110&ndash;280</td><td>ORLO logo</td><td>logo.png · 170 × 170 · centered · transparent PNG</td></tr>
+                    <tr><td>350&ndash;1140</td><td>Product hero</td><td>720 × 720 max · centered · on cream</td></tr>
+                    <tr><td>1200&ndash;1260</td><td>Product name</td><td>Cormorant italic 500 · 46pt · navy</td></tr>
+                    <tr><td>1300&ndash;1340</td><td>Price</td><td>DM Sans 500 · 32pt · navy</td></tr>
+                    <tr><td>1420</td><td>Hairline (120px)</td><td>navy @ 20%</td></tr>
+                    <tr><td>1485&ndash;1545</td><td>Shop Now pill</td><td>DM Sans 500 · 24pt · cream on navy · 999px radius</td></tr>
+                    <tr><td>1675&ndash;1705</td><td>orlostore.com</td><td>DM Sans 400 · 26pt · #6b7780</td></tr>
+                    <tr><td>1750&ndash;1780</td><td>@orlostore</td><td>DM Sans 400 · 23pt · #9aa5ad</td></tr>
+                </tbody>
+            </table>
+            <div class="vars">
+                <strong>Per-video variables (3 only)</strong><br>
+                Hero photo · Product name (1–2 words) · Price
+            </div>
+            <div class="locked">
+                <strong>Locked forever</strong><br>
+                Cream <code>#f8f6f2</code> bg · ORLO logo asset + size + position · pill copy + colour · URL · handle · all typography · all spacing · all band positions
             </div>
         </div>
     </div>
 
-    <div class="compare">
-        <h3>What changed from v1</h3>
-        <table>
-            <thead><tr><th>Element</th><th>v1 (loud)</th><th>v2A · v2B (calm)</th></tr></thead>
-            <tbody>
-                <tr><td>Price</td><td><span class="was">DM Sans 600 · 44pt</span></td><td><span class="now">DM Sans 500 · 32pt</span></td></tr>
-                <tr><td>URL</td><td><span class="was">DM Sans 400 · 22pt · #9aa5ad</span></td><td><span class="now">DM Sans 400 · 26pt · #6b7780</span></td></tr>
-                <tr><td>Handle</td><td><span class="was">DM Sans 400 · 18pt</span></td><td><span class="now">DM Sans 400 · 23pt</span></td></tr>
-                <tr><td>Footer spacing</td><td><span class="was">URL→handle 26px gap</span></td><td><span class="now">30px gap, full footer dropped 10px</span></td></tr>
-                <tr><td>Name (v2A)</td><td><span class="same">DM Sans 500 · 38pt</span></td><td><span class="now">DM Sans 500 · 36pt</span></td></tr>
-                <tr><td>Name (v2B)</td><td><span class="same">DM Sans 500 · 38pt</span></td><td><span class="now">Cormorant italic 500 · 46pt</span></td></tr>
-                <tr><td>Wordmark, hero, pill, divider</td><td colspan="2"><span class="same">unchanged — locked across all variants</span></td></tr>
-            </tbody>
-        </table>
+    <!-- Variant row -->
+    <div class="variants">
+        <h2>Same template, three products</h2>
+        <div class="row">
+            <div class="mini">
+                <div class="frame">
+                    <img src="logo.png" alt="" class="ec-logo">
+                    <div class="ec-hero"><div class="ec-hero-placeholder">Beetle</div></div>
+                    <div class="ec-name">Vintage Beetle</div>
+                    <div class="ec-price">AED 119</div>
+                    <div class="ec-divider"></div>
+                    <div class="ec-pill">Shop Now</div>
+                    <div class="ec-url">orlostore.com</div>
+                    <div class="ec-handle">@orlostore</div>
+                </div>
+            </div>
+            <div class="mini">
+                <div class="frame">
+                    <img src="logo.png" alt="" class="ec-logo">
+                    <div class="ec-hero"><div class="ec-hero-placeholder">Mustang</div></div>
+                    <div class="ec-name">Cherry Mustang</div>
+                    <div class="ec-price">AED 159</div>
+                    <div class="ec-divider"></div>
+                    <div class="ec-pill">Shop Now</div>
+                    <div class="ec-url">orlostore.com</div>
+                    <div class="ec-handle">@orlostore</div>
+                </div>
+            </div>
+            <div class="mini">
+                <div class="frame">
+                    <img src="logo.png" alt="" class="ec-logo">
+                    <div class="ec-hero"><div class="ec-hero-placeholder">Camera</div></div>
+                    <div class="ec-name">Brass Camera</div>
+                    <div class="ec-price">AED 89</div>
+                    <div class="ec-divider"></div>
+                    <div class="ec-pill">Shop Now</div>
+                    <div class="ec-url">orlostore.com</div>
+                    <div class="ec-handle">@orlostore</div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
