@@ -491,6 +491,25 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   </style>
 </head>
 <body>
+<!-- TEMP DEBUG STRIP — remove after diagnosing the tablet gap issue -->
+<div id="__debugStrip" style="position:fixed;top:8px;left:8px;background:#e76f51;color:#fff;padding:8px 12px;z-index:99999;font-family:monospace;font-size:12px;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.3);max-width:90vw;line-height:1.4"></div>
+<script>
+  function __updateDebug(){
+    var c = document.querySelector('.product-page-container.desktop-product');
+    var p = document.querySelector('.product-page');
+    var dpc = c ? getComputedStyle(c) : null;
+    var ppc = p ? getComputedStyle(p) : null;
+    document.getElementById('__debugStrip').innerHTML =
+      'W: ' + window.innerWidth + ' × ' + window.innerHeight +
+      '<br>container display: ' + (dpc ? dpc.display : '?') +
+      '<br>container min-H: ' + (dpc ? dpc.minHeight : '?') +
+      '<br>page display: ' + (ppc ? ppc.display : '?') +
+      '<br>page min-H: ' + (ppc ? ppc.minHeight : '?') +
+      '<br>page align-content: ' + (ppc ? ppc.alignContent : '?');
+  }
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(__updateDebug, 200); });
+  window.addEventListener('resize', __updateDebug);
+</script>
 <header class="pdp-lockup-nav">
   <a href="/" class="pdp-lockup">
     <img class="logo-img" src="logos/svg/Color%20logo%20-%20no%20background.svg" alt="ORLO" onerror="this.src='logo.png'">
