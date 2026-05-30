@@ -1,4 +1,4 @@
-# ORLO REEL — UPDATED SPEC (v3.3 — pre-render checks + tighter price vignette, May 2026)
+# ORLO REEL — UPDATED SPEC (v3.4 — end card generalized & calmed, May 2026)
 
 You are building a vertical reel/TikTok video for ORLO Store. This spec OVERRIDES anything from prior conversations. Follow exactly.
 
@@ -36,7 +36,7 @@ Before exporting a single frame, verify these. If any check fails, **STOP and re
 - File: the standard ORLO logo (navy organic blob + coral textured dot + cream "ORLO" wordmark). No UAE flag in the lockup. No tagline baked into the logo.
 - **Intro size:** 360 × 360 px, centred, y ≈ 760
 - **Corner-parked size** (scenes 2.0–14.0s): 125 × 125 px, anchored 50 px from top-left, 100% opacity, ROCK-SOLID throughout
-- **End-card size:** 340 × 340 px, centred horizontally, y ≈ 220
+- **End-card mark:** horizontal lock-up — badge (90 × 90) · 1px hairline divider (height 60, navy 25% opacity) · upright Cormorant Garamond wordmark "ORL[O]" (NOT italic). See End Card section for full lock-up spec.
 - NEVER make white pixels transparent — only multiply the alpha channel if applying opacity
 
 ## Coral accent line — TWO places, same alignment rule (both CENTERED under their logo)
@@ -56,24 +56,47 @@ Before exporting a single frame, verify these. If any check fails, **STOP and re
 - **Sequential beats:** EN appears alone for ~3 seconds, hard cut to AR alone for ~3 seconds. Same scene, same product, language swaps in the headline area.
 - Both languages get their own breathing room.
 
-## End card — REDESIGNED (v3 — fewer oranges, price reworked)
-Cream `#F8F6F2` background, stacked top to bottom:
+## End card — LOCKED v3.4 (generalized, calmed, English-only)
+A single locked frame that works for **every product reel**. Only three variables change per video — everything else stays drawn as below.
 
-1. **ORLO logo** — 340 × 340 px, centred, y ≈ 220
-2. **EN tagline** — "QUALITY IS A CLICK AWAY" — DM Sans 500, 44pt, **navy** `#1A3A52`, letter-spaced 5 px
-3. **Coral divider** — 140 × 3 px, centred under the EN tagline (the only "loud" coral element above the pill)
-4. **AR tagline** — "الجودة على بُعد نقرة" — Almarai **700** (was 800), 54pt, **navy** (was coral — reduce coral count)
-5. **PRICE — REWORKED:** "AED 119" — **Cormorant Garamond italic 500**, 64pt, **navy**. Editorial price treatment, not a chunky marketing badge. Centred. Sits in the visual centre.
-6. **SHOP NOW pill — REFINED:** navy `#1A3A52` rounded pill, **760 × 120 px** (was 720 × 110), border-radius 60. **1 px coral border** at `rgba(231,111,81,0.4)`. Inside, with generous internal padding:
-   - "SHOP NOW" — DM Sans 800, 44pt, coral, **letter-spaced 0.18em**
-   - Separator dot — cream, **70% opacity** (was 100%)
-   - "تسوّق الآن" — Almarai 800, 44pt, coral
-   - For UNRELEASED products only: text becomes "COMING SOON · قريباً" (same pill, same colours)
-   - This is the ONE big coral moment on the end card — the visual focal point.
-7. **URL** — "orlostore.com" — DM Sans 700, 36pt (was 44pt), **navy** (was coral — reduce coral count). Sits just below the pill.
-8. **Trust badges row** at y ≈ H – 340, three columns: truck / lock / UAE flag, coral circle outlines at **40% opacity** (was 100% — recedes into footer), custom PIL-drawn pictograms (NEVER letter placeholders), EN labels (DM Sans 500, 32pt, navy), AR labels (Almarai 700, 30pt, grey `#A0A5AA`).
+**Frame:** 1080 × 1920, background cream `#F8F6F2`. All bands measured against the 1080-wide source.
 
-**Coral budget on end card (v3):** logo dot + coral divider + SHOP NOW pill text + tiny trust circles. **Three loud coral moments, not seven.** The SHOP NOW pill is the obvious focal point.
+**Per-video variables (3 only):**
+- Hero product photo
+- Product name (1–2 words)
+- Price
+
+**Locked elements, top to bottom:**
+
+1. **ORLO lock-up** — y ≈ 160 to 250, centred. Composite mark, three parts in a horizontal row:
+   - Badge — the official ORLO PNG, **90 × 90 px**, transparent background
+   - Hairline divider — **1 × 60 px**, navy `#1A3A52` at **25% opacity**, ~22 px gap each side
+   - Wordmark — "ORL[O]" — **upright Cormorant Garamond 500, 38pt**, letter-spacing 0.16em. The final "O" is coral `#E76F51`; "ORL" is navy `#1A3A52`. **Not italic.**
+
+2. **Product hero** — y ≈ 350 to 1140, 720 × 720 max, centred on cream. Use the clean catalogue photo (warm beige #E5DCCF background as per Brand Guide).
+
+3. **Product name** — y ≈ 1200, centred. **Cormorant Garamond italic 500, 46pt, navy.** 1–2 words.
+
+4. **Price** — y ≈ 1300, centred. **DM Sans 500, 32pt, navy**, letter-spacing 0.02em. Format "AED 119". Calm, not loud. (Was 600/44pt — felt shouty.)
+
+5. **Hairline divider** — y ≈ 1420, 120 × 1 px, centred, navy at **20% opacity**. Ties name + price into a single block, separates from the CTA.
+
+6. **Shop Now pill** — y ≈ 1485 to 1545, centred. Navy `#1A3A52` solid fill, no border, border-radius 999. Inside: **"Shop Now"** in DM Sans 500, 24pt, cream `#F8F6F2`, letter-spacing 0.04em. **English only inside the pill.** No Arabic, no separator dot. (Bilingual pill copy felt loud and burned coral the brain doesn't need at the close.)
+
+7. **URL** — "orlostore.com" — y ≈ 1675, DM Sans 400, 26pt, `#6B7780` soft grey, letter-spacing 0.02em.
+
+8. **Handle** — "@orlostore" — y ≈ 1750, DM Sans 400, 23pt, `#9AA5AA` lighter grey, letter-spacing 0.02em. Passive follow signal — never an explicit "Follow us" prompt.
+
+**What's NOT on the end card:**
+- No EN or AR tagline
+- No trust badges (free delivery / lock / UAE flag) — those live on the PDP, cart, and site footer, not on a 2-second closing frame
+- No "Follow us" copy — handle does the work passively
+- No urgency chrome (no FREE delivery, no countdown, no strikethrough, no star rating) — opposite of the ORLO register
+- No coral border on the pill, no coral divider, no Arabic anywhere on the end card
+
+**Coral budget on end card (v3.4):** exactly **one** — the final "O" in the wordmark. Pill is solid navy, name and price are navy. The single coral note is the brand signature, not a focal point. Hero product is the focal point.
+
+**Mockup reference:** `/end-card-mockup.html` in the repo. The Sample C frame (reduced) is the locked v3.4 layout.
 
 ## Timeline
 - 0.0–1.5s: Logo intro (centered fade-in + CENTERED coral divider draws under it)
@@ -124,6 +147,20 @@ This beat exists so the still-frame **cover** that IG and TikTok show on the fee
 DO NOT start rendering until the concept is confirmed. Render all 480 frames in one go.
 
 ---
+
+## v3.4 changelog vs v3.3
+- **End card fully redesigned and generalized.** A single locked frame that every reel reuses; only hero photo, product name, and price change per video. Mockup at `/end-card-mockup.html`.
+- **Bilingual content removed from end card.** No EN tagline, no AR tagline, no Arabic inside the Shop Now pill. End card is English-only by design — the AR/EN cadence already happens earlier in the reel (scenes 2.0–10.0s); the close doesn't need to duplicate it. Cleaner, calmer, more like a Hermès or Aesop close.
+- **Trust badges removed from end card.** Trust signals (free delivery, returns, secure checkout) live on the PDP, cart, and footer — not on a 2-second closing frame. Adding them on the end card splits attention with the Shop Now pill and dilutes both.
+- **Logo at top is now the lock-up** (badge + 1px hairline + upright Cormorant wordmark with coral final O), reduced size 90×90 badge / 38pt wordmark. Was 340×340 badge alone. The lock-up matches the site header so the brand mark is consistent across surfaces.
+- **Wordmark in the lock-up is UPRIGHT, not italic.** Cormorant Garamond italic is reserved for emotional beats (product name, headlines) — the wordmark itself stays upright to read as the brand signature.
+- **Product name added** in the end-card body (Cormorant italic 500, 46pt) — replaces the EN/AR tagline pair. Names the thing the viewer just saw, signs off cleanly.
+- **Price calmed:** 600/64pt → **500/32pt** in DM Sans. The big italic-Cormorant price treatment was for the 10–14s reveal beat (still in place there); on the end card it doesn't need to shout again. DM Sans 500 is quieter and pairs with the italic name above it.
+- **Hairline divider added** between price and Shop Now pill (120×1, navy 20%). Visually groups name + price into a block.
+- **Shop Now pill simplified:** solid navy fill, no coral border, cream text, English only, 24pt. Was 760×120 with 1px coral border and bilingual EN/AR coral text.
+- **Handle added** below URL — "@orlostore", DM Sans 400, 23pt. Passive follow signal.
+- **Footer text bumped for legibility:** URL 36pt → 26pt (wait — reduced because the old 36pt navy fought the pill; new 26pt soft-grey recedes correctly). Handle is also smaller and lighter than URL — clear hierarchy: pill > URL > handle.
+- **Coral budget on end card: 1 element** (the wordmark's final O). Was 3+ in v3.
 
 ## v3.3 changelog vs v3.2
 - **Added Pre-render verification block** — three explicit STOP-and-report-back checks before any rendering: (a) native 9:16 aspect ratio (no letterboxing), (b) real official ORLO logo file (no AI-generated stand-ins, no placeholders), (c) real source product photo. Triggered by a v3.2 reel that came back letterboxed AND with a placeholder-style logo — both should have been caught before frames were committed.
