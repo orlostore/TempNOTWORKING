@@ -96,6 +96,7 @@ function siteHeader(origin) {
 export function customerEmail({
     origin,
     titleEn,
+    titleStyle,  // 'italic' on emotional emails (Order Confirmed / Welcome), default 'upright' for utility
     bodyEn,
     bodyAr,
     metaLabel,
@@ -116,6 +117,11 @@ export function customerEmail({
     const ctaBg     = ctaColor    || C.navy;
     const boxBg     = infoBoxBg   || C.boxBg;
     const boxBorder = infoBoxBorder || C.coral;
+
+    // Title typography (italic Cormorant reserved for emotional moments only).
+    const titleCss = titleStyle === 'italic'
+        ? `font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:28px;letter-spacing:-0.005em;`
+        : `font-family:${F_SANS};font-weight:500;font-size:24px;letter-spacing:0.01em;`;
 
     const preheaderHtml = preheader
         ? `<div style="display:none;font-size:1px;color:${C.cream};line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">${preheader}</div>`
@@ -164,11 +170,11 @@ ${preheaderHtml}
             ${siteHeader(origin)}
             ${metaHtml}
             <tr><td style="padding:14px 36px 8px;background:${C.white};">
-                <h1 style="margin:0;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:32px;line-height:1.1;color:${C.navy};letter-spacing:-0.005em;text-align:center;">${titleEn}</h1>
+                <h1 style="margin:0;${titleCss}line-height:1.2;color:${C.navy};text-align:center;">${titleEn}</h1>
                 ${orderRefHtml}
             </td></tr>
             <tr><td style="padding:22px 36px 32px;background:${C.white};">
-                <p style="margin:0 0 16px;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:17px;line-height:1.6;color:${C.navy};">${bodyEn}</p>
+                <p style="margin:0 0 16px;font-family:${F_SANS};font-weight:400;font-size:15px;line-height:1.65;color:${C.navy};">${bodyEn}</p>
                 ${arHtml}
                 ${infoBoxHtml}
                 ${ctaHtml}
@@ -214,7 +220,7 @@ ${preheaderHtml}
             ${siteHeader('https://orlostore.com')}
             <tr><td style="padding:24px 32px 14px;background:${C.white};">
                 <p style="margin:0 0 8px;font-family:${F_SANS};font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:${C.soft};font-weight:500;">${metaLabel || 'ADMIN NOTIFICATION'}</p>
-                <h1 style="margin:0;font-family:${F_SERIF};font-style:italic;font-weight:400;font-size:24px;line-height:1.2;color:${C.navy};">${titleEn}</h1>
+                <h1 style="margin:0;font-family:${F_SANS};font-weight:500;font-size:22px;line-height:1.2;letter-spacing:0.01em;color:${C.navy};">${titleEn}</h1>
             </td></tr>
             <tr><td style="padding:14px 32px 28px;background:${C.white};font-family:${F_SANS};font-size:14px;line-height:1.6;color:${C.navy};">${bodyHtml}</td></tr>
             ${EMAIL_FOOTER_HTML}

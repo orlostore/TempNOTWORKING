@@ -15,6 +15,7 @@ function buildCustomerSample(template, origin) {
         orderConfirmed: {
             metaLabel: 'ORDER · CONFIRMED', orderRef: SAMPLE_ORDER_REF,
             titleEn: 'Order Confirmed!',
+            titleStyle: 'italic',  // emotional moment — keep editorial flourish
             bodyEn: `Hi ${CUSTOMER_NAME}, thank you for your order. We've received your payment and your order is being prepared.`,
             bodyAr: `مرحباً، شكراً لطلبك. تم استلام الدفع وجارٍ تجهيز طلبك.`,
             infoBoxEn: "<strong>What's next?</strong> We'll send you another email when your order has been dispatched.",
@@ -91,6 +92,7 @@ function buildCustomerSample(template, origin) {
         guestToAccount: {
             metaLabel: 'ACCOUNT · WELCOME',
             titleEn: `Welcome, ${CUSTOMER_NAME}!`,
+            titleStyle: 'italic',  // welcoming moment — keep editorial flourish
             bodyEn: 'Your account has been created. Here are your login details.',
             bodyAr: 'تم إنشاء حسابك. يرجى تغيير كلمة المرور بعد أول تسجيل دخول.',
             ctaUrl: `${origin}/verify?token=sample`, ctaText: 'Verify Email',
@@ -107,13 +109,13 @@ function buildAdminSample(template) {
         newOrder: {
             metaLabel: 'ADMIN · NEW ORDER',
             titleEn: 'New Order — AED 119.00 from Rami Habash (sample)',
-            bodyHtml: `<div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Customer</div><div style="font-family:'DM Sans',Arial,sans-serif;font-size:15px;color:#1a3a52;font-weight:500;">Rami Habash (sample)</div></div><div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Total</div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:28px;color:#1a3a52;line-height:1.1;">AED 119.00</div></div>`,
+            bodyHtml: `<div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Customer</div><div style="font-family:'DM Sans',Arial,sans-serif;font-size:15px;color:#1a3a52;font-weight:500;">Rami Habash (sample)</div></div><div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Total</div><div style="font-family:'DM Sans',Arial,sans-serif;font-weight:600;font-size:20px;color:#1a3a52;line-height:1.2;letter-spacing:0.02em;">AED 119.00</div></div>`,
             preheader: 'Sample admin email — new order',
         },
         returnRequest: {
             metaLabel: 'ADMIN · NEW RETURN REQUEST',
             titleEn: `Return Request — Order #${SAMPLE_ORDER_REF} (sample)`,
-            bodyHtml: `<div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Reason</div><div style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:16px;color:#1a3a52;line-height:1.5;">Item arrived with a small chip on the rear bumper.</div></div>`,
+            bodyHtml: `<div style="margin:0 0 14px;padding:14px 16px;background:#f8f6f2;border-left:2px solid #e76f51;"><div style="font-family:'DM Sans',Arial,sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9aa5ad;font-weight:500;margin-bottom:8px;">Reason</div><div style="font-family:'DM Sans',Arial,sans-serif;font-weight:400;font-size:14px;color:#1a3a52;line-height:1.6;">Item arrived with a small chip on the rear bumper.</div></div>`,
             preheader: 'Sample admin email — return request',
         },
     };

@@ -100,6 +100,7 @@ export async function onRequestPost(context) {
                 const html = customerEmail({
                     origin,
                     titleEn: `Welcome, ${name}!`,
+                    titleStyle: 'italic',  // welcoming moment — keep the editorial flourish
                     bodyEn: 'Your account has been created. Here are your login details:',
                     bodyAr: 'تم إنشاء حسابك. يرجى تغيير كلمة المرور بعد أول تسجيل دخول.',
                     ctaUrl: verifyUrl,

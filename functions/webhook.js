@@ -172,6 +172,7 @@ export async function onRequestPost(context) {
                         origin,
                         icon: '✅',
                         titleEn: 'Order Confirmed!',
+                        titleStyle: 'italic',  // emotional moment — keep the editorial flourish
                         bodyEn: `Hi ${customerName}, thank you for your order! We've received your payment and your order is being prepared.`,
                         bodyAr: `مرحباً ${customerName}، شكراً لطلبك! تم استلام الدفع وجارٍ تجهيز طلبك.`,
                         infoBoxEn: '<strong>What\'s next?</strong> We\'ll send you another email when your order has been dispatched.',
