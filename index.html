@@ -797,6 +797,25 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
            so the two read as one editorial block instead of feeling stranded across whitespace. */
         @media (min-width: 769px) {
           .section-editorial { padding-top: 16px; padding-bottom: 32px; }
+
+          /* Bump the editorial headline + eyebrow + sort sizes on wide viewports.
+             Mobile sizes untouched. Affects Popular Now, Shop by Category, New Arrivals, All Products. */
+          .section-editorial h2 { font-size: clamp(3rem, 5.5vw, 3.6rem); }
+          .section-editorial .meta { font-size: 0.72rem; }
+          #products .ed-meta-row .meta,
+          #products .price-sort-toggle { font-size: 0.72rem; }
+
+          /* Break the All Products meta-row out of the .section-editorial 680px container
+             so ALL PRODUCTS lines up with the first card's left edge and PRICE ↑↓ with
+             the last card's right edge. Editorial stays centered at 680px; meta-row alone
+             extends to the products container's content width. */
+          #products .section-editorial > .ed-meta-row {
+            width: min(calc(1180px - 2 * 1.34rem), calc(100vw - 2.68rem));
+            max-width: none;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+          }
         }
         .section-editorial .meta {
           font-family: 'DM Sans', sans-serif;
@@ -1140,15 +1159,15 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 <div class="container" id="products">
     <nav class="breadcrumb category-breadcrumb" id="categoryBreadcrumb" aria-label="Breadcrumb" style="display:none;"></nav>
     <h2 class="homepage-section-title all-products-title">All Products <span class="arabic-inline">جميع المنتجات</span></h2>
-    <div class="ed-meta-row">
-        <span class="meta">All Products</span>
-        <button class="price-sort-toggle" id="priceSortToggle" type="button" aria-label="Sort by price" data-state="default">
-            <span class="ps-label">Price</span>
-            <span class="ps-arrow ps-arrow-asc" aria-hidden="true">↑</span>
-            <span class="ps-arrow ps-arrow-desc" aria-hidden="true">↓</span>
-        </button>
-    </div>
     <div class="section-editorial">
+        <div class="ed-meta-row">
+            <span class="meta">All Products</span>
+            <button class="price-sort-toggle" id="priceSortToggle" type="button" aria-label="Sort by price" data-state="default">
+                <span class="ps-label">Price</span>
+                <span class="ps-arrow ps-arrow-asc" aria-hidden="true">↑</span>
+                <span class="ps-arrow ps-arrow-desc" aria-hidden="true">↓</span>
+            </button>
+        </div>
         <h2>Every object, <em>in one place.</em></h2>
         <p>The whole shelf, gathered for browsing. Filter by room, or simply wander.</p>
     </div>
