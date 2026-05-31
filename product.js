@@ -595,9 +595,9 @@ async function initProductPage() {
     if (stock <= 0) {
       cap.className = 'pdp-stock-caption soldout';
       cap.textContent = 'Sold out';
-    } else if (stock <= 4) {
+    } else if (stock === 1) {
       cap.className = 'pdp-stock-caption low';
-      cap.textContent = `Only ${stock} available`;
+      cap.textContent = 'Only one';
     } else {
       cap.className = 'pdp-stock-caption';
       cap.textContent = 'In stock';
