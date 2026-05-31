@@ -582,26 +582,36 @@ async function initProductPage() {
     }
   }
 
-  // Stock caption — quiet "In stock" / "Only N available" with dot indicator (per locked tag system)
+  // Stock caption — quiet "In stock" / "Only one" / "Sold out" with dot indicator.
+  // Mirrored on BOTH desktop (#productPrice) and mobile (#mobileProductPrice) for consistency.
   (function() {
-    if (!productPriceEl || !productPriceEl.parentNode) return;
-    let cap = document.getElementById('productStockCaption');
-    if (!cap) {
-      cap = document.createElement('div');
-      cap.id = 'productStockCaption';
-      productPriceEl.parentNode.insertBefore(cap, productPriceEl.nextSibling);
-    }
     const stock = product.totalStock != null ? product.totalStock : product.quantity || 0;
+    let className, text;
     if (stock <= 0) {
-      cap.className = 'pdp-stock-caption soldout';
-      cap.textContent = 'Sold out';
+      className = 'pdp-stock-caption soldout';
+      text = 'Sold out';
     } else if (stock === 1) {
-      cap.className = 'pdp-stock-caption low';
-      cap.textContent = 'Only one';
+      className = 'pdp-stock-caption low';
+      text = 'Only one';
     } else {
-      cap.className = 'pdp-stock-caption';
-      cap.textContent = 'In stock';
+      className = 'pdp-stock-caption';
+      text = 'In stock';
     }
+    const targets = [
+      { anchor: productPriceEl,                                         capId: 'productStockCaption' },
+      { anchor: document.getElementById('mobileProductPrice'),          capId: 'mobileProductStockCaption' },
+    ];
+    targets.forEach(function(t) {
+      if (!t.anchor || !t.anchor.parentNode) return;
+      let cap = document.getElementById(t.capId);
+      if (!cap) {
+        cap = document.createElement('div');
+        cap.id = t.capId;
+        t.anchor.parentNode.insertBefore(cap, t.anchor.nextSibling);
+      }
+      cap.className = className;
+      cap.textContent = text;
+    });
   })();
 
   // === EARLY PRICE ===
