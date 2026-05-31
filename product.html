@@ -167,12 +167,15 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
     }
   }
 
-  /* Desktop + tablet landscape (>=969px): kill the .product-buybox top gap so
+  /* Desktop + tablet (>=769px): kill the .product-buybox top gap so
      the padding above the Add to Cart (or transformed qty stepper) equals the
      padding below it to the delivery info row. The CLS-reservation min-height
      of 200px plus 1rem padding-top + 1rem margin-top was creating a huge
-     asymmetric whitespace strip above the button. */
-  @media (min-width: 969px) {
+     asymmetric whitespace strip above the button.
+     Note: was originally @media (min-width:969px) but user diagnostic showed
+     viewport 962px (narrow desktop / browser window) hitting the gap because
+     the rule didn't fire. Lowered to 769 to cover the full non-mobile range. */
+  @media (min-width: 769px) {
     .product-buybox {
       min-height: 0 !important;
       padding-top: 14px !important;
