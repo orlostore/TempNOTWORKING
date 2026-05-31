@@ -171,7 +171,7 @@ export async function onRequestDelete(context) {
 }
 
 // Helper function to verify token (with 30-day expiry)
-async function verifyToken(request, DB) {
+export async function verifyToken(request, DB) {
     const authHeader = request.headers.get('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return null;
