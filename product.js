@@ -1895,11 +1895,6 @@ function renderPricingTiers(containerId, product) {
   container.innerHTML = `
     <div class="pricing-tiers" data-product-id="${product.id}" style="margin-bottom:1rem; ${isMobile ? 'padding: 0 16px;' : ''}">
       <div class="tier-table">${tiersHTML}</div>
-      ${isMobile ? '' : `<div class="your-price-bar${activeDiscount > 0 ? ' has-savings' : ''}" style="margin-top:6px;">
-        <span class="your-price-label">Your price per piece</span>
-        <span class="your-price-value">AED ${activePrice.toFixed(2)}</span>
-        ${activeDiscount > 0 ? `<span class="your-price-badge">Save ${Math.round(activeDiscount)}%</span>` : ''}
-      </div>`}
     </div>
   `;
 }
