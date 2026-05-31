@@ -2574,7 +2574,7 @@
                     1. Fill in the product description + L × W × H (in cm).
                     2. Click <strong>Copy prompt</strong>.
                     3. In Gemini, <strong>attach the clean catalogue image</strong> of the product (warm beige #E5DCCF bg, no props) and paste the prompt.
-                    4. Gemini returns the same image with the dimensions overlaid — same square, same beige, no extra strip below, no typography spec leaking into the caption.
+                    4. Gemini returns the same square, single #E5DCCF tone, hairlines anchored to the silhouette, single one-line caption, no typography spec leaking into visible text.
                 </div>
 
                 <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:0;">
@@ -2610,7 +2610,7 @@
 
                         <div style="padding:12px 14px;background:#f8f6f2;border-left:3px solid #e76f51;font-size:0.74rem;line-height:1.6;color:#555;">
                             <strong style="color:#1a3a52;">Brand standards (locked, do not change in the prompt):</strong>
-                            Beige bg #E5DCCF (single tone across whole canvas, no second strip) · Navy hairlines #1A3A52, 1 px · Labels in DM Sans 400, uppercase · Caption in Cormorant Garamond italic 300 · No brackets / quotes around numbers · cm only · 1:1 square 2000 × 2000 · Output canvas equals input — no extension below or beside the original frame · Only the dimension numbers + the "Dimensions ·" caption appear as visible text (font names, hex codes, "px" etc. must never render).
+                            Single #E5DCCF tone edge-to-edge, no second strip · Navy hairlines #1A3A52, 1 px, anchored to silhouette leftmost/rightmost/highest visible points · Labels (Strings 1–3): DM Sans 400 uppercase, 14 px · Caption (final String): Cormorant Garamond italic 300, 22 px, rendered exactly once · 1:1 square 2000 × 2000, output canvas equals input · Visible text limited to the listed Strings — font names, hex codes, section headers, "px" etc. must never appear as pixels.
                         </div>
                     </div>
 
@@ -6353,71 +6353,56 @@
             const captionDims = flat
                 ? `L ${lNum} cm × W ${wNum} cm`
                 : `L ${lNum} cm × W ${wNum} cm × H ${hNum} cm`;
+            const captionStr = `Dimensions · ${captionDims}`;
 
-            const captionLine = `Dimensions · ${captionDims}`;
+            // Anonymous string identifiers — keeps the model from leaking "caption" / "label" words
+            const stringsBlock = flat
+                ? `- String-1: "${lNum} CM"\n- String-2: "${wNum} CM"\n- String-3: "${captionStr}"`
+                : `- String-1: "${lNum} CM"\n- String-2: "${wNum} CM"\n- String-3: "${hNum} CM"\n- String-4: "${captionStr}"`;
 
-            const visibleTextLines = flat
-                ? `${lNum} CM\n${wNum} CM\n${captionLine}`
-                : `${lNum} CM\n${wNum} CM\n${hNum} CM\n${captionLine}`;
+            const captionId = flat ? 'String-3' : 'String-4';
+            const lineCount = flat ? 'two' : 'three';
+            const renderList = flat
+                ? 'String-1, String-2, and String-3'
+                : 'String-1, String-2, String-3, and String-4';
 
-            const heightAnnotation = flat ? '' :
-`3. A thin navy hairline running vertically to the right of the product, with small arrow caps at both ends, indicating the HEIGHT. Its CM label sits beside the line, rotated 90 degrees so it reads vertically.
+            const heightLine = flat ? '' :
+`3. Vertical Height Line: runs perfectly vertical on the right side of the product, spanning from the bottom of the product's lowest visible point up to the top of its highest visible point. Both ends terminate in small arrow caps.
 `;
 
-            const widthIndex = flat ? '3' : '4';
-            const captionIndex = flat ? '4' : '5';
-            const totalCount = flat ? '4' : '5';
+            const heightPlacement = flat ? '' :
+`- String-3: rotate exactly 90 degrees counter-clockwise so the text reads vertically. Position 10 pixels to the right of the Vertical Height Line, centred along its length. Render in a clean sans-serif typeface (DM Sans), weight 400, colour #1A3A52, uppercase, approximately 14 px size.
+`;
 
-            return `I'm attaching a clean catalogue product photograph of ${desc} on a warm beige #E5DCCF background. Use this exact image as the base — do NOT redraw, restyle, recolour, or alter the product or background in any way. Only add the dimension annotations described below.
+            return `[BASE]
+Input: a clean catalogue product photograph of ${desc} on a solid #E5DCCF (warm beige) background.
+Preservation rule: keep the product and its background exactly as provided. Do not re-render, recolour, redraw, or distort the source product or its background.
 
-================================================================
-SECTION A — VISIBLE TEXT (the COMPLETE and ONLY set of text strings that may appear in the output image)
-================================================================
-<visible_text>
-${visibleTextLines}
-</visible_text>
+[STRINGS]
+Render only these literal characters as visible text inside the image. No other characters, titles, labels, or descriptive text of any kind are permitted anywhere in the output:
+${stringsBlock}
 
-The output image must contain exactly the ${totalCount} text strings inside the <visible_text> fence above, and absolutely no others. The caption line "${captionLine}" appears ONE TIME ONLY — there is no second caption line, no subtitle, no follow-up sentence, no description of the caption. Any string that is not inside the <visible_text> fence is an instruction for you (the AI) and must NEVER be rendered as pixels.
+[LINES]
+Draw ${lineCount} vector lines in colour #1A3A52 at 1-pixel stroke weight:
+1. Horizontal Length Line: runs left-to-right, level beneath the product, spanning from the leftmost visible point of the product silhouette to the rightmost visible point. Both ends terminate in small arrow caps.
+2. Perspective Width Line: runs at a slight 3D perspective angle (approximately 25 to 30 degrees below horizontal) at the front-right of the product, indicating depth side-to-side. Both ends terminate in small arrow caps.
+${heightLine}
+[PLACEMENT]
+- String-1: position horizontally, centred 10 pixels directly underneath the Horizontal Length Line. Render in a clean sans-serif typeface (DM Sans), weight 400, colour #1A3A52, uppercase, approximately 14 px size.
+- String-2: position horizontally, centred 10 pixels directly underneath the Perspective Width Line. Render in a clean sans-serif typeface (DM Sans), weight 400, colour #1A3A52, uppercase, approximately 14 px size.
+${heightPlacement}- ${captionId}: position horizontally, centred within the lower portion of the canvas, painted directly on top of the solid #E5DCCF background. This string is rendered exactly once. Render in an elegant serif italic typeface (Cormorant Garamond), italic, weight 300, colour #1A3A52, approximately 22 px size.
 
-================================================================
-SECTION B — ANNOTATIONS TO DRAW (shapes only — refer to the visible text from Section A by index)
-================================================================
-1. A thin navy hairline (colour #1A3A52, 1 px wide) running horizontally just below the product, from one end to the other, with small arrow caps at both ends, indicating the LENGTH. Its CM label sits centred just below the line.
+[CANVAS]
+- Fixed 2000 × 2000 pixels (1:1 square). The entire canvas, edge to edge, is a single uninterrupted layer of solid colour #E5DCCF. Paint all lines and text directly onto this single background layer.
+- Maintain the exact 1:1 square boundaries of the original input image. No expansion, no additional panels, no second tone anywhere on the canvas.
+- Object proportions: the product silhouette occupies 65 to 70 percent of the vertical frame height, positioned in the upper-middle of the frame with approximately 10 percent clear breathing space above.
+- Padding: the Horizontal Length Line touches the bottom of the product silhouette. Labels sit 10 pixels below their lines. ${captionId} sits 40 pixels below the lowest label, leaving approximately 15 percent clear background buffer at the bottom edge.
 
-2. A thin navy hairline at a slight diagonal beneath the front of the product, with small arrow caps, indicating the WIDTH (depth side-to-side). Its CM label sits beside it.
+[OUTPUT]
+- Render only the literal content of ${renderList} as visible text. Exclude every other visible character — meta-words, section headers, variable names, markdown symbols, bracket types, font engine parameters, hexadecimal codes, and any descriptive sentence about the caption or its styling.
+- Exclude alignment grids, secondary camera angles, reference boxes, blueprint lines, watermarks, logos, second product views, exploded diagrams, props, brackets [ ], braces { }, angle brackets < >, and quotation marks around the numbers.
 
-${heightAnnotation}${widthIndex}. The bottom strip caption sits centred under the product, painted directly on the beige background — NOT on a separate strip, NOT on a new panel. It uses the caption string from Section A. It appears once. There is no second caption line beneath it.
-
-================================================================
-SECTION C — TYPOGRAPHY (apply these rules to the strings in Section A — these words are instructions and must NEVER be rendered as visible text in the image)
-================================================================
-- For the three "${lNum} CM" / "${wNum} CM"${flat ? '' : ' / "' + hNum + ' CM"'} dimension labels: render in DM Sans, weight 400, colour navy #1A3A52, all uppercase, approximately 14 px size.
-- For the "${captionLine}" caption: render in Cormorant Garamond, italic, weight 300, colour navy #1A3A52, approximately 22 px size.
-
-================================================================
-SECTION D — CANVAS (hard rules — failure means the image is unusable)
-================================================================
-- Output canvas dimensions and aspect ratio must EQUAL the input image (1:1 square, 2000 × 2000 px). Do NOT extend the canvas downward, upward, or sideways. Do NOT add a new strip, band, panel, footer, or border beneath or beside the original frame.
-- Background colour throughout the ENTIRE output canvas must be exactly #E5DCCF — the same single beige as the input. No second tone, no lighter strip, no gradient, no drop shadow on the frame, no visible seam between regions.
-- ALL annotations (hairlines, arrow caps, CM labels, AND the Dimensions caption) sit INSIDE the original beige canvas, painted directly on top of the existing background.
-
-================================================================
-SECTION E — COMPOSITION (consistent with clean catalogue shot)
-================================================================
-- The product silhouette must occupy roughly 65–70% of the visible frame height. It sits in the upper-middle of the canvas with minimal breathing room above (~8–10% of frame height).
-- Place the dimension hairlines + their CM labels FLUSH directly beneath the product silhouette — no floating gap between the product's lowest point and the first dimension line.
-- Place the caption FLUSH below the dimension labels with no extra padding gap.
-- Bottom clearance below the caption: roughly 12–15% of frame height (≈240–300 px on a 2000 px canvas).
-- Goal: the product silhouette in this dimensions shot occupies the SAME visual height as the product silhouette in the clean catalogue shot — so when both render on the homepage card grid, they sit at the same size.
-
-================================================================
-SECTION F — HARD DON'TS
-================================================================
-- DO NOT render the words "Style", "Visible text", "DM Sans", "Cormorant Garamond", "weight", "italic", "navy", "uppercase", "px", "size", "label", "Section", "approximately", or any colour hex code (e.g. #1A3A52, #E5DCCF) as visible pixels. Those are instructions for you, not text for the image.
-- DO NOT render the caption line ${captionIndex === '4' ? 'a second time' : 'twice'}. The caption "${captionLine}" appears exactly once.
-- DO NOT add: white background swap, grey, rulers, grid lines, measurement icons, second product view, exploded diagram, props, watermarks, logos, square brackets [ ], curly braces { }, angle brackets < >, quotation marks around the numbers, any sentence beginning with "Dimensions in...", any sentence describing the caption's font.
-
-Aspect ratio: 1:1 square, 2000 × 2000 px. Output as WebP, ~90% quality.`;
+Output specification: 1:1 square, 2000 × 2000 px, WebP at approximately 90 percent quality.`;
         }
 
         function updateSpecPrompt() {
