@@ -86,7 +86,7 @@ A single locked frame that works for **every product reel**. Only three variable
    - Hairline divider — **1 × 60 px**, navy `#1A3A52` at **25% opacity**, ~22 px gap each side
    - Wordmark — "ORL[O]" — **upright Cormorant Garamond 500, 38pt**, letter-spacing 0.16em. The final "O" is coral `#E76F51`; "ORL" is navy `#1A3A52`. **Not italic.**
 
-2. **Product hero** — y ≈ 350 to 1140, 720 × 720 max, centred on cream. **MUST be the clean catalogue square** (warm beige #E5DCCF background, product alone, no props) — output from the admin "Clean Catalogue Prompt". NEVER the lifestyle catalogue / scene shot — the reel scenes already gave the lifestyle context; the end card is the commercial close where product clarity wins. If the clean catalogue square is missing for a product, STOP and ask before rendering.
+2. **Product hero** — y ≈ 350 to 1140, 720 × 720 max, centred on cream. **MUST be the clean catalogue square** (warm beige #E5DCCF background, product alone, no props) — output from the admin "Clean Catalogue Prompt". NEVER the lifestyle catalogue / scene shot — the reel scenes already gave the lifestyle context; the end card is the commercial close where product clarity wins. If the clean catalogue square is missing for a product, STOP and ask before rendering. **The product silhouette MUST be optically centred within the 720 × 720 slot** — both horizontally AND vertically. If the source image has asymmetric whitespace (product biased to one corner), crop or pad the source so the product's visual centre lands at the slot's centre. Do not just paste the source unchanged.
 
 3. **Product name** — y ≈ 1200, centred. **Cormorant Garamond italic 500, 54pt, navy.** Use the EXACT product name from the admin (e.g. "Vintage Dusty Pink Vespa"), not a nickname or shortened form like "Mini Vespa". 1–4 words.
 
@@ -94,7 +94,7 @@ A single locked frame that works for **every product reel**. Only three variable
 
 5. **Hairline divider** — y ≈ 1420, 120 × 1 px, centred, navy at **20% opacity**. Ties name + price into a single block, separates from the CTA.
 
-6. **Shop Now pill** — y ≈ 1485 to 1545, centred. **Explicit dimensions: 320 × 56 px** (not "auto-size to text"). Navy `#1A3A52` solid fill, no border, border-radius 28 px (or 999 — equivalent at this size). Inside: **"Shop Now"** in DM Sans 500, 28pt, cream `#F8F6F2`, letter-spacing 0.04em, vertically and horizontally centred. **English only inside the pill.** No Arabic, no separator dot.
+6. **Shop Now pill** — y ≈ 1480 to 1546, centred. **Explicit dimensions: 340 × 66 px** (bumped from 320 × 56 — gave it slightly more visual weight per real-world render feedback). Navy `#1A3A52` solid fill, no border, border-radius 33 px (or 999 — equivalent at this size). Inside: **"Shop Now"** in DM Sans 500, **30pt** (bumped from 28pt), cream `#F8F6F2`, letter-spacing 0.04em. **The text MUST be both horizontally AND vertically centred** inside the pill — no left/right padding asymmetry, no baseline-shifted vertical alignment. Use `text-align: center; display: flex; align-items: center; justify-content: center` semantics (or whatever the render tool's equivalent is for "true optical centre"). **English only inside the pill.** No Arabic, no separator dot.
 
 7. **URL** — "orlostore.com" — y ≈ 1675, DM Sans 400, 26pt, `#6B7780` soft grey, letter-spacing 0.02em.
 
