@@ -2568,13 +2568,30 @@
             </div>
             <div class="modal-body" style="padding:0;">
 
-                <!-- Inline how-to panel -->
+                <!-- TOP: image upload + render — the recommended path -->
+                <div style="background:linear-gradient(135deg,#eaf3ec,#d8ead9);padding:18px 22px;border-bottom:1px solid #c8dbcc;">
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                        <span style="font-size:1.1rem;">🎯</span>
+                        <strong style="color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;font-size:0.75rem;">Recommended — render locally with real brand fonts</strong>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:end;">
+                        <div>
+                            <label for="specLocalFile" style="display:block;font-size:0.72rem;font-weight:600;color:#1a3a52;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;">📎 Attach clean catalogue image</label>
+                            <input type="file" id="specLocalFile" accept="image/png,image/jpeg,image/webp" style="width:100%;padding:8px;border:1px solid #b3c8b7;border-radius:6px;font-size:0.85rem;background:#fff;cursor:pointer;">
+                        </div>
+                        <button class="btn btn-primary btn-small" type="button" onclick="renderSpecLocal()" style="font-size:0.78rem;padding:9px 14px;height:38px;">Render dimensions</button>
+                        <button class="btn btn-secondary btn-small" type="button" onclick="downloadSpecLocal()" style="font-size:0.78rem;padding:9px 14px;height:38px;">Download WebP</button>
+                    </div>
+                    <div id="specLocalStatusTop" style="font-size:0.72rem;color:#2e7d4f;margin-top:8px;line-height:1.4;">Upload your beige-background product photo. Preview appears at the bottom of this panel.</div>
+                </div>
+
+                <!-- Inline how-to panel — Gemini fallback -->
                 <div style="background:#f8f6f2;padding:14px 22px;border-bottom:1px solid #eee;font-size:0.78rem;line-height:1.6;color:#444;">
-                    <strong style="color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;font-size:0.7rem;">How to use</strong><br>
+                    <strong style="color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;font-size:0.7rem;">Or use Gemini (fallback — fonts won't be exact)</strong><br>
                     1. Fill in the product description + L × W × H (in cm).
                     2. Click <strong>Copy prompt</strong>.
                     3. In Gemini, <strong>attach the clean catalogue image</strong> of the product (warm beige #E5DCCF bg, no props) and paste the prompt.
-                    4. Gemini returns the same image with the dimensions overlaid — same square, same beige, no extra strip below, no typography spec leaking into the caption.
+                    4. Gemini returns the same image with the dimensions overlaid — but text fonts are approximate. For exact DM Sans / Cormorant Garamond, use Render locally above.
                 </div>
 
                 <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:0;">
@@ -2634,33 +2651,13 @@
                     </div>
                 </div>
 
-                <!-- LOCAL RENDER PANEL — bypass Gemini for the overlay, use real brand fonts -->
+                <!-- LOCAL RENDER PREVIEW — canvas only; upload + buttons live at the top of the modal -->
                 <div style="border-top:1px solid #eee;padding:20px 22px;background:#fafaf7;">
-                    <div style="margin-bottom:14px;">
-                        <h3 style="margin:0 0 4px;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;color:#1a3a52;font-size:1.3rem;">Local Render — pixel-perfect typography</h3>
-                        <p style="margin:0;font-size:0.8rem;color:#555;line-height:1.55;">Upload the clean catalogue image (warm beige #E5DCCF bg, product centred). We detect the product silhouette, draw the dimension hairlines + labels in real DM Sans / Cormorant Garamond, and export a 2000×2000 WebP. No prompt, no leaks, no font drift.</p>
+                    <label style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Local render preview (2000 × 2000)</label>
+                    <div style="position:relative;background:#fff;border:1px solid #eee;border-radius:6px;padding:6px;max-width:640px;margin:0 auto;">
+                        <canvas id="specLocalCanvas" width="2000" height="2000" style="width:100%;height:auto;display:block;background:#E5DCCF;border-radius:4px;"></canvas>
                     </div>
-
-                    <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:24px;align-items:start;">
-                        <div>
-                            <label for="specLocalFile" style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Clean catalogue image</label>
-                            <input type="file" id="specLocalFile" accept="image/png,image/jpeg,image/webp" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;background:#fff;">
-                            <div style="display:flex;gap:8px;margin-top:14px;">
-                                <button class="btn btn-primary btn-small" type="button" onclick="renderSpecLocal()" style="font-size:0.78rem;flex:1;">Render dimensions</button>
-                                <button class="btn btn-secondary btn-small" type="button" onclick="downloadSpecLocal()" style="font-size:0.78rem;flex:1;">Download WebP</button>
-                            </div>
-                            <div style="margin-top:14px;padding:10px 12px;background:#fff;border:1px solid #eee;border-radius:6px;font-size:0.72rem;color:#666;line-height:1.55;">
-                                <strong style="color:#1a3a52;">How it works:</strong> the form values above (L × W × H, flat checkbox) drive the labels. Length hairline sits below the product, width hairline diagonals from the front bottom-right, height hairline runs vertically to the right. Caption sits below all labels.
-                            </div>
-                        </div>
-                        <div>
-                            <label style="display:block;font-size:0.78rem;font-weight:600;color:#1a3a52;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Preview</label>
-                            <div style="position:relative;background:#fff;border:1px solid #eee;border-radius:6px;padding:6px;">
-                                <canvas id="specLocalCanvas" width="2000" height="2000" style="width:100%;height:auto;display:block;background:#E5DCCF;border-radius:4px;"></canvas>
-                            </div>
-                            <div id="specLocalStatus" style="font-size:0.72rem;color:#888;margin-top:8px;line-height:1.55;">Upload an image to begin.</div>
-                        </div>
-                    </div>
+                    <div id="specLocalStatus" style="font-size:0.72rem;color:#888;margin-top:8px;line-height:1.55;text-align:center;">Upload an image at the top to begin.</div>
                 </div>
 
             </div>
@@ -6488,25 +6485,29 @@ Aspect ratio: 1:1 square, 2000 × 2000 px. Output as WebP, ~90% quality.`;
         // ─── LOCAL RENDER — draw dimensions on the clean catalogue image using real brand fonts ───
         let _specLocalImg = null;
 
+        function _specStatus(msg, color) {
+            const a = document.getElementById('specLocalStatus');
+            const b = document.getElementById('specLocalStatusTop');
+            if (a) a.textContent = msg;
+            if (b) { b.textContent = msg; b.style.color = color || '#2e7d4f'; }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             const fileInput = document.getElementById('specLocalFile');
             if (!fileInput) return;
             fileInput.addEventListener('change', function (e) {
                 const file = e.target.files && e.target.files[0];
                 if (!file) return;
-                const status = document.getElementById('specLocalStatus');
-                if (status) status.textContent = 'Loading image…';
+                _specStatus('Loading image…');
                 const reader = new FileReader();
                 reader.onload = function (ev) {
                     const img = new Image();
                     img.onload = function () {
                         _specLocalImg = img;
-                        if (status) status.textContent = 'Image loaded (' + img.width + ' × ' + img.height + '). Rendering…';
+                        _specStatus('Image loaded (' + img.width + ' × ' + img.height + '). Rendering…');
                         renderSpecLocal();
                     };
-                    img.onerror = function () {
-                        if (status) status.textContent = 'Failed to load image.';
-                    };
+                    img.onerror = function () { _specStatus('Failed to load image.', '#c33'); };
                     img.src = ev.target.result;
                 };
                 reader.readAsDataURL(file);
@@ -6559,9 +6560,8 @@ Aspect ratio: 1:1 square, 2000 × 2000 px. Output as WebP, ~90% quality.`;
         }
 
         async function renderSpecLocal() {
-            const status = document.getElementById('specLocalStatus');
             if (!_specLocalImg) {
-                if (status) status.textContent = 'Upload an image first.';
+                _specStatus('Upload an image first (use the file picker at the top of this panel).', '#c33');
                 return;
             }
 
@@ -6592,7 +6592,7 @@ Aspect ratio: 1:1 square, 2000 × 2000 px. Output as WebP, ~90% quality.`;
 
             const bbox = _specFindBBox(ctx, W, H);
             if (!bbox) {
-                if (status) status.textContent = 'Could not detect product — make sure the background is solid beige and the product has strong contrast.';
+                _specStatus('Could not detect product — make sure the background is solid beige and the product has strong contrast.', '#c33');
                 return;
             }
 
@@ -6650,7 +6650,7 @@ Aspect ratio: 1:1 square, 2000 × 2000 px. Output as WebP, ~90% quality.`;
             ctx.textBaseline = 'top';
             ctx.fillText('Dimensions · ' + captionDims, W / 2, captionY);
 
-            if (status) status.textContent = 'Rendered. Click Download WebP to save.';
+            _specStatus('✓ Rendered. Click Download WebP to save.');
         }
 
         function downloadSpecLocal() {
