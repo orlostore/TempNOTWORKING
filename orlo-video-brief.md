@@ -73,15 +73,15 @@ A single locked frame that works for **every product reel**. Only three variable
    - Hairline divider — **1 × 60 px**, navy `#1A3A52` at **25% opacity**, ~22 px gap each side
    - Wordmark — "ORL[O]" — **upright Cormorant Garamond 500, 38pt**, letter-spacing 0.16em. The final "O" is coral `#E76F51`; "ORL" is navy `#1A3A52`. **Not italic.**
 
-2. **Product hero** — y ≈ 350 to 1140, 720 × 720 max, centred on cream. Use the clean catalogue photo (warm beige #E5DCCF background as per Brand Guide).
+2. **Product hero** — y ≈ 350 to 1140, 720 × 720 max, centred on cream. **MUST be the clean catalogue square** (warm beige #E5DCCF background, product alone, no props) — output from the admin "Clean Catalogue Prompt". NEVER the lifestyle catalogue / scene shot — the reel scenes already gave the lifestyle context; the end card is the commercial close where product clarity wins. If the clean catalogue square is missing for a product, STOP and ask before rendering.
 
-3. **Product name** — y ≈ 1200, centred. **Cormorant Garamond italic 500, 46pt, navy.** 1–2 words.
+3. **Product name** — y ≈ 1200, centred. **Cormorant Garamond italic 500, 54pt, navy.** Use the EXACT product name from the admin (e.g. "Vintage Dusty Pink Vespa"), not a nickname or shortened form like "Mini Vespa". 1–4 words.
 
-4. **Price** — y ≈ 1300, centred. **DM Sans 500, 32pt, navy**, letter-spacing 0.02em. Format "AED 119". Calm, not loud. (Was 600/44pt — felt shouty.)
+4. **Price** — y ≈ 1300, centred. **DM Sans 500, 38pt, navy**, letter-spacing 0.02em. Format "AED 119".
 
 5. **Hairline divider** — y ≈ 1420, 120 × 1 px, centred, navy at **20% opacity**. Ties name + price into a single block, separates from the CTA.
 
-6. **Shop Now pill** — y ≈ 1485 to 1545, centred. Navy `#1A3A52` solid fill, no border, border-radius 999. Inside: **"Shop Now"** in DM Sans 500, 24pt, cream `#F8F6F2`, letter-spacing 0.04em. **English only inside the pill.** No Arabic, no separator dot. (Bilingual pill copy felt loud and burned coral the brain doesn't need at the close.)
+6. **Shop Now pill** — y ≈ 1485 to 1545, centred. **Explicit dimensions: 320 × 56 px** (not "auto-size to text"). Navy `#1A3A52` solid fill, no border, border-radius 28 px (or 999 — equivalent at this size). Inside: **"Shop Now"** in DM Sans 500, 28pt, cream `#F8F6F2`, letter-spacing 0.04em, vertically and horizontally centred. **English only inside the pill.** No Arabic, no separator dot.
 
 7. **URL** — "orlostore.com" — y ≈ 1675, DM Sans 400, 26pt, `#6B7780` soft grey, letter-spacing 0.02em.
 
