@@ -170,6 +170,8 @@ export async function onRequestPost(context) {
 
                     const confirmHtml = customerEmail({
                         origin,
+                        metaLabel: 'ORDER · CONFIRMED',
+                        orderRef: session.id.slice(-8).toUpperCase(),
                         icon: '✅',
                         titleEn: 'Order Confirmed!',
                         titleStyle: 'italic',  // emotional moment — keep the editorial flourish

@@ -194,6 +194,8 @@ export async function onRequestPost(context) {
 
             const html = customerEmail({
                 origin,
+                metaLabel: 'ORDER · DISPATCHED',
+                orderRef: order_id.slice(-8).toUpperCase(),
                 icon: '🚚',
                 titleEn: 'Your Order Has Been Dispatched!',
                 bodyEn: `Hi ${customer_name || 'there'}, great news! Your order has been dispatched and is heading your way.`,

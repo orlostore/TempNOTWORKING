@@ -148,6 +148,7 @@ export async function onRequestPost(context) {
 
                 const emailConfigs = {
                     approved: {
+                        metaLabel: 'RETURN · APPROVED',
                         icon: '✅',
                         titleEn: 'Return Approved',
                         bodyEn: `Hi ${custName}, your return request for order #${orderRef} has been approved.`,
@@ -160,6 +161,7 @@ export async function onRequestPost(context) {
                         plainInfoEn: 'Next steps: Please ship the item back to us. Return shipping costs are the customer\'s responsibility. Once we receive and inspect the item, we will process your refund.',
                     },
                     rejected: {
+                        metaLabel: 'RETURN · UPDATE',
                         icon: '📋',
                         titleEn: 'Return Request Update',
                         bodyEn: `Hi ${custName}, unfortunately we are unable to approve the return for order #${orderRef}.`,
@@ -172,6 +174,7 @@ export async function onRequestPost(context) {
                         plainInfoEn: note ? `Reason: ${note}` : '',
                     },
                     refunded: {
+                        metaLabel: 'RETURN · REFUNDED',
                         icon: '💸',
                         titleEn: 'Refund Processed',
                         bodyEn: `Hi ${custName}, a full refund has been issued for order #${orderRef}.`,
@@ -189,6 +192,8 @@ export async function onRequestPost(context) {
 
                 const html = buildCustomerEmail({
                     origin,
+                    metaLabel: cfg.metaLabel,
+                    orderRef,
                     icon: cfg.icon,
                     titleEn: cfg.titleEn,
                     bodyEn: cfg.bodyEn,
@@ -329,6 +334,8 @@ export async function onRequestPut(context) {
 
                 const html = buildCustomerEmail({
                     origin,
+                    metaLabel: 'RETURN · INITIATED',
+                    orderRef,
                     icon: '🔄',
                     titleEn: 'Return Initiated',
                     bodyEn: `Hi ${customerName || 'there'}, a return has been initiated for your order #${orderRef}.`,

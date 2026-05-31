@@ -207,6 +207,8 @@ export async function onRequestPost(context) {
 
                 const html = customerEmail({
                     origin,
+                    metaLabel: 'ORDER · CANCELLED',
+                    orderRef: orderId.slice(-8).toUpperCase(),
                     icon: '❌',
                     titleEn: 'Order Cancelled',
                     bodyEn: `Hi ${customerName || 'there'}, your order has been cancelled as requested.`,
