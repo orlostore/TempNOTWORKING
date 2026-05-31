@@ -86,8 +86,17 @@ A single locked frame that works for **every product reel**. Only three variable
    - Hairline divider — **1 × 60 px**, navy `#1A3A52` at **25% opacity**, ~22 px gap each side
    - Wordmark — "ORL[O]" — **upright Cormorant Garamond 500, 38pt**, letter-spacing 0.16em. The final "O" is coral `#E76F51`; "ORL" is navy `#1A3A52`. **Not italic.**
 
-2. **Product hero** — y ≈ 350 to 1140, 720 × 720 slot, centred on cream. **MUST be the clean catalogue square** (warm beige #E5DCCF background, product alone, no props) — output from the admin "Clean Catalogue Prompt". NEVER the lifestyle catalogue / scene shot — the reel scenes already gave the lifestyle context; the end card is the commercial close where product clarity wins. If the clean catalogue square is missing for a product, STOP and ask before rendering. **The source image MUST be used at its natural size** — DO NOT enlarge, upscale, or stretch it to fill the slot. If the source has asymmetric whitespace (product biased to one corner of its frame), **pad the source with additional cream `#E5DCCF` around it** so the product's optical centre lands at the slot's centre. Padding only — never scaling. The product silhouette in the rendered end-card should look identical in size to the source catalogue square.
-   **Vertical spacing rule:** the breathing room ABOVE the hero (from the bottom of the logo lockup to the top of the hero) MUST equal the breathing room BELOW the hero (from the bottom of the hero to the top of the product name). Both gaps roughly equal — reposition the hero block as needed.
+2. **Product hero** — 720 × 720 slot, centred horizontally on the cream end-card background. **MUST be the clean catalogue square** (warm beige #E5DCCF, product alone, no props). NEVER the lifestyle shot. STOP and ask if the clean catalogue square is missing.
+
+   **DO NOT MODIFY THE SOURCE IMAGE IN ANY WAY.** Use the source PNG/WebP exactly as provided. Specifically:
+   - **DO NOT enlarge, upscale, or stretch** the source to fit the slot.
+   - **DO NOT add cream padding to the source image** — the source's beige background is whatever size it is; do not extend it.
+   - **DO NOT crop, recolour, restyle, recompose, or regenerate** the source.
+   - The source image is dropped into the slot at its native pixel dimensions. If the source is smaller than 720×720, place it at its actual size — do not scale up. If larger, scale DOWN proportionally to fit 720×720 — never up.
+
+   **Positioning rule:** drop the source into the slot such that the **PRODUCT SILHOUETTE** (not the source's pixel frame) lands at the optical centre of the 720×720 slot. If the source has the product biased to one corner inside its own frame, **shift the source within the slot** (move it left/right/up/down) so the product itself is centred — this is a positional offset of the image inside the slot, NOT padding added to the image. Any source-frame area that falls outside the 720×720 slot gets clipped — that's fine because the source's outer edges are blank beige anyway.
+
+   **Vertical spacing rule:** the gap ABOVE the hero (from logo lockup bottom to hero top) MUST equal the gap BELOW the hero (from hero bottom to product name top). Both roughly equal. Reposition the hero block as needed.
 
 3. **Product name** — centred below the hero with the equal-gap rule above. **Cormorant Garamond italic 500, 54pt, navy.** Use the EXACT product name from the admin (e.g. "Vintage Dusty Pink Vespa"), not a nickname or shortened form like "Mini Vespa". 1–4 words.
 
