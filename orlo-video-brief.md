@@ -1,4 +1,4 @@
-# ORLO REEL — UPDATED SPEC (v3.5 — Brand Stamp safe zone, May 2026)
+# ORLO REEL — UPDATED SPEC (v3.5.1 — text-colour flip + feather verification, May 2026)
 
 You are building a vertical reel/TikTok video for ORLO Store. This spec OVERRIDES anything from prior conversations. Follow exactly.
 
@@ -77,8 +77,14 @@ Backdrops with alternating warm/dark zones (Marrakech-style, Provençal-window-s
 **Localised darkening plate (when the safe-zone test fails)**
 - A rounded semi-transparent **navy** rectangle painted on top of the photo, beneath the text. Same navy as the brand: `#1A3A52`.
 - Fill: `#1A3A52` at **32% opacity**. Border-radius: **16 px**. Padding: **24 px** around the text bounding box.
-- NOT a hard rectangle — apply a **12 px Gaussian feather** on all four edges so the plate reads as a halo, not a banner.
+- NOT a hard rectangle — apply a **12 px Gaussian feather** on all four edges so the plate reads as a halo, not a banner. If your renderer cannot blur the alpha channel directly, rasterise the plate as a separate layer, Gaussian-blur the alpha by 12 px, then composite onto the photo. **Verify by zooming to 200% on the plate edge in the final frame — if a clean rectangle boundary is visible against the photo, the feather was skipped and the frame is rejected.**
 - Apply behind: the corner-parked ORLO + coral line region during scenes 2.0–14.0s, AND scene headlines (EN and AR) whenever the safe-zone test fails.
+
+**Text colour FLIPS when the plate is applied — non-negotiable**
+- Default text colour for scene headlines + brand stamp wordmark: navy `#1A3A52` (used on flat-tone backdrops where no plate is needed).
+- **When the darkening plate is painted underneath the text, the text colour MUST flip to cream `#F8F6F2`.** Navy text on a navy plate is invisible — that exact failure occurred on the Marrakech reel and is rejected on sight.
+- The plate itself stays navy `#1A3A52` at 32% opacity. Only the text on top of it flips to cream. Cream on 32% navy reads cleanly against any backdrop.
+- Coral coral-line / coral-final-O on the wordmark: stays coral `#E76F51` (already high enough chroma to read against either the plate or a photo).
 
 **Type weight minimums in any scene context (override any earlier section that allowed lighter weights)**
 - English scene headlines: Cormorant Garamond italic, **weight 500 minimum**. NEVER 300 or 400 — they will be eaten on any non-flat photo.
@@ -198,6 +204,11 @@ This beat exists so the still-frame **cover** that IG and TikTok show on the fee
 DO NOT start rendering until the concept is confirmed. Render all 480 frames in one go.
 
 ---
+
+## v3.5.1 changelog vs v3.5
+- **Text colour flip rule added.** When the darkening plate is painted, the text colour MUST flip from navy `#1A3A52` to cream `#F8F6F2`. The v3.5 spec defined the plate (navy 32% with feather) but left text at the default navy — which produced a Marrakech render where navy headlines sat on navy plates and were invisible.
+- **Plate feather verification check added.** Renderers were skipping the 12 px Gaussian feather on the plate alpha, producing hard-edged sticker banners. Added an explicit 200% zoom verification at the plate edge and a fallback procedure for renderers that cannot blur alpha directly (rasterise plate layer, blur alpha 12 px, composite).
+- **Coral elements stay coral.** Coral mini-line under the corner badge and the coral final "O" in the wordmark do not flip — coral has enough chroma to read on either the plate or the photo directly.
 
 ## v3.5 changelog vs v3.4
 - **Brand Stamp & headline safe zone section added.** New CRITICAL section between Scene headlines and Bilingual cadence. Defines the luminance-range safe-zone test, the localised darkening plate (navy `#1A3A52` 32% with 12 px feather + 16 px radius + 24 px padding), bumped minimum type weights for any text on top of a photo (English italic 500 / brand stamp 600, Arabic 700 / brand stamp 800), and the backdrop-selection rule that auto-applies the plate whenever a lifestyle scene has more than two strong value zones.
