@@ -1,4 +1,4 @@
-# ORLO REEL — UPDATED SPEC (v3.4 — end card generalized & calmed, May 2026)
+# ORLO REEL — UPDATED SPEC (v3.5 — Brand Stamp safe zone, May 2026)
 
 You are building a vertical reel/TikTok video for ORLO Store. This spec OVERRIDES anything from prior conversations. Follow exactly.
 
@@ -31,6 +31,7 @@ After the inputs above are confirmed and rendering is underway, verify these las
 3. **Source product photo confirmed:** the actual supplied product hero / lifestyle photo is in use — no generated stand-ins.
 4. **End-card hero confirmed:** the clean catalogue square (not the lifestyle scene) is in the end-card hero slot.
 5. **Product name confirmed:** the EXACT admin-registered name is in the end-card name line — not a nickname or shortened form.
+6. **Brand Stamp safe-zone test passed:** for every scene frame (2.0–14.0s), the corner-parked ORLO + coral line AND any scene headline overlay (EN or AR) are EITHER on a flat-value photo region (max−min luminance ≤ 25 across the text bounding box + 24 px padding) OR have the localised darkening plate applied behind them (see Brand Stamp & headline safe zone section). Any frame failing this test is rejected on sight. This check was added after a Marrakech taxi reel rendered the corner-parked ORLO + Arabic line "كل شارع له حكاية" essentially invisible against the alternating pink wall / cedarwood door backdrop.
 
 ## Palette (use exactly)
 - Cream bg: `#F8F6F2`
@@ -62,7 +63,35 @@ After the inputs above are confirmed and rendering is underway, verify these las
 - **Arabic:** Almarai 700 **at 88% opacity** (softens the bold so it balances the italic English visually), 60–66pt, navy, line-height 1.4
 - **MAX 2 lines.** If your copy needs 3, shorten the copy.
 - **Position:** upper-left, x ≈ 60, y ≈ 240, left-aligned, max-width 880px
-- **NO text-shadow, NO drop-shadow, NO glow on type.** If contrast is weak against the image, soften the IMAGE with a subtle radial vignette behind the text — never blur the type.
+- **NO text-shadow, NO drop-shadow, NO glow on type.** If contrast is weak against the image, apply the **localised darkening plate** from the Brand Stamp & headline safe zone section below — never blur the type, never add text-shadow.
+
+## Brand Stamp & headline safe zone — CRITICAL (v3.5)
+Backdrops with alternating warm/dark zones (Marrakech-style, Provençal-window-style, any lifestyle scene with strong wall + door + sunlit-highlight contrast) eat thin light type. Cormorant italic 300 and Almarai 400 disappear entirely; Cormorant italic 500 and Almarai 700 survive but are still fragile. This section makes the contrast guarantee non-optional.
+
+**Safe-zone test — run BEFORE compositing the stamp / headline**
+1. At the planned stamp / headline position, define the text bounding box + 24 px padding.
+2. Sample pixel luminance across that rectangle on the source photo.
+3. If the max − min luminance range is > 25 (on a 0–255 scale), the spot is unsafe.
+4. Either move the stamp / headline to a flatter region, OR apply the localised darkening plate below. Do not ship the frame without one or the other.
+
+**Localised darkening plate (when the safe-zone test fails)**
+- A rounded semi-transparent **navy** rectangle painted on top of the photo, beneath the text. Same navy as the brand: `#1A3A52`.
+- Fill: `#1A3A52` at **32% opacity**. Border-radius: **16 px**. Padding: **24 px** around the text bounding box.
+- NOT a hard rectangle — apply a **12 px Gaussian feather** on all four edges so the plate reads as a halo, not a banner.
+- Apply behind: the corner-parked ORLO + coral line region during scenes 2.0–14.0s, AND scene headlines (EN and AR) whenever the safe-zone test fails.
+
+**Type weight minimums in any scene context (override any earlier section that allowed lighter weights)**
+- English scene headlines: Cormorant Garamond italic, **weight 500 minimum**. NEVER 300 or 400 — they will be eaten on any non-flat photo.
+- English brand stamp / tagline (when one is used): Cormorant Garamond italic, **weight 600 minimum**.
+- Arabic scene headlines: Almarai **700 at 88% opacity**.
+- Arabic brand stamp / tagline: Almarai **800** (matches the bumped English weight visually). Almarai 400 is banned for any text on top of a photo.
+
+**Backdrop selection rule**
+- If the lifestyle scene has more than two strong value zones (e.g. bright pink wall + dark cedarwood door + sunlit terracotta floor — i.e. Marrakech), apply the darkening plate by default. Don't bother running the safe-zone test — assume it fails.
+- If the lifestyle scene is uniformly mid-tone (e.g. fully shaded courtyard, flat plaster wall, single-tone tabletop, indoor sideboard), the safe-zone test will pass and you can skip the plate.
+
+**ROCK-SOLID rule (unchanged)**
+- The brand stamp does NOT animate during scenes 2.0–14.0s — no fades, no slides, no opacity shifts. Once painted with the plate behind it, it stays put for the duration of the scene.
 
 ## Bilingual cadence — SEQUENTIAL, not stacked
 - **DO NOT stack EN + AR on the same frame** at headline sizes. Four big lines = wall of text.
@@ -169,6 +198,11 @@ This beat exists so the still-frame **cover** that IG and TikTok show on the fee
 DO NOT start rendering until the concept is confirmed. Render all 480 frames in one go.
 
 ---
+
+## v3.5 changelog vs v3.4
+- **Brand Stamp & headline safe zone section added.** New CRITICAL section between Scene headlines and Bilingual cadence. Defines the luminance-range safe-zone test, the localised darkening plate (navy `#1A3A52` 32% with 12 px feather + 16 px radius + 24 px padding), bumped minimum type weights for any text on top of a photo (English italic 500 / brand stamp 600, Arabic 700 / brand stamp 800), and the backdrop-selection rule that auto-applies the plate whenever a lifestyle scene has more than two strong value zones.
+- **Pre-render verification check 6 added** — Brand Stamp safe-zone test must pass per frame, otherwise reject on sight. Triggered by a Marrakech taxi reel where the corner-parked ORLO + Arabic line "كل شارع له حكاية" rendered essentially invisible against alternating pink wall / cedarwood door zones.
+- **Scene-headlines typography rule updated.** The old "soften the image with a subtle radial vignette" guidance was too vague and wasn't being applied — replaced with an explicit pointer to the new safe-zone section and its localised darkening plate.
 
 ## v3.4 changelog vs v3.3
 - **End card fully redesigned and generalized.** A single locked frame that every reel reuses; only hero photo, product name, and price change per video. Mockup at `/end-card-mockup.html`.
