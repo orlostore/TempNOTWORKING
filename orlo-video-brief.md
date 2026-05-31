@@ -7,17 +7,30 @@ You are building a vertical reel/TikTok video for ORLO Store. This spec OVERRIDE
 - Audio: trim to 16s, volume 0.7, 1.5s fade-out at 14.5s
 - **Render frames at 2160 × 3840 (2×) then downsample to 1080 × 1920 with PIL `Image.LANCZOS`.** Non-negotiable — produces crisp type. JPEG quality 95 for frame export.
 
-## Pre-render verification — NON-NEGOTIABLE (added v3.3)
-Before exporting a single frame, verify these. If any check fails, **STOP and report back to the project owner before rendering** — do not silently work around it.
+## Required inputs — ASK FOR ALL OF THESE BEFORE RENDERING ANYTHING
+Before producing a single frame, you must explicitly confirm the following with the project owner. If ANY item is missing or ambiguous, **STOP and ask** — do not guess, do not nickname, do not substitute. Treat this as a handshake: read the list back to the owner and wait for confirmation on each line.
 
-1. **Aspect ratio:** the output MUST be **native 1080 × 1920 (9:16)** edge-to-edge. **Letterboxing is forbidden** — no black bars top/bottom, no padding, no 16:9 source stretched into 9:16. If your source assets are 16:9, ASK for 9:16 versions; do not letterbox.
-2. **Logo file:** the ORLO logo must be the **real official logo file** supplied by the project owner (navy organic blob + coral textured dot + cream "ORLO" wordmark). If the logo file is not in the brief package, **STOP and ask for it**. Do NOT:
-   - Generate a logo from scratch.
-   - Use a placeholder or stand-in logo.
-   - Use an AI-rendered approximation of the logo.
-   - Recolour, restyle, redraw, or modify the supplied logo in any way.
-   Any reel rendered without the real official logo file is rejected on sight.
-3. **Source product photo:** verify it is the actual product hero / lifestyle shot supplied by the project owner. If missing, ask before rendering.
+1. **Exact product name (English).** Use the name as registered in the admin panel (e.g. "Vintage Dusty Pink Vespa"). Do NOT shorten, abbreviate, or invent a nickname like "Mini Vespa", "Pink Vespa", "Vintage Vespa". Ask: *"Confirm the exact product name as it appears on the website."*
+2. **Exact product name (Arabic).** Required for the AR cadence in scenes 6.0–10.0s. Ask: *"Confirm the exact Arabic product name."*
+3. **Current price in AED.** Required for both the 10–14s price-reveal beat AND the end-card price line. Ask: *"What is the current AED price to display?"* (Do not assume — prices change.)
+4. **Clean catalogue square image** (1:1, warm beige #E5DCCF, product alone, no props). This is REQUIRED for the end card hero. Ask: *"Provide the clean catalogue square image — the end card cannot use the lifestyle / scene photo."* If only a lifestyle shot exists, STOP and request the clean version be generated via the admin's "Clean Catalogue Prompt" first.
+5. **Source product photo(s) for the reel scenes** (2.0–14.0s). These can be lifestyle / scene / detail shots — different from the end-card hero. Ask: *"Which source photos should appear in scenes 2–14s?"*
+6. **English scene headline copy** for scenes 2.0–6.0s. Cormorant italic 500, 72–80pt. Max 2 lines. Ask: *"Provide the English headline."*
+7. **Arabic scene headline copy** for scenes 6.0–10.0s. Almarai 700 at 88% opacity. Max 2 lines. Ask: *"Provide the Arabic headline."*
+8. **Official ORLO logo file** (navy organic blob + coral textured dot + cream "ORLO" wordmark). If not in the brief package, STOP and ask. Do NOT generate, redraw, recolour, or substitute. Ask: *"Confirm the official logo file is in the asset package."*
+9. **Aspect ratio:** explicit confirmation that the output will be native 1080 × 1920 (9:16), edge to edge, no letterboxing. Ask: *"Confirm output is native 9:16, no letterboxing."*
+10. **Any product-specific notes** — colour variant, collection name, special tag (NEW, Handmade), pairing context. Ask: *"Any product-specific notes I should know about?"*
+
+Only after ALL ten items are confirmed in writing should rendering begin. If any item is missing mid-render, STOP and report back — do not silently work around it.
+
+## Pre-render verification — final checks before exporting
+After the inputs above are confirmed and rendering is underway, verify these last technical checks before exporting frames. If any fails, STOP.
+
+1. **Aspect ratio confirmed:** native 1080 × 1920 (9:16) edge-to-edge. Letterboxing is forbidden — no black bars top/bottom, no padding, no 16:9 source stretched into 9:16.
+2. **Logo file confirmed:** the real official ORLO logo file is in use — no AI-generated stand-ins, no placeholders, no recoloured / restyled versions. Any reel rendered without the real official logo is rejected on sight.
+3. **Source product photo confirmed:** the actual supplied product hero / lifestyle photo is in use — no generated stand-ins.
+4. **End-card hero confirmed:** the clean catalogue square (not the lifestyle scene) is in the end-card hero slot.
+5. **Product name confirmed:** the EXACT admin-registered name is in the end-card name line — not a nickname or shortened form.
 
 ## Palette (use exactly)
 - Cream bg: `#F8F6F2`
