@@ -592,7 +592,7 @@ async function initProductPage() {
       text = 'Sold out';
     } else if (stock === 1) {
       className = 'pdp-stock-caption low';
-      text = 'Only one';
+      text = 'Only one available';
     } else {
       className = 'pdp-stock-caption';
       text = 'In stock';
