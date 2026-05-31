@@ -37,7 +37,7 @@
   <link rel="preload" href="/fonts/almarai-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/almarai-800.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="products.min.js?v=11" as="script">
-  <link rel="preload" href="product.min.js?v=38" as="script">
+  <link rel="preload" href="product.min.js?v=39" as="script">
   <link rel="preload" href="app.min.js?v=43" as="script">
   <script>
   if(sessionStorage.getItem('orlo_checkout_pending')){sessionStorage.removeItem('orlo_checkout_pending');window.location.replace('cancel.html');}
@@ -418,6 +418,9 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
   /* ═════════ Pricing tier bar — editorial Hermès-style (was busy with coral prices + green Save badges) ═════════ */
   #pricingTiersDesktop,#pricingTiersMobile{padding:14px 0 22px!important;background:transparent!important;border:none!important;box-shadow:none!important;margin:0!important}
   #pricingTiersDesktop > div,#pricingTiersMobile > div{background:transparent!important;border:none!important;box-shadow:none!important;border-radius:0!important;padding:0!important}
+  /* Strip the outer left+right borders of styles.css's .tier-table (border: 1px on all sides)
+     so only inner cell dividers + the parent .pricing-tiers' top/bottom hairlines remain. */
+  .tier-table{border-left:none!important;border-right:none!important;border-radius:0!important;background:transparent!important}
   .tier-item{flex:1!important;background:transparent!important;border:none!important;border-bottom:2px solid transparent!important;border-radius:0!important;box-shadow:none!important;padding:12px 8px!important;text-align:center!important;cursor:pointer!important;transition:border-color .2s!important}
   .tier-item.active{border-bottom-color:#1a3a52!important;background:transparent!important}
   .tier-item.best-deal{background:transparent!important}
@@ -765,7 +768,7 @@ nav{max-width:1180px;margin:auto;padding:.2rem 1.34rem;display:flex;align-items:
 </script>
 
 <script src="products.min.js?v=11" defer></script>
-<script src="product.min.js?v=38" defer></script>
+<script src="product.min.js?v=39" defer></script>
 <script src="app.min.js?v=43" defer></script>
 <script>
 function updateAccountLink() {

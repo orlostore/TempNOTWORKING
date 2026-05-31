@@ -1867,8 +1867,10 @@ function renderPricingTiers(containerId, product) {
   const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
   const totalQty = localCart.filter(i => i.id === product.id).reduce((s, i) => s + i.quantity, 0);
 
-  // Find the active tier based on cart qty
-  let activeTierIndex = 0;
+  // Find the active tier based on cart qty.
+  // -1 = no tier matches (qty below the first tier's minQty) — show NO underline at all,
+  // because customer pays the non-discounted base price.
+  let activeTierIndex = -1;
   for (let i = tiers.length - 1; i >= 0; i--) {
     if (totalQty >= tiers[i].minQty) { activeTierIndex = i; break; }
   }
@@ -1888,7 +1890,7 @@ function renderPricingTiers(containerId, product) {
     `;
   }).join('');
 
-  const activeDiscount = tiers[activeTierIndex].discountPercent;
+  const activeDiscount = activeTierIndex >= 0 ? tiers[activeTierIndex].discountPercent : 0;
   const activePrice = Math.round(basePrice * (1 - activeDiscount / 100) * 100) / 100;
 
   const isMobile = containerId.includes('Mobile');
@@ -1909,13 +1911,14 @@ function updateTierHighlight(productId) {
 
   document.querySelectorAll(`.pricing-tiers[data-product-id="${productId}"]`).forEach(container => {
     const tierItems = container.querySelectorAll('.tier-item');
-    let activeTierIndex = 0;
+    // -1 = no tier matches (qty below first tier's minQty) → no underline, customer pays base price
+    let activeTierIndex = -1;
     tierItems.forEach((item, i) => {
       const minQty = parseInt(item.dataset.minQty) || 1;
       if (totalQty >= minQty) activeTierIndex = i;
     });
     tierItems.forEach((item, i) => {
-      item.classList.toggle('active', i === activeTierIndex);
+      item.classList.toggle('active', activeTierIndex >= 0 && i === activeTierIndex);
     });
 
     // Update displayed prices (they depend on base price which may change with variant)
@@ -1926,9 +1929,9 @@ function updateTierHighlight(productId) {
       if (priceEl) priceEl.textContent = `AED ${tierPrice.toFixed(2)}`;
     });
 
-    // Update "Your price" bar
+    // Update "Your price" bar (still present in legacy DOM on mobile sticky bar; desktop bar removed)
     if (product.pricingTiers && product.pricingTiers.length > 0) {
-      const activeDiscount = product.pricingTiers[activeTierIndex].discountPercent;
+      const activeDiscount = activeTierIndex >= 0 ? product.pricingTiers[activeTierIndex].discountPercent : 0;
       const activePrice = Math.round(basePrice * (1 - activeDiscount / 100) * 100) / 100;
       const bar = container.querySelector('.your-price-bar');
       if (bar) {
