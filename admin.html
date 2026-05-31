@@ -6346,7 +6346,9 @@
             const hNum = (H === '' || H == null) ? 'HEIGHT' : String(H);
 
             const heightBlock = flat ? '' :
-`— A thin navy hairline running vertically to the right of the product, with small arrow caps at both ends, indicating the HEIGHT. Label with "${hNum} CM" in DM Sans weight 400, navy #1A3A52, all uppercase, ~14 px size, rotated 90 degrees so it reads vertically. The label is the number followed by CM only — no brackets, no quotes, no extra punctuation.
+`— A thin navy hairline running vertically to the right of the product, with small arrow caps at both ends, indicating the HEIGHT.
+    · Visible text on this label: ${hNum} CM
+    · Style: DM Sans weight 400, navy #1A3A52, all uppercase, ~14 px size, rotated 90 degrees so it reads vertically.
 
 `;
 
@@ -6354,15 +6356,25 @@
                 ? `L ${lNum} cm × W ${wNum} cm`
                 : `L ${lNum} cm × W ${wNum} cm × H ${hNum} cm`;
 
+            const labelTokens = flat
+                ? `${lNum} CM, ${wNum} CM`
+                : `${lNum} CM, ${wNum} CM, ${hNum} CM`;
+
             return `I'm attaching a clean catalogue product photograph of ${desc} on a warm beige #E5DCCF background. Use this exact image as the base — do NOT redraw, restyle, recolour, or alter the product or background in any way. Only add the dimension annotations described below.
 
 Add a discreet technical dimension overlay in the style of a Hermès or Aesop product spec page. The brand standards below are locked — apply them exactly, do not substitute fonts, colours, or styling:
 
-— A thin navy hairline (colour #1A3A52, 1 px wide) running horizontally just below the product, from one end to the other, with small arrow caps at both ends, indicating the LENGTH. Label the line with the text "${lNum} CM" in DM Sans weight 400, navy #1A3A52, all uppercase, ~14 px size, positioned just below the line, centred. The label is the number followed by CM only — no brackets, no quotes, no extra punctuation.
+— A thin navy hairline (colour #1A3A52, 1 px wide) running horizontally just below the product, from one end to the other, with small arrow caps at both ends, indicating the LENGTH.
+    · Visible text on this label: ${lNum} CM
+    · Style: DM Sans weight 400, navy #1A3A52, all uppercase, ~14 px size, centred just below the line.
 
-${heightBlock}— A thin navy hairline at a slight diagonal beneath the front of the product, with small arrow caps, indicating the WIDTH (depth side-to-side). Label with "${wNum} CM" in the same font, colour, and size — number followed by CM only.
+${heightBlock}— A thin navy hairline at a slight diagonal beneath the front of the product, with small arrow caps, indicating the WIDTH (depth side-to-side).
+    · Visible text on this label: ${wNum} CM
+    · Style: DM Sans weight 400, navy #1A3A52, all uppercase, ~14 px size.
 
-— Bottom strip caption, centred under the product: "Dimensions · ${captionDims}" in Cormorant Garamond italic, weight 300, navy #1A3A52, ~22 px size. The numerals appear directly in the caption with no brackets or quotes around them.
+— Bottom strip caption, centred under the product.
+    · Visible text on this caption (and NOTHING else): Dimensions · ${captionDims}
+    · Style: Cormorant Garamond italic, weight 300, navy #1A3A52, ~22 px size.
 
 Keep everything else identical to the attached image: the beige #E5DCCF background, the product, the lighting, the soft natural contact shadow — all unchanged. Only add the annotations.
 
@@ -6373,7 +6385,11 @@ COMPOSITION — TIGHT FRAME, CONSISTENT WITH CLEAN CATALOGUE SHOT (apply exactly
 — Bottom clearance below the caption strip: roughly 12–15% of frame height (≈240–300 px on a 2000 px canvas). Enough beige breathing room so the caption isn't crowding the edge, but NOT a vast empty stretch that pushes the product smaller on the card.
 — Goal: the product silhouette in this dimensions shot occupies the SAME visual height as the product silhouette in the clean catalogue shot — so when both render on the homepage card grid, they sit at the same size.
 
-CRITICAL — do NOT include any of the following: no white background swap, no grey, no rulers, no grid lines, no measurement icons, no second product view, no exploded diagram, no props, no text other than the dimension labels and the caption strip, no watermarks, no logos, no square brackets [ ], no curly braces { }, no angle brackets < >, no quotation marks around the numbers.
+VISIBLE TEXT WHITELIST — the ONLY text strings allowed to appear anywhere in the output image are:
+    ${labelTokens}, and the caption line: Dimensions · ${captionDims}
+Do NOT render the words "Style", "Visible text", "DM Sans", "Cormorant Garamond", "weight", "italic", "navy", "uppercase", "px", "size", "label", or any colour hex code (e.g. #1A3A52, #E5DCCF). Those are instructions for YOU, not text for the image. If a string is not in the whitelist above, it must not be drawn.
+
+CRITICAL — do NOT include any of the following: no white background swap, no grey, no rulers, no grid lines, no measurement icons, no second product view, no exploded diagram, no props, no text other than the whitelist above, no watermarks, no logos, no square brackets [ ], no curly braces { }, no angle brackets < >, no quotation marks around the numbers, no second caption line under the main caption.
 
 Aspect ratio: 1:1 square, 2000 × 2000 px. Output as WebP, ~90% quality.`;
         }
