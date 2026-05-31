@@ -86,9 +86,10 @@ A single locked frame that works for **every product reel**. Only three variable
    - Hairline divider — **1 × 60 px**, navy `#1A3A52` at **25% opacity**, ~22 px gap each side
    - Wordmark — "ORL[O]" — **upright Cormorant Garamond 500, 38pt**, letter-spacing 0.16em. The final "O" is coral `#E76F51`; "ORL" is navy `#1A3A52`. **Not italic.**
 
-2. **Product hero** — y ≈ 350 to 1140, 720 × 720 max, centred on cream. **MUST be the clean catalogue square** (warm beige #E5DCCF background, product alone, no props) — output from the admin "Clean Catalogue Prompt". NEVER the lifestyle catalogue / scene shot — the reel scenes already gave the lifestyle context; the end card is the commercial close where product clarity wins. If the clean catalogue square is missing for a product, STOP and ask before rendering. **The product silhouette MUST be optically centred within the 720 × 720 slot** — both horizontally AND vertically. If the source image has asymmetric whitespace (product biased to one corner), crop or pad the source so the product's visual centre lands at the slot's centre. Do not just paste the source unchanged.
+2. **Product hero** — y ≈ 350 to 1140, 720 × 720 slot, centred on cream. **MUST be the clean catalogue square** (warm beige #E5DCCF background, product alone, no props) — output from the admin "Clean Catalogue Prompt". NEVER the lifestyle catalogue / scene shot — the reel scenes already gave the lifestyle context; the end card is the commercial close where product clarity wins. If the clean catalogue square is missing for a product, STOP and ask before rendering. **The source image MUST be used at its natural size** — DO NOT enlarge, upscale, or stretch it to fill the slot. If the source has asymmetric whitespace (product biased to one corner of its frame), **pad the source with additional cream `#E5DCCF` around it** so the product's optical centre lands at the slot's centre. Padding only — never scaling. The product silhouette in the rendered end-card should look identical in size to the source catalogue square.
+   **Vertical spacing rule:** the breathing room ABOVE the hero (from the bottom of the logo lockup to the top of the hero) MUST equal the breathing room BELOW the hero (from the bottom of the hero to the top of the product name). Both gaps roughly equal — reposition the hero block as needed.
 
-3. **Product name** — y ≈ 1200, centred. **Cormorant Garamond italic 500, 54pt, navy.** Use the EXACT product name from the admin (e.g. "Vintage Dusty Pink Vespa"), not a nickname or shortened form like "Mini Vespa". 1–4 words.
+3. **Product name** — centred below the hero with the equal-gap rule above. **Cormorant Garamond italic 500, 54pt, navy.** Use the EXACT product name from the admin (e.g. "Vintage Dusty Pink Vespa"), not a nickname or shortened form like "Mini Vespa". 1–4 words.
 
 4. **Price** — y ≈ 1300, centred. **DM Sans 500, 38pt, navy**, letter-spacing 0.02em. Format "AED 119".
 
@@ -96,14 +97,13 @@ A single locked frame that works for **every product reel**. Only three variable
 
 6. **Shop Now pill** — y ≈ 1480 to 1546, centred. **Explicit dimensions: 340 × 66 px** (bumped from 320 × 56 — gave it slightly more visual weight per real-world render feedback). Navy `#1A3A52` solid fill, no border, border-radius 33 px (or 999 — equivalent at this size). Inside: **"Shop Now"** in DM Sans 500, **30pt** (bumped from 28pt), cream `#F8F6F2`, letter-spacing 0.04em. **The text MUST be both horizontally AND vertically centred** inside the pill — no left/right padding asymmetry, no baseline-shifted vertical alignment. Use `text-align: center; display: flex; align-items: center; justify-content: center` semantics (or whatever the render tool's equivalent is for "true optical centre"). **English only inside the pill.** No Arabic, no separator dot.
 
-7. **URL** — "orlostore.com" — y ≈ 1675, DM Sans 400, 26pt, `#6B7780` soft grey, letter-spacing 0.02em.
-
-8. **Handle** — "@orlostore" — y ≈ 1750, DM Sans 400, 23pt, `#9AA5AA` lighter grey, letter-spacing 0.02em. Passive follow signal — never an explicit "Follow us" prompt.
+7. **URL** — "orlostore.com" — y ≈ 1690, DM Sans 400, **36pt** (bumped from 26pt), `#6B7780` soft grey, letter-spacing 0.02em. Only commercial cue beneath the pill — the URL alone tells the customer where to go. No social handles, no "Follow us" copy.
 
 **What's NOT on the end card:**
 - No EN or AR tagline
 - No trust badges (free delivery / lock / UAE flag) — those live on the PDP, cart, and site footer, not on a 2-second closing frame
-- No "Follow us" copy — handle does the work passively
+- **No social handles (no @orlostore IG, no @shoporlo TikTok) — URL alone is the single commercial cue. Anyone who wants to follow will find both via the URL or a quick search; two handles split attention and add chrome in a 2-second close.**
+- No "Follow us" copy
 - No urgency chrome (no FREE delivery, no countdown, no strikethrough, no star rating) — opposite of the ORLO register
 - No coral border on the pill, no coral divider, no Arabic anywhere on the end card
 
