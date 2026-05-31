@@ -107,7 +107,7 @@ Backdrops with alternating warm/dark zones (Marrakech-style, Provençal-window-s
 ## End card — LOCKED v3.4 (generalized, calmed, English-only)
 A single locked frame that works for **every product reel**. Only three variables change per video — everything else stays drawn as below.
 
-**Frame:** 1080 × 1920, background cream `#F8F6F2`. All bands measured against the 1080-wide source.
+**Frame:** 1080 × 1920, background cream `#F8F6F2`. All bands measured against the 1080-wide source. **This background is FLAT cream only — never a lifestyle photo, never a gradient, never a textured surface, never a hero crop.** The flat cream is what makes the navy price, name, URL, and lockup readable without any plate. If the end-card backdrop is ever changed to a photo, the Brand Stamp safe-zone rule (text-colour flip to cream + navy plate with feather) applies to every text element on the end card. Do not change the backdrop.
 
 **Per-video variables (3 only):**
 - Hero product photo
