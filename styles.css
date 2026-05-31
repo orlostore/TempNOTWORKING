@@ -192,7 +192,7 @@ body:has(header.hdr-v2){padding-top:0!important}
 .popular-slide .badge .badge-sep,.arrival-card .badge .badge-sep{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:300;opacity:.6;font-size:.9rem;line-height:1}
 .popular-slide .sold-out-strip,.arrival-card .sold-out-strip{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);width:auto;height:auto;background:rgba(26,58,82,0.82);color:#fff;font-family:"DM Sans",sans-serif;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500;padding:5px 10px;text-align:center;z-index:6;pointer-events:none}
 /* PDP stock caption */
-.pdp-stock-caption{font-family:"DM Sans",sans-serif;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:#6b6b6b;margin:8px 0 16px;display:flex;align-items:center;gap:10px}
+.pdp-stock-caption{font-family:"DM Sans",sans-serif;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#6b6b6b;margin:8px 0 16px;display:flex;align-items:center;gap:8px}
 .pdp-stock-caption::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#2a7f4e}
 .pdp-stock-caption.low::before{background:#e76f51}
 .pdp-stock-caption.soldout{color:#1a3a52;font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:400;font-size:1rem;letter-spacing:0;text-transform:none}
