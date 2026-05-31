@@ -2582,7 +2582,28 @@
                         <button class="btn btn-primary btn-small" type="button" onclick="renderSpecLocal()" style="font-size:0.78rem;padding:9px 14px;height:38px;">Render dimensions</button>
                         <button class="btn btn-secondary btn-small" type="button" onclick="downloadSpecLocal()" style="font-size:0.78rem;padding:9px 14px;height:38px;">Download WebP</button>
                     </div>
-                    <div id="specLocalStatusTop" style="font-size:0.72rem;color:#2e7d4f;margin-top:8px;line-height:1.4;">Upload your beige-background product photo. Preview appears at the bottom of this panel.</div>
+
+                    <!-- Perspective controls — tell the renderer how the product sits in 3D space -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;padding:10px 12px;background:rgba(255,255,255,0.5);border-radius:6px;">
+                        <div>
+                            <label for="specTilt" style="display:flex;justify-content:space-between;font-size:0.72rem;font-weight:600;color:#1a3a52;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px;">
+                                <span>Length tilt</span>
+                                <span id="specTiltVal" style="color:#2e7d4f;font-family:'DM Sans',monospace;">0°</span>
+                            </label>
+                            <input type="range" id="specTilt" min="-20" max="20" step="0.5" value="0" style="width:100%;cursor:pointer;" oninput="document.getElementById('specTiltVal').textContent=this.value+'°';renderSpecLocal()">
+                            <div style="font-size:0.66rem;color:#666;margin-top:2px;">Tilt the length hairline to match the product's ground line. + = right end lower, − = left end lower.</div>
+                        </div>
+                        <div>
+                            <label for="specDepth" style="display:flex;justify-content:space-between;font-size:0.72rem;font-weight:600;color:#1a3a52;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px;">
+                                <span>Depth angle (width vector)</span>
+                                <span id="specDepthVal" style="color:#2e7d4f;font-family:'DM Sans',monospace;">28°</span>
+                            </label>
+                            <input type="range" id="specDepth" min="10" max="60" step="1" value="28" style="width:100%;cursor:pointer;" oninput="document.getElementById('specDepthVal').textContent=this.value+'°';renderSpecLocal()">
+                            <div style="font-size:0.66rem;color:#666;margin-top:2px;">Angle of the width diagonal at front-right. Larger = steeper recede into the image.</div>
+                        </div>
+                    </div>
+
+                    <div id="specLocalStatusTop" style="font-size:0.72rem;color:#2e7d4f;margin-top:8px;line-height:1.4;">Upload your beige-background product photo. Then nudge Tilt + Depth until the lines sit parallel to the product axes.</div>
                 </div>
 
                 <!-- Inline how-to panel — Gemini fallback -->
@@ -6565,11 +6586,15 @@ Aspect ratio: 1:1 square, 2000 × 2000 px. Output as WebP, ~90% quality.`;
                 return;
             }
 
-            // Ensure brand fonts are loaded before drawing text
+            // Force-load brand fonts (canvas falls back to serif/sans without this)
             if (document.fonts && document.fonts.load) {
                 try {
-                    await document.fonts.load('300 italic 44px "Cormorant Garamond"');
-                    await document.fonts.load('400 28px "DM Sans"');
+                    await Promise.all([
+                        document.fonts.load('italic 400 48px "Cormorant Garamond"'),
+                        document.fonts.load('italic 300 48px "Cormorant Garamond"'),
+                        document.fonts.load('400 30px "DM Sans"'),
+                    ]);
+                    await document.fonts.ready;
                 } catch (e) { /* fall through */ }
             }
 
@@ -6601,56 +6626,111 @@ Aspect ratio: 1:1 square, 2000 × 2000 px. Output as WebP, ~90% quality.`;
             const Hv = (document.getElementById('specH').value || '').toString().trim() || '?';
             const flat = document.getElementById('specFlat').checked;
 
-            const HAIRLINE_PAD = 44;
-            const LABEL_GAP = 18;
-            const CAPTION_GAP = 90;
-            const CAP_SIZE = 12;
+            const tiltDeg = parseFloat(document.getElementById('specTilt').value) || 0;
+            const depthDeg = parseFloat(document.getElementById('specDepth').value) || 28;
+            const tiltRad = tiltDeg * Math.PI / 180;
+            const depthRad = depthDeg * Math.PI / 180;
 
-            // 1 — Length hairline (horizontal, below product)
-            const lineY = bbox.y + bbox.h + HAIRLINE_PAD;
-            _specHairline(ctx, bbox.x, lineY, bbox.x + bbox.w, lineY, CAP_SIZE);
+            const HAIRLINE_PAD = 50;   // perpendicular gap from product edge to hairline
+            const LABEL_GAP = 22;       // gap from hairline to label baseline
+            const CAPTION_GAP = 110;    // gap from label baseline to caption baseline
+            const CAP_SIZE = 14;        // arrow cap half-length
+
+            // Length axis unit vector (tilted) — points right (with tilt)
+            const lDx = Math.cos(tiltRad);
+            const lDy = Math.sin(tiltRad);
+            // Perpendicular DOWN (canvas +y) relative to length axis
+            const pdX = -lDy;
+            const pdY = lDx;
+            // Perpendicular UP (canvas -y) relative to length axis
+            const puX = lDy;
+            const puY = -lDx;
+
+            // Anchor for length hairline: midpoint of bbox bottom, offset down by HAIRLINE_PAD along perp-down
+            const lCx = bbox.x + bbox.w / 2;
+            const lCy = bbox.y + bbox.h;
+            const lAnchorX = lCx + pdX * HAIRLINE_PAD;
+            const lAnchorY = lCy + pdY * HAIRLINE_PAD;
+
+            const halfL = bbox.w / 2;
+            const l1x = lAnchorX - lDx * halfL;
+            const l1y = lAnchorY - lDy * halfL;
+            const l2x = lAnchorX + lDx * halfL;
+            const l2y = lAnchorY + lDy * halfL;
+
+            // 1 — Length hairline
+            _specHairline(ctx, l1x, l1y, l2x, l2y, CAP_SIZE);
 
             ctx.fillStyle = '#1A3A52';
-            ctx.font = '400 28px "DM Sans", sans-serif';
+            ctx.font = '400 30px "DM Sans", sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
-            ctx.fillText(Lv + ' CM', bbox.x + bbox.w / 2, lineY + LABEL_GAP);
 
-            // 2 — Width hairline (diagonal at bottom-right of product)
-            const wLen = Math.max(bbox.w * 0.13, 90);
-            const wStartX = bbox.x + bbox.w * 0.82;
-            const wStartY = lineY;
-            const wEndX = wStartX + wLen;
-            const wEndY = wStartY + wLen * 0.5;
+            // Length label: centred under midpoint of hairline, rotated to match tilt
+            const lLabelX = lAnchorX + pdX * LABEL_GAP;
+            const lLabelY = lAnchorY + pdY * LABEL_GAP;
+            ctx.save();
+            ctx.translate(lLabelX, lLabelY);
+            ctx.rotate(tiltRad);
+            ctx.fillText(Lv + ' CM', 0, 0);
+            ctx.restore();
+
+            // 2 — Width hairline: from front-right corner outward at depth angle (depthDeg below horizontal)
+            const wDx = Math.cos(depthRad);
+            const wDy = Math.sin(depthRad);
+            const wStartX = l2x + lDx * 8;   // pick up just past the right end of the length line
+            const wStartY = l2y + lDy * 8;
+            const wLen = Math.max(bbox.w * 0.14, 110);
+            const wEndX = wStartX + wDx * wLen;
+            const wEndY = wStartY + wDy * wLen;
             _specHairline(ctx, wStartX, wStartY, wEndX, wEndY, CAP_SIZE);
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            ctx.fillText(Wv + ' CM', wEndX + 10, wEndY - 6);
 
-            // 3 — Height hairline (vertical, right of product) — only if not flat
+            // Width label: just outside the line, rotated to match depth angle
+            const wLabelOffset = 22;
+            const wLabelPerpX = -wDy;
+            const wLabelPerpY = wDx;
+            ctx.save();
+            ctx.translate(wEndX + wLabelPerpX * wLabelOffset + wDx * 8,
+                          wEndY + wLabelPerpY * wLabelOffset + wDy * 8);
+            ctx.rotate(depthRad);
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(Wv + ' CM', 0, 0);
+            ctx.restore();
+
+            // 3 — Height hairline: along perpendicular-up axis (matches length tilt), to the right of product
             if (!flat) {
-                const lineX = bbox.x + bbox.w + HAIRLINE_PAD;
-                _specHairline(ctx, lineX, bbox.y, lineX, bbox.y + bbox.h, CAP_SIZE);
+                // Anchor at the right edge of bbox, offset outward along length direction by HAIRLINE_PAD
+                const hBaseX = bbox.x + bbox.w + lDx * HAIRLINE_PAD;
+                const hBaseY = lCy + lDy * HAIRLINE_PAD * 0.5;
+                const hTopX = hBaseX + puX * bbox.h;
+                const hTopY = hBaseY + puY * bbox.h;
+                _specHairline(ctx, hBaseX, hBaseY, hTopX, hTopY, CAP_SIZE);
+
+                // Height label: midpoint of line, offset outward (along length direction), rotated 90° from length axis
+                const hMidX = (hBaseX + hTopX) / 2;
+                const hMidY = (hBaseY + hTopY) / 2;
                 ctx.save();
-                ctx.translate(lineX + LABEL_GAP + 8, bbox.y + bbox.h / 2);
-                ctx.rotate(-Math.PI / 2);
+                ctx.translate(hMidX + lDx * (LABEL_GAP + 10), hMidY + lDy * (LABEL_GAP + 10));
+                ctx.rotate(tiltRad - Math.PI / 2);  // perpendicular to length axis
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'top';
                 ctx.fillText(Hv + ' CM', 0, 0);
                 ctx.restore();
             }
 
-            // 4 — Caption (Cormorant Garamond italic 300)
+            // 4 — Caption (Cormorant Garamond italic 400 — closer match to Gemini's serif rendering)
             const captionDims = flat
                 ? 'L ' + Lv + ' cm × W ' + Wv + ' cm'
                 : 'L ' + Lv + ' cm × W ' + Wv + ' cm × H ' + Hv + ' cm';
-            const captionY = lineY + LABEL_GAP + 28 + CAPTION_GAP;
-            ctx.font = '300 italic 44px "Cormorant Garamond", serif';
+            // Caption baseline: below the lowest hairline endpoint + CAPTION_GAP, axis-aligned (always horizontal)
+            const lowestY = Math.max(l1y, l2y, wEndY) + LABEL_GAP + 30 + CAPTION_GAP;
+            ctx.font = 'italic 400 48px "Cormorant Garamond", serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
-            ctx.fillText('Dimensions · ' + captionDims, W / 2, captionY);
+            ctx.fillText('Dimensions · ' + captionDims, W / 2, lowestY);
 
-            _specStatus('✓ Rendered. Click Download WebP to save.');
+            _specStatus('✓ Rendered (tilt ' + tiltDeg + '°, depth ' + depthDeg + '°). Click Download WebP to save.');
         }
 
         function downloadSpecLocal() {
