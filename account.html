@@ -912,9 +912,13 @@
             btn.disabled = true;
             btn.textContent = 'Cancelling…';
             try {
-                const response = await fetch('/api/auth/orders/' + orderId + '/cancel', {
+                const response = await fetch('/api/auth/cancel-order', {
                     method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + token }
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ orderId: orderId })
                 });
                 const data = await response.json();
                 if (data.success) {
